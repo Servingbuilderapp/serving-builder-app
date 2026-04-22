@@ -75,7 +75,7 @@ export default async function LandingPage() {
         
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[0.9] italic uppercase">
           Build & Serve <br />
-          <span className="bg-clip-text text-transparent bg-linear-to-r from-color-primary via-white to-color-accent-pink">
+          <span className="text-gradient-magma">
             AI Magic
           </span>
         </h1>

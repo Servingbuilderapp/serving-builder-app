@@ -2,20 +2,30 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --color-base-100: #050014;
-  --color-base-200: #0A0520;
-  --color-base-300: #150D30;
-  --color-base-content: #E8E0FF;
+  --color-base-100: #1a2642;
+  --color-base-200: #24345d;
+  --color-base-300: #2d4278;
+  --color-base-content: #f8fafc;
   
-  --color-primary: #7C3AED;
+  --color-primary: #F97316;
   --color-primary-content: #FFFFFF;
   
   --color-accent-warm: #F97316;
   --color-accent-pink: #EC4899;
   --color-accent-blue: #38BDF8;
+  --color-accent-violet: #8B5CF6;
+  --color-accent-red: #EF4444;
 
   --font-sans: var(--font-inter);
   --font-display: var(--font-outfit);
+}
+
+.text-gradient-magma {
+  background: linear-gradient(to right, #F97316, #EC4899, #8B5CF6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
 }
 
 body {
@@ -37,11 +47,11 @@ body::before {
   height: 100%;
   z-index: -1;
   background: 
-    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--color-primary) 20%, transparent) 0%, transparent 50%),
-    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--color-accent-pink) 15%, transparent) 0%, transparent 50%),
-    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--color-primary) 10%, transparent) 0%, transparent 40%),
-    radial-gradient(circle at 0% 100%, color-mix(in srgb, var(--color-accent-blue) 20%, transparent) 0%, transparent 50%),
-    radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--color-primary) 15%, transparent) 0%, transparent 50%);
+    radial-gradient(circle at 0% 0%, color-mix(in srgb, #1e3a8a 20%, transparent) 0%, transparent 50%),
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, #8B5CF6 15%, transparent) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, color-mix(in srgb, #0f172a 10%, transparent) 0%, transparent 40%),
+    radial-gradient(circle at 0% 100%, color-mix(in srgb, #F97316 10%, transparent) 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, color-mix(in srgb, #1e40af 15%, transparent) 0%, transparent 50%);
   filter: blur(80px);
   animation: backgroundPulse 15s ease-in-out infinite alternate;
 }
