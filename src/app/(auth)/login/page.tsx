@@ -44,7 +44,7 @@ function LoginContent() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session) {
         startTransition(() => {
-          router.push('/')
+          router.push('/dashboard')
         })
       }
     })
