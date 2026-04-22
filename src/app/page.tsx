@@ -10,6 +10,7 @@ export const dynamic = 'force-dynamic'
 
 export default async function LandingPage() {
   const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
   
   // Fetch a few apps to showcase
   const { data: apps } = await supabase
@@ -43,14 +44,25 @@ export default async function LandingPage() {
           </span>
         </div>
         <div className="flex items-center gap-4">
-          <Link href="/login" className="text-sm font-bold text-white/60 hover:text-white transition-colors">
-            Login
-          </Link>
-          <Link href="/signup">
-            <GlowButton className="text-xs h-9 px-6">
-              Get Started
-            </GlowButton>
-          </Link>
+          {user ? (
+            <Link href="/dashboard">
+              <GlowButton className="text-xs h-9 px-6 gap-2">
+                <LayoutGrid className="h-3 w-3" />
+                Dashboard
+              </GlowButton>
+            </Link>
+          ) : (
+            <>
+              <Link href="/login" className="text-sm font-bold text-white/60 hover:text-white transition-colors">
+                Login
+              </Link>
+              <Link href="/signup">
+                <GlowButton className="text-xs h-9 px-6">
+                  Get Started
+                </GlowButton>
+              </Link>
+            </>
+          )}
         </div>
       </nav>
 
@@ -73,12 +85,21 @@ export default async function LandingPage() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-          <Link href="/signup">
-            <GlowButton className="h-14 px-10 text-base gap-3">
-              Start Building Now
-              <ArrowRight className="h-5 w-5" />
-            </GlowButton>
-          </Link>
+          {user ? (
+            <Link href="/dashboard">
+              <GlowButton className="h-14 px-10 text-base gap-3">
+                Go to My Dashboard
+                <LayoutGrid className="h-5 w-5" />
+              </GlowButton>
+            </Link>
+          ) : (
+            <Link href="/signup">
+              <GlowButton className="h-14 px-10 text-base gap-3">
+                Start Building Now
+                <ArrowRight className="h-5 w-5" />
+              </GlowButton>
+            </Link>
+          )}
           <Link href="#pricing">
             <button className="h-14 px-10 text-base font-bold text-white/60 hover:text-white transition-all rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10">
               View Pricing
