@@ -183,8 +183,7 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
   
   const hasChanges = formData.firstName !== (profile?.first_name || '') || formData.lastName !== (profile?.last_name || '')
 
-  const gravatarUrl = `https://www.gravatar.com/avatar/${md5(user.email || '')}?d=mp&s=200`
-  const currentAvatar = avatarUrl || gravatarUrl
+  const currentAvatar = avatarUrl || profile?.avatar_url || user?.user_metadata?.avatar_url || null
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -302,14 +301,31 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
           <GlassCard className="p-8 flex flex-col items-center text-center space-y-6 group">
             <div className="relative">
               <div className={cn(
-                "h-32 w-32 rounded-full border-2 border-white/10 overflow-hidden bg-white/5 relative shadow-2xl transition-all duration-500 group-hover:border-color-primary/50",
+                "h-32 w-32 rounded-full border-2 border-white/10 overflow-hidden bg-[#1a233a] relative shadow-2xl transition-all duration-500 group-hover:border-color-primary/50",
                 isUploading && "opacity-50"
               )}>
-                <img 
-                  src={currentAvatar} 
-                  alt={user.email} 
-                  className="h-full w-full object-cover"
-                />
+                {currentAvatar ? (
+                  <img 
+                    src={currentAvatar} 
+                    alt={user.email} 
+                    className="h-full w-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                      const parent = (e.target as HTMLImageElement).parentElement;
+                      if (parent) {
+                        const fallback = parent.querySelector('.avatar-fallback');
+                        if (fallback) (fallback as HTMLElement).style.display = 'flex';
+                      }
+                    }}
+                  />
+                ) : null}
+                
+                <div className={cn(
+                  "avatar-fallback absolute inset-0 flex items-center justify-center text-4xl font-black text-color-primary bg-linear-to-br from-color-primary/20 to-color-accent-pink/20",
+                  currentAvatar ? "hidden" : "flex"
+                )}>
+                  {profile?.first_name?.[0]}{profile?.last_name?.[0] || user?.email?.[0]?.toUpperCase()}
+                </div>
                 {isUploading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-black/20">
                     <Loader2 className="h-8 w-8 animate-spin text-white" />
@@ -393,7 +409,7 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
                     type="text"
                     value={formData.firstName}
                     onChange={(e) => setFormData({...formData, firstName: e.target.value})}
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 pl-11 pr-4 text-white focus:outline-hidden focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all"
+                    className="w-full bg-[#0a0f1d] border border-white/10 rounded-2xl py-3 pl-11 pr-4 text-white focus:outline-hidden focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all shadow-inner"
                   />
                 </div>
               </div>
@@ -407,7 +423,7 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
                     type="text"
                     value={formData.lastName}
                     onChange={(e) => setFormData({...formData, lastName: e.target.value})}
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 pl-11 pr-4 text-white focus:outline-hidden focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all"
+                    className="w-full bg-[#0a0f1d] border border-white/10 rounded-2xl py-3 pl-11 pr-4 text-white focus:outline-hidden focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all shadow-inner"
                   />
                 </div>
               </div>
@@ -423,7 +439,7 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
                   type="email"
                   value={user.email}
                   disabled
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 pl-11 pr-4 text-white/40 cursor-not-allowed"
+                  className="w-full bg-[#0a0f1d]/50 border border-white/10 rounded-2xl py-3 pl-11 pr-4 text-white/40 cursor-not-allowed"
                 />
               </div>
               <p className="text-[10px] text-white/20 ml-1 italic">
