@@ -69,7 +69,7 @@ export function DynamicForm({ schema, initialValues = {}, onSubmit, isLoading }:
                 placeholder={placeholder}
                 required={field.required}
                 rows={4}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all resize-none"
+                className="w-full bg-[#0a0f1d] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all resize-none shadow-inner"
               />
             ) : field.type === 'select' ? (
               <div className="relative">
@@ -111,7 +111,7 @@ export function DynamicForm({ schema, initialValues = {}, onSubmit, isLoading }:
                 onChange={(e) => handleChange(fieldName, e.target.value)}
                 placeholder={placeholder}
                 required={field.required}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all"
+                className="w-full bg-[#0a0f1d] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all shadow-inner"
               />
             )}
           </div>

@@ -2,9 +2,9 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --color-base-100: #1a2642;
-  --color-base-200: #24345d;
-  --color-base-300: #2d4278;
+  --color-base-100: #0f1629;
+  --color-base-200: #1a233a;
+  --color-base-300: #232d4b;
   --color-base-content: #f8fafc;
   
   --color-primary: #F97316;
@@ -87,13 +87,13 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Glassmorphism utility class - Enhanced with Glow */
 .glass-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.8));
   backdrop-filter: blur(25px);
   -webkit-backdrop-filter: blur(25px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1.5rem;
   box-shadow: 
-    0 10px 40px -10px rgba(0, 0, 0, 0.5),
+    0 20px 50px -12px rgba(0, 0, 0, 0.5),
     inset 0 0 0 1px rgba(255, 255, 255, 0.05);
   transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
@@ -101,14 +101,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .glass-sidebar {
-  background: linear-gradient(to bottom, rgba(26, 38, 66, 0.9), rgba(15, 23, 42, 0.95));
+  background: linear-gradient(to bottom, #111d35, #0f172a);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
   border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .glass-header {
-  background: rgba(26, 38, 66, 0.8);
+  background: rgba(15, 22, 41, 0.85);
   backdrop-filter: blur(25px);
   -webkit-backdrop-filter: blur(25px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);

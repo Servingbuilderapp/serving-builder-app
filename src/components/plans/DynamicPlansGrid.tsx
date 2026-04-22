@@ -128,10 +128,10 @@ export function DynamicPlansGrid({ plans, currentPlanId }: DynamicPlansGridProps
         
         return (
           <div key={plan.id} className={cn(
-            "relative group flex flex-col h-full bg-white/5 border rounded-3xl p-8 transition-all duration-500 overflow-hidden",
-            isCurrent ? "border-color-primary shadow-[0_0_40px_rgba(139,92,246,0.2)]" : "border-white/10 hover:border-white/20"
+            "relative group flex flex-col h-full bg-[#111d35] border rounded-3xl p-8 transition-all duration-500 overflow-hidden shadow-xl",
+            isCurrent ? "border-color-primary shadow-[0_0_50px_rgba(249,115,22,0.2)]" : "border-white/10 hover:border-white/20"
           )}>
-            <div className="absolute inset-0 bg-linear-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            <div className="absolute inset-0 bg-linear-to-br from-color-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
             
             {isCurrent && (
               <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-color-primary text-[10px] font-black uppercase tracking-widest text-white animate-pulse">
@@ -177,7 +177,7 @@ export function DynamicPlansGrid({ plans, currentPlanId }: DynamicPlansGridProps
                   {plan.plan_apps?.map((pa: any) => (
                     <div 
                       key={pa.app_id} 
-                      className="h-7 w-7 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:border-color-primary/40 transition-colors" 
+                      className="h-8 w-8 rounded-lg bg-color-base-100 border border-white/10 flex items-center justify-center text-white/40 hover:border-color-primary/40 hover:text-color-primary transition-all shadow-md" 
                       title={language === 'en' ? pa.micro_apps?.name_en : pa.micro_apps?.name_es}
                     >
                       <Sparkles className="h-3 w-3" />

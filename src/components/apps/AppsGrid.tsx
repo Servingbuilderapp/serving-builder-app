@@ -27,11 +27,15 @@ function AppCard({ app, isLocked }: AppCardProps) {
 
   const content = (
     <div className={cn(
-      "group relative flex flex-col h-full rounded-2xl border p-6 transition-all duration-300",
+      "group relative flex flex-col h-full rounded-3xl border p-7 transition-all duration-500 overflow-hidden",
       isLocked 
-        ? "bg-white/2 border-white/5 opacity-50 cursor-not-allowed" 
-        : "bg-white/5 border-white/10 hover:border-primary/50 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(124,58,237,0.1)] cursor-pointer"
+        ? "bg-slate-900/50 border-white/5 opacity-50 cursor-not-allowed" 
+        : "bg-linear-to-br from-[#1a233a] to-[#0f1629] border-white/10 hover:border-color-primary/50 hover:scale-[1.03] hover:shadow-[0_20px_50px_rgba(249,115,22,0.15)] cursor-pointer"
     )}>
+      {/* Background Accent Glow */}
+      {!isLocked && (
+        <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-color-primary/10 rounded-full blur-2xl group-hover:bg-color-primary/20 transition-colors" />
+      )}
       {isLocked && (
         <div className="absolute top-4 right-4 text-white/30">
           <Lock className="h-4 w-4" />
@@ -39,8 +43,8 @@ function AppCard({ app, isLocked }: AppCardProps) {
       )}
 
       <div className={cn(
-        "h-12 w-12 rounded-xl flex items-center justify-center mb-4 transition-colors",
-        isLocked ? "bg-white/5 text-white/30" : "bg-primary/20 text-primary group-hover:bg-primary/30"
+        "h-14 w-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500 shadow-xl",
+        isLocked ? "bg-white/5 text-white/20" : "bg-color-primary/20 text-color-primary group-hover:bg-color-primary/30 group-hover:scale-110"
       )}>
         <IconComponent className="h-6 w-6" />
       </div>

@@ -14,38 +14,38 @@ export function Footer() {
           href="https://linkedin.com" 
           target="_blank" 
           rel="noopener noreferrer"
-          className="text-white/20 hover:text-color-primary transition-colors duration-300"
+          className="text-white/40 hover:text-color-primary hover:scale-110 transition-all duration-300 p-2 rounded-full bg-white/5 border border-white/10"
           title="LinkedIn"
         >
-          <Globe className="h-4 w-4" />
+          <Globe className="h-5 w-5" />
         </a>
         <a 
           href="https://instagram.com" 
           target="_blank" 
           rel="noopener noreferrer"
-          className="text-white/20 hover:text-color-primary transition-colors duration-300"
+          className="text-white/40 hover:text-color-primary hover:scale-110 transition-all duration-300 p-2 rounded-full bg-white/5 border border-white/10"
           title="Instagram"
         >
-          <Globe className="h-4 w-4" />
+          <Globe className="h-5 w-5" />
         </a>
         <a 
           href="https://servingproyectos.com" 
           target="_blank" 
           rel="noopener noreferrer"
-          className="text-white/20 hover:text-color-primary transition-colors duration-300"
+          className="text-white/40 hover:text-color-primary hover:scale-110 transition-all duration-300 p-2 rounded-full bg-white/5 border border-white/10"
           title="Website"
         >
-          <Globe className="h-4 w-4" />
+          <Globe className="h-5 w-5" />
         </a>
       </div>
       
       <div className="text-center space-y-1">
-        <p className="text-[10px] sm:text-xs font-medium text-white/30 tracking-wider">
-          © 2026 <span className="text-white/40">SERVING PROYECTOS ESTRATEGICOS SAS</span>. 
+        <p className="text-[10px] sm:text-xs font-black text-white/50 tracking-widest uppercase italic">
+          © 2026 <span className="text-color-primary">SERVING PROYECTOS ESTRATEGICOS SAS</span>. 
           {language === 'en' ? ' All rights reserved.' : ' Todos los derechos reservados.'}
         </p>
-        <p className="text-[9px] text-white/10 uppercase tracking-[0.2em] font-bold">
-          Powered by Advanced Agentic AI
+        <p className="text-[10px] text-white/20 uppercase tracking-[0.4em] font-black mt-2">
+          Powered by <span className="text-gradient-magma">Advanced Agentic AI</span>
         </p>
       </div>
     </footer>

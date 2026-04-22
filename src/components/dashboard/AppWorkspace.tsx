@@ -152,7 +152,7 @@ export function AppWorkspace({ appId, currentExecutionId, schema }: AppWorkspace
   return (
     <div className="flex-1 flex flex-col gap-6 p-4 md:p-0">
       {/* The Petition Block */}
-      <div className="bg-white/5 border border-white/10 rounded-2xl p-6 relative overflow-hidden group">
+      <div className="bg-[#1a233a]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 relative overflow-hidden group shadow-2xl">
         <div className="absolute top-0 right-0 p-4">
           <div className="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] font-bold text-white/40 uppercase tracking-widest">
             {language === 'en' ? 'The Petition' : 'La Petición'}
@@ -167,7 +167,7 @@ export function AppWorkspace({ appId, currentExecutionId, schema }: AppWorkspace
       {/* The Response Block */}
       <div className="flex-1 flex flex-col min-h-100">
         {isProcessing ? (
-          <div className="flex-1 bg-white/5 border border-white/10 rounded-3xl p-12 flex flex-col items-center justify-center gap-6 relative overflow-hidden">
+          <div className="flex-1 bg-[#1a233a]/80 backdrop-blur-2xl border border-white/10 rounded-[2rem] p-12 flex flex-col items-center justify-center gap-8 relative overflow-hidden shadow-2xl">
             <div className="absolute inset-0 bg-linear-to-b from-transparent via-white/5 to-transparent animate-pulse" />
             <div className="relative">
               <div className="h-20 w-20 rounded-full border-4 border-white/5 border-t-color-primary animate-spin" />
