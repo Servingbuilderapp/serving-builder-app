@@ -99,7 +99,7 @@ export function Header({ onToggleMobileSidebar, user, profile }: HeaderProps) {
   }, [])
 
   return (
-    <header className="h-16 shrink-0 relative z-30 flex items-center justify-between px-4 sm:px-6 lg:px-8 border-b border-white/5 bg-color-base-200/50 backdrop-blur-md">
+    <header className="h-16 shrink-0 relative z-30 flex items-center justify-between px-4 sm:px-6 lg:px-8 glass-header">
       <div className="flex items-center gap-4">
         {/* Mobile menu button */}
         <button
@@ -115,7 +115,7 @@ export function Header({ onToggleMobileSidebar, user, profile }: HeaderProps) {
           <input
             type="text"
             placeholder={language === 'en' ? "Search..." : "Buscar..."}
-            className="w-64 bg-black/20 border border-white/10 rounded-full py-1.5 pl-9 pr-12 text-sm text-white placeholder:text-color-base-content/40 focus:outline-none focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all shadow-inner"
+            className="w-64 bg-white/5 border border-white/10 rounded-full py-1.5 pl-9 pr-12 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all shadow-inner focus:bg-white/10"
           />
           <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-0.5 text-[10px] font-medium text-color-base-content/50 border border-white/10 rounded px-1.5 py-0.5 bg-white/5">
             <span>⌘</span>

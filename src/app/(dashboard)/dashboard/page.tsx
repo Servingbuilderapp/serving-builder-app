@@ -119,11 +119,12 @@ export default function DashboardPage() {
   return (
     <div className="w-full max-w-7xl mx-auto p-6 md:p-8 space-y-8 pb-12">
       {/* Personalized Greeting */}
-      <div className="mb-2 animate-in fade-in slide-in-from-top-4 duration-700">
-        <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight flex items-center gap-3">
-          {greeting}, <span className="bg-clip-text text-transparent bg-linear-to-r from-color-primary to-color-accent-pink">{userName || '...'}</span> {emoji}
+      <div className="mb-2 animate-in fade-in slide-in-from-top-4 duration-700 relative">
+        <div className="absolute -left-8 top-0 bottom-0 w-1 bg-linear-to-b from-color-primary to-color-accent-pink rounded-full blur-[2px]" />
+        <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter italic uppercase flex items-center gap-4">
+          {greeting}, <span className="text-gradient-magma drop-shadow-[0_0_15px_rgba(249,115,22,0.3)]">{userName || '...'}</span> {emoji}
         </h2>
-        <p className="text-color-base-content/40 mt-1 font-medium italic">
+        <p className="text-white/40 mt-2 font-black uppercase tracking-[0.3em] text-xs">
           {subtitle}
         </p>
       </div>
@@ -153,11 +154,11 @@ export default function DashboardPage() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, i) => (
-          <GlassCard key={i} className="p-6 relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-color-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-color-primary/10 transition-colors" />
-            <div className="flex items-start justify-between mb-4 relative z-10">
-              <div className="p-2 rounded-lg bg-white/5 border border-white/10 text-color-primary">
-                <stat.icon className="h-5 w-5" />
+          <GlassCard key={i} className="p-7 relative overflow-hidden group premium-border-glow border-white/5">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-color-primary/10 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-110 transition-transform blur-2xl" />
+            <div className="flex items-start justify-between mb-5 relative z-10">
+              <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-color-primary shadow-inner">
+                <stat.icon className="h-6 w-6" />
               </div>
               {stat.trend && (
                 <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
@@ -170,10 +171,10 @@ export default function DashboardPage() {
               )}
             </div>
             <div className="relative z-10">
-              <h3 className="text-color-base-content/60 text-xs font-bold uppercase tracking-widest mb-1">
+              <h3 className="text-white/30 text-[10px] font-black uppercase tracking-[0.2em] mb-1.5">
                 {stat.label}
               </h3>
-              <p className="text-2xl font-black text-white tracking-tight">
+              <p className="text-3xl font-black text-white tracking-tighter text-glow-primary">
                 {loading ? '...' : stat.value}
               </p>
             </div>
@@ -186,9 +187,10 @@ export default function DashboardPage() {
         
         {/* Charts Section (Simplified for this version) */}
         <div className="lg:col-span-2 space-y-8">
-          <GlassCard className="p-8 flex flex-col items-center justify-center min-h-[300px] text-center space-y-4">
-            <div className="p-4 rounded-full bg-color-primary/10 border border-color-primary/20">
-              <Sparkles className="h-8 w-8 text-color-primary animate-pulse" />
+          <GlassCard className="p-10 flex flex-col items-center justify-center min-h-[350px] text-center space-y-6 relative group border-white/5">
+            <div className="absolute inset-0 bg-linear-to-br from-color-primary/5 via-transparent to-color-accent-pink/5 opacity-50" />
+            <div className="p-6 rounded-full bg-white/5 border border-white/10 shadow-2xl relative z-10 group-hover:scale-110 transition-transform">
+              <Sparkles className="h-10 w-10 text-color-primary animate-pulse" />
             </div>
             <div>
               <h2 className="text-xl font-bold text-white">

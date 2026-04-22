@@ -21,10 +21,10 @@ export function DashboardLayoutClient({ children, user, profile }: DashboardLayo
       <div className="pointer-events-none absolute inset-0 overflow-hidden z-0">
         {/* Top-left orange→violet orb (hero orb) */}
         <div 
-          className="absolute -top-40 -left-72 w-225 h-225 rounded-full opacity-20"
+          className="absolute -top-48 -left-72 w-[1000px] h-[1000px] rounded-full opacity-30 animate-pulse"
           style={{ 
-            background: 'radial-gradient(circle, rgba(249, 115, 22, 0.2) 0%, rgba(139, 92, 246, 0.1) 40%, transparent 70%)',
-            filter: 'blur(80px)'
+            background: 'radial-gradient(circle, rgba(249, 115, 22, 0.2) 0%, rgba(139, 92, 246, 0.1) 50%, transparent 70%)',
+            filter: 'blur(120px)'
           }} 
         />
         {/* Top-right violet orb */}
@@ -37,10 +37,11 @@ export function DashboardLayoutClient({ children, user, profile }: DashboardLayo
         />
         {/* Bottom-right orange orb */}
         <div 
-          className="absolute -bottom-28 -right-20 w-137.5 h-137.5 rounded-full opacity-20"
+          className="absolute -bottom-48 -right-48 w-[800px] h-[800px] rounded-full opacity-25 animate-pulse"
           style={{ 
-            background: 'radial-gradient(circle, rgba(249, 115, 22, 0.1) 0%, transparent 70%)',
-            filter: 'blur(40px)'
+            background: 'radial-gradient(circle, rgba(249, 115, 22, 0.2) 0%, transparent 70%)',
+            filter: 'blur(120px)',
+            animationDuration: '10s'
           }} 
         />
       </div>
