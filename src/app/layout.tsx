@@ -3,6 +3,7 @@ import { Outfit, Inter } from "next/font/google"
 import "./globals.css"
 import { LanguageProvider } from "@/context/LanguageContext"
 import { ToastProvider } from "@/components/ui/ToastProvider"
+import { PayPalProvider } from "@/components/providers/PayPalProvider"
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -32,7 +33,9 @@ export default function RootLayout({
       >
         <LanguageProvider>
           <ToastProvider>
-            {children}
+            <PayPalProvider>
+              {children}
+            </PayPalProvider>
           </ToastProvider>
         </LanguageProvider>
       </body>

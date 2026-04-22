@@ -8,6 +8,7 @@ import { GlowButton } from '@/components/ui/GlowButton'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { useToast } from '@/components/ui/ToastProvider'
 import { Input } from '@/components/ui/Input'
+import { PayPalButtons } from "@paypal/react-paypal-js"
 
 interface DynamicPlansGridProps {
   plans: any[]
@@ -230,82 +231,100 @@ export function DynamicPlansGrid({ plans, currentPlanId }: DynamicPlansGridProps
                   <X className="h-5 w-5" />
                 </button>
               </div>
-
-              {/* Credit Card Visual */}
-              <div className="relative h-48 w-full rounded-2xl bg-linear-to-br from-color-base-300 to-color-base-200 border border-white/10 p-6 shadow-2xl flex flex-col justify-between overflow-hidden">
-                <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
-                  <CreditCard className="h-40 w-40" />
-                </div>
-                
-                <div className="flex justify-between items-start">
-                  <div className="h-10 w-14 rounded-md bg-yellow-500/20 border border-yellow-500/30 flex items-center justify-center">
-                    <div className="h-6 w-10 rounded bg-yellow-600/40" />
-                  </div>
-                  <CreditCard className="h-8 w-8 text-white/20" />
-                </div>
-
-                <div className="space-y-1">
-                  <p className="text-xl font-mono text-white tracking-[0.15em]">4242 4242 4242 4242</p>
-                  <div className="flex justify-between items-end">
-                    <div className="space-y-0.5">
-                      <p className="text-[8px] uppercase tracking-widest text-white/30">Card Holder</p>
-                      <p className="text-xs font-bold text-white/80">{formData.card_holder}</p>
-                    </div>
-                    <div className="text-right space-y-0.5">
-                      <p className="text-[8px] uppercase tracking-widest text-white/30">Expires</p>
-                      <p className="text-xs font-bold text-white/80">{formData.expiry}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Editable Fields */}
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-white/40 uppercase tracking-widest">{language === 'en' ? 'First Name' : 'Nombre'}</label>
-                    <Input 
-                      value={formData.first_name}
-                      onChange={(e) => setFormData({...formData, first_name: e.target.value})}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-white/40 uppercase tracking-widest">{language === 'en' ? 'Last Name' : 'Apellido'}</label>
-                    <Input 
-                      value={formData.last_name}
-                      onChange={(e) => setFormData({...formData, last_name: e.target.value})}
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-white/40 uppercase tracking-widest">{language === 'en' ? 'Email Address' : 'Correo Electrónico'}</label>
-                  <Input 
-                    value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  />
-                </div>
-              </div>
-
+              {/* PayPal Buttons */}
               <div className="pt-2">
-                <GlowButton 
-                  onClick={handleConfirmPayment}
-                  disabled={isProcessing}
-                  className="w-full py-4 font-bold"
-                  variant="primary"
-                >
-                  {isProcessing ? (
-                    <RefreshCw className="h-5 w-5 animate-spin" />
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <Lock className="h-4 w-4" />
-                      {language === 'en' ? '🔒 Confirm Payment' : '🔒 Confirmar Pago'}
-                    </div>
-                  )}
-                </GlowButton>
+                <PayPalButtons
+                  style={{ 
+                    layout: "vertical",
+                    color: "blue",
+                    shape: "pill",
+                    label: "pay"
+                  }}
+                  createOrder={(data, actions) => {
+                    return actions.order.create({
+                      intent: "CAPTURE",
+                      purchase_units: [
+                        {
+                          amount: {
+                            currency_code: "USD",
+                            value: selectedPlan.price_monthly.toString(),
+                          },
+                          description: `${selectedPlan.name_en} Plan Subscription`,
+                        },
+                      ],
+                    });
+                  }}
+                  onApprove={async (data, actions) => {
+                    if (!actions.order) return;
+                    setIsProcessing(true);
+                    
+                    try {
+                      const details = await actions.order.capture();
+                      const email = details.payer?.email_address || formData.email;
+                      const firstName = details.payer?.name?.given_name || formData.first_name;
+                      const lastName = details.payer?.name?.surname || formData.last_name;
+
+                      // Llamar a tu webhook existente
+                      const response = await fetch('/api/webhooks/payment', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          event: 'payment.completed',
+                          customer: {
+                            email: email,
+                            first_name: firstName,
+                            last_name: lastName
+                          },
+                          plan: selectedPlan.slug,
+                          source: 'paypal',
+                          transaction_id: details.id,
+                          amount: selectedPlan.price_monthly,
+                          currency: 'USD'
+                        })
+                      });
+
+                      const resData = await response.json();
+
+                      if (response.ok) {
+                        setIsModalOpen(false);
+                        toast({
+                          title: language === 'en' 
+                            ? `Success! Welcome to the ${selectedPlan.name_en} plan` 
+                            : `¡Éxito! Bienvenido al plan ${selectedPlan.name_es}`,
+                          type: 'success'
+                        });
+                        
+                        if (resData.generated_password) {
+                          toast({
+                            title: `Password: ${resData.generated_password}`,
+                            type: 'success'
+                          });
+                        }
+
+                        setTimeout(() => window.location.reload(), 2000);
+                      } else {
+                         throw new Error(resData.error || 'Failed to update plan');
+                      }
+                    } catch (error: any) {
+                      toast({
+                        title: error.message || (language === 'en' ? "Payment verification failed" : "Fallo en la verificación del pago"),
+                        type: 'error'
+                      });
+                    } finally {
+                      setIsProcessing(false);
+                    }
+                  }}
+                  onError={(err) => {
+                    toast({
+                      title: language === 'en' ? "PayPal Error" : "Error de PayPal",
+                      type: 'error'
+                    });
+                  }}
+                />
                 
-                <div className="mt-4 flex items-center justify-center gap-2 text-[10px] text-white/30 uppercase tracking-widest font-bold">
+                <div className="mt-6 flex items-center justify-center gap-2 text-[10px] text-white/30 uppercase tracking-widest font-bold">
                   <ShieldCheck className="h-3 w-3" />
-                  {language === 'en' ? 'Secured by DemoPay' : 'Protegido por DemoPay'}
+                  {language === 'en' ? 'Secured by PayPal' : 'Protegido por PayPal'}
                 </div>
               </div>
             </div>
