@@ -33,7 +33,8 @@ export default async function PlansPage() {
     plans = [
       { id: '1', slug: 'basic', name_en: 'Basic', name_es: 'Básico', description_en: 'Perfect for getting started', description_es: 'Perfecto para empezar', price_monthly: 29.00, items_en: ['Access to all AI apps', 'Standard speed'], items_es: ['Acceso a todas las apps', 'Velocidad estándar'] },
       { id: '2', slug: 'intermediary', name_en: 'Intermediary', name_es: 'Intermedio', description_en: 'For growing businesses', description_es: 'Para negocios en crecimiento', price_monthly: 49.00, items_en: ['Priority generation', 'Priority support'], items_es: ['Generación prioritaria', 'Soporte prioritario'] },
-      { id: '3', slug: 'professional', name_en: 'Professional', name_es: 'Profesional', description_en: 'Unlimited power', description_es: 'Poder ilimitado', price_monthly: 97.00, items_en: ['Ultra-fast generation', 'Direct support'], items_es: ['Generación ultra-rápida', 'Soporte directo'] }
+      { id: '3', slug: 'professional', name_en: 'Professional', name_es: 'Profesional', description_en: 'Unlimited power', description_es: 'Poder ilimitado', price_monthly: 97.00, items_en: ['Ultra-fast generation', 'Direct support'], items_es: ['Generación ultra-rápida', 'Soporte directo'] },
+      { id: '4', slug: 'enterprise', name_en: 'Enterprise', name_es: 'Empresarial', description_en: 'Custom solutions', description_es: 'Soluciones a medida', price_monthly: 197.00, items_en: ['API Access', 'Dedicated account manager'], items_es: ['Acceso API', 'Gestor de cuenta dedicado'] }
     ] as any;
   }
 
