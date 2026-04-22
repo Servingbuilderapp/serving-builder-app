@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { updateSession } from '@/lib/supabase/proxy'
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   // 1. Manejar redirección de /dashboard/* a /*
   if (request.nextUrl.pathname.startsWith('/dashboard')) {
     const newPath = request.nextUrl.pathname.replace(/^\/dashboard/, '') || '/'

@@ -1,0 +1,42 @@
+{
+  "slug": "article-gen",
+  "icon": "PenTool",
+  "name_es": "Generador de Artículos",
+  "name_en": "Article Generator",
+  "description_es": "Genera artículos y posts de blog optimizados con IA en segundos.",
+  "description_en": "Generate AI-optimized articles and blog posts in seconds.",
+  "form_schema": [
+    { "name": "topic", "label_es": "Tema principal", "label_en": "Main Topic", "type": "textarea", "required": true, "placeholder_es": "Ej: Beneficios del trabajo remoto", "placeholder_en": "Ex: Benefits of remote work" },
+    { "name": "length", "label_es": "Longitud", "label_en": "Length", "type": "select", "options_es": ["Corto", "Medio", "Largo"], "options_en": ["Short", "Medium", "Long"], "required": true },
+    { "name": "tone", "label_es": "Tono", "label_en": "Tone", "type": "select", "options_es": ["Profesional", "Casual", "Persuasivo"], "options_en": ["Professional", "Casual", "Persuasive"], "required": true },
+    { "name": "emojis", "label_es": "¿Incluir Emojis?", "label_en": "Include Emojis?", "type": "toggle", "required": false }
+  ],
+  "autofill_presets": [
+    {
+      "label_es": "Blog de Fitness",
+      "label_en": "Fitness Blog",
+      "values": { "topic": "5 ejercicios para hacer en casa sin equipo", "length": "Medio", "tone": "Casual", "emojis": "true" }
+    },
+    {
+      "label_es": "Guía Financiera",
+      "label_en": "Finance Guide",
+      "values": { "topic": "Cómo ahorrar dinero si ganas poco: guía práctica", "length": "Largo", "tone": "Profesional", "emojis": "false" }
+    },
+    {
+      "label_es": "Receta Viral",
+      "label_en": "Viral Recipe",
+      "values": { "topic": "La receta de pasta cremosa con 3 ingredientes que rompe TikTok", "length": "Corto", "tone": "Casual", "emojis": "true" }
+    },
+    {
+      "label_es": "IA en Negocios",
+      "label_en": "AI in Business",
+      "values": { "topic": "Cómo la inteligencia artificial está transformando las pymes", "length": "Largo", "tone": "Profesional", "emojis": "false" }
+    },
+    {
+      "label_es": "Viajes Low Cost",
+      "label_en": "Budget Travel",
+      "values": { "topic": "10 destinos de viaje baratos para 2025 en Latinoamérica", "length": "Medio", "tone": "Persuasivo", "emojis": "true" }
+    }
+  ],
+  "prompt_template": "GENERAL INSTRUCTIONS:\n- You are an expert and professional AI writing assistant.\n- Your response must be EXCLUSIVELY in valid and clean Markdown format.\n- Use headings (##, ###), bold (**text**), italics (*text*), bulleted lists (-), numbered lists (1.), blockquotes (>), tables, and code blocks when appropriate.\n- Structure your response clearly, making it organized and easy to read.\n- Be detailed, useful, and action-oriented.\n- Respond EXCLUSIVELY in the indicated language: **{{responseLanguage}}**.\n- DO NOT include explanations about yourself or mention that you are an AI.\n- DO NOT use HTML. Pure Markdown only.\n\nSPECIFIC TASK: Generate a complete and professional blog article.\n\nUSER PARAMETERS:\n- Topic: {{topic}}\n- Length: {{length}} (Corto/Short = ~400 words, Medio/Medium = ~800 words, Largo/Long = ~1500 words)\n- Tone: {{tone}}\n- Use emojis: {{emojis}}\n\nREQUIRED STRUCTURE (MANDATORY TO FOLLOW EXACTLY):\n1. An engaging title formatted as a heading (##)\n2. A magnetic introduction that hooks the reader\n3. The article body divided into logical sections with clear subheadings (###)\n4. Key points or high-value insights must be highlighted in **bold**\n5. A strong conclusion that summarizes the article and includes a call to action\n6. At the very end, include a small **Summary Table** with 3 rows highlighting the most important points of the article.\n\nIf \"Use emojis\" is \"true\", incorporate relevant emojis naturally throughout the text (but don't overdo it). If \"false\", do not use a single emoji."
+}
