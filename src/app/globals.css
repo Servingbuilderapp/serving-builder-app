@@ -1,0 +1,139 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --color-base-100: #050014;
+  --color-base-200: #0A0520;
+  --color-base-300: #150D30;
+  --color-base-content: #E8E0FF;
+  
+  --color-primary: #7C3AED;
+  --color-primary-content: #FFFFFF;
+  
+  --color-accent-warm: #F97316;
+  --color-accent-pink: #EC4899;
+  --color-accent-blue: #38BDF8;
+
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-outfit);
+}
+
+body {
+  background-color: var(--color-base-100);
+  color: var(--color-base-content);
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Animated Mesh Gradient Background - More Vibrant */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: 
+    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--color-primary) 20%, transparent) 0%, transparent 50%),
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--color-accent-pink) 15%, transparent) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--color-primary) 10%, transparent) 0%, transparent 40%),
+    radial-gradient(circle at 0% 100%, color-mix(in srgb, var(--color-accent-blue) 20%, transparent) 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--color-primary) 15%, transparent) 0%, transparent 50%);
+  filter: blur(80px);
+  animation: backgroundPulse 15s ease-in-out infinite alternate;
+}
+
+@keyframes backgroundPulse {
+  0% { transform: scale(1) translate(0, 0); opacity: 0.8; }
+  50% { transform: scale(1.1) translate(2%, 2%); opacity: 1; }
+  100% { transform: scale(1) translate(0, 0); opacity: 0.8; }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+}
+
+/* Glassmorphism utility class - Enhanced with Glow */
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.5rem;
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    inset 0 0 20px rgba(255, 255, 255, 0.01);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.glass-card:hover {
+  border-color: color-mix(in srgb, var(--color-primary) 40%, transparent);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 
+    0 20px 25px -5px rgba(0, 0, 0, 0.2), 
+    0 0 30px color-mix(in srgb, var(--color-primary) 15%, transparent);
+  transform: translateY(-2px);
+}
+
+/* Custom scrollbar for glass components */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* Typography Overrides */
+.prose {
+  color: var(--color-base-content) !important;
+}
+
+.prose h1, .prose h2, .prose h3 {
+  color: #ffffff !important;
+  font-family: var(--font-display) !important;
+  font-weight: 700 !important;
+}
+
+.prose table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.prose table thead th {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  color: #ffffff !important;
+  padding: 1rem !important;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.prose table tbody td {
+  padding: 1rem !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.prose table tbody tr:last-child td {
+  border-bottom: none !important;
+}
+
+.prose table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
