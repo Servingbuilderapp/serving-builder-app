@@ -77,8 +77,16 @@ export function UserDetailClient({ user, plans, totalAppsCount, accessibleApps, 
           {/* User Info Card */}
           <div className="bg-white/5 border border-white/10 rounded-3xl p-6 space-y-6">
             <div className="flex items-center justify-center">
-              <div className="h-24 w-24 rounded-full bg-linear-to-br from-color-primary/20 to-color-accent-pink/20 border border-white/10 flex items-center justify-center text-3xl font-bold text-color-primary">
-                {user.first_name[0]}{user.last_name[0]}
+              <div className="h-24 w-24 rounded-full border-2 border-white/10 flex items-center justify-center text-3xl font-black text-color-primary overflow-hidden shadow-2xl shadow-color-primary/20 bg-linear-to-br from-color-primary/20 to-color-accent-pink/20">
+                {user.avatar_url ? (
+                  <img 
+                    src={user.avatar_url} 
+                    alt={user.first_name} 
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <span>{user.first_name[0]}{user.last_name[0]}</span>
+                )}
               </div>
             </div>
             

@@ -232,13 +232,20 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
           </>
         )}
       </nav>
-
       {/* Bottom section: Profile & Collapse */}
       <div className="mt-auto p-4 space-y-4 border-t border-white/5 bg-black/20">
         {/* User Profile Info */}
         <div className={cn("flex items-center gap-3 p-2 rounded-xl transition-all duration-300", collapsed ? "justify-center" : "bg-white/5 border border-white/10 shadow-inner")}>
-          <div className="h-9 w-9 rounded-full bg-linear-to-br from-color-primary to-color-accent-pink flex items-center justify-center text-white font-black shadow-lg shadow-color-primary/20 shrink-0">
-            {profile?.full_name?.[0] || user?.email?.[0]?.toUpperCase()}
+          <div className="h-9 w-9 rounded-full bg-linear-to-br from-color-primary to-color-accent-pink flex items-center justify-center text-white font-black shadow-lg shadow-color-primary/20 shrink-0 overflow-hidden">
+            {(profile?.avatar_url || user?.user_metadata?.avatar_url) ? (
+              <img 
+                src={profile?.avatar_url || user?.user_metadata?.avatar_url} 
+                alt="Avatar" 
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <span>{profile?.full_name?.[0] || user?.email?.[0]?.toUpperCase()}</span>
+            )}
           </div>
           {!collapsed && (
             <div className="flex flex-col min-w-0">

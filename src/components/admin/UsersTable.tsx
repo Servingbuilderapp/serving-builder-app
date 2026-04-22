@@ -112,8 +112,12 @@ export function UsersTable({ initialUsers, plans }: UsersTableProps) {
                 <tr key={user.id} className="hover:bg-white/5 transition-colors group">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-full bg-linear-to-br from-color-primary/20 to-color-accent-pink/20 border border-white/10 flex items-center justify-center text-color-primary font-black shadow-lg">
-                        {user.first_name[0]}{user.last_name[0]}
+                      <div className="h-10 w-10 rounded-full bg-linear-to-br from-color-primary/20 to-color-accent-pink/20 border border-white/10 flex items-center justify-center text-color-primary font-black shadow-lg overflow-hidden">
+                        {user.avatar_url ? (
+                          <img src={user.avatar_url} alt={user.first_name} className="h-full w-full object-cover" />
+                        ) : (
+                          <span>{user.first_name[0]}{user.last_name[0]}</span>
+                        )}
                       </div>
                       <div className="flex flex-col">
                         <span className="text-sm font-semibold text-white group-hover:text-primary transition-colors">
