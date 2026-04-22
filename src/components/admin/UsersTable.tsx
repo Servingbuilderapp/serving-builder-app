@@ -72,24 +72,24 @@ export function UsersTable({ initialUsers, plans }: UsersTableProps) {
               setSearchTerm(e.target.value)
               setCurrentPage(1)
             }}
-            className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-white/20 focus:outline-hidden focus:border-primary/50 transition-all"
+            className="w-full bg-[#0f1629] border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-white/20 focus:outline-hidden focus:border-color-primary/50 transition-all shadow-inner"
           />
         </div>
 
         <button 
           onClick={() => setIsModalOpen(true)}
-          className="w-full md:w-auto flex items-center justify-center gap-2 bg-primary hover:bg-primary/80 text-white px-4 py-2.5 rounded-xl text-sm font-bold transition-all shadow-[0_0_20px_rgba(124,58,237,0.3)]"
+          className="w-full md:w-auto flex items-center justify-center gap-2 bg-linear-to-r from-color-primary to-color-accent-pink hover:scale-105 text-white px-5 py-3 rounded-xl text-sm font-black transition-all shadow-[0_0_25px_rgba(249,115,22,0.4)] uppercase tracking-widest"
         >
           <UserPlus className="h-4 w-4" />
           {language === 'en' ? 'Add User' : 'Agregar Usuario'}
         </button>
       </div>
 
-      <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-xl">
+      <div className="bg-[#111d35] border border-white/10 rounded-2xl overflow-hidden backdrop-blur-xl shadow-2xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-white/10 bg-white/5">
+              <tr className="border-b border-white/10 bg-[#1a233a]">
                 <th className="px-6 py-4 text-xs font-bold text-white/40 uppercase tracking-widest">
                   {language === 'en' ? 'User' : 'Usuario'}
                 </th>
@@ -112,7 +112,7 @@ export function UsersTable({ initialUsers, plans }: UsersTableProps) {
                 <tr key={user.id} className="hover:bg-white/5 transition-colors group">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-full bg-linear-to-br from-primary/20 to-accent-pink/20 border border-white/10 flex items-center justify-center text-primary font-bold">
+                      <div className="h-10 w-10 rounded-full bg-linear-to-br from-color-primary/20 to-color-accent-pink/20 border border-white/10 flex items-center justify-center text-color-primary font-black shadow-lg">
                         {user.first_name[0]}{user.last_name[0]}
                       </div>
                       <div className="flex flex-col">

@@ -30,9 +30,12 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
   const role = (currentEmail === 'servingbuilderapp@gmail.com' || currentRole === 'admin') ? 'admin' : 'user'
 
   const sidebarContent = (
-    <div className="flex h-full flex-col glass-sidebar relative overflow-hidden">
+    <div className="flex h-full flex-col glass-sidebar relative overflow-hidden border-r-0">
+      {/* Vibrant Right Border Glow */}
+      <div className="absolute top-0 right-0 w-[2px] h-full bg-linear-to-b from-color-primary via-color-accent-pink to-color-accent-violet opacity-80 shadow-[0_0_15px_rgba(249,115,22,0.5)] z-20" />
+      
       {/* Decorative Gradient Glow behind logo */}
-      <div className="absolute -top-24 -left-24 w-48 h-48 bg-color-primary/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -top-24 -left-24 w-64 h-64 bg-color-primary/20 rounded-full blur-3xl pointer-events-none" />
       {/* Top section: Logo/Brand */}
       <div className="flex h-16 shrink-0 items-center justify-between px-4 border-b border-white/5">
         <div className="flex items-center gap-3 overflow-hidden">
@@ -134,7 +137,7 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
         {/* Admin Section (Conditional) */}
         {role === 'admin' && (
           <>
-            <div className={cn("px-2 text-xs font-semibold text-color-base-content/40 uppercase tracking-wider mb-2 mt-8 transition-all duration-300", collapsed && "lg:text-center lg:opacity-0")}>
+            <div className={cn("px-4 text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-3 mt-8 transition-all duration-300", collapsed && "lg:text-center lg:opacity-0")}>
               {language === 'en' ? 'Administration' : 'Administración'}
             </div>
             
@@ -143,18 +146,18 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
               href="/admin"
               onClick={() => onCloseMobile()}
               className={cn(
-                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-300 group border mb-1",
+                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-black transition-all duration-500 group border mb-1 relative overflow-hidden",
                 pathname === '/admin'
-                  ? "bg-linear-to-br from-color-primary/20 to-color-accent-pink/20 text-white border-color-primary/30 shadow-[0_0_20px_rgba(139,92,246,0.25)] ring-1 ring-white/10" 
-                  : "bg-transparent text-color-base-content/60 border-transparent hover:bg-white/5 hover:text-white"
+                  ? "bg-color-primary/20 text-white border-color-primary/50 shadow-[0_0_20px_rgba(249,115,22,0.2)] ring-1 ring-white/10 animate-active-glow" 
+                  : "bg-transparent text-white/40 border-transparent hover:bg-white/5 hover:text-white"
               )}
             >
               <LucideIcons.Shield className={cn(
                 "h-5 w-5 shrink-0 transition-colors",
-                pathname === '/admin' ? "text-white" : "text-color-base-content/40 group-hover:text-white/60"
+                pathname === '/admin' ? "text-white" : "text-white/30 group-hover:text-white/60"
               )} />
               <span className={cn("whitespace-nowrap transition-all duration-300", collapsed && "lg:hidden")}>
-                {language === 'en' ? 'Admin' : 'Admin'}
+                {language === 'en' ? 'Admin Panel' : 'Panel Admin'}
               </span>
             </Link>
 
@@ -163,20 +166,20 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
               href="/admin/webhooks"
               onClick={() => onCloseMobile()}
               className={cn(
-                "flex items-center gap-2 transition-all duration-300 group border border-transparent",
+                "flex items-center gap-2 transition-all duration-300 group border border-transparent relative overflow-hidden",
                 collapsed 
                   ? "justify-center px-2 ml-0 pl-2 border-l-0 py-2.5 rounded-xl" 
-                  : "ml-4 pl-4 py-2 text-xs border-l border-white/10 hover:border-white/30",
+                  : "ml-4 pl-4 py-2.5 text-xs border-l border-white/10 hover:border-color-primary/30",
                 pathname.startsWith('/admin/webhooks')
-                  ? "text-white border-l-color-primary font-bold bg-color-primary/5 rounded-r-lg" 
-                  : "text-color-base-content/40 hover:text-white/80"
+                  ? "text-white border-l-color-primary font-black bg-color-primary/10 rounded-r-xl shadow-inner" 
+                  : "text-white/30 hover:text-white"
               )}
             >
               <LucideIcons.Radio className={cn(
                 "h-4 w-4 shrink-0 transition-colors",
-                pathname.startsWith('/admin/webhooks') ? "text-color-primary" : "text-color-base-content/30 group-hover:text-white/40"
+                pathname.startsWith('/admin/webhooks') ? "text-color-primary" : "text-white/20 group-hover:text-white/40"
               )} />
-              <span className={cn("whitespace-nowrap transition-all duration-300", collapsed && "lg:hidden")}>
+              <span className={cn("whitespace-nowrap transition-all duration-300 uppercase tracking-widest", collapsed && "lg:hidden")}>
                 Webhooks
               </span>
             </Link>
@@ -186,20 +189,20 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
               href="/admin/email"
               onClick={() => onCloseMobile()}
               className={cn(
-                "flex items-center gap-2 transition-all duration-300 group border border-transparent",
+                "flex items-center gap-2 transition-all duration-300 group border border-transparent relative overflow-hidden",
                 collapsed 
                   ? "justify-center px-2 ml-0 pl-2 border-l-0 py-2.5 rounded-xl" 
-                  : "ml-4 pl-4 py-2 text-xs border-l border-white/10 hover:border-white/30",
+                  : "ml-4 pl-4 py-2.5 text-xs border-l border-white/10 hover:border-color-primary/30",
                 pathname.startsWith('/admin/email')
-                  ? "text-white border-l-color-primary font-bold bg-color-primary/5 rounded-r-lg" 
-                  : "text-color-base-content/40 hover:text-white/80"
+                  ? "text-white border-l-color-primary font-black bg-color-primary/10 rounded-r-xl shadow-inner" 
+                  : "text-white/30 hover:text-white"
               )}
             >
               <LucideIcons.Mail className={cn(
                 "h-4 w-4 shrink-0 transition-colors",
-                pathname.startsWith('/admin/email') ? "text-color-primary" : "text-color-base-content/30 group-hover:text-white/40"
+                pathname.startsWith('/admin/email') ? "text-color-primary" : "text-white/20 group-hover:text-white/40"
               )} />
-              <span className={cn("whitespace-nowrap transition-all duration-300", collapsed && "lg:hidden")}>
+              <span className={cn("whitespace-nowrap transition-all duration-300 uppercase tracking-widest", collapsed && "lg:hidden")}>
                 Email
               </span>
             </Link>
@@ -209,20 +212,20 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
               href="/admin/plans"
               onClick={() => onCloseMobile()}
               className={cn(
-                "flex items-center gap-2 transition-all duration-300 group border border-transparent",
+                "flex items-center gap-2 transition-all duration-300 group border border-transparent relative overflow-hidden",
                 collapsed 
                   ? "justify-center px-2 ml-0 pl-2 border-l-0 py-2.5 rounded-xl" 
-                  : "ml-4 pl-4 py-2 text-xs border-l border-white/10 hover:border-white/30",
+                  : "ml-4 pl-4 py-2.5 text-xs border-l border-white/10 hover:border-color-primary/30",
                 pathname.startsWith('/admin/plans')
-                  ? "text-white border-l-color-primary font-bold bg-color-primary/5 rounded-r-lg" 
-                  : "text-color-base-content/40 hover:text-white/80"
+                  ? "text-white border-l-color-primary font-black bg-color-primary/10 rounded-r-xl shadow-inner" 
+                  : "text-white/30 hover:text-white"
               )}
             >
               <LucideIcons.CreditCard className={cn(
                 "h-4 w-4 shrink-0 transition-colors",
-                pathname.startsWith('/admin/plans') ? "text-color-primary" : "text-color-base-content/30 group-hover:text-white/40"
+                pathname.startsWith('/admin/plans') ? "text-color-primary" : "text-white/20 group-hover:text-white/40"
               )} />
-              <span className={cn("whitespace-nowrap transition-all duration-300", collapsed && "lg:hidden")}>
+              <span className={cn("whitespace-nowrap transition-all duration-300 uppercase tracking-widest", collapsed && "lg:hidden")}>
                 {language === 'en' ? 'Plans' : 'Planes'}
               </span>
             </Link>
@@ -230,11 +233,28 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
         )}
       </nav>
 
-      {/* Bottom section: Collapse Toggle (Desktop only) */}
-      <div className="hidden lg:flex p-4 border-t border-white/5">
+      {/* Bottom section: Profile & Collapse */}
+      <div className="mt-auto p-4 space-y-4 border-t border-white/5 bg-black/20">
+        {/* User Profile Info */}
+        <div className={cn("flex items-center gap-3 p-2 rounded-xl transition-all duration-300", collapsed ? "justify-center" : "bg-white/5 border border-white/10 shadow-inner")}>
+          <div className="h-9 w-9 rounded-full bg-linear-to-br from-color-primary to-color-accent-pink flex items-center justify-center text-white font-black shadow-lg shadow-color-primary/20 shrink-0">
+            {profile?.full_name?.[0] || user?.email?.[0]?.toUpperCase()}
+          </div>
+          {!collapsed && (
+            <div className="flex flex-col min-w-0">
+              <span className="text-xs font-black text-white truncate drop-shadow-sm italic">
+                {profile?.full_name || user?.email?.split('@')[0]}
+              </span>
+              <span className="text-[9px] font-black text-color-primary uppercase tracking-[0.2em]">
+                {role}
+              </span>
+            </div>
+          )}
+        </div>
+
         <button
           onClick={onToggleCollapse}
-          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-color-base-content/60 hover:text-white hover:bg-white/5 transition-colors"
+          className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white hover:bg-white/10 hover:shadow-lg transition-all border border-transparent hover:border-white/10"
         >
           {collapsed ? (
             <ChevronsRight className="h-5 w-5 shrink-0 mx-auto" />
