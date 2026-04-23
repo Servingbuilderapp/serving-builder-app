@@ -90,26 +90,33 @@ export function AppsGrid({ apps, accessibleSlugs, userEmail }: AppsGridProps) {
 
   // Helper para organizar por temas si la DB no tiene el campo category
   const getAppCategory = (app: any) => {
-    if (app.category) return app.category;
+    // 1. Usar categoría de la DB si existe (Prioridad Máxima)
+    if (app.category) {
+      if (app.category.toLowerCase().includes('social')) return language === 'en' ? 'Social Media' : 'Redes Sociales';
+      if (app.category.toLowerCase().includes('project') || app.category.toLowerCase().includes('proyect')) return language === 'en' ? 'Projects' : 'Proyectos';
+      if (app.category.toLowerCase().includes('productiv')) return language === 'en' ? 'Productivity' : 'Productividad';
+      if (app.category.toLowerCase().includes('tool') || app.category.toLowerCase().includes('herramienta')) return language === 'en' ? 'Tools' : 'Herramientas';
+      return app.category;
+    }
+
     const name = (app.name_es || app.name_en || '').toLowerCase();
-    const desc = (app.description_es || app.description_en || '').toLowerCase();
     
     // Redes Sociales
-    if (name.includes('instagram') || name.includes('social') || name.includes('ninja') || name.includes('viral') || name.includes('facebook') || name.includes('tiktok') || name.includes('post') || name.includes('reels') || name.includes('contenido')) {
+    if (name.includes('instagram') || name.includes('social') || name.includes('ninja') || name.includes('viral') || name.includes('post') || name.includes('reels')) {
       return language === 'en' ? 'Social Media' : 'Redes Sociales';
     }
     
-    // Proyectos y Consecución de Recursos
-    if (name.includes('proyecto') || name.includes('recurso') || name.includes('financia') || name.includes('inversión') || name.includes('fondo') || name.includes('ganar') || name.includes('monetiza') || name.includes('negocio') || name.includes('business') || name.includes('startup')) {
-      return language === 'en' ? 'Projects & Fundraising' : 'Proyectos y Consecución de Recursos';
+    // Proyectos
+    if (name.includes('proyecto') || name.includes('negocio') || name.includes('business') || name.includes('startup') || name.includes('inversión')) {
+      return language === 'en' ? 'Projects' : 'Proyectos';
     }
     
     // Productividad
-    if (name.includes('escritor') || name.includes('artículo') || name.includes('pro') || name.includes('texto') || name.includes('blog') || name.includes('copy') || name.includes('seo') || name.includes('optimiza') || name.includes('agenda') || name.includes('tarea') || name.includes('gestor')) {
+    if (name.includes('escritor') || name.includes('artículo') || name.includes('pro') || name.includes('texto') || name.includes('blog') || name.includes('copy') || name.includes('seo') || name.includes('optimiza')) {
       return language === 'en' ? 'Productivity' : 'Productividad';
     }
     
-    // Herramientas (Default/General)
+    // Herramientas (Default)
     return language === 'en' ? 'Tools' : 'Herramientas';
   };
 

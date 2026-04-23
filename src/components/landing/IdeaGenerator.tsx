@@ -418,52 +418,76 @@ export function IdeaGenerator({ userPlan, mode = 'ideas', ideasCount = 5 }: Idea
 
           {/* Section: Strategy (Only in strategies mode) */}
           {mode === 'strategies' && result.strategies && (
-            <div className="space-y-12">
-              <div className="text-center">
-                 <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter">Estrategia de Lanzamiento y Escalamiento</h3>
+            <div className="space-y-12 pt-12 border-t border-white/5 animate-in fade-in slide-in-from-bottom-12 duration-1000">
+              <div className="text-center space-y-4">
+                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-color-primary/10 border border-color-primary/20 text-[10px] font-black uppercase tracking-[0.3em] text-color-primary">
+                   ⚡ HOJA DE RUTA ESTRATÉGICA
+                 </div>
+                 <h3 className="text-4xl md:text-5xl font-black text-white uppercase italic tracking-tighter">
+                   Plan de <span className="text-color-primary">Lanzamiento</span> y Escalamiento
+                 </h3>
+                 <p className="text-white/40 text-sm max-w-2xl mx-auto">Análisis profundo de ejecución comercial para dominar el sector de {result.industry}.</p>
               </div>
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {/* Marketing */}
-                <div className="space-y-6">
+                <div className="space-y-6 group">
                   <div className="flex items-center gap-3">
-                    <Target className="h-6 w-6 text-color-primary" />
+                    <div className="h-12 w-12 rounded-2xl bg-color-primary/20 flex items-center justify-center text-color-primary group-hover:scale-110 transition-transform">
+                      <Target className="h-6 w-6" />
+                    </div>
                     <h4 className="text-xl font-black text-white uppercase italic tracking-tight">Marketing</h4>
                   </div>
                   <div className="space-y-4">
                     {result.strategies.marketing.map((s: any, idx: number) => (
-                      <div key={idx} className="p-4 rounded-2xl bg-white/5 border border-white/10">
-                        <p className="text-xs font-black text-color-primary uppercase tracking-widest mb-1">{s.title}</p>
-                        <p className="text-[11px] text-white/60 leading-relaxed">{s.desc}</p>
+                      <div key={idx} className="p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-color-primary/30 transition-all">
+                        <p className="text-[10px] font-black text-color-primary uppercase tracking-widest mb-2 flex items-center gap-2">
+                          <span className="h-1.5 w-1.5 rounded-full bg-color-primary" />
+                          {s.title}
+                        </p>
+                        <p className="text-xs text-white/60 leading-relaxed">{s.desc}</p>
                       </div>
                     ))}
                   </div>
                 </div>
+
                 {/* Sales */}
-                <div className="space-y-6">
+                <div className="space-y-6 group">
                   <div className="flex items-center gap-3">
-                    <DollarSign className="h-6 w-6 text-color-accent-blue" />
+                    <div className="h-12 w-12 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-emerald-500 group-hover:scale-110 transition-transform">
+                      <DollarSign className="h-6 w-6" />
+                    </div>
                     <h4 className="text-xl font-black text-white uppercase italic tracking-tight">Ventas</h4>
                   </div>
                   <div className="space-y-4">
                     {result.strategies.sales.map((s: any, idx: number) => (
-                      <div key={idx} className="p-4 rounded-2xl bg-white/5 border border-white/10">
-                        <p className="text-xs font-black text-color-accent-blue uppercase tracking-widest mb-1">{s.title}</p>
-                        <p className="text-[11px] text-white/60 leading-relaxed">{s.desc}</p>
+                      <div key={idx} className="p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-emerald-500/30 transition-all">
+                        <p className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mb-2 flex items-center gap-2">
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                          {s.title}
+                        </p>
+                        <p className="text-xs text-white/60 leading-relaxed">{s.desc}</p>
                       </div>
                     ))}
                   </div>
                 </div>
+
                 {/* Growth */}
-                <div className="space-y-6">
+                <div className="space-y-6 group">
                   <div className="flex items-center gap-3">
-                    <TrendingUp className="h-6 w-6 text-color-accent-pink" />
+                    <div className="h-12 w-12 rounded-2xl bg-purple-500/20 flex items-center justify-center text-purple-500 group-hover:scale-110 transition-transform">
+                      <TrendingUp className="h-6 w-6" />
+                    </div>
                     <h4 className="text-xl font-black text-white uppercase italic tracking-tight">Crecimiento</h4>
                   </div>
                   <div className="space-y-4">
                     {result.strategies.growth.map((s: any, idx: number) => (
-                      <div key={idx} className="p-4 rounded-2xl bg-white/5 border border-white/10">
-                        <p className="text-xs font-black text-color-accent-pink uppercase tracking-widest mb-1">{s.title}</p>
-                        <p className="text-[11px] text-white/60 leading-relaxed">{s.desc}</p>
+                      <div key={idx} className="p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-purple-500/30 transition-all">
+                        <p className="text-[10px] font-black text-purple-500 uppercase tracking-widest mb-2 flex items-center gap-2">
+                          <span className="h-1.5 w-1.5 rounded-full bg-purple-500" />
+                          {s.title}
+                        </p>
+                        <p className="text-xs text-white/60 leading-relaxed">{s.desc}</p>
                       </div>
                     ))}
                   </div>

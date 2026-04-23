@@ -320,7 +320,7 @@ export default async function LandingPage() {
             <h2 className="text-5xl font-black uppercase italic tracking-tighter leading-none">
               Arsenal de <span className="text-color-primary">Motores</span>
             </h2>
-            <p className="text-white/40 font-medium text-xl">Más de 47 motores especializados listos para trabajar por ti.</p>
+            <p className="text-white/40 font-medium text-xl">Más de 100 motores especializados listos para trabajar por ti.</p>
           </div>
           <Link href="/apps" className="text-xs font-black uppercase tracking-[0.3em] text-color-primary flex items-center gap-3 group px-6 py-3 rounded-xl bg-color-primary/5 border border-color-primary/20 hover:bg-color-primary/10 transition-all">
             VER TODO EL ARSENAL
