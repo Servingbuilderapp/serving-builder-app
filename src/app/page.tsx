@@ -13,10 +13,22 @@ export default async function LandingPage() {
   const { data: { user } } = await supabase.auth.getUser()
   
   // Fetch a few apps to showcase
-  const { data: apps } = await supabase
+  let { data: apps } = await supabase
     .from('micro_apps')
     .select('*')
     .limit(6)
+
+  // Fallback si la DB de apps está vacía o falla
+  if (!apps || apps.length === 0) {
+    apps = [
+      { id: '1', slug: 'escritor-pro', name_es: 'Escritor Maestro IA', description_es: 'Genera contenido persuasivo y artículos de alta calidad en segundos.', icon: 'PenTool' },
+      { id: '2', slug: 'vision-art', name_es: 'Visión Artística 3D', description_es: 'Transforma conceptos simples en imágenes fotorrealistas e impactantes.', icon: 'Sparkles' },
+      { id: '3', slug: 'video-gen', name_es: 'Generador de Video Pro', description_es: 'Crea clips cinematográficos a partir de texto con inteligencia cinemática.', icon: 'Video' },
+      { id: '4', slug: 'seo-boost', name_es: 'Optimizador SEO Elite', description_es: 'Domina los buscadores con análisis profundo de palabras clave.', icon: 'Zap' },
+      { id: '5', slug: 'social-ninja', name_es: 'Social Media Ninja', description_es: 'Automatiza tu presencia en redes sociales con contenido viral.', icon: 'Share2' },
+      { id: '6', slug: 'code-wizard', name_es: 'Asistente Code Wizard', description_es: 'Desarrolla aplicaciones y resuelve bugs con lógica de nivel experto.', icon: 'LayoutGrid' },
+    ] as any;
+  }
 
   // Fetch plans
   let { data: plans } = await supabase

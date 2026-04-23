@@ -10,20 +10,29 @@ export async function getUserAccessibleApps(userId: string): Promise<string[]> {
   );
 
   // 1. Obtener el perfil del usuario (plan y rol)
-  const { data: userProfile } = await supabase
+  // Fallback inmediato para el admin principal
+  const ADMIN_EMAIL = 'servingbuilderapp@gmail.com';
+  
+  const { data: userProfile, error: profileError } = await supabase
     .from('users')
-    .select('plan_id, role')
+    .select('plan_id, role, email')
     .eq('id', userId)
     .single();
 
-  // Si es admin, tiene acceso a TODO
-  if (userProfile?.role === 'admin') {
+  if (profileError) {
+    console.error('Error fetching user profile in access.ts:', profileError);
+  }
+
+  // Si es admin (por rol o por email reservado), tiene acceso a TODO
+  if (userProfile?.role === 'admin' || userProfile?.email === ADMIN_EMAIL) {
     const { data: allApps } = await supabase
       .from('micro_apps')
       .select('slug')
       .eq('is_active', true);
     
-    return (allApps || []).map(a => a.slug);
+    if (allApps && allApps.length > 0) {
+      return allApps.map(a => a.slug);
+    }
   }
 
   const slugs = new Set<string>();
