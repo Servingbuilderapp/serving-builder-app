@@ -45,7 +45,9 @@ export function Header({ onToggleMobileSidebar, user, profile }: HeaderProps) {
       const firstName = profile.first_name || ''
       const lastName = profile.last_name || ''
       const fullName = profile.full_name || `${firstName} ${lastName}`.trim()
-      const role = (profile.email === 'servingbuilderapp@gmail.com' || (profile.role || 'user').toLowerCase() === 'admin') ? 'admin' : 'user'
+      const currentEmail = (profile.email || user?.email || '').toLowerCase().trim()
+      const currentRole = (profile.role || user?.user_metadata?.role || 'user').toLowerCase().trim()
+      const role = (currentEmail === 'servingbuilderapp@gmail.com' || currentRole === 'admin') ? 'admin' : 'user'
       
       setUserRole(role)
       setUserAvatar(profile.avatar_url || null)

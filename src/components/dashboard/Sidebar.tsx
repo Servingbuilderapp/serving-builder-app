@@ -25,8 +25,8 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
   const { language } = useTranslation()
   const pathname = usePathname()
   
-  const currentEmail = profile?.email || user?.email || ''
-  const currentRole = (profile?.role || user?.user_metadata?.role || 'user').toLowerCase()
+  const currentEmail = (profile?.email || user?.email || '').toLowerCase().trim()
+  const currentRole = (profile?.role || user?.user_metadata?.role || 'user').toLowerCase().trim()
   const role = (currentEmail === 'servingbuilderapp@gmail.com' || currentRole === 'admin') ? 'admin' : 'user'
 
   const sidebarContent = (
