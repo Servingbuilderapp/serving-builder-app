@@ -11,6 +11,17 @@ export const dynamic = 'force-dynamic'
 export default async function LandingPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
+
+  // Helper para organizar por temas si la DB no tiene el campo category
+  const getAppCategory = (app: any) => {
+    if (app.category) return app.category;
+    const name = (app.name_es || app.name_en || '').toLowerCase();
+    if (name.includes('video') || name.includes('guion') || name.includes('podcast')) return 'Video & Audio';
+    if (name.includes('instagram') || name.includes('social') || name.includes('ninja') || name.includes('viral')) return 'Redes Sociales';
+    if (name.includes('seo') || name.includes('web') || name.includes('optimiza')) return 'SEO & Web';
+    if (name.includes('escritor') || name.includes('artículo') || name.includes('pro') || name.includes('texto')) return 'Escritura & Contenido';
+    return 'Herramientas Pro';
+  };
   
   // Fetch apps for showcase
   let { data: allApps } = await supabase
@@ -31,11 +42,11 @@ export default async function LandingPage() {
   }
 
   const trialApps = allApps?.slice(0, 3) || []
-  const arsenalApps = allApps?.slice(3, 9) || []
+  const arsenalApps = allApps?.slice(3, 12) || []
 
   // Group arsenal by category
   const arsenalCategories = arsenalApps.reduce((acc: Record<string, any[]>, app) => {
-    const cat = app.category || 'General'
+    const cat = getAppCategory(app)
     if (!acc[cat]) acc[cat] = []
     acc[cat].push(app)
     return acc
@@ -170,12 +181,12 @@ export default async function LandingPage() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-6 pt-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-600">
-              <a href="/signup" className="contents">
+              <a href={user ? "/dashboard" : "/signup"} className="contents">
                 <GlowButton 
                   className="h-16 px-12 text-lg gap-4 font-black italic uppercase tracking-widest"
-                  onClick={() => window.location.href = '/signup'}
+                  onClick={() => window.location.href = user ? "/dashboard" : "/signup"}
                 >
-                  Empieza Gratis
+                  {user ? "Ir al Dashboard" : "Empieza Gratis"}
                   <ArrowRight className="h-6 w-6" />
                 </GlowButton>
               </a>
