@@ -109,6 +109,18 @@ export function Header({ onToggleMobileSidebar, user, profile }: HeaderProps) {
           <Menu className="h-5 w-5" />
         </button>
 
+        {/* White Label Logo */}
+        {profile?.branding?.logo_url && (
+          <div className="hidden lg:flex items-center gap-3 mr-4">
+            <div className="h-8 w-8 shrink-0 overflow-hidden rounded-lg">
+              <img src={profile.branding.logo_url} alt="Brand Logo" className="h-full w-full object-contain" />
+            </div>
+            <span className="text-sm font-black tracking-widest text-white/40 uppercase">
+              {profile.branding.name}
+            </span>
+          </div>
+        )}
+
         {/* Search */}
         <div className="hidden sm:flex items-center relative group">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-color-base-content/40 group-focus-within:text-color-primary transition-colors" />

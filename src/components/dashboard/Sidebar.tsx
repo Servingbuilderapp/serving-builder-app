@@ -39,14 +39,21 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
       {/* Top section: Logo/Brand */}
       <div className="flex h-16 shrink-0 items-center justify-between px-4 border-b border-white/5">
         <div className="flex items-center gap-3 overflow-hidden">
-          <Link href="/" className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-linear-to-br from-color-primary to-color-accent-pink shadow-lg shadow-color-primary/20 hover:scale-105 transition-transform">
-            <span className="text-lg font-bold text-white">S</span>
-          </Link>
+          {profile?.branding?.logo_url ? (
+            <div className="h-8 w-8 shrink-0 overflow-hidden rounded-lg">
+              <img src={profile.branding.logo_url} alt="Brand Logo" className="h-full w-full object-contain" />
+            </div>
+          ) : (
+            <Link href="/" className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-linear-to-br from-color-primary to-color-accent-pink shadow-lg shadow-color-primary/20 hover:scale-105 transition-transform">
+              <span className="text-lg font-bold text-white">S</span>
+            </Link>
+          )}
+          
           <span className={cn(
             "text-lg font-black tracking-tighter bg-clip-text text-transparent bg-linear-to-r from-color-primary via-color-accent-pink to-color-accent-violet whitespace-nowrap transition-all duration-300 drop-shadow-sm",
             collapsed && "lg:opacity-0 lg:w-0"
           )} style={{ WebkitTextFillColor: 'transparent', color: 'transparent' }}>
-            SERVING <span className="text-white/90">BUILDER</span>
+            {profile?.branding?.name.toUpperCase()}
           </span>
         </div>
         

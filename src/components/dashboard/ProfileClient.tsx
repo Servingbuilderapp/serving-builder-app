@@ -184,7 +184,10 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
   const [brandLogoUrl, setBrandLogoUrl] = useState<string | null>(profile?.brand_logo_url || user?.user_metadata?.brand_logo_url || null)
   const [brandName, setBrandName] = useState(profile?.brand_name || user?.user_metadata?.brand_name || '')
   
-  const isWhiteLabelEligible = profile?.plans?.slug === 'professional' || profile?.plans?.slug === 'elite'
+  const currentEmail = (profile?.email || user?.email || '').toLowerCase().trim()
+  const currentRole = (profile?.role || user?.user_metadata?.role || 'user').toLowerCase().trim()
+  const isAdmin = (currentEmail === 'servingbuilderapp@gmail.com' || currentRole === 'admin')
+  const isWhiteLabelEligible = isAdmin || profile?.plans?.slug === 'professional' || profile?.plans?.slug === 'elite' || profile?.plans?.slug === 'poder-ilimitado'
   
   const hasChanges = formData.firstName !== (profile?.first_name || '') || 
                      formData.lastName !== (profile?.last_name || '') ||
@@ -326,6 +329,15 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      {/* DEBUG INFO - REMOVE AFTER VERIFICATION */}
+      <div className="bg-red-500 text-white font-bold p-4 rounded-2xl flex flex-col gap-2 z-50 relative">
+        <div className="text-sm">SISTEMA DE DIAGNÓSTICO (ESTO ES TEMPORAL):</div>
+        <div className="flex gap-8">
+          <span>EMAIL DETECTADO: <span className="underline">{currentEmail}</span></span>
+          <span>ES ADMIN: <span className="underline">{isAdmin ? 'SÍ (YES)' : 'NO'}</span></span>
+        </div>
+      </div>
+
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-black text-white tracking-tight">
           {language === 'en' ? 'Your Profile' : 'Tu Perfil'}
@@ -396,9 +408,9 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
               <div className="flex items-center justify-center gap-2">
                 <span className={cn(
                   "px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest border",
-                  profile?.role === 'admin' ? "bg-color-primary/20 text-color-primary border-color-primary/30" : "bg-white/5 text-white/40 border-white/10"
+                  isAdmin ? "bg-color-primary/20 text-color-primary border-color-primary/30" : "bg-white/5 text-white/40 border-white/10"
                 )}>
-                  {profile?.role || 'user'}
+                  {isAdmin ? 'admin' : (profile?.role || 'user')}
                 </span>
               </div>
             </div>
