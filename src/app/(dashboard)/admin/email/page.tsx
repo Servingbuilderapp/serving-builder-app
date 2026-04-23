@@ -18,7 +18,10 @@ export default async function AdminEmailPage() {
     .eq('id', user.id)
     .single()
 
-  if (!profile || profile.role !== 'admin') redirect('/')
+  const ADMIN_EMAIL = 'servingbuilderapp@gmail.com';
+  const isGodAdmin = user.email === ADMIN_EMAIL;
+
+  if (!isGodAdmin && (!profile || profile.role !== 'admin')) redirect('/')
 
   // 2. Obtener configuraciones actuales
   const { data: settings } = await supabase

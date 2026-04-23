@@ -21,14 +21,14 @@ export default async function LandingPage() {
   // Fallback si la DB de apps está vacía o falla
   if (!apps || apps.length === 0) {
     apps = [
-      { id: '1', slug: 'escritor-pro', name_es: 'Escritor Maestro IA', description_es: 'Genera contenido persuasivo y artículos de alta calidad en segundos.', icon: 'PenTool' },
-      { id: '2', slug: 'vision-art', name_es: 'Visión Artística 3D', description_es: 'Transforma conceptos simples en imágenes fotorrealistas e impactantes.', icon: 'Sparkles' },
-      { id: '3', slug: 'video-gen', name_es: 'Generador de Video Pro', description_es: 'Crea clips cinematográficos a partir de texto con inteligencia cinemática.', icon: 'Video' },
-      { id: '4', slug: 'seo-boost', name_es: 'Optimizador SEO Elite', description_es: 'Domina los buscadores con análisis profundo de palabras clave.', icon: 'Zap' },
-      { id: '5', slug: 'social-ninja', name_es: 'Social Media Ninja', description_es: 'Automatiza tu presencia en redes sociales con contenido viral.', icon: 'Share2' },
-      { id: '6', slug: 'code-wizard', name_es: 'Asistente Code Wizard', description_es: 'Desarrolla aplicaciones y resuelve bugs con lógica de nivel experto.', icon: 'LayoutGrid' },
-      { id: '7', slug: 'image-upscaler', name_es: 'Upscaler de Imagen IA', description_es: 'Mejora la resolución de tus imágenes sin perder calidad.', icon: 'Sparkles' },
-      { id: '8', slug: 'voice-pro', name_es: 'Sintetizador de Voz Pro', description_es: 'Convierte texto en voz humana ultra-natural en múltiples idiomas.', icon: 'MessageSquare' },
+      { id: '1', slug: 'escritor-pro', name_es: 'Escritor Maestro IA', description_es: 'Genera contenido persuasivo y artículos de alta calidad en segundos.', icon: 'PenTool', category: 'Contenido' },
+      { id: '2', slug: 'vision-art', name_es: 'Visión Artística 3D', description_es: 'Transforma conceptos simples en imágenes fotorrealistas e impactantes.', icon: 'Sparkles', category: 'Imagen & Video' },
+      { id: '3', slug: 'video-gen', name_es: 'Generador de Video Pro', description_es: 'Crea clips cinematográficos a partir de texto con inteligencia cinemática.', icon: 'Video', category: 'Imagen & Video' },
+      { id: '4', slug: 'seo-boost', name_es: 'Optimizador SEO Elite', description_es: 'Domina los buscadores con análisis profundo de palabras clave.', icon: 'Zap', category: 'Optimización' },
+      { id: '5', slug: 'social-ninja', name_es: 'Social Media Ninja', description_es: 'Automatiza tu presencia en redes sociales con contenido viral.', icon: 'Share2', category: 'Contenido' },
+      { id: '6', slug: 'code-wizard', name_es: 'Asistente Code Wizard', description_es: 'Desarrolla aplicaciones y resuelve bugs con lógica de nivel experto.', icon: 'LayoutGrid', category: 'Optimización' },
+      { id: '7', slug: 'image-upscaler', name_es: 'Upscaler de Imagen IA', description_es: 'Mejora la resolución de tus imágenes sin perder calidad.', icon: 'Sparkles', category: 'Imagen & Video' },
+      { id: '8', slug: 'voice-pro', name_es: 'Sintetizador de Voz Pro', description_es: 'Convierte texto en voz humana ultra-natural en múltiples idiomas.', icon: 'MessageSquare', category: 'Contenido' },
     ] as any;
   }
 
