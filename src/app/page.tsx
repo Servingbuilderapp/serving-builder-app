@@ -192,7 +192,6 @@ export default async function LandingPage() {
               <a href={user ? "/dashboard" : "/signup"} className="contents">
                 <GlowButton 
                   className="h-16 px-12 text-lg gap-4 font-black italic uppercase tracking-widest"
-                  onClick={() => window.location.href = user ? "/dashboard" : "/signup"}
                 >
                   {user ? "Ir al Dashboard" : "Empieza Gratis"}
                   <ArrowRight className="h-6 w-6" />
