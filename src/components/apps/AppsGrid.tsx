@@ -79,11 +79,14 @@ function AppCard({ app, isLocked }: AppCardProps) {
 interface AppsGridProps {
   apps: any[]
   accessibleSlugs: string[]
+  userEmail?: string | null
 }
 
-export function AppsGrid({ apps, accessibleSlugs }: AppsGridProps) {
+export function AppsGrid({ apps, accessibleSlugs, userEmail }: AppsGridProps) {
   const { language } = useTranslation()
-  const hasNoPlan = accessibleSlugs.length === 0
+  const ADMIN_EMAIL = 'servingbuilderapp@gmail.com';
+  const isAdmin = userEmail?.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+  const hasNoPlan = accessibleSlugs.length === 0 && !isAdmin
 
   // Helper para organizar por temas si la DB no tiene el campo category
   const getAppCategory = (app: any) => {
@@ -140,7 +143,7 @@ export function AppsGrid({ apps, accessibleSlugs }: AppsGridProps) {
               <AppCard 
                 key={app.id} 
                 app={app} 
-                isLocked={!accessibleSlugs.includes(app.slug)} 
+                isLocked={!isAdmin && !accessibleSlugs.includes(app.slug)} 
               />
             ))}
           </div>

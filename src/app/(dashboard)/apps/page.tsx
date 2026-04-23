@@ -69,6 +69,7 @@ export default async function AppsPage() {
       <AppsGrid 
         apps={apps || []} 
         accessibleSlugs={accessibleSlugs} 
+        userEmail={user.email}
       />
     </div>
   )

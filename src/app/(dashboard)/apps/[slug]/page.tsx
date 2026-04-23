@@ -16,8 +16,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   }
 
   // Verificar acceso
-  const accessibleSlugs = await getUserAccessibleApps(user.id)
-  if (!accessibleSlugs.includes(slug)) {
+  const ADMIN_EMAIL = 'servingbuilderapp@gmail.com';
+  const accessibleSlugs = await getUserAccessibleApps(user.id, user.email)
+  
+  const isAdmin = user.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+
+  if (!isAdmin && !accessibleSlugs.includes(slug)) {
     redirect('/plans')
   }
 

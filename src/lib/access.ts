@@ -24,15 +24,26 @@ export async function getUserAccessibleApps(userId: string, email?: string): Pro
   }
 
   // Si es admin (por rol o por email reservado), tiene acceso a TODO
-  if (userProfile?.role === 'admin' || userProfile?.email === ADMIN_EMAIL || email === ADMIN_EMAIL) {
+  const isAdmin = userProfile?.role === 'admin' || 
+                  userProfile?.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase() || 
+                  email?.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+
+  if (isAdmin) {
     const { data: allApps } = await supabase
       .from('micro_apps')
       .select('slug')
       .eq('is_active', true);
     
+    // Si hay apps en la DB, las devolvemos todas
     if (allApps && allApps.length > 0) {
       return allApps.map(a => a.slug);
     }
+    
+    // Si no hay apps en la DB, el admin debe seguir teniendo acceso a los slugs de demo
+    return [
+      'escritor-pro', 'vision-art', 'video-gen', 'seo-boost', 
+      'social-ninja', 'code-wizard', 'image-upscaler', 'voice-pro'
+    ];
   }
 
   const slugs = new Set<string>();

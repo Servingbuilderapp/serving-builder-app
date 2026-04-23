@@ -6,7 +6,7 @@ import { GlassCard } from '@/components/ui/GlassCard'
 import { GlowButton } from '@/components/ui/GlowButton'
 import { Input } from '@/components/ui/Input'
 import { useToast } from '@/components/ui/ToastProvider'
-import { User, Mail, Save, Loader2, Shield } from 'lucide-react'
+import { User, Mail, Save, Loader2, Shield, Zap } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 
