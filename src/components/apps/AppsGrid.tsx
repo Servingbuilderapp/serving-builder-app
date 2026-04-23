@@ -89,10 +89,11 @@ export function AppsGrid({ apps, accessibleSlugs }: AppsGridProps) {
   const getAppCategory = (app: any) => {
     if (app.category) return app.category;
     const name = (app.name_es || app.name_en || '').toLowerCase();
-    if (name.includes('video') || name.includes('guion') || name.includes('podcast')) return language === 'en' ? 'Video & Audio' : 'Video & Audio';
-    if (name.includes('instagram') || name.includes('social') || name.includes('ninja') || name.includes('viral')) return language === 'en' ? 'Social Media' : 'Redes Sociales';
-    if (name.includes('seo') || name.includes('web') || name.includes('optimiza')) return language === 'en' ? 'SEO & Optimization' : 'SEO & Optimización';
-    if (name.includes('escritor') || name.includes('artículo') || name.includes('pro') || name.includes('texto')) return language === 'en' ? 'Writing & Content' : 'Escritura & Contenido';
+    if (name.includes('video') || name.includes('guion') || name.includes('podcast') || name.includes('audio') || name.includes('voz')) return language === 'en' ? 'Video & Audio' : 'Video & Audio';
+    if (name.includes('imagen') || name.includes('foto') || name.includes('diseño') || name.includes('art') || name.includes('visual')) return language === 'en' ? 'Image & Design' : 'Imagen & Diseño';
+    if (name.includes('instagram') || name.includes('social') || name.includes('ninja') || name.includes('viral') || name.includes('facebook') || name.includes('tiktok') || name.includes('post')) return language === 'en' ? 'Social Media' : 'Redes Sociales';
+    if (name.includes('seo') || name.includes('web') || name.includes('optimiza') || name.includes('ranking') || name.includes('keyword')) return language === 'en' ? 'SEO & Optimization' : 'SEO & Optimización';
+    if (name.includes('escritor') || name.includes('artículo') || name.includes('pro') || name.includes('texto') || name.includes('blog') || name.includes('copy')) return language === 'en' ? 'Writing & Content' : 'Escritura & Contenido';
     return language === 'en' ? 'Pro Tools' : 'Herramientas Pro';
   };
 

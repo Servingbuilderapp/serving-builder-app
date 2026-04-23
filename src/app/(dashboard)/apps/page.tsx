@@ -48,6 +48,11 @@ export default async function AppsPage() {
     });
     
     apps = mergedApps;
+
+    // Asegurar que el admin tiene acceso a TODO lo que ve en la lista
+    apps.forEach(a => {
+      if (!accessibleSlugs.includes(a.slug)) accessibleSlugs.push(a.slug);
+    });
   }
 
   return (
