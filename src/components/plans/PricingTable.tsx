@@ -49,28 +49,28 @@ export function PricingTable({ plans, currentPlanId }: PricingTableProps) {
     const price = plan.price_monthly
     if (price === 0) {
       return {
-        card: "border-blue-500/20 bg-blue-500/5 hover:border-blue-500/40 shadow-blue-500/5",
-        badge: "bg-blue-500/10 text-blue-400 border-blue-500/20",
-        icon: "text-blue-500",
+        card: "border-blue-500/30 bg-blue-500/10 hover:border-blue-500/50 shadow-blue-500/10",
+        badge: "bg-blue-500/20 text-blue-300 border-blue-500/30",
+        icon: "text-blue-400",
         button: "ghost",
-        accent: "from-blue-500/20 to-transparent"
+        accent: "from-blue-500/15 via-transparent to-blue-500/5"
       }
     }
     if (price < 100) {
       return {
-        card: "border-emerald-500/20 bg-emerald-500/5 hover:border-emerald-500/40 shadow-emerald-500/5",
-        badge: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-        icon: "text-emerald-500",
+        card: "border-emerald-500/30 bg-emerald-500/10 hover:border-emerald-500/50 shadow-emerald-500/10",
+        badge: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
+        icon: "text-emerald-400",
         button: "primary",
-        accent: "from-emerald-500/20 to-transparent"
+        accent: "from-emerald-500/15 via-transparent to-emerald-500/5"
       }
     }
     return {
-      card: "border-purple-500/30 bg-purple-500/10 hover:border-purple-500/50 shadow-purple-500/10 ring-1 ring-purple-500/20",
-      badge: "bg-linear-to-r from-orange-500 via-red-500 to-purple-600 text-white border-transparent",
-      icon: "text-orange-500",
+      card: "border-purple-500/40 bg-purple-900/20 hover:border-purple-400/60 shadow-purple-500/20 ring-1 ring-purple-500/30",
+      badge: "bg-linear-to-r from-orange-500 via-red-500 to-purple-600 text-white border-transparent shadow-lg shadow-purple-500/20",
+      icon: "text-orange-400",
       button: "primary",
-      accent: "from-purple-500/30 via-red-500/10 to-transparent",
+      accent: "from-purple-600/20 via-red-500/10 to-orange-500/10",
       premium: true
     }
   }
@@ -88,7 +88,7 @@ export function PricingTable({ plans, currentPlanId }: PricingTableProps) {
       )}>
         {/* Background Gradient Effect */}
         <div className={cn(
-          "absolute inset-0 bg-linear-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-700",
+          "absolute inset-0 bg-linear-to-br opacity-40 group-hover:opacity-100 transition-opacity duration-700",
           styles.accent
         )} />
 
