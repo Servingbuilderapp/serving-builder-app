@@ -28,11 +28,55 @@ export default async function LandingPage() {
   // Fallback if no plans found
   if (!plans || plans.length === 0) {
     plans = [
-      { id: '1', slug: 'explorador', name_en: 'Explorer', price_monthly: 0, items_en: ['1 Base Tool', '3 Mini-apps', 'Community support'] },
-      { id: '2', slug: 'basic', name_en: 'Entrepreneur', price_monthly: 29, items_en: ['4 Additional Tools', '7 Mini-apps', 'Email Support', 'No Watermark'] },
-      { id: '3', slug: 'growth', name_en: 'Growth', price_monthly: 49, items_en: ['Niche Specific Tools', '10 Mini-apps', 'Custom Domain', 'Analytics Dashboard'] },
-      { id: '4', slug: 'professional', name_en: 'Unlimited Power', price_monthly: 97, items_en: ['All Business Tools', '30 Mini-apps', 'Priority Support', 'Multi-user Mode', 'White Label Options'] },
-      { id: '5', slug: 'elite', name_en: 'Elite', price_monthly: 197, items_en: ['Everything Unlimited', 'Beta Access', 'Monthly Consulting', 'Full White Label', 'Priority Feature Requests'] }
+      { 
+        id: '1', slug: 'explorador', name_en: 'Explorer', price_monthly: 0, 
+        items_en: [
+          '1 Specialized Base Tool', 
+          '3 High-Performance Miniapps', 
+          'Standard Generation Speed',
+          'Community Discord Support'
+        ] 
+      },
+      { 
+        id: '2', slug: 'basic', name_en: 'Entrepreneur', price_monthly: 29, 
+        items_en: [
+          '4 Pro Tools (Image/Text/Video)', 
+          '7 Specialized Miniapps', 
+          'No Watermarks on Assets',
+          'Fast Generation Queue',
+          'Direct Email Support'
+        ] 
+      },
+      { 
+        id: '3', slug: 'growth', name_en: 'Growth', price_monthly: 49, 
+        items_en: [
+          'Niche Specific AI Tools', 
+          '10 Advanced Miniapps', 
+          'Custom Domain Integration', 
+          'Advanced Analytics Dashboard',
+          'SEO Optimization Tools'
+        ] 
+      },
+      { 
+        id: '4', slug: 'professional', name_en: 'Unlimited Power', price_monthly: 97, 
+        items_en: [
+          'Complete Business Suite Access', 
+          '30+ Premium Miniapps', 
+          'Full White-Label Capabilities',
+          'Multi-user Team Management',
+          'Priority VIP Support 24/7'
+        ] 
+      },
+      { 
+        id: '5', slug: 'elite', name_en: 'Elite', price_monthly: 197, 
+        items_en: [
+          'Everything Truly Unlimited', 
+          'Private Beta for All New Apps', 
+          '1-on-1 Monthly Growth Strategy', 
+          'Full White-Label Deployment', 
+          'Priority Roadmap Influence'
+        ] 
+      }
     ] as any;
   }
 

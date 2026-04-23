@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { useTranslation } from '@/hooks/useTranslation'
-import { Check, Sparkles, LayoutGrid, X, CreditCard, ShieldCheck, Lock } from 'lucide-react'
+import { Check, Sparkles, LayoutGrid, X, CreditCard, ShieldCheck, Lock, CheckCircle2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { GlowButton } from '@/components/ui/GlowButton'
 import { GlassCard } from '@/components/ui/GlassCard'
@@ -169,11 +169,13 @@ export function DynamicPlansGrid({ plans, currentPlanId }: DynamicPlansGridProps
                 <div className="h-px bg-white/10 w-full" />
                 <ul className="space-y-4">
                   {features.map((item: string, i: number) => (
-                    <li key={i} className="flex items-start gap-3 text-sm text-white/80">
-                      <div className="mt-1 h-4 w-4 rounded-full bg-color-primary/20 flex items-center justify-center text-color-primary">
-                        <Check className="h-2.5 w-2.5" />
+                    <li key={i} className="flex items-start gap-3 group/item">
+                      <div className="mt-1 flex-shrink-0">
+                        <CheckCircle2 className="h-4 w-4 text-color-primary group-hover/item:scale-120 transition-transform duration-300" />
                       </div>
-                      {item}
+                      <span className="text-sm font-bold text-white/60 leading-snug group-hover/item:text-white transition-colors">
+                        {item}
+                      </span>
                     </li>
                   ))}
                 </ul>

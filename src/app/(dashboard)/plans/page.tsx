@@ -33,43 +33,115 @@ export default async function PlansPage() {
     plans = [
       { 
         id: '1', slug: 'explorador', name_en: 'Explorer', name_es: 'Explorador', 
-        description_en: 'Perfect to test the portal power and start automating for free.', 
-        description_es: 'Perfecto para probar la potencia del portal y empezar a automatizar sin costo.', 
+        description_en: 'The perfect entry point to the AI revolution. Test our core capabilities without spending a cent.', 
+        description_es: 'La puerta de entrada ideal a la revolución de la IA. Prueba nuestras capacidades principales sin gastar un centavo.', 
         price_monthly: 0.00, 
-        items_en: ['1 Base Tool', '3 Mini-apps', 'Community support'], 
-        items_es: ['1 Herramienta base', '3 Miniapps', 'Soporte de la comunidad'] 
+        items_en: [
+          '1 Specialized Base Tool', 
+          '3 High-Performance Miniapps', 
+          'Standard Generation Speed',
+          'Community Discord Support',
+          'Standard Cloud Hosting'
+        ], 
+        items_es: [
+          '1 Herramienta Base Especializada', 
+          '3 Miniapps de Alto Rendimiento', 
+          'Velocidad de Generación Estándar',
+          'Soporte vía Comunidad Discord',
+          'Alojamiento Cloud Estándar'
+        ] 
       },
       { 
         id: '2', slug: 'basic', name_en: 'Entrepreneur', name_es: 'Emprendedor', 
-        description_en: 'Designed for solopreneurs. Includes email support and no watermark.', 
-        description_es: 'Diseñado para solopreneurs. Incluye soporte por email y eliminación de marca de agua.', 
+        description_en: 'Scale your personal brand with professional tools. No watermarks, just your brand.', 
+        description_es: 'Escala tu marca personal con herramientas profesionales. Sin marcas de agua, solo tu marca.', 
         price_monthly: 29.00, 
-        items_en: ['4 Additional Tools', '7 Mini-apps', 'Email Support', 'No Watermark'], 
-        items_es: ['4 Herramientas adicionales', '7 Miniapps', 'Soporte por email', 'Sin marca de agua'] 
+        items_en: [
+          '4 Pro Tools (Image/Text/Video)', 
+          '7 Specialized Miniapps', 
+          'No Watermarks on Assets',
+          'Fast Generation Queue',
+          'Direct Email Support',
+          'Personal Commercial License'
+        ], 
+        items_es: [
+          '4 Herramientas Pro (Imagen/Texto/Video)', 
+          '7 Miniapps Especializadas', 
+          'Sin Marcas de Agua en Recursos',
+          'Cola de Generación Rápida',
+          'Soporte Directo por Email',
+          'Licencia Comercial Personal'
+        ] 
       },
       { 
         id: '3', slug: 'growth', name_en: 'Growth', name_es: 'Crecimiento', 
-        description_en: 'For scaling businesses. Includes custom domain and analytics.', 
-        description_es: 'Para negocios que escalan. Incluye dominio personalizado y analíticas.', 
+        description_en: 'For businesses that need more power. Analytics and custom branding to dominate your niche.', 
+        description_es: 'Para negocios que necesitan más poder. Analíticas y marca personalizada para dominar tu nicho.', 
         price_monthly: 49.00, 
-        items_en: ['Niche Specific Tools', '10 Mini-apps', 'Custom Domain', 'Analytics Dashboard'], 
-        items_es: ['Herramientas de nicho', '10 Miniapps', 'Dominio personalizado', 'Analíticas'] 
+        items_en: [
+          'Niche Specific AI Tools', 
+          '10 Advanced Miniapps', 
+          'Custom Domain Integration', 
+          'Advanced Analytics Dashboard',
+          'SEO Optimization Tools',
+          'Priority Generation Speed'
+        ], 
+        items_es: [
+          'Herramientas de IA para Nichos', 
+          '10 Miniapps Avanzadas', 
+          'Integración de Dominio Propio', 
+          'Panel de Analíticas Avanzado',
+          'Herramientas de Optimización SEO',
+          'Velocidad de Generación Prioritaria'
+        ] 
       },
       { 
         id: '4', slug: 'professional', name_en: 'Unlimited Power', name_es: 'Poder Ilimitado', 
-        description_en: 'Ideal for agencies and power users. Priority support and multi-user.', 
-        description_es: 'Ideal para agencias y power users. Incluye soporte prioritario y modo multi-usuario.', 
+        description_en: 'The ultimate agency powerhouse. White-label everything and manage your team with ease.', 
+        description_es: 'La central de energía para agencias. Marca blanca en todo y gestiona a tu equipo con facilidad.', 
         price_monthly: 97.00, 
-        items_en: ['All Business Tools', '30 Mini-apps', 'Priority Support', 'Multi-user Mode', 'White Label Options'], 
-        items_es: ['Todas las herramientas', '30 Miniapps', 'Soporte prioritario', 'Modo multi-usuario', 'Opciones Marca Blanca'] 
+        items_en: [
+          'Complete Business Suite Access', 
+          '30+ Premium Miniapps', 
+          'Full White-Label Capabilities',
+          'Multi-user Team Management',
+          'Priority VIP Support 24/7',
+          'API Access (Early Access)',
+          'Extended Commercial Rights'
+        ], 
+        items_es: [
+          'Acceso a Suite Completa de Negocio', 
+          'Más de 30 Miniapps Premium', 
+          'Capacidad Total de Marca Blanca',
+          'Gestión de Equipo Multi-usuario',
+          'Soporte VIP Prioritario 24/7',
+          'Acceso a API (Acceso Temprano)',
+          'Derechos Comerciales Extendidos'
+        ] 
       },
       { 
         id: '5', slug: 'elite', name_en: 'Everything Unlimited', name_es: 'Elite', 
-        description_en: 'Total access to new apps before anyone else and monthly optimization consulting.', 
-        description_es: 'Acceso total a nuevas apps antes que nadie y consultoría mensual de optimización.', 
+        description_en: 'The inner circle of AI innovators. Access everything, influence our roadmap, and grow exponentially.', 
+        description_es: 'El círculo interno de innovadores de IA. Accede a todo, influye en nuestro roadmap y crece exponencialmente.', 
         price_monthly: 197.00, 
-        items_en: ['Everything Unlimited', 'Beta Access', 'Monthly Consulting', 'Full White Label', 'Priority Feature Requests'], 
-        items_es: ['Todo Ilimitado', 'Acceso Beta', 'Consultoría mensual', 'Marca Blanca Total', 'Peticiones de funciones VIP'] 
+        items_en: [
+          'Everything Truly Unlimited', 
+          'Private Beta for All New Apps', 
+          '1-on-1 Monthly Growth Strategy', 
+          'Full White-Label Deployment', 
+          'Priority Feature Roadmap Influence',
+          'Dedicated Success Manager',
+          'Custom Tool Development Requests'
+        ], 
+        items_es: [
+          'Todo Absolutamente Ilimitado', 
+          'Beta Privada de Nuevas Apps', 
+          'Estrategia de Crecimiento Mensual 1-a-1', 
+          'Despliegue de Marca Blanca Total', 
+          'Influencia Directa en el Roadmap',
+          'Gestor de Éxito Dedicado',
+          'Peticiones de Desarrollo de Herramientas'
+        ] 
       }
     ] as any;
   }
