@@ -4,6 +4,7 @@ import "./globals.css"
 import { LanguageProvider } from "@/context/LanguageContext"
 import { ToastProvider } from "@/components/ui/ToastProvider"
 import { PayPalProvider } from "@/components/providers/PayPalProvider"
+import { WhatsAppButton } from "@/components/ui/WhatsAppButton"
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -35,6 +36,7 @@ export default function RootLayout({
           <ToastProvider>
             <PayPalProvider>
               {children}
+              <WhatsAppButton />
             </PayPalProvider>
           </ToastProvider>
         </LanguageProvider>

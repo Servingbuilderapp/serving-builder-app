@@ -165,7 +165,7 @@ export default async function PlansPage() {
 
       <div className="text-center p-8 border border-dashed border-white/10 rounded-3xl bg-white/2">
         <p className="text-sm text-white/40">
-          ¿Necesitas un plan a medida? <a href="#" className="text-primary hover:underline font-bold">Contacta con soporte</a>
+          ¿Necesitas un plan a medida? <a href="https://wa.me/573227008727?text=Hola,%20necesito%20información%20sobre%20un%20plan%20a%20medida" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-bold">Contacta con soporte</a>
         </p>
       </div>
     </div>
