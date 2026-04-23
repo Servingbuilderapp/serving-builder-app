@@ -1,8 +1,9 @@
 import React from 'react'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { ArrowRight, Sparkles, Zap, Shield, Globe, LayoutGrid, ChevronRight, Check } from 'lucide-react'
+import { ArrowRight, Sparkles, Zap, Shield, Globe, LayoutGrid, ChevronRight, Check, Gift } from 'lucide-react'
 import { PricingTable } from '@/components/plans/PricingTable'
+import { IdeaGenerator } from '@/components/landing/IdeaGenerator'
 import { GlowButton } from '@/components/ui/GlowButton'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { cn } from '@/lib/utils'
@@ -354,6 +355,26 @@ export default async function LandingPage() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Idea Generator Section (The Gift) */}
+      <section className="relative z-10 py-32 px-6 overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-color-primary/5 rounded-full blur-[150px] pointer-events-none" />
+        
+        <div className="max-w-7xl mx-auto space-y-16">
+          <div className="flex flex-col items-center text-center space-y-8 mb-10">
+            <p className="text-white/60 font-medium text-lg max-w-4xl leading-relaxed">
+              Acabas de ver 5 micro-apps, una fusión que no existe en ningún lado, y los números reales de tu primer año. <br className="hidden md:block" />
+              <span className="text-white font-bold">¿Te gustaría recibir ideas así — personalizadas para la industria que TÚ elijas — generadas por IA en 30 segundos?</span>
+            </p>
+            
+            <p className="text-white/30 font-medium text-sm max-w-3xl">
+              Eric te regala <span className="text-white font-black">5 generaciones gratuitas</span> de su Generador de Apps Rentables. Cada generación te da 5 micro-apps únicas + 1 fusión + la matemática completa. Eso es <span className="text-white font-black">25 ideas de negocio en 5 industrias</span>. Elige tu industria y genera.
+            </p>
+          </div>
+
+          <IdeaGenerator />
         </div>
       </section>
 
