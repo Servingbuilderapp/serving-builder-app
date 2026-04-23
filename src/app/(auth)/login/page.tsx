@@ -43,8 +43,9 @@ function LoginContent() {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session) {
+        const redirectTo = searchParams.get('redirect') || '/dashboard'
         startTransition(() => {
-          router.push('/dashboard')
+          router.push(redirectTo)
         })
       }
     })

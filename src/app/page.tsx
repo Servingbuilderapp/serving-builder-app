@@ -16,7 +16,7 @@ export default async function LandingPage() {
   let { data: apps } = await supabase
     .from('micro_apps')
     .select('*')
-    .limit(6)
+    .limit(12)
 
   // Fallback si la DB de apps está vacía o falla
   if (!apps || apps.length === 0) {
@@ -27,6 +27,8 @@ export default async function LandingPage() {
       { id: '4', slug: 'seo-boost', name_es: 'Optimizador SEO Elite', description_es: 'Domina los buscadores con análisis profundo de palabras clave.', icon: 'Zap' },
       { id: '5', slug: 'social-ninja', name_es: 'Social Media Ninja', description_es: 'Automatiza tu presencia en redes sociales con contenido viral.', icon: 'Share2' },
       { id: '6', slug: 'code-wizard', name_es: 'Asistente Code Wizard', description_es: 'Desarrolla aplicaciones y resuelve bugs con lógica de nivel experto.', icon: 'LayoutGrid' },
+      { id: '7', slug: 'image-upscaler', name_es: 'Upscaler de Imagen IA', description_es: 'Mejora la resolución de tus imágenes sin perder calidad.', icon: 'Sparkles' },
+      { id: '8', slug: 'voice-pro', name_es: 'Sintetizador de Voz Pro', description_es: 'Convierte texto en voz humana ultra-natural en múltiples idiomas.', icon: 'MessageSquare' },
     ] as any;
   }
 
