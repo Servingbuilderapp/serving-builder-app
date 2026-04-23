@@ -1,12 +1,13 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Sparkles, Zap, PieChart, Layers, ArrowRight, Loader2, CheckCircle2, Star } from 'lucide-react'
+import { Sparkles, Zap, PieChart, Layers, ArrowRight, Loader2, CheckCircle2, Star, Target, TrendingUp, DollarSign } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { GlowButton } from '@/components/ui/GlowButton'
 import { GlassCard } from '@/components/ui/GlassCard'
 
 const INDUSTRIES = [
+  // Core / Classics
   { id: 'real-estate', name_es: 'Bienes Raíces', icon: '🏠' },
   { id: 'fitness', name_es: 'Salud y Fitness', icon: '💪' },
   { id: 'education', name_es: 'Educación y Cursos', icon: '🎓' },
@@ -19,102 +20,172 @@ const INDUSTRIES = [
   { id: 'beauty', name_es: 'Belleza y Spas', icon: '💄' },
   { id: 'pets', name_es: 'Mascotas y Veterinaria', icon: '🐾' },
   { id: 'travel', name_es: 'Viajes y Turismo', icon: '✈️' },
-  { id: 'crypto', name_es: 'Cripto y Web3', icon: '🔗' },
   { id: 'gaming', name_es: 'Gaming y Esports', icon: '🎮' },
   { id: 'fashion', name_es: 'Moda y Accesorios', icon: '👗' },
   { id: 'photography', name_es: 'Fotografía y Video', icon: '📸' },
   { id: 'events', name_es: 'Eventos y Bodas', icon: '🎊' },
   { id: 'hr', name_es: 'RRHH y Reclutamiento', icon: '👥' },
-  { id: 'real-estate-invest', name_es: 'Inversión Inmobiliaria', icon: '🏢' },
   { id: 'architecture', name_es: 'Arquitectura y Diseño', icon: '📐' },
   { id: 'logistics', name_es: 'Logística y Transporte', icon: '📦' },
-  { id: 'cleaning', name_es: 'Servicios de Limpieza', icon: '🧹' },
-  { id: 'construction', name_es: 'Construcción y Reformas', icon: '🏗️' },
-  { id: 'automotive', name_es: 'Automotriz y Talleres', icon: '🚗' },
-  { id: 'insurance', name_es: 'Seguros y Corretaje', icon: '🛡️' },
-  { id: 'psychology', name_es: 'Psicología y Terapia', icon: '🧠' },
-  { id: 'yoga', name_es: 'Yoga y Mindfulness', icon: '🧘' },
+  
+  // Requested & Advanced
+  { id: 'agriculture', name_es: 'Agricultura y Ganadería', icon: '🚜' },
+  { id: 'mental-health', name_es: 'Salud Mental y Bienestar', icon: '🧠' },
+  { id: 'environment', name_es: 'Medio Ambiente y Ecología', icon: '🌿' },
+  { id: 'entrepreneurship', name_es: 'Emprendimiento y Startups', icon: '🚀' },
+  { id: 'social-projects', name_es: 'Proyectos Sociales y ONGs', icon: '🤝' },
+  { id: 'tokenization', name_es: 'Tokenización de Activos', icon: '💎' },
+  { id: 'industry-4', name_es: 'Innovación y Tecnologías 4.0', icon: '🤖' },
+  { id: 'blockchain', name_es: 'Blockchain y Web3', icon: '🔗' },
+  { id: 'ai-advanced', name_es: 'Inteligencia Artificial', icon: '🧠' },
+  { id: 'freelance', name_es: 'Profesionales Independientes', icon: '👨‍💻' },
+  { id: 'b2b', name_es: 'B2B y Servicios Corporativos', icon: '🏢' },
+  { id: 'consulting', name_es: 'Consultoría y Asesoría', icon: '👔' },
+  
+  // Specialized Niches
+  { id: 'crypto-mining', name_es: 'Minería de Cripto', icon: '⛏️' },
+  { id: 'renewable-energy', name_es: 'Energías Renovables', icon: '☀️' },
+  { id: 'smart-cities', name_es: 'Smart Cities e Infraestructura', icon: '🏙️' },
+  { id: 'biotech', name_es: 'Biotecnología', icon: '🧪' },
+  { id: 'cybersecurity', name_es: 'Ciberseguridad', icon: '🔐' },
+  { id: 'iot', name_es: 'Internet de las Cosas (IoT)', icon: '📡' },
+  { id: 'robotics', name_es: 'Robótica y Automatización', icon: '🦾' },
+  { id: 'space-tech', name_es: 'Tecnología Espacial', icon: '🚀' },
+  { id: 'vr-ar', name_es: 'Realidad Virtual y Aumentada', icon: '👓' },
+  { id: 'fintech', name_es: 'Fintech y Neobancos', icon: '💳' },
+  { id: 'insurtech', name_es: 'Insurtech y Seguros', icon: '🛡️' },
+  { id: 'proptech', name_es: 'Proptech e Inmobiliaria Tech', icon: '🏢' },
+  { id: 'edtech', name_es: 'EdTech y Educación Online', icon: '💻' },
+  { id: 'medtech', name_es: 'MedTech y Salud Digital', icon: '🏥' },
+  { id: 'agritech', name_es: 'AgriTech y Agricultura Tech', icon: '🌱' },
+  { id: 'foodtech', name_es: 'FoodTech e Innovación Alimentaria', icon: '🍔' },
+  { id: 'clean-tech', name_es: 'CleanTech y Sostenibilidad', icon: '♻️' },
+  
+  // Services & Business
   { id: 'saas', name_es: 'Software y SaaS', icon: '💻' },
   { id: 'coaching', name_es: 'Coaching y Mentoría', icon: '📢' },
   { id: 'podcasting', name_es: 'Podcasting y Audio', icon: '🎙️' },
   { id: 'influencers', name_es: 'Influencers y Creadores', icon: '🤳' },
   { id: 'dropshipping', name_es: 'Dropshipping', icon: '🚢' },
-  { id: 'nonprofit', name_es: 'ONGs y Fundaciones', icon: '🤝' },
+  { id: 'cleaning', name_es: 'Servicios de Limpieza', icon: '🧹' },
+  { id: 'construction', name_es: 'Construcción y Reformas', icon: '🏗️' },
+  { id: 'automotive', name_es: 'Automotriz y Talleres', icon: '🚗' },
+  { id: 'insurance', name_es: 'Seguros y Corretaje', icon: '🛡️' },
+  { id: 'yoga', name_es: 'Yoga y Mindfulness', icon: '🧘' },
   { id: 'gardening', name_es: 'Jardinería y Paisajismo', icon: '🌿' },
   { id: 'security', name_es: 'Seguridad y Vigilancia', icon: '🚨' },
-  { id: 'energy', name_es: 'Energía y Renovables', icon: '⚡' },
-  { id: 'agriculture', name_es: 'Agricultura y Ganadería', icon: '🚜' },
   { id: 'music', name_es: 'Música y Producción', icon: '🎵' },
   { id: 'writing', name_es: 'Escritura y Copywriting', icon: '✍️' },
   { id: 'translation', name_es: 'Traducción e Idiomas', icon: '🌐' },
-  { id: 'cybersecurity', name_es: 'Ciberseguridad', icon: '🔐' },
-  { id: 'iot', name_es: 'IoT y Smart Homes', icon: '🏠' },
-  { id: 'cleaning-ind', name_es: 'Limpieza Industrial', icon: '🏭' },
   { id: 'recycling', name_es: 'Reciclaje y Ecología', icon: '♻️' },
   { id: 'fishing', name_es: 'Pesca y Acuicultura', icon: '🎣' },
   { id: 'luxury', name_es: 'Lujo y Estilo de Vida', icon: '💎' },
   { id: 'wedding-plan', name_es: 'Wedding Planning', icon: '💍' },
   { id: 'baby', name_es: 'Bebés y Maternidad', icon: '👶' },
   { id: 'home-decor', name_es: 'Decoración de Hogar', icon: '🖼️' },
-  { id: 'parenting', name_es: 'Parenting y Crianza', icon: '👨‍👩‍👧' },
-  { id: 'pets-food', name_es: 'Alimentación de Mascotas', icon: '🦴' },
   { id: 'coffee', name_es: 'Cafeterías y Barismo', icon: '☕' },
   { id: 'wine', name_es: 'Vinos y Enología', icon: '🍷' },
-  { id: 'beer', name_es: 'Cervecería Artesanal', icon: '🍺' },
-  { id: 'bakery', name_es: 'Panadería y Pastelería', icon: '🥐' },
   { id: 'gym', name_es: 'Gimnasios y Boxeo', icon: '🥊' },
   { id: 'martial-arts', name_es: 'Artes Marciales', icon: '🥋' },
-  { id: 'running', name_es: 'Running y Maratón', icon: '🏃' },
   { id: 'cycling', name_es: 'Ciclismo', icon: '🚲' },
-  { id: 'swimming', name_es: 'Natación', icon: '🏊' },
   { id: 'football', name_es: 'Fútbol y Deportes', icon: '⚽' },
-  { id: 'tennis', name_es: 'Tenis y Pádel', icon: '🎾' },
-  { id: 'golf', name_es: 'Golf', icon: '⛳' },
-  { id: 'outdoor', name_es: 'Camping y Outdoor', icon: '🏕️' },
-  { id: 'handmade', name_es: 'Artesanías y DIY', icon: '🎨' },
-  { id: 'jewelry', name_es: 'Joyería', icon: '📿' },
-  { id: 'toys', name_es: 'Juguetes y Hobbies', icon: '🧸' },
-  { id: 'books', name_es: 'Libros y Editoriales', icon: '📚' },
-  { id: 'newspaper', name_es: 'Noticias y Medios', icon: '📰' },
-  { id: 'theatre', name_es: 'Teatro y Cine', icon: '🎭' },
-  { id: 'dance', name_es: 'Danza y Baile', icon: '💃' },
   { id: 'art', name_es: 'Arte y Galerías', icon: '🎨' },
   { id: 'spirituality', name_es: 'Espiritualidad', icon: '✨' },
-  { id: 'astrology', name_es: 'Astrología', icon: '🌙' },
-  { id: 'magic', name_es: 'Magia e Ilusionismo', icon: '🪄' },
-  { id: 'cleaning-car', name_es: 'Detailing Automotriz', icon: '✨' },
-  { id: 'vintage', name_es: 'Vintage y Segunda Mano', icon: '📜' },
   { id: 'gadgets', name_es: 'Gadgets Tecnológicos', icon: '⌚' },
   { id: 'drones', name_es: 'Drones y Robótica', icon: '🚁' },
-  { id: 'ai', name_es: 'IA Aplicada', icon: '🤖' },
   { id: 'nocode', name_es: 'No-Code y Low-Code', icon: '🛠️' },
-  { id: 'cyber-security', name_es: 'Ciber-Seguridad Personal', icon: '🛡️' },
   { id: 'productivity', name_es: 'Productividad Personal', icon: '📅' },
   { id: 'biohacking', name_es: 'Biohacking', icon: '🧪' },
   { id: 'investing', name_es: 'Bolsa e Inversiones', icon: '📈' },
   { id: 'taxes', name_es: 'Impuestos y Contabilidad', icon: '📝' },
-  { id: 'real-estate-luxury', name_es: 'Inmuebles de Lujo', icon: '🏰' },
   { id: 'co-working', name_es: 'Co-working y Oficinas', icon: '🏢' },
   { id: 'virtual-asist', name_es: 'Asistencia Virtual', icon: '👩‍💻' },
   { id: 'copywriting', name_es: 'Copywriting Persuasivo', icon: '✒️' },
-  { id: 'public-speak', name_es: 'Hablar en Público', icon: '🎤' },
   { id: 'languages', name_es: 'Idiomas Online', icon: '🗣️' },
-  { id: 'cooking-class', name_es: 'Clases de Cocina', icon: '👨‍🍳' },
   { id: 'survival', name_es: 'Supervivencia y Bushcraft', icon: '🔪' },
-  { id: 'solar', name_es: 'Energía Solar', icon: '☀️' },
-  { id: 'sustainable', name_es: 'Vida Sostenible', icon: '♻️' },
   { id: 'interior-design', name_es: 'Diseño de Interiores', icon: '🛋️' },
   { id: 'graphic-design', name_es: 'Diseño Gráfico', icon: '🖌️' },
   { id: 'video-edit', name_es: 'Edición de Video', icon: '🎞️' },
   { id: 'social-ads', name_es: 'Publicidad Pagada', icon: '💰' },
+  
+  // Even more niches to hit 100+
+  { id: 'hvac', name_es: 'Aire Acondicionado y Calefacción', icon: '❄️' },
+  { id: 'plumbing', name_es: 'Fontanería y Plomería', icon: '🚰' },
+  { id: 'electrical', name_es: 'Electricidad y Energía', icon: '⚡' },
+  { id: 'roofing', name_es: 'Techos y Cubiertas', icon: '🏠' },
+  { id: 'pest-control', name_es: 'Control de Plagas', icon: '🐜' },
+  { id: 'pool-service', name_es: 'Mantenimiento de Piscinas', icon: '🏊' },
+  { id: 'landscaping', name_es: 'Paisajismo y Jardinería', icon: '🌳' },
+  { id: 'waste-mgmt', name_es: 'Gestión de Residuos', icon: '🗑️' },
+  { id: 'printing', name_es: 'Impresión y Merchandising', icon: '🖨️' },
+  { id: 'storage', name_es: 'Almacenamiento y Trasteros', icon: '📦' },
+  { id: 'vending', name_es: 'Máquinas Vending', icon: '🍫' },
+  { id: 'laundry', name_es: 'Lavandería y Tintorería', icon: '🧺' },
+  { id: 'security-home', name_es: 'Seguridad para el Hogar', icon: '🏠' },
+  { id: 'personal-shopper', name_es: 'Personal Shopper', icon: '🛍️' },
+  { id: 'concierge', name_es: 'Servicios de Conserjería', icon: '🛎️' },
+  { id: 'moving', name_es: 'Mudanzas y Traslados', icon: '🚚' },
+  { id: 'courier', name_es: 'Mensajería y Reparto', icon: '🛵' },
+  { id: 'pet-grooming', name_es: 'Peluquería Canina', icon: '✂️' },
+  { id: 'dog-training', name_es: 'Adiestramiento Canino', icon: '🐕' },
+  { id: 'vet-mobile', name_es: 'Veterinaria a Domicilio', icon: '🚑' },
+  { id: 'care-seniors', name_es: 'Cuidado de Personas Mayores', icon: '👵' },
+  { id: 'nanny', name_es: 'Cuidado de Niños', icon: '🤱' },
+  { id: 'tutoring-math', name_es: 'Clases de Matemáticas', icon: '➕' },
+  { id: 'tutoring-eng', name_es: 'Clases de Inglés', icon: '🔤' },
+  { id: 'music-piano', name_es: 'Clases de Piano', icon: '🎹' },
+  { id: 'music-guitar', name_es: 'Clases de Guitarra', icon: '🎸' },
+  { id: 'fitness-online', name_es: 'Entrenamiento Online', icon: '💻' },
+  { id: 'yoga-pre', name_es: 'Yoga Prenatal', icon: '🤰' },
+  { id: 'meditation', name_es: 'Meditación Guiada', icon: '🧘' },
+  { id: 'nutrition-vegan', name_es: 'Nutrición Vegana', icon: '🥦' },
+  { id: 'paleo', name_es: 'Dieta Paleo', icon: '🍖' },
+  { id: 'keto', name_es: 'Dieta Keto', icon: '🥑' },
+  { id: 'crossfit', name_es: 'Crossfit', icon: '🏋️' },
+  { id: 'pilates', name_es: 'Pilates', icon: '🤸' },
+  { id: 'zumba', name_es: 'Zumba y Baile', icon: '💃' },
+  { id: 'tennis-padel', name_es: 'Tenis y Pádel', icon: '🎾' },
+  { id: 'golf-pro', name_es: 'Clases de Golf', icon: '⛳' },
+  { id: 'hiking', name_es: 'Senderismo y Trekking', icon: '🥾' },
+  { id: 'camping', name_es: 'Camping y Glamping', icon: '⛺' },
+  { id: 'surfing', name_es: 'Surf y Kitesurf', icon: '🏄' },
+  { id: 'skiing', name_es: 'Esquí y Snowboard', icon: '⛷️' },
+  { id: 'scuba', name_es: 'Buceo y Submarinismo', icon: '🤿' },
+  { id: 'sailing', name_es: 'Vela y Yates', icon: '⛵' },
+  { id: 'classic-cars', name_es: 'Coches Clásicos', icon: '🏎️' },
+  { id: 'motorcycles', name_es: 'Motos y Custom', icon: '🏍️' },
+  { id: 'bicycles-ebike', name_es: 'E-Bikes y Movilidad', icon: '🚲' },
+  { id: 'renewable-solar', name_es: 'Energía Solar Fotovoltaica', icon: '☀️' },
+  { id: 'renewable-wind', name_es: 'Energía Eólica', icon: '🌬️' },
+  { id: 'home-automation', name_es: 'Domótica Avanzada', icon: '🏠' },
+  { id: 'interior-office', name_es: 'Diseño de Oficinas', icon: '🏢' },
+  { id: 'landscape-commercial', name_es: 'Paisajismo Comercial', icon: '🏢' },
+  { id: 'event-planning', name_es: 'Organización de Eventos', icon: '📅' },
+  { id: 'wedding-photography', name_es: 'Fotografía de Bodas', icon: '📸' },
+  { id: 'video-drone', name_es: 'Video con Drones', icon: '🚁' },
+  { id: 'animation-3d', name_es: 'Animación 3D', icon: '🎬' },
+  { id: 'game-dev', name_es: 'Desarrollo de Videojuegos', icon: '🎮' },
+  { id: 'app-dev-mobile', name_es: 'Desarrollo de Apps Móviles', icon: '📱' },
+  { id: 'web-design-ux', name_es: 'Diseño Web y UX', icon: '🖥️' },
+  { id: 'cyber-sec-audit', name_es: 'Auditoría de Ciberseguridad', icon: '🔐' },
+  { id: 'cloud-hosting', name_es: 'Cloud y Alojamiento', icon: '☁️' },
+  { id: 'big-data-ana', name_es: 'Big Data y Analítica', icon: '📊' },
+  { id: 'ai-chatbots', name_es: 'Chatbots e IA', icon: '🤖' },
+  { id: 'machine-learning', name_es: 'Machine Learning', icon: '⚙️' },
+  { id: 'blockchain-dev', name_es: 'Desarrollo Blockchain', icon: '🔗' },
+  { id: 'nft-art', name_es: 'Arte NFT y Coleccionables', icon: '🎨' },
+  { id: 'metaverse-real', name_es: 'Metaverso y Realidad Virtual', icon: '🌐' },
+  
   { id: 'others', name_es: 'Otros (Especificar)', icon: '✨' }
 ]
 
 interface IdeaGeneratorProps {
   userPlan?: string;
+  mode?: 'ideas' | 'strategies';
+  ideasCount?: number;
 }
 
-export function IdeaGenerator({ userPlan }: IdeaGeneratorProps) {
+export function IdeaGenerator({ userPlan, mode = 'ideas', ideasCount = 5 }: IdeaGeneratorProps) {
   const [industry, setIndustry] = useState('')
   const [customIndustry, setCustomIndustry] = useState('')
   const [generationsLeft, setGenerationsLeft] = useState(5)
@@ -163,25 +234,52 @@ export function IdeaGenerator({ userPlan }: IdeaGeneratorProps) {
       
       const displayIndustry = industry === 'others' ? customIndustry : INDUSTRIES.find(i => i.id === industry)?.name_es
 
+      // Generate items based on count
+      const items = Array.from({ length: ideasCount }).map((_, i) => ({
+        title: i === 0 ? `Generador de Copys para ${displayIndustry}` : 
+               i === 1 ? `Calculadora de ROI ${displayIndustry}` :
+               i === 2 ? `Asistente de Leads para ${displayIndustry}` :
+               i === 3 ? `Analizador de Tendencias ${displayIndustry}` :
+               i === 4 ? `Portal VIP ${displayIndustry}` :
+               i === 5 ? `Optimizador de Procesos ${displayIndustry}` :
+               i === 6 ? `Dashboard de KPIs ${displayIndustry}` :
+               i === 7 ? `Sistema de Reservas ${displayIndustry}` :
+               i === 8 ? `Gestor de Inventario ${displayIndustry}` :
+               `Herramienta Inteligente #${i + 1} para ${displayIndustry}`,
+        desc: `Solución innovadora que utiliza IA para resolver problemas críticos en el sector de ${displayIndustry}.`,
+        market: `$${(Math.random() * 5 + 0.5).toFixed(1)}M/mo`
+      }))
+
       setResult({
         industry: displayIndustry,
-        microApps: [
-          { title: `Generador de Copys para ${displayIndustry}`, desc: `IA que redacta descripciones hipnóticas especializadas en ${displayIndustry}.`, market: '$1.2M/mo' },
-          { title: `Calculadora de ROI ${displayIndustry}`, desc: `Herramienta de precisión para el nicho de ${displayIndustry}.`, market: '$800k/mo' },
-          { title: `Asistente de Leads para ${displayIndustry}`, desc: `Bot que califica leads y agenda citas en el sector ${displayIndustry}.`, market: '$2.5M/mo' },
-          { title: `Analizador de Tendencias ${displayIndustry}`, desc: `Dashboard que predice el futuro de ${displayIndustry}.`, market: '$3.1M/mo' },
-          { title: `Portal VIP ${displayIndustry}`, desc: `Experiencia exclusiva para clientes de ${displayIndustry}.`, market: '$4.5M/mo' }
-        ],
+        microApps: items,
         fusion: {
           title: `${displayIndustry}OS Pro`,
           desc: `La fusión definitiva: CRM + Generador de Contenido + Analítica Predictiva para ${displayIndustry}.`,
           impact: 'Potencial de Facturación: $10k - $25k / mes'
         },
+        strategies: mode === 'strategies' ? {
+          marketing: [
+            { title: 'Marketing de Contenidos', desc: `Creación de 30 reels mensuales con ganchos psicológicos sobre ${displayIndustry}.` },
+            { title: 'Ads de Alta Conversión', desc: `Campañas en Meta y Google dirigidas a dueños de negocios en ${displayIndustry}.` },
+            { title: 'Estrategia de Autoridad', desc: `Posicionamiento en LinkedIn como el experto #1 en tecnología para ${displayIndustry}.` }
+          ],
+          sales: [
+            { title: 'Modelo Suscripción', desc: 'Pricing mensual de $49 - $197 dependiendo del volumen de uso.' },
+            { title: 'Demo Automática', desc: 'Embudo que permite probar la herramienta y cierra la venta con un video personalizado.' },
+            { title: 'Partnerships', desc: `Alianzas con asociaciones locales de ${displayIndustry} para distribución masiva.` }
+          ],
+          growth: [
+            { title: 'Bucle Viral', desc: 'Descuentos cruzados por referir a otros profesionales del sector.' },
+            { title: 'Expansión Vertical', desc: `Módulos adicionales para sub-nichos específicos dentro de ${displayIndustry}.` },
+            { title: 'Retención Premium', desc: 'Soporte prioritario y acceso a betas exclusivas para usuarios Elite.' }
+          ]
+        } : null,
         math: {
           cost: '$150',
           time: '3-5 días',
           users: '500 suscriptores',
-          revenue: '$14,500/mes'
+          revenue: `$${(ideasCount * 2900).toLocaleString()}/mes`
         }
       })
       setIsGenerating(false)
@@ -193,13 +291,15 @@ export function IdeaGenerator({ userPlan }: IdeaGeneratorProps) {
       {/* Header Info */}
       <div className="text-center space-y-4">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-color-primary/10 border border-color-primary/20 text-[10px] font-black uppercase tracking-[0.2em] text-color-primary">
-          🎁 EL REGALO — GENERADOR DE APPS RENTABLES
+          🎁 {mode === 'strategies' ? 'PORTAL PREMIUM — GENERADOR DE ESTRATEGIAS' : 'EL REGALO — GENERADOR DE APPS RENTABLES'}
         </div>
         <h2 className="text-4xl md:text-5xl font-black text-white italic tracking-tighter uppercase">
-          Generador de Ideas de Micro-Apps
+          {mode === 'strategies' ? 'Generador de Estrategias de Negocio' : 'Generador de Ideas de Micro-Apps'}
         </h2>
         <p className="text-white/40 font-bold">
-          Tu fábrica personal de ideas de negocio — 25 ideas en 5 industrias
+          {mode === 'strategies' 
+            ? `Estrategia completa y ${ideasCount} ideas de negocio para escalar tu visión.` 
+            : `Tu fábrica personal de ideas de negocio — 150+ industrias disponibles.`}
         </p>
       </div>
 
@@ -260,11 +360,10 @@ export function IdeaGenerator({ userPlan }: IdeaGeneratorProps) {
               </div>
             )}
           </div>
-          </div>
 
-            <GlowButton 
+          <GlowButton 
             onClick={handleGenerate}
-            disabled={!industry || generationsLeft <= 0 || isGenerating}
+            disabled={!industry || (!isPremium && generationsLeft <= 0) || isGenerating}
             className="w-full h-16 text-sm font-black uppercase tracking-[0.3em] gap-3 italic"
           >
             {isGenerating ? (
@@ -274,14 +373,14 @@ export function IdeaGenerator({ userPlan }: IdeaGeneratorProps) {
               </>
             ) : (
               <>
-                GENERAR 5 IDEAS DE MICRO-APPS + 1 FUSIÓN
+                GENERAR {ideasCount} {mode === 'strategies' ? 'ESTRATEGIAS' : 'IDEAS'} DE MICRO-APPS
                 <Zap className="h-5 w-5 fill-white" />
               </>
             )}
           </GlowButton>
         </div>
 
-        {generationsLeft === 0 && !isGenerating && !result && (
+        {!isPremium && generationsLeft === 0 && !isGenerating && !result && (
           <div className="mt-8 p-6 rounded-2xl bg-color-primary/10 border border-color-primary/20 text-center animate-in zoom-in-95">
             <p className="text-sm font-bold text-white mb-4">¡Has agotado tus consultas gratuitas de ideas!</p>
             <GlowButton variant="primary" className="mx-auto px-8">Acceder a Ideas Ilimitadas</GlowButton>
@@ -291,29 +390,89 @@ export function IdeaGenerator({ userPlan }: IdeaGeneratorProps) {
 
       {/* Result Display */}
       {result && (
-        <div className="space-y-8 animate-in fade-in slide-in-from-top-8 duration-700">
-          <div className="text-center mb-6">
-            <span className="text-[10px] font-black text-color-primary uppercase tracking-[0.4em]">Propuestas de Negocio para {result.industry}</span>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {result.microApps.map((app: any, idx: number) => (
-              <GlassCard key={idx} className="p-6 border-white/5 bg-white/2 hover:border-color-primary/30 transition-all group">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="h-10 w-10 rounded-xl bg-color-primary/10 flex items-center justify-center text-color-primary">
-                    <Sparkles className="h-5 w-5" />
+        <div className="space-y-16 animate-in fade-in slide-in-from-top-8 duration-700 pb-20">
+          {/* Section: Ideas Grid */}
+          <div className="space-y-8">
+            <div className="text-center">
+              <span className="text-[10px] font-black text-color-primary uppercase tracking-[0.4em]">Propuestas de Negocio para {result.industry}</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {result.microApps.map((app: any, idx: number) => (
+                <GlassCard key={idx} className="p-6 border-white/5 bg-white/2 hover:border-color-primary/30 transition-all group">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="h-10 w-10 rounded-xl bg-color-primary/10 flex items-center justify-center text-color-primary">
+                      <Sparkles className="h-5 w-5" />
+                    </div>
+                    <span className="text-[10px] font-black text-white/20 group-hover:text-color-primary transition-colors">IDEA #{idx + 1}</span>
                   </div>
-                  <span className="text-[10px] font-black text-white/20 group-hover:text-color-primary transition-colors">IDEA #{idx + 1}</span>
-                </div>
-                <h4 className="text-lg font-black text-white uppercase italic tracking-tight mb-2">{app.title}</h4>
-                <p className="text-xs text-white/40 leading-relaxed mb-4">{app.desc}</p>
-                <div className="flex items-center gap-2 text-color-accent-blue">
-                  <PieChart className="h-3.5 w-3.5" />
-                  <span className="text-[10px] font-black uppercase tracking-widest">{app.market} Potencial</span>
-                </div>
-              </GlassCard>
-            ))}
+                  <h4 className="text-lg font-black text-white uppercase italic tracking-tight mb-2">{app.title}</h4>
+                  <p className="text-xs text-white/40 leading-relaxed mb-4">{app.desc}</p>
+                  <div className="flex items-center gap-2 text-color-accent-blue">
+                    <PieChart className="h-3.5 w-3.5" />
+                    <span className="text-[10px] font-black uppercase tracking-widest">{app.market} Potencial</span>
+                  </div>
+                </GlassCard>
+              ))}
+            </div>
           </div>
 
+          {/* Section: Strategy (Only in strategies mode) */}
+          {mode === 'strategies' && result.strategies && (
+            <div className="space-y-12">
+              <div className="text-center">
+                 <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter">Estrategia de Lanzamiento y Escalamiento</h3>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {/* Marketing */}
+                <div className="space-y-6">
+                  <div className="flex items-center gap-3">
+                    <Target className="h-6 w-6 text-color-primary" />
+                    <h4 className="text-xl font-black text-white uppercase italic tracking-tight">Marketing</h4>
+                  </div>
+                  <div className="space-y-4">
+                    {result.strategies.marketing.map((s: any, idx: number) => (
+                      <div key={idx} className="p-4 rounded-2xl bg-white/5 border border-white/10">
+                        <p className="text-xs font-black text-color-primary uppercase tracking-widest mb-1">{s.title}</p>
+                        <p className="text-[11px] text-white/60 leading-relaxed">{s.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {/* Sales */}
+                <div className="space-y-6">
+                  <div className="flex items-center gap-3">
+                    <DollarSign className="h-6 w-6 text-color-accent-blue" />
+                    <h4 className="text-xl font-black text-white uppercase italic tracking-tight">Ventas</h4>
+                  </div>
+                  <div className="space-y-4">
+                    {result.strategies.sales.map((s: any, idx: number) => (
+                      <div key={idx} className="p-4 rounded-2xl bg-white/5 border border-white/10">
+                        <p className="text-xs font-black text-color-accent-blue uppercase tracking-widest mb-1">{s.title}</p>
+                        <p className="text-[11px] text-white/60 leading-relaxed">{s.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {/* Growth */}
+                <div className="space-y-6">
+                  <div className="flex items-center gap-3">
+                    <TrendingUp className="h-6 w-6 text-color-accent-pink" />
+                    <h4 className="text-xl font-black text-white uppercase italic tracking-tight">Crecimiento</h4>
+                  </div>
+                  <div className="space-y-4">
+                    {result.strategies.growth.map((s: any, idx: number) => (
+                      <div key={idx} className="p-4 rounded-2xl bg-white/5 border border-white/10">
+                        <p className="text-xs font-black text-color-accent-pink uppercase tracking-widest mb-1">{s.title}</p>
+                        <p className="text-[11px] text-white/60 leading-relaxed">{s.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Section: Fusion */}
           <GlassCard className="p-10 border-color-accent-pink/30 bg-color-accent-pink/5 relative overflow-hidden group">
             <div className="absolute top-0 right-0 px-6 py-2 bg-color-accent-pink text-white text-[10px] font-black uppercase tracking-widest italic">
               CONCEPTO DE FUSIÓN RENTABLE
@@ -333,6 +492,7 @@ export function IdeaGenerator({ userPlan }: IdeaGeneratorProps) {
             </div>
           </GlassCard>
 
+          {/* Section: Math */}
           <div className="bg-[#111d35] rounded-[2.5rem] p-10 border border-white/10">
             <div className="text-center mb-8">
                <p className="text-[11px] font-black uppercase tracking-[0.3em] text-white/20">Proyección Estimada del Modelo de Negocio</p>

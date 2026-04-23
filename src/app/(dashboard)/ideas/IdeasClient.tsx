@@ -20,7 +20,7 @@ export default function IdeasClient({ planSlug }: { planSlug: string }) {
         </p>
       </div>
 
-      <IdeaGenerator userPlan={planSlug} />
+      <IdeaGenerator userPlan={planSlug} mode="strategies" ideasCount={10} />
       
       <div className="pt-20 border-t border-white/5">
         <div className="bg-white/5 rounded-3xl p-8 border border-white/10 text-center">

@@ -113,7 +113,7 @@ export function Header({ onToggleMobileSidebar, user, profile }: HeaderProps) {
         {/* Website Link */}
         <Link 
           href="/" 
-          className="hidden sm:flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/50 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all group"
+          className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/50 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all group shrink-0"
         >
           <Globe className="h-3.5 w-3.5 group-hover:scale-110 transition-transform" />
           {language === 'en' ? 'VIEW WEBSITE' : 'VER SITIO WEB'}
