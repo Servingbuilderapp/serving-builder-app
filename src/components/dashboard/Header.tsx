@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from '@/hooks/useTranslation'
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
-import { Menu, Search, Bell, LogOut, User as UserIcon, Settings } from 'lucide-react'
+import { Menu, Search, Bell, LogOut, User as UserIcon, Settings, Globe } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -110,6 +110,14 @@ export function Header({ onToggleMobileSidebar, user, profile }: HeaderProps) {
             <span>K</span>
           </div>
         </div>
+        {/* Website Link */}
+        <Link 
+          href="/" 
+          className="hidden sm:flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/50 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all group"
+        >
+          <Globe className="h-3.5 w-3.5 group-hover:scale-110 transition-transform" />
+          {language === 'en' ? 'VIEW WEBSITE' : 'VER SITIO WEB'}
+        </Link>
       </div>
 
       <div className="flex items-center gap-3 sm:gap-4">

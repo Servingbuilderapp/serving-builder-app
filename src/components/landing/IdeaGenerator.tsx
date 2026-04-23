@@ -14,11 +14,105 @@ const INDUSTRIES = [
   { id: 'legal', name_es: 'Legal y Abogados', icon: '⚖️' },
   { id: 'marketing', name_es: 'Marketing y Agencias', icon: '🚀' },
   { id: 'finance', name_es: 'Finanzas Personales', icon: '💰' },
-  { id: 'food', name_es: 'Restaurantes y Comida', icon: '🍕' }
+  { id: 'food', name_es: 'Restaurantes y Comida', icon: '🍕' },
+  { id: 'dentists', name_es: 'Dentistas y Odontología', icon: '🦷' },
+  { id: 'beauty', name_es: 'Belleza y Spas', icon: '💄' },
+  { id: 'pets', name_es: 'Mascotas y Veterinaria', icon: '🐾' },
+  { id: 'travel', name_es: 'Viajes y Turismo', icon: '✈️' },
+  { id: 'crypto', name_es: 'Cripto y Web3', icon: '🔗' },
+  { id: 'gaming', name_es: 'Gaming y Esports', icon: '🎮' },
+  { id: 'fashion', name_es: 'Moda y Accesorios', icon: '👗' },
+  { id: 'photography', name_es: 'Fotografía y Video', icon: '📸' },
+  { id: 'events', name_es: 'Eventos y Bodas', icon: '🎊' },
+  { id: 'hr', name_es: 'RRHH y Reclutamiento', icon: '👥' },
+  { id: 'real-estate-invest', name_es: 'Inversión Inmobiliaria', icon: '🏢' },
+  { id: 'architecture', name_es: 'Arquitectura y Diseño', icon: '📐' },
+  { id: 'logistics', name_es: 'Logística y Transporte', icon: '📦' },
+  { id: 'cleaning', name_es: 'Servicios de Limpieza', icon: '🧹' },
+  { id: 'construction', name_es: 'Construcción y Reformas', icon: '🏗️' },
+  { id: 'automotive', name_es: 'Automotriz y Talleres', icon: '🚗' },
+  { id: 'insurance', name_es: 'Seguros y Corretaje', icon: '🛡️' },
+  { id: 'psychology', name_es: 'Psicología y Terapia', icon: '🧠' },
+  { id: 'yoga', name_es: 'Yoga y Mindfulness', icon: '🧘' },
+  { id: 'saas', name_es: 'Software y SaaS', icon: '💻' },
+  { id: 'coaching', name_es: 'Coaching y Mentoría', icon: '📢' },
+  { id: 'podcasting', name_es: 'Podcasting y Audio', icon: '🎙️' },
+  { id: 'influencers', name_es: 'Influencers y Creadores', icon: '🤳' },
+  { id: 'dropshipping', name_es: 'Dropshipping', icon: '🚢' },
+  { id: 'nonprofit', name_es: 'ONGs y Fundaciones', icon: '🤝' },
+  { id: 'gardening', name_es: 'Jardinería y Paisajismo', icon: '🌿' },
+  { id: 'security', name_es: 'Seguridad y Vigilancia', icon: '🚨' },
+  { id: 'energy', name_es: 'Energía y Renovables', icon: '⚡' },
+  { id: 'agriculture', name_es: 'Agricultura y Ganadería', icon: '🚜' },
+  { id: 'music', name_es: 'Música y Producción', icon: '🎵' },
+  { id: 'writing', name_es: 'Escritura y Copywriting', icon: '✍️' },
+  { id: 'translation', name_es: 'Traducción e Idiomas', icon: '🌐' },
+  { id: 'cybersecurity', name_es: 'Ciberseguridad', icon: '🔐' },
+  { id: 'iot', name_es: 'IoT y Smart Homes', icon: '🏠' },
+  { id: 'cleaning-ind', name_es: 'Limpieza Industrial', icon: '🏭' },
+  { id: 'recycling', name_es: 'Reciclaje y Ecología', icon: '♻️' },
+  { id: 'fishing', name_es: 'Pesca y Acuicultura', icon: '🎣' },
+  { id: 'luxury', name_es: 'Lujo y Estilo de Vida', icon: '💎' },
+  { id: 'wedding-plan', name_es: 'Wedding Planning', icon: '💍' },
+  { id: 'baby', name_es: 'Bebés y Maternidad', icon: '👶' },
+  { id: 'home-decor', name_es: 'Decoración de Hogar', icon: '🖼️' },
+  { id: 'parenting', name_es: 'Parenting y Crianza', icon: '👨‍👩‍👧' },
+  { id: 'pets-food', name_es: 'Alimentación de Mascotas', icon: '🦴' },
+  { id: 'coffee', name_es: 'Cafeterías y Barismo', icon: '☕' },
+  { id: 'wine', name_es: 'Vinos y Enología', icon: '🍷' },
+  { id: 'beer', name_es: 'Cervecería Artesanal', icon: '🍺' },
+  { id: 'bakery', name_es: 'Panadería y Pastelería', icon: '🥐' },
+  { id: 'gym', name_es: 'Gimnasios y Boxeo', icon: '🥊' },
+  { id: 'martial-arts', name_es: 'Artes Marciales', icon: '🥋' },
+  { id: 'running', name_es: 'Running y Maratón', icon: '🏃' },
+  { id: 'cycling', name_es: 'Ciclismo', icon: '🚲' },
+  { id: 'swimming', name_es: 'Natación', icon: '🏊' },
+  { id: 'football', name_es: 'Fútbol y Deportes', icon: '⚽' },
+  { id: 'tennis', name_es: 'Tenis y Pádel', icon: '🎾' },
+  { id: 'golf', name_es: 'Golf', icon: '⛳' },
+  { id: 'outdoor', name_es: 'Camping y Outdoor', icon: '🏕️' },
+  { id: 'handmade', name_es: 'Artesanías y DIY', icon: '🎨' },
+  { id: 'jewelry', name_es: 'Joyería', icon: '📿' },
+  { id: 'toys', name_es: 'Juguetes y Hobbies', icon: '🧸' },
+  { id: 'books', name_es: 'Libros y Editoriales', icon: '📚' },
+  { id: 'newspaper', name_es: 'Noticias y Medios', icon: '📰' },
+  { id: 'theatre', name_es: 'Teatro y Cine', icon: '🎭' },
+  { id: 'dance', name_es: 'Danza y Baile', icon: '💃' },
+  { id: 'art', name_es: 'Arte y Galerías', icon: '🎨' },
+  { id: 'spirituality', name_es: 'Espiritualidad', icon: '✨' },
+  { id: 'astrology', name_es: 'Astrología', icon: '🌙' },
+  { id: 'magic', name_es: 'Magia e Ilusionismo', icon: '🪄' },
+  { id: 'cleaning-car', name_es: 'Detailing Automotriz', icon: '✨' },
+  { id: 'vintage', name_es: 'Vintage y Segunda Mano', icon: '📜' },
+  { id: 'gadgets', name_es: 'Gadgets Tecnológicos', icon: '⌚' },
+  { id: 'drones', name_es: 'Drones y Robótica', icon: '🚁' },
+  { id: 'ai', name_es: 'IA Aplicada', icon: '🤖' },
+  { id: 'nocode', name_es: 'No-Code y Low-Code', icon: '🛠️' },
+  { id: 'cyber-security', name_es: 'Ciber-Seguridad Personal', icon: '🛡️' },
+  { id: 'productivity', name_es: 'Productividad Personal', icon: '📅' },
+  { id: 'biohacking', name_es: 'Biohacking', icon: '🧪' },
+  { id: 'investing', name_es: 'Bolsa e Inversiones', icon: '📈' },
+  { id: 'taxes', name_es: 'Impuestos y Contabilidad', icon: '📝' },
+  { id: 'real-estate-luxury', name_es: 'Inmuebles de Lujo', icon: '🏰' },
+  { id: 'co-working', name_es: 'Co-working y Oficinas', icon: '🏢' },
+  { id: 'virtual-asist', name_es: 'Asistencia Virtual', icon: '👩‍💻' },
+  { id: 'copywriting', name_es: 'Copywriting Persuasivo', icon: '✒️' },
+  { id: 'public-speak', name_es: 'Hablar en Público', icon: '🎤' },
+  { id: 'languages', name_es: 'Idiomas Online', icon: '🗣️' },
+  { id: 'cooking-class', name_es: 'Clases de Cocina', icon: '👨‍🍳' },
+  { id: 'survival', name_es: 'Supervivencia y Bushcraft', icon: '🔪' },
+  { id: 'solar', name_es: 'Energía Solar', icon: '☀️' },
+  { id: 'sustainable', name_es: 'Vida Sostenible', icon: '♻️' },
+  { id: 'interior-design', name_es: 'Diseño de Interiores', icon: '🛋️' },
+  { id: 'graphic-design', name_es: 'Diseño Gráfico', icon: '🖌️' },
+  { id: 'video-edit', name_es: 'Edición de Video', icon: '🎞️' },
+  { id: 'social-ads', name_es: 'Publicidad Pagada', icon: '💰' },
+  { id: 'others', name_es: 'Otros (Especificar)', icon: '✨' }
 ]
 
 export function IdeaGenerator() {
   const [industry, setIndustry] = useState('')
+  const [customIndustry, setCustomIndustry] = useState('')
   const [generationsLeft, setGenerationsLeft] = useState(5)
   const [isGenerating, setIsGenerating] = useState(false)
   const [result, setResult] = useState<any>(null)
@@ -33,7 +127,8 @@ export function IdeaGenerator() {
   }, [])
 
   const handleGenerate = async () => {
-    if (!industry || generationsLeft <= 0 || isGenerating) return
+    const finalIndustry = industry === 'others' ? customIndustry : industry
+    if (!finalIndustry || generationsLeft <= 0 || isGenerating) return
 
     setIsGenerating(true)
     setResult(null)
@@ -56,18 +151,20 @@ export function IdeaGenerator() {
       setGenerationsLeft(newLeft)
       localStorage.setItem('idea_generations_left', newLeft.toString())
       
+      const displayIndustry = industry === 'others' ? customIndustry : INDUSTRIES.find(i => i.id === industry)?.name_es
+
       setResult({
-        industry: INDUSTRIES.find(i => i.id === industry)?.name_es,
+        industry: displayIndustry,
         microApps: [
-          { title: 'Generador de Copys de Listados', desc: 'IA que redacta descripciones hipnóticas para propiedades.', market: '$1.2M/mo' },
-          { title: 'Calculadora de ROI Express', desc: 'Herramienta de 1 clic para inversores de alta velocidad.', market: '$800k/mo' },
-          { title: 'Asistente de Citas WhatsApp', desc: 'Bot que califica leads y agenda visitas automáticamente.', market: '$2.5M/mo' },
-          { title: 'Analizador de Precios de Zona', desc: 'Dashboard que predice tendencias de valor por m².', market: '$3.1M/mo' },
-          { title: 'Creador de Tours Virtuales IA', desc: 'Convierte fotos 2D en renders 3D navegables.', market: '$4.5M/mo' }
+          { title: `Generador de Copys para ${displayIndustry}`, desc: `IA que redacta descripciones hipnóticas especializadas en ${displayIndustry}.`, market: '$1.2M/mo' },
+          { title: `Calculadora de ROI ${displayIndustry}`, desc: `Herramienta de precisión para el nicho de ${displayIndustry}.`, market: '$800k/mo' },
+          { title: `Asistente de Leads para ${displayIndustry}`, desc: `Bot que califica leads y agenda citas en el sector ${displayIndustry}.`, market: '$2.5M/mo' },
+          { title: `Analizador de Tendencias ${displayIndustry}`, desc: `Dashboard que predice el futuro de ${displayIndustry}.`, market: '$3.1M/mo' },
+          { title: `Portal VIP ${displayIndustry}`, desc: `Experiencia exclusiva para clientes de ${displayIndustry}.`, market: '$4.5M/mo' }
         ],
         fusion: {
-          title: 'RealEstateOS Pro',
-          desc: 'La fusión definitiva: CRM + Generador de Contenido + Analítica Predictiva en una sola micro-app.',
+          title: `${displayIndustry}OS Pro`,
+          desc: `La fusión definitiva: CRM + Generador de Contenido + Analítica Predictiva para ${displayIndustry}.`,
           impact: 'Potencial de Facturación: $10k - $25k / mes'
         },
         math: {
@@ -134,6 +231,19 @@ export function IdeaGenerator() {
                 <Layers className="h-5 w-5 text-white/20" />
               </div>
             </div>
+
+            {industry === 'others' && (
+              <div className="animate-in fade-in slide-in-from-top-2 duration-300">
+                <input 
+                  type="text"
+                  placeholder="Escribe tu nicho o industria aquí..."
+                  value={customIndustry}
+                  onChange={(e) => setCustomIndustry(e.target.value)}
+                  className="w-full h-16 bg-[#0a0f1d] border border-white/10 rounded-2xl px-6 text-white focus:outline-none focus:border-color-primary/50 transition-all font-bold placeholder:text-white/20"
+                />
+              </div>
+            )}
+          </div>
           </div>
 
             <GlowButton 
