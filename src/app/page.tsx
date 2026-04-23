@@ -112,8 +112,8 @@ export default async function LandingPage() {
             </span>
           </div>
           <div className="flex items-center gap-6">
-            <Link href="#features" className="hidden md:block text-[10px] font-black uppercase tracking-[0.3em] text-white/40 hover:text-white transition-colors">Features</Link>
-            <Link href="#pricing" className="hidden md:block text-[10px] font-black uppercase tracking-[0.3em] text-white/40 hover:text-white transition-colors">Pricing</Link>
+            <Link href="#trial" className="hidden md:block text-[10px] font-black uppercase tracking-[0.3em] text-white/40 hover:text-white transition-colors">Motores</Link>
+            <Link href="#pricing" className="hidden md:block text-[10px] font-black uppercase tracking-[0.3em] text-white/40 hover:text-white transition-colors">Planes</Link>
             {user ? (
               <Link href="/dashboard">
                 <GlowButton className="text-[10px] h-10 px-8 gap-2 font-black tracking-widest">

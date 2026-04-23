@@ -167,17 +167,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .glass-sidebar {
-  background: linear-gradient(to bottom, #111d35, #0f172a);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, #0f172a, #020617);
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px);
+  border-right: 1px solid rgba(249, 115, 22, 0.1);
 }
 
 .glass-header {
-  background: rgba(15, 22, 41, 0.85);
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 15, 29, 0.8);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-bottom: 1px solid rgba(249, 115, 22, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }
 
 .premium-border-glow {
