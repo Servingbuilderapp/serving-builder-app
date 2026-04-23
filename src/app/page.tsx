@@ -369,7 +369,7 @@ export default async function LandingPage() {
             </p>
             
             <p className="text-white/30 font-medium text-sm max-w-3xl">
-              Eric te regala <span className="text-white font-black">5 generaciones gratuitas</span> de su Generador de Apps Rentables. Cada generación te da 5 micro-apps únicas + 1 fusión + la matemática completa. Eso es <span className="text-white font-black">25 ideas de negocio en 5 industrias</span>. Elige tu industria y genera.
+              Accede a <span className="text-white font-black">generaciones gratuitas</span> de nuestro Generador de Estrategias. Cada generación te proporciona ideas de micro-apps únicas adaptadas a tu sector, posibles fusiones y una estimación matemática completa. Elige tu industria y descubre tu próximo gran proyecto.
             </p>
           </div>
 
