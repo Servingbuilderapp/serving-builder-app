@@ -40,14 +40,14 @@ export default async function PlansPage() {
           '1 Specialized Base Tool', 
           '3 High-Performance Miniapps', 
           'Standard Generation Speed',
-          'Community Discord Support',
+          'Community Support',
           'Standard Cloud Hosting'
         ], 
         items_es: [
           '1 Herramienta Base Especializada', 
           '3 Miniapps de Alto Rendimiento', 
           'Velocidad de Generación Estándar',
-          'Soporte vía Comunidad Discord',
+          'Soporte vía Comunidad',
           'Alojamiento Cloud Estándar'
         ] 
       },
@@ -148,7 +148,7 @@ export default async function PlansPage() {
 
 
   return (
-    <div className="max-w-7xl mx-auto w-full space-y-12 py-10">
+    <div className="max-w-[90rem] mx-auto w-full space-y-12 py-16">
       <div className="text-center space-y-4">
         <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">
           Impulsa tu <span className="bg-clip-text text-transparent bg-linear-to-r from-primary to-accent-pink">Creatividad</span>

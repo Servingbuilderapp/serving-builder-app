@@ -34,7 +34,7 @@ export default async function LandingPage() {
           '1 Specialized Base Tool', 
           '3 High-Performance Miniapps', 
           'Standard Generation Speed',
-          'Community Discord Support'
+          'Community Support'
         ] 
       },
       { 
@@ -221,7 +221,7 @@ export default async function LandingPage() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="relative z-10 py-32 px-6 max-w-7xl mx-auto">
+      <section id="pricing" className="relative z-10 py-40 px-6 max-w-[90rem] mx-auto">
         <div className="text-center space-y-4 mb-20">
           <h2 className="text-4xl md:text-5xl font-black uppercase italic tracking-tighter">
             Choose Your <span className="text-color-primary">Plan</span>
@@ -241,7 +241,10 @@ export default async function LandingPage() {
                   {plan.slug === 'elite' ? 'Premium' : 'Most Popular'}
                 </div>
               )}
-              <h3 className="text-lg font-bold text-white uppercase tracking-tighter mb-1">{plan.name_en}</h3>
+              <h3 className="text-xl font-black text-white uppercase tracking-tighter mb-2">{plan.name_en}</h3>
+              <p className="text-xs text-white/40 mb-6 leading-relaxed min-h-[3rem]">
+                {plan.description_en || (plan.slug === 'elite' ? 'Ultimate power for innovators.' : 'Professional AI tools for growth.')}
+              </p>
               <div className="flex items-baseline gap-1 mb-6">
                 <span className="text-3xl font-black text-white">${plan.price_monthly}</span>
                 <span className="text-xs text-white/40 font-bold uppercase tracking-widest">/mo</span>

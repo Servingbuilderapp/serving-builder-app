@@ -121,7 +121,7 @@ export function DynamicPlansGrid({ plans, currentPlanId }: DynamicPlansGridProps
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 pt-10">
       {plans.map((plan) => {
         const isCurrent = plan.id === currentPlanId
         const features = language === 'en' ? plan.items_en : plan.items_es
@@ -155,7 +155,7 @@ export function DynamicPlansGrid({ plans, currentPlanId }: DynamicPlansGridProps
                 <h3 className="text-xl font-bold text-white mb-2">
                   {language === 'en' ? plan.name_en : plan.name_es}
                 </h3>
-                <p className="text-sm text-white/50 h-10 line-clamp-2">
+                <p className="text-sm text-white/50 min-h-[4rem]">
                   {language === 'en' ? plan.description_en : plan.description_es}
                 </p>
               </div>
