@@ -329,14 +329,6 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      {/* DEBUG INFO - REMOVE AFTER VERIFICATION */}
-      <div className="bg-red-500 text-white font-bold p-4 rounded-2xl flex flex-col gap-2 z-50 relative">
-        <div className="text-sm">SISTEMA DE DIAGNÓSTICO (ESTO ES TEMPORAL):</div>
-        <div className="flex gap-8">
-          <span>EMAIL DETECTADO: <span className="underline">{currentEmail}</span></span>
-          <span>ES ADMIN: <span className="underline">{isAdmin ? 'SÍ (YES)' : 'NO'}</span></span>
-        </div>
-      </div>
 
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-black text-white tracking-tight">
