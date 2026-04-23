@@ -12,25 +12,26 @@ export default async function LandingPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   
-  // Fetch a few apps to showcase
-  let { data: apps } = await supabase
+  // Fetch apps for showcase
+  let { data: allApps } = await supabase
     .from('micro_apps')
     .select('*')
-    .limit(12)
+    .limit(20)
 
   // Fallback si la DB de apps está vacía o falla
-  if (!apps || apps.length === 0) {
-    apps = [
+  if (!allApps || allApps.length === 0) {
+    allApps = [
       { id: '1', slug: 'escritor-pro', name_es: 'Escritor Maestro IA', description_es: 'Genera contenido persuasivo y artículos de alta calidad en segundos.', icon: 'PenTool', category: 'Contenido' },
       { id: '2', slug: 'vision-art', name_es: 'Visión Artística 3D', description_es: 'Transforma conceptos simples en imágenes fotorrealistas e impactantes.', icon: 'Sparkles', category: 'Imagen & Video' },
       { id: '3', slug: 'video-gen', name_es: 'Generador de Video Pro', description_es: 'Crea clips cinematográficos a partir de texto con inteligencia cinemática.', icon: 'Video', category: 'Imagen & Video' },
       { id: '4', slug: 'seo-boost', name_es: 'Optimizador SEO Elite', description_es: 'Domina los buscadores con análisis profundo de palabras clave.', icon: 'Zap', category: 'Optimización' },
       { id: '5', slug: 'social-ninja', name_es: 'Social Media Ninja', description_es: 'Automatiza tu presencia en redes sociales con contenido viral.', icon: 'Share2', category: 'Contenido' },
       { id: '6', slug: 'code-wizard', name_es: 'Asistente Code Wizard', description_es: 'Desarrolla aplicaciones y resuelve bugs con lógica de nivel experto.', icon: 'LayoutGrid', category: 'Optimización' },
-      { id: '7', slug: 'image-upscaler', name_es: 'Upscaler de Imagen IA', description_es: 'Mejora la resolución de tus imágenes sin perder calidad.', icon: 'Sparkles', category: 'Imagen & Video' },
-      { id: '8', slug: 'voice-pro', name_es: 'Sintetizador de Voz Pro', description_es: 'Convierte texto en voz humana ultra-natural en múltiples idiomas.', icon: 'MessageSquare', category: 'Contenido' },
     ] as any;
   }
+
+  const trialApps = allApps?.slice(0, 3) || []
+  const arsenalApps = allApps?.slice(3, 6) || []
 
   // Fetch plans
   let { data: plans } = await supabase
@@ -161,8 +162,10 @@ export default async function LandingPage() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-6 pt-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-600">
-              <Link href="/signup">
-                <GlowButton className="h-16 px-12 text-lg gap-4 font-black italic uppercase tracking-widest">
+              <Link href="/signup" className="contents">
+                <GlowButton 
+                  className="h-16 px-12 text-lg gap-4 font-black italic uppercase tracking-widest"
+                >
                   Empieza Gratis
                   <ArrowRight className="h-6 w-6" />
                 </GlowButton>
@@ -262,7 +265,7 @@ export default async function LandingPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {apps?.slice(0, 3).map((app) => (
+            {trialApps.map((app: any) => (
               <GlassCard key={app.id} className="p-8 group hover:border-color-primary/50 transition-all hover:scale-105 duration-500 flex flex-col">
                 <div className="h-16 w-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-color-primary group-hover:bg-color-primary/20 transition-all mb-6">
                   <Zap className="h-8 w-8" />
@@ -298,7 +301,7 @@ export default async function LandingPage() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {apps?.map((app) => (
+          {arsenalApps.map((app: any) => (
             <GlassCard key={app.id} className="p-10 group hover:border-color-primary/50 transition-all hover:-translate-y-2 duration-500">
               <div className="h-14 w-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/20 group-hover:text-color-primary group-hover:bg-color-primary/10 transition-all mb-8">
                 <Sparkles className="h-7 w-7" />

@@ -85,8 +85,16 @@ export function AppsGrid({ apps, accessibleSlugs }: AppsGridProps) {
   const { language } = useTranslation()
   const hasNoPlan = accessibleSlugs.length === 0
 
+  // Group apps by category
+  const categories = apps.reduce((acc: Record<string, any[]>, app) => {
+    const cat = app.category || (language === 'en' ? 'General' : 'General')
+    if (!acc[cat]) acc[cat] = []
+    acc[cat].push(app)
+    return acc
+  }, {})
+
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
       {hasNoPlan && (
         <div className="bg-linear-to-r from-primary/20 via-accent-pink/20 to-primary/20 border border-white/10 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-center md:text-left">
@@ -107,15 +115,25 @@ export function AppsGrid({ apps, accessibleSlugs }: AppsGridProps) {
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {apps.map((app) => (
-          <AppCard 
-            key={app.id} 
-            app={app} 
-            isLocked={!accessibleSlugs.includes(app.slug)} 
-          />
-        ))}
-      </div>
+      {Object.entries(categories).map(([category, categoryApps]) => (
+        <div key={category} className="space-y-6">
+          <div className="flex items-center gap-4">
+            <h2 className="text-xl font-black text-white uppercase italic tracking-tighter bg-clip-text text-transparent bg-linear-to-r from-white to-white/40">
+              {category}
+            </h2>
+            <div className="h-px flex-1 bg-linear-to-r from-white/10 to-transparent" />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {categoryApps.map((app) => (
+              <AppCard 
+                key={app.id} 
+                app={app} 
+                isLocked={!accessibleSlugs.includes(app.slug)} 
+              />
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   )
 }
