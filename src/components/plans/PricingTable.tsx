@@ -157,26 +157,41 @@ export function PricingTable({ plans, currentPlanId }: PricingTableProps) {
   }
 
   return (
-    <div className="space-y-20">
+    <div className="space-y-24">
       {/* Tier 1: Explorador */}
-      <div className="flex justify-center">
-        <div className="w-full max-w-md">
-          {tier1.map(plan => <PlanCard key={plan.id} plan={plan} />)}
+      <div className="space-y-12">
+        <div className="text-center">
+          <h3 className="text-2xl font-black text-white/20 uppercase tracking-[0.5em] italic">Fase 1: Exploración</h3>
+        </div>
+        <div className="flex justify-center">
+          <div className="w-full max-w-md">
+            {tier1.map(plan => <PlanCard key={plan.id} plan={plan} />)}
+          </div>
         </div>
       </div>
 
       {/* Tier 2: Mid Range */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {tier2.map(plan => <PlanCard key={plan.id} plan={plan} />)}
+      <div className="space-y-12">
+        <div className="text-center">
+          <h3 className="text-2xl font-black text-white/20 uppercase tracking-[0.5em] italic">Fase 2: Crecimiento y Negocio</h3>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {tier2.map(plan => <PlanCard key={plan.id} plan={plan} />)}
+        </div>
       </div>
 
       {/* Tier 3: Premium */}
-      <div className="flex flex-col md:flex-row justify-center gap-8 items-stretch">
-        {tier3.map(plan => (
-          <div key={plan.id} className="w-full max-w-xl">
-             <PlanCard plan={plan} />
-          </div>
-        ))}
+      <div className="space-y-12">
+        <div className="text-center">
+          <h3 className="text-2xl font-black text-white/20 uppercase tracking-[0.5em] italic">Fase 3: Escalamiento Elite</h3>
+        </div>
+        <div className="flex flex-col md:flex-row justify-center gap-8 items-stretch">
+          {tier3.map(plan => (
+            <div key={plan.id} className="w-full max-w-xl">
+               <PlanCard plan={plan} />
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Checkout Modal (Shared) */}
