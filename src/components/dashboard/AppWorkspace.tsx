@@ -165,7 +165,10 @@ export function AppWorkspace({ appId, currentExecutionId, schema, profile }: App
   }
 
   const isProcessing = execution?.status === 'pending' || execution?.status === 'processing'
-  const isGrowthEligible = profile?.plan_slug === 'growth' || profile?.plan_slug === 'professional' || profile?.plan_slug === 'elite'
+  const isGrowthEligible = profile?.plan_slug === 'growth' || 
+                           profile?.plan_slug === 'professional' || 
+                           profile?.plan_slug === 'elite' || 
+                           profile?.plan_slug === 'master'
 
   return (
     <div className="flex-1 flex flex-col gap-6 p-4 md:p-0">

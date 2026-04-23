@@ -1,7 +1,7 @@
 
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { DynamicPlansGrid } from '@/components/plans/DynamicPlansGrid'
+import { PricingTable } from '@/components/plans/PricingTable'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -21,130 +21,74 @@ export default async function PlansPage() {
     .eq('id', user.id)
     .single()
 
-  // 2. Obtener planes activos
-  let { data: plans } = await supabase
+  // 2. Obtener planes activos de la DB para tener los IDs correctos
+  let { data: dbPlans } = await supabase
     .from('plans')
     .select('*, plan_apps(app_id, micro_apps(name_en, name_es))')
     .eq('is_active', true)
     .order('sort_order', { ascending: true })
 
-  // Fallback si la DB falla o devuelve vacío
-  if (!plans || plans.length === 0) {
-    plans = [
-      { 
-        id: '1', slug: 'explorador', name_en: 'Explorer', name_es: 'Explorador', 
-        description_en: 'The perfect entry point to the AI revolution. Test our core capabilities without spending a cent.', 
-        description_es: 'La puerta de entrada ideal a la revolución de la IA. Prueba nuestras capacidades principales sin gastar un centavo.', 
-        price_monthly: 0.00, 
-        items_en: [
-          '1 Specialized Base Tool', 
-          '3 High-Performance Miniapps', 
-          'Standard Generation Speed',
-          'Community Support',
-          'Standard Cloud Hosting'
-        ], 
-        items_es: [
-          '1 Herramienta Base Especializada', 
-          '3 Miniapps de Alto Rendimiento', 
-          'Velocidad de Generación Estándar',
-          'Soporte vía Comunidad',
-          'Alojamiento Cloud Estándar'
-        ] 
-      },
-      { 
-        id: '2', slug: 'basic', name_en: 'Entrepreneur', name_es: 'Emprendedor', 
-        description_en: 'Scale your personal brand with professional tools. No watermarks, just your brand.', 
-        description_es: 'Escala tu marca personal con herramientas profesionales. Sin marcas de agua, solo tu marca.', 
-        price_monthly: 29.00, 
-        items_en: [
-          '4 Pro Tools (Image/Text/Video)', 
-          '7 Specialized Miniapps', 
-          'No Watermarks on Assets',
-          'Fast Generation Queue',
-          'Direct Email Support',
-          'Personal Commercial License'
-        ], 
-        items_es: [
-          '4 Herramientas Pro (Imagen/Texto/Video)', 
-          '7 Miniapps Especializadas', 
-          'Sin Marcas de Agua en Recursos',
-          'Cola de Generación Rápida',
-          'Soporte Directo por Email',
-          'Licencia Comercial Personal'
-        ] 
-      },
-      { 
-        id: '3', slug: 'growth', name_en: 'Growth', name_es: 'Crecimiento', 
-        description_en: 'For businesses that need more power. Analytics and custom branding to dominate your niche.', 
-        description_es: 'Para negocios que necesitan más poder. Analíticas y marca personalizada para dominar tu nicho.', 
-        price_monthly: 49.00, 
-        items_en: [
-          'Niche Specific AI Tools', 
-          '10 Advanced Miniapps', 
-          'Custom Domain Integration', 
-          'Advanced Analytics Dashboard',
-          'SEO Optimization Tools',
-          'Priority Generation Speed'
-        ], 
-        items_es: [
-          'Herramientas de IA para Nichos', 
-          '10 Miniapps Avanzadas', 
-          'Integración de Dominio Propio', 
-          'Panel de Analíticas Avanzado',
-          'Herramientas de Optimización SEO',
-          'Velocidad de Generación Prioritaria'
-        ] 
-      },
-      { 
-        id: '4', slug: 'professional', name_en: 'Unlimited Power', name_es: 'Poder Ilimitado', 
-        description_en: 'The ultimate agency powerhouse. White-label everything and manage your team with ease.', 
-        description_es: 'La central de energía para agencias. Marca blanca en todo y gestiona a tu equipo con facilidad.', 
-        price_monthly: 97.00, 
-        items_en: [
-          'Complete Business Suite Access', 
-          '30+ Premium Miniapps', 
-          'Full White-Label Capabilities',
-          'Multi-user Team Management',
-          'Priority VIP Support 24/7',
-          'API Access (Early Access)',
-          'Extended Commercial Rights'
-        ], 
-        items_es: [
-          'Acceso a Suite Completa de Negocio', 
-          'Más de 30 Miniapps Premium', 
-          'Capacidad Total de Marca Blanca',
-          'Gestión de Equipo Multi-usuario',
-          'Soporte VIP Prioritario 24/7',
-          'Acceso a API (Acceso Temprano)',
-          'Derechos Comerciales Extendidos'
-        ] 
-      },
-      { 
-        id: '5', slug: 'elite', name_en: 'Everything Unlimited', name_es: 'Elite', 
-        description_en: 'The inner circle of AI innovators. Access everything, influence our roadmap, and grow exponentially.', 
-        description_es: 'El círculo interno de innovadores de IA. Accede a todo, influye en nuestro roadmap y crece exponencialmente.', 
-        price_monthly: 197.00, 
-        items_en: [
-          'Everything Truly Unlimited', 
-          'Private Beta for All New Apps', 
-          '1-on-1 Monthly Growth Strategy', 
-          'Full White-Label Deployment', 
-          'Priority Feature Roadmap Influence',
-          'Dedicated Success Manager',
-          'Custom Tool Development Requests'
-        ], 
-        items_es: [
-          'Todo Absolutamente Ilimitado', 
-          'Beta Privada de Nuevas Apps', 
-          'Estrategia de Crecimiento Mensual 1-a-1', 
-          'Despliegue de Marca Blanca Total', 
-          'Influencia Directa en el Roadmap',
-          'Gestor de Éxito Dedicado',
-          'Peticiones de Desarrollo de Herramientas'
-        ] 
-      }
-    ] as any;
-  }
+  // Definición de contenido local (Source of Truth para presentación)
+  const localPlans = [
+    { 
+      slug: 'explorador', name_en: 'Explorer', name_es: 'Explorador', 
+      description_en: 'Test our interface with limited access.', 
+      description_es: 'Acceso limitado para conocer la interfaz.', 
+      price_monthly: 0.00, 
+      items_en: ['3 Demo Apps (1 Tool, 1 Productivity, 1 Project)', 'Community Support', 'Limited Access (No AI)'], 
+      items_es: ['3 Apps Demo (1 Herramienta, 1 Productividad, 1 Proyecto)', 'Soporte vía Comunidad', 'Acceso Limitado (Sin IA)'] 
+    },
+    { 
+      slug: 'basic', name_en: 'Entrepreneur', name_es: 'Emprendedor', 
+      description_en: 'Start your journey with essential productivity tools.', 
+      description_es: 'Inicia tu camino con herramientas esenciales de productividad.', 
+      price_monthly: 29.00, 
+      items_en: ['Productivity Tools Unlocked', '7 Specialized Miniapps', 'No Watermarks', 'Fast Generation Queue', 'Email Support', 'Commercial License'], 
+      items_es: ['Herramientas de Productividad Desbloqueadas', '7 Miniapps Especializadas', 'Sin Marcas de Agua', 'Cola de Generación Rápida', 'Soporte por Email', 'Licencia Comercial'] 
+    },
+    { 
+      slug: 'growth', name_en: 'Growth', name_es: 'Crecimiento', 
+      description_en: 'Scale with project management and advanced vertical tools.', 
+      description_es: 'Escala con gestión de proyectos y herramientas verticales avanzadas.', 
+      price_monthly: 49.00, 
+      items_en: ['Project Tools Unlocked', '15 Advanced Miniapps', 'Custom Domain Integration', 'Advanced Analytics', 'SEO Optimization', 'Priority Generation'], 
+      items_es: ['Herramientas de Proyectos Desbloqueadas', '15 Miniapps Avanzadas', 'Integración de Dominio Propio', 'Analíticas Avanzadas', 'Optimización SEO', 'Generación Prioritaria'] 
+    },
+    { 
+      slug: 'professional', name_en: 'Professional', name_es: 'Profesional', 
+      description_en: 'Full suite for professional creators and agencies.', 
+      description_es: 'Suite completa para creadores profesionales y agencias.', 
+      price_monthly: 97.00, 
+      items_en: ['Vertical Tools Fully Unlocked', '30+ Premium Miniapps', 'Full White-Label Capabilities', 'Team Management', '24/7 VIP Support', 'Extended Commercial Rights'], 
+      items_es: ['Herramientas Verticales Desbloqueadas', 'Más de 30 Miniapps Premium', 'Marca Blanca Total', 'Gestión de Equipo', 'Soporte VIP 24/7', 'Derechos Comerciales Extendidos'] 
+    },
+    { 
+      slug: 'elite', name_en: 'Elite', name_es: 'Elite', 
+      description_en: 'The premium experience with AI Idea Generation.', 
+      description_es: 'La experiencia premium con Generador de Ideas de IA.', 
+      price_monthly: 197.00, 
+      items_en: ['All Tools at Maximum Capacity', 'AI Idea Generator (10 queries/mo)', 'Private Beta Access', 'Monthly Growth Strategy', 'Dedicated Success Manager', 'Custom Development Requests'], 
+      items_es: ['Todas las Herramientas al Máximo', 'Generador de Ideas IA (10 consultas/mes)', 'Acceso a Betas Privadas', 'Estrategia de Crecimiento Mensual', 'Gestor de Éxito Dedicado', 'Peticiones de Desarrollo a Medida'] 
+    },
+    { 
+      slug: 'master', name_en: 'Business Master', name_es: 'Master Empresarial', 
+      description_en: 'The ultimate business powerhouse. Everything unlimited.', 
+      description_es: 'La potencia empresarial definitiva. Todo ilimitado.', 
+      price_monthly: 497.00, 
+      items_en: ['Everything Unlimited', 'UNLIMITED AI Idea Generator', '10 Custom Apps per Month', 'Full White-Label Deployment', 'Direct Access to Roadmap', 'Priority Engineering Support'], 
+      items_es: ['Todo Ilimitado', 'Generador de Ideas IA ILIMITADO', '10 Apps Personalizadas al Mes', 'Despliegue de Marca Blanca Total', 'Acceso Directo al Roadmap', 'Soporte de Ingeniería Prioritario'] 
+    }
+  ];
+
+  // Combinar: Usar localPlans para el contenido, pero mantener IDs de la DB si existen
+  const plans = localPlans.map(lp => {
+    const dbPlan = dbPlans?.find(dbp => dbp.slug === lp.slug);
+    return {
+      ...lp,
+      id: dbPlan?.id || `temp-${lp.slug}`, // Importante para que el checkout funcione con el slug
+      plan_apps: dbPlan?.plan_apps || []
+    };
+  });
 
 
   return (
@@ -158,7 +102,7 @@ export default async function PlansPage() {
         </p>
       </div>
 
-      <DynamicPlansGrid 
+      <PricingTable 
         plans={plans || []} 
         currentPlanId={userData?.plan_id || null} 
       />

@@ -26,7 +26,10 @@ export function SettingsClient({ initialProfile, user }: SettingsClientProps) {
   const [brandName, setBrandName] = useState(initialProfile?.brand_name || '')
   const [brandLogo, setBrandLogo] = useState(initialProfile?.brand_logo_url || '')
   const [loading, setLoading] = useState(false)
-  const isProPlan = initialProfile?.plan_slug === 'professional' || initialProfile?.plan_slug === 'elite' || initialProfile?.plan_slug === 'growth'
+  const isProPlan = initialProfile?.plan_slug === 'professional' || 
+                    initialProfile?.plan_slug === 'elite' || 
+                    initialProfile?.plan_slug === 'master' || 
+                    initialProfile?.plan_slug === 'growth'
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()

@@ -2,6 +2,7 @@ import React from 'react'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { ArrowRight, Sparkles, Zap, Shield, Globe, LayoutGrid, ChevronRight, Check } from 'lucide-react'
+import { PricingTable } from '@/components/plans/PricingTable'
 import { GlowButton } from '@/components/ui/GlowButton'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { cn } from '@/lib/utils'
@@ -52,67 +53,73 @@ export default async function LandingPage() {
     return acc
   }, {})
 
-  // Fetch plans
-  let { data: plans } = await supabase
+  // 2. Obtener planes activos de la DB
+  let { data: dbPlans } = await supabase
     .from('plans')
     .select('*')
     .eq('is_active', true)
     .order('sort_order', { ascending: true })
 
-  // Fallback si la DB falla o devuelve vacío
-  if (!plans || plans.length === 0) {
-    plans = [
-      { 
-        id: '1', slug: 'explorador', name_en: 'Explorer', price_monthly: 0, 
-        items_en: [
-          '1 Specialized AI Engine', 
-          '3 High-Performance Tools', 
-          'Standard Generation Speed',
-          'Community Support'
-        ] 
-      },
-      { 
-        id: '2', slug: 'basic', name_en: 'Entrepreneur', price_monthly: 29, 
-        items_en: [
-          '4 Pro AI Engines (Image/Video)', 
-          '7 Specialized Tools', 
-          'No Watermarks on Assets',
-          'Fast Generation Queue',
-          'Direct Email Support'
-        ] 
-      },
-      { 
-        id: '3', slug: 'growth', name_en: 'Growth', price_monthly: 49, 
-        items_en: [
-          'Niche Specific AI Engines', 
-          '10 Advanced Tools', 
-          'Custom Domain Integration', 
-          'Advanced Analytics Dashboard',
-          'SEO Optimization Tools'
-        ] 
-      },
-      { 
-        id: '4', slug: 'professional', name_en: 'Unlimited Power', price_monthly: 97, 
-        items_en: [
-          'Complete Business Engine Access', 
-          '30+ Premium Tools', 
-          'Full White-Label Capabilities',
-          'Multi-user Team Management',
-          'Priority VIP Support 24/7'
-        ] 
-      },
-      { 
-        id: '5', slug: 'elite', name_en: 'Elite', price_monthly: 197, 
-        items_en: [
-          'Everything Truly Unlimited', 
-          'Private Beta for All New Engines', 
-          '1-on-1 Monthly Growth Strategy', 
-          'Full White-Label Deployment', 
-          'Priority Roadmap Influence'
-        ] 
-      }
-    ] as any;
-  }
+  // Definición de contenido local (Source of Truth para presentación)
+  const localPlans = [
+    { 
+      slug: 'explorador', name_en: 'Explorer', name_es: 'Explorador', 
+      description_en: 'Test our interface with limited access.', 
+      description_es: 'Acceso limitado para conocer la interfaz.', 
+      price_monthly: 0.00, 
+      items_en: ['3 Demo Apps (1 Tool, 1 Productivity, 1 Project)', 'Community Support', 'Limited Access (No AI)'], 
+      items_es: ['3 Apps Demo (1 Herramienta, 1 Productividad, 1 Proyecto)', 'Soporte vía Comunidad', 'Acceso Limitado (Sin IA)'] 
+    },
+    { 
+      slug: 'basic', name_en: 'Entrepreneur', name_es: 'Emprendedor', 
+      description_en: 'Start your journey with essential productivity tools.', 
+      description_es: 'Inicia tu camino con herramientas esenciales de productividad.', 
+      price_monthly: 29.00, 
+      items_en: ['Productivity Tools Unlocked', '7 Specialized Miniapps', 'No Watermarks', 'Fast Generation Queue', 'Email Support', 'Commercial License'], 
+      items_es: ['Herramientas de Productividad Desbloqueadas', '7 Miniapps Especializadas', 'Sin Marcas de Agua', 'Cola de Generación Rápida', 'Soporte por Email', 'Licencia Comercial'] 
+    },
+    { 
+      slug: 'growth', name_en: 'Growth', name_es: 'Crecimiento', 
+      description_en: 'Scale with project management and advanced vertical tools.', 
+      description_es: 'Escala con gestión de proyectos y herramientas verticales avanzadas.', 
+      price_monthly: 49.00, 
+      items_en: ['Project Tools Unlocked', '15 Advanced Miniapps', 'Custom Domain Integration', 'Advanced Analytics', 'SEO Optimization', 'Priority Generation'], 
+      items_es: ['Herramientas de Proyectos Desbloqueadas', '15 Miniapps Avanzadas', 'Integración de Dominio Propio', 'Analíticas Avanzadas', 'Optimización SEO', 'Generación Prioritaria'] 
+    },
+    { 
+      slug: 'professional', name_en: 'Professional', name_es: 'Profesional', 
+      description_en: 'Full suite for professional creators and agencies.', 
+      description_es: 'Suite completa para creadores profesionales y agencias.', 
+      price_monthly: 97.00, 
+      items_en: ['Vertical Tools Fully Unlocked', '30+ Premium Miniapps', 'Full White-Label Capabilities', 'Team Management', '24/7 VIP Support', 'Extended Commercial Rights'], 
+      items_es: ['Herramientas Verticales Desbloqueadas', 'Más de 30 Miniapps Premium', 'Marca Blanca Total', 'Gestión de Equipo', 'Soporte VIP 24/7', 'Derechos Comerciales Extendidos'] 
+    },
+    { 
+      slug: 'elite', name_en: 'Elite', name_es: 'Elite', 
+      description_en: 'The premium experience with AI Idea Generation.', 
+      description_es: 'La experiencia premium con Generador de Ideas de IA.', 
+      price_monthly: 197.00, 
+      items_en: ['All Tools at Maximum Capacity', 'AI Idea Generator (10 queries/mo)', 'Private Beta Access', 'Monthly Growth Strategy', 'Dedicated Success Manager', 'Custom Development Requests'], 
+      items_es: ['Todas las Herramientas al Máximo', 'Generador de Ideas IA (10 consultas/mes)', 'Acceso a Betas Privadas', 'Estrategia de Crecimiento Mensual', 'Gestor de Éxito Dedicado', 'Peticiones de Desarrollo a Medida'] 
+    },
+    { 
+      slug: 'master', name_en: 'Business Master', name_es: 'Master Empresarial', 
+      description_en: 'The ultimate business powerhouse. Everything unlimited.', 
+      description_es: 'La potencia empresarial definitiva. Todo ilimitado.', 
+      price_monthly: 497.00, 
+      items_en: ['Everything Unlimited', 'UNLIMITED AI Idea Generator', '10 Custom Apps per Month', 'Full White-Label Deployment', 'Direct Access to Roadmap', 'Priority Engineering Support'], 
+      items_es: ['Todo Ilimitado', 'Generador de Ideas IA ILIMITADO', '10 Apps Personalizadas al Mes', 'Despliegue de Marca Blanca Total', 'Acceso Directo al Roadmap', 'Soporte de Ingeniería Prioritario'] 
+    }
+  ];
+
+  const syncPlans = localPlans.map(lp => {
+    const dbPlan = dbPlans?.find(dbp => dbp.slug === lp.slug);
+    return {
+      ...lp,
+      id: dbPlan?.id || `temp-${lp.slug}`,
+      plan_apps: []
+    };
+  });
 
   return (
     <div className="min-h-screen bg-color-base-100 text-white overflow-hidden">
@@ -361,52 +368,10 @@ export default async function LandingPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
-          {plans?.map((plan) => (
-            <GlassCard key={plan.id} className={cn(
-              "p-10 flex flex-col relative overflow-hidden transition-all duration-500 hover:scale-105",
-              plan.slug === 'professional' && "border-color-accent-pink/50 ring-1 ring-color-accent-pink/20 shadow-[0_0_50px_rgba(236,72,153,0.1)]",
-              plan.slug === 'elite' && "border-color-primary/50 ring-2 ring-color-primary/30 shadow-[0_0_60px_rgba(249,115,22,0.1)]"
-            )}>
-              {(plan.slug === 'professional' || plan.slug === 'elite') && (
-                <div className="absolute top-0 right-0 bg-linear-to-r from-color-primary to-color-accent-pink text-white text-[10px] font-black uppercase px-5 py-2 rounded-bl-2xl tracking-[0.2em] z-10 shadow-2xl">
-                  {plan.slug === 'elite' ? 'PREMIUM' : 'POPULAR'}
-                </div>
-              )}
-              <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter mb-2">{plan.name_es || plan.name_en}</h3>
-              <p className="text-[11px] text-white/30 mb-8 leading-relaxed font-bold uppercase tracking-widest min-h-[3rem]">
-                {plan.description_es || (plan.slug === 'elite' ? 'Poder total para innovadores de IA.' : 'Herramientas profesionales para crecimiento empresarial.')}
-              </p>
-              
-              <div className="flex items-baseline gap-2 mb-10">
-                <span className="text-5xl font-black text-white">${plan.price_monthly}</span>
-                <span className="text-xs text-white/30 font-black uppercase tracking-widest">/ Mes</span>
-              </div>
-              
-              <div className="space-y-5 mb-12 flex-1">
-                {plan.items_en?.map((feature: string, i: number) => (
-                  <div key={i} className="flex items-start gap-3 group/item">
-                    <div className="mt-1 h-5 w-5 rounded-lg bg-color-primary/10 flex items-center justify-center flex-shrink-0">
-                      <Check className="h-3 w-3 text-color-primary" />
-                    </div>
-                    <span className="text-[10px] font-black uppercase tracking-widest text-white/50 group-hover/item:text-white transition-colors">
-                      {plan.items_es?.[i] || feature}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              <Link href={`/signup?plan=${plan.slug}`}>
-                <GlowButton 
-                  variant={(plan.slug === 'professional' || plan.slug === 'elite') ? 'primary' : 'ghost'} 
-                  className="w-full text-[11px] font-black uppercase h-14 tracking-[0.2em]"
-                >
-                  SELECCIONAR PLAN
-                </GlowButton>
-              </Link>
-            </GlassCard>
-          ))}
-        </div>
+        <PricingTable 
+          plans={syncPlans} 
+          currentPlanId={null} 
+        />
       </section>
 
       {/* Footer */}

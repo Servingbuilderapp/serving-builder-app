@@ -187,7 +187,11 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
   const currentEmail = (profile?.email || user?.email || '').toLowerCase().trim()
   const currentRole = (profile?.role || user?.user_metadata?.role || 'user').toLowerCase().trim()
   const isAdmin = (currentEmail === 'servingbuilderapp@gmail.com' || currentRole === 'admin')
-  const isWhiteLabelEligible = isAdmin || profile?.plans?.slug === 'professional' || profile?.plans?.slug === 'elite' || profile?.plans?.slug === 'poder-ilimitado'
+  const isWhiteLabelEligible = isAdmin || 
+                               profile?.plans?.slug === 'professional' || 
+                               profile?.plans?.slug === 'elite' || 
+                               profile?.plans?.slug === 'master' || 
+                               profile?.plans?.slug === 'poder-ilimitado'
   
   const hasChanges = formData.firstName !== (profile?.first_name || '') || 
                      formData.lastName !== (profile?.last_name || '') ||
