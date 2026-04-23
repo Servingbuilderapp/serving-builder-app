@@ -374,7 +374,7 @@ export default async function LandingPage() {
             </p>
           </div>
 
-          <IdeaGenerator />
+          <IdeaGenerator userPlan={user?.user_metadata?.plan_slug || 'free'} />
         </div>
       </section>
 

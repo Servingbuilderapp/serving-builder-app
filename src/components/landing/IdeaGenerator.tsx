@@ -110,13 +110,21 @@ const INDUSTRIES = [
   { id: 'others', name_es: 'Otros (Especificar)', icon: '✨' }
 ]
 
-export function IdeaGenerator() {
+interface IdeaGeneratorProps {
+  userPlan?: string;
+}
+
+export function IdeaGenerator({ userPlan }: IdeaGeneratorProps) {
   const [industry, setIndustry] = useState('')
   const [customIndustry, setCustomIndustry] = useState('')
   const [generationsLeft, setGenerationsLeft] = useState(5)
   const [isGenerating, setIsGenerating] = useState(false)
   const [result, setResult] = useState<any>(null)
   const [progress, setProgress] = useState(0)
+
+  // Determine if user has unlimited access
+  const isPremium = userPlan && !['explorador', 'free'].includes(userPlan.toLowerCase());
+  const hasGenerations = isPremium || generationsLeft > 0;
 
   // Load state from local storage
   useEffect(() => {
@@ -128,7 +136,7 @@ export function IdeaGenerator() {
 
   const handleGenerate = async () => {
     const finalIndustry = industry === 'others' ? customIndustry : industry
-    if (!finalIndustry || generationsLeft <= 0 || isGenerating) return
+    if (!finalIndustry || !hasGenerations || isGenerating) return
 
     setIsGenerating(true)
     setResult(null)
@@ -147,9 +155,11 @@ export function IdeaGenerator() {
 
     // Simulate AI Generation
     setTimeout(() => {
-      const newLeft = generationsLeft - 1
-      setGenerationsLeft(newLeft)
-      localStorage.setItem('idea_generations_left', newLeft.toString())
+      if (!isPremium) {
+        const newLeft = generationsLeft - 1
+        setGenerationsLeft(newLeft)
+        localStorage.setItem('idea_generations_left', newLeft.toString())
+      }
       
       const displayIndustry = industry === 'others' ? customIndustry : INDUSTRIES.find(i => i.id === industry)?.name_es
 
@@ -196,19 +206,25 @@ export function IdeaGenerator() {
       <GlassCard className="p-10 border-white/10 bg-linear-to-b from-white/5 to-transparent relative overflow-hidden">
         {/* Progress Dots */}
         <div className="flex justify-center gap-3 mb-6">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <div 
-              key={i} 
-              className={cn(
-                "h-2.5 w-2.5 rounded-full transition-all duration-500",
-                i <= generationsLeft ? "bg-color-accent-blue shadow-[0_0_10px_rgba(56,189,248,0.8)]" : "bg-white/10"
-              )} 
-            />
-          ))}
+          {isPremium ? (
+            <div className="h-2.5 px-4 rounded-full bg-color-primary/20 border border-color-primary/30 text-[8px] font-black text-color-primary flex items-center tracking-widest uppercase">
+              Acceso Ilimitado Premium
+            </div>
+          ) : (
+            [1, 2, 3, 4, 5].map((i) => (
+              <div 
+                key={i} 
+                className={cn(
+                  "h-2.5 w-2.5 rounded-full transition-all duration-500",
+                  i <= generationsLeft ? "bg-color-accent-blue shadow-[0_0_10px_rgba(56,189,248,0.8)]" : "bg-white/10"
+                )} 
+              />
+            ))
+          )}
         </div>
         
         <p className="text-center text-[11px] font-black uppercase tracking-widest text-white/30 mb-10">
-          Generaciones disponibles: <span className="text-color-accent-blue">{generationsLeft} de 5</span>
+          Generaciones disponibles: <span className="text-color-accent-blue">{isPremium ? 'ILIMITADAS' : `${generationsLeft} de 5`}</span>
         </p>
 
         <div className="space-y-8">
