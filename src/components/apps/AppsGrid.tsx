@@ -52,7 +52,7 @@ function AppCard({ app, isLocked }: AppCardProps) {
       <h3 className="text-lg font-bold text-white mb-2">
         {language === 'en' ? app.name_en : app.name_es}
       </h3>
-      <p className="text-sm text-white/50 line-clamp-2 mb-6">
+      <p className="text-sm text-white/50 line-clamp-4 mb-6">
         {language === 'en' ? app.description_en : app.description_es}
       </p>
 

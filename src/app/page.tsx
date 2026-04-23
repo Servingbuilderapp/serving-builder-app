@@ -298,7 +298,7 @@ export default async function LandingPage() {
                   <Zap className="h-8 w-8" />
                 </div>
                 <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter mb-4">{app.name_es}</h3>
-                <p className="text-sm text-white/40 mb-8 line-clamp-3 leading-relaxed flex-1">
+                <p className="text-sm text-white/40 mb-8 line-clamp-6 leading-relaxed flex-1">
                   {app.description_es}
                 </p>
                 <a href={`/login?redirect=/apps/${app.slug}`} className="w-full">
@@ -343,7 +343,7 @@ export default async function LandingPage() {
                       <Sparkles className="h-7 w-7" />
                     </div>
                     <h3 className="text-xl font-bold text-white mb-3 uppercase tracking-tight">{app.name_es}</h3>
-                    <p className="text-sm text-white/40 line-clamp-2 leading-relaxed">
+                    <p className="text-sm text-white/40 line-clamp-4 leading-relaxed">
                       {app.description_es}
                     </p>
                     <a href={`/login?redirect=/apps/${app.slug}`} className="mt-6 inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-color-primary/60 hover:text-color-primary transition-colors">
