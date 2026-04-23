@@ -16,13 +16,35 @@ export default async function AppsPage() {
   }
 
   // 1. Obtener apps accesibles
-  const accessibleSlugs = await getUserAccessibleApps(user.id)
+  const accessibleSlugs = await getUserAccessibleApps(user.id, user.email)
+  const ADMIN_EMAIL = 'servingbuilderapp@gmail.com';
 
   // 2. Obtener TODAS las apps de la DB
-  const { data: apps } = await supabase
+  let { data: apps } = await supabase
     .from('micro_apps')
     .select('*')
     .order('created_at', { ascending: true })
+
+  // Fallback para el Admin si la DB está vacía, para que pueda ver la organización por temas
+  if ((!apps || apps.length === 0) && user.email === ADMIN_EMAIL) {
+    apps = [
+      { id: '1', slug: 'escritor-pro', name_es: 'Escritor Maestro IA', description_es: 'Genera contenido persuasivo y artículos de alta calidad en segundos.', icon: 'PenTool', category: 'Contenido' },
+      { id: '2', slug: 'vision-art', name_es: 'Visión Artística 3D', description_es: 'Transforma conceptos simples en imágenes fotorrealistas e impactantes.', icon: 'Sparkles', category: 'Imagen & Video' },
+      { id: '3', slug: 'video-gen', name_es: 'Generador de Video Pro', description_es: 'Crea clips cinematográficos a partir de texto con inteligencia cinemática.', icon: 'Video', category: 'Imagen & Video' },
+      { id: '4', slug: 'seo-boost', name_es: 'Optimizador SEO Elite', description_es: 'Domina los buscadores con análisis profundo de palabras clave.', icon: 'Zap', category: 'Optimización' },
+      { id: '5', slug: 'social-ninja', name_es: 'Social Media Ninja', description_es: 'Automatiza tu presencia en redes sociales con contenido viral.', icon: 'Share2', category: 'Contenido' },
+      { id: '6', slug: 'code-wizard', name_es: 'Asistente Code Wizard', description_es: 'Desarrolla aplicaciones y resuelve bugs con lógica de nivel experto.', icon: 'LayoutGrid', category: 'Optimización' },
+      { id: '7', slug: 'image-upscaler', name_es: 'Upscaler de Imagen IA', description_es: 'Mejora la resolución de tus imágenes sin perder calidad.', icon: 'Sparkles', category: 'Imagen & Video' },
+      { id: '8', slug: 'voice-pro', name_es: 'Sintetizador de Voz Pro', description_es: 'Convierte texto en voz humana ultra-natural en múltiples idiomas.', icon: 'MessageSquare', category: 'Contenido' },
+    ] as any;
+    
+    // Si estamos en modo fallback, el admin tiene acceso a todos los slugs del fallback
+    if (user.email === ADMIN_EMAIL) {
+      apps?.forEach(a => {
+        if (!accessibleSlugs.includes(a.slug)) accessibleSlugs.push(a.slug);
+      });
+    }
+  }
 
   return (
     <div className="max-w-7xl mx-auto w-full space-y-8">
