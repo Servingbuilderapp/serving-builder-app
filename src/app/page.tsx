@@ -88,41 +88,45 @@ export default async function LandingPage() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-color-accent-pink/10 rounded-full blur-[120px] animate-pulse" />
       </div>
 
-      {/* Nav */}
-      <nav className="relative z-10 flex items-center justify-between px-6 py-6 max-w-7xl mx-auto">
-        <div className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-lg bg-linear-to-tr from-color-primary to-color-accent-pink flex items-center justify-center shadow-lg shadow-color-primary/20">
-            <span className="font-black text-white italic">S</span>
+      {/* Fixed Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-[#0a0f1d]/60 border-b border-white/5">
+        <div className="flex items-center justify-between px-8 h-20 max-w-7xl mx-auto">
+          <div className="flex items-center gap-3 group cursor-pointer">
+            <div className="h-10 w-10 rounded-xl bg-linear-to-tr from-color-primary to-color-accent-pink flex items-center justify-center shadow-xl shadow-color-primary/20 group-hover:scale-110 transition-transform duration-500">
+              <span className="font-black text-white italic text-xl">S</span>
+            </div>
+            <span className="text-xl font-black tracking-tighter uppercase italic group-hover:tracking-normal transition-all duration-500">
+              SERVING <span className="text-color-primary">BUILDER</span>
+            </span>
           </div>
-          <span className="text-lg font-black tracking-tighter uppercase italic">
-            SERVING <span className="text-color-primary">BUILDER</span>
-          </span>
-        </div>
-        <div className="flex items-center gap-4">
-          {user ? (
-            <Link href="/dashboard">
-              <GlowButton className="text-xs h-9 px-6 gap-2">
-                <LayoutGrid className="h-3 w-3" />
-                Dashboard
-              </GlowButton>
-            </Link>
-          ) : (
-            <>
-              <Link href="/login" className="text-sm font-bold text-white/60 hover:text-white transition-colors">
-                Login
-              </Link>
-              <Link href="/signup">
-                <GlowButton className="text-xs h-9 px-6">
-                  Get Started
+          <div className="flex items-center gap-6">
+            <Link href="#features" className="hidden md:block text-[10px] font-black uppercase tracking-[0.3em] text-white/40 hover:text-white transition-colors">Features</Link>
+            <Link href="#pricing" className="hidden md:block text-[10px] font-black uppercase tracking-[0.3em] text-white/40 hover:text-white transition-colors">Pricing</Link>
+            {user ? (
+              <Link href="/dashboard">
+                <GlowButton className="text-[10px] h-10 px-8 gap-2 font-black tracking-widest">
+                  <LayoutGrid className="h-4 w-4" />
+                  DASHBOARD
                 </GlowButton>
               </Link>
-            </>
-          )}
+            ) : (
+              <>
+                <Link href="/login" className="text-[10px] font-black uppercase tracking-[0.3em] text-white/60 hover:text-white transition-colors">
+                  Login
+                </Link>
+                <Link href="/signup">
+                  <GlowButton className="text-[10px] h-10 px-8 font-black tracking-widest">
+                    GET STARTED
+                  </GlowButton>
+                </Link>
+              </>
+            )}
+          </div>
         </div>
       </nav>
 
       {/* Hero Section: The "WOW" Part */}
-      <section className="relative z-10 pt-32 pb-40 px-6 max-w-7xl mx-auto">
+      <section className="relative z-10 pt-48 pb-40 px-6 max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           <div className="space-y-10 text-left">
             <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.3em] text-color-primary animate-in fade-in slide-in-from-left-4 duration-1000">
