@@ -88,7 +88,7 @@ export function PricingTable({ plans, currentPlanId }: PricingTableProps) {
       )}>
         {/* Background Gradient Effect */}
         <div className={cn(
-          "absolute inset-0 bg-linear-to-br opacity-40 group-hover:opacity-100 transition-opacity duration-700",
+          "absolute inset-0 bg-linear-to-br opacity-40 group-hover:opacity-100 transition-opacity duration-700 blur-3xl",
           styles.accent
         )} />
 
