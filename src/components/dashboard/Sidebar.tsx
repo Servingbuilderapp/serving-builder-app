@@ -120,7 +120,28 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
           </span>
         </Link>
 
-        {/* App Library Link */}
+        {/* Idea Generator Link */}
+        <Link 
+          href="/ideas"
+          onClick={() => onCloseMobile()}
+          className={cn(
+            "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-black transition-all duration-500 group border relative overflow-hidden",
+            pathname === '/ideas' 
+              ? "bg-color-accent-pink/20 text-white border-color-accent-pink/50 shadow-[0_0_25px_rgba(236,72,153,0.2)] ring-1 ring-white/20 animate-active-glow" 
+              : "bg-transparent text-white/40 border-transparent hover:bg-white/5 hover:text-white"
+          )}
+        >
+          {pathname === '/ideas' && (
+            <div className="absolute inset-0 bg-linear-to-br from-color-accent-pink/20 via-transparent to-transparent pointer-events-none" />
+          )}
+          <LucideIcons.Sparkles className={cn(
+            "h-5 w-5 shrink-0 transition-colors",
+            pathname === '/ideas' ? "text-white" : "text-color-base-content/40 group-hover:text-white/60"
+          )} />
+          <span className={cn("whitespace-nowrap transition-all duration-300", collapsed && "lg:hidden")}>
+            {language === 'en' ? 'Idea Generator' : 'Generador de Ideas'}
+          </span>
+        </Link>
         <Link 
           href="/apps"
           onClick={() => onCloseMobile()}
