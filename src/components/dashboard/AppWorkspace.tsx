@@ -21,8 +21,24 @@ export function AppWorkspace({ appId, currentExecutionId, schema, profile }: App
   const { toast } = useToast()
   const supabase = createClient()
   const [execution, setExecution] = useState<any>(null)
+  const [stats, setStats] = useState({ count: 0, time: '1.2s', efficiency: '98%' })
   const [isLoading, setIsLoading] = useState(false)
   const responseRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    async function fetchStats() {
+      const { count } = await supabase
+        .from('app_executions')
+        .select('*', { count: 'exact', head: true })
+        .eq('app_id', appId)
+        .eq('status', 'completed')
+      
+      if (count !== null) {
+        setStats(prev => ({ ...prev, count }))
+      }
+    }
+    fetchStats()
+  }, [appId, supabase])
 
   useEffect(() => {
     if (!currentExecutionId) {
@@ -162,7 +178,7 @@ export function AppWorkspace({ appId, currentExecutionId, schema, profile }: App
             </div>
             <div>
               <p className="text-[10px] font-black uppercase tracking-widest text-white/20">Total Executions</p>
-              <p className="text-xl font-black text-white">47</p>
+              <p className="text-xl font-black text-white">{stats.count}</p>
             </div>
           </div>
           <div className="bg-[#1a233a]/40 backdrop-blur-xl border border-white/5 rounded-2xl p-4 flex items-center gap-4">
@@ -171,7 +187,7 @@ export function AppWorkspace({ appId, currentExecutionId, schema, profile }: App
             </div>
             <div>
               <p className="text-[10px] font-black uppercase tracking-widest text-white/20">Avg. Response Time</p>
-              <p className="text-xl font-black text-white">1.2s</p>
+              <p className="text-xl font-black text-white">{stats.time}</p>
             </div>
           </div>
           <div className="bg-[#1a233a]/40 backdrop-blur-xl border border-white/5 rounded-2xl p-4 flex items-center gap-4">
@@ -180,7 +196,7 @@ export function AppWorkspace({ appId, currentExecutionId, schema, profile }: App
             </div>
             <div>
               <p className="text-[10px] font-black uppercase tracking-widest text-white/20">Efficiency Score</p>
-              <p className="text-xl font-black text-white">98%</p>
+              <p className="text-xl font-black text-white">{stats.efficiency}</p>
             </div>
           </div>
         </div>

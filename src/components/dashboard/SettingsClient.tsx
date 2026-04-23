@@ -23,7 +23,10 @@ export function SettingsClient({ initialProfile, user }: SettingsClientProps) {
 
   const [firstName, setFirstName] = useState(initialProfile?.first_name || '')
   const [lastName, setLastName] = useState(initialProfile?.last_name || '')
+  const [brandName, setBrandName] = useState(initialProfile?.brand_name || '')
+  const [brandLogo, setBrandLogo] = useState(initialProfile?.brand_logo_url || '')
   const [loading, setLoading] = useState(false)
+  const isProPlan = initialProfile?.plan_slug === 'professional' || initialProfile?.plan_slug === 'elite' || initialProfile?.plan_slug === 'growth'
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -35,6 +38,8 @@ export function SettingsClient({ initialProfile, user }: SettingsClientProps) {
         .update({
           first_name: firstName,
           last_name: lastName,
+          brand_name: brandName,
+          brand_logo_url: brandLogo,
           updated_at: new Date().toISOString()
         })
         .eq('id', user.id)
@@ -133,6 +138,66 @@ export function SettingsClient({ initialProfile, user }: SettingsClientProps) {
           </div>
         </form>
       </GlassCard>
+
+      {/* Branding Section (Marca Blanca) - Only for Pro/Elite */}
+      {isProPlan && (
+        <GlassCard className="p-8 border-color-primary/20 bg-color-primary/5">
+          <div className="space-y-6">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="h-12 w-12 rounded-2xl bg-color-primary/20 flex items-center justify-center text-color-primary shadow-lg">
+                <Zap className="h-6 w-6" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-white tracking-tight">
+                  {language === 'en' ? 'Branding & White Label' : 'Identidad de Marca Blanca'}
+                </h2>
+                <p className="text-xs text-white/40">Personaliza la apariencia de los recursos generados</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-white/70 ml-1">Nombre de Marca</label>
+                <Input 
+                  placeholder="Tu Agencia Pro" 
+                  value={brandName}
+                  onChange={(e) => setBrandName(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-white/70 ml-1">URL del Logo (Transparente)</label>
+                <Input 
+                  placeholder="https://tu-sitio.com/logo.png" 
+                  value={brandLogo}
+                  onChange={(e) => setBrandLogo(e.target.value)}
+                />
+              </div>
+            </div>
+            
+            <div className="bg-white/5 rounded-2xl p-4 border border-white/5">
+              <p className="text-[10px] text-white/40 italic">
+                * Tu logo aparecerá como marca de agua en los resultados finales, eliminando la marca de Serving Builder.
+              </p>
+            </div>
+          </div>
+        </GlassCard>
+      )}
+
+      {/* Team Management (Multi-user) - Agency Plan */}
+      {initialProfile?.plan_slug === 'professional' && (
+        <GlassCard className="p-8 opacity-60">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <h2 className="text-xl font-bold text-white tracking-tight">Gestión de Equipo</h2>
+                <span className="px-2 py-0.5 rounded-full bg-white/10 text-[8px] font-black uppercase text-white/40">Próximamente</span>
+              </div>
+              <p className="text-sm text-white/40">Añade colaboradores a tu espacio de trabajo de agencia.</p>
+            </div>
+            <GlowButton variant="ghost" disabled className="text-xs opacity-50">Gestionar Equipo</GlowButton>
+          </div>
+        </GlassCard>
+      )}
 
       {/* Danger Zone */}
       <div className="pt-8">
