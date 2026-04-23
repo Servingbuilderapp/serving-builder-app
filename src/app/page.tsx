@@ -31,7 +31,15 @@ export default async function LandingPage() {
   }
 
   const trialApps = allApps?.slice(0, 3) || []
-  const arsenalApps = allApps?.slice(3, 6) || []
+  const arsenalApps = allApps?.slice(3, 9) || []
+
+  // Group arsenal by category
+  const arsenalCategories = arsenalApps.reduce((acc: Record<string, any[]>, app) => {
+    const cat = app.category || 'General'
+    if (!acc[cat]) acc[cat] = []
+    acc[cat].push(app)
+    return acc
+  }, {})
 
   // Fetch plans
   let { data: plans } = await supabase
@@ -126,14 +134,14 @@ export default async function LandingPage() {
               </Link>
             ) : (
               <>
-              <Link href="/login" className="text-[10px] font-black uppercase tracking-[0.3em] text-white/60 hover:text-white transition-colors">
+              <a href="/login" className="text-[10px] font-black uppercase tracking-[0.3em] text-white/60 hover:text-white transition-colors">
                 Iniciar Sesión
-              </Link>
-              <Link href="/signup">
+              </a>
+              <a href="/signup" className="contents">
                 <GlowButton className="text-[10px] h-10 px-8 font-black tracking-widest">
                   EMPEZAR AHORA
                 </GlowButton>
-              </Link>
+              </a>
               </>
             )}
           </div>
@@ -162,19 +170,19 @@ export default async function LandingPage() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-6 pt-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-600">
-              <Link href="/signup" className="contents">
+              <a href="/signup" className="contents">
                 <GlowButton 
                   className="h-16 px-12 text-lg gap-4 font-black italic uppercase tracking-widest"
                 >
                   Empieza Gratis
                   <ArrowRight className="h-6 w-6" />
                 </GlowButton>
-              </Link>
-              <Link href="#trial">
+              </a>
+              <a href="#trial">
                 <button className="h-16 px-10 text-xs font-black uppercase tracking-[0.2em] text-white/40 hover:text-white transition-all rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 group">
                   Probar Ahora
                 </button>
-              </Link>
+              </a>
             </div>
           </div>
 
@@ -274,11 +282,11 @@ export default async function LandingPage() {
                 <p className="text-sm text-white/40 mb-8 line-clamp-3 leading-relaxed flex-1">
                   {app.description_es}
                 </p>
-                <Link href={`/login?redirect=/apps/${app.slug}`} className="w-full">
+                <a href={`/login?redirect=/apps/${app.slug}`} className="w-full">
                   <GlowButton variant="ghost" className="w-full text-[10px] font-black uppercase tracking-widest py-6">
                     Probar Motor
                   </GlowButton>
-                </Link>
+                </a>
               </GlassCard>
             ))}
           </div>
@@ -300,17 +308,32 @@ export default async function LandingPage() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {arsenalApps.map((app: any) => (
-            <GlassCard key={app.id} className="p-10 group hover:border-color-primary/50 transition-all hover:-translate-y-2 duration-500">
-              <div className="h-14 w-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/20 group-hover:text-color-primary group-hover:bg-color-primary/10 transition-all mb-8">
-                <Sparkles className="h-7 w-7" />
+        <div className="space-y-16">
+          {Object.entries(arsenalCategories).map(([category, categoryApps]) => (
+            <div key={category} className="space-y-8">
+              <div className="flex items-center gap-6">
+                <h3 className="text-2xl font-black uppercase italic tracking-tighter text-color-primary">
+                  {category}
+                </h3>
+                <div className="h-px flex-1 bg-linear-to-r from-color-primary/20 to-transparent" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-3 uppercase tracking-tight">{app.name_es}</h3>
-              <p className="text-sm text-white/40 line-clamp-2 leading-relaxed">
-                {app.description_es}
-              </p>
-            </GlassCard>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {categoryApps.map((app: any) => (
+                  <GlassCard key={app.id} className="p-10 group hover:border-color-primary/50 transition-all hover:-translate-y-2 duration-500">
+                    <div className="h-14 w-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/20 group-hover:text-color-primary group-hover:bg-color-primary/10 transition-all mb-8">
+                      <Sparkles className="h-7 w-7" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 uppercase tracking-tight">{app.name_es}</h3>
+                    <p className="text-sm text-white/40 line-clamp-2 leading-relaxed">
+                      {app.description_es}
+                    </p>
+                    <a href={`/login?redirect=/apps/${app.slug}`} className="mt-6 inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-color-primary/60 hover:text-color-primary transition-colors">
+                      Probar Motor <ArrowRight className="h-3 w-3" />
+                    </a>
+                  </GlassCard>
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       </section>
