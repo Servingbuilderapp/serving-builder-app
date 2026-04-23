@@ -112,7 +112,7 @@ export default async function LandingPage() {
             </span>
           </div>
           <div className="flex items-center gap-6">
-            <Link href="#trial" className="hidden md:block text-[10px] font-black uppercase tracking-[0.3em] text-white/40 hover:text-white transition-colors">Motores</Link>
+            <Link href="#trial" className="hidden md:block text-[10px] font-black uppercase tracking-[0.3em] text-white/40 hover:text-white transition-colors">Arsenal</Link>
             <Link href="#pricing" className="hidden md:block text-[10px] font-black uppercase tracking-[0.3em] text-white/40 hover:text-white transition-colors">Planes</Link>
             {user ? (
               <Link href="/dashboard">
@@ -123,14 +123,14 @@ export default async function LandingPage() {
               </Link>
             ) : (
               <>
-                <Link href="/login" className="text-[10px] font-black uppercase tracking-[0.3em] text-white/60 hover:text-white transition-colors">
-                  Login
-                </Link>
-                <Link href="/signup">
-                  <GlowButton className="text-[10px] h-10 px-8 font-black tracking-widest">
-                    GET STARTED
-                  </GlowButton>
-                </Link>
+              <Link href="/login" className="text-[10px] font-black uppercase tracking-[0.3em] text-white/60 hover:text-white transition-colors">
+                Iniciar Sesión
+              </Link>
+              <Link href="/signup">
+                <GlowButton className="text-[10px] h-10 px-8 font-black tracking-widest">
+                  EMPEZAR AHORA
+                </GlowButton>
+              </Link>
               </>
             )}
           </div>
@@ -143,14 +143,14 @@ export default async function LandingPage() {
           <div className="space-y-10 text-left">
             <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.3em] text-color-primary animate-in fade-in slide-in-from-left-4 duration-1000">
               <Sparkles className="h-4 w-4 fill-color-primary" />
-              Intelligence Reimagined
+              Inteligencia Reimaginada
             </div>
             
             <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.85] italic uppercase animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
-              Transform <br />
+              Transforma <br />
               <span className="text-gradient-magma drop-shadow-[0_0_30px_rgba(249,115,22,0.3)]">
-                Ideas into <br />
-                Reality
+                Ideas en <br />
+                Realidad
               </span>
             </h1>
             
@@ -218,6 +218,33 @@ export default async function LandingPage() {
                 <Sparkles className="h-6 w-6 text-color-accent-pink" />
               </GlassCard>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Benefits Section */}
+      <section id="benefits" className="relative z-10 py-32 px-6 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div className="space-y-6 group p-8 rounded-[2.5rem] hover:bg-white/5 transition-all duration-500">
+            <div className="h-16 w-16 rounded-2xl bg-color-primary/10 flex items-center justify-center text-color-primary group-hover:scale-110 transition-transform">
+              <Zap className="h-8 w-8" />
+            </div>
+            <h3 className="text-2xl font-black uppercase italic tracking-tighter">Velocidad Extrema</h3>
+            <p className="text-white/40 leading-relaxed font-medium">Obtén resultados en milisegundos con nuestra infraestructura de IA optimizada para el rendimiento.</p>
+          </div>
+          <div className="space-y-6 group p-8 rounded-[2.5rem] hover:bg-white/5 transition-all duration-500">
+            <div className="h-16 w-16 rounded-2xl bg-color-accent-pink/10 flex items-center justify-center text-color-accent-pink group-hover:scale-110 transition-transform">
+              <Shield className="h-8 w-8" />
+            </div>
+            <h3 className="text-2xl font-black uppercase italic tracking-tighter">Seguridad de Élite</h3>
+            <p className="text-white/40 leading-relaxed font-medium">Tus datos están protegidos con encriptación de nivel bancario y protocolos de seguridad avanzados.</p>
+          </div>
+          <div className="space-y-6 group p-8 rounded-[2.5rem] hover:bg-white/5 transition-all duration-500">
+            <div className="h-16 w-16 rounded-2xl bg-color-accent-blue/10 flex items-center justify-center text-color-accent-blue group-hover:scale-110 transition-transform">
+              <Globe className="h-8 w-8" />
+            </div>
+            <h3 className="text-2xl font-black uppercase italic tracking-tighter">Multicanal Pro</h3>
+            <p className="text-white/40 leading-relaxed font-medium">Genera contenido adaptado para cualquier plataforma: redes sociales, web o campañas de email marketing.</p>
           </div>
         </div>
       </section>
@@ -306,9 +333,9 @@ export default async function LandingPage() {
                   {plan.slug === 'elite' ? 'PREMIUM' : 'POPULAR'}
                 </div>
               )}
-              <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter mb-2">{plan.name_en}</h3>
+              <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter mb-2">{plan.name_es || plan.name_en}</h3>
               <p className="text-[11px] text-white/30 mb-8 leading-relaxed font-bold uppercase tracking-widest min-h-[3rem]">
-                {plan.description_en || (plan.slug === 'elite' ? 'Ultimate power for AI innovators.' : 'Professional tools for business growth.')}
+                {plan.description_es || (plan.slug === 'elite' ? 'Poder total para innovadores de IA.' : 'Herramientas profesionales para crecimiento empresarial.')}
               </p>
               
               <div className="flex items-baseline gap-2 mb-10">
@@ -323,7 +350,7 @@ export default async function LandingPage() {
                       <Check className="h-3 w-3 text-color-primary" />
                     </div>
                     <span className="text-[10px] font-black uppercase tracking-widest text-white/50 group-hover/item:text-white transition-colors">
-                      {feature}
+                      {plan.items_es?.[i] || feature}
                     </span>
                   </div>
                 ))}
@@ -361,7 +388,7 @@ export default async function LandingPage() {
           </div>
           <div className="flex justify-md-end gap-10">
             <div className="space-y-4">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white">Platform</h4>
+              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white">Plataforma</h4>
               <nav className="flex flex-col gap-2">
                 <Link href="/apps" className="text-[10px] font-bold text-white/30 hover:text-white transition-colors uppercase">Arsenal</Link>
                 <Link href="#pricing" className="text-[10px] font-bold text-white/30 hover:text-white transition-colors uppercase">Precios</Link>
