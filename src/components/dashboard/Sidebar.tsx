@@ -84,6 +84,19 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
           {language === 'en' ? 'Main Menu' : 'Menú Principal'}
         </div>
 
+        {/* Landing Page Link */}
+        <Link 
+          href="/"
+          className={cn(
+            "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-black transition-all duration-500 group border border-transparent text-white/40 hover:bg-white/5 hover:text-white"
+          )}
+        >
+          <LucideIcons.Globe className="h-5 w-5 shrink-0 transition-colors text-color-base-content/40 group-hover:text-white/60" />
+          <span className={cn("whitespace-nowrap transition-all duration-300", collapsed && "lg:hidden")}>
+            {language === 'en' ? 'Back to Website' : 'Volver a la Web'}
+          </span>
+        </Link>
+
         {/* Dashboard Link */}
         <Link 
           href="/dashboard"

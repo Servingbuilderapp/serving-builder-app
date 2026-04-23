@@ -136,7 +136,7 @@ export function IdeaGenerator() {
             </div>
           </div>
 
-          <GlowButton 
+            <GlowButton 
             onClick={handleGenerate}
             disabled={!industry || generationsLeft <= 0 || isGenerating}
             className="w-full h-16 text-sm font-black uppercase tracking-[0.3em] gap-3 italic"
@@ -144,11 +144,11 @@ export function IdeaGenerator() {
             {isGenerating ? (
               <>
                 <Loader2 className="h-5 w-5 animate-spin" />
-                GENERANDO OPORTUNIDADES... {progress}%
+                EXTRAYENDO OPORTUNIDADES... {progress}%
               </>
             ) : (
               <>
-                GENERAR 5 MICRO-APPS + 1 FUSIÓN
+                GENERAR 5 IDEAS DE MICRO-APPS + 1 FUSIÓN
                 <Zap className="h-5 w-5 fill-white" />
               </>
             )}
@@ -157,8 +157,8 @@ export function IdeaGenerator() {
 
         {generationsLeft === 0 && !isGenerating && !result && (
           <div className="mt-8 p-6 rounded-2xl bg-color-primary/10 border border-color-primary/20 text-center animate-in zoom-in-95">
-            <p className="text-sm font-bold text-white mb-4">¡Has agotado tus consultas gratuitas!</p>
-            <GlowButton variant="primary" className="mx-auto px-8">Acceder a Consultas Ilimitadas</GlowButton>
+            <p className="text-sm font-bold text-white mb-4">¡Has agotado tus consultas gratuitas de ideas!</p>
+            <GlowButton variant="primary" className="mx-auto px-8">Acceder a Ideas Ilimitadas</GlowButton>
           </div>
         )}
       </GlassCard>
@@ -166,6 +166,9 @@ export function IdeaGenerator() {
       {/* Result Display */}
       {result && (
         <div className="space-y-8 animate-in fade-in slide-in-from-top-8 duration-700">
+          <div className="text-center mb-6">
+            <span className="text-[10px] font-black text-color-primary uppercase tracking-[0.4em]">Propuestas de Negocio para {result.industry}</span>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {result.microApps.map((app: any, idx: number) => (
               <GlassCard key={idx} className="p-6 border-white/5 bg-white/2 hover:border-color-primary/30 transition-all group">
@@ -173,7 +176,7 @@ export function IdeaGenerator() {
                   <div className="h-10 w-10 rounded-xl bg-color-primary/10 flex items-center justify-center text-color-primary">
                     <Sparkles className="h-5 w-5" />
                   </div>
-                  <span className="text-[10px] font-black text-white/20 group-hover:text-color-primary transition-colors">#{idx + 1}</span>
+                  <span className="text-[10px] font-black text-white/20 group-hover:text-color-primary transition-colors">IDEA #{idx + 1}</span>
                 </div>
                 <h4 className="text-lg font-black text-white uppercase italic tracking-tight mb-2">{app.title}</h4>
                 <p className="text-xs text-white/40 leading-relaxed mb-4">{app.desc}</p>
@@ -187,7 +190,7 @@ export function IdeaGenerator() {
 
           <GlassCard className="p-10 border-color-accent-pink/30 bg-color-accent-pink/5 relative overflow-hidden group">
             <div className="absolute top-0 right-0 px-6 py-2 bg-color-accent-pink text-white text-[10px] font-black uppercase tracking-widest italic">
-              LA FUSIÓN GANADORA
+              CONCEPTO DE FUSIÓN RENTABLE
             </div>
             <div className="flex flex-col md:flex-row gap-10 items-center">
               <div className="h-24 w-24 rounded-3xl bg-color-accent-pink/20 flex items-center justify-center text-color-accent-pink shadow-[0_0_30px_rgba(236,72,153,0.3)] group-hover:scale-110 transition-transform duration-500">
@@ -205,13 +208,16 @@ export function IdeaGenerator() {
           </GlassCard>
 
           <div className="bg-[#111d35] rounded-[2.5rem] p-10 border border-white/10">
+            <div className="text-center mb-8">
+               <p className="text-[11px] font-black uppercase tracking-[0.3em] text-white/20">Proyección Estimada del Modelo de Negocio</p>
+            </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <div className="text-center space-y-1">
                 <p className="text-[10px] font-black uppercase tracking-widest text-white/30">Costo Desarrollo</p>
                 <p className="text-2xl font-black text-white">{result.math.cost}</p>
               </div>
               <div className="text-center space-y-1">
-                <p className="text-[10px] font-black uppercase tracking-widest text-white/30">Tiempo Go-to-Market</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-white/30">Tiempo de Lanzamiento</p>
                 <p className="text-2xl font-black text-white">{result.math.time}</p>
               </div>
               <div className="text-center space-y-1">
@@ -227,7 +233,7 @@ export function IdeaGenerator() {
 
           <div className="flex justify-center pt-8">
             <GlowButton variant="primary" className="h-16 px-12 text-sm gap-3">
-              QUIERO EMPEZAR CON ESTA IDEA
+              QUIERO DESARROLLAR ESTA IDEA
               <ArrowRight className="h-5 w-5" />
             </GlowButton>
           </div>
