@@ -121,21 +121,32 @@ export function DynamicPlansGrid({ plans, currentPlanId }: DynamicPlansGridProps
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
       {plans.map((plan) => {
         const isCurrent = plan.id === currentPlanId
         const features = language === 'en' ? plan.items_en : plan.items_es
         
         return (
           <div key={plan.id} className={cn(
-            "relative group flex flex-col h-full bg-[#111d35] border rounded-3xl p-8 transition-all duration-500 overflow-hidden shadow-xl",
-            isCurrent ? "border-color-primary shadow-[0_0_50px_rgba(249,115,22,0.2)]" : "border-white/10 hover:border-white/20"
+            "relative group flex flex-col h-full bg-[#111d35] border rounded-3xl p-6 transition-all duration-500 overflow-hidden shadow-xl",
+            isCurrent ? "border-color-primary shadow-[0_0_50px_rgba(249,115,22,0.2)]" : "border-white/10 hover:border-white/20",
+            plan.slug === 'elite' && "border-color-primary/50 ring-2 ring-color-primary/20",
+            plan.slug === 'professional' && "border-color-accent-pink/50 ring-2 ring-color-accent-pink/20"
           )}>
-            <div className="absolute inset-0 bg-linear-to-br from-color-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            <div className={cn(
+              "absolute inset-0 bg-linear-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-700",
+              plan.slug === 'elite' ? "from-color-primary/10 via-color-accent-pink/5 to-transparent" : "from-color-primary/5 to-transparent"
+            )} />
             
             {isCurrent && (
-              <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-color-primary text-[10px] font-black uppercase tracking-widest text-white animate-pulse">
+              <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-color-primary text-[10px] font-black uppercase tracking-widest text-white animate-pulse z-20">
                 {language === 'en' ? 'Current Plan' : 'Plan Actual'}
+              </div>
+            )}
+            
+            {plan.slug === 'elite' && (
+              <div className="absolute -top-1 -right-1 px-4 py-2 bg-linear-to-r from-color-primary to-color-accent-pink text-[10px] font-black uppercase tracking-widest text-white rounded-bl-2xl shadow-xl z-20">
+                ⭐ {language === 'en' ? 'Most Exclusive' : 'Más Exclusivo'}
               </div>
             )}
 

@@ -19,11 +19,22 @@ export default async function LandingPage() {
     .limit(6)
 
   // Fetch plans
-  const { data: plans } = await supabase
+  let { data: plans } = await supabase
     .from('plans')
     .select('*')
     .eq('is_active', true)
     .order('sort_order', { ascending: true })
+
+  // Fallback if no plans found
+  if (!plans || plans.length === 0) {
+    plans = [
+      { id: '1', slug: 'explorador', name_en: 'Explorer', price_monthly: 0, items_en: ['1 Base Tool', '3 Mini-apps', 'Community support'] },
+      { id: '2', slug: 'basic', name_en: 'Entrepreneur', price_monthly: 29, items_en: ['4 Additional Tools', '7 Mini-apps', 'Email Support', 'No Watermark'] },
+      { id: '3', slug: 'growth', name_en: 'Growth', price_monthly: 49, items_en: ['Niche Specific Tools', '10 Mini-apps', 'Custom Domain', 'Analytics Dashboard'] },
+      { id: '4', slug: 'professional', name_en: 'Unlimited Power', price_monthly: 97, items_en: ['All Business Tools', '30 Mini-apps', 'Priority Support', 'Multi-user Mode', 'White Label Options'] },
+      { id: '5', slug: 'elite', name_en: 'Elite', price_monthly: 197, items_en: ['Everything Unlimited', 'Beta Access', 'Monthly Consulting', 'Full White Label', 'Priority Feature Requests'] }
+    ] as any;
+  }
 
   return (
     <div className="min-h-screen bg-color-base-100 text-white overflow-hidden">
@@ -174,15 +185,16 @@ export default async function LandingPage() {
           <p className="text-white/40 font-medium">Scalable solutions for individuals and teams.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
           {plans?.map((plan) => (
             <GlassCard key={plan.id} className={cn(
               "p-8 flex flex-col relative overflow-hidden",
-              plan.slug === 'professional' && "border-color-primary/50 ring-1 ring-color-primary/20"
+              plan.slug === 'professional' && "border-color-accent-pink/50 ring-1 ring-color-accent-pink/20 shadow-[0_0_30px_rgba(236,72,153,0.1)]",
+              plan.slug === 'elite' && "border-color-primary/50 ring-2 ring-color-primary/30 shadow-[0_0_40px_rgba(249,115,22,0.1)]"
             )}>
-              {plan.slug === 'professional' && (
-                <div className="absolute top-0 right-0 bg-color-primary text-white text-[10px] font-black uppercase px-3 py-1 rounded-bl-xl tracking-widest">
-                  Popular
+              {(plan.slug === 'professional' || plan.slug === 'elite') && (
+                <div className="absolute top-0 right-0 bg-linear-to-r from-color-primary to-color-accent-pink text-white text-[9px] font-black uppercase px-3 py-1 rounded-bl-xl tracking-[0.2em] z-10 shadow-lg">
+                  {plan.slug === 'elite' ? 'Premium' : 'Most Popular'}
                 </div>
               )}
               <h3 className="text-lg font-bold text-white uppercase tracking-tighter mb-1">{plan.name_en}</h3>
@@ -192,16 +204,19 @@ export default async function LandingPage() {
               </div>
               
               <div className="space-y-3 mb-8 flex-1">
-                {plan.features?.map((feature: string, i: number) => (
-                  <div key={i} className="flex items-center gap-2 text-xs font-medium text-white/60">
-                    <div className="h-1 w-1 rounded-full bg-color-primary" />
+                {plan.items_en?.map((feature: string, i: number) => (
+                  <div key={i} className="flex items-start gap-2 text-[10px] font-bold uppercase tracking-tight text-white/40">
+                    <div className="h-1 w-1 rounded-full bg-color-primary mt-1.5 shrink-0" />
                     {feature}
                   </div>
                 ))}
               </div>
 
               <Link href={`/signup?plan=${plan.slug}`}>
-                <GlowButton variant={plan.slug === 'professional' ? 'primary' : 'ghost'} className="w-full text-xs">
+                <GlowButton 
+                  variant={(plan.slug === 'professional' || plan.slug === 'elite') ? 'primary' : 'ghost'} 
+                  className="w-full text-[10px] h-11"
+                >
                   Select Plan
                 </GlowButton>
               </Link>
