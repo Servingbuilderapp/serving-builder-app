@@ -24,12 +24,26 @@ export function MicroAppRunner({ appSlug }: MicroAppRunnerProps) {
   const [activeTab, setActiveTab] = useState<'form' | 'history'>('form')
   const [formValues, setFormValues] = useState<Record<string, string>>({})
   const [activePresetId, setActivePresetId] = useState<string>('')
+  const [profile, setProfile] = useState<any>(null)
   
   const workspaceRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     async function fetchApp() {
       setIsLoading(true)
+      
+      // Fetch User Profile
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        const { data: prof } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', user.id)
+          .single()
+        setProfile(prof)
+      }
+
+      // Fetch App
       const { data, error } = await supabase
         .from('micro_apps')
         .select('*')
@@ -183,6 +197,7 @@ export function MicroAppRunner({ appSlug }: MicroAppRunnerProps) {
             appId={app.id} 
             currentExecutionId={currentExecutionId} 
             schema={app.form_schema}
+            profile={profile}
           />
         </div>
       </div>

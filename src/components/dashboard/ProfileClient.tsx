@@ -179,9 +179,16 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
   })
   
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const brandLogoInputRef = useRef<HTMLInputElement>(null)
   const [avatarUrl, setAvatarUrl] = useState<string | null>(profile?.avatar_url || null)
+  const [brandLogoUrl, setBrandLogoUrl] = useState<string | null>(profile?.brand_logo_url || user?.user_metadata?.brand_logo_url || null)
+  const [brandName, setBrandName] = useState(profile?.brand_name || user?.user_metadata?.brand_name || '')
   
-  const hasChanges = formData.firstName !== (profile?.first_name || '') || formData.lastName !== (profile?.last_name || '')
+  const isWhiteLabelEligible = profile?.plans?.slug === 'professional' || profile?.plans?.slug === 'elite'
+  
+  const hasChanges = formData.firstName !== (profile?.first_name || '') || 
+                     formData.lastName !== (profile?.last_name || '') ||
+                     brandName !== (profile?.brand_name || user?.user_metadata?.brand_name || '')
 
   const currentAvatar = avatarUrl || profile?.avatar_url || user?.user_metadata?.avatar_url || null
 
@@ -256,6 +263,37 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
     }
   }
 
+  const handleBrandLogoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setIsUploading(true)
+    try {
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${user.id}/brand_${Math.random()}.${fileExt}`
+      
+      const { error: uploadError } = await supabase.storage
+        .from('avatars') // Using same bucket for simplicity
+        .upload(fileName, file, { upsert: true })
+
+      if (uploadError) throw uploadError
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(fileName)
+
+      setBrandLogoUrl(publicUrl)
+      toast({
+        title: language === 'en' ? 'Brand logo uploaded' : 'Logo de marca subido',
+        type: 'success'
+      })
+    } catch (error: any) {
+      toast({ title: language === 'en' ? 'Upload failed' : 'Error al subir', type: 'error' })
+    } finally {
+      setIsUploading(false)
+    }
+  }
+
   const handleSaveChanges = async () => {
     setIsSaving(true)
     try {
@@ -264,7 +302,9 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           firstName: formData.firstName, 
-          lastName: formData.lastName 
+          lastName: formData.lastName,
+          brandName,
+          brandLogoUrl
         })
       })
 
@@ -446,6 +486,74 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
                 {language === 'en' ? 'Email cannot be changed for security reasons.' : 'El email no puede cambiarse por razones de seguridad.'}
               </p>
             </div>
+
+            {/* White Label Settings (Conditional) */}
+            {isWhiteLabelEligible && (
+              <div className="pt-8 border-t border-white/5 space-y-6">
+                <div className="flex items-center gap-2">
+                  <Shield className="h-5 w-5 text-color-primary" />
+                  <h3 className="text-lg font-bold text-white uppercase tracking-tighter">
+                    {language === 'en' ? 'White Label Settings' : 'Configuración de Marca Blanca'}
+                  </h3>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-white/40 uppercase tracking-widest ml-1">
+                        {language === 'en' ? 'Brand Name' : 'Nombre de la Marca'}
+                      </label>
+                      <input 
+                        type="text"
+                        value={brandName}
+                        onChange={(e) => setBrandName(e.target.value)}
+                        placeholder="Ej: Mi Agencia AI"
+                        className="w-full bg-[#0a0f1d] border border-white/10 rounded-2xl py-3 px-4 text-white focus:outline-hidden focus:border-color-primary/50 transition-all"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-white/40 uppercase tracking-widest ml-1">
+                        {language === 'en' ? 'Brand Logo' : 'Logo de la Marca'}
+                      </label>
+                      <div className="flex items-center gap-4">
+                        <div className="h-16 w-16 rounded-xl border-2 border-dashed border-white/10 bg-[#0a0f1d] flex items-center justify-center overflow-hidden">
+                          {brandLogoUrl ? (
+                            <img src={brandLogoUrl} alt="Brand" className="h-full w-full object-contain" />
+                          ) : (
+                            <Upload className="h-6 w-6 text-white/10" />
+                          )}
+                        </div>
+                        <button 
+                          onClick={() => brandLogoInputRef.current?.click()}
+                          className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/60 hover:bg-white/10 hover:text-white transition-all"
+                        >
+                          {language === 'en' ? 'Upload Logo' : 'Subir Logo'}
+                        </button>
+                        <input 
+                          type="file"
+                          ref={brandLogoInputRef}
+                          className="hidden"
+                          accept="image/*"
+                          onChange={handleBrandLogoChange}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-color-primary/5 rounded-2xl p-6 border border-color-primary/10">
+                    <p className="text-xs font-bold text-color-primary uppercase tracking-widest mb-2">
+                      {language === 'en' ? 'What is this?' : '¿Qué es esto?'}
+                    </p>
+                    <p className="text-[11px] text-white/40 leading-relaxed">
+                      {language === 'en' 
+                        ? 'Your logo and brand name will appear in the results of the apps you generate, replacing our branding. Perfect for agencies and professional use.' 
+                        : 'Tu logo y nombre de marca aparecerán en los resultados de las apps que generes, reemplazando nuestra marca. Ideal para agencias y uso profesional.'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div className="pt-6 flex justify-end">
               <button 
