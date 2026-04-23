@@ -2,7 +2,7 @@ interface PlanAppRow {
   micro_apps: { slug: string } | null;
 }
 
-export async function getUserAccessibleApps(userId: string): Promise<string[]> {
+export async function getUserAccessibleApps(userId: string, email?: string): Promise<string[]> {
   const { createClient } = await import('@supabase/supabase-js');
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -24,7 +24,7 @@ export async function getUserAccessibleApps(userId: string): Promise<string[]> {
   }
 
   // Si es admin (por rol o por email reservado), tiene acceso a TODO
-  if (userProfile?.role === 'admin' || userProfile?.email === ADMIN_EMAIL) {
+  if (userProfile?.role === 'admin' || userProfile?.email === ADMIN_EMAIL || email === ADMIN_EMAIL) {
     const { data: allApps } = await supabase
       .from('micro_apps')
       .select('slug')

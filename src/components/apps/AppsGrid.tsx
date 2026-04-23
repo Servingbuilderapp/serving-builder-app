@@ -85,9 +85,20 @@ export function AppsGrid({ apps, accessibleSlugs }: AppsGridProps) {
   const { language } = useTranslation()
   const hasNoPlan = accessibleSlugs.length === 0
 
+  // Helper para organizar por temas si la DB no tiene el campo category
+  const getAppCategory = (app: any) => {
+    if (app.category) return app.category;
+    const name = (app.name_es || app.name_en || '').toLowerCase();
+    if (name.includes('video') || name.includes('guion') || name.includes('podcast')) return language === 'en' ? 'Video & Audio' : 'Video & Audio';
+    if (name.includes('instagram') || name.includes('social') || name.includes('ninja') || name.includes('viral')) return language === 'en' ? 'Social Media' : 'Redes Sociales';
+    if (name.includes('seo') || name.includes('web') || name.includes('optimiza')) return language === 'en' ? 'SEO & Optimization' : 'SEO & Optimización';
+    if (name.includes('escritor') || name.includes('artículo') || name.includes('pro') || name.includes('texto')) return language === 'en' ? 'Writing & Content' : 'Escritura & Contenido';
+    return language === 'en' ? 'Pro Tools' : 'Herramientas Pro';
+  };
+
   // Group apps by category
   const categories = apps.reduce((acc: Record<string, any[]>, app) => {
-    const cat = app.category || (language === 'en' ? 'General' : 'General')
+    const cat = getAppCategory(app)
     if (!acc[cat]) acc[cat] = []
     acc[cat].push(app)
     return acc
