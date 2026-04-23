@@ -28,6 +28,32 @@
   color: transparent;
 }
 
+/* 3D Utilities for Premium Hero */
+.perspective-1000 {
+  perspective: 1000px;
+}
+.transform-3d {
+  transform-style: preserve-3d;
+}
+.rotate-x-2 {
+  transform: rotateX(2deg);
+}
+.rotate-y--6 {
+  transform: rotateY(-6deg);
+}
+.group:hover .rotate-x-2 {
+  transform: rotateX(5deg);
+}
+.group:hover .rotate-y--6 {
+  transform: rotateY(-12deg);
+}
+
+/* Fix for anchor links overlapping with fixed header */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+}
+
 body {
   background-color: var(--color-base-100);
   color: var(--color-base-content);
@@ -35,6 +61,9 @@ body {
   font-family: var(--font-sans);
   overflow-x: hidden;
   position: relative;
+  margin: 0;
+  padding: 0;
+  width: 100%;
 }
 
 /* Animated Mesh Gradient Background - More Vibrant */
@@ -71,6 +100,43 @@ body::before {
 .animate-active-glow {
   animation: activeGlow 3s infinite ease-in-out;
 }
+
+/* Custom Animation Utilities (replacing tailwindcss-animate) */
+.animate-in {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+.fade-in {
+  animation-name: fadeIn;
+}
+
+.slide-in-from-left-4 {
+  animation-name: slideInFromLeft;
+}
+
+.slide-in-from-bottom-8 {
+  animation-name: slideInFromBottom;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInFromLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInFromBottom {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.delay-200 { animation-delay: 200ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-600 { animation-delay: 600ms; }
 
 /* Premium Text Glows */
 .text-glow-primary {
