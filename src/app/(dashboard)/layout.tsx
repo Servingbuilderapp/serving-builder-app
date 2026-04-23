@@ -3,6 +3,9 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { DashboardLayoutClient } from '@/components/dashboard/DashboardLayoutClient'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function ProtectedLayout({
   children,
 }: {
@@ -31,8 +34,8 @@ export default async function ProtectedLayout({
     .single()
 
   const branding = {
-    name: profile?.brand_name || adminProfile?.brand_name || 'SERVING BUILDER',
-    logo_url: profile?.brand_logo_url || adminProfile?.brand_logo_url || null
+    name: profile?.brand_name || user?.user_metadata?.brand_name || adminProfile?.brand_name || 'SERVING BUILDER',
+    logo_url: profile?.brand_logo_url || user?.user_metadata?.brand_logo_url || adminProfile?.brand_logo_url || null
   }
 
   return (

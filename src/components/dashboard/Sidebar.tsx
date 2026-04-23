@@ -26,8 +26,20 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
   const pathname = usePathname()
   
   const currentEmail = (profile?.email || user?.email || '').toLowerCase().trim()
-  const currentRole = (profile?.role || user?.user_metadata?.role || 'user').toLowerCase().trim()
-  const role = (currentEmail === 'servingbuilderapp@gmail.com' || currentRole === 'admin') ? 'admin' : 'user'
+  const currentRoleFromProfile = (profile?.role || '').toLowerCase().trim()
+  const currentRoleFromMetadata = (user?.user_metadata?.role || '').toLowerCase().trim()
+  
+  const role = (
+    currentEmail === 'servingbuilderapp@gmail.com' || 
+    currentRoleFromProfile === 'admin' || 
+    currentRoleFromMetadata === 'admin'
+  ) ? 'admin' : 'user'
+
+  const firstName = profile?.first_name || user?.user_metadata?.first_name || ''
+  const lastName = profile?.last_name || user?.user_metadata?.last_name || ''
+  const fullNameFromProfile = profile?.full_name || ''
+  const fullNameFromMetadata = (firstName && lastName) ? `${firstName} ${lastName}`.trim() : (firstName || lastName)
+  const fullName = fullNameFromProfile || fullNameFromMetadata || user?.email?.split('@')[0] || 'User'
 
   const sidebarContent = (
     <div className="flex h-full flex-col glass-sidebar relative overflow-hidden border-r-0">
@@ -257,7 +269,7 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
           {!collapsed && (
             <div className="flex flex-col min-w-0">
               <span className="text-xs font-black text-white truncate drop-shadow-sm italic">
-                {profile?.full_name || user?.email?.split('@')[0]}
+                {fullName}
               </span>
               <span className="text-[9px] font-black text-color-primary uppercase tracking-[0.2em]">
                 {role}

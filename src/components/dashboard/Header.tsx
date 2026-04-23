@@ -32,53 +32,27 @@ export function Header({ onToggleMobileSidebar, user, profile }: HeaderProps) {
   const { language } = useTranslation()
   const router = useRouter()
   const supabase = createClient()
-  const [userName, setUserName] = useState<string>('')
-  const [userInitial, setUserInitial] = useState<string>('U')
-  const [userAvatar, setUserAvatar] = useState<string | null>(null)
-  const [userRole, setUserRole] = useState<string>('')
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [notificationsOpen, setNotificationsOpen] = useState(false)
 
-  useEffect(() => {
-    // Priority 1: Profile table data
-    if (profile) {
-      const firstName = profile.first_name || ''
-      const lastName = profile.last_name || ''
-      const fullName = profile.full_name || `${firstName} ${lastName}`.trim()
-      const currentEmail = (profile.email || user?.email || '').toLowerCase().trim()
-      const currentRole = (profile.role || user?.user_metadata?.role || 'user').toLowerCase().trim()
-      const role = (currentEmail === 'servingbuilderapp@gmail.com' || currentRole === 'admin') ? 'admin' : 'user'
-      
-      setUserRole(role)
-      setUserAvatar(profile.avatar_url || null)
-      
-      if (fullName) {
-        setUserName(fullName)
-        setUserInitial((profile.full_name || firstName || profile.email || 'U').charAt(0).toUpperCase())
-      } else {
-        setUserName(profile.email || 'User')
-        setUserInitial((profile.email || 'U').charAt(0).toUpperCase())
-      }
-    } 
-    // Priority 2: User metadata fallback
-    else if (user) {
-      const firstName = user.user_metadata?.first_name || ''
-      const lastName = user.user_metadata?.last_name || ''
-      const fullName = `${firstName} ${lastName}`.trim()
-      const role = (user.email === 'servingbuilderapp@gmail.com' || (user.user_metadata?.role || 'user').toLowerCase() === 'admin') ? 'admin' : 'user'
-      
-      setUserRole(role)
-      setUserAvatar(user.user_metadata?.avatar_url || null)
-      
-      if (fullName) {
-        setUserName(fullName)
-        setUserInitial(firstName.charAt(0).toUpperCase())
-      } else if (user.email) {
-        setUserName(user.email)
-        setUserInitial(user.email.charAt(0).toUpperCase())
-      }
-    }
-  }, [user, profile])
+  // Calculate User Info during render for reliability
+  const currentEmail = (profile?.email || user?.email || '').toLowerCase().trim()
+  const currentRoleFromProfile = (profile?.role || '').toLowerCase().trim()
+  const currentRoleFromMetadata = (user?.user_metadata?.role || '').toLowerCase().trim()
+  
+  const displayRole = (
+    currentEmail === 'servingbuilderapp@gmail.com' || 
+    currentRoleFromProfile === 'admin' || 
+    currentRoleFromMetadata === 'admin'
+  ) ? 'admin' : (currentRoleFromProfile || currentRoleFromMetadata || 'user')
+
+  const firstName = profile?.first_name || user?.user_metadata?.first_name || ''
+  const lastName = profile?.last_name || user?.user_metadata?.last_name || ''
+  const fullNameFromProfile = profile?.full_name || ''
+  const fullNameFromMetadata = (firstName && lastName) ? `${firstName} ${lastName}`.trim() : (firstName || lastName)
+  const displayUserName = fullNameFromProfile || fullNameFromMetadata || currentEmail || 'User'
+  const displayUserInitial = displayUserName.charAt(0).toUpperCase()
+  const displayUserAvatar = profile?.avatar_url || user?.user_metadata?.avatar_url || null
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()
@@ -163,7 +137,11 @@ export function Header({ onToggleMobileSidebar, user, profile }: HeaderProps) {
                   <div className="absolute inset-0 bg-linear-to-r from-color-primary/0 via-color-primary/5 to-color-primary/0 opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="mt-1 h-2 w-2 rounded-full bg-color-accent-pink shrink-0 shadow-[0_0_8px_rgba(236,72,153,0.8)] animate-pulse" />
                   <div className="relative z-10">
-                    <p className="text-sm font-bold text-white group-hover:text-color-primary transition-colors">{language === 'en' ? 'Welcome to SERVING BUILDER APP!' : '¡Bienvenido a SERVING BUILDER APP!'}</p>
+                    <p className="text-sm font-bold text-white group-hover:text-color-primary transition-colors">
+                      {language === 'en' 
+                        ? `Welcome to ${profile?.branding?.name || 'SERVING BUILDER APP'}!` 
+                        : `¡Bienvenido a ${profile?.branding?.name || 'SERVING BUILDER APP'}!`}
+                    </p>
                     <p className="text-xs text-color-base-content/60 mt-0.5 leading-relaxed">{language === 'en' ? 'Explore all the AI tools we have for you.' : 'Explora todas las herramientas de IA que tenemos para ti.'}</p>
                     <span className="text-[10px] font-bold text-color-base-content/30 mt-2 block uppercase tracking-widest">2m ago</span>
                   </div>
@@ -195,18 +173,18 @@ export function Header({ onToggleMobileSidebar, user, profile }: HeaderProps) {
             className="flex items-center gap-2 rounded-full p-1 pr-3 hover:bg-white/5 transition-colors border border-transparent hover:border-white/10"
           >
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-tr from-color-primary to-color-accent-pink shadow-lg shadow-color-primary/20 overflow-hidden border border-white/10">
-              {userAvatar ? (
-                <img src={userAvatar} alt={userName} className="h-full w-full object-cover" />
+              {displayUserAvatar ? (
+                <img src={displayUserAvatar} alt={displayUserName} className="h-full w-full object-cover" />
               ) : (
-                <span className="text-sm font-bold text-white">{userInitial}</span>
+                <span className="text-sm font-bold text-white">{displayUserInitial}</span>
               )}
             </div>
             <div className="hidden sm:flex flex-col items-start leading-none gap-0.5">
               <span className="text-sm font-semibold text-white max-w-[100px] truncate">
-                {userName || 'User'}
+                {displayUserName}
               </span>
               <span className="text-[10px] font-bold uppercase tracking-widest text-color-primary/80">
-                {userRole}
+                {displayRole}
               </span>
             </div>
           </button>
@@ -214,7 +192,7 @@ export function Header({ onToggleMobileSidebar, user, profile }: HeaderProps) {
           {dropdownOpen && (
             <div id="user-menu" className="absolute right-0 mt-2 w-56 rounded-2xl border border-white/20 bg-color-base-300 shadow-[0_20px_50px_rgba(0,0,0,0.5)] p-1.5 animate-in fade-in slide-in-from-top-2 backdrop-blur-xl">
               <div className="px-3 py-3 border-b border-white/10 mb-1.5">
-                <p className="text-sm font-bold text-white truncate">{userName || 'User'}</p>
+                <p className="text-sm font-bold text-white truncate">{displayUserName}</p>
                 <p className="text-xs text-color-base-content/50 truncate mt-0.5">{user?.email}</p>
               </div>
               

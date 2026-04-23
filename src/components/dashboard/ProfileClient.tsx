@@ -286,10 +286,21 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
         .getPublicUrl(fileName)
 
       setBrandLogoUrl(publicUrl)
+      
+      // Persist immediately like avatar
+      await fetch('/api/user/update-profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          brandLogoUrl: publicUrl
+        })
+      })
+
       toast({
-        title: language === 'en' ? 'Brand logo uploaded' : 'Logo de marca subido',
+        title: language === 'en' ? 'Brand logo updated' : 'Logo de marca actualizado',
         type: 'success'
       })
+      router.refresh()
     } catch (error: any) {
       toast({ title: language === 'en' ? 'Upload failed' : 'Error al subir', type: 'error' })
     } finally {
