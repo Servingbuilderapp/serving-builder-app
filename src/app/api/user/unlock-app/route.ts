@@ -28,7 +28,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'No active plan found' }, { status: 403 })
     }
 
-    const appLimit = userData.plans?.app_limit || 0
+    const appLimit = (userData.plans as any)?.app_limit || 0
 
     // 2. Count current unlocked apps
     const { count, error: countError } = await supabase

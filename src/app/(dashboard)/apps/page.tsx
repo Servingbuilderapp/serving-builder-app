@@ -31,7 +31,7 @@ export default async function AppsPage() {
     .select('*', { count: 'exact', head: true })
     .eq('user_id', user.id)
 
-  const appLimit = userData?.plans?.app_limit || 0;
+  const appLimit = (userData?.plans as any)?.app_limit || 0;
   const usedCredits = overridesCount || 0;
 
   // 2. Obtener TODAS las apps de la DB

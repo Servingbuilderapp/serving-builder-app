@@ -28,7 +28,7 @@ export async function getUserAccessibleApps(userId: string, email?: string): Pro
                   userProfile?.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase() || 
                   email?.toLowerCase() === ADMIN_EMAIL.toLowerCase();
 
-  const appLimit = userProfile?.plans?.app_limit || 0;
+  const appLimit = (userProfile?.plans as any)?.app_limit || 0;
   const hasUnlimitedAccess = appLimit >= 100; // Elite (100) or Master (999) get all apps unlocked
 
   if (isAdmin || hasUnlimitedAccess) {
