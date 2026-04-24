@@ -19,6 +19,21 @@ export default async function AppsPage() {
   const accessibleSlugs = await getUserAccessibleApps(user.id, user.email)
   const ADMIN_EMAIL = 'servingbuilderapp@gmail.com';
 
+  // Fetch app limit and overrides count
+  const { data: userData } = await supabase
+    .from('users')
+    .select('plans(app_limit)')
+    .eq('id', user.id)
+    .single()
+
+  const { count: overridesCount } = await supabase
+    .from('user_app_overrides')
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', user.id)
+
+  const appLimit = userData?.plans?.app_limit || 0;
+  const usedCredits = overridesCount || 0;
+
   // 2. Obtener TODAS las apps de la DB
   let { data: apps } = await supabase
     .from('micro_apps')
@@ -70,6 +85,8 @@ export default async function AppsPage() {
         apps={apps || []} 
         accessibleSlugs={accessibleSlugs} 
         userEmail={user.email}
+        appLimit={appLimit}
+        usedCredits={usedCredits}
       />
     </div>
   )

@@ -15,7 +15,7 @@ export async function getUserAccessibleApps(userId: string, email?: string): Pro
   
   const { data: userProfile, error: profileError } = await supabase
     .from('users')
-    .select('plan_id, role, email')
+    .select('plan_id, role, email, plans(app_limit)')
     .eq('id', userId)
     .single();
 
@@ -28,7 +28,10 @@ export async function getUserAccessibleApps(userId: string, email?: string): Pro
                   userProfile?.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase() || 
                   email?.toLowerCase() === ADMIN_EMAIL.toLowerCase();
 
-  if (isAdmin) {
+  const appLimit = userProfile?.plans?.app_limit || 0;
+  const hasUnlimitedAccess = appLimit >= 100; // Elite (100) or Master (999) get all apps unlocked
+
+  if (isAdmin || hasUnlimitedAccess) {
     const { data: allApps } = await supabase
       .from('micro_apps')
       .select('slug')
@@ -48,7 +51,7 @@ export async function getUserAccessibleApps(userId: string, email?: string): Pro
 
   const slugs = new Set<string>();
 
-  // 2. Obtener apps incluidas en su plan
+  // 2. Obtener apps incluidas en su plan (Apps base que vienen fijas)
   if (userProfile?.plan_id) {
     const { data: planApps } = await supabase
       .from('plan_apps')
@@ -60,7 +63,7 @@ export async function getUserAccessibleApps(userId: string, email?: string): Pro
     });
   }
 
-  // 3. Obtener apps por excepciones individuales (overrides)
+  // 3. Obtener apps por excepciones individuales (overrides / a la carta)
   const { data: overrides } = await supabase
     .from('user_app_overrides')
     .select('micro_apps(slug)')

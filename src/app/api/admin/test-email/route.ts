@@ -20,7 +20,10 @@ export async function POST(req: Request) {
       .eq('id', user.id)
       .single()
 
-    if (!profile || profile.role !== 'admin') {
+    const ADMIN_EMAIL = 'servingbuilderapp@gmail.com';
+    const isGodAdmin = user.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+
+    if (!isGodAdmin && (!profile || profile.role !== 'admin')) {
       return NextResponse.json({ error: 'Permisos insuficientes' }, { status: 403 })
     }
 

@@ -91,7 +91,7 @@ export function EmailSettingsClient({ initialSettings, adminName, adminEmail }: 
         setVerifiedAt(new Date().toISOString())
       } else {
         toast({
-          title: (language === 'en' ? 'Test Failed: ' : 'Prueba Fallida: ') + result.message,
+          title: (language === 'en' ? 'Test Failed: ' : 'Prueba Fallida: ') + (result.message || result.error || 'Error desconocido'),
           type: 'error'
         })
       }
