@@ -143,9 +143,9 @@ export function WebhooksClient({ logs: initialLogs, plans }: WebhooksClientProps
           <div className="h-10 w-10 rounded-xl bg-primary/20 flex items-center justify-center">
             <Radio className="h-6 w-6 text-primary animate-pulse" />
           </div>
-          <h1 className="text-3xl font-black text-white tracking-tight">Webhooks</h1>
+          <h1 className="text-3xl font-black text-color-base-content tracking-tight">Webhooks</h1>
         </div>
-        <p className="text-white/40">
+        <p className="text-color-base-content/40">
           {language === 'en' 
             ? 'Simulate payments and manage processor integration' 
             : 'Simula pagos y gestiona la integración de procesadores'}
@@ -157,13 +157,13 @@ export function WebhooksClient({ logs: initialLogs, plans }: WebhooksClientProps
         <div className="space-y-6">
           <GlassCard className="p-6 border-primary/20 bg-primary/5">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-white flex items-center gap-2">
+              <h2 className="text-xl font-bold text-color-base-content flex items-center gap-2">
                 <Zap className="h-5 w-5 text-yellow-400" />
                 {language === 'en' ? 'Payment Simulator' : 'Simulador de Pagos'}
               </h2>
               <button 
                 onClick={quickGenerate}
-                className="text-xs font-bold bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-lg transition-colors flex items-center gap-2"
+                className="text-xs font-bold bg-color-base-content/10 hover:bg-color-base-content/20 text-color-base-content px-3 py-1.5 rounded-lg transition-colors flex items-center gap-2"
               >
                 ⚡ {language === 'en' ? 'Quick Generate' : 'Generar Demo'}
               </button>
@@ -172,25 +172,25 @@ export function WebhooksClient({ logs: initialLogs, plans }: WebhooksClientProps
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-white/40 uppercase ml-1">Event</label>
+                  <label className="text-xs font-bold text-color-base-content/40 uppercase ml-1">Event</label>
                   <select 
                     value={formData.event}
                     onChange={(e) => setFormData({...formData, event: e.target.value})}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-primary/50 transition-colors"
+                    className="w-full bg-color-base-content/5 border border-color-base-content/10 rounded-xl px-4 py-2.5 text-color-base-content text-sm focus:outline-none focus:border-primary/50 transition-colors"
                   >
                     <option value="payment.completed">payment.completed</option>
                     <option value="subscription.cancelled">subscription.cancelled</option>
                   </select>
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-white/40 uppercase ml-1">Plan</label>
+                  <label className="text-xs font-bold text-color-base-content/40 uppercase ml-1">Plan</label>
                   <select 
                     value={formData.plan}
                     onChange={(e) => {
                       const p = plans.find(pl => pl.slug === e.target.value)
                       setFormData({...formData, plan: e.target.value, amount: p?.price_monthly || 0})
                     }}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-primary/50 transition-colors"
+                    className="w-full bg-color-base-content/5 border border-color-base-content/10 rounded-xl px-4 py-2.5 text-color-base-content text-sm focus:outline-none focus:border-primary/50 transition-colors"
                   >
                     {plans.map(p => (
                       <option key={p.id} value={p.slug}>{p.name_es} (${p.price_monthly})</option>
@@ -201,14 +201,14 @@ export function WebhooksClient({ logs: initialLogs, plans }: WebhooksClientProps
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-white/40 uppercase ml-1">{language === 'en' ? 'First Name' : 'Nombre'}</label>
+                  <label className="text-xs font-bold text-color-base-content/40 uppercase ml-1">{language === 'en' ? 'First Name' : 'Nombre'}</label>
                   <Input 
                     value={formData.first_name}
                     onChange={(e) => setFormData({...formData, first_name: e.target.value})}
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-white/40 uppercase ml-1">{language === 'en' ? 'Last Name' : 'Apellido'}</label>
+                  <label className="text-xs font-bold text-color-base-content/40 uppercase ml-1">{language === 'en' ? 'Last Name' : 'Apellido'}</label>
                   <Input 
                     value={formData.last_name}
                     onChange={(e) => setFormData({...formData, last_name: e.target.value})}
@@ -217,7 +217,7 @@ export function WebhooksClient({ logs: initialLogs, plans }: WebhooksClientProps
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-white/40 uppercase ml-1">Email</label>
+                <label className="text-xs font-bold text-color-base-content/40 uppercase ml-1">Email</label>
                 <Input 
                   type="email"
                   value={formData.email}
@@ -227,14 +227,14 @@ export function WebhooksClient({ logs: initialLogs, plans }: WebhooksClientProps
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-white/40 uppercase ml-1">Transaction ID</label>
+                  <label className="text-xs font-bold text-color-base-content/40 uppercase ml-1">Transaction ID</label>
                   <Input 
                     value={formData.transaction_id}
                     onChange={(e) => setFormData({...formData, transaction_id: e.target.value})}
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-white/40 uppercase ml-1">Source</label>
+                  <label className="text-xs font-bold text-color-base-content/40 uppercase ml-1">Source</label>
                   <Input 
                     value={formData.source}
                     onChange={(e) => setFormData({...formData, source: e.target.value})}
@@ -263,10 +263,10 @@ export function WebhooksClient({ logs: initialLogs, plans }: WebhooksClientProps
               response.status === 200 ? "bg-green-500/10 border-green-500/20" : "bg-red-500/10 border-red-500/20"
             )}>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold uppercase text-white/40">Response Status: {response.status}</span>
+                <span className="text-xs font-bold uppercase text-color-base-content/40">Response Status: {response.status}</span>
                 {response.status === 200 ? <CheckCircle2 className="h-4 w-4 text-green-400" /> : <XCircle className="h-4 w-4 text-red-400" />}
               </div>
-              <pre className="text-[10px] font-mono text-white/60 overflow-x-auto p-3 bg-black/20 rounded-lg">
+              <pre className="text-[10px] font-mono text-color-base-content/60 overflow-x-auto p-3 bg-black/20 rounded-lg">
                 {JSON.stringify(response.data, null, 2)}
               </pre>
             </div>
@@ -275,29 +275,29 @@ export function WebhooksClient({ logs: initialLogs, plans }: WebhooksClientProps
 
         {/* Integration Guide Section */}
         <div className="space-y-6">
-          <GlassCard className="p-6 border-white/10">
-            <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+          <GlassCard className="p-6 border-color-base-content/10">
+            <h2 className="text-xl font-bold text-color-base-content mb-6 flex items-center gap-2">
               <Shield className="h-5 w-5 text-primary" />
               {language === 'en' ? 'Integration Guide' : 'Guía de Integración'}
             </h2>
 
             <div className="space-y-8">
               <section className="space-y-3">
-                <label className="text-xs font-bold text-white/40 uppercase">Webhook URL</label>
-                <div className="flex items-center gap-2 bg-black/40 p-3 rounded-xl border border-white/5">
+                <label className="text-xs font-bold text-color-base-content/40 uppercase">Webhook URL</label>
+                <div className="flex items-center gap-2 bg-black/40 p-3 rounded-xl border border-color-base-content/5">
                   <code className="text-xs text-primary font-mono truncate flex-1">
                     https://servingbuilder.vercel.app/api/webhooks/payment
                   </code>
-                  <button onClick={() => copyToClipboard('https://servingbuilder.vercel.app/api/webhooks/payment')} className="p-1.5 hover:bg-white/10 rounded-md transition-colors">
-                    <Copy className="h-4 w-4 text-white/60" />
+                  <button onClick={() => copyToClipboard('https://servingbuilder.vercel.app/api/webhooks/payment')} className="p-1.5 hover:bg-color-base-content/10 rounded-md transition-colors">
+                    <Copy className="h-4 w-4 text-color-base-content/60" />
                   </button>
                 </div>
               </section>
 
               <section className="space-y-4">
                 <div className="flex items-start gap-4">
-                  <div className="h-8 w-8 rounded-full bg-white/5 flex items-center justify-center shrink-0 text-sm font-bold text-primary">1</div>
-                  <p className="text-sm text-white/70">
+                  <div className="h-8 w-8 rounded-full bg-color-base-content/5 flex items-center justify-center shrink-0 text-sm font-bold text-primary">1</div>
+                  <p className="text-sm text-color-base-content/70">
                     {language === 'en' 
                       ? 'Map your payment processor (Stripe, PayPal, Hotmart) to our format using Make.com or Zapier.' 
                       : 'Mapea tu procesador de pagos (Stripe, PayPal, Hotmart) a nuestro formato usando Make.com o Zapier.'}
@@ -305,12 +305,12 @@ export function WebhooksClient({ logs: initialLogs, plans }: WebhooksClientProps
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="h-8 w-8 rounded-full bg-white/5 flex items-center justify-center shrink-0 text-sm font-bold text-primary">2</div>
+                  <div className="h-8 w-8 rounded-full bg-color-base-content/5 flex items-center justify-center shrink-0 text-sm font-bold text-primary">2</div>
                   <div className="space-y-2 flex-1">
-                    <p className="text-sm text-white/70">
+                    <p className="text-sm text-color-base-content/70">
                       {language === 'en' ? 'Expected JSON Payload:' : 'Payload JSON esperado:'}
                     </p>
-                    <pre className="text-[10px] font-mono text-white/40 bg-black/40 p-3 rounded-xl border border-white/5 overflow-x-auto">
+                    <pre className="text-[10px] font-mono text-color-base-content/40 bg-black/40 p-3 rounded-xl border border-color-base-content/5 overflow-x-auto">
 {`{
   "event": "payment.completed",
   "customer": {
@@ -327,8 +327,8 @@ export function WebhooksClient({ logs: initialLogs, plans }: WebhooksClientProps
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="h-8 w-8 rounded-full bg-white/5 flex items-center justify-center shrink-0 text-sm font-bold text-primary">3</div>
-                  <p className="text-sm text-white/70">
+                  <div className="h-8 w-8 rounded-full bg-color-base-content/5 flex items-center justify-center shrink-0 text-sm font-bold text-primary">3</div>
+                  <p className="text-sm text-color-base-content/70">
                     {language === 'en' 
                       ? 'The system will automatically create the user account and send them an email.' 
                       : 'El sistema creará automáticamente la cuenta de usuario y le enviará el acceso.'}
@@ -352,15 +352,15 @@ export function WebhooksClient({ logs: initialLogs, plans }: WebhooksClientProps
       {/* Logs Table Section */}
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold text-white flex items-center gap-2">
+          <h2 className="text-xl font-bold text-color-base-content flex items-center gap-2">
             <Terminal className="h-5 w-5 text-color-accent-blue" />
             {language === 'en' ? 'Webhook History' : 'Historial de Webhooks'}
           </h2>
         </div>
 
-        <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/2">
+        <div className="overflow-x-auto rounded-2xl border border-color-base-content/10 bg-color-base-content/2">
           <table className="w-full text-left text-sm">
-            <thead className="bg-white/5 text-white/40 uppercase text-[10px] font-bold tracking-wider">
+            <thead className="bg-color-base-content/5 text-color-base-content/40 uppercase text-[10px] font-bold tracking-wider">
               <tr>
                 <th className="px-6 py-4">Status</th>
                 <th className="px-6 py-4">Source</th>
@@ -373,14 +373,14 @@ export function WebhooksClient({ logs: initialLogs, plans }: WebhooksClientProps
             <tbody className="divide-y divide-white/5">
               {logs.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-white/20 italic">
+                  <td colSpan={6} className="px-6 py-12 text-center text-color-base-content/20 italic">
                     {language === 'en' ? 'No webhooks recorded yet' : 'No hay webhooks registrados aún'}
                   </td>
                 </tr>
               ) : (
                 logs.map((log) => (
                   <React.Fragment key={log.id}>
-                    <tr className="hover:bg-white/5 transition-colors group">
+                    <tr className="hover:bg-color-base-content/5 transition-colors group">
                       <td className="px-6 py-4">
                         <span className={cn(
                           "px-2 py-0.5 rounded-full text-[10px] font-bold uppercase",
@@ -390,20 +390,20 @@ export function WebhooksClient({ logs: initialLogs, plans }: WebhooksClientProps
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="flex items-center gap-2 text-white">
+                        <span className="flex items-center gap-2 text-color-base-content">
                           <Radio className="h-3 w-3 text-color-accent-blue" />
                           {log.source}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-white/60 font-mono text-xs">{log.event_type}</td>
-                      <td className="px-6 py-4 text-white/80">{log.raw_payload?.customer?.email || 'N/A'}</td>
-                      <td className="px-6 py-4 text-white/40 text-xs">
+                      <td className="px-6 py-4 text-color-base-content/60 font-mono text-xs">{log.event_type}</td>
+                      <td className="px-6 py-4 text-color-base-content/80">{log.raw_payload?.customer?.email || 'N/A'}</td>
+                      <td className="px-6 py-4 text-color-base-content/40 text-xs">
                         {new Date(log.created_at).toLocaleString()}
                       </td>
                       <td className="px-6 py-4 text-right">
                         <button 
                           onClick={() => setExpandedLog(expandedLog === log.id ? null : log.id)}
-                          className="p-1.5 hover:bg-white/10 rounded-lg text-white/40 hover:text-white transition-all"
+                          className="p-1.5 hover:bg-color-base-content/10 rounded-lg text-color-base-content/40 hover:text-color-base-content transition-all"
                         >
                           {expandedLog === log.id ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                         </button>
@@ -412,7 +412,7 @@ export function WebhooksClient({ logs: initialLogs, plans }: WebhooksClientProps
                     {expandedLog === log.id && (
                       <tr className="bg-black/20">
                         <td colSpan={6} className="px-6 py-4">
-                          <pre className="text-[10px] font-mono text-white/50 overflow-x-auto">
+                          <pre className="text-[10px] font-mono text-color-base-content/50 overflow-x-auto">
                             {JSON.stringify(log.raw_payload, null, 2)}
                           </pre>
                         </td>

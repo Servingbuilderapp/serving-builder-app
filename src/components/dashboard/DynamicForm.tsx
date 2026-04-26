@@ -41,9 +41,9 @@ export function DynamicForm({ schema, initialValues = {}, onSubmit, isLoading }:
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Default responseLanguage to 'es' if not set
+    // Default responseLanguage to current global language if not set
     const finalValues = { 
-      responseLanguage: 'es',
+      responseLanguage: language,
       ...values 
     }
     onSubmit(finalValues)
@@ -58,7 +58,7 @@ export function DynamicForm({ schema, initialValues = {}, onSubmit, isLoading }:
 
         return (
           <div key={fieldName} className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-white/70">
+            <label className="text-sm font-medium text-color-base-content/70">
               {label} {field.required && <span className="text-color-accent-pink">*</span>}
             </label>
 
@@ -66,10 +66,10 @@ export function DynamicForm({ schema, initialValues = {}, onSubmit, isLoading }:
               <textarea
                 value={values[fieldName] || ''}
                 onChange={(e) => handleChange(fieldName, e.target.value)}
-                placeholder={placeholder}
+                placeholder={placeholder || (language === 'en' ? 'E.g., Write your request or paste information here...' : 'Ej. Escribe tu solicitud o pega información aquí...')}
                 required={field.required}
                 rows={4}
-                className="w-full bg-[#0a0f1d] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all resize-none shadow-inner"
+                className="w-full bg-white border border-color-base-content/10 rounded-xl px-4 py-3 text-color-base-content placeholder-color-base-content/30 focus:outline-none focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all resize-none shadow-sm"
               />
             ) : field.type === 'select' ? (
               <div className="relative">
@@ -77,16 +77,16 @@ export function DynamicForm({ schema, initialValues = {}, onSubmit, isLoading }:
                   value={values[fieldName] || ''}
                   onChange={(e) => handleChange(fieldName, e.target.value)}
                   required={field.required}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all appearance-none"
+                  className="w-full bg-white border border-color-base-content/10 rounded-xl px-4 py-3 text-color-base-content focus:outline-none focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all appearance-none"
                 >
-                  <option value="" disabled className="bg-[#0A0520]">{placeholder || (language === 'en' ? 'Select an option' : 'Selecciona una opción')}</option>
+                  <option value="" disabled className="bg-white">{placeholder || (language === 'en' ? 'Select an option' : 'Selecciona una opción')}</option>
                   {(language === 'en' ? field.options_en : field.options_es)?.map((opt, i) => (
-                    <option key={i} value={field.options_es?.[i] || opt} className="bg-[#0A0520]">
+                    <option key={i} value={field.options_es?.[i] || opt} className="bg-white">
                       {opt}
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40 pointer-events-none" />
+                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-color-base-content/40 pointer-events-none" />
               </div>
             ) : field.type === 'toggle' ? (
               <button
@@ -109,56 +109,49 @@ export function DynamicForm({ schema, initialValues = {}, onSubmit, isLoading }:
                 type="text"
                 value={values[fieldName] || ''}
                 onChange={(e) => handleChange(fieldName, e.target.value)}
-                placeholder={placeholder}
+                placeholder={placeholder || (language === 'en' ? 'E.g., Example text...' : 'Ej. Texto de ejemplo...')}
                 required={field.required}
-                className="w-full bg-[#0a0f1d] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all shadow-inner"
+                className="w-full bg-white border border-color-base-content/10 rounded-xl px-4 py-3 text-color-base-content placeholder-color-base-content/30 focus:outline-none focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all shadow-sm"
               />
             )}
           </div>
         )
       })}
 
-      {/* responseLanguage radio group */}
-      <div className="flex flex-col gap-3 pt-2">
-        <label className="text-sm font-medium text-white/70">
+      {/* responseLanguage selection group */}
+      <div className="flex flex-col gap-3 pt-4 border-t border-color-base-content/10">
+        <label className="text-sm font-bold text-color-base-content">
           {language === 'en' ? 'Response Language' : 'Idioma de Respuesta'}
         </label>
-        <div className="flex gap-4">
+        <div className="flex gap-3">
           {[
             { value: 'es', label: language === 'en' ? 'Spanish' : 'Español' },
             { value: 'en', label: language === 'en' ? 'English' : 'Inglés' }
-          ].map((opt) => (
-            <button
-              key={opt.value}
-              type="button"
-              onClick={() => handleChange('responseLanguage', opt.value)}
-              className="flex items-center gap-2 group cursor-pointer"
-            >
-              <div className={cn(
-                "w-5 h-5 rounded-full border flex items-center justify-center transition-all",
-                (values['responseLanguage'] || 'es') === opt.value 
-                  ? "border-color-primary bg-color-primary/20" 
-                  : "border-white/20 group-hover:border-white/40"
-              )}>
-                {(values['responseLanguage'] || 'es') === opt.value && (
-                  <div className="w-2.5 h-2.5 rounded-full bg-color-primary" />
+          ].map((opt) => {
+            const isSelected = (values['responseLanguage'] || language) === opt.value;
+            return (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => handleChange('responseLanguage', opt.value)}
+                className={cn(
+                  "flex-1 flex items-center justify-center py-3 px-4 rounded-xl border-2 transition-all font-bold text-sm",
+                  isSelected
+                    ? "border-color-primary bg-color-primary text-white shadow-md shadow-color-primary/20 scale-[1.02]"
+                    : "border-color-base-content/10 bg-color-base-content/5 text-color-base-content/60 hover:bg-color-base-content/10 hover:border-color-base-content/20"
                 )}
-              </div>
-              <span className={cn(
-                "text-sm transition-colors",
-                (values['responseLanguage'] || 'es') === opt.value ? "text-white" : "text-white/60 group-hover:text-white/80"
-              )}>
+              >
                 {opt.label}
-              </span>
-            </button>
-          ))}
+              </button>
+            );
+          })}
         </div>
       </div>
 
       <GlowButton
         type="submit"
         disabled={isLoading}
-        className="mt-4 py-4 text-base font-bold tracking-wide uppercase"
+        className="mt-6 py-4 text-base font-bold tracking-wide uppercase"
       >
         {isLoading 
           ? (language === 'en' ? 'Generating...' : 'Generando...') 

@@ -7,7 +7,7 @@ import { DynamicForm } from '../dashboard/DynamicForm'
 import { AutofillBadges } from '../dashboard/AutofillBadges'
 import { AppHistory } from '../dashboard/AppHistory'
 import { AppWorkspace } from '../dashboard/AppWorkspace'
-import { Sparkles, History, FormInput, Loader2 } from 'lucide-react'
+import { Sparkles, History, FormInput, Loader2, PlayCircle, X, FileText, Zap, LayoutTemplate } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface MicroAppRunnerProps {
@@ -25,8 +25,16 @@ export function MicroAppRunner({ appSlug }: MicroAppRunnerProps) {
   const [formValues, setFormValues] = useState<Record<string, string>>({})
   const [activePresetId, setActivePresetId] = useState<string>('')
   const [profile, setProfile] = useState<any>(null)
+  const [showTutorial, setShowTutorial] = useState(false)
   
   const workspaceRef = useRef<HTMLDivElement>(null)
+
+  const handleCloseTutorial = () => {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      window.speechSynthesis.cancel() // Stop speech when closing modal
+    }
+    setShowTutorial(false)
+  }
 
   useEffect(() => {
     async function fetchApp() {
@@ -61,6 +69,10 @@ export function MicroAppRunner({ appSlug }: MicroAppRunnerProps) {
   const handleGenerate = async (values: Record<string, string>) => {
     setIsGenerating(true)
     try {
+      // Map 'en' / 'es' code to actual prompt language word
+      const selectedLang = values.responseLanguage || 'es'
+      const langWord = selectedLang === 'en' ? 'English' : 'Español'
+      
       const response = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -68,7 +80,7 @@ export function MicroAppRunner({ appSlug }: MicroAppRunnerProps) {
           appSlug, 
           inputs: { 
             ...values, 
-            responseLanguage: language === 'en' ? 'English' : 'Español' 
+            responseLanguage: langWord
           } 
         })
       })
@@ -110,7 +122,7 @@ export function MicroAppRunner({ appSlug }: MicroAppRunnerProps) {
 
   if (!app) {
     return (
-      <div className="flex items-center justify-center h-full text-white/40">
+      <div className="flex items-center justify-center h-full text-color-base-content/40">
         {language === 'en' ? 'App not found' : 'Aplicación no encontrada'}
       </div>
     )
@@ -119,14 +131,14 @@ export function MicroAppRunner({ appSlug }: MicroAppRunnerProps) {
   return (
     <div className="flex flex-col md:flex-row h-full w-full gap-4 md:gap-6 lg:gap-8 overflow-y-auto md:overflow-hidden p-6 pb-4">
       {/* Left Column: Form & History */}
-      <div className="w-full md:w-[320px] lg:w-[380px] shrink-0 flex flex-col h-auto md:h-full bg-white/5 border border-white/10 rounded-3xl overflow-hidden backdrop-blur-xl">
+      <div className="w-full md:w-[320px] lg:w-[380px] shrink-0 flex flex-col h-auto md:h-full bg-white border border-color-base-content/10 rounded-3xl overflow-hidden shadow-sm">
         {/* Tabs Header */}
-        <div className="flex border-b border-white/10">
+        <div className="flex border-b border-color-base-content/10">
           <button
             onClick={() => setActiveTab('form')}
             className={cn(
               "flex-1 flex items-center justify-center gap-2 py-4 text-sm font-semibold transition-all relative",
-              activeTab === 'form' ? "text-white" : "text-white/40 hover:text-white/60"
+              activeTab === 'form' ? "text-color-base-content" : "text-color-base-content/40 hover:text-color-base-content/60"
             )}
           >
             <FormInput className="h-4 w-4" />
@@ -139,7 +151,7 @@ export function MicroAppRunner({ appSlug }: MicroAppRunnerProps) {
             onClick={() => setActiveTab('history')}
             className={cn(
               "flex-1 flex items-center justify-center gap-2 py-4 text-sm font-semibold transition-all relative",
-              activeTab === 'history' ? "text-white" : "text-white/40 hover:text-white/60"
+              activeTab === 'history' ? "text-color-base-content" : "text-color-base-content/40 hover:text-color-base-content/60"
             )}
           >
             <History className="h-4 w-4" />
@@ -155,13 +167,20 @@ export function MicroAppRunner({ appSlug }: MicroAppRunnerProps) {
           {activeTab === 'form' ? (
             <div className="p-6">
               <div className="mb-6">
-                <h1 className="text-xl font-bold text-white flex items-center gap-2">
+                <h1 className="text-xl font-bold text-color-base-content flex items-center gap-2">
                   <Sparkles className="h-5 w-5 text-color-primary" />
                   {language === 'en' ? app.name_en : app.name_es}
                 </h1>
-                <p className="text-sm text-white/50 mt-1">
+                <p className="text-sm text-color-base-content/60 mt-1 mb-4">
                   {language === 'en' ? app.description_en : app.description_es}
                 </p>
+                <button 
+                  onClick={() => setShowTutorial(true)}
+                  className="flex items-center gap-2 text-xs font-bold text-color-primary hover:text-color-primary/80 bg-color-primary/10 hover:bg-color-primary/20 px-3 py-1.5 rounded-lg transition-colors w-fit"
+                >
+                  <PlayCircle className="h-4 w-4" />
+                  {language === 'en' ? 'Watch Tutorial' : 'Ver Tutorial'}
+                </button>
               </div>
 
               <AutofillBadges 
@@ -201,6 +220,69 @@ export function MicroAppRunner({ appSlug }: MicroAppRunnerProps) {
           />
         </div>
       </div>
+
+      {/* Tutorial Modal */}
+      {showTutorial && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-color-base-content/80 backdrop-blur-sm" onClick={handleCloseTutorial} />
+          <div className="relative w-full max-w-2xl bg-white rounded-3xl p-6 shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-300">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-color-base-content flex items-center gap-2">
+                <PlayCircle className="h-5 w-5 text-color-primary" />
+                {language === 'en' ? 'How to use this App' : 'Cómo usar esta App'}
+              </h3>
+              <button onClick={handleCloseTutorial} className="text-color-base-content/40 hover:text-color-base-content p-1">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            
+            <div className="aspect-video w-full bg-color-base-content/5 rounded-xl overflow-hidden mb-6 flex items-center justify-center border border-color-base-content/10 relative group">
+              <iframe 
+                width="100%" 
+                height="100%" 
+                src="https://www.youtube.com/embed/9vY9qxmNNP8?rel=0&showinfo=0" 
+                title="Tutorial Video" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowFullScreen
+                className="w-full h-full object-cover"
+              ></iframe>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-color-base-100 p-5 rounded-2xl border border-color-base-content/5 flex flex-col gap-3 transition-all hover:shadow-md hover:border-color-primary/20">
+                <div className="flex items-center gap-2 text-color-primary">
+                  <FileText className="h-5 w-5" />
+                  <h4 className="font-bold text-sm">{language === 'en' ? 'Input Limit' : 'Límite de Entrada'}</h4>
+                </div>
+                <p className="text-xs text-color-base-content/70 leading-relaxed">
+                  {language === 'en' ? 'Paste up to ~3,000 words (about 4-5 pages) of rich context.' : 'Puedes pegar hasta ~3,000 palabras (unas 4-5 páginas) de contexto estratégico sin problemas.'}
+                </p>
+              </div>
+
+              <div className="bg-color-base-100 p-5 rounded-2xl border border-color-base-content/5 flex flex-col gap-3 transition-all hover:shadow-md hover:border-color-primary/20">
+                <div className="flex items-center gap-2 text-color-primary">
+                  <Zap className="h-5 w-5" />
+                  <h4 className="font-bold text-sm">{language === 'en' ? 'Output Size' : 'Tamaño de Salida'}</h4>
+                </div>
+                <p className="text-xs text-color-base-content/70 leading-relaxed">
+                  {language === 'en' ? 'The AI generates highly concentrated responses of up to 1,000 words.' : 'La IA generará respuestas altamente concentradas y procesables de hasta 1,000 palabras.'}
+                </p>
+              </div>
+
+              <div className="bg-color-base-100 p-5 rounded-2xl border border-color-base-content/5 flex flex-col gap-3 transition-all hover:shadow-md hover:border-color-primary/20">
+                <div className="flex items-center gap-2 text-color-primary">
+                  <LayoutTemplate className="h-5 w-5" />
+                  <h4 className="font-bold text-sm">{language === 'en' ? 'Format Output' : 'Formato de Salida'}</h4>
+                </div>
+                <p className="text-xs text-color-base-content/70 leading-relaxed">
+                  {language === 'en' ? 'Produces advanced Text, Code, and Markdown. No raw media.' : 'Genera estructuras en Texto avanzado, Tablas y Código. No produce imágenes ni audios nativos.'}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

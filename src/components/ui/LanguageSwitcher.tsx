@@ -12,7 +12,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
         onClick={() => setLanguage('es')}
         className={cn(
           "text-sm font-medium transition-colors hover:text-color-primary",
-          language === 'es' ? "text-color-primary-content" : "text-color-base-content/50"
+          language === 'es' ? "text-color-primary font-black" : "text-color-base-content/50"
         )}
       >
         ES
@@ -22,7 +22,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
         onClick={() => setLanguage('en')}
         className={cn(
           "text-sm font-medium transition-colors hover:text-color-primary",
-          language === 'en' ? "text-color-primary-content" : "text-color-base-content/50"
+          language === 'en' ? "text-color-primary font-black" : "text-color-base-content/50"
         )}
       >
         EN

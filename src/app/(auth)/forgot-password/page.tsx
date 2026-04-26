@@ -45,11 +45,11 @@ export default function ForgotPasswordPage() {
   return (
     <GlassCard className="p-8 w-full">
       <div className="flex flex-col items-center mb-8">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-color-primary to-color-accent-pink shadow-lg shadow-color-primary/20 mb-4">
-          <span className="text-2xl font-bold text-white">S</span>
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-emerald-500 to-teal-400 shadow-lg shadow-emerald-500/20 mb-4">
+          <span className="text-2xl font-bold text-white">E</span>
         </div>
-        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-color-primary to-color-accent-pink" style={{ WebkitTextFillColor: 'transparent', color: 'transparent' }}>
-          SERVING BUILDER APP
+        <h1 className="text-2xl font-black bg-clip-text text-transparent bg-linear-to-r from-emerald-500 to-teal-400" style={{ WebkitTextFillColor: 'transparent', color: 'transparent' }}>
+          ECOSERVING
         </h1>
         <p className="text-sm text-color-base-content/60 mt-2 text-center">
           {language === 'en' ? "Reset your password" : "Recupera tu contraseña"}

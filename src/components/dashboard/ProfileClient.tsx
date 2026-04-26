@@ -346,10 +346,10 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
 
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-black text-white tracking-tight">
+        <h1 className="text-3xl font-black text-color-base-content tracking-tight">
           {language === 'en' ? 'Your Profile' : 'Tu Perfil'}
         </h1>
-        <p className="text-white/40 text-sm">
+        <p className="text-color-base-content/80 text-sm">
           {language === 'en' ? 'Manage your personal information and profile picture.' : 'Gestiona tu información personal y foto de perfil.'}
         </p>
       </div>
@@ -360,7 +360,7 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
           <GlassCard className="p-8 flex flex-col items-center text-center space-y-6 group">
             <div className="relative">
               <div className={cn(
-                "h-32 w-32 rounded-full border-2 border-white/10 overflow-hidden bg-[#1a233a] relative shadow-2xl transition-all duration-500 group-hover:border-color-primary/50",
+                "h-32 w-32 rounded-full border-2 border-color-base-content/10 overflow-hidden bg-color-base-200 relative shadow-2xl transition-all duration-500 group-hover:border-color-primary/50",
                 isUploading && "opacity-50"
               )}>
                 {currentAvatar ? (
@@ -387,7 +387,7 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
                 </div>
                 {isUploading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                    <Loader2 className="h-8 w-8 animate-spin text-white" />
+                    <Loader2 className="h-8 w-8 animate-spin text-color-base-content" />
                   </div>
                 )}
               </div>
@@ -395,7 +395,7 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
               <button 
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isUploading}
-                className="absolute bottom-1 right-1 h-10 w-10 rounded-full bg-color-primary text-white flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all border-4 border-color-base-100 group-hover:shadow-color-primary/40"
+                className="absolute bottom-1 right-1 h-10 w-10 rounded-full bg-color-primary text-color-base-content flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all border-4 border-color-base-100 group-hover:shadow-color-primary/40"
               >
                 <Camera className="h-5 w-5" />
               </button>
@@ -409,40 +409,40 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
             </div>
 
             <div className="space-y-1 w-full">
-              <h3 className="text-xl font-bold text-white truncate">
+              <h3 className="text-xl font-bold text-color-base-content truncate">
                 {profile?.first_name} {profile?.last_name}
               </h3>
               <div className="flex items-center justify-center gap-2">
                 <span className={cn(
                   "px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest border",
-                  isAdmin ? "bg-color-primary/20 text-color-primary border-color-primary/30" : "bg-white/5 text-white/40 border-white/10"
+                  isAdmin ? "bg-color-primary/20 text-color-primary border-color-primary/30" : "bg-color-base-content/5 text-color-base-content/80 border-color-base-content/10"
                 )}>
                   {isAdmin ? 'admin' : (profile?.role || 'user')}
                 </span>
               </div>
             </div>
 
-            <div className="w-full pt-6 border-t border-white/5 space-y-4">
+            <div className="w-full pt-6 border-t border-color-base-content/5 space-y-4">
               <div className="flex items-center gap-3 text-left">
-                <div className="h-8 w-8 rounded-lg bg-white/5 flex items-center justify-center text-white/40">
+                <div className="h-8 w-8 rounded-lg bg-color-base-content/5 flex items-center justify-center text-color-base-content/80">
                   <Calendar className="h-4 w-4" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-white/20">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-color-base-content/90">
                     {language === 'en' ? 'Member since' : 'Miembro desde'}
                   </p>
-                  <p className="text-sm font-bold text-white/80">
+                  <p className="text-sm font-bold text-color-base-content/80">
                     {new Date(user.created_at).toLocaleDateString(language === 'en' ? 'en-US' : 'es-ES', { month: 'long', year: 'numeric' })}
                   </p>
                 </div>
               </div>
 
               <div className="flex items-center gap-3 text-left">
-                <div className="h-8 w-8 rounded-lg bg-white/5 flex items-center justify-center text-white/40">
+                <div className="h-8 w-8 rounded-lg bg-color-base-content/5 flex items-center justify-center text-color-base-content/80">
                   <CreditCard className="h-4 w-4" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-white/20">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-color-base-content/90">
                     {language === 'en' ? 'Current Plan' : 'Plan Actual'}
                   </p>
                   <p className="text-sm font-bold text-color-primary">
@@ -459,59 +459,59 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
           <GlassCard className="p-8 space-y-8">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-xs font-bold text-white/40 uppercase tracking-widest ml-1">
+                <label className="text-xs font-bold text-color-base-content/80 uppercase tracking-widest ml-1">
                   {language === 'en' ? 'First Name' : 'Nombre'}
                 </label>
                 <div className="relative group">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-white/20 group-focus-within:text-color-primary transition-colors" />
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-color-base-content/90 group-focus-within:text-color-primary transition-colors" />
                   <input 
                     type="text"
                     value={formData.firstName}
                     onChange={(e) => setFormData({...formData, firstName: e.target.value})}
-                    className="w-full bg-[#0a0f1d] border border-white/10 rounded-2xl py-3 pl-11 pr-4 text-white focus:outline-hidden focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all shadow-inner"
+                    className="w-full bg-color-base-100 border border-color-base-content/10 rounded-2xl py-3 pl-11 pr-4 text-color-base-content focus:outline-hidden focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all shadow-inner"
                   />
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-bold text-white/40 uppercase tracking-widest ml-1">
+                <label className="text-xs font-bold text-color-base-content/80 uppercase tracking-widest ml-1">
                   {language === 'en' ? 'Last Name' : 'Apellido'}
                 </label>
                 <div className="relative group">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-white/20 group-focus-within:text-color-primary transition-colors" />
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-color-base-content/90 group-focus-within:text-color-primary transition-colors" />
                   <input 
                     type="text"
                     value={formData.lastName}
                     onChange={(e) => setFormData({...formData, lastName: e.target.value})}
-                    className="w-full bg-[#0a0f1d] border border-white/10 rounded-2xl py-3 pl-11 pr-4 text-white focus:outline-hidden focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all shadow-inner"
+                    className="w-full bg-color-base-100 border border-color-base-content/10 rounded-2xl py-3 pl-11 pr-4 text-color-base-content focus:outline-hidden focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all shadow-inner"
                   />
                 </div>
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-bold text-white/40 uppercase tracking-widest ml-1">
+              <label className="text-xs font-bold text-color-base-content/80 uppercase tracking-widest ml-1">
                 {language === 'en' ? 'Email Address' : 'Correo Electrónico'}
               </label>
               <div className="relative opacity-60">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-white/20" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-color-base-content/90" />
                 <input 
                   type="email"
                   value={user.email}
                   disabled
-                  className="w-full bg-[#0a0f1d]/50 border border-white/10 rounded-2xl py-3 pl-11 pr-4 text-white/40 cursor-not-allowed"
+                  className="w-full bg-color-base-100/50 border border-color-base-content/10 rounded-2xl py-3 pl-11 pr-4 text-color-base-content/80 cursor-not-allowed"
                 />
               </div>
-              <p className="text-[10px] text-white/20 ml-1 italic">
+              <p className="text-[10px] text-color-base-content/90 ml-1 italic">
                 {language === 'en' ? 'Email cannot be changed for security reasons.' : 'El email no puede cambiarse por razones de seguridad.'}
               </p>
             </div>
 
             {/* White Label Settings (Conditional) */}
             {isWhiteLabelEligible && (
-              <div className="pt-8 border-t border-white/5 space-y-6">
+              <div className="pt-8 border-t border-color-base-content/5 space-y-6">
                 <div className="flex items-center gap-2">
                   <Shield className="h-5 w-5 text-color-primary" />
-                  <h3 className="text-lg font-bold text-white uppercase tracking-tighter">
+                  <h3 className="text-lg font-bold text-color-base-content uppercase tracking-tighter">
                     {language === 'en' ? 'White Label Settings' : 'Configuración de Marca Blanca'}
                   </h3>
                 </div>
@@ -519,7 +519,7 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <label className="text-xs font-bold text-white/40 uppercase tracking-widest ml-1">
+                      <label className="text-xs font-bold text-color-base-content/80 uppercase tracking-widest ml-1">
                         {language === 'en' ? 'Brand Name' : 'Nombre de la Marca'}
                       </label>
                       <input 
@@ -527,25 +527,25 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
                         value={brandName}
                         onChange={(e) => setBrandName(e.target.value)}
                         placeholder="Ej: Mi Agencia AI"
-                        className="w-full bg-[#0a0f1d] border border-white/10 rounded-2xl py-3 px-4 text-white focus:outline-hidden focus:border-color-primary/50 transition-all"
+                        className="w-full bg-color-base-100 border border-color-base-content/10 rounded-2xl py-3 px-4 text-color-base-content focus:outline-hidden focus:border-color-primary/50 transition-all"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-xs font-bold text-white/40 uppercase tracking-widest ml-1">
+                      <label className="text-xs font-bold text-color-base-content/80 uppercase tracking-widest ml-1">
                         {language === 'en' ? 'Brand Logo' : 'Logo de la Marca'}
                       </label>
                       <div className="flex items-center gap-4">
-                        <div className="h-16 w-16 rounded-xl border-2 border-dashed border-white/10 bg-[#0a0f1d] flex items-center justify-center overflow-hidden">
+                        <div className="h-16 w-16 rounded-xl border-2 border-dashed border-color-base-content/10 bg-color-base-100 flex items-center justify-center overflow-hidden">
                           {brandLogoUrl ? (
                             <img src={brandLogoUrl} alt="Brand" className="h-full w-full object-contain" />
                           ) : (
-                            <Upload className="h-6 w-6 text-white/10" />
+                            <Upload className="h-6 w-6 text-color-base-content/10" />
                           )}
                         </div>
                         <button 
                           onClick={() => brandLogoInputRef.current?.click()}
-                          className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/60 hover:bg-white/10 hover:text-white transition-all"
+                          className="px-4 py-2 rounded-xl bg-color-base-content/5 border border-color-base-content/10 text-[10px] font-black uppercase tracking-widest text-color-base-content/90 hover:bg-color-base-content/10 hover:text-color-base-content transition-all"
                         >
                           {language === 'en' ? 'Upload Logo' : 'Subir Logo'}
                         </button>
@@ -564,7 +564,7 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
                     <p className="text-xs font-bold text-color-primary uppercase tracking-widest mb-2">
                       {language === 'en' ? 'What is this?' : '¿Qué es esto?'}
                     </p>
-                    <p className="text-[11px] text-white/40 leading-relaxed">
+                    <p className="text-[11px] text-color-base-content/80 leading-relaxed">
                       {language === 'en' 
                         ? 'Your logo and brand name will appear in the results of the apps you generate, replacing our branding. Perfect for agencies and professional use.' 
                         : 'Tu logo y nombre de marca aparecerán en los resultados de las apps que generes, reemplazando nuestra marca. Ideal para agencias y uso profesional.'}
@@ -581,8 +581,8 @@ export function ProfileClient({ user, profile }: ProfileClientProps) {
                 className={cn(
                   "flex items-center gap-2 px-8 py-4 rounded-2xl font-bold uppercase tracking-widest text-xs transition-all",
                   hasChanges 
-                    ? "bg-white text-black hover:bg-white/90 shadow-xl shadow-white/5 active:scale-95" 
-                    : "bg-white/5 text-white/20 cursor-not-allowed"
+                    ? "bg-color-base-content text-black hover:bg-color-base-content/90 shadow-xl shadow-white/5 active:scale-95" 
+                    : "bg-color-base-content/5 text-color-base-content/90 cursor-not-allowed"
                 )}
               >
                 {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}

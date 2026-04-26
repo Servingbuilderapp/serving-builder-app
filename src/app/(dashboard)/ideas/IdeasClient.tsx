@@ -12,19 +12,22 @@ export default function IdeasClient({ planSlug }: { planSlug: string }) {
           <Sparkles className="h-3 w-3" />
           HERRAMIENTA PREMIUM
         </div>
-        <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight uppercase italic">
+        <h1 className="text-4xl md:text-5xl font-black text-color-base-content tracking-tight uppercase italic">
           Generador de <span className="text-color-primary">Estrategias</span>
         </h1>
-        <p className="text-white/40 max-w-2xl mx-auto font-medium">
+        <p className="text-color-base-content/40 max-w-2xl mx-auto font-medium">
           Explora nuevas verticales de negocio y descubre micro-apps rentables para tu industria.
         </p>
       </div>
 
       <IdeaGenerator userPlan={planSlug} mode="strategies" ideasCount={10} />
       
-      <div className="pt-20 border-t border-white/5">
-        <div className="bg-white/5 rounded-3xl p-8 border border-white/10 text-center">
-          <p className="text-sm text-white/40 font-medium">
+      <div className="pt-20 border-t border-color-base-content/5">
+        <div className="bg-color-base-content/5 rounded-3xl p-8 border border-color-base-content/10 text-center">
+          <p className="text-sm text-color-base-content/60 font-medium mb-4">
+            <em>Los límites de generación dependen de tu plan actual: $49 (3/mes), $97 (10/mes), Elite/Master (Ilimitado).</em>
+          </p>
+          <p className="text-sm text-color-base-content/40 font-medium">
             ¿Tienes una idea específica que quieres desarrollar? <br className="hidden md:block" />
             <a href="https://wa.me/573227008727" className="text-color-primary hover:underline font-bold" target="_blank">Contacta con nuestro equipo de ingeniería para un desarrollo a medida.</a>
           </p>

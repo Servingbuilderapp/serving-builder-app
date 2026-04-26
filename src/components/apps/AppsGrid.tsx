@@ -29,10 +29,10 @@ function AppCard({ app, isLocked, onUnlockClick }: AppCardProps) {
 
   const content = (
     <div className={cn(
-      "group relative flex flex-col h-full rounded-3xl border p-7 transition-all duration-500 overflow-hidden",
+      "group relative flex flex-col h-full rounded-3xl border p-7 transition-all duration-500 overflow-hidden bg-white shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)]",
       isLocked 
-        ? "bg-slate-900/50 border-white/5 opacity-50 hover:opacity-100 hover:border-color-primary/30 cursor-pointer" 
-        : "bg-linear-to-br from-[#1a233a] to-[#0f1629] border-white/10 hover:border-color-primary/50 hover:scale-[1.03] hover:shadow-[0_20px_50px_rgba(249,115,22,0.15)] cursor-pointer"
+        ? "border-orange-500/10 opacity-70 hover:opacity-100 hover:border-emerald-500/30 cursor-pointer" 
+        : "border-orange-500/10 hover:border-emerald-500/30 hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(16,185,129,0.15)] cursor-pointer"
     )}
     onClick={() => {
       if (isLocked && onUnlockClick) {
@@ -41,33 +41,33 @@ function AppCard({ app, isLocked, onUnlockClick }: AppCardProps) {
     }}>
       {/* Background Accent Glow */}
       {!isLocked && (
-        <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-color-primary/10 rounded-full blur-2xl group-hover:bg-color-primary/20 transition-colors" />
+        <div className="absolute -bottom-16 -right-16 w-40 h-40 bg-linear-to-br from-orange-500/10 to-amber-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-colors" />
       )}
       {isLocked && (
-        <div className="absolute top-4 right-4 text-white/30 group-hover:text-color-primary transition-colors">
+        <div className="absolute top-4 right-4 text-orange-950/30 group-hover:text-emerald-500 transition-colors">
           <Lock className="h-4 w-4" />
         </div>
       )}
 
       <div className={cn(
-        "h-14 w-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500 shadow-xl",
-        isLocked ? "bg-white/5 text-white/20 group-hover:text-color-primary group-hover:bg-color-primary/10" : "bg-color-primary/20 text-color-primary group-hover:bg-color-primary/30 group-hover:scale-110"
+        "h-14 w-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500 shadow-md",
+        isLocked ? "bg-orange-50 text-orange-950/40 group-hover:text-emerald-500 group-hover:bg-emerald-50" : "bg-orange-50 text-orange-600 group-hover:bg-emerald-500 group-hover:text-white group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-emerald-500/20"
       )}>
         <IconComponent className="h-6 w-6" />
       </div>
 
-      <h3 className="text-lg font-bold text-white mb-2">
+      <h3 className="text-lg font-bold text-color-base-content mb-2 group-hover:text-emerald-700 transition-colors">
         {language === 'en' ? app.name_en : app.name_es}
       </h3>
-      <p className="text-sm text-white/50 line-clamp-4 mb-6">
+      <p className="text-xs text-color-base-content/60 mb-6 relative z-10 leading-relaxed">
         {language === 'en' ? app.description_en : app.description_es}
       </p>
 
-      <div className="mt-auto flex items-center gap-2 text-xs font-bold uppercase tracking-widest transition-all">
+      <div className="mt-auto flex items-center gap-2 text-xs font-bold uppercase tracking-widest transition-all relative z-10">
         {isLocked ? (
-          <span className="text-white/30 group-hover:text-white transition-colors">{language === 'en' ? 'Unlock' : 'Desbloquear'}</span>
+          <span className="text-orange-950/40 group-hover:text-emerald-500 transition-colors">{language === 'en' ? 'Unlock' : 'Desbloquear'}</span>
         ) : (
-          <span className="text-color-primary group-hover:translate-x-1 flex items-center gap-2">
+          <span className="text-orange-600 group-hover:text-emerald-600 group-hover:translate-x-1 flex items-center gap-2">
             {language === 'en' ? 'Launch' : 'Lanzar'}
             <ArrowRight className="h-3 w-3" />
           </span>
@@ -186,13 +186,13 @@ export function AppsGrid({ apps, accessibleSlugs, userEmail, appLimit = 0, usedC
       
       {/* Barra de Créditos A La Carta */}
       {!isAdmin && appLimit > 0 && !hasUnlimitedAccess && (
-        <div className="bg-linear-to-r from-color-primary/10 via-color-accent-pink/10 to-color-primary/10 border border-white/10 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="bg-linear-to-r from-color-primary/10 via-color-accent-pink/10 to-color-primary/10 border border-color-base-content/10 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-center md:text-left">
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+            <h3 className="text-lg font-bold text-color-base-content flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-color-primary" />
               {language === 'en' ? 'A La Carte Plan' : 'Plan A La Carta'}
             </h3>
-            <p className="text-sm text-white/60">
+            <p className="text-sm text-color-base-content/60">
               {language === 'en' 
                 ? `You have used ${usedCredits} out of ${appLimit} available app unlocks.` 
                 : `Has usado ${usedCredits} de ${appLimit} aplicaciones disponibles.`}
@@ -200,8 +200,8 @@ export function AppsGrid({ apps, accessibleSlugs, userEmail, appLimit = 0, usedC
           </div>
           <div className="flex items-center gap-4">
             <div className="text-right">
-              <div className="text-2xl font-black text-white">{creditsRemaining}</div>
-              <div className="text-[10px] uppercase tracking-widest text-white/40">
+              <div className="text-2xl font-black text-color-base-content">{creditsRemaining}</div>
+              <div className="text-[10px] uppercase tracking-widest text-color-base-content/60">
                 {language === 'en' ? 'Credits Left' : 'Créditos Restantes'}
               </div>
             </div>
@@ -217,12 +217,12 @@ export function AppsGrid({ apps, accessibleSlugs, userEmail, appLimit = 0, usedC
       )}
 
       {hasNoPlan && (
-        <div className="bg-linear-to-r from-color-primary/20 via-color-accent-pink/20 to-color-primary/20 border border-white/10 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="bg-linear-to-r from-color-primary/20 via-color-accent-pink/20 to-color-primary/20 border border-color-base-content/10 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-center md:text-left">
-            <h3 className="text-lg font-bold text-white">
+            <h3 className="text-lg font-bold text-color-base-content">
               {language === 'en' ? 'Choose a plan to unlock your apps' : 'Elige un plan para desbloquear tus apps'}
             </h3>
-            <p className="text-sm text-white/60">
+            <p className="text-sm text-color-base-content/60">
               {language === 'en' 
                 ? 'Get instant access to professional AI tools.' 
                 : 'Obtén acceso instantáneo a herramientas profesionales de IA.'}
@@ -239,10 +239,10 @@ export function AppsGrid({ apps, accessibleSlugs, userEmail, appLimit = 0, usedC
       {Object.entries(categories).map(([category, categoryApps]) => (
         <div key={category} className="space-y-6">
           <div className="flex items-center gap-4">
-            <h2 className="text-xl font-black text-white uppercase italic tracking-tighter bg-clip-text text-transparent bg-linear-to-r from-white to-white/40">
+            <h2 className="text-xl font-black text-color-base-content uppercase italic tracking-tighter">
               {category}
             </h2>
-            <div className="h-px flex-1 bg-linear-to-r from-white/10 to-transparent" />
+            <div className="h-px flex-1 bg-linear-to-r from-color-base-content/20 to-transparent" />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {categoryApps.map((app) => (
@@ -260,11 +260,11 @@ export function AppsGrid({ apps, accessibleSlugs, userEmail, appLimit = 0, usedC
       {/* Unlock Confirmation Modal */}
       {unlockingApp && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-[#0a0f1d]/80 backdrop-blur-md" onClick={() => !isUnlocking && setUnlockingApp(null)} />
-          <div className="relative w-full max-w-md bg-[#111d35] border border-white/10 rounded-3xl p-8 shadow-2xl animate-in fade-in zoom-in-95 duration-300">
+          <div className="absolute inset-0 bg-color-base-content/60 backdrop-blur-md" onClick={() => !isUnlocking && setUnlockingApp(null)} />
+          <div className="relative w-full max-w-md bg-color-base-100 border border-color-base-content/10 rounded-3xl p-8 shadow-2xl animate-in fade-in zoom-in-95 duration-300">
             <button 
               onClick={() => setUnlockingApp(null)}
-              className="absolute top-6 right-6 text-white/40 hover:text-white transition-colors"
+              className="absolute top-6 right-6 text-color-base-content/60 hover:text-color-base-content transition-colors"
               disabled={isUnlocking}
             >
               <X className="h-5 w-5" />
@@ -276,10 +276,10 @@ export function AppsGrid({ apps, accessibleSlugs, userEmail, appLimit = 0, usedC
               </div>
 
               <div className="text-center space-y-2">
-                <h3 className="text-2xl font-black text-white">
+                <h3 className="text-2xl font-black text-color-base-content">
                   {language === 'en' ? 'Unlock App' : 'Desbloquear App'}
                 </h3>
-                <p className="text-white/60">
+                <p className="text-color-base-content/60">
                   {language === 'en' 
                     ? `Do you want to permanently unlock "${unlockingApp.name_en || unlockingApp.name_es}"?` 
                     : `¿Deseas desbloquear permanentemente "${unlockingApp.name_es}"?`}
@@ -294,9 +294,9 @@ export function AppsGrid({ apps, accessibleSlugs, userEmail, appLimit = 0, usedC
 
               {creditsRemaining > 0 ? (
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between text-sm p-4 rounded-xl bg-white/5 border border-white/10">
-                    <span className="text-white/60">{language === 'en' ? 'Credits Remaining:' : 'Créditos Restantes:'}</span>
-                    <span className="font-bold text-white">{creditsRemaining}</span>
+                  <div className="flex items-center justify-between text-sm p-4 rounded-xl bg-color-base-content/5 border border-color-base-content/10">
+                    <span className="text-color-base-content/60">{language === 'en' ? 'Credits Remaining:' : 'Créditos Restantes:'}</span>
+                    <span className="font-bold text-color-base-content">{creditsRemaining}</span>
                   </div>
                   <GlowButton 
                     className="w-full h-12" 

@@ -14,7 +14,7 @@ export function Footer() {
           href="https://linkedin.com" 
           target="_blank" 
           rel="noopener noreferrer"
-          className="text-white/40 hover:text-color-primary hover:scale-110 transition-all duration-300 p-2 rounded-full bg-white/5 border border-white/10"
+          className="text-color-base-content/ hover:text-color-primary hover:scale-110 transition-all duration-300 p-2 rounded-full bg-color-base-content/ border border-color-base-content/"
           title="LinkedIn"
         >
           <Globe className="h-5 w-5" />
@@ -23,7 +23,7 @@ export function Footer() {
           href="https://instagram.com" 
           target="_blank" 
           rel="noopener noreferrer"
-          className="text-white/40 hover:text-color-primary hover:scale-110 transition-all duration-300 p-2 rounded-full bg-white/5 border border-white/10"
+          className="text-color-base-content/ hover:text-color-primary hover:scale-110 transition-all duration-300 p-2 rounded-full bg-color-base-content/ border border-color-base-content/"
           title="Instagram"
         >
           <Globe className="h-5 w-5" />
@@ -32,7 +32,7 @@ export function Footer() {
           href="https://servingproyectos.com" 
           target="_blank" 
           rel="noopener noreferrer"
-          className="text-white/40 hover:text-color-primary hover:scale-110 transition-all duration-300 p-2 rounded-full bg-white/5 border border-white/10"
+          className="text-color-base-content/ hover:text-color-primary hover:scale-110 transition-all duration-300 p-2 rounded-full bg-color-base-content/ border border-color-base-content/"
           title="Website"
         >
           <Globe className="h-5 w-5" />
@@ -40,11 +40,11 @@ export function Footer() {
       </div>
       
       <div className="text-center space-y-1">
-        <p className="text-[10px] sm:text-xs font-black text-white/50 tracking-widest uppercase italic">
+        <p className="text-[10px] sm:text-xs font-black text-color-base-content/ tracking-widest uppercase italic">
           © 2026 <span className="text-color-primary">SERVING PROYECTOS ESTRATEGICOS SAS</span>. 
           {language === 'en' ? ' All rights reserved.' : ' Todos los derechos reservados.'}
         </p>
-        <p className="text-[10px] text-white/20 uppercase tracking-[0.4em] font-black mt-2">
+        <p className="text-[10px] text-color-base-content/ uppercase tracking-[0.4em] font-black mt-2">
           Powered by <span className="text-gradient-magma">Advanced Agentic AI</span>
         </p>
       </div>

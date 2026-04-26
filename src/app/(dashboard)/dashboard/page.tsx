@@ -40,8 +40,12 @@ export default function DashboardPage() {
           .eq('id', user.id)
           .single()
         
-        const name = profile?.first_name || profile?.full_name?.split(' ')[0] || user.email?.split('@')[0] || (language === 'en' ? 'User' : 'Usuario')
-        setUserName(name)
+        // Avoid setting name to 'servingbuilderapp'
+        let parsedName = profile?.first_name || profile?.full_name?.split(' ')[0] || user.email?.split('@')[0] || (language === 'en' ? 'User' : 'Usuario');
+        if (parsedName.toLowerCase() === 'servingbuilderapp') {
+          parsedName = 'ECOServing';
+        }
+        setUserName(parsedName)
 
         // 2. Fetch Executions for Stats
         const { data: executions } = await supabase
@@ -121,20 +125,20 @@ export default function DashboardPage() {
       {/* Personalized Greeting */}
       <div className="mb-2 animate-in fade-in slide-in-from-top-4 duration-700 relative">
         <div className="absolute -left-8 top-0 bottom-0 w-1 bg-linear-to-b from-color-primary to-color-accent-pink rounded-full blur-[2px]" />
-        <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter italic uppercase flex items-center gap-4">
+        <h2 className="text-2xl md:text-3xl font-black text-color-base-content tracking-tighter italic uppercase flex items-center gap-4">
           {greeting}, <span className="text-gradient-magma drop-shadow-[0_0_15px_rgba(249,115,22,0.3)]">{userName || '...'}</span> {emoji}
         </h2>
-        <p className="text-white/40 mt-2 font-black uppercase tracking-[0.3em] text-xs">
+        <p className="text-color-base-content/60 mt-2 font-black uppercase tracking-[0.3em] text-xs">
           {subtitle}
         </p>
       </div>
 
-      <div className="h-px w-full bg-linear-to-r from-white/10 via-white/5 to-transparent mb-8" />
+      <div className="h-px w-full bg-linear-to-r from-color-base-content/10 via-color-base-content/5 to-transparent mb-8" />
 
       {/* Header section */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-white tracking-tight">
+          <h1 className="text-3xl font-bold text-color-base-content tracking-tight">
             {language === 'en' ? 'Dashboard Overview' : 'Resumen del Panel'}
           </h1>
           <p className="text-color-base-content/60 mt-1">
@@ -154,10 +158,10 @@ export default function DashboardPage() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, i) => (
-          <GlassCard key={i} className="p-7 relative overflow-hidden group premium-border-glow border-white/5">
+          <GlassCard key={i} className="p-7 relative overflow-hidden group premium-border-glow border-color-base-content/10">
             <div className="absolute top-0 right-0 w-32 h-32 bg-color-primary/10 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-110 transition-transform blur-2xl" />
             <div className="flex items-start justify-between mb-5 relative z-10">
-              <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-color-primary shadow-inner">
+              <div className="p-2.5 rounded-xl bg-color-base-content/5 border border-color-base-content/10 text-color-primary shadow-inner">
                 <stat.icon className="h-6 w-6" />
               </div>
               {stat.trend && (
@@ -171,10 +175,10 @@ export default function DashboardPage() {
               )}
             </div>
             <div className="relative z-10">
-              <h3 className="text-white/30 text-[10px] font-black uppercase tracking-[0.2em] mb-1.5">
+              <h3 className="text-color-base-content/60 text-[10px] font-black uppercase tracking-[0.2em] mb-1.5">
                 {stat.label}
               </h3>
-              <p className="text-3xl font-black text-white tracking-tighter text-glow-primary">
+              <p className="text-3xl font-black text-color-base-content tracking-tighter text-glow-primary">
                 {loading ? '...' : stat.value}
               </p>
             </div>
@@ -187,13 +191,13 @@ export default function DashboardPage() {
         
         {/* Charts Section (Simplified for this version) */}
         <div className="lg:col-span-2 space-y-8">
-          <GlassCard className="p-10 flex flex-col items-center justify-center min-h-[350px] text-center space-y-6 relative group border-white/5">
+          <GlassCard className="p-10 flex flex-col items-center justify-center min-h-[350px] text-center space-y-6 relative group border-color-base-content/10">
             <div className="absolute inset-0 bg-linear-to-br from-color-primary/5 via-transparent to-color-accent-pink/5 opacity-50" />
-            <div className="p-6 rounded-full bg-white/5 border border-white/10 shadow-2xl relative z-10 group-hover:scale-110 transition-transform">
+            <div className="p-6 rounded-full bg-color-base-content/5 border border-color-base-content/10 shadow-2xl relative z-10 group-hover:scale-110 transition-transform">
               <Sparkles className="h-10 w-10 text-color-primary animate-pulse" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-white">
+              <h2 className="text-xl font-bold text-color-base-content">
                 {language === 'en' ? 'Start Creating with AI' : 'Empieza a crear con IA'}
               </h2>
               <p className="text-color-base-content/60 max-w-md mx-auto mt-2">
@@ -220,37 +224,37 @@ export default function DashboardPage() {
                     <FileText className="h-6 w-6" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-white">{language === 'en' ? 'Upgrade Plan' : 'Mejorar Plan'}</h3>
+                    <h3 className="font-semibold text-color-base-content">{language === 'en' ? 'Upgrade Plan' : 'Mejorar Plan'}</h3>
                     <p className="text-sm text-color-base-content/60">{language === 'en' ? 'Get more generations' : 'Obtén más generaciones'}</p>
                   </div>
                 </div>
               </div>
             </Link>
-            <div className="group cursor-pointer rounded-2xl p-6 bg-linear-to-br from-color-accent-pink/10 to-transparent border border-color-accent-pink/20 hover:border-color-accent-pink/50 transition-colors relative overflow-hidden">
+            <a href="mailto:servingbuilderapp@gmail.com" className="group cursor-pointer rounded-2xl p-6 bg-linear-to-br from-color-accent-pink/10 to-transparent border border-color-accent-pink/20 hover:border-color-accent-pink/50 transition-colors relative overflow-hidden">
               <div className="absolute inset-0 bg-color-accent-pink/5 opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="relative z-10 flex items-center gap-4">
                 <div className="p-3 rounded-xl bg-color-accent-pink/20 text-color-accent-pink">
                   <Settings className="h-6 w-6" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white">{language === 'en' ? 'Help Center' : 'Centro de Ayuda'}</h3>
+                  <h3 className="font-semibold text-color-base-content">{language === 'en' ? 'Help Center' : 'Centro de Ayuda'}</h3>
                   <p className="text-sm text-color-base-content/60">{language === 'en' ? 'Need assistance?' : '¿Necesitas ayuda?'}</p>
                 </div>
               </div>
-            </div>
+            </a>
           </div>
         </div>
 
         {/* Recent Activity Sidebar */}
         <GlassCard className="p-6 h-full flex flex-col">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-white">
+            <h2 className="text-lg font-semibold text-color-base-content">
               {language === 'en' ? 'Recent Activity' : 'Actividad Reciente'}
             </h2>
           </div>
           
           <div className="flex-1 relative">
-            <div className="absolute top-0 bottom-0 left-[15px] w-px bg-white/10" />
+            <div className="absolute top-0 bottom-0 left-[15px] w-px bg-color-base-content/10" />
             
             <div className="space-y-6">
               {loading ? (
@@ -259,15 +263,15 @@ export default function DashboardPage() {
                   <span className="text-xs uppercase tracking-widest font-bold">Cargando...</span>
                 </div>
               ) : activities.length === 0 ? (
-                <div className="text-center py-12 text-white/20 italic text-sm">
+                <div className="text-center py-12 text-color-base-content/40 italic text-sm">
                   {language === 'en' ? 'No recent activity' : 'Sin actividad reciente'}
                 </div>
               ) : activities.map((item, i) => (
                 <div key={i} className="relative flex items-start gap-4">
                   <div className={cn(
                     "h-8 w-8 rounded-full flex items-center justify-center shrink-0 border z-10 bg-color-base-200",
-                    item.status === 'completed' ? "border-green-500/50 text-green-400" :
-                    item.status === 'error' ? "border-red-500/50 text-red-400" :
+                    item.status === 'completed' ? "border-green-500/50 text-green-600" :
+                    item.status === 'error' ? "border-red-500/50 text-red-600" :
                     "border-color-primary/50 text-color-primary"
                   )}>
                     {item.status === 'completed' ? <CheckCircle2 className="h-4 w-4" /> :
@@ -275,7 +279,7 @@ export default function DashboardPage() {
                      <Loader2 className="h-4 w-4 animate-spin" />}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-sm font-bold text-white truncate">
+                    <p className="text-sm font-bold text-color-base-content truncate">
                       {item.title}
                     </p>
                     <p className="text-[10px] text-color-base-content/40 uppercase tracking-widest mt-1">

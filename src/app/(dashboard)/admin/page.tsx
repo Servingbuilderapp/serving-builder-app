@@ -36,11 +36,11 @@ export default async function AdminUsersPage() {
     <div className="space-y-8 pb-10">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div className="space-y-2">
-          <h1 className="text-3xl font-black text-white tracking-tight">
+          <h1 className="text-3xl font-black text-color-base-content tracking-tight">
             Gestión del Portal
           </h1>
-          <p className="text-white/40">
-            Administra los usuarios registrados y supervisa la actividad reciente del sistema.
+          <p className="text-color-base-content/60 text-sm mt-2 max-w-3xl">
+            <strong>¿Cómo agregar un usuario y cuándo usarlo?</strong> Puedes agregar usuarios manualmente haciendo clic en el botón "Agregar Usuario". Esto es útil si tienes clientes que te pagaron por fuera de la plataforma (ej. transferencia, efectivo) o si quieres darle acceso gratuito a un colaborador. El sistema le creará la cuenta y le enviará un correo de bienvenida.
           </p>
         </div>
       </div>

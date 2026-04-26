@@ -49,15 +49,15 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
       {/* Decorative Gradient Glow behind logo */}
       <div className="absolute -top-24 -left-24 w-64 h-64 bg-color-primary/20 rounded-full blur-3xl pointer-events-none" />
       {/* Top section: Logo/Brand */}
-      <div className="flex h-16 shrink-0 items-center justify-between px-4 border-b border-white/5">
+      <div className="flex h-16 shrink-0 items-center justify-between px-4 border-b border-color-base-content/5">
         <div className="flex items-center gap-3 overflow-hidden">
           {profile?.branding?.logo_url ? (
             <div className="h-8 w-8 shrink-0 overflow-hidden rounded-lg">
               <img src={profile.branding.logo_url} alt="Brand Logo" className="h-full w-full object-contain" />
             </div>
           ) : (
-            <Link href="/" className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-linear-to-br from-color-primary to-color-accent-pink shadow-lg shadow-color-primary/20 hover:scale-105 transition-transform">
-              <span className="text-lg font-bold text-white">S</span>
+            <Link href="/" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg hover:scale-105 transition-transform overflow-hidden">
+              <img src="/logo.png" alt="ECO SERVING Logo" className="h-full w-full object-contain drop-shadow-sm" />
             </Link>
           )}
           
@@ -72,7 +72,7 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
         {/* Mobile close button */}
         <button 
           onClick={onCloseMobile}
-          className="lg:hidden p-1 rounded-md text-color-base-content/50 hover:text-white hover:bg-white/10 transition-colors"
+          className="lg:hidden p-1 rounded-md text-color-base-content/50 hover:text-color-base-content hover:bg-color-base-content/10 transition-colors"
         >
           <X className="h-5 w-5" />
         </button>
@@ -80,7 +80,7 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
 
       {/* Navigation Links */}
       <nav className="flex-1 overflow-y-auto py-4 px-2 space-y-1 custom-scrollbar">
-        <div className={cn("px-4 text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-3 mt-6 transition-all duration-300", collapsed && "lg:text-center lg:opacity-0")}>
+        <div className={cn("px-4 text-[10px] font-black text-color-base-content/60 uppercase tracking-[0.2em] mb-3 mt-6 transition-all duration-300", collapsed && "lg:text-center lg:opacity-0")}>
           {language === 'en' ? 'Main Menu' : 'Menú Principal'}
         </div>
 
@@ -88,10 +88,10 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
         <Link 
           href="/"
           className={cn(
-            "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-black transition-all duration-500 group border border-transparent text-white/40 hover:bg-white/5 hover:text-white"
+            "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-black transition-all duration-500 group border border-transparent text-color-base-content/60 hover:bg-color-base-content/5 hover:text-color-base-content"
           )}
         >
-          <LucideIcons.Globe className="h-5 w-5 shrink-0 transition-colors text-color-base-content/40 group-hover:text-white/60" />
+          <LucideIcons.Globe className="h-5 w-5 shrink-0 transition-colors text-color-base-content/40 group-hover:text-color-base-content/80" />
           <span className={cn("whitespace-nowrap transition-all duration-300", collapsed && "lg:hidden")}>
             {language === 'en' ? 'Back to Website' : 'Volver a la Web'}
           </span>
@@ -104,8 +104,8 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
           className={cn(
             "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-black transition-all duration-500 group border relative overflow-hidden",
             pathname === '/dashboard' 
-              ? "bg-color-primary/20 text-white border-color-primary/50 shadow-[0_0_25px_rgba(249,115,22,0.2)] ring-1 ring-white/20 animate-active-glow" 
-              : "bg-transparent text-white/40 border-transparent hover:bg-white/5 hover:text-white"
+              ? "bg-color-primary/20 text-color-base-content border-color-primary/50 shadow-[0_0_15px_rgba(249,115,22,0.1)] ring-1 ring-color-primary/20 animate-active-glow" 
+              : "bg-transparent text-color-base-content/60 border-transparent hover:bg-color-base-content/5 hover:text-color-base-content"
           )}
         >
           {pathname === '/dashboard' && (
@@ -113,7 +113,7 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
           )}
           <LucideIcons.LayoutDashboard className={cn(
             "h-5 w-5 shrink-0 transition-colors",
-            pathname === '/' ? "text-white" : "text-color-base-content/40 group-hover:text-white/60"
+            pathname === '/' ? "text-color-primary" : "text-color-base-content/40 group-hover:text-color-base-content"
           )} />
           <span className={cn("whitespace-nowrap transition-all duration-300", collapsed && "lg:hidden")}>
             {language === 'en' ? 'Dashboard' : 'Panel de Control'}
@@ -127,8 +127,8 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
           className={cn(
             "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-black transition-all duration-500 group border relative overflow-hidden",
             pathname === '/ideas' 
-              ? "bg-color-accent-pink/20 text-white border-color-accent-pink/50 shadow-[0_0_25px_rgba(236,72,153,0.2)] ring-1 ring-white/20 animate-active-glow" 
-              : "bg-transparent text-white/40 border-transparent hover:bg-white/5 hover:text-white"
+              ? "bg-color-accent-pink/20 text-color-base-content border-color-accent-pink/50 shadow-[0_0_15px_rgba(236,72,153,0.1)] ring-1 ring-color-accent-pink/20 animate-active-glow" 
+              : "bg-transparent text-color-base-content/60 border-transparent hover:bg-color-base-content/5 hover:text-color-base-content"
           )}
         >
           {pathname === '/ideas' && (
@@ -136,7 +136,7 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
           )}
           <LucideIcons.Sparkles className={cn(
             "h-5 w-5 shrink-0 transition-colors",
-            pathname === '/ideas' ? "text-white" : "text-color-base-content/40 group-hover:text-white/60"
+            pathname === '/ideas' ? "text-color-accent-pink" : "text-color-base-content/40 group-hover:text-color-base-content"
           )} />
           <span className={cn("whitespace-nowrap transition-all duration-300", collapsed && "lg:hidden")}>
             {language === 'en' ? 'Idea Generator' : 'Generador de Ideas'}
@@ -148,8 +148,8 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
           className={cn(
             "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-black transition-all duration-500 group border relative overflow-hidden",
             pathname.startsWith('/apps')
-              ? "bg-color-primary/20 text-white border-color-primary/50 shadow-[0_0_25px_rgba(249,115,22,0.2)] ring-1 ring-white/20 animate-active-glow" 
-              : "bg-transparent text-white/40 border-transparent hover:bg-white/5 hover:text-white"
+              ? "bg-color-primary/20 text-color-base-content border-color-primary/50 shadow-[0_0_15px_rgba(249,115,22,0.1)] ring-1 ring-color-primary/20 animate-active-glow" 
+              : "bg-transparent text-color-base-content/60 border-transparent hover:bg-color-base-content/5 hover:text-color-base-content"
           )}
         >
           {pathname.startsWith('/apps') && (
@@ -157,7 +157,7 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
           )}
           <LucideIcons.LayoutGrid className={cn(
             "h-5 w-5 shrink-0 transition-colors",
-            pathname.startsWith('/apps') ? "text-white" : "text-color-base-content/40 group-hover:text-white/60"
+            pathname.startsWith('/apps') ? "text-color-primary" : "text-color-base-content/40 group-hover:text-color-base-content"
           )} />
           <span className={cn("whitespace-nowrap transition-all duration-300", collapsed && "lg:hidden")}>
             {language === 'en' ? 'App Library' : 'Librería de Apps'}
@@ -171,8 +171,8 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
           className={cn(
             "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-black transition-all duration-500 group border relative overflow-hidden",
             pathname === '/plans' 
-              ? "bg-color-primary/20 text-white border-color-primary/50 shadow-[0_0_25px_rgba(249,115,22,0.2)] ring-1 ring-white/20 animate-active-glow" 
-              : "bg-transparent text-white/40 border-transparent hover:bg-white/5 hover:text-white"
+              ? "bg-color-primary/20 text-color-base-content border-color-primary/50 shadow-[0_0_15px_rgba(249,115,22,0.1)] ring-1 ring-color-primary/20 animate-active-glow" 
+              : "bg-transparent text-color-base-content/60 border-transparent hover:bg-color-base-content/5 hover:text-color-base-content"
           )}
         >
           {pathname === '/plans' && (
@@ -180,7 +180,7 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
           )}
           <LucideIcons.CreditCard className={cn(
             "h-5 w-5 shrink-0 transition-colors",
-            pathname === '/plans' ? "text-white" : "text-color-base-content/40 group-hover:text-white/60"
+            pathname === '/plans' ? "text-color-primary" : "text-color-base-content/40 group-hover:text-color-base-content"
           )} />
           <span className={cn("whitespace-nowrap transition-all duration-300", collapsed && "lg:hidden")}>
             {language === 'en' ? 'Plans' : 'Planes'}
@@ -190,7 +190,7 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
         {/* Admin Section (Conditional) */}
         {role === 'admin' && (
           <>
-            <div className={cn("px-4 text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-3 mt-8 transition-all duration-300", collapsed && "lg:text-center lg:opacity-0")}>
+            <div className={cn("px-4 text-[10px] font-black text-color-base-content/60 uppercase tracking-[0.2em] mb-3 mt-8 transition-all duration-300", collapsed && "lg:text-center lg:opacity-0")}>
               {language === 'en' ? 'Administration' : 'Administración'}
             </div>
             
@@ -201,13 +201,13 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
               className={cn(
                 "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-black transition-all duration-500 group border mb-1 relative overflow-hidden",
                 pathname === '/admin'
-                  ? "bg-color-primary/20 text-white border-color-primary/50 shadow-[0_0_20px_rgba(249,115,22,0.2)] ring-1 ring-white/10 animate-active-glow" 
-                  : "bg-transparent text-white/40 border-transparent hover:bg-white/5 hover:text-white"
+                  ? "bg-color-primary/20 text-color-base-content border-color-primary/50 shadow-[0_0_15px_rgba(249,115,22,0.1)] ring-1 ring-color-primary/10 animate-active-glow" 
+                  : "bg-transparent text-color-base-content/60 border-transparent hover:bg-color-base-content/5 hover:text-color-base-content"
               )}
             >
               <LucideIcons.Shield className={cn(
                 "h-5 w-5 shrink-0 transition-colors",
-                pathname === '/admin' ? "text-white" : "text-white/30 group-hover:text-white/60"
+                pathname === '/admin' ? "text-color-primary" : "text-color-base-content/60 group-hover:text-color-base-content"
               )} />
               <span className={cn("whitespace-nowrap transition-all duration-300", collapsed && "lg:hidden")}>
                 {language === 'en' ? 'Admin Panel' : 'Panel Admin'}
@@ -222,15 +222,15 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
                 "flex items-center gap-2 transition-all duration-300 group border border-transparent relative overflow-hidden",
                 collapsed 
                   ? "justify-center px-2 ml-0 pl-2 border-l-0 py-2.5 rounded-xl" 
-                  : "ml-4 pl-4 py-2.5 text-xs border-l border-white/10 hover:border-color-primary/30",
+                  : "ml-4 pl-4 py-2.5 text-xs border-l border-color-base-content/10 hover:border-color-primary/30",
                 pathname.startsWith('/admin/webhooks')
-                  ? "text-white border-l-color-primary font-black bg-color-primary/10 rounded-r-xl shadow-inner" 
-                  : "text-white/30 hover:text-white"
+                  ? "text-color-base-content border-l-color-primary font-black bg-color-primary/10 rounded-r-xl shadow-inner" 
+                  : "text-color-base-content/60 hover:text-color-base-content"
               )}
             >
               <LucideIcons.Radio className={cn(
                 "h-4 w-4 shrink-0 transition-colors",
-                pathname.startsWith('/admin/webhooks') ? "text-color-primary" : "text-white/20 group-hover:text-white/40"
+                pathname.startsWith('/admin/webhooks') ? "text-color-primary" : "text-color-base-content/40 group-hover:text-color-base-content/60"
               )} />
               <span className={cn("whitespace-nowrap transition-all duration-300 uppercase tracking-widest", collapsed && "lg:hidden")}>
                 Webhooks
@@ -245,15 +245,15 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
                 "flex items-center gap-2 transition-all duration-300 group border border-transparent relative overflow-hidden",
                 collapsed 
                   ? "justify-center px-2 ml-0 pl-2 border-l-0 py-2.5 rounded-xl" 
-                  : "ml-4 pl-4 py-2.5 text-xs border-l border-white/10 hover:border-color-primary/30",
+                  : "ml-4 pl-4 py-2.5 text-xs border-l border-color-base-content/10 hover:border-color-primary/30",
                 pathname.startsWith('/admin/email')
-                  ? "text-white border-l-color-primary font-black bg-color-primary/10 rounded-r-xl shadow-inner" 
-                  : "text-white/30 hover:text-white"
+                  ? "text-color-base-content border-l-color-primary font-black bg-color-primary/10 rounded-r-xl shadow-inner" 
+                  : "text-color-base-content/60 hover:text-color-base-content"
               )}
             >
               <LucideIcons.Mail className={cn(
                 "h-4 w-4 shrink-0 transition-colors",
-                pathname.startsWith('/admin/email') ? "text-color-primary" : "text-white/20 group-hover:text-white/40"
+                pathname.startsWith('/admin/email') ? "text-color-primary" : "text-color-base-content/40 group-hover:text-color-base-content/60"
               )} />
               <span className={cn("whitespace-nowrap transition-all duration-300 uppercase tracking-widest", collapsed && "lg:hidden")}>
                 Email
@@ -268,15 +268,15 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
                 "flex items-center gap-2 transition-all duration-300 group border border-transparent relative overflow-hidden",
                 collapsed 
                   ? "justify-center px-2 ml-0 pl-2 border-l-0 py-2.5 rounded-xl" 
-                  : "ml-4 pl-4 py-2.5 text-xs border-l border-white/10 hover:border-color-primary/30",
+                  : "ml-4 pl-4 py-2.5 text-xs border-l border-color-base-content/10 hover:border-color-primary/30",
                 pathname.startsWith('/admin/plans')
-                  ? "text-white border-l-color-primary font-black bg-color-primary/10 rounded-r-xl shadow-inner" 
-                  : "text-white/30 hover:text-white"
+                  ? "text-color-base-content border-l-color-primary font-black bg-color-primary/10 rounded-r-xl shadow-inner" 
+                  : "text-color-base-content/60 hover:text-color-base-content"
               )}
             >
               <LucideIcons.CreditCard className={cn(
                 "h-4 w-4 shrink-0 transition-colors",
-                pathname.startsWith('/admin/plans') ? "text-color-primary" : "text-white/20 group-hover:text-white/40"
+                pathname.startsWith('/admin/plans') ? "text-color-primary" : "text-color-base-content/40 group-hover:text-color-base-content/60"
               )} />
               <span className={cn("whitespace-nowrap transition-all duration-300 uppercase tracking-widest", collapsed && "lg:hidden")}>
                 {language === 'en' ? 'Plans' : 'Planes'}
@@ -286,35 +286,15 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
         )}
       </nav>
       {/* Bottom section: Profile & Collapse */}
-      <div className="mt-auto p-4 space-y-4 border-t border-white/5 bg-black/20">
-        {/* User Profile Info */}
-        <div className={cn("flex items-center gap-3 p-2 rounded-xl transition-all duration-300", collapsed ? "justify-center" : "bg-white/5 border border-white/10 shadow-inner")}>
-          <div className="h-9 w-9 rounded-full bg-linear-to-br from-color-primary to-color-accent-pink flex items-center justify-center text-white font-black shadow-lg shadow-color-primary/20 shrink-0 overflow-hidden">
-            {(profile?.avatar_url || user?.user_metadata?.avatar_url) ? (
-              <img 
-                src={profile?.avatar_url || user?.user_metadata?.avatar_url} 
-                alt="Avatar" 
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <span>{profile?.full_name?.[0] || user?.email?.[0]?.toUpperCase()}</span>
-            )}
-          </div>
-          {!collapsed && (
-            <div className="flex flex-col min-w-0">
-              <span className="text-xs font-black text-white truncate drop-shadow-sm italic">
-                {fullName}
-              </span>
-              <span className="text-[9px] font-black text-color-primary uppercase tracking-[0.2em]">
-                {role}
-              </span>
-            </div>
-          )}
-        </div>
+      <div className={cn("mt-auto space-y-4 border-t border-color-base-content/10 bg-color-base-content/5", collapsed ? "p-2" : "p-4")}>
+        {/* Profile removed based on user request */}
 
         <button
           onClick={onToggleCollapse}
-          className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white hover:bg-white/10 hover:shadow-lg transition-all border border-transparent hover:border-white/10"
+          className={cn(
+            "flex w-full items-center rounded-xl py-2.5 text-[10px] font-black uppercase tracking-widest text-color-base-content/60 hover:text-color-base-content hover:bg-color-base-content/10 hover:shadow-lg transition-all border border-transparent hover:border-color-base-content/10",
+            collapsed ? "justify-center px-0" : "gap-3 px-3"
+          )}
         >
           {collapsed ? (
             <ChevronsRight className="h-5 w-5 shrink-0 mx-auto" />
@@ -344,7 +324,7 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
       {/* Mobile Drawer Backdrop */}
       {mobileOpen && (
         <div 
-          className="fixed inset-0 bg-black/60 z-40 lg:hidden backdrop-blur-sm"
+          className="fixed inset-0 bg-color-base-content/60 z-40 lg:hidden backdrop-blur-sm"
           onClick={onCloseMobile}
         />
       )}

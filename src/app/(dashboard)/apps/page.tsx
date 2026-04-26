@@ -73,10 +73,10 @@ export default async function AppsPage() {
   return (
     <div className="max-w-7xl mx-auto w-full space-y-8">
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold text-white tracking-tight">
+        <h1 className="text-3xl font-bold text-color-base-content tracking-tight">
           Mis Aplicaciones
         </h1>
-        <p className="text-white/40">
+        <p className="text-color-base-content/60">
           Explora las herramientas de IA disponibles en tu plan
         </p>
       </div>

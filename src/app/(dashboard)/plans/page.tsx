@@ -31,52 +31,52 @@ export default async function PlansPage() {
   // Definición de contenido local (Source of Truth para presentación)
   const localPlans = [
     { 
-      slug: 'explorador', name_en: 'Explorer', name_es: 'Explorador', 
-      description_en: 'Test our interface with limited access.', 
-      description_es: 'Acceso limitado para conocer la interfaz.', 
+      slug: 'gratis', name_en: 'Free Plan', name_es: 'Gratuito', 
+      description_en: '5 pre-assigned master apps.', 
+      description_es: '5 Apps maestras pre-asignadas.', 
       price_monthly: 0.00, 
-      items_en: ['3 Demo Apps (1 Tool, 1 Productivity, 1 Project)', 'Community Support', 'Limited Access (No AI)'], 
-      items_es: ['3 Apps Demo (1 Herramienta, 1 Productividad, 1 Proyecto)', 'Soporte vía Comunidad', 'Acceso Limitado (Sin IA)'] 
+      items_en: ['5 Pre-assigned Master Apps', 'Basic AI Generation', 'Limited Access'], 
+      items_es: ['5 Apps Maestras Pre-asignadas', 'Familia, Empresas, Comunidad, Colegios, Gobierno', 'Generación Básica con IA'] 
     },
     { 
-      slug: 'basic', name_en: 'Entrepreneur', name_es: 'Emprendedor', 
-      description_en: 'Start your journey with essential productivity tools.', 
-      description_es: 'Inicia tu camino con herramientas esenciales de productividad.', 
-      price_monthly: 29.00, 
-      items_en: ['Productivity Tools Unlocked', '7 Specialized Miniapps', 'No Watermarks', 'Fast Generation Queue', 'Email Support', 'Commercial License'], 
-      items_es: ['Herramientas de Productividad Desbloqueadas', '7 Miniapps Especializadas', 'Sin Marcas de Agua', 'Cola de Generación Rápida', 'Soporte por Email', 'Licencia Comercial'] 
+      slug: 'crecimiento-10', name_en: 'Initial Growth', name_es: 'Crecimiento Inicial', 
+      description_en: 'Unlocks 10 additional apps.', 
+      description_es: 'Desbloquea 10 apps adicionales.', 
+      price_monthly: 27.00, 
+      items_en: ['Everything in Free, PLUS:', '15 Apps in Total', 'Advanced Export Options', 'Standard Priority Support'], 
+      items_es: ['Todo lo del plan Gratuito, MÁS:', '15 Apps en Total a tu elección', 'Exportación Avanzada (PDF/Word)', 'Soporte Estándar Prioritario'] 
     },
     { 
-      slug: 'growth', name_en: 'Growth', name_es: 'Crecimiento', 
-      description_en: 'Scale with project management and advanced vertical tools.', 
-      description_es: 'Escala con gestión de proyectos y herramientas verticales avanzadas.', 
-      price_monthly: 49.00, 
-      items_en: ['Project Tools Unlocked', '15 Advanced Miniapps', 'Custom Domain Integration', 'Advanced Analytics', 'SEO Optimization', 'Priority Generation'], 
-      items_es: ['Herramientas de Proyectos Desbloqueadas', '15 Miniapps Avanzadas', 'Integración de Dominio Propio', 'Analíticas Avanzadas', 'Optimización SEO', 'Generación Prioritaria'] 
+      slug: 'crecimiento-30', name_en: 'Pro Growth', name_es: 'Crecimiento Pro', 
+      description_en: 'Unlocks 30 apps of your choice.', 
+      description_es: 'Desbloquea 30 apps a tu elección.', 
+      price_monthly: 47.00, 
+      items_en: ['Everything in Initial Growth, PLUS:', '30 Apps in Total', 'Ultra-fast Generation Speed', 'Priority Support'], 
+      items_es: ['Todo lo del plan anterior, MÁS:', '30 Apps en Total a tu elección', 'Velocidad de Generación Ultra-rápida', 'Soporte Prioritario'] 
     },
     { 
-      slug: 'professional', name_en: 'Professional', name_es: 'Profesional', 
-      description_en: 'Full suite for professional creators and agencies.', 
-      description_es: 'Suite completa para creadores profesionales y agencias.', 
+      slug: 'crecimiento-max', name_en: 'Max Growth', name_es: 'Crecimiento Max', 
+      description_en: 'Unlocks 70 apps of your choice.', 
+      description_es: 'Desbloquea 70 apps a tu elección.', 
       price_monthly: 97.00, 
-      items_en: ['Vertical Tools Fully Unlocked', '30+ Premium Miniapps', 'Full White-Label Capabilities', 'Team Management', '24/7 VIP Support', 'Extended Commercial Rights'], 
-      items_es: ['Herramientas Verticales Desbloqueadas', 'Más de 30 Miniapps Premium', 'Marca Blanca Total', 'Gestión de Equipo', 'Soporte VIP 24/7', 'Derechos Comerciales Extendidos'] 
+      items_en: ['Everything in Pro Growth, PLUS:', '70 Apps in Total', 'Includes 15 Project Funding Apps', 'VIP Support'], 
+      items_es: ['Todo lo del plan anterior, MÁS:', '70 Apps en Total a tu elección', 'Incluye 15 Apps de Financiamiento y Subvenciones', 'Soporte VIP'] 
     },
     { 
-      slug: 'elite', name_en: 'Elite', name_es: 'Elite', 
-      description_en: 'The premium experience with AI Idea Generation.', 
-      description_es: 'La experiencia premium con Generador de Ideas de IA.', 
+      slug: 'elite', name_en: 'Elite Plan', name_es: 'Plan Elite', 
+      description_en: 'Unlocks 80 apps of your choice.', 
+      description_es: 'Desbloquea 80 apps a tu elección.', 
       price_monthly: 197.00, 
-      items_en: ['All Tools at Maximum Capacity', 'AI Idea Generator (10 queries/mo)', 'Private Beta Access', 'Monthly Growth Strategy', 'Dedicated Success Manager', 'Custom Development Requests'], 
-      items_es: ['Todas las Herramientas al Máximo', 'Generador de Ideas IA (10 consultas/mes)', 'Acceso a Betas Privadas', 'Estrategia de Crecimiento Mensual', 'Gestor de Éxito Dedicado', 'Peticiones de Desarrollo a Medida'] 
+      items_en: ['Everything in Max Growth, PLUS:', '80 Apps in Total', 'Unlimited Strategy Generator', 'Dedicated VIP Support', 'Custom Development Requests'], 
+      items_es: ['Todo lo del plan anterior, MÁS:', '80 Apps en Total a tu elección', 'Generador de Estrategias y Proyectos IA ILIMITADO', 'Marca Blanca Total (Añade tu Logo)', 'Soporte VIP Dedicado', 'Prioridad en Peticiones de Desarrollo a Medida'] 
     },
     { 
-      slug: 'master', name_en: 'Business Master', name_es: 'Master Empresarial', 
-      description_en: 'The ultimate business powerhouse. Everything unlimited.', 
-      description_es: 'La potencia empresarial definitiva. Todo ilimitado.', 
+      slug: 'master', name_en: 'Master Plan', name_es: 'Plan Master', 
+      description_en: 'Unlimited Unlock (120 apps).', 
+      description_es: 'Desbloqueo Ilimitado (120 apps).', 
       price_monthly: 497.00, 
-      items_en: ['Everything Unlimited', 'UNLIMITED AI Idea Generator', '10 Custom Apps per Month', 'Full White-Label Deployment', 'Direct Access to Roadmap', 'Priority Engineering Support'], 
-      items_es: ['Todo Ilimitado', 'Generador de Ideas IA ILIMITADO', '10 Apps Personalizadas al Mes', 'Despliegue de Marca Blanca Total', 'Acceso Directo al Roadmap', 'Soporte de Ingeniería Prioritario'] 
+      items_en: ['Everything in Elite, PLUS:', '120 Apps (Total Unlimited Access)', 'We build 3 Custom Apps / Month', 'Full White-Label Portal Deployment', 'Exclusive Server', 'Enterprise Support'], 
+      items_es: ['Todo lo del plan Elite, MÁS:', '120 Apps (Acceso Total a TODA la Suite)', 'Construimos 3 Apps 100% Personalizadas / Mes', 'Despliegue Completo de Portal Marca Blanca Propio', 'Alojamiento en Servidor Privado Exclusivo', 'Soporte Técnico Empresarial'] 
     }
   ];
 
@@ -94,10 +94,10 @@ export default async function PlansPage() {
   return (
     <div className="max-w-[90rem] mx-auto w-full space-y-12 py-16">
       <div className="text-center space-y-4">
-        <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">
+        <h1 className="text-4xl md:text-5xl font-black text-color-base-content tracking-tight">
           Impulsa tu <span className="bg-clip-text text-transparent bg-linear-to-r from-primary to-accent-pink">Creatividad</span>
         </h1>
-        <p className="text-white/40 max-w-2xl mx-auto">
+        <p className="text-color-base-content/60 max-w-2xl mx-auto">
           Elige el plan que mejor se adapte a tus necesidades y comienza a generar contenido con IA profesional hoy mismo.
         </p>
       </div>
@@ -107,8 +107,8 @@ export default async function PlansPage() {
         currentPlanId={userData?.plan_id || null} 
       />
 
-      <div className="text-center p-8 border border-dashed border-white/10 rounded-3xl bg-white/2">
-        <p className="text-sm text-white/40">
+      <div className="text-center p-8 border border-dashed border-color-base-content/10 rounded-3xl bg-color-base-content/5">
+        <p className="text-sm text-color-base-content/60">
           ¿Necesitas un plan a medida? <a href="https://wa.me/573227008727?text=Hola,%20necesito%20información%20sobre%20un%20plan%20a%20medida" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-bold">Contacta con soporte</a>
         </p>
       </div>

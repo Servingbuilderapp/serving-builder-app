@@ -37,12 +37,12 @@ export function AutofillBadges({ presets, onSelect, activePresetId }: AutofillBa
             className={cn(
               "px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 border relative overflow-hidden group",
               isActive 
-                ? "bg-color-primary/20 border-color-primary text-white shadow-[0_0_10px_rgba(124,58,237,0.3)]" 
-                : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:border-white/20 hover:text-white"
+                ? "bg-color-primary/20 border-color-primary text-color-base-content shadow-[0_0_10px_rgba(124,58,237,0.3)]" 
+                : "bg-color-base-content/ border-color-base-content/ text-color-base-content/ hover:bg-color-base-content/ hover:border-color-base-content/ hover:text-color-base-content"
             )}
           >
             {label}
-            <div className="absolute inset-0 bg-white/5 scale-0 group-active:scale-150 transition-transform duration-500 rounded-full pointer-events-none" />
+            <div className="absolute inset-0 bg-color-base-content/ scale-0 group-active:scale-150 transition-transform duration-500 rounded-full pointer-events-none" />
           </button>
         )
       })}

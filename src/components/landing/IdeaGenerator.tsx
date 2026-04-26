@@ -188,7 +188,7 @@ interface IdeaGeneratorProps {
 export function IdeaGenerator({ userPlan, mode = 'ideas', ideasCount = 5 }: IdeaGeneratorProps) {
   const [industry, setIndustry] = useState('')
   const [customIndustry, setCustomIndustry] = useState('')
-  const [generationsLeft, setGenerationsLeft] = useState(5)
+  const [generationsLeft, setGenerationsLeft] = useState(1)
   const [isGenerating, setIsGenerating] = useState(false)
   const [result, setResult] = useState<any>(null)
   const [progress, setProgress] = useState(0)
@@ -293,17 +293,17 @@ export function IdeaGenerator({ userPlan, mode = 'ideas', ideasCount = 5 }: Idea
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-color-primary/10 border border-color-primary/20 text-[10px] font-black uppercase tracking-[0.2em] text-color-primary">
           🎁 {mode === 'strategies' ? 'PORTAL PREMIUM — GENERADOR DE ESTRATEGIAS' : 'EL REGALO — GENERADOR DE APPS RENTABLES'}
         </div>
-        <h2 className="text-4xl md:text-5xl font-black text-white italic tracking-tighter uppercase">
+        <h2 className="text-4xl md:text-5xl font-black text-color-base-content italic tracking-tighter uppercase">
           {mode === 'strategies' ? 'Generador de Estrategias de Negocio' : 'Generador de Ideas de Micro-Apps'}
         </h2>
-        <p className="text-white/40 font-bold">
+        <p className="text-color-base-content/60 font-bold">
           {mode === 'strategies' 
             ? `Estrategia completa y ${ideasCount} ideas de negocio para escalar tu visión.` 
             : `Tu fábrica personal de ideas de negocio — 150+ industrias disponibles.`}
         </p>
       </div>
 
-      <GlassCard className="p-10 border-white/10 bg-linear-to-b from-white/5 to-transparent relative overflow-hidden">
+      <GlassCard className="p-10 border-color-base-content/10 bg-linear-to-b from-color-base-content/5 to-transparent relative overflow-hidden">
         {/* Progress Dots */}
         <div className="flex justify-center gap-3 mb-6">
           {isPremium ? (
@@ -323,20 +323,20 @@ export function IdeaGenerator({ userPlan, mode = 'ideas', ideasCount = 5 }: Idea
           )}
         </div>
         
-        <p className="text-center text-[11px] font-black uppercase tracking-widest text-white/30 mb-10">
-          Generaciones disponibles: <span className="text-color-accent-blue">{isPremium ? 'ILIMITADAS' : `${generationsLeft} de 5`}</span>
+        <p className="text-center text-[11px] font-black uppercase tracking-widest text-color-base-content/40 mb-10">
+          Generaciones disponibles: <span className="text-color-accent-blue">{isPremium ? 'ILIMITADAS' : `${generationsLeft} de 1`}</span>
         </p>
 
         <div className="space-y-8">
           <div className="space-y-4">
-            <label className="block text-xs font-black uppercase tracking-[0.2em] text-white/40 ml-2">
+            <label className="block text-xs font-black uppercase tracking-[0.2em] text-color-base-content/60 ml-2">
               Selecciona una industria:
             </label>
             <div className="relative group">
               <select 
                 value={industry}
                 onChange={(e) => setIndustry(e.target.value)}
-                className="w-full h-16 bg-[#0a0f1d] border border-white/10 rounded-2xl px-6 text-white appearance-none focus:outline-none focus:border-color-primary/50 transition-all cursor-pointer font-bold"
+                className="w-full h-16 bg-color-base-content/5 border border-color-base-content/10 rounded-2xl px-6 text-color-base-content appearance-none focus:outline-none focus:border-color-primary/50 transition-all cursor-pointer font-bold"
               >
                 <option value="" disabled>— Elige una industria —</option>
                 {INDUSTRIES.map(i => (
@@ -344,7 +344,7 @@ export function IdeaGenerator({ userPlan, mode = 'ideas', ideasCount = 5 }: Idea
                 ))}
               </select>
               <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none">
-                <Layers className="h-5 w-5 text-white/20" />
+                <Layers className="h-5 w-5 text-color-base-content/30" />
               </div>
             </div>
 
@@ -355,7 +355,7 @@ export function IdeaGenerator({ userPlan, mode = 'ideas', ideasCount = 5 }: Idea
                   placeholder="Escribe tu nicho o industria aquí..."
                   value={customIndustry}
                   onChange={(e) => setCustomIndustry(e.target.value)}
-                  className="w-full h-16 bg-[#0a0f1d] border border-white/10 rounded-2xl px-6 text-white focus:outline-none focus:border-color-primary/50 transition-all font-bold placeholder:text-white/20"
+                  className="w-full h-16 bg-color-base-content/5 border border-color-base-content/10 rounded-2xl px-6 text-color-base-content focus:outline-none focus:border-color-primary/50 transition-all font-bold placeholder:text-color-base-content/30"
                 />
               </div>
             )}
@@ -374,7 +374,7 @@ export function IdeaGenerator({ userPlan, mode = 'ideas', ideasCount = 5 }: Idea
             ) : (
               <>
                 GENERAR {ideasCount} {mode === 'strategies' ? 'ESTRATEGIAS' : 'IDEAS'} DE MICRO-APPS
-                <Zap className="h-5 w-5 fill-white" />
+                <Zap className="h-5 w-5 fill-current" />
               </>
             )}
           </GlowButton>
@@ -382,7 +382,7 @@ export function IdeaGenerator({ userPlan, mode = 'ideas', ideasCount = 5 }: Idea
 
         {!isPremium && generationsLeft === 0 && !isGenerating && !result && (
           <div className="mt-8 p-6 rounded-2xl bg-color-primary/10 border border-color-primary/20 text-center animate-in zoom-in-95">
-            <p className="text-sm font-bold text-white mb-4">¡Has agotado tus consultas gratuitas de ideas!</p>
+            <p className="text-sm font-bold text-color-base-content mb-4">¡Has agotado tus consultas gratuitas de ideas!</p>
             <GlowButton variant="primary" className="mx-auto px-8">Acceder a Ideas Ilimitadas</GlowButton>
           </div>
         )}
@@ -398,15 +398,15 @@ export function IdeaGenerator({ userPlan, mode = 'ideas', ideasCount = 5 }: Idea
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {result.microApps.map((app: any, idx: number) => (
-                <GlassCard key={idx} className="p-6 border-white/5 bg-white/2 hover:border-color-primary/30 transition-all group">
+                <GlassCard key={idx} className="p-6 border-color-base-content/10 bg-color-base-content/5 hover:border-color-primary/30 transition-all group">
                   <div className="flex items-center justify-between mb-4">
                     <div className="h-10 w-10 rounded-xl bg-color-primary/10 flex items-center justify-center text-color-primary">
                       <Sparkles className="h-5 w-5" />
                     </div>
-                    <span className="text-[10px] font-black text-white/20 group-hover:text-color-primary transition-colors">IDEA #{idx + 1}</span>
+                    <span className="text-[10px] font-black text-color-base-content/30 group-hover:text-color-primary transition-colors">IDEA #{idx + 1}</span>
                   </div>
-                  <h4 className="text-lg font-black text-white uppercase italic tracking-tight mb-2">{app.title}</h4>
-                  <p className="text-xs text-white/40 leading-relaxed mb-4">{app.desc}</p>
+                  <h4 className="text-lg font-black text-color-base-content uppercase italic tracking-tight mb-2">{app.title}</h4>
+                  <p className="text-xs text-color-base-content/60 leading-relaxed mb-4">{app.desc}</p>
                   <div className="flex items-center gap-2 text-color-accent-blue">
                     <PieChart className="h-3.5 w-3.5" />
                     <span className="text-[10px] font-black uppercase tracking-widest">{app.market} Potencial</span>
@@ -418,15 +418,15 @@ export function IdeaGenerator({ userPlan, mode = 'ideas', ideasCount = 5 }: Idea
 
           {/* Section: Strategy (Only in strategies mode) */}
           {mode === 'strategies' && result.strategies && (
-            <div className="space-y-12 pt-12 border-t border-white/5 animate-in fade-in slide-in-from-bottom-12 duration-1000">
+            <div className="space-y-12 pt-12 border-t border-color-base-content/10 animate-in fade-in slide-in-from-bottom-12 duration-1000">
               <div className="text-center space-y-4">
                  <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-color-primary/10 border border-color-primary/20 text-[10px] font-black uppercase tracking-[0.3em] text-color-primary">
                    ⚡ HOJA DE RUTA ESTRATÉGICA
                  </div>
-                 <h3 className="text-4xl md:text-5xl font-black text-white uppercase italic tracking-tighter">
+                 <h3 className="text-4xl md:text-5xl font-black text-color-base-content uppercase italic tracking-tighter">
                    Plan de <span className="text-color-primary">Lanzamiento</span> y Escalamiento
                  </h3>
-                 <p className="text-white/40 text-sm max-w-2xl mx-auto">Análisis profundo de ejecución comercial para dominar el sector de {result.industry}.</p>
+                 <p className="text-color-base-content/60 text-sm max-w-2xl mx-auto">Análisis profundo de ejecución comercial para dominar el sector de {result.industry}.</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -436,16 +436,16 @@ export function IdeaGenerator({ userPlan, mode = 'ideas', ideasCount = 5 }: Idea
                     <div className="h-12 w-12 rounded-2xl bg-color-primary/20 flex items-center justify-center text-color-primary group-hover:scale-110 transition-transform">
                       <Target className="h-6 w-6" />
                     </div>
-                    <h4 className="text-xl font-black text-white uppercase italic tracking-tight">Marketing</h4>
+                    <h4 className="text-xl font-black text-color-base-content uppercase italic tracking-tight">Marketing</h4>
                   </div>
                   <div className="space-y-4">
                     {result.strategies.marketing.map((s: any, idx: number) => (
-                      <div key={idx} className="p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-color-primary/30 transition-all">
+                      <div key={idx} className="p-5 rounded-2xl bg-color-base-content/5 border border-color-base-content/10 hover:border-color-primary/30 transition-all">
                         <p className="text-[10px] font-black text-color-primary uppercase tracking-widest mb-2 flex items-center gap-2">
                           <span className="h-1.5 w-1.5 rounded-full bg-color-primary" />
                           {s.title}
                         </p>
-                        <p className="text-xs text-white/60 leading-relaxed">{s.desc}</p>
+                        <p className="text-xs text-color-base-content/60 leading-relaxed">{s.desc}</p>
                       </div>
                     ))}
                   </div>
@@ -457,16 +457,16 @@ export function IdeaGenerator({ userPlan, mode = 'ideas', ideasCount = 5 }: Idea
                     <div className="h-12 w-12 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-emerald-500 group-hover:scale-110 transition-transform">
                       <DollarSign className="h-6 w-6" />
                     </div>
-                    <h4 className="text-xl font-black text-white uppercase italic tracking-tight">Ventas</h4>
+                    <h4 className="text-xl font-black text-color-base-content uppercase italic tracking-tight">Ventas</h4>
                   </div>
                   <div className="space-y-4">
                     {result.strategies.sales.map((s: any, idx: number) => (
-                      <div key={idx} className="p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-emerald-500/30 transition-all">
+                      <div key={idx} className="p-5 rounded-2xl bg-color-base-content/5 border border-color-base-content/10 hover:border-emerald-500/30 transition-all">
                         <p className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mb-2 flex items-center gap-2">
                           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                           {s.title}
                         </p>
-                        <p className="text-xs text-white/60 leading-relaxed">{s.desc}</p>
+                        <p className="text-xs text-color-base-content/60 leading-relaxed">{s.desc}</p>
                       </div>
                     ))}
                   </div>
@@ -478,16 +478,16 @@ export function IdeaGenerator({ userPlan, mode = 'ideas', ideasCount = 5 }: Idea
                     <div className="h-12 w-12 rounded-2xl bg-purple-500/20 flex items-center justify-center text-purple-500 group-hover:scale-110 transition-transform">
                       <TrendingUp className="h-6 w-6" />
                     </div>
-                    <h4 className="text-xl font-black text-white uppercase italic tracking-tight">Crecimiento</h4>
+                    <h4 className="text-xl font-black text-color-base-content uppercase italic tracking-tight">Crecimiento</h4>
                   </div>
                   <div className="space-y-4">
                     {result.strategies.growth.map((s: any, idx: number) => (
-                      <div key={idx} className="p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-purple-500/30 transition-all">
+                      <div key={idx} className="p-5 rounded-2xl bg-color-base-content/5 border border-color-base-content/10 hover:border-purple-500/30 transition-all">
                         <p className="text-[10px] font-black text-purple-500 uppercase tracking-widest mb-2 flex items-center gap-2">
                           <span className="h-1.5 w-1.5 rounded-full bg-purple-500" />
                           {s.title}
                         </p>
-                        <p className="text-xs text-white/60 leading-relaxed">{s.desc}</p>
+                        <p className="text-xs text-color-base-content/60 leading-relaxed">{s.desc}</p>
                       </div>
                     ))}
                   </div>
@@ -506,36 +506,36 @@ export function IdeaGenerator({ userPlan, mode = 'ideas', ideasCount = 5 }: Idea
                 <Zap className="h-12 w-12 fill-color-accent-pink" />
               </div>
               <div className="flex-1 space-y-4">
-                <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter">{result.fusion.title}</h3>
-                <p className="text-sm text-white/60 leading-relaxed max-w-2xl">{result.fusion.desc}</p>
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10">
+                <h3 className="text-3xl font-black text-color-base-content uppercase italic tracking-tighter">{result.fusion.title}</h3>
+                <p className="text-sm text-color-base-content/60 leading-relaxed max-w-2xl">{result.fusion.desc}</p>
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-color-base-content/5 border border-color-base-content/10">
                   <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
-                  <span className="text-xs font-black uppercase tracking-widest text-white">{result.fusion.impact}</span>
+                  <span className="text-xs font-black uppercase tracking-widest text-color-base-content">{result.fusion.impact}</span>
                 </div>
               </div>
             </div>
           </GlassCard>
 
           {/* Section: Math */}
-          <div className="bg-[#111d35] rounded-[2.5rem] p-10 border border-white/10">
+          <div className="bg-color-base-100 rounded-[2.5rem] p-10 border border-color-base-content/10">
             <div className="text-center mb-8">
-               <p className="text-[11px] font-black uppercase tracking-[0.3em] text-white/20">Proyección Estimada del Modelo de Negocio</p>
+               <p className="text-[11px] font-black uppercase tracking-[0.3em] text-color-base-content/40">Proyección Estimada del Modelo de Negocio</p>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <div className="text-center space-y-1">
-                <p className="text-[10px] font-black uppercase tracking-widest text-white/30">Costo Desarrollo</p>
-                <p className="text-2xl font-black text-white">{result.math.cost}</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-color-base-content/50">Costo Desarrollo</p>
+                <p className="text-2xl font-black text-color-base-content">{result.math.cost}</p>
               </div>
               <div className="text-center space-y-1">
-                <p className="text-[10px] font-black uppercase tracking-widest text-white/30">Tiempo de Lanzamiento</p>
-                <p className="text-2xl font-black text-white">{result.math.time}</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-color-base-content/50">Tiempo de Lanzamiento</p>
+                <p className="text-2xl font-black text-color-base-content">{result.math.time}</p>
               </div>
               <div className="text-center space-y-1">
-                <p className="text-[10px] font-black uppercase tracking-widest text-white/30">Meta de Usuarios</p>
-                <p className="text-2xl font-black text-white">{result.math.users}</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-color-base-content/50">Meta de Usuarios</p>
+                <p className="text-2xl font-black text-color-base-content">{result.math.users}</p>
               </div>
               <div className="text-center space-y-1">
-                <p className="text-[10px] font-black uppercase tracking-widest text-white/30">Ingreso Mensual Est.</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-color-base-content/50">Ingreso Mensual Est.</p>
                 <p className="text-2xl font-black text-color-accent-blue">{result.math.revenue}</p>
               </div>
             </div>

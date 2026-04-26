@@ -18,8 +18,8 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "SERVING BUILDER APP",
-  description: "Advanced AI solutions for building and serving applications with SERVING BUILDER APP.",
+  title: "ECOSERVING",
+  description: "Advanced AI solutions for building and serving environmental applications with ECOSERVING.",
 }
 
 export default function RootLayout({
@@ -28,9 +28,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${outfit.variable} ${inter.variable} font-sans antialiased`}
+        suppressHydrationWarning
       >
         <LanguageProvider>
           <ToastProvider>

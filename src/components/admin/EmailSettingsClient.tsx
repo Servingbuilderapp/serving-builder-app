@@ -152,7 +152,7 @@ export function EmailSettingsClient({ initialSettings, adminName, adminEmail }: 
             <div className="p-2.5 rounded-xl bg-color-primary/20 text-color-primary">
               <Server className="h-6 w-6" />
             </div>
-            <h2 className="text-xl font-bold text-white tracking-tight">
+            <h2 className="text-xl font-bold text-color-base-content tracking-tight">
               {language === 'en' ? 'SMTP Settings' : 'Configuración SMTP'}
             </h2>
           </div>
@@ -174,7 +174,7 @@ export function EmailSettingsClient({ initialSettings, adminName, adminEmail }: 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-1">
+              <label className="text-[10px] font-black uppercase tracking-widest text-color-base-content/40 ml-1">
                 {language === 'en' ? 'SMTP Host' : 'Host SMTP'}
               </label>
               <Input 
@@ -185,7 +185,7 @@ export function EmailSettingsClient({ initialSettings, adminName, adminEmail }: 
               />
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-1">
+              <label className="text-[10px] font-black uppercase tracking-widest text-color-base-content/40 ml-1">
                 {language === 'en' ? 'SMTP Port' : 'Puerto SMTP'}
               </label>
               <Input 
@@ -199,7 +199,7 @@ export function EmailSettingsClient({ initialSettings, adminName, adminEmail }: 
           </div>
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-1">
+              <label className="text-[10px] font-black uppercase tracking-widest text-color-base-content/40 ml-1">
                 {language === 'en' ? 'Username' : 'Usuario'}
               </label>
               <Input 
@@ -210,7 +210,7 @@ export function EmailSettingsClient({ initialSettings, adminName, adminEmail }: 
               />
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-1">
+              <label className="text-[10px] font-black uppercase tracking-widest text-color-base-content/40 ml-1">
                 {language === 'en' ? 'Password' : 'Contraseña'}
               </label>
               <Input 
@@ -224,11 +224,11 @@ export function EmailSettingsClient({ initialSettings, adminName, adminEmail }: 
           </div>
         </div>
 
-        <div className="h-px w-full bg-white/5" />
+        <div className="h-px w-full bg-color-base-content/5" />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-1">
+            <label className="text-[10px] font-black uppercase tracking-widest text-color-base-content/40 ml-1">
               {language === 'en' ? 'From Email' : 'Email Remitente'}
             </label>
             <Input 
@@ -239,7 +239,7 @@ export function EmailSettingsClient({ initialSettings, adminName, adminEmail }: 
             />
           </div>
           <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-1">
+            <label className="text-[10px] font-black uppercase tracking-widest text-color-base-content/40 ml-1">
               {language === 'en' ? 'From Name' : 'Nombre Remitente'}
             </label>
             <Input 
@@ -258,7 +258,7 @@ export function EmailSettingsClient({ initialSettings, adminName, adminEmail }: 
           <div className="flex-1 space-y-2">
             <div className="flex items-center gap-2 mb-2">
               <FlaskConical className="h-4 w-4 text-color-primary" />
-              <h3 className="text-sm font-black uppercase tracking-widest text-white/60">
+              <h3 className="text-sm font-black uppercase tracking-widest text-color-base-content/60">
                 {language === 'en' ? 'Test Verification' : 'Verificación de Prueba'}
               </h3>
             </div>
@@ -268,7 +268,7 @@ export function EmailSettingsClient({ initialSettings, adminName, adminEmail }: 
               value={testRecipient}
               onChange={(e) => setTestRecipient(e.target.value)}
             />
-            <p className="text-[10px] text-white/30 italic">
+            <p className="text-[10px] text-color-base-content/30 italic">
               {language === 'en' ? 'The test is the save button. Successful tests automatically save your settings.' : 'La prueba es el botón de guardar. Las pruebas exitosas guardan tu configuración automáticamente.'}
             </p>
           </div>

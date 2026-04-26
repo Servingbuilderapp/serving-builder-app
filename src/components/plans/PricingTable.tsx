@@ -8,6 +8,7 @@ import { GlowButton } from '@/components/ui/GlowButton'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { useToast } from '@/components/ui/ToastProvider'
 import { PayPalButtons } from "@paypal/react-paypal-js"
+import { useRouter } from 'next/navigation'
 
 interface PricingTableProps {
   plans: any[]
@@ -17,6 +18,7 @@ interface PricingTableProps {
 export function PricingTable({ plans, currentPlanId }: PricingTableProps) {
   const { language } = useTranslation()
   const { toast } = useToast()
+  const router = useRouter()
   
   const [selectedPlan, setSelectedPlan] = useState<any>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -49,28 +51,28 @@ export function PricingTable({ plans, currentPlanId }: PricingTableProps) {
     const price = plan.price_monthly
     if (price === 0) {
       return {
-        card: "border-blue-500/30 bg-blue-500/10 hover:border-blue-500/50 shadow-blue-500/10",
-        badge: "bg-blue-500/20 text-blue-300 border-blue-500/30",
-        icon: "text-blue-400",
+        card: "border-blue-500/30 bg-white hover:border-blue-500/50 shadow-md",
+        badge: "bg-blue-50 text-blue-600 border-blue-200",
+        icon: "text-blue-500",
         button: "ghost",
-        accent: "from-blue-500/15 via-transparent to-blue-500/5"
+        accent: "from-blue-500/5 via-transparent to-transparent"
       }
     }
     if (price < 100) {
       return {
-        card: "border-emerald-500/30 bg-emerald-500/10 hover:border-emerald-500/50 shadow-emerald-500/10",
-        badge: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
-        icon: "text-emerald-400",
+        card: "border-emerald-500/30 bg-white hover:border-emerald-500/50 shadow-lg hover:shadow-xl",
+        badge: "bg-emerald-50 text-emerald-600 border-emerald-200",
+        icon: "text-emerald-500",
         button: "primary",
-        accent: "from-emerald-500/15 via-transparent to-emerald-500/5"
+        accent: "from-emerald-500/5 via-transparent to-transparent"
       }
     }
     return {
-      card: "border-purple-500/40 bg-purple-900/20 hover:border-purple-400/60 shadow-purple-500/20 ring-1 ring-purple-500/30",
-      badge: "bg-linear-to-r from-orange-500 via-red-500 to-purple-600 text-white border-transparent shadow-lg shadow-purple-500/20",
-      icon: "text-orange-400",
+      card: "border-orange-500/40 bg-white hover:border-orange-400/60 shadow-xl hover:shadow-2xl ring-1 ring-orange-500/30",
+      badge: "bg-linear-to-r from-orange-500 to-purple-600 text-white border-transparent shadow-md",
+      icon: "text-orange-500",
       button: "primary",
-      accent: "from-purple-600/20 via-red-500/10 to-orange-500/10",
+      accent: "from-purple-600/5 via-orange-500/5 to-transparent",
       premium: true
     }
   }
@@ -93,7 +95,7 @@ export function PricingTable({ plans, currentPlanId }: PricingTableProps) {
         )} />
 
         {isCurrent && (
-          <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-[10px] font-black uppercase tracking-widest text-white z-20">
+          <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-color-base-content/10 backdrop-blur-md text-[10px] font-black uppercase tracking-widest text-color-base-content z-20">
             {language === 'en' ? 'Current' : 'Actual'}
           </div>
         )}
@@ -109,28 +111,28 @@ export function PricingTable({ plans, currentPlanId }: PricingTableProps) {
                plan.price_monthly < 100 ? (language === 'en' ? 'Growth' : 'Crecimiento') : 
                (language === 'en' ? 'Premium' : 'Exclusivo')}
             </div>
-            <h3 className="text-2xl font-bold text-white leading-tight">
+            <h3 className="text-2xl font-bold text-color-base-content leading-tight">
               {language === 'en' ? plan.name_en : plan.name_es}
             </h3>
-            <p className="text-sm text-white/50 leading-relaxed">
+            <p className="text-sm text-color-base-content/60 leading-relaxed">
               {language === 'en' ? plan.description_en : plan.description_es}
             </p>
           </div>
 
           <div className="flex items-baseline gap-1">
-            <span className="text-5xl font-black text-white tracking-tighter">${plan.price_monthly}</span>
-            <span className="text-sm text-white/40 font-medium tracking-wide">/mo</span>
+            <span className="text-5xl font-black text-color-base-content tracking-tighter">${plan.price_monthly}</span>
+            <span className="text-sm text-color-base-content/40 font-medium tracking-wide">/mo</span>
           </div>
 
           <div className="space-y-4 pt-4">
-            <div className="h-px bg-white/10 w-full" />
+            <div className="h-px bg-color-base-content/10 w-full" />
             <ul className="space-y-4">
               {features.map((item: string, i: number) => (
                 <li key={i} className="flex items-start gap-3 group/item">
                   <div className="mt-1 flex-shrink-0">
                     <CheckCircle2 className={cn("h-4 w-4 transition-transform duration-300 group-hover/item:scale-125", styles.icon)} />
                   </div>
-                  <span className="text-sm font-bold text-white/70 leading-snug group-hover/item:text-white transition-colors">
+                  <span className="text-sm font-bold text-color-base-content/70 leading-snug group-hover/item:text-color-base-content transition-colors">
                     {item}
                   </span>
                 </li>
@@ -161,7 +163,7 @@ export function PricingTable({ plans, currentPlanId }: PricingTableProps) {
       {/* Tier 1: Explorador */}
       <div className="space-y-12">
         <div className="text-center">
-          <h3 className="text-2xl font-black text-white/20 uppercase tracking-[0.5em] italic">Fase 1: Exploración</h3>
+          <h3 className="text-2xl font-black opacity-40 uppercase tracking-[0.5em] italic">Fase 1: Exploración</h3>
         </div>
         <div className="flex justify-center">
           <div className="w-full max-w-md">
@@ -173,7 +175,7 @@ export function PricingTable({ plans, currentPlanId }: PricingTableProps) {
       {/* Tier 2: Mid Range */}
       <div className="space-y-12">
         <div className="text-center">
-          <h3 className="text-2xl font-black text-white/20 uppercase tracking-[0.5em] italic">Fase 2: Crecimiento y Negocio</h3>
+          <h3 className="text-2xl font-black opacity-40 uppercase tracking-[0.5em] italic">Fase 2: Crecimiento y Negocio</h3>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {tier2.map(plan => <PlanCard key={plan.id} plan={plan} />)}
@@ -183,7 +185,7 @@ export function PricingTable({ plans, currentPlanId }: PricingTableProps) {
       {/* Tier 3: Premium */}
       <div className="space-y-12">
         <div className="text-center">
-          <h3 className="text-2xl font-black text-white/20 uppercase tracking-[0.5em] italic">Fase 3: Escalamiento Elite</h3>
+          <h3 className="text-2xl font-black opacity-40 uppercase tracking-[0.5em] italic">Fase 3: Escalamiento Elite</h3>
         </div>
         <div className="flex flex-col md:flex-row justify-center gap-8 items-stretch">
           {tier3.map(plan => (
@@ -197,10 +199,10 @@ export function PricingTable({ plans, currentPlanId }: PricingTableProps) {
       {/* Checkout Modal (Shared) */}
       {isModalOpen && selectedPlan && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-in fade-in duration-500"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-color-base-content/60 backdrop-blur-md animate-in fade-in duration-500"
           onClick={(e) => { if (e.target === e.currentTarget) setIsModalOpen(false) }}
         >
-          <GlassCard className="w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-300 border-white/10">
+          <GlassCard className="w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-300 border-color-base-content/10">
             <div className="bg-yellow-500/10 border-b border-yellow-500/20 py-3 text-center">
               <p className="text-[10px] font-black uppercase tracking-[0.3em] text-yellow-500">
                 🛡️ {language === 'en' ? 'SECURE CHECKOUT' : 'PAGO SEGURO'}
@@ -210,17 +212,17 @@ export function PricingTable({ plans, currentPlanId }: PricingTableProps) {
             <div className="p-8 space-y-8">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                  <h2 className="text-3xl font-black text-white tracking-tighter">
+                  <h2 className="text-3xl font-black text-color-base-content tracking-tighter">
                     {language === 'en' ? selectedPlan.name_en : selectedPlan.name_es}
                   </h2>
                   <div className="flex items-center gap-2">
                     <span className="text-2xl font-bold text-orange-500">${selectedPlan.price_monthly}.00</span>
-                    <span className="text-xs text-white/40 uppercase font-bold tracking-widest">/ month</span>
+                    <span className="text-xs text-color-base-content/60 uppercase font-bold tracking-widest">/ month</span>
                   </div>
                 </div>
                 <button 
                   onClick={() => setIsModalOpen(false)}
-                  className="h-12 w-12 rounded-full bg-white/5 flex items-center justify-center text-white/40 hover:bg-white/10 hover:text-white transition-all"
+                  className="h-12 w-12 rounded-full bg-color-base-content/5 flex items-center justify-center text-color-base-content/40 hover:bg-color-base-content/10 hover:text-color-base-content transition-all"
                 >
                   <X className="h-6 w-6" />
                 </button>
@@ -281,7 +283,8 @@ export function PricingTable({ plans, currentPlanId }: PricingTableProps) {
                           title: language === 'en' ? "Welcome to the family!" : "¡Bienvenido a la familia!",
                           type: 'success'
                         });
-                        setTimeout(() => window.location.reload(), 2000);
+                        const customerEmail = details.payer?.email_address || 'customer@example.com';
+                        router.push(`/plans/success?email=${encodeURIComponent(customerEmail)}&password=${encodeURIComponent(resData.generated_password || '')}&new=${resData.is_new_user}`);
                       } else {
                          throw new Error(resData.error || 'Failed to update plan');
                       }
@@ -296,7 +299,60 @@ export function PricingTable({ plans, currentPlanId }: PricingTableProps) {
                   }}
                 />
                 
-                <div className="flex items-center justify-center gap-6 text-[10px] text-white/20 uppercase tracking-widest font-black">
+                {process.env.NODE_ENV === 'development' && (
+                  <GlowButton 
+                    disabled={isProcessing}
+                    onClick={async () => {
+                      setIsProcessing(true);
+                      try {
+                        // Enviamos al email del admin por defecto para que pueda probar la recepción de correos
+                        const response = await fetch('/api/webhooks/payment', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            event: 'payment.completed',
+                            customer: {
+                              email: 'servingbuilderapp@gmail.com',
+                              first_name: 'Admin',
+                              last_name: 'ECOServing'
+                            },
+                            plan: selectedPlan.slug,
+                            source: 'paypal_simulation',
+                            transaction_id: 'SIM_' + Math.random().toString(36).substr(2, 9),
+                            amount: selectedPlan.price_monthly,
+                            currency: 'USD'
+                          })
+                        });
+
+                        const resData = await response.json();
+                        if (response.ok) {
+                          setIsModalOpen(false);
+                          toast({
+                            title: language === 'en' ? "Simulation successful! Check your email." : "¡Simulación exitosa! Revisa tu correo.",
+                            type: 'success'
+                          });
+                          const customerEmail = 'servingbuilderapp@gmail.com';
+                          router.push(`/plans/success?email=${encodeURIComponent(customerEmail)}&password=${encodeURIComponent(resData.generated_password || '')}&new=${resData.is_new_user}`);
+                        } else {
+                          throw new Error(resData.error || 'Failed to update plan');
+                        }
+                      } catch (error: any) {
+                        toast({
+                          title: error.message || "Simulation error",
+                          type: 'error'
+                        });
+                      } finally {
+                        setIsProcessing(false);
+                      }
+                    }}
+                    className="w-full py-3 border border-dashed border-orange-500/50 bg-orange-500/10 text-orange-400 hover:bg-orange-500/20"
+                    variant="ghost"
+                  >
+                    {isProcessing ? 'Procesando...' : (language === 'en' ? '🧪 Simulate Payment (Dev Only)' : '🧪 Simular Pago (Solo Dev)')}
+                  </GlowButton>
+                )}
+                
+                <div className="flex items-center justify-center gap-6 text-[10px] text-color-base-content/40 uppercase tracking-widest font-black">
                   <div className="flex items-center gap-2">
                     <ShieldCheck className="h-3 w-3" />
                     SSL SECURE

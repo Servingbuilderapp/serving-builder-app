@@ -16,7 +16,7 @@ export function DashboardLayoutClient({ children, user, profile }: DashboardLayo
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
-    <div className="flex h-screen w-full overflow-hidden z-0 bg-[#0a0f1d] text-color-base-content relative">
+    <div className="flex h-screen w-full overflow-hidden z-0 bg-color-base-100 text-color-base-content relative">
       {/* Ambient Background Orbs (Dynamic & High Impact) */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden z-0">
         {/* Top-left orange→violet orb */}

@@ -8,8 +8,8 @@ export function WhatsAppButton() {
   const { language } = useTranslation()
   const phoneNumber = '573227008727'
   const message = language === 'en' 
-    ? 'Hello, I need support with Serving Builder' 
-    : 'Hola, necesito soporte con Serving Builder'
+    ? 'Hello, I need support with ECOServing' 
+    : 'Hola, necesito soporte con ECOServing'
   
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
 

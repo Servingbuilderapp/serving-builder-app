@@ -73,16 +73,16 @@ export function SettingsClient({ initialProfile, user }: SettingsClientProps) {
               {(firstName || 'U').charAt(0).toUpperCase()}
             </div>
             <div>
-              <h2 className="text-xl font-bold text-white tracking-tight">
+              <h2 className="text-xl font-bold text-color-base-content tracking-tight">
                 {language === 'en' ? 'Personal Information' : 'Información Personal'}
               </h2>
-              <p className="text-sm text-white/40">{user.email}</p>
+              <p className="text-sm text-color-base-content/80">{user.email}</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-white/70 ml-1">
+              <label className="text-sm font-bold text-color-base-content ml-1">
                 {language === 'en' ? 'First Name' : 'Nombre'}
               </label>
               <Input
@@ -94,7 +94,7 @@ export function SettingsClient({ initialProfile, user }: SettingsClientProps) {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-white/70 ml-1">
+              <label className="text-sm font-bold text-color-base-content ml-1">
                 {language === 'en' ? 'Last Name' : 'Apellido'}
               </label>
               <Input
@@ -106,7 +106,7 @@ export function SettingsClient({ initialProfile, user }: SettingsClientProps) {
               />
             </div>
             <div className="space-y-2 md:col-span-2">
-              <label className="text-sm font-medium text-white/70 ml-1">
+              <label className="text-sm font-bold text-color-base-content ml-1">
                 Email
               </label>
               <Input
@@ -115,16 +115,16 @@ export function SettingsClient({ initialProfile, user }: SettingsClientProps) {
                 disabled
                 className="opacity-50 cursor-not-allowed"
               />
-              <p className="text-[10px] text-white/20 mt-1 italic ml-1">
+              <p className="text-[10px] text-color-base-content/80 mt-1 italic ml-1">
                 {language === 'en' ? 'Email cannot be changed directly.' : 'El email no se puede cambiar directamente.'}
               </p>
             </div>
           </div>
 
-          <div className="h-px w-full bg-white/5 my-4" />
+          <div className="h-px w-full bg-color-base-content/10 my-4" />
 
           <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-2 text-white/40">
+            <div className="flex items-center gap-2 text-color-base-content/80">
               <Shield className="h-4 w-4" />
               <span className="text-[10px] font-bold uppercase tracking-widest">
                 {language === 'en' ? 'Role:' : 'Rol:'} {initialProfile?.role || 'user'}
@@ -151,16 +151,16 @@ export function SettingsClient({ initialProfile, user }: SettingsClientProps) {
                 <Zap className="h-6 w-6" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-white tracking-tight">
+                <h2 className="text-xl font-bold text-color-base-content tracking-tight">
                   {language === 'en' ? 'Branding & White Label' : 'Identidad de Marca Blanca'}
                 </h2>
-                <p className="text-xs text-white/40">Personaliza la apariencia de los recursos generados</p>
+                <p className="text-xs text-color-base-content/90">Personaliza la apariencia de los recursos generados</p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-white/70 ml-1">Nombre de Marca</label>
+                <label className="text-sm font-bold text-color-base-content ml-1">Nombre de Marca</label>
                 <Input 
                   placeholder="Tu Agencia Pro" 
                   value={brandName}
@@ -168,7 +168,7 @@ export function SettingsClient({ initialProfile, user }: SettingsClientProps) {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-white/70 ml-1">URL del Logo (Transparente)</label>
+                <label className="text-sm font-bold text-color-base-content ml-1">URL del Logo (Transparente)</label>
                 <Input 
                   placeholder="https://tu-sitio.com/logo.png" 
                   value={brandLogo}
@@ -177,9 +177,9 @@ export function SettingsClient({ initialProfile, user }: SettingsClientProps) {
               </div>
             </div>
             
-            <div className="bg-white/5 rounded-2xl p-4 border border-white/5">
-              <p className="text-[10px] text-white/40 italic">
-                * Tu logo aparecerá como marca de agua en los resultados finales, eliminando la marca de Serving Builder.
+            <div className="bg-color-base-content/5 rounded-2xl p-4 border border-color-base-content/10">
+              <p className="text-[10px] text-color-base-content/80 italic">
+                * Tu logo aparecerá como marca de agua en los resultados finales, eliminando la marca de ECOSERVING.
               </p>
             </div>
           </div>
@@ -192,10 +192,10 @@ export function SettingsClient({ initialProfile, user }: SettingsClientProps) {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <h2 className="text-xl font-bold text-white tracking-tight">Gestión de Equipo</h2>
-                <span className="px-2 py-0.5 rounded-full bg-white/10 text-[8px] font-black uppercase text-white/40">Próximamente</span>
+                <h2 className="text-xl font-bold text-color-base-content tracking-tight">Gestión de Equipo</h2>
+                <span className="px-2 py-0.5 rounded-full bg-color-base-content/10 text-[8px] font-black uppercase text-color-base-content/90">Próximamente</span>
               </div>
-              <p className="text-sm text-white/40">Añade colaboradores a tu espacio de trabajo de agencia.</p>
+              <p className="text-sm text-color-base-content/80">Añade colaboradores a tu espacio de trabajo de agencia.</p>
             </div>
             <GlowButton variant="ghost" disabled className="text-xs opacity-50">Gestionar Equipo</GlowButton>
           </div>
@@ -210,8 +210,8 @@ export function SettingsClient({ initialProfile, user }: SettingsClientProps) {
         <GlassCard className="p-6 border-red-500/20 bg-red-500/5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h4 className="font-bold text-white">{language === 'en' ? 'Delete Account' : 'Eliminar Cuenta'}</h4>
-              <p className="text-xs text-white/40 mt-1">
+              <h4 className="font-bold text-color-base-content">{language === 'en' ? 'Delete Account' : 'Eliminar Cuenta'}</h4>
+              <p className="text-xs text-color-base-content/90 mt-1">
                 {language === 'en' 
                   ? 'Permanently delete your account and all data. This cannot be undone.' 
                   : 'Elimina permanentemente tu cuenta y todos los datos. Esto no se puede deshacer.'}

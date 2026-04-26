@@ -50,7 +50,7 @@ export function buildEmailTemplate(options: {
           <tr>
             <td align="center" style="padding: 40px 40px 20px 40px;">
               <div style="display: inline-block; background: linear-gradient(135deg, #7c3aed, #6d28d9, #ec4899); border-radius: 12px; padding: 10px 24px;">
-                <span style="color: #ffffff; font-weight: 900; font-size: 14px; letter-spacing: 1px; text-transform: uppercase;">✦ SERVING BUILDER APP</span>
+                <span style="color: #ffffff; font-weight: 900; font-size: 14px; letter-spacing: 1px; text-transform: uppercase;">✦ ECOSERVING</span>
               </div>
             </td>
           </tr>
@@ -85,7 +85,7 @@ export function buildEmailTemplate(options: {
                   ${footerText || 'Este email fue enviado automáticamente por el sistema. Si tienes alguna duda, contacta al administrador.'}
                 </p>
                 <p style="color: rgba(255, 255, 255, 0.2); font-size: 10px; margin: 10px 0 0 0; font-weight: bold; text-transform: uppercase; letter-spacing: 2px;">
-                  © 2026 SERVING BUILDER APP
+                  © 2026 ECOSERVING
                 </p>
               </div>
             </td>
@@ -147,7 +147,7 @@ export async function sendWelcomeEmail(options: {
   ]
 
   const html = buildEmailTemplate({
-    title: '¡Bienvenido a SERVING BUILDER APP!',
+    title: '¡Bienvenido a ECOSERVING!',
     greeting: `Hola ${firstName},`,
     bodyLines,
     ctaText: 'Acceder al Portal',
@@ -156,7 +156,7 @@ export async function sendWelcomeEmail(options: {
 
   return sendEmail({
     to,
-    subject: '¡Bienvenido a SERVING BUILDER APP! Tu acceso está listo',
+    subject: '¡Bienvenido a ECOSERVING! Tu acceso está listo',
     html
   })
 }
