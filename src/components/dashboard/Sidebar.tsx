@@ -24,6 +24,13 @@ interface SidebarProps {
 export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile, profile, user }: SidebarProps) {
   const { language } = useTranslation()
   const pathname = usePathname()
+  const [isEcoServing, setIsEcoServing] = useState(true)
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsEcoServing(window.location.hostname.includes('ecoserving') || window.location.hostname.includes('localhost'))
+    }
+  }, [])
   
   const currentEmail = (profile?.email || user?.email || '').toLowerCase().trim()
   const currentRoleFromProfile = (profile?.role || '').toLowerCase().trim()
@@ -65,7 +72,7 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
             "text-lg font-black tracking-tighter bg-clip-text text-transparent bg-linear-to-r from-color-primary via-color-accent-pink to-color-accent-violet whitespace-nowrap transition-all duration-300 drop-shadow-sm",
             collapsed && "lg:opacity-0 lg:w-0"
           )} style={{ WebkitTextFillColor: 'transparent', color: 'transparent' }}>
-            {profile?.branding?.name.toUpperCase()}
+            {isEcoServing ? profile?.branding?.name.toUpperCase() : 'SERVING BUILDER'}
           </span>
         </div>
         

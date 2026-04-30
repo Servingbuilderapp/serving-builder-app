@@ -17,9 +17,18 @@ const inter = Inter({
   subsets: ["latin"],
 })
 
-export const metadata: Metadata = {
-  title: "ECOSERVING",
-  description: "Advanced AI solutions for building and serving environmental applications with ECOSERVING.",
+export async function generateMetadata(): Promise<Metadata> {
+  const { headers } = await import('next/headers')
+  const headersList = await headers()
+  const host = headersList.get('host') || ''
+  const isEcoServing = host.toLowerCase().includes('ecoserving') || host.toLowerCase().includes('localhost')
+
+  return {
+    title: isEcoServing ? "ECOSERVING" : "SERVING BUILDER APP",
+    description: isEcoServing 
+      ? "Advanced AI solutions for building and serving environmental applications."
+      : "Plataforma de más de 200 aplicaciones de Inteligencia Artificial para emprendedores.",
+  }
 }
 
 export default function RootLayout({

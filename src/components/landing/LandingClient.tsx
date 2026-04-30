@@ -17,9 +17,10 @@ interface LandingClientProps {
   trialApps: any[]
   arsenalCategories: Record<string, any[]>
   syncPlans: any[]
+  isEcoServing?: boolean
 }
 
-export function LandingClient({ user, trialApps, arsenalCategories, syncPlans }: LandingClientProps) {
+export function LandingClient({ user, trialApps, arsenalCategories, syncPlans, isEcoServing = true }: LandingClientProps) {
   const { language } = useTranslation()
   const [selectedTrialApp, setSelectedTrialApp] = React.useState<any>(null)
 
@@ -45,7 +46,7 @@ export function LandingClient({ user, trialApps, arsenalCategories, syncPlans }:
               <img src="/logo.png" alt="ECO SERVING Logo" className="h-full w-full object-contain" />
             </div>
             <span className="text-xl font-black tracking-tighter uppercase italic group-hover:tracking-normal transition-all duration-500 text-color-base-content">
-              ECO<span className="text-color-primary">SERVING</span>
+              {isEcoServing ? 'ECO' : 'SERVING'}<span className="text-color-primary">{isEcoServing ? 'SERVING' : 'BUILDER'}</span>
             </span>
           </div>
           <div className="flex items-center gap-6">
@@ -109,9 +110,9 @@ export function LandingClient({ user, trialApps, arsenalCategories, syncPlans }:
             
             <p className="text-xl text-color-base-content/70 max-w-xl font-medium leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400">
               {language === 'en' ? (
-                <>Deploy specialized <span className="text-color-base-content font-black">AI Engines</span> that boost sustainability, calculate environmental impact, and scale green projects.</>
+                <>Deploy specialized <span className="text-color-base-content font-black">AI Engines</span> that boost {isEcoServing ? 'sustainability, calculate environmental impact, and scale green projects.' : 'productivity, generate copy, and scale your digital business.'}</>
               ) : (
-                <>Despliega <span className="text-color-base-content font-black">Motores de IA</span> especializados que impulsan la sostenibilidad, calculan el impacto ambiental y escalan proyectos verdes.</>
+                <>Despliega <span className="text-color-base-content font-black">Motores de IA</span> especializados que impulsan {isEcoServing ? 'la sostenibilidad, calculan el impacto ambiental y escalan proyectos verdes.' : 'tu productividad, generan copys persuasivos y escalan tu negocio digital.'}</>
               )}
             </p>
 
@@ -151,8 +152,8 @@ export function LandingClient({ user, trialApps, arsenalCategories, syncPlans }:
                   {/* Mock Content */}
                   <div className="flex-1 p-8 space-y-6 flex flex-col">
                     <div className="space-y-2">
-                      <h4 className="font-black text-xl text-color-base-content uppercase tracking-tighter italic">ECO-STRATEGY</h4>
-                      <p className="text-sm text-color-base-content/60 font-medium">Generando plan de impacto ambiental...</p>
+                      <h4 className="font-black text-xl text-color-base-content uppercase tracking-tighter italic">{isEcoServing ? 'ECO-STRATEGY' : 'BUSINESS-PLAN'}</h4>
+                      <p className="text-sm text-color-base-content/60 font-medium">{isEcoServing ? 'Generando plan de impacto ambiental...' : 'Generando modelo de negocio...'}</p>
                     </div>
                     
                     <div className="grid grid-cols-2 gap-4">
@@ -413,12 +414,12 @@ export function LandingClient({ user, trialApps, arsenalCategories, syncPlans }:
                 <img src="/logo.png" alt="ECO SERVING Logo" className="h-full w-full object-contain" />
               </div>
               <span className="text-base font-black tracking-tighter uppercase italic text-color-base-content">
-                ECO<span className="text-color-primary">SERVING</span>
+                {isEcoServing ? 'ECO' : 'SERVING'}<span className="text-color-primary">{isEcoServing ? 'SERVING' : 'BUILDER'}</span>
               </span>
             </div>
             <p className="text-color-base-content/40 text-xs font-bold uppercase tracking-[0.3em] leading-relaxed">
-              © 2026 ECOSERVING SUITE. <br />
-              {language === 'en' ? 'DEFINING THE FUTURE OF ENVIRONMENTAL IMPACT.' : 'DEFINIENDO EL FUTURO DEL IMPACTO AMBIENTAL.'}
+              © 2026 {isEcoServing ? 'ECOSERVING SUITE' : 'SERVING BUILDER APP'}. <br />
+              {language === 'en' ? `DEFINING THE FUTURE OF ${isEcoServing ? 'ENVIRONMENTAL IMPACT' : 'DIGITAL BUSINESS'}.` : `DEFINIENDO EL FUTURO DEL ${isEcoServing ? 'IMPACTO AMBIENTAL' : 'NEGOCIO DIGITAL'}.`}
             </p>
           </div>
           <div className="flex justify-md-end gap-10">

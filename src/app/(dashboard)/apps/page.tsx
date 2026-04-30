@@ -4,12 +4,17 @@ import { createClient } from '@/lib/supabase/server'
 import { getUserAccessibleApps } from '@/lib/access'
 import { AppsGrid } from '@/components/apps/AppsGrid'
 
+import { headers } from 'next/headers'
+
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export default async function AppsPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
+  const headersList = await headers()
+  const host = headersList.get('host') || ''
+  const isEcoServing = host.toLowerCase().includes('ecoserving') || host.toLowerCase().includes('localhost') // For local testing we can show Eco or just default to servingbuilder. Let's make localhost show ServingBuilder. Wait, if I just do `host.toLowerCase().includes('ecoserving')`, localhost is ServingBuilder. That's fine.
   
   if (!user) {
     redirect('/login')
@@ -35,10 +40,22 @@ export default async function AppsPage() {
   const usedCredits = overridesCount || 0;
 
   // 2. Obtener TODAS las apps de la DB
-  let { data: apps } = await supabase
+  let { data: appsData } = await supabase
     .from('micro_apps')
     .select('*')
     .order('created_at', { ascending: true })
+
+  let apps = appsData || [];
+
+  // 3. Filtrar según el portal (Ocultar las que no corresponden)
+  apps = apps.filter(app => {
+    const isEcoApp = !!(app.name_es?.match(/^(I|II|III|IV|V|VI)\.\s/i));
+    if (isEcoServing) {
+      return isEcoApp;
+    } else {
+      return !isEcoApp;
+    }
+  });
 
   // Para el Admin, siempre mostramos los motores de demo si hay pocos o ninguno en la DB
   if (user.email === ADMIN_EMAIL) {
