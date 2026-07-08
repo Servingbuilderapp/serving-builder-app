@@ -1,0 +1,344 @@
+'use client'
+
+import React, { useEffect, useState, useRef } from 'react'
+import { createClient } from '@/lib/supabase/client'
+import { useTranslation } from '@/hooks/useTranslation'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import { Copy, Check, X, Loader2, FileText, Code, BarChart3, Clock, Zap } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { useToast } from '@/components/ui/ToastProvider'
+
+interface AppWorkspaceProps {
+  appId: string
+  currentExecutionId: string | null
+  schema: any[]
+  profile?: any
+}
+
+export function AppWorkspace({ appId, currentExecutionId, schema, profile }: AppWorkspaceProps) {
+  const { language } = useTranslation()
+  const { toast } = useToast()
+  const supabase = createClient()
+  const [execution, setExecution] = useState<any>(null)
+  const [stats, setStats] = useState({ count: 0, time: '1.2s', efficiency: '98%' })
+  const [isLoading, setIsLoading] = useState(false)
+  const responseRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    async function fetchStats() {
+      const { count } = await supabase
+        .from('app_executions')
+        .select('*', { count: 'exact', head: true })
+        .eq('app_id', appId)
+        .eq('status', 'completed')
+      
+      if (count !== null) {
+        setStats(prev => ({ ...prev, count }))
+      }
+    }
+    fetchStats()
+  }, [appId, supabase])
+
+  useEffect(() => {
+    if (!currentExecutionId) {
+      setExecution(null)
+      setIsLoading(false)
+      return
+    }
+
+    async function fetchExecution() {
+      setIsLoading(true)
+      const { data, error } = await supabase
+        .from('app_executions')
+        .select('*')
+        .eq('id', currentExecutionId)
+        .single()
+
+      if (!error && data) {
+        setExecution(data)
+        if (data.status === 'completed' || data.status === 'error') {
+          setIsLoading(false)
+        }
+      } else {
+        setIsLoading(false)
+      }
+    }
+
+    fetchExecution()
+
+    const channel = supabase
+      .channel(`execution-${currentExecutionId}`)
+      .on('postgres_changes', { 
+        event: 'UPDATE', 
+        schema: 'public', 
+        table: 'app_executions',
+        filter: `id=eq.${currentExecutionId}`
+      }, (payload) => {
+        setExecution(payload.new)
+        if (payload.new.status === 'completed' || payload.new.status === 'error') {
+          setIsLoading(false)
+        }
+      })
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [currentExecutionId, supabase])
+
+  const copyToClipboard = async (type: 'text' | 'markdown' | 'html') => {
+    if (!responseRef.current && type !== 'markdown') return
+
+    let content = ''
+    if (type === 'text') {
+      content = responseRef.current?.innerText || ''
+    } else if (type === 'markdown') {
+      content = execution?.result?.markdown || ''
+    } else if (type === 'html') {
+      content = responseRef.current?.innerHTML || ''
+    }
+
+    try {
+      await navigator.clipboard.writeText(content)
+      toast({ 
+        title: language === 'en' ? 'Copied to clipboard!' : '¡Copiado al portapapeles!', 
+        type: 'success' 
+      })
+    } catch (err) {
+      toast({ 
+        title: language === 'en' ? 'Failed to copy' : 'Error al copiar', 
+        type: 'error' 
+      })
+    }
+  }
+
+  const renderInputValue = (key: string, value: any) => {
+    const field = schema.find(f => (f.id === key || f.name === key))
+    const label = field ? (language === 'en' ? field.label_en : field.label_es) : key
+
+    if (value === 'true' || value === true) {
+      return (
+        <div key={key} className="flex flex-col gap-1">
+          <span className="text-[10px] font-bold text-color-base-content/ uppercase tracking-widest">{label}</span>
+          <div className="flex items-center gap-2 text-green-500 py-1">
+            <Check className="h-4 w-4" />
+          </div>
+        </div>
+      )
+    }
+    if (value === 'false' || value === false) {
+      return (
+        <div key={key} className="flex flex-col gap-1">
+          <span className="text-[10px] font-bold text-color-base-content/ uppercase tracking-widest">{label}</span>
+          <div className="flex items-center gap-2 text-red-500 py-1">
+            <X className="h-4 w-4" />
+          </div>
+        </div>
+      )
+    }
+
+    return (
+      <div key={key} className="flex flex-col gap-1">
+        <span className="text-[10px] font-bold text-color-base-content/ uppercase tracking-widest">{label}</span>
+        <span className="text-sm text-color-base-content/">{value}</span>
+      </div>
+    )
+  }
+
+  if (!currentExecutionId) {
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
+        <div className="w-24 h-24 rounded-full bg-color-base-100 flex items-center justify-center mb-6 border border-color-base-content/10 shadow-sm">
+          <Loader2 className="h-10 w-10 text-color-base-content/20" />
+        </div>
+        <h2 className="text-xl font-semibold text-color-base-content mb-2">
+          {language === 'en' ? 'Ready for your next creation' : 'Listo para tu próxima creación'}
+        </h2>
+        <p className="text-color-base-content/60 max-w-sm">
+          {language === 'en' 
+            ? 'Fill out the form and click generate to start the magic.' 
+            : 'Completa el formulario y haz clic en generar para comenzar la magia.'}
+        </p>
+      </div>
+    )
+  }
+
+  const isProcessing = execution?.status === 'pending' || execution?.status === 'processing'
+  const isGrowthEligible = profile?.plan_slug === 'growth' || 
+                           profile?.plan_slug === 'professional' || 
+                           profile?.plan_slug === 'elite' || 
+                           profile?.plan_slug === 'master'
+
+  return (
+    <div className="flex-1 flex flex-col gap-6 p-4 md:p-0">
+      {/* Analytics Section (Conditional) */}
+      {isGrowthEligible && (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="bg-color-base-200/40 backdrop-blur-xl border border-color-base-content/ rounded-2xl p-4 flex items-center gap-4">
+            <div className="h-10 w-10 rounded-xl bg-color-primary/10 flex items-center justify-center text-color-primary">
+              <Zap className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-widest text-color-base-content/">Total Executions</p>
+              <p className="text-xl font-black text-color-base-content">{stats.count}</p>
+            </div>
+          </div>
+          <div className="bg-color-base-200/40 backdrop-blur-xl border border-color-base-content/ rounded-2xl p-4 flex items-center gap-4">
+            <div className="h-10 w-10 rounded-xl bg-color-accent-pink/10 flex items-center justify-center text-color-accent-pink">
+              <Clock className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-widest text-color-base-content/">Avg. Response Time</p>
+              <p className="text-xl font-black text-color-base-content">{stats.time}</p>
+            </div>
+          </div>
+          <div className="bg-color-base-200/40 backdrop-blur-xl border border-color-base-content/ rounded-2xl p-4 flex items-center gap-4">
+            <div className="h-10 w-10 rounded-xl bg-color-accent-blue/10 flex items-center justify-center text-color-accent-blue">
+              <BarChart3 className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-widest text-color-base-content/">Efficiency Score</p>
+              <p className="text-xl font-black text-color-base-content">{stats.efficiency}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* The Petition Block */}
+      <div className="bg-white border border-color-base-content/10 rounded-3xl p-8 relative overflow-hidden group shadow-sm">
+        <div className="absolute top-0 right-0 p-4">
+          <div className="px-2 py-1 rounded bg-color-base-100 border border-color-base-content/10 text-[10px] font-bold text-color-base-content/40 uppercase tracking-widest">
+            {language === 'en' ? 'The Petition' : 'La Petición'}
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
+          {execution?.inputs && Object.entries(execution.inputs).map(([key, value]) => renderInputValue(key, value))}
+        </div>
+      </div>
+
+      {/* The Response Block */}
+      <div className="flex-1 flex flex-col min-h-100">
+        {isProcessing ? (
+          <div className="flex-1 bg-color-base-200/80 backdrop-blur-2xl border border-color-base-content/ rounded-[2rem] p-12 flex flex-col items-center justify-center gap-8 relative overflow-hidden shadow-2xl">
+            <div className="absolute inset-0 bg-linear-to-b from-transparent via-white/5 to-transparent animate-pulse" />
+            <div className="relative">
+              <div className="h-20 w-20 rounded-full border-4 border-color-base-content/ border-t-color-primary animate-spin" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="h-10 w-10 rounded-full bg-color-primary blur-xl animate-pulse" />
+              </div>
+            </div>
+            
+            <div className="flex flex-col items-center gap-3 text-center">
+              <div className="flex gap-2">
+                <span className="px-3 py-1 rounded-full bg-color-primary/20 text-color-primary text-[10px] font-bold uppercase tracking-widest animate-bounce">
+                  {language === 'en' ? 'Generating Content...' : 'Generando Contenido...'}
+                </span>
+              </div>
+              
+              <div className="w-64 flex flex-col gap-2">
+                <div className="h-2 w-full bg-color-base-content/ rounded-full overflow-hidden">
+                  <div className="h-full bg-linear-to-r from-color-primary to-color-accent-pink w-1/3 animate-[shimmer_2s_infinite]" />
+                </div>
+                <div className="h-2 w-2/3 bg-color-base-content/ rounded-full mx-auto" />
+              </div>
+            </div>
+          </div>
+        ) : execution?.status === 'error' ? (
+          <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-8 text-center">
+            <X className="h-12 w-12 text-red-500 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-color-base-content mb-2">
+              {language === 'en' ? 'Generation Error' : 'Error de Generación'}
+            </h3>
+            <p className="text-red-400/80 text-sm max-w-md mx-auto">
+              {execution.error_message || (language === 'en' ? 'Unknown error' : 'Error desconocido')}
+            </p>
+          </div>
+        ) : execution?.status === 'completed' ? (
+          <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            {/* Action Bar */}
+            <div className="flex flex-wrap items-center justify-between gap-4 px-2">
+              <div className="flex items-center gap-2">
+                <div className="h-8 w-8 rounded-lg bg-color-primary/20 flex items-center justify-center text-color-primary">
+                  <Check className="h-4 w-4" />
+                </div>
+                <span className="text-sm font-semibold text-color-base-content">
+                  {language === 'en' ? 'Final Result' : 'Resultado Final'}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => copyToClipboard('text')}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white border border-color-base-content/10 text-xs font-medium text-color-base-content/70 hover:bg-color-base-100 hover:text-color-base-content transition-all shadow-sm"
+                >
+                  <FileText className="h-3.5 w-3.5" />
+                  {language === 'en' ? 'Text' : 'Texto'}
+                </button>
+                <button
+                  onClick={() => copyToClipboard('markdown')}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white border border-color-base-content/10 text-xs font-medium text-color-base-content/70 hover:bg-color-base-100 hover:text-color-base-content transition-all shadow-sm"
+                >
+                  <Code className="h-3.5 w-3.5" />
+                  {language === 'en' ? 'Markdown' : 'Markdown'}
+                </button>
+                <button
+                  onClick={() => copyToClipboard('html')}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-color-primary text-xs font-bold text-color-base-content hover:bg-color-primary transition-all shadow-[0_0_15px_rgba(124,58,237,0.4)] opacity-90 hover:opacity-100"
+                >
+                  <Copy className="h-3.5 w-3.5" />
+                  {language === 'en' ? 'Copy HTML' : 'Copiar HTML'}
+                </button>
+              </div>
+            </div>
+
+            {/* Result Card with Glassmorphism */}
+            <div className="bg-white rounded-3xl shadow-sm border border-color-base-content/10 p-6 md:p-10 overflow-hidden relative group">
+              {/* Decorative accent */}
+              <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-color-primary/50 via-color-accent-pink/50 to-color-primary/50" />
+              
+              <div ref={responseRef} className="prose prose-slate prose-sm md:prose-base max-w-none relative z-10 prose-headings:text-color-base-content prose-p:text-color-base-content/80 prose-strong:text-color-base-content prose-blockquote:border-color-primary prose-blockquote:text-color-base-content/70 prose-blockquote:bg-color-primary/5 prose-blockquote:not-italic prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-lg prose-a:text-color-primary">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {execution?.result?.markdown || ''}
+                </ReactMarkdown>
+              </div>
+
+              {/* Dynamic Watermark / White Label Logic */}
+              <div className="absolute bottom-6 right-8 pointer-events-none select-none opacity-20 group-hover:opacity-40 transition-opacity">
+                {(!profile?.plans?.slug || profile?.plans?.slug === 'explorador') ? (
+                  // Watermark for Free Plan
+                  <div className="flex flex-col items-end">
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-color-base-content/">Generated by</span>
+                    <div className="flex items-center gap-1.5">
+                      <div className="h-6 w-6 rounded bg-linear-to-tr from-emerald-500 to-teal-400 flex items-center justify-center">
+                        <span className="text-[8px] font-black text-color-base-content italic">E</span>
+                      </div>
+                      <span className="text-xs font-black tracking-tighter uppercase italic text-color-base-content">
+                        {profile?.branding?.name || 'ECOSERVING'}
+                      </span>
+                    </div>
+                  </div>
+                ) : profile?.branding?.logo_url ? (
+                  // White Label / Custom Branding for eligible plans
+                  <div className="flex flex-col items-end">
+                    <img 
+                      src={profile.branding.logo_url} 
+                      alt="Brand Logo" 
+                      className="max-h-8 w-auto object-contain grayscale brightness-200" 
+                    />
+                    {profile.branding.name && (
+                      <span className="text-[8px] font-bold uppercase tracking-widest text-color-base-content/ mt-1">
+                        {profile.branding.name}
+                      </span>
+                    )}
+                  </div>
+                ) : null}
+              </div>
+            </div>
+          </div>
+        ) : null}
+      </div>
+    </div>
+  )
+}

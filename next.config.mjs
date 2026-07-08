@@ -8,6 +8,8 @@ const nextConfig = {
   turbopack: {
     root: path.resolve(process.cwd()),
   },
+  transpilePackages: ['react-markdown', 'remark-gfm', 'unified', 'micromark', 'mdast-util-from-markdown'],
 };
 
 export default nextConfig;
+

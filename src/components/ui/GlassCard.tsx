@@ -1,10 +1,19 @@
-'use client';
+import * as React from "react"
+import { cn } from "@/lib/utils"
 
-import React from 'react';
-export const GlassCard = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => {
-  return (
-    <div className={`bg-white/[0.03] backdrop-blur-[12px] border border-white/[0.08] shadow-2xl rounded-2xl hover:border-white/[0.15] transition-all duration-300 ${className}`}>
-      {children}
-    </div>
-  );
-};
+const GlassCard = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "glass-card overflow-hidden",
+      className
+    )}
+    {...props}
+  />
+))
+GlassCard.displayName = "GlassCard"
+
+export { GlassCard }
