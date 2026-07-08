@@ -1,0 +1,270 @@
+{
+  "name": "Serving - Asynchronous Project Structuring Queue",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "process-structuring",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [0, 0],
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [180, 0],
+      "id": "respond-immediately",
+      "name": "Respond immediately (200)"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://ibcuyqoleuurfhnkwsgx.supabase.co/rest/v1/proyectos_clientes_serving?id=eq.{{$json.body.id}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImliY3V5cW9sZXV1cmZobmt3c2d4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNTY2ODgsImV4cCI6MjA5NDYzMjY4OH0.H3H_013X7kLlUv7Ya2lKxaQBQ"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_SUPABASE_SERVICE_ROLE_KEY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"progreso_estructuracion\": 25,\n  \"estado_actual\": \"Estructurando_IA\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [360, 0],
+      "id": "update-progress-25",
+      "name": "Update Progress (25%)"
+    },
+    {
+      "parameters": {
+        "amount": 3,
+        "unit": "seconds"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [540, 0],
+      "id": "wait-3-seconds-1",
+      "name": "Wait 3s (1)"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://ibcuyqoleuurfhnkwsgx.supabase.co/rest/v1/proyectos_clientes_serving?id=eq.{{$json.body.id}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImliY3V5cW9sZXV1cmZobmt3c2d4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNTY2ODgsImV4cCI6MjA5NDYzMjY4OH0.H3H_013X7kLlUv7Ya2lKxaQBQ"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_SUPABASE_SERVICE_ROLE_KEY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"progreso_estructuracion\": 50\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [720, 0],
+      "id": "update-progress-50",
+      "name": "Update Progress (50%)"
+    },
+    {
+      "parameters": {
+        "amount": 3,
+        "unit": "seconds"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [900, 0],
+      "id": "wait-3-seconds-2",
+      "name": "Wait 3s (2)"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://ibcuyqoleuurfhnkwsgx.supabase.co/rest/v1/proyectos_clientes_serving?id=eq.{{$json.body.id}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImliY3V5cW9sZXV1cmZobmt3c2d4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNTY2ODgsImV4cCI6MjA5NDYzMjY4OH0.H3H_013X7kLlUv7Ya2lKxaQBQ"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_SUPABASE_SERVICE_ROLE_KEY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"progreso_estructuracion\": 80\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1080, 0],
+      "id": "update-progress-80",
+      "name": "Update Progress (80%)"
+    },
+    {
+      "parameters": {
+        "amount": 3,
+        "unit": "seconds"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [1260, 0],
+      "id": "wait-3-seconds-3",
+      "name": "Wait 3s (3)"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://host.docker.internal:3000/api/n8n/process-structuring",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"id\": \"{{$json.body.id}}\",\n  \"fase2Data\": {{$json.body.fase2Data}},\n  \"planPago\": \"{{$json.body.planPago}}\",\n  \"nombreProyecto\": \"{{$json.body.nombreProyecto}}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1440, 0],
+      "id": "finalize-structuring-api",
+      "name": "Finalize Structuring API"
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "respond-immediately",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "respond-immediately": {
+      "main": [
+        [
+          {
+            "node": "update-progress-25",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update-progress-25": {
+      "main": [
+        [
+          {
+            "node": "wait-3-seconds-1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "wait-3-seconds-1": {
+      "main": [
+        [
+          {
+            "node": "update-progress-50",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update-progress-50": {
+      "main": [
+        [
+          {
+            "node": "wait-3-seconds-2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "wait-3-seconds-2": {
+      "main": [
+        [
+          {
+            "node": "update-progress-80",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update-progress-80": {
+      "main": [
+        [
+          {
+            "node": "wait-3-seconds-3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "wait-3-seconds-3": {
+      "main": [
+        [
+          {
+            "node": "finalize-structuring-api",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "id": "serving-structuring-queue",
+  "meta": {
+    "templateId": null
+  }
+}
