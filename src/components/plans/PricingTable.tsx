@@ -314,7 +314,7 @@ export function PricingTable({ plans, currentPlanId }: PricingTableProps) {
                             customer: {
                               email: 'servingbuilderapp@gmail.com',
                               first_name: 'Admin',
-                              last_name: 'ECOServing'
+                              last_name: 'Serving Factory'
                             },
                             plan: selectedPlan.slug,
                             source: 'paypal_simulation',

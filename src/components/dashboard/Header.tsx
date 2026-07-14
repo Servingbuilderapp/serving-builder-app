@@ -148,8 +148,8 @@ export function Header({ onToggleMobileSidebar, user, profile }: HeaderProps) {
                   <div className="relative z-10">
                     <p className="text-sm font-bold text-color-base-content group-hover:text-color-primary transition-colors">
                       {language === 'en' 
-                        ? `Welcome to ${profile?.branding?.name || 'ECOSERVING'}!` 
-                        : `¡Bienvenido a ${profile?.branding?.name || 'ECOSERVING'}!`}
+                        ? `Welcome to ${profile?.branding?.name || 'SERVING FACTORY'}!` 
+                        : `¡Bienvenido a ${profile?.branding?.name || 'SERVING FACTORY'}!`}
                     </p>
                     <p className="text-xs text-color-base-content/60 mt-0.5 leading-relaxed">{language === 'en' ? 'Explore all the AI tools we have for you.' : 'Explora todas las herramientas de IA que tenemos para ti.'}</p>
                     <span className="text-[10px] font-bold text-color-base-content/30 mt-2 block uppercase tracking-widest">2m ago</span>

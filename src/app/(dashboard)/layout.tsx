@@ -34,7 +34,7 @@ export default async function ProtectedLayout({
     .single()
 
   const branding = {
-    name: profile?.brand_name || user?.user_metadata?.brand_name || adminProfile?.brand_name || 'ECOSERVING',
+    name: profile?.brand_name || user?.user_metadata?.brand_name || adminProfile?.brand_name || 'SERVING FACTORY',
     logo_url: profile?.brand_logo_url || user?.user_metadata?.brand_logo_url || adminProfile?.brand_logo_url || null
   }
 

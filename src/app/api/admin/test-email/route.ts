@@ -65,7 +65,7 @@ export async function POST(req: Request) {
       title: '✅ Configuración SMTP Exitosa',
       greeting: '¡Hola!',
       bodyLines: [
-        'Este es un email de prueba para confirmar que tu configuración SMTP en **ECOSERVING** está funcionando correctamente.',
+        'Este es un email de prueba para confirmar que tu configuración SMTP en **SERVING FACTORY** está funcionando correctamente.',
         'Desde ahora, el sistema podrá enviar emails de bienvenida y notificaciones automáticas.'
       ],
       ctaText: 'Ir al Panel',

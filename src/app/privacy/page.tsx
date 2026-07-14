@@ -10,8 +10,8 @@ export default function PrivacyPage() {
         <div className="prose prose-sm md:prose-base max-w-none text-color-base-content">
           <h2>1. Información que recopilamos</h2>
           <p>
-            En ECOSERVING, recopilamos información personal básica como tu nombre y correo electrónico cuando te registras. 
-            También almacenamos los datos que introduces en nuestros motores de IA para generar los reportes y proyectos ambientales.
+            En Serving Factory, recopilamos información personal básica como tu nombre y correo electrónico cuando te registras. 
+            También almacenamos los datos que introduces en nuestros motores de IA para generar los reportes y proyectos.
           </p>
 
           <h2>2. Cómo usamos tu información</h2>

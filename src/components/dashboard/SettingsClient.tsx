@@ -179,7 +179,7 @@ export function SettingsClient({ initialProfile, user }: SettingsClientProps) {
             
             <div className="bg-color-base-content/5 rounded-2xl p-4 border border-color-base-content/10">
               <p className="text-[10px] text-color-base-content/80 italic">
-                * Tu logo aparecerá como marca de agua en los resultados finales, eliminando la marca de ECOSERVING.
+                * Tu logo aparecerá como marca de agua en los resultados finales, eliminando la marca de SERVING FACTORY.
               </p>
             </div>
           </div>

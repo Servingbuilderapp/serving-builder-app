@@ -30,7 +30,7 @@ export function PublicMicroAppRunner({ app, onClose }: PublicMicroAppRunnerProps
 
   useEffect(() => {
     // Verificar si ya usó la prueba gratuita en general
-    const trialUsed = localStorage.getItem('ecoserving_public_trial_used')
+    const trialUsed = localStorage.getItem('serving_public_trial_used')
     if (trialUsed === 'true') {
       setHasUsedTrial(true)
     }
@@ -76,7 +76,7 @@ export function PublicMicroAppRunner({ app, onClose }: PublicMicroAppRunnerProps
       if (data.result && data.result.markdown) {
         setResult(data.result.markdown)
         // Marcar como usado
-        localStorage.setItem('ecoserving_public_trial_used', 'true')
+        localStorage.setItem('serving_public_trial_used', 'true')
         setHasUsedTrial(true)
         
         // Auto-scroll

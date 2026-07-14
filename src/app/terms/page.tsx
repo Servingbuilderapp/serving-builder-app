@@ -10,13 +10,13 @@ export default function TermsPage() {
         <div className="prose prose-sm md:prose-base max-w-none text-color-base-content">
           <h2>1. Aceptación de los Términos</h2>
           <p>
-            Al acceder y utilizar ECOSERVING, aceptas estar sujeto a estos Términos de Servicio y a todas las leyes 
+            Al acceder y utilizar Serving Factory, aceptas estar sujeto a estos Términos de Servicio y a todas las leyes 
             y regulaciones aplicables. Si no estás de acuerdo con alguno de estos términos, tienes prohibido usar o acceder a este sitio.
           </p>
 
           <h2>2. Licencia de Uso</h2>
           <p>
-            Se concede permiso para utilizar temporalmente las herramientas y el contenido de la plataforma de ECOSERVING 
+            Se concede permiso para utilizar temporalmente las herramientas y el contenido de la plataforma de Serving Factory 
             según el plan de suscripción que hayas adquirido. Esto es el otorgamiento de una licencia, no una transferencia de título.
           </p>
           <p>
@@ -32,7 +32,7 @@ export default function TermsPage() {
           <h2>3. Generación por IA</h2>
           <p>
             El contenido generado por nuestras herramientas es producto de Inteligencia Artificial. Aunque nos esforzamos 
-            por lograr la mayor precisión, ECOSERVING no garantiza la exactitud técnica de los proyectos ambientales generados. 
+            por lograr la mayor precisión, Serving Factory no garantiza la exactitud técnica de los proyectos generados. 
             El usuario es el único responsable de validar y verificar los datos y estrategias antes de su implementación en el mundo real.
           </p>
 
@@ -44,7 +44,7 @@ export default function TermsPage() {
 
           <h2>5. Limitaciones</h2>
           <p>
-            En ningún caso ECOSERVING o sus proveedores serán responsables de ningún daño (incluidos, entre otros, daños por pérdida de 
+            En ningún caso Serving Factory o sus proveedores serán responsables de ningún daño (incluidos, entre otros, daños por pérdida de 
             datos o ganancias, o debido a la interrupción del negocio) que surja del uso o la incapacidad de usar la plataforma.
           </p>
 

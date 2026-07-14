@@ -43,7 +43,7 @@ export default function DashboardPage() {
         // Avoid setting name to 'servingbuilderapp'
         let parsedName = profile?.first_name || profile?.full_name?.split(' ')[0] || user.email?.split('@')[0] || (language === 'en' ? 'User' : 'Usuario');
         if (parsedName.toLowerCase() === 'servingbuilderapp') {
-          parsedName = 'ECOServing';
+          parsedName = 'Admin';
         }
         setUserName(parsedName)
 
