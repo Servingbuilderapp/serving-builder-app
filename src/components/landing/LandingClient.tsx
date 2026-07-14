@@ -20,7 +20,7 @@ interface LandingClientProps {
   isEcoServing?: boolean
 }
 
-export function LandingClient({ user, trialApps, arsenalCategories, syncPlans, isEcoServing = true }: LandingClientProps) {
+export function LandingClient({ user, trialApps, arsenalCategories, syncPlans, isEcoServing = false }: LandingClientProps) {
   const { language } = useTranslation()
   const [selectedTrialApp, setSelectedTrialApp] = React.useState<any>(null)
 
@@ -42,11 +42,11 @@ export function LandingClient({ user, trialApps, arsenalCategories, syncPlans, i
       <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/60 border-b border-color-base-content/5">
         <div className="flex items-center justify-between px-8 h-20 max-w-7xl mx-auto">
           <div className="flex items-center gap-3 group cursor-pointer">
-            <div className="h-12 w-12 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-500 overflow-hidden">
-              <img src="/logo.png" alt="ECO SERVING Logo" className="h-full w-full object-contain" />
+            <div className="h-10 w-10 rounded-lg flex items-center justify-center bg-linear-to-br from-color-primary to-color-accent-pink shadow-lg shadow-color-primary/20 group-hover:scale-110 transition-transform duration-500">
+              <span className="text-xl font-bold text-white">S</span>
             </div>
             <span className="text-xl font-black tracking-tighter uppercase italic group-hover:tracking-normal transition-all duration-500 text-color-base-content">
-              {isEcoServing ? 'ECO' : 'SERVING'}<span className="text-color-primary">{isEcoServing ? 'SERVING' : 'BUILDER'}</span>
+              SERVING<span className="text-color-primary">HOLDING</span>
             </span>
           </div>
           <div className="flex items-center gap-6">
@@ -410,16 +410,16 @@ export function LandingClient({ user, trialApps, arsenalCategories, syncPlans, i
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-lg flex items-center justify-center overflow-hidden">
-                <img src="/logo.png" alt="ECO SERVING Logo" className="h-full w-full object-contain" />
+              <div className="h-10 w-10 rounded-lg flex items-center justify-center bg-linear-to-br from-color-primary to-color-accent-pink shadow-lg shadow-color-primary/20">
+                <span className="text-xl font-bold text-white">S</span>
               </div>
               <span className="text-base font-black tracking-tighter uppercase italic text-color-base-content">
-                {isEcoServing ? 'ECO' : 'SERVING'}<span className="text-color-primary">{isEcoServing ? 'SERVING' : 'BUILDER'}</span>
+                SERVING<span className="text-color-primary">HOLDING</span>
               </span>
             </div>
             <p className="text-color-base-content/40 text-xs font-bold uppercase tracking-[0.3em] leading-relaxed">
-              © 2026 {isEcoServing ? 'ECOSERVING SUITE' : 'SERVING BUILDER APP'}. <br />
-              {language === 'en' ? `DEFINING THE FUTURE OF ${isEcoServing ? 'ENVIRONMENTAL IMPACT' : 'DIGITAL BUSINESS'}.` : `DEFINIENDO EL FUTURO DEL ${isEcoServing ? 'IMPACTO AMBIENTAL' : 'NEGOCIO DIGITAL'}.`}
+              © 2026 SERVING HOLDING. <br />
+              {language === 'en' ? `DEFINING THE FUTURE OF DIGITAL BUSINESS.` : `DEFINIENDO EL FUTURO DEL NEGOCIO DIGITAL.`}
             </p>
           </div>
           <div className="flex justify-md-end gap-10">

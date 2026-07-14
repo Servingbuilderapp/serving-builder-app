@@ -18,16 +18,11 @@ const inter = Inter({
 })
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { headers } = await import('next/headers')
-  const headersList = await headers()
-  const host = headersList.get('host') || ''
-  const isEcoServing = host.toLowerCase().includes('ecoserving') || host.toLowerCase().includes('localhost')
+  const isEcoServing = false
 
   return {
-    title: isEcoServing ? "ECOSERVING" : "SERVING BUILDER APP",
-    description: isEcoServing 
-      ? "Advanced AI solutions for building and serving environmental applications."
-      : "Plataforma de más de 200 aplicaciones de Inteligencia Artificial para emprendedores.",
+    title: "Serving Factory | Torre de Control",
+    description: "Plataforma de estructuración y gobernanza con IA.",
   }
 }
 

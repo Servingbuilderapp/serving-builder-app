@@ -12,9 +12,7 @@ export const revalidate = 0
 export default async function AppsPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  const headersList = await headers()
-  const host = headersList.get('host') || ''
-  const isEcoServing = host.toLowerCase().includes('ecoserving') || host.toLowerCase().includes('localhost') // For local testing we can show Eco or just default to servingbuilder. Let's make localhost show ServingBuilder. Wait, if I just do `host.toLowerCase().includes('ecoserving')`, localhost is ServingBuilder. That's fine.
+  const isEcoServing = false
   
   if (!user) {
     redirect('/login')

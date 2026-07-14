@@ -24,12 +24,10 @@ interface SidebarProps {
 export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile, profile, user }: SidebarProps) {
   const { language } = useTranslation()
   const pathname = usePathname()
-  const [isEcoServing, setIsEcoServing] = useState(true)
+  const [isEcoServing, setIsEcoServing] = useState(false)
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setIsEcoServing(window.location.hostname.includes('ecoserving') || window.location.hostname.includes('localhost'))
-    }
+    setIsEcoServing(false)
   }, [])
   
   const currentEmail = (profile?.email || user?.email || '').toLowerCase().trim()
@@ -63,16 +61,16 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
               <img src={profile.branding.logo_url} alt="Brand Logo" className="h-full w-full object-contain" />
             </div>
           ) : (
-            <Link href="/" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg hover:scale-105 transition-transform overflow-hidden">
-              <img src="/logo.png" alt="ECO SERVING Logo" className="h-full w-full object-contain drop-shadow-sm" />
-            </Link>
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-linear-to-br from-color-primary to-color-accent-pink shadow-lg shadow-color-primary/20">
+              <span className="text-sm font-bold text-white">S</span>
+            </div>
           )}
           
           <span className={cn(
             "text-lg font-black tracking-tighter bg-clip-text text-transparent bg-linear-to-r from-color-primary via-color-accent-pink to-color-accent-violet whitespace-nowrap transition-all duration-300 drop-shadow-sm",
             collapsed && "lg:opacity-0 lg:w-0"
           )} style={{ WebkitTextFillColor: 'transparent', color: 'transparent' }}>
-            {isEcoServing ? profile?.branding?.name.toUpperCase() : 'SERVING BUILDER'}
+            {profile?.branding?.name ? profile.branding.name.toUpperCase() : 'SERVING FACTORY'}
           </span>
         </div>
         

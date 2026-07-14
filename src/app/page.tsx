@@ -11,17 +11,17 @@ export default async function LandingPage() {
   const { data: { user } } = await supabase.auth.getUser()
   const headersList = await headers()
   const host = headersList.get('host') || ''
-  const isEcoServing = host.toLowerCase().includes('ecoserving') || host.toLowerCase().includes('localhost')
+  const isEcoServing = false
 
   // Helper para organizar por temas si la DB no tiene el campo category
   const getAppCategory = (app: any) => {
     if (app.category) return app.category;
     const name = (app.name_es || app.name_en || '').toLowerCase();
-    if (name.includes('video') || name.includes('guion') || name.includes('podcast')) return 'Medios & Eco-Conciencia';
-    if (name.includes('instagram') || name.includes('social') || name.includes('ninja') || name.includes('viral')) return 'Comunidad Verde';
-    if (name.includes('seo') || name.includes('web') || name.includes('optimiza')) return 'SEO Sostenible';
-    if (name.includes('escritor') || name.includes('artículo') || name.includes('pro') || name.includes('texto')) return 'Reportes & Análisis';
-    return 'Impacto General';
+    if (name.includes('video') || name.includes('guion') || name.includes('podcast')) return 'Medios & Contenido';
+    if (name.includes('instagram') || name.includes('social') || name.includes('ninja') || name.includes('viral')) return 'Marketing & Social';
+    if (name.includes('seo') || name.includes('web') || name.includes('optimiza')) return 'SEO & Web';
+    if (name.includes('escritor') || name.includes('artículo') || name.includes('pro') || name.includes('texto')) return 'Reportes & Textos';
+    return 'Productividad General';
   };
   
   // Fetch apps for showcase
@@ -33,12 +33,9 @@ export default async function LandingPage() {
   // Fallback si la DB de apps está vacía o falla
   if (!allApps || allApps.length === 0) {
     allApps = [
-      { id: '1', slug: 'carbon-footprint', name_es: 'Calculadora Huella Carbono', description_es: 'Mide y compensa emisiones.', icon: 'Calculator', category: 'Herramientas' },
-      { id: '2', slug: 'green-grants', name_es: 'Buscador de Subvenciones', description_es: 'Encuentra fondos verdes disponibles.', icon: 'Search', category: 'Proyectos' },
-      { id: '3', slug: 'eco-newsletter', name_es: 'Generador Eco-Newsletter', description_es: 'Noticias climáticas listas para enviar.', icon: 'Mail', category: 'Productividad' },
-      { id: '4', slug: 'solar-roi', name_es: 'Calculadora ROI Solar', description_es: 'Calcula retorno de paneles solares.', icon: 'Sun', category: 'Herramientas' },
-      { id: '5', slug: 'climate-simulator', name_es: 'Simulador Climático', description_es: 'Visualiza impactos a largo plazo.', icon: 'Globe', category: 'Educación' },
-      { id: '6', slug: 'sustainability-kpis', name_es: 'Dashboard de KPIs', description_es: 'Métricas de sostenibilidad para empresas.', icon: 'PieChart', category: 'Productividad' },
+      { id: '1', slug: 'buyer-persona-builder', name_es: 'Buyer Persona', description_es: 'Define tu cliente ideal.', icon: 'Users', category: 'Marketing' },
+      { id: '2', slug: 'ad-copy-generator', name_es: 'Generador de Ads', description_es: 'Copys persuasivos.', icon: 'Type', category: 'Publicidad' },
+      { id: '3', slug: 'roi-calculator', name_es: 'Calculadora ROI', description_es: 'Calcula tu retorno.', icon: 'TrendingUp', category: 'Finanzas' },
     ] as any;
   }
 
@@ -101,52 +98,52 @@ export default async function LandingPage() {
   // Definición de contenido local (Source of Truth para presentación)
   const localPlans = [
     { 
-      slug: 'basic', name_en: 'Eco Seed', name_es: 'Semilla Eco', 
+      slug: 'explorador', name_en: 'Explorer', name_es: 'Explorador', 
       description_en: 'Test our interface with limited access.', 
-      description_es: 'Acceso básico para probar 5 herramientas fundamentales.', 
+      description_es: 'Acceso limitado para conocer la interfaz.', 
       price_monthly: 0.00, 
-      items_en: ['5 Pre-assigned Master Apps', 'Basic AI Generation', 'Limited Access'], 
-      items_es: ['5 Apps Maestras Pre-asignadas', 'Familia, Empresas, Comunidad, Colegios, Gobierno', 'Generación Básica con IA'] 
+      items_en: ['3 Demo Apps (1 Tool, 1 Productivity, 1 Project)', 'Community Support', 'Limited Access (No AI)'], 
+      items_es: ['3 Apps Demo (1 Herramienta, 1 Productividad, 1 Proyecto)', 'Soporte vía Comunidad', 'Acceso Limitado (Sin IA)'] 
     },
     { 
-      slug: 'growth-29', name_en: 'Green Sprout', name_es: 'Brote Verde', 
-      description_en: 'Start your environmental impact with essential tools.', 
-      description_es: 'Inicia tu impacto con 15 herramientas ambientales.', 
+      slug: 'basic', name_en: 'Entrepreneur', name_es: 'Emprendedor', 
+      description_en: 'Start your journey with essential productivity tools.', 
+      description_es: 'Inicia tu camino con herramientas esenciales de productividad.', 
       price_monthly: 29.00, 
-      items_en: ['Everything in Free, PLUS:', '15 Apps in Total', 'Advanced Export Options', 'Standard Priority Support'], 
-      items_es: ['Todo lo del plan Gratuito, MÁS:', '15 Herramientas a tu elección', 'Exportación Avanzada (PDF/Word)', 'Soporte Estándar Prioritario'] 
+      items_en: ['Productivity Tools Unlocked', '7 Specialized Miniapps', 'No Watermarks', 'Fast Generation Queue', 'Email Support', 'Commercial License'], 
+      items_es: ['Herramientas de Productividad Desbloqueadas', '7 Miniapps Especializadas', 'Sin Marcas de Agua', 'Cola de Generación Rápida', 'Soporte por Email', 'Licencia Comercial'] 
     },
     { 
-      slug: 'growth-49', name_en: 'Eco Catalyst', name_es: 'Catalizador Eco', 
-      description_en: 'Scale your projects with advanced tools.', 
-      description_es: 'Escala tus iniciativas con 30 herramientas avanzadas.', 
+      slug: 'growth', name_en: 'Growth', name_es: 'Crecimiento', 
+      description_en: 'Scale with project management and advanced vertical tools.', 
+      description_es: 'Escala con gestión de proyectos y herramientas verticales avanzadas.', 
       price_monthly: 49.00, 
-      items_en: ['Everything in Green Sprout, PLUS:', '30 Apps in Total', 'Ultra-fast Generation Speed', 'Priority Support'], 
-      items_es: ['Todo lo del plan anterior, MÁS:', '30 Herramientas Avanzadas a tu elección', 'Velocidad de Generación Ultra-rápida', 'Soporte Prioritario'] 
+      items_en: ['Project Tools Unlocked', '15 Advanced Miniapps', 'Custom Domain Integration', 'Advanced Analytics', 'SEO Optimization', 'Priority Generation'], 
+      items_es: ['Herramientas de Proyectos Desbloqueadas', '15 Miniapps Avanzadas', 'Integración de Dominio Propio', 'Analíticas Avanzadas', 'Optimización SEO', 'Generación Prioritaria'] 
     },
     { 
-      slug: 'growth-97', name_en: 'Sustainable Leader', name_es: 'Líder Sostenible', 
-      description_en: 'Full access to 70 apps.', 
-      description_es: 'Acceso total a 70 apps de impacto ambiental.', 
+      slug: 'professional', name_en: 'Professional', name_es: 'Profesional', 
+      description_en: 'Full suite for professional creators and agencies.', 
+      description_es: 'Suite completa para creadores profesionales y agencias.', 
       price_monthly: 97.00, 
-      items_en: ['Everything in Eco Catalyst, PLUS:', '70 Apps in Total', 'Includes 15 Project Funding Apps', 'VIP Support'], 
-      items_es: ['Todo lo del plan anterior, MÁS:', '70 Herramientas Desbloqueadas', 'Incluye 15 Apps de Financiamiento y Subvenciones', 'Soporte VIP'] 
+      items_en: ['Vertical Tools Fully Unlocked', '30+ Premium Miniapps', 'Full White-Label Capabilities', 'Team Management', '24/7 VIP Support', 'Extended Commercial Rights'], 
+      items_es: ['Herramientas Verticales Desbloqueadas', 'Más de 30 Miniapps Premium', 'Marca Blanca Total', 'Gestión de Equipo', 'Soporte VIP 24/7', 'Derechos Comerciales Extendidos'] 
     },
     { 
-      slug: 'elite', name_en: 'Impact Elite', name_es: 'Élite de Impacto', 
-      description_en: 'The premium experience with unlimited AI Generation.', 
-      description_es: 'La experiencia premium para agencias u ONGs.', 
+      slug: 'elite', name_en: 'Elite', name_es: 'Elite', 
+      description_en: 'The premium experience with AI Idea Generation.', 
+      description_es: 'La experiencia premium con Generador de Ideas de IA.', 
       price_monthly: 197.00, 
-      items_en: ['Everything in Sustainable Leader, PLUS:', '80 Apps in Total', 'Unlimited Strategy Generator', 'Dedicated VIP Support', 'Custom Development Requests'], 
-      items_es: ['Todo lo del plan anterior, MÁS:', '80 Herramientas a tu elección', 'Generador de Estrategias y Proyectos IA ILIMITADO', 'Marca Blanca Total (Añade tu Logo)', 'Soporte VIP Dedicado', 'Prioridad en Peticiones de Desarrollo a Medida'] 
+      items_en: ['All Tools at Maximum Capacity', 'AI Idea Generator (10 queries/mo)', 'Private Beta Access', 'Monthly Growth Strategy', 'Dedicated Success Manager', 'Custom Development Requests'], 
+      items_es: ['Todas las Herramientas al Máximo', 'Generador de Ideas IA (10 consultas/mes)', 'Acceso a Betas Privadas', 'Estrategia de Crecimiento Mensual', 'Gestor de Éxito Dedicado', 'Peticiones de Desarrollo a Medida'] 
     },
     { 
-      slug: 'master', name_en: 'Global Vision', name_es: 'Visión Global', 
-      description_en: 'The ultimate powerhouse. Everything unlimited plus custom apps.', 
-      description_es: 'Potencia empresarial. Apps a medida para tu gobierno o multinacional.', 
+      slug: 'master', name_en: 'Business Master', name_es: 'Master Empresarial', 
+      description_en: 'The ultimate business powerhouse. Everything unlimited.', 
+      description_es: 'La potencia empresarial definitiva. Todo ilimitado.', 
       price_monthly: 497.00, 
-      items_en: ['Everything in Impact Elite, PLUS:', '120 Apps (Total Unlimited Access)', 'We build 3 Custom Apps / Month', 'Full White-Label Portal Deployment', 'Exclusive Server', 'Enterprise Support'], 
-      items_es: ['Todo lo del plan Elite, MÁS:', '120 Herramientas (Acceso Total a TODA la Suite)', 'Construimos 3 Apps 100% Personalizadas / Mes', 'Despliegue Completo de Portal Marca Blanca Propio', 'Alojamiento en Servidor Privado Exclusivo', 'Soporte Técnico Empresarial'] 
+      items_en: ['Everything Unlimited', 'UNLIMITED AI Idea Generator', '10 Custom Apps per Month', 'Full White-Label Deployment', 'Direct Access to Roadmap', 'Priority Engineering Support'], 
+      items_es: ['Todo Ilimitado', 'Generador de Ideas IA ILIMITADO', '10 Apps Personalizadas al Mes', 'Despliegue de Marca Blanca Total', 'Acceso Directo al Roadmap', 'Soporte de Ingeniería Prioritario'] 
     }
   ];
 
