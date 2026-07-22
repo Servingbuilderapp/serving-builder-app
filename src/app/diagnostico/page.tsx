@@ -1,17 +1,17 @@
 import React from 'react'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
-import { BloqueEstructuracion } from '@/components/estructuracion/BloqueEstructuracion'
+import { DiagnosticoGratuito } from '@/components/landing/DiagnosticoGratuito'
 
 export const metadata = {
-  title: 'Estructuración Pagada de Proyectos & Contrato | Arquitectura Digital',
-  description: 'Contrata la estructuración técnica profesional de tu proyecto con garantía de acompañamiento extendido en convocatorias de financiación.'
+  title: 'Diagnóstico Gratuito de Viabilidad & Fondos | Arquitectura Digital',
+  description: 'Evalúa la madurez de tu proyecto para postulaciones a Fondo Emprender, APC Colombia, BID Lab, DRK Foundation y convocatorias de financiamiento.'
 }
 
-export default function EstructuracionPage() {
+export default function DiagnosticoPage() {
   return (
     <main className="min-h-screen bg-color-base-100 text-color-base-content py-12 px-4 relative overflow-hidden">
-      {/* Ambient background blur */}
+      {/* Background accents */}
       <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-color-primary/10 rounded-full blur-[120px]" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-teal-500/10 rounded-full blur-[120px]" />
@@ -36,7 +36,7 @@ export default function EstructuracionPage() {
           </div>
         </div>
 
-        <BloqueEstructuracion />
+        <DiagnosticoGratuito />
       </div>
     </main>
   )

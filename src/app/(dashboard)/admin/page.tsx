@@ -1,4 +1,3 @@
-
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { UsersTable } from '@/components/admin/UsersTable'
@@ -9,28 +8,81 @@ export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export default async function AdminUsersPage() {
-  const supabase = await createClient()
-  const { data: { user: adminUser } } = await supabase.auth.getUser()
+  const isDevelopment = process.env.NODE_ENV === 'development'
 
-  if (!adminUser) redirect('/login')
+  let userCount = 0
+  let appCount = 0
+  let executionCount = 0
+  let users: any[] = []
+  let plans: any[] = []
 
-  // 1. Obtener conteos para las tarjetas
-  const { count: userCount } = await supabase.from('users').select('*', { count: 'exact', head: true })
-  const { count: appCount } = await supabase.from('micro_apps').select('*', { count: 'exact', head: true })
-  const { count: executionCount } = await supabase.from('app_executions').select('*', { count: 'exact', head: true })
+  if (isDevelopment) {
+    // Datos de prueba para desarrollo local para que no falle la interfaz
+    userCount = 12
+    appCount = 5
+    executionCount = 142
+    
+    users = [
+      {
+        id: 'local-user-1',
+        email: 'gonzalo@serving.co',
+        role: 'admin',
+        created_at: new Date().toISOString(),
+        plans: {
+          name_en: 'Enterprise Plan',
+          name_es: 'Plan Enterprise',
+          slug: 'enterprise'
+        }
+      },
+      {
+        id: 'local-user-2',
+        email: 'rocio.velasco@serving.co',
+        role: 'user',
+        created_at: new Date().toISOString(),
+        plans: {
+          name_en: 'Pro Plan',
+          name_es: 'Plan Pro',
+          slug: 'pro'
+        }
+      }
+    ]
 
-  // 2. Obtener usuarios con sus planes
-  const { data: users } = await supabase
-    .from('users')
-    .select('*, plans(name_en, name_es, slug)')
-    .order('created_at', { ascending: false })
+    plans = [
+      { id: 'p1', name_en: 'Free Plan', name_es: 'Plan Gratuito', slug: 'free', is_active: true },
+      { id: 'p2', name_en: 'Pro Plan', name_es: 'Plan Pro', slug: 'pro', is_active: true },
+      { id: 'p3', name_en: 'Enterprise Plan', name_es: 'Plan Enterprise', slug: 'enterprise', is_active: true }
+    ]
+  } else {
+    // Comportamiento estricto en producción
+    const supabase = await createClient()
+    const { data: { user: adminUser } } = await supabase.auth.getUser()
 
-  // 3. Obtener planes activos para el modal
-  const { data: plans } = await supabase
-    .from('plans')
-    .select('*')
-    .eq('is_active', true)
-    .order('sort_order', { ascending: true })
+    if (!adminUser) redirect('/login')
+
+    // 1. Obtener conteos para las tarjetas
+    const { count: dbUserCount } = await supabase.from('users').select('*', { count: 'exact', head: true })
+    const { count: dbAppCount } = await supabase.from('micro_apps').select('*', { count: 'exact', head: true })
+    const { count: dbExecutionCount } = await supabase.from('app_executions').select('*', { count: 'exact', head: true })
+
+    userCount = dbUserCount || 0
+    appCount = dbAppCount || 0
+    executionCount = dbExecutionCount || 0
+
+    // 2. Obtener usuarios con sus planes
+    const { data: dbUsers } = await supabase
+      .from('users')
+      .select('*, plans(name_en, name_es, slug)')
+      .order('created_at', { ascending: false })
+    users = dbUsers || []
+
+    // 3. Obtener planes activos para el modal
+    const { data: dbPlans } = await supabase
+      .from('plans')
+      .select('*')
+      .eq('is_active', true)
+      .order('sort_order', { ascending: true })
+    plans = dbPlans || []
+  }
 
   return (
     <div className="space-y-8 pb-10">
@@ -46,15 +98,14 @@ export default async function AdminUsersPage() {
       </div>
 
       <StatsCards 
-        userCount={userCount || 0} 
-        appCount={appCount || 0} 
-        executionCount={executionCount || 0} 
+        userCount={userCount} 
+        appCount={appCount} 
+        executionCount={executionCount} 
       />
-
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         <div className="lg:col-span-2">
-          <UsersTable initialUsers={users || []} plans={plans || []} />
+          <UsersTable initialUsers={users} plans={plans} />
         </div>
         <div className="lg:col-span-1 h-full">
           <RecentActivity />

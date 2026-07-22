@@ -7,6 +7,7 @@ import { PricingTable } from '@/components/plans/PricingTable'
 import { EnvProjectGenerator } from '@/components/landing/EnvProjectGenerator'
 import { IdeaGenerator } from '@/components/landing/IdeaGenerator'
 import { PublicMicroAppRunner } from '@/components/landing/PublicMicroAppRunner'
+import { DiagnosticoGratuito } from '@/components/landing/DiagnosticoGratuito'
 import { GlowButton } from '@/components/ui/GlowButton'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { useTranslation } from '@/hooks/useTranslation'
@@ -35,26 +36,26 @@ export function LandingClient({ user, trialApps, arsenalCategories, syncPlans, i
       {/* Background Orbs */}
       <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-color-primary/10 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-color-accent-pink/10 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-teal-500/10 rounded-full blur-[120px] animate-pulse" />
       </div>
 
       {/* Fixed Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/60 border-b border-color-base-content/5">
+      <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/70 border-b border-color-base-content/5 shadow-xs">
         <div className="flex items-center justify-between px-8 h-20 max-w-7xl mx-auto">
-          <div className="flex items-center gap-3 group cursor-pointer">
-            <div className="h-10 w-10 rounded-lg flex items-center justify-center bg-linear-to-br from-color-primary to-color-accent-pink shadow-lg shadow-color-primary/20 group-hover:scale-110 transition-transform duration-500">
-              <span className="text-xl font-bold text-white">S</span>
+          <Link href="/" className="flex items-center gap-3 group cursor-pointer">
+            <div className="h-10 w-10 rounded-lg flex items-center justify-center bg-gradient-to-br from-color-primary to-teal-500 shadow-lg shadow-color-primary/20 group-hover:scale-110 transition-transform duration-500">
+              <span className="text-xl font-black text-white">A</span>
             </div>
             <span className="text-xl font-black tracking-tighter uppercase italic group-hover:tracking-normal transition-all duration-500 text-color-base-content">
-              SERVING<span className="text-color-primary">HOLDING</span>
+              ARQUITECTURA<span className="text-color-primary">DIGITAL</span>
             </span>
-          </div>
+          </Link>
           <div className="flex items-center gap-6">
-            <Link href="#trial" className="hidden md:block text-[10px] font-black uppercase tracking-[0.3em] text-color-base-content/60 hover:text-color-base-content transition-colors">
-              {language === 'en' ? 'Arsenal' : 'Arsenal'}
+            <Link href="#diagnostico" className="hidden md:block text-[10px] font-black uppercase tracking-[0.3em] text-color-primary hover:text-emerald-700 transition-colors">
+              Diagnóstico Gratuito
             </Link>
             <Link href="#pricing" className="hidden md:block text-[10px] font-black uppercase tracking-[0.3em] text-color-base-content/60 hover:text-color-base-content transition-colors">
-              {language === 'en' ? 'Plans' : 'Planes'}
+              Planes de Estructuración
             </Link>
             {user ? (
               <Link href="/dashboard">
@@ -79,57 +80,38 @@ export function LandingClient({ user, trialApps, arsenalCategories, syncPlans, i
         </div>
       </nav>
 
-      {/* Hero Section: The "WOW" Part */}
-      <section className="relative z-10 pt-48 pb-40 px-6 max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-20 items-center">
-          <div className="space-y-10 text-left">
-            <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-color-base-content/5 border border-color-base-content/10 text-[10px] font-black uppercase tracking-[0.3em] text-color-primary animate-in fade-in slide-in-from-left-4 duration-1000">
+      {/* Hero Section: Arquitectura Digital */}
+      <section className="relative z-10 pt-36 pb-20 px-6 max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="space-y-8 text-left">
+            <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-color-primary/10 border border-color-primary/20 text-[10px] font-black uppercase tracking-[0.3em] text-color-primary animate-in fade-in slide-in-from-left-4 duration-1000">
               <Sparkles className="h-4 w-4 fill-color-primary" />
-              {language === 'en' ? 'Intelligence Reimagined' : 'Inteligencia Reimaginada'}
+              Estructuración Inteligente de Proyectos
             </div>
             
-            <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.85] italic uppercase animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
-              {language === 'en' ? (
-                <>
-                  Transform <br />
-                  <span className="text-gradient-magma drop-shadow-[0_0_30px_rgba(249,115,22,0.3)]">
-                    Ideas into <br />
-                    Impact
-                  </span>
-                </>
-              ) : (
-                <>
-                  Transforma <br />
-                  <span className="text-gradient-magma drop-shadow-[0_0_30px_rgba(249,115,22,0.3)]">
-                    Ideas en <br />
-                    Impacto
-                  </span>
-                </>
-              )}
+            <h1 className="text-5xl md:text-7xl font-black tracking-tighter leading-[0.9] italic uppercase animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
+              Arquitectura <br />
+              <span className="text-gradient-magma drop-shadow-[0_0_30px_rgba(16,185,129,0.3)]">
+                Digital & Fondos
+              </span>
             </h1>
             
-            <p className="text-xl text-color-base-content/70 max-w-xl font-medium leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400">
-              {language === 'en' ? (
-                <>Deploy specialized <span className="text-color-base-content font-black">AI Engines</span> that boost {isEcoServing ? 'sustainability, calculate environmental impact, and scale green projects.' : 'productivity, generate copy, and scale your digital business.'}</>
-              ) : (
-                <>Despliega <span className="text-color-base-content font-black">Motores de IA</span> especializados que impulsan {isEcoServing ? 'la sostenibilidad, calculan el impacto ambiental y escalan proyectos verdes.' : 'tu productividad, generan copys persuasivos y escalan tu negocio digital.'}</>
-              )}
+            <p className="text-lg md:text-xl text-color-base-content/80 max-w-xl font-medium leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400">
+              Estructuramos, formalizamos y postulamos tu <span className="text-color-base-content font-black">Emprendimiento, Proyecto Social o Sostenible</span> ante <strong className="text-color-primary">Fondo Emprender, APC Colombia, BID Lab, DRK Foundation</strong> y fuentes internacionales de financiamiento.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center gap-6 pt-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-600">
-              <a href={user ? "/dashboard" : "/signup"} className="contents">
+            <div className="flex flex-col sm:flex-row items-center gap-4 pt-2 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-600">
+              <a href="#diagnostico" className="contents">
                 <GlowButton 
-                  className="h-16 px-12 text-lg gap-4 font-black italic uppercase tracking-widest"
+                  className="h-14 px-10 text-xs gap-3 font-black italic uppercase tracking-widest bg-gradient-to-r from-color-primary to-teal-500"
                 >
-                  {user 
-                    ? (language === 'en' ? "Go to Dashboard" : "Ir al Dashboard") 
-                    : (language === 'en' ? "Start for Free" : "Empieza Gratis")}
-                  <ArrowRight className="h-6 w-6" />
+                  REALIZAR DIAGNÓSTICO GRATUITO
+                  <ArrowRight className="h-5 w-5" />
                 </GlowButton>
               </a>
-              <a href="#trial">
-                <button className="h-16 px-10 text-xs font-black uppercase tracking-[0.2em] text-color-base-content/60 hover:text-color-base-content transition-all rounded-2xl bg-color-base-content/5 border border-color-base-content/10 hover:bg-color-base-content/10 hover:border-color-base-content/20 group">
-                  {language === 'en' ? 'Try Now' : 'Probar Ahora'}
+              <a href="#pricing">
+                <button className="h-14 px-8 text-xs font-black uppercase tracking-[0.2em] text-color-base-content/70 hover:text-color-base-content transition-all rounded-2xl bg-white/60 border border-color-base-300 hover:bg-white group">
+                  Ver Planes de Acompañamiento
                 </button>
               </a>
             </div>
@@ -219,6 +201,9 @@ export function LandingClient({ user, trialApps, arsenalCategories, syncPlans, i
           </div>
         </div>
       </section>
+
+      {/* Bloque 1: Diagnóstico Gratuito */}
+      <DiagnosticoGratuito />
 
       {/* Benefits Section */}
       <section id="benefits" className="relative z-10 py-32 px-6 max-w-7xl mx-auto">

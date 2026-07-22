@@ -18,11 +18,9 @@ const inter = Inter({
 })
 
 export async function generateMetadata(): Promise<Metadata> {
-  const isEcoServing = false
-
   return {
-    title: "Serving Factory | Torre de Control",
-    description: "Plataforma de estructuración y gobernanza con IA.",
+    title: "Arquitectura Digital | Estructuración de Proyectos & Fondos",
+    description: "Plataforma inteligente de diagnóstico, formalización y estructuración de proyectos para Fondo Emprender, APC Colombia y convocatorias de financiamiento.",
   }
 }
 

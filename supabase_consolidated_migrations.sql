@@ -49,7 +49,7 @@ ADD COLUMN IF NOT EXISTS contrato_firmado BOOLEAN DEFAULT false,
 ADD COLUMN IF NOT EXISTS firma_digital TEXT,
 ADD COLUMN IF NOT EXISTS auditoria_financiera_estado TEXT DEFAULT 'Pendiente' CHECK (auditoria_financiera_estado IN ('Pendiente', 'En Proceso', 'Aprobado', 'Rechazado')),
 ADD COLUMN IF NOT EXISTS auditoria_legal_estado TEXT DEFAULT 'Pendiente' CHECK (auditoria_legal_estado IN ('Pendiente', 'En Proceso', 'Aprobado', 'Rechazado')),
-ADD COLUMN IF NOT EXISTS pasarela_pago TEXT DEFAULT 'Ninguno' CHECK (pasarela_pago IN ('Stripe', 'Wompi', 'Cupón Aliado', 'Ninguno', 'Manual')),
+ADD COLUMN IF NOT EXISTS pasarela_pago TEXT DEFAULT 'Ninguno' CHECK (pasarela_pago IN ('Stripe', 'Wompi', 'Cupón Aliado', 'Ninguno')),
 ADD COLUMN IF NOT EXISTS cupon_aliado_usado TEXT DEFAULT NULL;
 
 -- Convertir columna estado_actual a TEXT para flexibilidad de estados del embudo
