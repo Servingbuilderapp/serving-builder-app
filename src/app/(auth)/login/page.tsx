@@ -129,7 +129,17 @@ function LoginContent() {
   )
 }
 
-export default function LoginPage() {
+import { createClient as createServerClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
+
+export default async function LoginPage() {
+  const supabase = await createServerClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  
+  if (user) {
+    redirect('/admin/presidencia')
+  }
+
   return (
     <Suspense fallback={<div className="flex justify-center"><Loader2 className="h-8 w-8 animate-spin text-color-primary" /></div>}>
       <LoginContent />

@@ -31,39 +31,10 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  const isAuthRoute = request.nextUrl.pathname.startsWith('/login') || 
-                      request.nextUrl.pathname.startsWith('/signup') || 
-                      request.nextUrl.pathname.startsWith('/forgot-password') ||
-                      request.nextUrl.pathname.startsWith('/auth')
-  
-  const isPublicRoute = request.nextUrl.pathname === '/'
-  const isApiRoute = request.nextUrl.pathname.startsWith('/api')
-
-  if (!user && !isAuthRoute && !isPublicRoute && !isApiRoute) {
-    // no user and not a public/auth route, redirect to login
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    const redirectRes = NextResponse.redirect(url)
-    
-    // Preserve cookies set by Supabase (like refreshed tokens)
-    supabaseResponse.cookies.getAll().forEach((cookie) => {
-      redirectRes.cookies.set(cookie.name, cookie.value, cookie.options)
-    })
-    return redirectRes
-  }
-
-  if (user && isAuthRoute && !request.nextUrl.pathname.startsWith('/auth/callback')) {
-    // user is logged in, redirect them away from auth pages
-    const url = request.nextUrl.clone()
-    url.pathname = '/dashboard'
-    const redirectRes = NextResponse.redirect(url)
-    
-    // Preserve cookies set by Supabase
-    supabaseResponse.cookies.getAll().forEach((cookie) => {
-      redirectRes.cookies.set(cookie.name, cookie.value, cookie.options)
-    })
-    return redirectRes
-  }
+  // IMPORTANT: We do NOT perform route protection (redirects) in the middleware.
+  // This prevents infinite redirect loops and race conditions between Edge and Node runtimes.
+  // The middleware's ONLY responsibility is to refresh the session and set the cookies on supabaseResponse.
+  // Route protection should be handled in the Server Components (e.g. layout.tsx).
 
   return supabaseResponse
 }
