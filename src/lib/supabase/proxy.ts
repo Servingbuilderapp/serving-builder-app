@@ -43,14 +43,26 @@ export async function updateSession(request: NextRequest) {
     // no user and not a public/auth route, redirect to login
     const url = request.nextUrl.clone()
     url.pathname = '/login'
-    return NextResponse.redirect(url)
+    const redirectRes = NextResponse.redirect(url)
+    
+    // Preserve cookies set by Supabase (like refreshed tokens)
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectRes.cookies.set(cookie.name, cookie.value, cookie.options)
+    })
+    return redirectRes
   }
 
   if (user && isAuthRoute && !request.nextUrl.pathname.startsWith('/auth/callback')) {
     // user is logged in, redirect them away from auth pages
     const url = request.nextUrl.clone()
     url.pathname = '/dashboard'
-    return NextResponse.redirect(url)
+    const redirectRes = NextResponse.redirect(url)
+    
+    // Preserve cookies set by Supabase
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectRes.cookies.set(cookie.name, cookie.value, cookie.options)
+    })
+    return redirectRes
   }
 
   return supabaseResponse
