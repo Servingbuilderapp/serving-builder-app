@@ -56,7 +56,7 @@ function LoginContent() {
         type: 'success'
       })
       startTransition(() => {
-        router.push('/admin/presidencia')
+        router.push('/dashboard')
       })
       return
     }
@@ -74,7 +74,7 @@ function LoginContent() {
       })
       setLoading(false)
     } else if (data?.session) {
-      const redirectTo = searchParams.get('redirect') || '/admin/presidencia'
+      const redirectTo = searchParams.get('redirect') || '/dashboard'
       window.location.href = redirectTo
     }
   }
@@ -137,7 +137,7 @@ export default async function LoginPage() {
   const { data: { user } } = await supabase.auth.getUser()
   
   if (user) {
-    redirect('/admin/presidencia')
+    redirect('/dashboard')
   }
 
   return (
