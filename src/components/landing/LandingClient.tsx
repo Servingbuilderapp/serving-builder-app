@@ -2,9 +2,8 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { ArrowRight, Sparkles, Zap, Shield, Globe, LayoutGrid, ChevronRight } from 'lucide-react'
+import { ArrowRight, Sparkles, Zap, Globe, LayoutGrid } from 'lucide-react'
 import { PricingTable } from '@/components/plans/PricingTable'
-import { PublicMicroAppRunner } from '@/components/landing/PublicMicroAppRunner'
 import { DiagnosticoGratuito } from '@/components/landing/DiagnosticoGratuito'
 import { GlowButton } from '@/components/ui/GlowButton'
 import { GlassCard } from '@/components/ui/GlassCard'
@@ -19,18 +18,11 @@ interface LandingClientProps {
   isEcoServing?: boolean
 }
 
-export function LandingClient({ user, trialApps, arsenalCategories, syncPlans, isEcoServing = false }: LandingClientProps) {
+export function LandingClient({ user, syncPlans }: LandingClientProps) {
   const { language } = useTranslation()
-  const [selectedTrialApp, setSelectedTrialApp] = React.useState<any>(null)
 
   return (
     <div className="min-h-screen bg-color-base-100 text-color-base-content overflow-hidden">
-      {selectedTrialApp && (
-        <PublicMicroAppRunner 
-          app={selectedTrialApp} 
-          onClose={() => setSelectedTrialApp(null)} 
-        />
-      )}
       {/* Background Orbs */}
       <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-color-primary/10 rounded-full blur-[120px] animate-pulse" />
@@ -196,141 +188,6 @@ export function LandingClient({ user, trialApps, arsenalCategories, syncPlans, i
       {/* Bloque 1: Diagnóstico Gratuito */}
       <DiagnosticoGratuito />
 
-      {/* Benefits Section */}
-      <section id="benefits" className="relative z-10 py-32 px-6 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          <div className="space-y-6 group p-8 rounded-[2.5rem] hover:bg-color-base-content/5 transition-all duration-500">
-            <div className="h-16 w-16 rounded-2xl bg-color-primary/10 flex items-center justify-center text-color-primary group-hover:scale-110 transition-transform">
-              <Zap className="h-8 w-8" />
-            </div>
-            <h3 className="text-2xl font-black uppercase italic tracking-tighter">
-              {language === 'en' ? 'Instant Impact Analysis' : 'Análisis de Impacto Inmediato'}
-            </h3>
-            <p className="text-color-base-content/60 leading-relaxed font-medium">
-              {language === 'en' 
-                ? 'Get precise environmental calculations and strategies in milliseconds with our specialized AI.' 
-                : 'Obtén cálculos y estrategias ambientales precisas en milisegundos con nuestra IA especializada.'}
-            </p>
-          </div>
-          <div className="space-y-6 group p-8 rounded-[2.5rem] hover:bg-color-base-content/5 transition-all duration-500">
-            <div className="h-16 w-16 rounded-2xl bg-color-accent-pink/10 flex items-center justify-center text-color-accent-pink group-hover:scale-110 transition-transform">
-              <Shield className="h-8 w-8" />
-            </div>
-            <h3 className="text-2xl font-black uppercase italic tracking-tighter">
-              {language === 'en' ? 'Normative Security' : 'Seguridad Normativa'}
-            </h3>
-            <p className="text-color-base-content/60 leading-relaxed font-medium">
-              {language === 'en' 
-                ? 'Your company data is protected and aligned with global environmental standards.' 
-                : 'Los datos de tu empresa están protegidos y alineados con estándares ambientales globales.'}
-            </p>
-          </div>
-          <div className="space-y-6 group p-8 rounded-[2.5rem] hover:bg-color-base-content/5 transition-all duration-500">
-            <div className="h-16 w-16 rounded-2xl bg-color-accent-blue/10 flex items-center justify-center text-color-accent-blue group-hover:scale-110 transition-transform">
-              <Globe className="h-8 w-8" />
-            </div>
-            <h3 className="text-2xl font-black uppercase italic tracking-tighter">
-              {language === 'en' ? 'Global Execution' : 'Ejecución Global'}
-            </h3>
-            <p className="text-color-base-content/60 leading-relaxed font-medium">
-              {language === 'en' 
-                ? 'Export your projects into actionable plans for government, corporate, or community levels.' 
-                : 'Exporta tus proyectos en planes accionables para niveles gubernamentales, corporativos o comunitarios.'}
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Free Trial Section */}
-      <section id="trial" className="relative z-10 py-32 px-6 bg-color-base-content/5 border-y border-color-base-content/5">
-        <div className="max-w-7xl mx-auto text-center space-y-16">
-          <div className="space-y-4">
-            <h2 className="text-4xl md:text-5xl font-black uppercase italic tracking-tighter">
-              {language === 'en' ? 'Try it ' : 'Pruébalo '}
-              <span className="text-color-primary">
-                {language === 'en' ? 'No Signup Required' : 'Sin Registro'}
-              </span>
-            </h2>
-            <p className="text-color-base-content/60 font-medium text-lg">
-              {language === 'en' ? 'Experience the power of our AI engines right now.' : 'Experimenta el poder de nuestros motores de IA ahora mismo.'}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {trialApps.map((app: any) => (
-              <GlassCard key={app.id} className="p-8 group hover:border-color-primary/50 transition-all hover:scale-105 duration-500 flex flex-col">
-                <div className="h-16 w-16 rounded-2xl bg-color-base-content/5 border border-color-base-content/10 flex items-center justify-center text-color-primary group-hover:bg-color-primary/20 transition-all mb-6">
-                  <Zap className="h-8 w-8" />
-                </div>
-                <h3 className="text-2xl font-black text-color-base-content uppercase italic tracking-tighter mb-4">
-                  {language === 'en' ? app.name_en || app.name_es : app.name_es}
-                </h3>
-                <p className="text-sm text-color-base-content/60 mb-8 line-clamp-6 leading-relaxed flex-1">
-                  {language === 'en' ? app.description_en || app.description_es : app.description_es}
-                </p>
-                <button onClick={() => setSelectedTrialApp(app)} className="w-full">
-                  <GlowButton variant="ghost" className="w-full text-[10px] font-black uppercase tracking-widest py-6">
-                    {language === 'en' ? 'Test Engine' : 'Probar Motor'}
-                  </GlowButton>
-                </button>
-              </GlassCard>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* App Grid Preview */}
-      <section className="relative z-10 py-32 px-6 max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-8">
-          <div className="space-y-4">
-            <h2 className="text-5xl font-black uppercase italic tracking-tighter leading-none">
-              {language === 'en' ? 'Engine ' : 'Arsenal de '}
-              <span className="text-color-primary">
-                {language === 'en' ? 'Arsenal' : 'Motores'}
-              </span>
-            </h2>
-            <p className="text-color-base-content/60 font-medium text-xl">
-              {language === 'en' ? 'Specialized engines ready to work for you.' : 'Motores especializados listos para trabajar por ti.'}
-            </p>
-          </div>
-          <Link href="/apps" className="text-xs font-black uppercase tracking-[0.3em] text-color-primary flex items-center gap-3 group px-6 py-3 rounded-xl bg-color-primary/5 border border-color-primary/20 hover:bg-color-primary/10 transition-all">
-            {language === 'en' ? 'VIEW FULL ARSENAL' : 'VER TODO EL ARSENAL'}
-            <ChevronRight className="h-5 w-5 group-hover:translate-x-2 transition-transform" />
-          </Link>
-        </div>
-
-        <div className="space-y-16">
-          {Object.entries(arsenalCategories).map(([category, categoryApps]) => (
-            <div key={category} className="space-y-8">
-              <div className="flex items-center gap-6">
-                <h3 className="text-2xl font-black uppercase italic tracking-tighter text-color-primary">
-                  {category}
-                </h3>
-                <div className="h-px flex-1 bg-linear-to-r from-color-primary/20 to-transparent" />
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                {categoryApps.map((app: any) => (
-                  <GlassCard key={app.id} className="p-10 group hover:border-color-primary/50 transition-all hover:-translate-y-2 duration-500">
-                    <div className="h-14 w-14 rounded-2xl bg-color-base-content/5 border border-color-base-content/10 flex items-center justify-center text-color-base-content/40 group-hover:text-color-primary group-hover:bg-color-primary/10 transition-all mb-8">
-                      <Sparkles className="h-7 w-7" />
-                    </div>
-                    <h3 className="text-xl font-bold text-color-base-content mb-3 uppercase tracking-tight">
-                      {language === 'en' ? app.name_en || app.name_es : app.name_es}
-                    </h3>
-                    <p className="text-sm text-color-base-content/60 line-clamp-4 leading-relaxed">
-                      {language === 'en' ? app.description_en || app.description_es : app.description_es}
-                    </p>
-                    <a href={`/login?redirect=/apps/${app.slug}`} className="mt-6 inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-color-primary/60 hover:text-color-primary transition-colors">
-                      {language === 'en' ? 'Test Engine' : 'Probar Motor'} <ArrowRight className="h-3 w-3" />
-                    </a>
-                  </GlassCard>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* Pricing Section */}
       <section id="pricing" className="relative z-10 py-40 px-6 max-w-[95rem] mx-auto">
         <div className="text-center space-y-6 mb-24">
@@ -371,17 +228,6 @@ export function LandingClient({ user, trialApps, arsenalCategories, syncPlans, i
             </p>
           </div>
           <div className="flex justify-md-end gap-10">
-            <div className="space-y-4">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-color-base-content">
-                {language === 'en' ? 'Platform' : 'Plataforma'}
-              </h4>
-              <nav className="flex flex-col gap-2">
-                <Link href="/apps" className="text-[10px] font-bold text-color-base-content/60 hover:text-color-base-content transition-colors uppercase">Arsenal</Link>
-                <Link href="#pricing" className="text-[10px] font-bold text-color-base-content/60 hover:text-color-base-content transition-colors uppercase">
-                  {language === 'en' ? 'Pricing' : 'Precios'}
-                </Link>
-              </nav>
-            </div>
             <div className="space-y-4">
               <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-color-base-content">
                 {language === 'en' ? 'Contact & Legal' : 'Contacto y Legal'}
