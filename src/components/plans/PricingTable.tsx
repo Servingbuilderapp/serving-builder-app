@@ -12,7 +12,6 @@ interface PricingTableProps {
   currentPlanId: string | null
 }
 
-// TODO: Reemplaza esto por tu número real de WhatsApp de negocio (con indicativo, sin +, sin espacios)
 const WHATSAPP_NUMBER = '573227008727'
 
 function formatCOP(value: number) {
