@@ -17,7 +17,7 @@ function LoginContent() {
   const { toast } = useToast()
   const router = useRouter()
   const supabase = createClient()
-  
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -40,15 +40,23 @@ function LoginContent() {
         type: 'error'
       })
     }
-    // NOTA: Hemos eliminado por completo el 'onAuthStateChange' automático de este bloque 
-    // para evitar que sesiones locales residuales fuercen redirecciones invisibles y generen bucles.
   }, [searchParams, language, toast])
+
+  // Si ya hay una sesión activa, mandamos directo al dashboard (chequeo del lado del navegador)
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        router.replace('/dashboard')
+      }
+    }
+    checkSession()
+  }, [supabase, router])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
 
-    // Si estamos en desarrollo local, hacemos bypass directo al panel para evitar fallos de base de datos
     const isDevelopment = window.location.hostname === 'localhost'
     if (isDevelopment) {
       toast({
@@ -61,7 +69,6 @@ function LoginContent() {
       return
     }
 
-    // Comportamiento de producción estándar
     const { error, data } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -129,17 +136,7 @@ function LoginContent() {
   )
 }
 
-import { createClient as createServerClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
-
-export default async function LoginPage() {
-  const supabase = await createServerClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  
-  if (user) {
-    redirect('/dashboard')
-  }
-
+export default function LoginPage() {
   return (
     <Suspense fallback={<div className="flex justify-center"><Loader2 className="h-8 w-8 animate-spin text-color-primary" /></div>}>
       <LoginContent />
