@@ -37,6 +37,7 @@ export async function POST(req: Request) {
         nombre_cliente: nombreCliente,
         correo_cliente: correoCliente,
         telefono_whatsapp: whatsapp,
+        vertical_asignada: 'sin_clasificar',
         nombre_iniciativa: nombreIniciativa || nombreCliente,
         plan_pago: planPago,
         monto_solicitado_cop: montoCop || null,
