@@ -1,18 +1,16 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslation } from '@/hooks/useTranslation'
-import { CheckCircle2, X, ShieldCheck, Crown } from 'lucide-react'
+import { CheckCircle2, Crown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { GlowButton } from '@/components/ui/GlowButton'
-import { GlassCard } from '@/components/ui/GlassCard'
+import { useRouter } from 'next/navigation'
 
 interface PricingTableProps {
   plans: any[]
   currentPlanId: string | null
 }
-
-const WHATSAPP_NUMBER = '573227008727'
 
 function formatCOP(value: number) {
   return new Intl.NumberFormat('es-CO', {
@@ -24,29 +22,7 @@ function formatCOP(value: number) {
 
 export function PricingTable({ plans }: PricingTableProps) {
   const { language } = useTranslation()
-
-  const [selectedPlan, setSelectedPlan] = useState<any>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-
-  const [formData, setFormData] = useState({
-    nombre: '',
-    email: '',
-    telefono: '',
-  })
-
-  const handleOpenModal = (plan: any) => {
-    setSelectedPlan(plan)
-    setIsModalOpen(true)
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    const planName = language === 'en' ? selectedPlan.name_en : selectedPlan.name_es
-    const message = `Hola, quiero iniciar mi proyecto con el plan *${planName}* (${formatCOP(selectedPlan.price_monthly)}).\n\nNombre: ${formData.nombre}\nCorreo: ${formData.email}\nTeléfono: ${formData.telefono}`
-    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
-    window.open(url, '_blank')
-    setIsModalOpen(false)
-  }
+  const router = useRouter()
 
   const PlanCard = ({ plan }: { plan: any }) => {
     const features = language === 'en' ? plan.items_en : plan.items_es
@@ -102,7 +78,7 @@ export function PricingTable({ plans }: PricingTableProps) {
 
         <div className="mt-8">
           <GlowButton
-            onClick={() => handleOpenModal(plan)}
+            onClick={() => router.push(`/contratar?plan=${plan.slug}`)}
             className="w-full py-4 text-sm font-black uppercase tracking-widest"
           >
             {language === 'en' ? 'Start My Project' : 'Iniciar Mi Proyecto'}
@@ -117,70 +93,6 @@ export function PricingTable({ plans }: PricingTableProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto items-stretch">
         {plans.map(plan => <PlanCard key={plan.id} plan={plan} />)}
       </div>
-
-      {isModalOpen && selectedPlan && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-color-base-content/60 backdrop-blur-md"
-          onClick={(e) => { if (e.target === e.currentTarget) setIsModalOpen(false) }}
-        >
-          <GlassCard className="w-full max-w-md overflow-hidden border-color-base-content/10">
-            <div className="p-8 space-y-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-xl font-black text-color-base-content">
-                    {language === 'en' ? selectedPlan.name_en : selectedPlan.name_es}
-                  </h2>
-                  <p className="text-sm text-color-base-content/60">{formatCOP(selectedPlan.price_monthly)}</p>
-                </div>
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="h-10 w-10 rounded-full bg-color-base-content/5 flex items-center justify-center text-color-base-content/40 hover:bg-color-base-content/10"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-
-              <p className="text-sm text-color-base-content/60">
-                {language === 'en'
-                  ? "Leave your details and we'll contact you to start the process and sign the data-handling agreement."
-                  : 'Déjanos tus datos y te contactamos para iniciar el proceso y firmar el acuerdo de manejo de datos.'}
-              </p>
-
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <input
-                  required
-                  placeholder={language === 'en' ? 'Full name' : 'Nombre completo'}
-                  value={formData.nombre}
-                  onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
-                  className="w-full rounded-xl border border-color-base-content/10 px-4 py-3 text-sm"
-                />
-                <input
-                  required
-                  type="email"
-                  placeholder={language === 'en' ? 'Email' : 'Correo electrónico'}
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full rounded-xl border border-color-base-content/10 px-4 py-3 text-sm"
-                />
-                <input
-                  required
-                  placeholder={language === 'en' ? 'WhatsApp phone' : 'Teléfono WhatsApp'}
-                  value={formData.telefono}
-                  onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
-                  className="w-full rounded-xl border border-color-base-content/10 px-4 py-3 text-sm"
-                />
-                <GlowButton type="submit" className="w-full py-4 text-sm font-black uppercase tracking-widest">
-                  {language === 'en' ? 'Continue on WhatsApp' : 'Continuar por WhatsApp'}
-                </GlowButton>
-                <div className="flex items-center justify-center gap-2 text-[10px] text-color-base-content/40 uppercase tracking-widest font-black">
-                  <ShieldCheck className="h-3 w-3" />
-                  {language === 'en' ? 'Your data is safe' : 'Tus datos están seguros'}
-                </div>
-              </form>
-            </div>
-          </GlassCard>
-        </div>
-      )}
     </div>
   )
 }
