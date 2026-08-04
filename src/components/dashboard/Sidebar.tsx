@@ -54,8 +54,7 @@ export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile
       {/* Decorative Gradient Glow behind logo */}
       <div className="absolute -top-24 -left-24 w-64 h-64 bg-color-primary/20 rounded-full blur-3xl pointer-events-none" />
       {/* Top section: Logo/Brand */}
-      <div
-className="flex h-16 shrink-0 items-center justify-between px-4 border-b border-color-base-content/5">
+      <div className="flex h-16 shrink-0 items-center justify-between px-4 border-b border-color-base-content/5">
         <div className="flex items-center gap-3 overflow-hidden">
           {profile?.branding?.logo_url ? (
             <div className="h-8 w-8 shrink-0 overflow-hidden rounded-lg">
@@ -249,6 +248,8 @@ className="flex h-16 shrink-0 items-center justify-between px-4 border-b border-
       </nav>
       {/* Bottom section: Profile & Collapse */}
       <div className={cn("mt-auto space-y-4 border-t border-color-base-content/10 bg-color-base-content/5", collapsed ? "p-2" : "p-4")}>
+        {/* Profile removed based on user request */}
+
         <button
           onClick={onToggleCollapse}
           className={cn(
