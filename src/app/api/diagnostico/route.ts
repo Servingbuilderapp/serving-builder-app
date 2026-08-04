@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { callGemini } from '@/lib/gemini'
+import { createClient } from '@/lib/supabase/server'
 import { VerticalId, TipoAccesoSocio } from '@/types/verticales'
 
 export interface DiagnosticoInput {
@@ -28,10 +28,10 @@ export interface FondoSugerido {
 
 export interface DiagnosticoResultado {
   scores: {
-    formalizacionLegal: number // 0-100
-    elegibilidadFinanciera: number // 0-100
-    madurezProyecto: number // 0-100
-    preparacionConvocatorias: number // 0-100
+    formalizacionLegal: number
+    elegibilidadFinanciera: number
+    madurezProyecto: number
+    preparacionConvocatorias: number
   }
   resumenEjecutivo: string
   fondosSugeridos: FondoSugerido[]
@@ -46,7 +46,6 @@ export async function POST(req: Request) {
     const body = await req.json()
     const data: DiagnosticoInput = body
 
-    // 1. Algoritmo base de puntuación determinista
     let formalizacionLegal = 35
     if (data.estadoLegal === 'sas_constituida') formalizacionLegal = 92
     else if (data.estadoLegal === 'fundacion_esal') formalizacionLegal = 88
@@ -57,11 +56,7 @@ export async function POST(req: Request) {
     if (data.descripcion && data.descripcion.length > 80) madurezProyecto += 20
     if (data.tipoProyecto === 'tecnologia' || data.tipoProyecto === 'ambiental') madurezProyecto += 15
     if (data.tipoProyecto === 'social') madurezProyecto += 10
-    
-    // Bonificación de Madurez por Estatus de Socio Anual VIP
-    if (data.tipoAcceso === 'socio_anual') {
-      madurezProyecto += 10
-    }
+    if (data.tipoAcceso === 'socio_anual') madurezProyecto += 10
     madurezProyecto = Math.min(98, madurezProyecto)
 
     let elegibilidadFinanciera = 60
@@ -75,10 +70,8 @@ export async function POST(req: Request) {
 
     let preparacionConvocatorias = Math.round((formalizacionLegal * 0.4) + (madurezProyecto * 0.3) + (elegibilidadFinanciera * 0.3))
 
-    // 2. Fondos adaptados según vertical oficial seleccionada
     const fondosBase: FondoSugerido[] = []
 
-    // Adaptación por Verticales
     if (data.verticalId === 'agro_ganaderia') {
       fondosBase.push({
         nombre: 'MADR - El Campo Emprende & Finagro ICR',
@@ -121,7 +114,6 @@ export async function POST(req: Request) {
       })
     }
 
-    // Fondo Emprender SENA
     const matchFondoEmprender = (data.tipoProyecto === 'emprendimiento' || data.tipoProyecto === 'tecnologia' || data.verticalId === 'emprendimiento')
       ? Math.min(98, preparacionConvocatorias + 10)
       : 70
@@ -136,7 +128,6 @@ export async function POST(req: Request) {
       requisitosClave: ['Plan de negocio formalizado', 'Asesoría y validación SENA', 'Constitución de empresa en territorio nacional']
     })
 
-    // APC Colombia & Cooperación Internacional
     const matchAPC = (data.tipoProyecto === 'social' || data.tipoProyecto === 'ambiental' || data.verticalId === 'proyectos_sociales' || data.verticalId === 'medio_ambiente')
       ? 95
       : 65
@@ -151,7 +142,6 @@ export async function POST(req: Request) {
       requisitosClave: ['Estructura formal o alianza con ESAL', 'Matriz de marco lógico detallada', 'Indicadores de impacto medibles']
     })
 
-    // BID Lab / DRK Foundation
     const matchBID = (data.tipoProyecto === 'tecnologia' || data.verticalId === 'innovacion_tecnologica' || data.verticalId === 'desarrollo_empresarial')
       ? 94
       : 60
@@ -166,7 +156,6 @@ export async function POST(req: Request) {
       requisitosClave: ['Modelo de negocio sostenible', 'Equipo multidisciplinario', 'Prueba de concepto o MVP validado']
     })
 
-    // 3. Generar análisis cualitativo
     const socioPrefix = data.tipoAcceso === 'socio_anual' ? '[SOCIO ANUAL VIP] ' : ''
     let resumenEjecutivo = `${socioPrefix}El proyecto "${data.empresa || data.nombre}" (Vertical: ${data.verticalId || 'General'}) presenta un nivel de preparación global del ${preparacionConvocatorias}%. Su perfil demuestra alto potencial para acceder a convocatorias de ${data.tipoFinanciamiento.replace(/_/g, ' ')}.`
 
@@ -188,7 +177,6 @@ export async function POST(req: Request) {
     brechasCriticas.push('Definición de Matriz de Marco Lógico MGA y KPIs de impacto verificables.')
     pasosRecomendados.push('Estructurar los indicadores de producto e impacto bajo la metodología MGA.')
 
-    // Determinar plan recomendado
     let planRecomendado: DiagnosticoResultado['planRecomendado'] = 'growth'
     if (preparacionConvocatorias < 50) planRecomendado = 'basic'
     else if (preparacionConvocatorias >= 80) planRecomendado = 'professional'
@@ -206,6 +194,31 @@ export async function POST(req: Request) {
       pasosRecomendados,
       planRecomendado,
       estatusSocio: data.tipoAcceso || 'estandar'
+    }
+
+    // Guardar el diagnóstico como cliente potencial (no bloquea la respuesta si falla)
+    try {
+      const supabase = await createClient()
+      await supabase.from('diagnosticos').insert({
+        nombre: data.nombre,
+        empresa: data.empresa,
+        email: data.email,
+        whatsapp: data.whatsapp,
+        vertical_id: data.verticalId || null,
+        tipo_acceso: data.tipoAcceso || null,
+        tipo_proyecto: data.tipoProyecto,
+        estado_legal: data.estadoLegal,
+        tipo_financiamiento: data.tipoFinanciamiento,
+        monto_objetivo: data.montoObjetivo,
+        descripcion: data.descripcion,
+        score_formalizacion_legal: formalizacionLegal,
+        score_elegibilidad_financiera: elegibilidadFinanciera,
+        score_madurez_proyecto: madurezProyecto,
+        score_preparacion_convocatorias: preparacionConvocatorias,
+        plan_recomendado: planRecomendado
+      })
+    } catch (dbError) {
+      console.error('No se pudo guardar el diagnóstico:', dbError)
     }
 
     return NextResponse.json(resultado)
