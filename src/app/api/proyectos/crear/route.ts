@@ -46,7 +46,7 @@ export async function POST(req: Request) {
         estado_comercial: 'nuevo',
         contrato_firmado: true,
         firma_digital: firmaDigital,
-        pasarela_pago: pais === 'colombia' ? 'transferencia_colombia' : 'paypal_internacional',
+        pasarela_pago: pais === 'colombia' ? 'Manual' : 'PayPal',
       })
       .select('id')
       .single()
