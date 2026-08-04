@@ -237,6 +237,9 @@ function ContratarContent() {
               )}
 
               
+                )}
+
+              
                 href={mensajeWhatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
