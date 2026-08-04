@@ -1,4 +1,3 @@
-
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { PricingTable } from '@/components/plans/PricingTable'
@@ -28,55 +27,54 @@ export default async function PlansPage() {
     .eq('is_active', true)
     .order('sort_order', { ascending: true })
 
-  // Definición de contenido local (Source of Truth para presentación)
+  // Planes reales de Arquitectura Digital
   const localPlans = [
-    { 
-      slug: 'gratis', name_en: 'Free Plan', name_es: 'Gratuito', 
-      description_en: '5 pre-assigned master apps.', 
-      description_es: '5 Apps maestras pre-asignadas.', 
-      price_monthly: 0.00, 
-      items_en: ['5 Pre-assigned Master Apps', 'Basic AI Generation', 'Limited Access'], 
-      items_es: ['5 Apps Maestras Pre-asignadas', 'Familia, Empresas, Comunidad, Colegios, Gobierno', 'Generación Básica con IA'] 
+    {
+      slug: 'esencial',
+      name_en: 'Essential Structuring',
+      name_es: 'Estructuración Esencial',
+      description_en: 'Full project structuring with 3 months of grant search.',
+      description_es: 'Estructuración completa de tu proyecto con 3 meses de búsqueda de convocatorias.',
+      price_monthly: 12000000,
+      items_en: [
+        'Free Diagnosis Included',
+        'Full Formulation Process (32 Steps)',
+        '3 Months of Grant & Funding Search',
+        'Terms of Reference Matching',
+        '+3 Extra Months if Nothing is Won'
+      ],
+      items_es: [
+        'Diagnóstico Gratuito Incluido',
+        'Formulación Completa (32 Pasos)',
+        '3 Meses de Búsqueda de Convocatorias',
+        'Encaje con Términos de Referencia',
+        '+3 Meses de Cortesía si no se Gana Nada'
+      ]
     },
-    { 
-      slug: 'crecimiento-10', name_en: 'Initial Growth', name_es: 'Crecimiento Inicial', 
-      description_en: 'Unlocks 10 additional apps.', 
-      description_es: 'Desbloquea 10 apps adicionales.', 
-      price_monthly: 27.00, 
-      items_en: ['Everything in Free, PLUS:', '15 Apps in Total', 'Advanced Export Options', 'Standard Priority Support'], 
-      items_es: ['Todo lo del plan Gratuito, MÁS:', '15 Apps en Total a tu elección', 'Exportación Avanzada (PDF/Word)', 'Soporte Estándar Prioritario'] 
-    },
-    { 
-      slug: 'crecimiento-30', name_en: 'Pro Growth', name_es: 'Crecimiento Pro', 
-      description_en: 'Unlocks 30 apps of your choice.', 
-      description_es: 'Desbloquea 30 apps a tu elección.', 
-      price_monthly: 47.00, 
-      items_en: ['Everything in Initial Growth, PLUS:', '30 Apps in Total', 'Ultra-fast Generation Speed', 'Priority Support'], 
-      items_es: ['Todo lo del plan anterior, MÁS:', '30 Apps en Total a tu elección', 'Velocidad de Generación Ultra-rápida', 'Soporte Prioritario'] 
-    },
-    { 
-      slug: 'crecimiento-max', name_en: 'Max Growth', name_es: 'Crecimiento Max', 
-      description_en: 'Unlocks 70 apps of your choice.', 
-      description_es: 'Desbloquea 70 apps a tu elección.', 
-      price_monthly: 97.00, 
-      items_en: ['Everything in Pro Growth, PLUS:', '70 Apps in Total', 'Includes 15 Project Funding Apps', 'VIP Support'], 
-      items_es: ['Todo lo del plan anterior, MÁS:', '70 Apps en Total a tu elección', 'Incluye 15 Apps de Financiamiento y Subvenciones', 'Soporte VIP'] 
-    },
-    { 
-      slug: 'elite', name_en: 'Elite Plan', name_es: 'Plan Elite', 
-      description_en: 'Unlocks 80 apps of your choice.', 
-      description_es: 'Desbloquea 80 apps a tu elección.', 
-      price_monthly: 197.00, 
-      items_en: ['Everything in Max Growth, PLUS:', '80 Apps in Total', 'Unlimited Strategy Generator', 'Dedicated VIP Support', 'Custom Development Requests'], 
-      items_es: ['Todo lo del plan anterior, MÁS:', '80 Apps en Total a tu elección', 'Generador de Estrategias y Proyectos IA ILIMITADO', 'Marca Blanca Total (Añade tu Logo)', 'Soporte VIP Dedicado', 'Prioridad en Peticiones de Desarrollo a Medida'] 
-    },
-    { 
-      slug: 'master', name_en: 'Master Plan', name_es: 'Plan Master', 
-      description_en: 'Unlimited Unlock (120 apps).', 
-      description_es: 'Desbloqueo Ilimitado (120 apps).', 
-      price_monthly: 497.00, 
-      items_en: ['Everything in Elite, PLUS:', '120 Apps (Total Unlimited Access)', 'We build 3 Custom Apps / Month', 'Full White-Label Portal Deployment', 'Exclusive Server', 'Enterprise Support'], 
-      items_es: ['Todo lo del plan Elite, MÁS:', '120 Apps (Acceso Total a TODA la Suite)', 'Construimos 3 Apps 100% Personalizadas / Mes', 'Despliegue Completo de Portal Marca Blanca Propio', 'Alojamiento en Servidor Privado Exclusivo', 'Soporte Técnico Empresarial'] 
+    {
+      slug: 'completo',
+      name_en: 'Complete Structuring',
+      name_es: 'Estructuración Completa',
+      description_en: 'Our most complete plan: 6 months of grant search and priority matching.',
+      description_es: 'Nuestro plan más completo: 6 meses de búsqueda de convocatorias y encaje prioritario.',
+      price_monthly: 17000000,
+      featured: true,
+      items_en: [
+        'Free Diagnosis Included',
+        'Full Formulation Process (32 Steps)',
+        '6 Months of Grant & Funding Search',
+        'Terms of Reference Matching',
+        '+6 Extra Months if Nothing is Won',
+        'Priority Support'
+      ],
+      items_es: [
+        'Diagnóstico Gratuito Incluido',
+        'Formulación Completa (32 Pasos)',
+        '6 Meses de Búsqueda de Convocatorias',
+        'Encaje con Términos de Referencia',
+        '+6 Meses de Cortesía si no se Gana Nada',
+        'Soporte Prioritario'
+      ]
     }
   ];
 
@@ -85,7 +83,7 @@ export default async function PlansPage() {
     const dbPlan = dbPlans?.find(dbp => dbp.slug === lp.slug);
     return {
       ...lp,
-      id: dbPlan?.id || `temp-${lp.slug}`, // Importante para que el checkout funcione con el slug
+      id: dbPlan?.id || `temp-${lp.slug}`,
       plan_apps: dbPlan?.plan_apps || []
     };
   });
@@ -95,10 +93,10 @@ export default async function PlansPage() {
     <div className="max-w-[90rem] mx-auto w-full space-y-12 py-16">
       <div className="text-center space-y-4">
         <h1 className="text-4xl md:text-5xl font-black text-color-base-content tracking-tight">
-          Impulsa tu <span className="bg-clip-text text-transparent bg-linear-to-r from-primary to-accent-pink">Creatividad</span>
+          Estructura tu <span className="bg-clip-text text-transparent bg-linear-to-r from-primary to-accent-pink">Proyecto</span>
         </h1>
         <p className="text-color-base-content/60 max-w-2xl mx-auto">
-          Elige el plan que mejor se adapte a tus necesidades y comienza a generar contenido con IA profesional hoy mismo.
+          Elige el plan de estructuración que mejor se adapte a tu proyecto y comienza el proceso hoy mismo.
         </p>
       </div>
 
