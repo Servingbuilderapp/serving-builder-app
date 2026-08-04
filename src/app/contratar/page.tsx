@@ -69,6 +69,9 @@ function ContratarContent() {
     }
   }
 
+  const mensajeWhatsapp = 'Hola, firme el contrato para el plan ' + plan.nombre + ' (proyecto ' + proyectoId + '). Aqui esta mi comprobante de pago.'
+  const mensajeWhatsappUrl = 'https://wa.me/573227008727?text=' + encodeURIComponent(mensajeWhatsapp)
+
   return (
     <div className="min-h-screen bg-color-base-100 py-16 px-4">
       <div className="max-w-2xl mx-auto">
@@ -219,7 +222,7 @@ function ContratarContent() {
                         purchase_units: [
                           {
                             amount: { currency_code: 'USD', value: montoUsd.toString() },
-                            description: `${plan.nombre} - Arquitectura Digital`,
+                            description: plan.nombre + ' - Arquitectura Digital',
                           },
                         ],
                       })
@@ -234,7 +237,7 @@ function ContratarContent() {
               )}
 
               
-                href={`https://wa.me/573227008727?text=${encodeURIComponent(`Hola, firmé el contrato para el plan ${plan.nombre} (proyecto ${proyectoId}). Aquí está mi comprobante de pago.`)}`}
+                href={mensajeWhatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-color-primary hover:underline"
