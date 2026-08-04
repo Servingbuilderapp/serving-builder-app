@@ -234,9 +234,6 @@ function ContratarContent() {
                     }}
                   />
                 </div>
-              )}
-
-              
                 )}
 
               
