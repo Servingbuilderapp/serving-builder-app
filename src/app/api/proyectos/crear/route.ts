@@ -7,7 +7,7 @@ export async function POST(req: Request) {
     const {
       nombreCliente,
       correoCliente,
-      telefono_whatsapp: whatsapp,telefono_whatsapp: whatsapp,
+      whatsapp,
       nombreIniciativa,
       planPago,
       montoCop,
@@ -36,7 +36,7 @@ export async function POST(req: Request) {
       .insert({
         nombre_cliente: nombreCliente,
         correo_cliente: correoCliente,
-        whatsapp,
+        telefono_whatsapp: whatsapp,
         nombre_iniciativa: nombreIniciativa || nombreCliente,
         plan_pago: planPago,
         monto_solicitado_cop: montoCop || null,
