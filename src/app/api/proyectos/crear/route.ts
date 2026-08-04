@@ -7,7 +7,7 @@ export async function POST(req: Request) {
     const {
       nombreCliente,
       correoCliente,
-      whatsapp,
+      telefono_whatsapp: whatsapp,telefono_whatsapp: whatsapp,
       nombreIniciativa,
       planPago,
       montoCop,
