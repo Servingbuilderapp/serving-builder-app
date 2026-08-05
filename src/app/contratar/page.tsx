@@ -350,6 +350,24 @@ function ContratarContent() {
             <div className="space-y-6 text-center">
               <CheckCircle2 className="h-14 w-14 text-emerald-500 mx-auto" />
               <h2 className="text-xl font-black text-color-base-content">¡Contrato firmado con éxito!</h2>
+              {passwordTemporal && (
+                <div className="text-left p-5 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-2">
+                  <p className="text-xs font-black uppercase tracking-widest text-emerald-700">
+                    Tu acceso a la plataforma
+                  </p>
+                  <p className="text-sm text-color-base-content">
+                    Correo: <strong>{formData.correoCliente}</strong>
+                  </p>
+                  <p className="text-sm text-color-base-content">
+                    Contraseña temporal: <strong className="font-mono">{passwordTemporal}</strong>
+                  </p>
+                  <p className="text-xs text-color-base-content/60 pt-1">
+                    Guarda estos datos — los necesitas para entrar a tu panel en{' '}
+                    <a href="/login" className="text-color-primary underline">/login</a>. Te
+                    recomendamos cambiar la contraseña la primera vez que ingreses.
+                  </p>
+                </div>
+              )}
 
               {pais === 'colombia' ? (
                 <div className="text-left p-6 rounded-2xl bg-color-base-content/5 border border-color-base-content/10 space-y-2">
