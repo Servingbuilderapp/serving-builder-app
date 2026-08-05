@@ -388,7 +388,7 @@ function ContratarContent() {
               )}
 
               
-                href={mensajeWhatsappUrl}
+                <a href={mensajeWhatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-color-primary hover:underline"
