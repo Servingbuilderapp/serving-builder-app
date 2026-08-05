@@ -169,6 +169,7 @@ function ContratarContent() {
   const [pais, setPais] = useState<'colombia' | 'internacional' | null>(null)
   const [loading, setLoading] = useState(false)
   const [proyectoId, setProyectoId] = useState<string | null>(null)
+  const [passwordTemporal, setPasswordTemporal] = useState<string | null>(null)
   const [error, setError] = useState('')
   const [contratoLeido, setContratoLeido] = useState(false)
 
