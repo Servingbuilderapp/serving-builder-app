@@ -204,6 +204,7 @@ function ContratarContent() {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Error al crear el proyecto')
       setProyectoId(data.proyectoId)
+      setPasswordTemporal(data.passwordTemporal || null)
       setStep(2)
     } catch (err: any) {
       setError(err.message || 'Hubo un problema. Intenta de nuevo.')
