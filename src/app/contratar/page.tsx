@@ -170,13 +170,14 @@ function ContratarContent() {
   const [loading, setLoading] = useState(false)
   const [proyectoId, setProyectoId] = useState<string | null>(null)
   const [passwordTemporal, setPasswordTemporal] = useState<string | null>(null)
-  const [error, setError] = useState('')const [verticalDiagnostico, setVerticalDiagnostico] = useState<string | null>(null)
+  const [error, setError] = useState('')
+  const [verticalDiagnostico, setVerticalDiagnostico] = useState<string | null>(null)
+  const [contratoLeido, setContratoLeido] = useState(false)
 
   React.useEffect(() => {
     const guardado = sessionStorage.getItem('diagnostico_vertical_principal')
     if (guardado) setVerticalDiagnostico(guardado)
   }, [])
-  const [contratoLeido, setContratoLeido] = useState(false)
 
   const [formData, setFormData] = useState({
     nombreCliente: '',
@@ -195,16 +196,18 @@ function ContratarContent() {
       const res = await fetch('/api/proyectos/crear', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        
-Update page.tsx
-Error
-29s
-Production
-3f90736
-main
-1m ago
-github/Servingbuilderapp
-
+        body: JSON.stringify({
+          nombreCliente: formData.nombreCliente,
+          correoCliente: formData.correoCliente,
+          whatsapp: formData.whatsapp,
+          nombreIniciativa: formData.nombreIniciativa,
+          planPago: planSlug,
+          montoCop: plan.montoCop,
+          montoUsd,
+          pais,
+          verticalDiagnostico,
+        }),
+      })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Error al crear el proyecto')
       setProyectoId(data.proyectoId)
@@ -412,7 +415,7 @@ github/Servingbuilderapp
               )}
 
               
-                <a href={mensajeWhatsappUrl}
+                href={mensajeWhatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-color-primary hover:underline"
