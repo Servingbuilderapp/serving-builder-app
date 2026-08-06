@@ -49,7 +49,7 @@ export default function ForgotPasswordPage() {
           <span className="text-2xl font-bold text-white">S</span>
         </div>
         <h1 className="text-2xl font-black text-color-base-content uppercase tracking-tighter">
-          SERVING<span className="text-color-primary">FACTORY</span>
+          ARQUITECTURA<span className="text-color-primary">DIGITAL</span>
         </h1>
         <p className="text-sm text-color-base-content/60 mt-2 text-center">
           {language === 'en' ? "Reset your password" : "Recupera tu contraseña"}
