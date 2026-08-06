@@ -170,7 +170,12 @@ function ContratarContent() {
   const [loading, setLoading] = useState(false)
   const [proyectoId, setProyectoId] = useState<string | null>(null)
   const [passwordTemporal, setPasswordTemporal] = useState<string | null>(null)
-  const [error, setError] = useState('')
+  const [error, setError] = useState('')const [verticalDiagnostico, setVerticalDiagnostico] = useState<string | null>(null)
+
+  React.useEffect(() => {
+    const guardado = sessionStorage.getItem('diagnostico_vertical_principal')
+    if (guardado) setVerticalDiagnostico(guardado)
+  }, [])
   const [contratoLeido, setContratoLeido] = useState(false)
 
   const [formData, setFormData] = useState({
