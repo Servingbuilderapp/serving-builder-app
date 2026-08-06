@@ -80,7 +80,7 @@ export async function POST(req: Request) {
         correo_cliente: correoCliente,
         telefono_whatsapp: whatsapp,
         nombre_iniciativa: nombreIniciativa || nombreCliente,
-        vertical_asignada: 'sin_clasificar',
+        vertical_asignada: verticalDiagnostico || 'sin_clasificar',
         plan_pago: planPago,
         monto_solicitado_cop: montoCop || null,
         monto_solicitado_usd: montoUsd || null,
