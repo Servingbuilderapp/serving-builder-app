@@ -23,7 +23,6 @@ export async function POST(req: Request) {
       montoCop,
       montoUsd,
       pais,
-    pais,
       verticalDiagnostico,
     } = body
 
