@@ -33,14 +33,16 @@ export function SubirDocumentoProyecto({ proyectoId, archivoActualNombre, archiv
 
       if (uploadError) throw uploadError
 
-      const { data: urlData } = supabase.storage
+      const { data: urlData, error: urlError } = await supabase.storage
         .from('documentos-proyectos')
-        .getPublicUrl(path)
+        .createSignedUrl(path, 60 * 60 * 24 * 365) // enlace válido por 1 año
+
+      if (urlError) throw urlError
 
       const { error: updateError } = await supabase
         .from('proyectos_clientes_serving')
         .update({
-          archivo_proyecto_url: urlData.publicUrl,
+          archivo_proyecto_url: urlData.signedUrl,
           archivo_proyecto_nombre: file.name,
         })
         .eq('id', proyectoId)
