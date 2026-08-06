@@ -195,17 +195,16 @@ function ContratarContent() {
       const res = await fetch('/api/proyectos/crear', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          nombreCliente: formData.nombreCliente,
-          correoCliente: formData.correoCliente,
-          whatsapp: formData.whatsapp,
-          nombreIniciativa: formData.nombreIniciativa,
-          planPago: planSlug,
-          montoCop: plan.montoCop,
-          montoUsd,
-          pais,
-        }),
-      })
+        
+Update page.tsx
+Error
+29s
+Production
+3f90736
+main
+1m ago
+github/Servingbuilderapp
+
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Error al crear el proyecto')
       setProyectoId(data.proyectoId)
