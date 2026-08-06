@@ -63,6 +63,9 @@ export function DiagnosticoGratuito() {
       if (!res.ok) throw new Error(data.error || 'Error al generar el diagnóstico')
       setResultado(data)
       setStep(4)
+      if (typeof window !== 'undefined' && data.sectoresSugeridos?.[0]?.nombre) {
+        sessionStorage.setItem('diagnostico_vertical_principal', data.sectoresSugeridos[0].nombre)
+      }
     } catch (err: any) {
       setError(err.message || 'Hubo un problema. Intenta de nuevo.')
     } finally {
