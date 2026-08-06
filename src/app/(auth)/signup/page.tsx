@@ -103,9 +103,7 @@ export default function SignupPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-        /><h1 className="text-2xl font-black text-color-base-content uppercase tracking-tighter">
-          ARQUITECTURA<span className="text-color-primary">DIGITAL</span>
-        </h1>
+        />
 
         <GlowButton type="submit" className="w-full mt-2" disabled={loading}>
           {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : (language === 'en' ? "Create Account" : "Crear Cuenta")}
