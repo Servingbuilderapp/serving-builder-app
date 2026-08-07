@@ -201,6 +201,12 @@ function formatCOP(v: number) {
 function ContratarContent() {
   const searchParams = useSearchParams()
   const planSlug = searchParams.get('plan') || 'esencial'
+  const montoFondoEmprender = Number(searchParams.get('monto')) || 30000000
+  const esFondoEmprender = planSlug === 'fondo_emprender'
+
+  const plan = esFondoEmprender
+    ? { nombre: 'Estructuración — Fondo Emprender', montoCop: calcularPrecioFondoEmprender(montoFondoEmprender) }
+    : (PLANES[planSlug] || PLANES.esencial)
   const plan = PLANES[planSlug] || PLANES.esencial
   const montoUsd = Math.round(plan.montoCop / TASA_COP_POR_USD)
 
