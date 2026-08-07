@@ -339,6 +339,28 @@ export function DiagnosticoGratuito() {
               </div>
             </div>
 
+            {resultado.mecanismosSugeridos[0]?.nombre?.toLowerCase().includes('emprend') && (
+              <div className="p-6 rounded-3xl bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border-2 border-emerald-400/40 space-y-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full">
+                    Recomendación Especial
+                  </span>
+                </div>
+                <h4 className="text-lg font-black text-color-base-content">
+                  Tu proyecto es ideal para Fondo Emprender — tenemos un precio especial para ti
+                </h4>
+                <p className="text-xs text-color-base-content/70">
+                  En vez del plan estándar, para proyectos que aplican a Fondo Emprender ofrecemos
+                  estructuración desde $2.300.000 COP, con comisión de éxito solo si tu proyecto es aprobado.
+                </p>
+                <a href={`/contratar?plan=fondo_emprender&monto=${encodeURIComponent(formData.presupuesto)}`}>
+                  <GlowButton className="text-xs font-black uppercase tracking-widest px-6 py-3">
+                    Ver precio para mi proyecto
+                  </GlowButton>
+                </a>
+              </div>
+            )}
+
             <div className="grid md:grid-cols-2 gap-6">
               <div className="p-5 rounded-2xl bg-amber-500/5 border border-amber-500/20 space-y-3">
                 <h5 className="text-xs font-black uppercase tracking-wider text-amber-700">Brechas a Fortalecer</h5>
