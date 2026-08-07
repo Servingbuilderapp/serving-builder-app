@@ -141,9 +141,41 @@ fecha de recepción del dinero, o según las estipulaciones y calendario de
 desembolsos propios de cada convocatoria o fondo, lo que resulte aplicable.
 
 Nota: en el caso específico de postulaciones al Fondo Emprender, la
-comisión de éxito podrá regirse por condiciones diferentes a las aquí
-descritas, las cuales se definirán y anexarán a este contrato como Anexo 1
-cuando dicho caso se presente. [PENDIENTE DE DEFINIR]
+comisión de éxito se rige por condiciones diferentes a las aquí descritas,
+detalladas en el Anexo 1 de este contrato.
+
+ANEXO 1 — CONDICIONES ESPECÍFICAS PARA PROYECTOS DE FONDO EMPRENDER
+
+Para proyectos que se estructuren con el objetivo específico de postularse
+al Fondo Emprender, aplican las siguientes condiciones, que reemplazan lo
+establecido en la Cláusula 7 (Valor del Plan) y en la Cláusula 11 (Comisión
+de Éxito general) únicamente para este tipo de proyecto:
+
+1. Valor de estructuración: en lugar de los valores establecidos para los
+   planes Esencial o Completo, el servicio de estructuración, formulación y
+   acompañamiento para proyectos de Fondo Emprender tiene un valor fijo
+   según el rango de financiación solicitada, así:
+
+   - Hasta $30.000.000 COP: $3.500.000 COP
+   - De $30.000.001 a $73.000.000 COP: $2.300.000 COP
+   - De $73.000.001 a $300.000.000 COP: $12.000.000 COP
+   - De $300.000.001 a $1.000.000.000 COP: $17.000.000 COP
+
+2. Comisión de éxito: en caso de que el proyecto sea aprobado y reciba
+   desembolso por parte del Fondo Emprender, el cliente reconocerá
+   adicionalmente una comisión de éxito, calculada como un porcentaje sobre
+   el monto de financiación aprobada, según el siguiente rango:
+
+   - Hasta $30.000.000 COP: 20%
+   - De $30.000.001 a $73.000.000 COP: 17%
+   - De $73.000.001 a $300.000.000 COP: 10%
+   - De $300.000.001 a $1.000.000.000 COP: 10%
+
+   Esta comisión de éxito es exigible y pagadera bajo las mismas condiciones
+   de plazo establecidas en la Cláusula 11 para el resto de fuentes de
+   financiamiento.
+
+12. VERACIDAD DE LA INFORMACIÓN
 
 12. VERACIDAD DE LA INFORMACIÓN
 Usted declara que la información suministrada es veraz, completa y de su
