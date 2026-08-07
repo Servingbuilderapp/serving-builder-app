@@ -207,7 +207,6 @@ function ContratarContent() {
   const plan = esFondoEmprender
     ? { nombre: 'Estructuración — Fondo Emprender', montoCop: calcularPrecioFondoEmprender(montoFondoEmprender) }
     : (PLANES[planSlug] || PLANES.esencial)
-  const plan = PLANES[planSlug] || PLANES.esencial
   const montoUsd = Math.round(plan.montoCop / TASA_COP_POR_USD)
 
   const [step, setStep] = useState<1 | 2>(1)
