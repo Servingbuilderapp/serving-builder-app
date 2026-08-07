@@ -183,9 +183,7 @@ de Éxito general) únicamente para este tipo de proyecto:
    financiamiento.
 
 12. VERACIDAD DE LA INFORMACIÓN
-
-12. VERACIDAD DE LA INFORMACIÓN
-Usted declara que la información suministrada es veraz, completa y de su
+Usted declara Usted declara que la información suministrada es veraz, completa y de su
 autoría o representación legítima, y que cuenta con la facultad para
 autorizar su tratamiento y contratar este servicio.
 
