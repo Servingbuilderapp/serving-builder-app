@@ -15,6 +15,13 @@ const PLANES: Record<string, { nombre: string; montoCop: number }> = {
   completo: { nombre: 'Estructuración Completa', montoCop: 17000000 },
 }
 
+function calcularPrecioFondoEmprender(montoSolicitado: number) {
+  if (montoSolicitado <= 30000000) return 3500000
+  if (montoSolicitado <= 73000000) return 2300000
+  if (montoSolicitado <= 300000000) return 12000000
+  return 17000000
+}
+
 const TEXTO_CONTRATO = `AUTORIZACIÓN PARA EL TRATAMIENTO DE DATOS PERSONALES
 Y TÉRMINOS DEL SERVICIO DE DIAGNÓSTICO Y ESTRUCTURACIÓN DE PROYECTOS
 
