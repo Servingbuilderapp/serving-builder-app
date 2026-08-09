@@ -28,6 +28,11 @@ export default async function DashboardPage() {
 
   const nombreMostrar = user.user_metadata?.first_name || user.email?.split('@')[0] || 'Usuario'
 
+  const mensajePortalReplica = proyecto
+    ? `Hola, quiero información sobre el Portal Réplica para mi proyecto "${proyecto.nombre_iniciativa}".`
+    : 'Hola, quiero información sobre el Portal Réplica.'
+  const portalReplicaWhatsappUrl = 'https://wa.me/573227008727?text=' + encodeURIComponent(mensajePortalReplica)
+
   return (
     <div className="w-full max-w-4xl mx-auto p-6 md:p-8 space-y-8 pb-12">
       <div>
@@ -67,6 +72,26 @@ export default async function DashboardPage() {
             archivoActualNombre={proyecto.archivo_proyecto_nombre}
             archivoActualUrl={proyecto.archivo_proyecto_url}
           />
+        </div>
+      )}
+
+      {proyecto && (
+        <div className="p-8 rounded-3xl border border-color-base-content/10 bg-color-base-content/5 space-y-3">
+          <h3 className="text-lg font-black text-color-base-content">Portal Réplica</h3>
+          <p className="text-color-base-content/60 text-sm max-w-md">
+            Tu proyecto se presenta, tal como fue estructurado, a todas las convocatorias
+            identificadas. Si más adelante necesitas hacer ajustes o una nueva búsqueda,
+            eso se gestiona en el Portal Réplica, una plataforma aparte con un valor de
+            $1.800 USD. Ahí encontrarás todos los términos y condiciones.
+          </p>
+          
+            href={portalReplicaWhatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-color-primary hover:underline"
+          >
+            Ir al Portal Réplica
+          </a>
         </div>
       )}
     </div>
