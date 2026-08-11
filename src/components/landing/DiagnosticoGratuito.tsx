@@ -36,4 +36,4 @@ const initialForm = {
 type FormData = typeof initialForm
 
 const inputClass = "w-full px-4 py-3 rounded-xl border border-color-base-300 bg-white/50 focus:bg-white focus:ring-2 focus:ring-color-primary outline-none transition-all text-sm font-medium"
-const labelClass = "block text-xs font-bold uppercase tracking-wider
+const labelClass = "block text-xs font-bold uppercase tracking-wider text-color-base-content/70 mb-2"
