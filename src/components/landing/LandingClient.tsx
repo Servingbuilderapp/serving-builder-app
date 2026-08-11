@@ -35,8 +35,9 @@ export function LandingClient({ user, syncPlans }: LandingClientProps) {
             <div className="h-10 w-10 rounded-lg flex items-center justify-center bg-gradient-to-br from-color-primary to-teal-500 shadow-lg shadow-color-primary/20 group-hover:scale-110 transition-transform duration-500">
               <span className="text-xl font-black text-white">A</span>
             </div>
-            <span className="text-xl font-black tracking-tighter uppercase italic group-hover:tracking-normal transition-all duration-500 text-color-base-content">
-              ARQUITECTURA<span className="text-color-primary">DIGITAL</span>
+           <span className="text-xl font-black tracking-tighter uppercase italic group-hover:tracking-normal transition-all duration-500 text-color-base-content">
+              ARQUITECTURA <span className="text-color-primary">DIGITAL DE PROYECTOS</span>
+            </span>
             </span>
           </Link>
           <div className="flex items-center gap-6">
