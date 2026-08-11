@@ -90,9 +90,8 @@ export function LandingClient({ user, syncPlans }: LandingClientProps) {
           </p>
 
           <p className="text-lg md:text-xl text-color-base-content/80 max-w-xl mx-auto font-medium leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400">
-            Estructuramos, formalizamos y postulamos tu <span className="text-color-base-content font-black">Emprendimiento, Proyecto Social o Sostenible</span> ante <strong className="text-color-primary">Fondo Emprender, APC Colombia, BID Lab, DRK Foundation</strong> y fuentes internacionales de financiamiento.
+            Estructuramos, formalizamos y <span className="text-color-base-content font-black">acompañamos la postulación</span> de tu <span className="text-color-base-content font-black">Emprendimiento, Proyecto Social o Sostenible</span> ante <strong className="text-color-primary">convocatorias, subvenciones y fondos de cooperación internacional</strong>, buscando en múltiples plataformas y motores de búsqueda la fuente que mejor encaje con tu proyecto.
           </p>
-
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-600">
             <a href="#diagnostico" className="contents">
               <GlowButton
