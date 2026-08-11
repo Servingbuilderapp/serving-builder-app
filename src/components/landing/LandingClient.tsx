@@ -144,12 +144,12 @@ export function LandingClient({ user, syncPlans }: LandingClientProps) {
                 <span className="text-xl font-bold text-white">S</span>
               </div>
               <span className="text-base font-black tracking-tighter uppercase italic text-color-base-content">
-                SERVING<span className="text-color-primary">HOLDING</span>
+                ARQUITECTURA<span className="text-color-primary">DIGITAL</span>
               </span>
             </div>
             <p className="text-color-base-content/40 text-xs font-bold uppercase tracking-[0.3em] leading-relaxed">
-              © 2026 SERVING HOLDING. <br />
-              {language === 'en' ? `DEFINING THE FUTURE OF DIGITAL BUSINESS.` : `DEFINIENDO EL FUTURO DEL NEGOCIO DIGITAL.`}
+              © 2026 ARQUITECTURA DIGITAL DE PROYECTOS. <br />
+              {language === 'en' ? `YOUR DIRECT PATH TO FUNDING.` : `TU CAMINO DIRECTO A LA FINANCIACIÓN.`}
             </p>
           </div>
           <div className="flex justify-md-end gap-10">
