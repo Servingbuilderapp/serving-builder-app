@@ -79,11 +79,15 @@ export function LandingClient({ user, syncPlans }: LandingClientProps) {
           </div>
 
           <h1 className="text-5xl md:text-7xl font-black tracking-tighter leading-[0.9] italic uppercase animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
-            Arquitectura <br />
+            Arquitectura Digital <br />
             <span className="text-gradient-magma drop-shadow-[0_0_30px_rgba(16,185,129,0.3)]">
-              Digital & Fondos
+              de Proyectos
             </span>
           </h1>
+
+          <p className="text-xl md:text-2xl font-black italic text-color-primary animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
+            Tu camino directo a la financiación
+          </p>
 
           <p className="text-lg md:text-xl text-color-base-content/80 max-w-xl mx-auto font-medium leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400">
             Estructuramos, formalizamos y postulamos tu <span className="text-color-base-content font-black">Emprendimiento, Proyecto Social o Sostenible</span> ante <strong className="text-color-primary">Fondo Emprender, APC Colombia, BID Lab, DRK Foundation</strong> y fuentes internacionales de financiamiento.
