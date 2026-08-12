@@ -80,7 +80,7 @@ export default async function AdminProyectosPage() {
                   </td>
                   <td className="p-3">
                     {linkPortalReplica && (
-                      
+                      <a
                         href={linkPortalReplica}
                         target="_blank"
                         rel="noopener noreferrer"
