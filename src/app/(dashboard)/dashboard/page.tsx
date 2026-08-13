@@ -2,6 +2,7 @@ import React from 'react'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { SubirDocumentoProyecto } from '@/components/dashboard/SubirDocumentoProyecto'
+import { SaludoCliente } from '@/components/dashboard/SaludoCliente'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,11 +22,6 @@ export default async function DashboardPage() {
     .limit(1)
     .maybeSingle()
 
-  let saludo = 'Buenos días'
-  const hora = new Date().getHours()
-  if (hora >= 12 && hora < 18) saludo = 'Buenas tardes'
-  else if (hora >= 18) saludo = 'Buenas noches'
-
   const nombreMostrar = user.user_metadata?.first_name || user.email?.split('@')[0] || 'Usuario'
 
   const mensajePortalReplica = proyecto
@@ -36,9 +32,7 @@ export default async function DashboardPage() {
   return (
     <div className="w-full max-w-4xl mx-auto p-6 md:p-8 space-y-8 pb-12">
       <div>
-        <h2 className="text-2xl md:text-3xl font-black text-color-base-content tracking-tighter italic uppercase">
-          {saludo}, <span className="text-gradient-magma">{nombreMostrar}</span>
-        </h2>
+        <SaludoCliente nombreMostrar={nombreMostrar} />
       </div>
 
       {!proyecto && (
@@ -84,8 +78,8 @@ export default async function DashboardPage() {
             eso se gestiona en el Portal Réplica, una plataforma aparte con un valor de
             $1.800 USD. Ahí encontrarás todos los términos y condiciones.
           </p>
-          <a
-            href={portalReplicaWhatsappUrl}
+          
+            <a href={portalReplicaWhatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-color-primary hover:underline"
