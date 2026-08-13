@@ -65,7 +65,7 @@ export default async function ProtectedLayout({
   }
 
   const branding = {
-    name: profile?.brand_name || user?.user_metadata?.brand_name || adminProfile?.brand_name || 'SERVING FACTORY',
+    name: profile?.brand_name || user?.user_metadata?.brand_name || adminProfile?.brand_name || 'Arquitectura Digital de Proyectos',
     logo_url: profile?.brand_logo_url || user?.user_metadata?.brand_logo_url || adminProfile?.brand_logo_url || null
   }
 
