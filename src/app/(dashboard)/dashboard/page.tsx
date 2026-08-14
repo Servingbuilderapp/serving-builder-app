@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { SubirDocumentoProyecto } from '@/components/dashboard/SubirDocumentoProyecto'
 import { SaludoCliente } from '@/components/dashboard/SaludoCliente'
+import { ChecklistEstructuracion } from '@/components/dashboard/ChecklistEstructuracion'
 
 export const dynamic = 'force-dynamic'
 
@@ -69,6 +70,10 @@ export default async function DashboardPage() {
         </div>
       )}
 
+      {proyecto && proyecto.estado_actual === 'pagado' && (
+        <ChecklistEstructuracion proyectoId={proyecto.id} />
+      )}
+
       {proyecto && (
         <div className="p-8 rounded-3xl border border-color-base-content/10 bg-color-base-content/5 space-y-3">
           <h3 className="text-lg font-black text-color-base-content">Portal Réplica</h3>
@@ -79,7 +84,7 @@ export default async function DashboardPage() {
             $1.800 USD. Ahí encontrarás todos los términos y condiciones.
           </p>
           
-            <a href={portalReplicaWhatsappUrl}
+            href={portalReplicaWhatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-color-primary hover:underline"
