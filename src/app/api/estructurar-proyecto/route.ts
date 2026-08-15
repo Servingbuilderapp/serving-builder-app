@@ -287,8 +287,10 @@ Responde ÚNICAMENTE con un JSON válido, sin texto antes ni después, con este 
     }
 
     return NextResponse.json({ ok: true, pasos_procesados: resultado.pasos.length });
-  } catch (err) {
+  } catch (err: any) {
     console.error("Error en Motor 1:", err);
-    return NextResponse.json({ error: "Error al procesar el proyecto" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Error al procesar el proyecto", detalle: err?.message || String(err) },
+      { status: 500 }
+    );
   }
-}
