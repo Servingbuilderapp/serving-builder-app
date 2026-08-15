@@ -175,6 +175,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const apiKeyGemini = process.env.GEMINI_KEY;
+    if (!apiKeyGemini) {
+      return NextResponse.json(
+        { error: "Falta configurar GEMINI_KEY en el servidor" },
+        { status: 500 }
+      );
+    }
+
     const { data: archivo, error: errorArchivo } = await supabase.storage
       .from("documentos-proyectos")
       .download(ruta_documento);
@@ -217,58 +225,46 @@ Responde ÚNICAMENTE con un JSON válido, sin texto antes ni después, con este 
 }
 `;
 
-    let contentParaClaude: any[];
+    const partesUsuario: any[] = [];
 
     if (tipo_archivo === "word") {
       const resultadoMammoth = await mammoth.extractRawText({ buffer: bufferArchivo });
       const textoExtraido = resultadoMammoth.value;
-      contentParaClaude = [
-        {
-          type: "text",
-          text: `Contenido del documento del cliente (extraído de un archivo Word):\n\n${textoExtraido}\n\n${instruccionFormato}`,
-        },
-      ];
+      partesUsuario.push({
+        text: `Contenido del documento del cliente (extraído de un archivo Word):\n\n${textoExtraido}\n\n${instruccionFormato}`,
+      });
     } else {
       const base64Archivo = bufferArchivo.toString("base64");
-      const mediaType = tipo_archivo === "imagen" ? "image/jpeg" : "application/pdf";
-      const contentBlock =
-        tipo_archivo === "imagen"
-          ? { type: "image", source: { type: "base64", media_type: mediaType, data: base64Archivo } }
-          : { type: "document", source: { type: "base64", media_type: mediaType, data: base64Archivo } };
-      contentParaClaude = [contentBlock, { type: "text", text: instruccionFormato }];
+      const mimeType = tipo_archivo === "imagen" ? "image/jpeg" : "application/pdf";
+      partesUsuario.push({
+        inlineData: { mimeType, data: base64Archivo },
+      });
+      partesUsuario.push({ text: instruccionFormato });
     }
 
-    const respuestaClaude = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": process.env.ANTHROPIC_API_KEY!,
-        "anthropic-version": "2023-06-01",
-      },
-      body: JSON.stringify({
-        model: "claude-sonnet-5",
-        max_tokens: 8000,
-        system: PROMPT_MOTOR_1,
-        messages: [
-          {
-            role: "user",
-            content: contentParaClaude,
-          },
-        ],
-      }),
-    });
+    const respuestaGemini = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKeyGemini}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          systemInstruction: { parts: [{ text: PROMPT_MOTOR_1 }] },
+          contents: [{ role: "user", parts: partesUsuario }],
+        }),
+      }
+    );
 
-    const dataClaude = await respuestaClaude.json();
+    const dataGemini = await respuestaGemini.json();
 
-    if (!respuestaClaude.ok) {
-      console.error("Error de la API de Claude:", JSON.stringify(dataClaude));
+    if (!respuestaGemini.ok) {
+      console.error("Error de la API de Gemini:", JSON.stringify(dataGemini));
       return NextResponse.json(
-        { error: "La API de Claude devolvió un error", detalle: dataClaude },
+        { error: "La API de Gemini devolvió un error", detalle: dataGemini },
         { status: 500 }
       );
     }
 
-    const textoRespuesta = dataClaude.content?.[0]?.text ?? "";
+    const textoRespuesta = dataGemini.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
     const jsonLimpio = textoRespuesta.replace(/```json|```/g, "").trim();
     const resultado = JSON.parse(jsonLimpio);
 
