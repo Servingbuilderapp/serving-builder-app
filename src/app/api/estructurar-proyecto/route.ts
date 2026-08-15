@@ -180,8 +180,9 @@ export async function POST(req: NextRequest) {
       .download(ruta_documento);
 
     if (errorArchivo || !archivo) {
+      console.error("Error leyendo el documento del bucket:", JSON.stringify(errorArchivo));
       return NextResponse.json(
-        { error: "No se pudo leer el documento subido" },
+        { error: "No se pudo leer el documento subido", detalle: JSON.stringify(errorArchivo) },
         { status: 500 }
       );
     }
@@ -194,9 +195,9 @@ export async function POST(req: NextRequest) {
       .order("orden_secuencia");
 
     if (errorPasos || !pasos) {
-      console.error("Error leyendo pasos_estructuracion:", errorPasos);
+      console.error("Error leyendo pasos_estructuracion:", JSON.stringify(errorPasos));
       return NextResponse.json(
-        { error: "No se pudieron leer los 42 pasos", detalle: errorPasos?.message },
+        { error: "No se pudieron leer los 42 pasos", detalle: JSON.stringify(errorPasos) },
         { status: 500 }
       );
     }
