@@ -1,44 +1,33 @@
 'use client'
-
 import React, { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { Loader2, FileText, CheckCircle2 } from 'lucide-react'
-
 interface Props {
   proyectoId: string
   archivoActualNombre: string | null
   archivoActualUrl: string | null
 }
-
 export function SubirDocumentoProyecto({ proyectoId, archivoActualNombre, archivoActualUrl }: Props) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-
     setLoading(true)
     setError('')
-
     try {
       const supabase = createClient()
       const path = `${proyectoId}/${Date.now()}-${file.name}`
-
       const { error: uploadError } = await supabase.storage
         .from('documentos-proyectos')
         .upload(path, file)
-
       if (uploadError) throw uploadError
-
       const { data: urlData, error: urlError } = await supabase.storage
         .from('documentos-proyectos')
         .createSignedUrl(path, 60 * 60 * 24 * 365) // enlace válido por 1 año
-
       if (urlError) throw urlError
-
       const { error: updateError } = await supabase
         .from('proyectos_clientes_serving')
         .update({
@@ -46,8 +35,23 @@ export function SubirDocumentoProyecto({ proyectoId, archivoActualNombre, archiv
           archivo_proyecto_nombre: file.name,
         })
         .eq('id', proyectoId)
-
       if (updateError) throw updateError
+
+      // Disparar el Motor 1 automáticamente en segundo plano (solo PDF e imágenes por ahora)
+      const extension = file.name.split('.').pop()?.toLowerCase() || ''
+      const esImagen = ['jpg', 'jpeg', 'png'].includes(extension)
+      const esPdf = extension === 'pdf'
+      if (esPdf || esImagen) {
+        fetch('/api/estructurar-proyecto', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id_proyecto: proyectoId,
+            ruta_documento: path,
+            tipo_archivo: esImagen ? 'imagen' : 'pdf',
+          }),
+        }).catch((err) => console.error('Error al disparar Motor 1:', err))
+      }
 
       router.refresh()
     } catch (err: any) {
@@ -56,7 +60,6 @@ export function SubirDocumentoProyecto({ proyectoId, archivoActualNombre, archiv
       setLoading(false)
     }
   }
-
   return (
     <div className="space-y-3">
       {archivoActualNombre && (
@@ -70,7 +73,6 @@ export function SubirDocumentoProyecto({ proyectoId, archivoActualNombre, archiv
           )}
         </div>
       )}
-
       <label className="flex items-center gap-3 p-4 rounded-xl border-2 border-dashed border-emerald-300 bg-white cursor-pointer hover:bg-emerald-50 transition-colors">
         {loading ? <Loader2 className="h-5 w-5 animate-spin text-emerald-600" /> : <FileText className="h-5 w-5 text-emerald-600" />}
         <span className="text-sm font-bold text-color-base-content">
@@ -84,7 +86,6 @@ export function SubirDocumentoProyecto({ proyectoId, archivoActualNombre, archiv
           className="hidden"
         />
       </label>
-
       {error && <p className="text-xs text-red-500 font-bold">{error}</p>}
     </div>
   )
