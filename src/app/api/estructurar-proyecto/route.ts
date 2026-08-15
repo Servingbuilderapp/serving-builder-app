@@ -260,9 +260,10 @@ Responde ÚNICAMENTE con un JSON válido, sin texto antes ni después, con este 
           contenido: paso.contenido,
         });
         await supabase.from("avance_estructuracion_proyecto").upsert({
-          id_proyecto,
-          id_paso: paso.id_paso,
+          proyecto_id: id_proyecto,
+          paso_id: paso.id_paso,
           completado: true,
+          fecha_completado: new Date().toISOString(),
         });
       } else if (paso.estado === "incompleto" && paso.pregunta) {
         await supabase.from("preguntas_pendientes_proyecto").insert({
