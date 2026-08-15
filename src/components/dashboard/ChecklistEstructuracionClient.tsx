@@ -52,11 +52,14 @@ export function ChecklistEstructuracionClient({ proyectoId, pasosIniciales, porc
           table: 'avance_estructuracion_proyecto',
           filter: `proyecto_id=eq.${proyectoId}`,
         },
-        () => {
+        (payload) => {
+          console.log('🔴 Cambio recibido por Realtime:', payload)
           actualizarDatos()
         }
       )
-      .subscribe()
+      .subscribe((status) => {
+        console.log('🔵 Estado de la conexión Realtime:', status)
+      })
 
     return () => {
       supabase.removeChannel(canal)
