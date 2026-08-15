@@ -37,18 +37,19 @@ export function SubirDocumentoProyecto({ proyectoId, archivoActualNombre, archiv
         .eq('id', proyectoId)
       if (updateError) throw updateError
 
-      // Disparar el Motor 1 automáticamente en segundo plano (solo PDF e imágenes por ahora)
+      // Disparar el Motor 1 automáticamente en segundo plano (PDF, imágenes y Word)
       const extension = file.name.split('.').pop()?.toLowerCase() || ''
       const esImagen = ['jpg', 'jpeg', 'png'].includes(extension)
       const esPdf = extension === 'pdf'
-      if (esPdf || esImagen) {
+      const esWord = ['doc', 'docx'].includes(extension)
+      if (esPdf || esImagen || esWord) {
         fetch('/api/estructurar-proyecto', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             id_proyecto: proyectoId,
             ruta_documento: path,
-            tipo_archivo: esImagen ? 'imagen' : 'pdf',
+            tipo_archivo: esImagen ? 'imagen' : esWord ? 'word' : 'pdf',
           }),
         }).catch((err) => console.error('Error al disparar Motor 1:', err))
       }
