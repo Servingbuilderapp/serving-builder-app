@@ -164,6 +164,50 @@ Detecta contradicciones.
 IMPORTANTE PARA ESTA INTEGRACIÓN: además de construir el contenido del Proyecto Maestro, debes evaluar el avance contra la lista de pasos de estructuración que se te entrega en el mensaje del usuario, y responder en el formato JSON estricto que se te solicita ahí — no agregues las 35 secciones de la salida final como texto libre, usa el formato JSON pedido en las instrucciones del usuario para esta tarea específica.
 `;
 
+function esperar(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function llamarGeminiConReintentos(
+  apiKey: string,
+  body: any,
+  maxIntentos = 3
+): Promise<{ ok: boolean; data: any }> {
+  let ultimoResultado: { ok: boolean; data: any } = { ok: false, data: null };
+
+  for (let intento = 1; intento <= maxIntentos; intento++) {
+    const respuesta = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      }
+    );
+
+    const data = await respuesta.json();
+
+    if (respuesta.ok) {
+      return { ok: true, data };
+    }
+
+    ultimoResultado = { ok: false, data };
+
+    const esErrorTemporal = respuesta.status === 503 || respuesta.status === 429;
+    const quedanIntentos = intento < maxIntentos;
+
+    if (esErrorTemporal && quedanIntentos) {
+      console.log(`Gemini ocupado (intento ${intento}/${maxIntentos}), reintentando en ${intento * 5} segundos...`);
+      await esperar(intento * 5000);
+      continue;
+    }
+
+    return ultimoResultado;
+  }
+
+  return ultimoResultado;
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { id_proyecto, ruta_documento, tipo_archivo } = await req.json();
@@ -242,22 +286,18 @@ Responde ÚNICAMENTE con un JSON válido, sin texto antes ni después, con este 
       partesUsuario.push({ text: instruccionFormato });
     }
 
-    const respuestaGemini = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKeyGemini}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: PROMPT_MOTOR_1 }] },
-          contents: [{ role: "user", parts: partesUsuario }],
-        }),
-      }
+    const cuerpoSolicitud = {
+      systemInstruction: { parts: [{ text: PROMPT_MOTOR_1 }] },
+      contents: [{ role: "user", parts: partesUsuario }],
+    };
+
+    const { ok: geminiOk, data: dataGemini } = await llamarGeminiConReintentos(
+      apiKeyGemini,
+      cuerpoSolicitud
     );
 
-    const dataGemini = await respuestaGemini.json();
-
-    if (!respuestaGemini.ok) {
-      console.error("Error de la API de Gemini:", JSON.stringify(dataGemini));
+    if (!geminiOk) {
+      console.error("Error de la API de Gemini (tras reintentos):", JSON.stringify(dataGemini));
       return NextResponse.json(
         { error: "La API de Gemini devolvió un error", detalle: dataGemini },
         { status: 500 }
