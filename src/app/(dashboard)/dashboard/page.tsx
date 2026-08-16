@@ -5,6 +5,7 @@ import { SubirDocumentoProyecto } from '@/components/dashboard/SubirDocumentoPro
 import { SaludoCliente } from '@/components/dashboard/SaludoCliente'
 import { ChecklistEstructuracion } from '@/components/dashboard/ChecklistEstructuracion'
 import { PreguntasPendientesProyecto } from '@/components/dashboard/PreguntasPendientesProyecto'
+import { EstadoProyecto } from '@/components/dashboard/EstadoProyecto'
 
 export const dynamic = 'force-dynamic'
 
@@ -73,6 +74,10 @@ export default async function DashboardPage() {
 
       {proyecto && proyecto.estado_actual === 'pagado' && (
         <ChecklistEstructuracion proyectoId={proyecto.id} />
+      )}
+
+      {proyecto && proyecto.estado_actual === 'pagado' && (
+        <EstadoProyecto proyectoId={proyecto.id} />
       )}
 
       {proyecto && proyecto.estado_actual === 'pagado' && (
