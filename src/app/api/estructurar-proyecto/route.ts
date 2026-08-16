@@ -162,6 +162,10 @@ problema ↔ causas, problema ↔ objetivos, objetivos ↔ productos, productos 
 Detecta contradicciones.
 
 IMPORTANTE PARA ESTA INTEGRACIÓN: además de construir el contenido del Proyecto Maestro, debes evaluar el avance contra la lista de pasos de estructuración que se te entrega en el mensaje del usuario, y responder en el formato JSON estricto que se te solicita ahí — no agregues las 35 secciones de la salida final como texto libre, usa el formato JSON pedido en las instrucciones del usuario para esta tarea específica.
+
+REGLA DE CRITICIDAD: los siguientes pasos son considerados CRÍTICOS y nunca deben quedar sin resolver silenciosamente: problema central, árbol del problema, población objetivo, población, presupuesto, objetivo general, solución propuesta. Si alguno de estos queda incompleto por falta de información, márcalo como crítico en tu respuesta. El resto de los pasos, si quedan incompletos, márcalos como no críticos.
+
+REGLA DE ADVERTENCIA: si completas un paso pero la información que tienes es débil, poco sustentada, o el cliente tendría que reforzarla antes de postular a una convocatoria real (por ejemplo, un presupuesto sin cifras reales, o un problema sin evidencia clara), complétalo igual pero agrega una advertencia breve explicando qué debería reforzarse.
 `;
 
 function esperar(ms: number) {
@@ -254,19 +258,39 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Traemos lo que ya está estructurado de este proyecto (si algo ya existe),
+    // para que la IA lo use como base y no reemplace lo que ya está bien.
+    const { data: contenidoExistente } = await supabase
+      .from("contenido_pasos_proyecto")
+      .select("id_paso, contenido")
+      .eq("id_proyecto", id_proyecto);
+
+    const hayContenidoPrevio = (contenidoExistente?.length || 0) > 0;
+    const resumenContenidoPrevio = hayContenidoPrevio
+      ? contenidoExistente!
+          .map((c) => {
+            const nombrePaso = pasos.find((p) => p.id === c.id_paso)?.nombre_paso || `paso ${c.id_paso}`;
+            return `--- ${nombrePaso} ---\n${c.contenido}`;
+          })
+          .join("\n\n")
+      : "";
+
     const instruccionFormato = `
-Analiza el documento y complétalo contra esta lista de ${pasos.length} pasos de estructuración:
+${hayContenidoPrevio ? `Este proyecto YA tiene contenido estructurado previamente. Aquí está lo que ya existe:\n\n${resumenContenidoPrevio}\n\nEl documento o texto nuevo que recibes a continuación es INFORMACIÓN COMPLEMENTARIA para completar lo que faltaba de ESE MISMO proyecto. Antes de usarlo, verifica que el contenido nuevo sea coherente con el proyecto ya existente (mismo tema, mismo problema, misma población). Si el contenido nuevo parece pertenecer a un proyecto completamente distinto y no tiene relación con lo ya estructurado, NO lo mezcles: en vez de eso, para el o los pasos afectados, responde con estado "incompleto" y una pregunta que diga textualmente: "La información recibida no parece corresponder a este proyecto. Por favor confirma o sube información relacionada con el mismo proyecto." No inventes conexión donde no la hay.\n\n` : ""}Analiza el documento y complétalo contra esta lista de ${pasos.length} pasos de estructuración:
 ${pasos.map((p) => `- id ${p.id}: ${p.nombre_paso}`).join("\n")}
 
-Para CADA paso, responde si hay información suficiente en el documento para desarrollarlo completo, o si falta información esencial.
+Para CADA paso, responde si hay información suficiente para desarrollarlo completo, o si falta información esencial.
 
 Responde ÚNICAMENTE con un JSON válido, sin texto antes ni después, con este formato exacto:
 {
   "pasos": [
-    { "id_paso": 1, "estado": "completo", "contenido": "texto desarrollado del paso..." },
-    { "id_paso": 2, "estado": "incompleto", "pregunta": "pregunta clara y específica para el cliente sobre lo que falta..." }
+    { "id_paso": 1, "estado": "completo", "contenido": "texto desarrollado del paso...", "advertencia": null },
+    { "id_paso": 2, "estado": "completo", "contenido": "texto desarrollado...", "advertencia": "Esta parte quedó débil porque..." },
+    { "id_paso": 3, "estado": "incompleto", "pregunta": "pregunta clara y específica...", "critico": true }
   ]
 }
+
+El campo "advertencia" solo aplica a pasos "completo" y va en null si no hay ninguna advertencia. El campo "critico" solo aplica a pasos "incompleto" (true o false).
 `;
 
     const partesUsuario: any[] = [];
@@ -314,6 +338,7 @@ Responde ÚNICAMENTE con un JSON válido, sin texto antes ni después, con este 
           id_proyecto,
           id_paso: paso.id_paso,
           contenido: paso.contenido,
+          advertencia: paso.advertencia || null,
         });
         await supabase.from("avance_estructuracion_proyecto").upsert({
           proyecto_id: id_proyecto,
@@ -321,16 +346,51 @@ Responde ÚNICAMENTE con un JSON válido, sin texto antes ni después, con este 
           completado: true,
           fecha_completado: new Date().toISOString(),
         });
+        // Si este paso tenía una pregunta pendiente de antes, la marcamos como resuelta
+        await supabase
+          .from("preguntas_pendientes_proyecto")
+          .update({ respondida: true, respondido_en: new Date().toISOString() })
+          .eq("id_proyecto", id_proyecto)
+          .eq("id_paso", paso.id_paso)
+          .eq("respondida", false);
       } else if (paso.estado === "incompleto" && paso.pregunta) {
-        await supabase.from("preguntas_pendientes_proyecto").insert({
-          id_proyecto,
-          id_paso: paso.id_paso,
-          pregunta: paso.pregunta,
-        });
+        // Evitamos duplicar la misma pregunta pendiente si ya existía una sin responder para ese paso
+        const { data: existente } = await supabase
+          .from("preguntas_pendientes_proyecto")
+          .select("id")
+          .eq("id_proyecto", id_proyecto)
+          .eq("id_paso", paso.id_paso)
+          .eq("respondida", false)
+          .limit(1);
+
+        if (!existente || existente.length === 0) {
+          await supabase.from("preguntas_pendientes_proyecto").insert({
+            id_proyecto,
+            id_paso: paso.id_paso,
+            pregunta: paso.pregunta,
+            critico: paso.critico === true,
+          });
+        }
       }
     }
 
-    return NextResponse.json({ ok: true, pasos_procesados: resultado.pasos.length });
+    // Actualizamos el candado: listo_para_busqueda = true solo si NO quedan
+    // preguntas críticas sin responder para este proyecto.
+    const { data: criticasPendientes } = await supabase
+      .from("preguntas_pendientes_proyecto")
+      .select("id")
+      .eq("id_proyecto", id_proyecto)
+      .eq("respondida", false)
+      .eq("critico", true);
+
+    const listoParaBusqueda = !criticasPendientes || criticasPendientes.length === 0;
+
+    await supabase
+      .from("proyectos_clientes_serving")
+      .update({ listo_para_busqueda: listoParaBusqueda })
+      .eq("id", id_proyecto);
+
+    return NextResponse.json({ ok: true, pasos_procesados: resultado.pasos.length, listo_para_busqueda: listoParaBusqueda });
   } catch (err: any) {
     console.error("Error en Motor 1:", err);
     return NextResponse.json(
