@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const apiKeyGemini = process.env.GEMINI_KEY;
+    const apiKeyGemini = process.env.GEMINI_API_KEY;
     if (!apiKeyGemini) {
       return NextResponse.json(
         { error: "Falta configurar GEMINI_KEY en el servidor" },
