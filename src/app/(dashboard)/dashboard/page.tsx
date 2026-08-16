@@ -88,7 +88,7 @@ export default async function DashboardPage() {
             eso se gestiona en el Portal Réplica, una plataforma aparte con un valor de
             $1.800 USD. Ahí encontrarás todos los términos y condiciones.
           </p>
-          
+          <a
             href={portalReplicaWhatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
