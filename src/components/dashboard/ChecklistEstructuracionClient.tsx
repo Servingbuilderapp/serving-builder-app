@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { AlertTriangle } from 'lucide-react'
 
@@ -15,6 +15,22 @@ interface Props {
   proyectoId: string
   pasosIniciales: Paso[]
   porcentajeInicial: number
+}
+
+const CATEGORIAS = [
+  { nombre: 'Diagnóstico', desde: 1, hasta: 19, color: '#1D9E75' },
+  { nombre: 'Objetivos y solución', desde: 20, hasta: 26, color: '#378ADD' },
+  { nombre: 'Ejecución', desde: 27, hasta: 37, color: '#BA7517' },
+  { nombre: 'Cierre', desde: 38, hasta: 42, color: '#D4537E' },
+]
+
+function calcularAvancePorCategoria(pasos: Paso[]) {
+  return CATEGORIAS.map((cat) => {
+    const pasosCat = pasos.filter((p) => p.orden_secuencia >= cat.desde && p.orden_secuencia <= cat.hasta)
+    const completados = pasosCat.filter((p) => p.completado).length
+    const porcentaje = pasosCat.length > 0 ? Math.round((completados / pasosCat.length) * 100) : 0
+    return { ...cat, porcentaje, completados, total: pasosCat.length }
+  })
 }
 
 export function ChecklistEstructuracionClient({ proyectoId, pasosIniciales, porcentajeInicial }: Props) {
@@ -55,22 +71,12 @@ export function ChecklistEstructuracionClient({ proyectoId, pasosIniciales, porc
       .channel(`avance-proyecto-${proyectoId}`)
       .on(
         'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'avance_estructuracion_proyecto',
-          filter: `proyecto_id=eq.${proyectoId}`,
-        },
+        { event: '*', schema: 'public', table: 'avance_estructuracion_proyecto', filter: `proyecto_id=eq.${proyectoId}` },
         () => actualizarDatos()
       )
       .on(
         'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'contenido_pasos_proyecto',
-          filter: `id_proyecto=eq.${proyectoId}`,
-        },
+        { event: '*', schema: 'public', table: 'contenido_pasos_proyecto', filter: `id_proyecto=eq.${proyectoId}` },
         () => actualizarDatos()
       )
       .subscribe()
@@ -80,21 +86,46 @@ export function ChecklistEstructuracionClient({ proyectoId, pasosIniciales, porc
     }
   }, [proyectoId])
 
+  const avancePorCategoria = useMemo(() => calcularAvancePorCategoria(pasos), [pasos])
+
+  const radio = 48
+  const circunferencia = 2 * Math.PI * radio
+  const offset = circunferencia - (porcentajeAvance / 100) * circunferencia
+
   return (
     <div className="p-8 rounded-3xl border border-color-base-content/10 bg-color-base-content/5 space-y-6">
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-black text-color-base-content">Estructuración de tu proyecto</h3>
-          <span className="text-2xl font-black text-gradient-magma">{porcentajeAvance}%</span>
-        </div>
-        <div className="w-full h-3 bg-color-base-content/10 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-gradient-magma rounded-full transition-all duration-500"
-            style={{ width: `${porcentajeAvance}%` }}
+      <h3 className="text-lg font-black text-color-base-content">Estructuración de tu proyecto</h3>
+
+      <div className="flex flex-col sm:flex-row items-center gap-6">
+        <svg width="120" height="120" viewBox="0 0 120 120" className="shrink-0">
+          <circle cx="60" cy="60" r={radio} fill="none" stroke="currentColor" className="text-color-base-content/10" strokeWidth="14" />
+          <circle
+            cx="60" cy="60" r={radio} fill="none" stroke="#1D9E75" strokeWidth="14"
+            strokeDasharray={circunferencia} strokeDashoffset={offset} strokeLinecap="round"
+            transform="rotate(-90 60 60)" style={{ transition: 'stroke-dashoffset 0.6s ease' }}
           />
+          <text x="60" y="67" textAnchor="middle" fontSize="24" fontWeight="600" className="fill-color-base-content">
+            {porcentajeAvance}%
+          </text>
+        </svg>
+
+        <div className="flex-1 w-full space-y-2.5">
+          {avancePorCategoria.map((cat) => (
+            <div key={cat.nombre} className="flex items-center gap-2">
+              <span className="text-xs text-color-base-content/60 w-36 shrink-0">{cat.nombre}</span>
+              <div className="flex-1 h-2.5 rounded-full bg-color-base-content/10 overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-500"
+                  style={{ width: `${cat.porcentaje}%`, backgroundColor: cat.color }}
+                />
+              </div>
+              <span className="text-xs text-color-base-content/50 w-8 text-right shrink-0">{cat.porcentaje}%</span>
+            </div>
+          ))}
         </div>
       </div>
-      <div className="space-y-2">
+
+      <div className="space-y-2 pt-2 border-t border-color-base-content/10">
         {pasos.map((paso) => (
           <div key={paso.id} className="py-1.5">
             <div className="flex items-center gap-3">
