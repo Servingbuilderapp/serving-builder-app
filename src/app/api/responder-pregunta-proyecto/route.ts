@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
+import { after } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
+
+const UMBRAL_MINIMO_PORCENTAJE = 90;
 
 const PROMPT_RESPUESTA = `
 Eres el MOTOR DE ESTRUCTURACIÓN del sistema de Arquitectura Digital de Proyectos, trabajando ahora en modo de COMPLETAR UN PASO ESPECÍFICO a partir de la respuesta que el cliente acaba de dar a una pregunta puntual.
@@ -83,15 +86,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const apiKeyGemini = process.env.GEMINI_API_KEY;
+    const apiKeyGemini = process.env.GEMINI_API_KEY || process.env.GEMINI_KEY;
     if (!apiKeyGemini) {
       return NextResponse.json(
-        { error: "Falta configurar GEMINI_KEY en el servidor" },
+        { error: "Falta configurar GEMINI_API_KEY en el servidor" },
         { status: 500 }
       );
     }
 
-    // Traemos la pregunta pendiente
     const { data: preguntaRow, error: errorPregunta } = await supabase
       .from("preguntas_pendientes_proyecto")
       .select("id, id_proyecto, id_paso, pregunta, respondida")
@@ -109,7 +111,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true, ya_estaba_respondida: true });
     }
 
-    // Traemos el nombre del paso
     const { data: pasoRow } = await supabase
       .from("pasos_estructuracion")
       .select("nombre_paso")
@@ -142,7 +143,6 @@ export async function POST(req: NextRequest) {
     const jsonLimpio = textoRespuestaIA.replace(/```json|```/g, "").trim();
     const resultado = JSON.parse(jsonLimpio);
 
-    // Guardamos el contenido generado para ese paso
     await supabase.from("contenido_pasos_proyecto").upsert({
       id_proyecto: preguntaRow.id_proyecto,
       id_paso: preguntaRow.id_paso,
@@ -150,7 +150,6 @@ export async function POST(req: NextRequest) {
       advertencia: resultado.advertencia || null,
     });
 
-    // Marcamos el paso como completado
     await supabase.from("avance_estructuracion_proyecto").upsert({
       proyecto_id: preguntaRow.id_proyecto,
       paso_id: preguntaRow.id_paso,
@@ -158,7 +157,6 @@ export async function POST(req: NextRequest) {
       fecha_completado: new Date().toISOString(),
     });
 
-    // Guardamos la respuesta del cliente y marcamos la pregunta como resuelta
     await supabase
       .from("preguntas_pendientes_proyecto")
       .update({
@@ -168,7 +166,14 @@ export async function POST(req: NextRequest) {
       })
       .eq("id", id_pregunta);
 
-    // Recalculamos el candado listo_para_encaje
+    const { data: proyectoAntes } = await supabase
+      .from("proyectos_clientes_serving")
+      .select("listo_para_encaje")
+      .eq("id", preguntaRow.id_proyecto)
+      .maybeSingle();
+
+    const yaEstabaListo = proyectoAntes?.listo_para_encaje === true;
+
     const { data: criticasPendientes } = await supabase
       .from("preguntas_pendientes_proyecto")
       .select("id")
@@ -176,12 +181,34 @@ export async function POST(req: NextRequest) {
       .eq("respondida", false)
       .eq("critico", true);
 
-    const listoParaEncaje = !criticasPendientes || criticasPendientes.length === 0;
+    const { data: porcentajeActual } = await supabase.rpc("calcular_avance_estructuracion", {
+      id_proyecto: preguntaRow.id_proyecto,
+    });
+
+    const sinCriticasPendientes = !criticasPendientes || criticasPendientes.length === 0;
+    const cumplePorcentajeMinimo = (porcentajeActual || 0) >= UMBRAL_MINIMO_PORCENTAJE;
+    const listoParaEncaje = sinCriticasPendientes && cumplePorcentajeMinimo;
 
     await supabase
       .from("proyectos_clientes_serving")
       .update({ listo_para_encaje: listoParaEncaje })
       .eq("id", preguntaRow.id_proyecto);
+
+    if (listoParaEncaje && !yaEstabaListo) {
+      const origen = req.nextUrl.origin;
+      const idProyecto = preguntaRow.id_proyecto;
+      after(async () => {
+        try {
+          await fetch(`${origen}/api/buscar-convocatorias`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id_proyecto: idProyecto }),
+          });
+        } catch (e) {
+          console.error("Error disparando Motor 2 desde responder-pregunta-proyecto:", e);
+        }
+      });
+    }
 
     return NextResponse.json({ ok: true, listo_para_encaje: listoParaEncaje });
   } catch (err: any) {
