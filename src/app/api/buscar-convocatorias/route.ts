@@ -140,54 +140,42 @@ async function llamarGeminiConReintentos(
   return ultimoResultado;
 }
 
-export async function POST(req: NextRequest) {
-  try {
-    const { id_proyecto } = await req.json();
+async function ejecutarBusquedaConvocatorias(id_proyecto: string) {
+  const apiKeyGemini = process.env.GEMINI_API_KEY || process.env.GEMINI_KEY;
+  if (!apiKeyGemini) {
+    return { status: 500, body: { error: "Falta configurar GEMINI_API_KEY en el servidor" } };
+  }
 
-    if (!id_proyecto) {
-      return NextResponse.json({ error: "Falta id_proyecto" }, { status: 400 });
-    }
+  const { data: contenido, error: errorContenido } = await supabase
+    .from("contenido_pasos_proyecto")
+    .select("id_paso, contenido")
+    .eq("id_proyecto", id_proyecto);
 
-    const apiKeyGemini = process.env.GEMINI_API_KEY || process.env.GEMINI_KEY;
-    if (!apiKeyGemini) {
-      return NextResponse.json({ error: "Falta configurar GEMINI_API_KEY en el servidor" }, { status: 500 });
-    }
+  if (errorContenido || !contenido || contenido.length === 0) {
+    return { status: 400, body: { error: "No hay contenido estructurado para este proyecto todavía" } };
+  }
 
-    // 1. Traer el Proyecto Maestro completo (todo lo estructurado hasta ahora)
-    const { data: contenido, error: errorContenido } = await supabase
-      .from("contenido_pasos_proyecto")
-      .select("id_paso, contenido")
-      .eq("id_proyecto", id_proyecto);
+  const { data: pasos } = await supabase
+    .from("pasos_estructuracion")
+    .select("id, nombre_paso, orden_secuencia")
+    .order("orden_secuencia");
 
-    if (errorContenido || !contenido || contenido.length === 0) {
-      return NextResponse.json(
-        { error: "No hay contenido estructurado para este proyecto todavía" },
-        { status: 400 }
-      );
-    }
+  const mapaNombres = new Map((pasos || []).map((p) => [p.id, p.nombre_paso]));
+  const proyectoMaestroTexto = contenido
+    .map((c) => `--- ${mapaNombres.get(c.id_paso) || "paso"} ---\n${c.contenido}`)
+    .join("\n\n");
 
-    const { data: pasos } = await supabase
-      .from("pasos_estructuracion")
-      .select("id, nombre_paso, orden_secuencia")
-      .order("orden_secuencia");
+  const { data: matrizHunter } = await supabase
+    .from("matriz_hunter_convocatorias")
+    .select(
+      "nombre_subvencion, fuente_sitio, tipo_fuente, link_oficial_tdr, vigencia, mes_apertura_estimado, fecha_cierre_actual, monto_maximo_usd, monto_maximo_cop, aristas_requeridas, estado"
+    );
 
-    const mapaNombres = new Map((pasos || []).map((p) => [p.id, p.nombre_paso]));
-    const proyectoMaestroTexto = contenido
-      .map((c) => `--- ${mapaNombres.get(c.id_paso) || "paso"} ---\n${c.contenido}`)
-      .join("\n\n");
+  const { data: aliados } = await supabase
+    .from("aliados_financiamiento")
+    .select("nombre_fondo, politica_inversion, sectores_preferenciales, sectores_excluidos, etapa_empresa, cobertura_geografica, rango_inversion");
 
-    // 2. Traer la biblioteca interna: Matriz Hunter y aliados de financiación
-    const { data: matrizHunter } = await supabase
-      .from("matriz_hunter_convocatorias")
-      .select(
-        "nombre_subvencion, fuente_sitio, tipo_fuente, link_oficial_tdr, vigencia, mes_apertura_estimado, fecha_cierre_actual, monto_maximo_usd, monto_maximo_cop, aristas_requeridas, estado"
-      );
-
-    const { data: aliados } = await supabase
-      .from("aliados_financiamiento")
-      .select("nombre_fondo, politica_inversion, sectores_preferenciales, sectores_excluidos, etapa_empresa, cobertura_geografica, rango_inversion");
-
-    const bibliotecaTexto = `
+  const bibliotecaTexto = `
 MATRIZ HUNTER (biblioteca interna de convocatorias ya catalogadas):
 ${(matrizHunter || [])
   .map(
@@ -205,28 +193,26 @@ ${(aliados || [])
   .join("\n")}
 `;
 
-    // 3. Traer oportunidades ya evaluadas antes para este proyecto (para no repetirlas)
-    const { data: yaEvaluadas } = await supabase
-      .from("convocatorias_candidatas_proyecto")
-      .select("nombre, entidad")
-      .eq("id_proyecto", id_proyecto);
+  const { data: yaEvaluadas } = await supabase
+    .from("convocatorias_candidatas_proyecto")
+    .select("nombre, entidad")
+    .eq("id_proyecto", id_proyecto);
 
-    const listaYaEvaluadas =
-      yaEvaluadas && yaEvaluadas.length > 0
-        ? yaEvaluadas.map((c) => `- ${c.nombre} (${c.entidad})`).join("\n")
-        : "Ninguna todavía — este es el primer lote para este proyecto.";
+  const listaYaEvaluadas =
+    yaEvaluadas && yaEvaluadas.length > 0
+      ? yaEvaluadas.map((c) => `- ${c.nombre} (${c.entidad})`).join("\n")
+      : "Ninguna todavía — este es el primer lote para este proyecto.";
 
-    // 4. Calcular el número de lote
-    const { data: ultimoLote } = await supabase
-      .from("convocatorias_candidatas_proyecto")
-      .select("lote")
-      .eq("id_proyecto", id_proyecto)
-      .order("lote", { ascending: false })
-      .limit(1);
+  const { data: ultimoLote } = await supabase
+    .from("convocatorias_candidatas_proyecto")
+    .select("lote")
+    .eq("id_proyecto", id_proyecto)
+    .order("lote", { ascending: false })
+    .limit(1);
 
-    const numeroLote = ultimoLote && ultimoLote.length > 0 ? ultimoLote[0].lote + 1 : 1;
+  const numeroLote = ultimoLote && ultimoLote.length > 0 ? ultimoLote[0].lote + 1 : 1;
 
-    const instruccionUsuario = `
+  const instruccionUsuario = `
 PROYECTO MAESTRO A ANALIZAR:
 ${proyectoMaestroTexto}
 
@@ -258,47 +244,90 @@ Responde ÚNICAMENTE con un JSON válido, sin texto antes ni después, con este 
 }
 `;
 
-    const cuerpoSolicitud = {
-      systemInstruction: { parts: [{ text: PROMPT_MOTOR_2 }] },
-      contents: [{ role: "user", parts: [{ text: instruccionUsuario }] }],
-      tools: [{ google_search: {} }],
-    };
+  const cuerpoSolicitud = {
+    systemInstruction: { parts: [{ text: PROMPT_MOTOR_2 }] },
+    contents: [{ role: "user", parts: [{ text: instruccionUsuario }] }],
+    tools: [{ google_search: {} }],
+  };
 
-    const { ok: geminiOk, data: dataGemini } = await llamarGeminiConReintentos(apiKeyGemini, cuerpoSolicitud);
+  const { ok: geminiOk, data: dataGemini } = await llamarGeminiConReintentos(apiKeyGemini, cuerpoSolicitud);
 
-    if (!geminiOk) {
-      console.error("Error de Gemini en Motor 2:", JSON.stringify(dataGemini));
-      return NextResponse.json({ error: "La API de Gemini devolvió un error", detalle: dataGemini }, { status: 500 });
+  if (!geminiOk) {
+    console.error("Error de Gemini en Motor 2:", JSON.stringify(dataGemini));
+    return { status: 500, body: { error: "La API de Gemini devolvió un error", detalle: dataGemini } };
+  }
+
+  const partesTexto = (dataGemini.candidates?.[0]?.content?.parts || [])
+    .map((p: any) => p.text || "")
+    .join("");
+  const jsonLimpio = partesTexto.replace(/```json|```/g, "").trim();
+
+  let resultado: any;
+  try {
+    resultado = JSON.parse(jsonLimpio);
+  } catch (e) {
+    console.error("No se pudo interpretar la respuesta de Gemini como JSON:", partesTexto);
+    return { status: 500, body: { error: "Respuesta de Gemini no fue JSON válido", detalle: partesTexto.slice(0, 2000) } };
+  }
+
+  const filasParaGuardar = [
+    ...(resultado.seleccionadas || []).map((c: any) => ({ ...c, id_proyecto, lote: numeroLote, seleccionada: true })),
+    ...(resultado.descartadas || []).map((c: any) => ({ ...c, id_proyecto, lote: numeroLote, seleccionada: false })),
+  ];
+
+  if (filasParaGuardar.length > 0) {
+    const { error: errorGuardar } = await supabase.from("convocatorias_candidatas_proyecto").insert(filasParaGuardar);
+    if (errorGuardar) {
+      console.error("Error guardando convocatorias:", JSON.stringify(errorGuardar));
+      return { status: 500, body: { error: "Error al guardar las convocatorias", detalle: errorGuardar } };
     }
+  }
 
-    const partesTexto = (dataGemini.candidates?.[0]?.content?.parts || [])
-      .map((p: any) => p.text || "")
-      .join("");
-    const jsonLimpio = partesTexto.replace(/```json|```/g, "").trim();
-    const resultado = JSON.parse(jsonLimpio);
+  await supabase
+    .from("proyectos_clientes_serving")
+    .update({ fecha_ultimo_lote_convocatorias: new Date().toISOString() })
+    .eq("id", id_proyecto);
 
-    const filasParaGuardar = [
-      ...(resultado.seleccionadas || []).map((c: any) => ({ ...c, id_proyecto, lote: numeroLote, seleccionada: true })),
-      ...(resultado.descartadas || []).map((c: any) => ({ ...c, id_proyecto, lote: numeroLote, seleccionada: false })),
-    ];
-
-    if (filasParaGuardar.length > 0) {
-      await supabase.from("convocatorias_candidatas_proyecto").insert(filasParaGuardar);
-    }
-
-    await supabase
-      .from("proyectos_clientes_serving")
-      .update({ fecha_ultimo_lote_convocatorias: new Date().toISOString() })
-      .eq("id", id_proyecto);
-
-    return NextResponse.json({
+  return {
+    status: 200,
+    body: {
       ok: true,
       lote: numeroLote,
       seleccionadas: resultado.seleccionadas?.length || 0,
       descartadas: resultado.descartadas?.length || 0,
-    });
+    },
+  };
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const { id_proyecto } = await req.json();
+    if (!id_proyecto) {
+      return NextResponse.json({ error: "Falta id_proyecto" }, { status: 400 });
+    }
+    const resultado = await ejecutarBusquedaConvocatorias(id_proyecto);
+    return NextResponse.json(resultado.body, { status: resultado.status });
   } catch (err: any) {
-    console.error("Error en Motor 2 (buscar-convocatorias):", err);
+    console.error("Error en Motor 2 (buscar-convocatorias, POST):", err);
+    return NextResponse.json(
+      { error: "Error al buscar convocatorias", detalle: err?.message || String(err) },
+      { status: 500 }
+    );
+  }
+}
+
+// Disparo manual por navegador, útil para pruebas: visita
+// /api/buscar-convocatorias?id_proyecto=EL-ID-DEL-PROYECTO
+export async function GET(req: NextRequest) {
+  try {
+    const id_proyecto = req.nextUrl.searchParams.get("id_proyecto");
+    if (!id_proyecto) {
+      return NextResponse.json({ error: "Falta ?id_proyecto= en la URL" }, { status: 400 });
+    }
+    const resultado = await ejecutarBusquedaConvocatorias(id_proyecto);
+    return NextResponse.json(resultado.body, { status: resultado.status });
+  } catch (err: any) {
+    console.error("Error en Motor 2 (buscar-convocatorias, GET):", err);
     return NextResponse.json(
       { error: "Error al buscar convocatorias", detalle: err?.message || String(err) },
       { status: 500 }
