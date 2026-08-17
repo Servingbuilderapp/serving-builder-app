@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { after } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
@@ -143,7 +144,7 @@ async function llamarGeminiConReintentos(
 async function ejecutarBusquedaConvocatorias(id_proyecto: string) {
   const apiKeyGemini = process.env.GEMINI_API_KEY || process.env.GEMINI_KEY;
   if (!apiKeyGemini) {
-    return { status: 500, body: { error: "Falta configurar GEMINI_API_KEY en el servidor" } };
+    return { status: 500, body: { error: "Falta configurar GEMINI_API_KEY en el servidor" }, idsSeleccionadas: [] as string[] };
   }
 
   const { data: contenido, error: errorContenido } = await supabase
@@ -152,7 +153,7 @@ async function ejecutarBusquedaConvocatorias(id_proyecto: string) {
     .eq("id_proyecto", id_proyecto);
 
   if (errorContenido || !contenido || contenido.length === 0) {
-    return { status: 400, body: { error: "No hay contenido estructurado para este proyecto todavía" } };
+    return { status: 400, body: { error: "No hay contenido estructurado para este proyecto todavía" }, idsSeleccionadas: [] as string[] };
   }
 
   const { data: pasos } = await supabase
@@ -254,7 +255,7 @@ Responde ÚNICAMENTE con un JSON válido, sin texto antes ni después, con este 
 
   if (!geminiOk) {
     console.error("Error de Gemini en Motor 2:", JSON.stringify(dataGemini));
-    return { status: 500, body: { error: "La API de Gemini devolvió un error", detalle: dataGemini } };
+    return { status: 500, body: { error: "La API de Gemini devolvió un error", detalle: dataGemini }, idsSeleccionadas: [] as string[] };
   }
 
   const partesTexto = (dataGemini.candidates?.[0]?.content?.parts || [])
@@ -267,20 +268,29 @@ Responde ÚNICAMENTE con un JSON válido, sin texto antes ni después, con este 
     resultado = JSON.parse(jsonLimpio);
   } catch (e) {
     console.error("No se pudo interpretar la respuesta de Gemini como JSON:", partesTexto);
-    return { status: 500, body: { error: "Respuesta de Gemini no fue JSON válido", detalle: partesTexto.slice(0, 2000) } };
+    return { status: 500, body: { error: "Respuesta de Gemini no fue JSON válido", detalle: partesTexto.slice(0, 2000) }, idsSeleccionadas: [] as string[] };
   }
 
-  const filasParaGuardar = [
-    ...(resultado.seleccionadas || []).map((c: any) => ({ ...c, id_proyecto, lote: numeroLote, seleccionada: true })),
-    ...(resultado.descartadas || []).map((c: any) => ({ ...c, id_proyecto, lote: numeroLote, seleccionada: false })),
-  ];
+  const filasSeleccionadas = (resultado.seleccionadas || []).map((c: any) => ({ ...c, id_proyecto, lote: numeroLote, seleccionada: true }));
+  const filasDescartadas = (resultado.descartadas || []).map((c: any) => ({ ...c, id_proyecto, lote: numeroLote, seleccionada: false }));
 
-  if (filasParaGuardar.length > 0) {
-    const { error: errorGuardar } = await supabase.from("convocatorias_candidatas_proyecto").insert(filasParaGuardar);
-    if (errorGuardar) {
-      console.error("Error guardando convocatorias:", JSON.stringify(errorGuardar));
-      return { status: 500, body: { error: "Error al guardar las convocatorias", detalle: errorGuardar } };
+  let idsSeleccionadas: string[] = [];
+
+  if (filasSeleccionadas.length > 0) {
+    const { data: insertadasSeleccionadas, error: errorSeleccionadas } = await supabase
+      .from("convocatorias_candidatas_proyecto")
+      .insert(filasSeleccionadas)
+      .select("id");
+
+    if (errorSeleccionadas) {
+      console.error("Error guardando convocatorias seleccionadas:", JSON.stringify(errorSeleccionadas));
+      return { status: 500, body: { error: "Error al guardar las convocatorias", detalle: errorSeleccionadas }, idsSeleccionadas: [] as string[] };
     }
+    idsSeleccionadas = (insertadasSeleccionadas || []).map((r: any) => r.id);
+  }
+
+  if (filasDescartadas.length > 0) {
+    await supabase.from("convocatorias_candidatas_proyecto").insert(filasDescartadas);
   }
 
   await supabase
@@ -296,7 +306,24 @@ Responde ÚNICAMENTE con un JSON válido, sin texto antes ni después, con este 
       seleccionadas: resultado.seleccionadas?.length || 0,
       descartadas: resultado.descartadas?.length || 0,
     },
+    idsSeleccionadas,
   };
+}
+
+function dispararEncajesEnSegundoPlano(origen: string, idsSeleccionadas: string[]) {
+  for (const id_convocatoria of idsSeleccionadas) {
+    after(async () => {
+      try {
+        await fetch(`${origen}/api/analizar-encaje`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id_convocatoria }),
+        });
+      } catch (e) {
+        console.error("Error disparando Motor 3 desde buscar-convocatorias:", e);
+      }
+    });
+  }
 }
 
 export async function POST(req: NextRequest) {
@@ -306,6 +333,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Falta id_proyecto" }, { status: 400 });
     }
     const resultado = await ejecutarBusquedaConvocatorias(id_proyecto);
+    if (resultado.idsSeleccionadas.length > 0) {
+      dispararEncajesEnSegundoPlano(req.nextUrl.origin, resultado.idsSeleccionadas);
+    }
     return NextResponse.json(resultado.body, { status: resultado.status });
   } catch (err: any) {
     console.error("Error en Motor 2 (buscar-convocatorias, POST):", err);
@@ -325,6 +355,9 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Falta ?id_proyecto= en la URL" }, { status: 400 });
     }
     const resultado = await ejecutarBusquedaConvocatorias(id_proyecto);
+    if (resultado.idsSeleccionadas.length > 0) {
+      dispararEncajesEnSegundoPlano(req.nextUrl.origin, resultado.idsSeleccionadas);
+    }
     return NextResponse.json(resultado.body, { status: resultado.status });
   } catch (err: any) {
     console.error("Error en Motor 2 (buscar-convocatorias, GET):", err);
