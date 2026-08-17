@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { after } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import mammoth from "mammoth";
 
@@ -6,6 +7,8 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
+
+const UMBRAL_MINIMO_PORCENTAJE = 90;
 
 const PROMPT_MOTOR_1 = `
 Eres el MOTOR DE ESTRUCTURACIÓN del sistema de Arquitectura Digital de Proyectos.
@@ -201,7 +204,6 @@ async function llamarGeminiConReintentos(
     const quedanIntentos = intento < maxIntentos;
 
     if (esErrorTemporal && quedanIntentos) {
-      console.log(`Gemini ocupado (intento ${intento}/${maxIntentos}), reintentando en ${intento * 5} segundos...`);
       await esperar(intento * 5000);
       continue;
     }
@@ -223,10 +225,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const apiKeyGemini = process.env.GEMINI_KEY;
+    const apiKeyGemini = process.env.GEMINI_API_KEY || process.env.GEMINI_KEY;
     if (!apiKeyGemini) {
       return NextResponse.json(
-        { error: "Falta configurar GEMINI_KEY en el servidor" },
+        { error: "Falta configurar GEMINI_API_KEY en el servidor" },
         { status: 500 }
       );
     }
@@ -258,8 +260,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Traemos lo que ya está estructurado de este proyecto (si algo ya existe),
-    // para que la IA lo use como base y no reemplace lo que ya está bien.
     const { data: contenidoExistente } = await supabase
       .from("contenido_pasos_proyecto")
       .select("id_paso, contenido")
@@ -346,7 +346,6 @@ El campo "advertencia" solo aplica a pasos "completo" y va en null si no hay nin
           completado: true,
           fecha_completado: new Date().toISOString(),
         });
-        // Si este paso tenía una pregunta pendiente de antes, la marcamos como resuelta
         await supabase
           .from("preguntas_pendientes_proyecto")
           .update({ respondida: true, respondido_en: new Date().toISOString() })
@@ -354,7 +353,6 @@ El campo "advertencia" solo aplica a pasos "completo" y va en null si no hay nin
           .eq("id_paso", paso.id_paso)
           .eq("respondida", false);
       } else if (paso.estado === "incompleto" && paso.pregunta) {
-        // Evitamos duplicar la misma pregunta pendiente si ya existía una sin responder para ese paso
         const { data: existente } = await supabase
           .from("preguntas_pendientes_proyecto")
           .select("id")
@@ -374,8 +372,14 @@ El campo "advertencia" solo aplica a pasos "completo" y va en null si no hay nin
       }
     }
 
-    // Actualizamos el candado: listo_para_busqueda = true solo si NO quedan
-    // preguntas críticas sin responder para este proyecto.
+    const { data: proyectoAntes } = await supabase
+      .from("proyectos_clientes_serving")
+      .select("listo_para_encaje")
+      .eq("id", id_proyecto)
+      .maybeSingle();
+
+    const yaEstabaListo = proyectoAntes?.listo_para_encaje === true;
+
     const { data: criticasPendientes } = await supabase
       .from("preguntas_pendientes_proyecto")
       .select("id")
@@ -383,14 +387,35 @@ El campo "advertencia" solo aplica a pasos "completo" y va en null si no hay nin
       .eq("respondida", false)
       .eq("critico", true);
 
-    const listoParaBusqueda = !criticasPendientes || criticasPendientes.length === 0;
+    const { data: porcentajeActual } = await supabase.rpc("calcular_avance_estructuracion", {
+      id_proyecto,
+    });
+
+    const sinCriticasPendientes = !criticasPendientes || criticasPendientes.length === 0;
+    const cumplePorcentajeMinimo = (porcentajeActual || 0) >= UMBRAL_MINIMO_PORCENTAJE;
+    const listoParaEncaje = sinCriticasPendientes && cumplePorcentajeMinimo;
 
     await supabase
       .from("proyectos_clientes_serving")
-      .update({ listo_para_busqueda: listoParaBusqueda })
+      .update({ listo_para_encaje: listoParaEncaje })
       .eq("id", id_proyecto);
 
-    return NextResponse.json({ ok: true, pasos_procesados: resultado.pasos.length, listo_para_busqueda: listoParaBusqueda });
+    if (listoParaEncaje && !yaEstabaListo) {
+      const origen = req.nextUrl.origin;
+      after(async () => {
+        try {
+          await fetch(`${origen}/api/buscar-convocatorias`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id_proyecto }),
+          });
+        } catch (e) {
+          console.error("Error disparando Motor 2 desde estructurar-proyecto:", e);
+        }
+      });
+    }
+
+    return NextResponse.json({ ok: true, pasos_procesados: resultado.pasos.length, listo_para_encaje: listoParaEncaje });
   } catch (err: any) {
     console.error("Error en Motor 1:", err);
     return NextResponse.json(
