@@ -310,6 +310,42 @@ Responde ÚNICAMENTE con un JSON válido, sin texto antes ni después, con este 
   };
 }
 
+// NUEVO: modo masivo, usado por el cron job semanal cuando NO se indica id_proyecto.
+// Busca todos los proyectos ya listos (listo_para_encaje = true) y les hace un lote
+// nuevo, saltándose los que ya tuvieron un lote nuevo en los últimos 6 días para no
+// repetir de más ni gastar cuota de Gemini innecesariamente.
+async function ejecutarBusquedaMasiva() {
+  const haceSeisDias = new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString();
+
+  const { data: proyectosListos, error } = await supabase
+    .from("proyectos_clientes_serving")
+    .select("id, fecha_ultimo_lote_convocatorias")
+    .eq("listo_para_encaje", true)
+    .or(`fecha_ultimo_lote_convocatorias.is.null,fecha_ultimo_lote_convocatorias.lt.${haceSeisDias}`);
+
+  if (error) {
+    console.error("Error consultando proyectos listos para Motor 2 masivo:", JSON.stringify(error));
+    return { status: 500, body: { error: "No se pudo consultar la lista de proyectos listos" } };
+  }
+
+  const resumen: any[] = [];
+  const todosLosIdsSeleccionadas: { origen: string; idsSeleccionadas: string[] }[] = [];
+
+  for (const proyecto of proyectosListos || []) {
+    const resultado = await ejecutarBusquedaConvocatorias(proyecto.id);
+    resumen.push({ id_proyecto: proyecto.id, status: resultado.status, resultado: resultado.body });
+    if (resultado.idsSeleccionadas.length > 0) {
+      todosLosIdsSeleccionadas.push({ origen: proyecto.id, idsSeleccionadas: resultado.idsSeleccionadas });
+    }
+  }
+
+  return {
+    status: 200,
+    body: { ok: true, proyectos_procesados: (proyectosListos || []).length, resumen },
+    idsSeleccionadasPorProyecto: todosLosIdsSeleccionadas,
+  };
+}
+
 function dispararEncajesEnSegundoPlano(origen: string, idsSeleccionadas: string[]) {
   for (const id_convocatoria of idsSeleccionadas) {
     after(async () => {
@@ -348,12 +384,23 @@ export async function POST(req: NextRequest) {
 
 // Disparo manual por navegador, útil para pruebas: visita
 // /api/buscar-convocatorias?id_proyecto=EL-ID-DEL-PROYECTO
+//
+// Disparo automático del cron job semanal (Vercel Cron llama a esta misma ruta
+// por GET, sin ningún parámetro): en ese caso se activa el modo masivo, que
+// procesa TODOS los proyectos listos para encaje de una sola vez.
 export async function GET(req: NextRequest) {
   try {
     const id_proyecto = req.nextUrl.searchParams.get("id_proyecto");
+
     if (!id_proyecto) {
-      return NextResponse.json({ error: "Falta ?id_proyecto= en la URL" }, { status: 400 });
+      // Sin id_proyecto en la URL = lo está llamando el cron job semanal, no una prueba manual.
+      const resultadoMasivo = await ejecutarBusquedaMasiva();
+      for (const grupo of resultadoMasivo.idsSeleccionadasPorProyecto || []) {
+        dispararEncajesEnSegundoPlano(req.nextUrl.origin, grupo.idsSeleccionadas);
+      }
+      return NextResponse.json(resultadoMasivo.body, { status: resultadoMasivo.status });
     }
+
     const resultado = await ejecutarBusquedaConvocatorias(id_proyecto);
     if (resultado.idsSeleccionadas.length > 0) {
       dispararEncajesEnSegundoPlano(req.nextUrl.origin, resultado.idsSeleccionadas);
