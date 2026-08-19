@@ -1,1 +1,11 @@
-
+{
+  "inicio.titulo": "Arquitectura Digital de Proyectos",
+  "inicio.subtitulo": "Tu camino directo a la financiación",
+  "inicio.boton_diagnostico": "Diagnóstico Gratuito",
+  "inicio.boton_planes": "Ver Planes de Estructuración",
+  "menu.diagnostico": "Diagnóstico Gratuito",
+  "menu.app_ideas": "App de Ideas",
+  "menu.planes": "Planes de Estructuración",
+  "menu.dashboard": "Ir al Dashboard",
+  "menu.oportunidades": "Oportunidades para tu Proyecto"
+}
