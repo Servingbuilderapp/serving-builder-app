@@ -18,7 +18,7 @@ interface LandingClientProps {
 }
 
 export function LandingClient({ user, syncPlans }: LandingClientProps) {
-  const { language } = useTranslation()
+  const { t } = useTranslation()
 
   return (
     <div className="min-h-screen bg-color-base-100 text-color-base-content overflow-hidden">
@@ -41,26 +41,26 @@ export function LandingClient({ user, syncPlans }: LandingClientProps) {
           </Link>
           <div className="flex items-center gap-6">
             <Link href="#diagnostico" className="hidden md:block text-[10px] font-black uppercase tracking-[0.3em] text-color-primary hover:text-emerald-700 transition-colors">
-              Diagnóstico Gratuito
+              {t('nav.diagnostico')}
             </Link>
             <Link href="#pricing" className="hidden md:block text-[10px] font-black uppercase tracking-[0.3em] text-color-base-content/60 hover:text-color-base-content transition-colors">
-              Planes de Estructuración
+              {t('nav.planes')}
             </Link>
             {user ? (
               <Link href="/dashboard">
                 <GlowButton className="text-[10px] h-10 px-8 gap-2 font-black tracking-widest">
                   <LayoutGrid className="h-4 w-4" />
-                  DASHBOARD
+                  {t('nav.dashboard')}
                 </GlowButton>
               </Link>
             ) : (
               <>
               <a href="/login" className="text-[10px] font-black uppercase tracking-[0.3em] text-color-base-content/60 hover:text-color-base-content transition-colors">
-                {language === 'en' ? 'Login' : 'Iniciar Sesión'}
+                {t('nav.login')}
               </a>
               <a href="/signup" className="contents">
                 <GlowButton className="text-[10px] h-10 px-8 font-black tracking-widest">
-                  {language === 'en' ? 'GET STARTED' : 'EMPEZAR AHORA'}
+                  {t('nav.empezar')}
                 </GlowButton>
               </a>
               </>
@@ -74,35 +74,41 @@ export function LandingClient({ user, syncPlans }: LandingClientProps) {
         <div className="max-w-3xl mx-auto text-center space-y-8">
           <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-color-primary/10 border border-color-primary/20 text-[10px] font-black uppercase tracking-[0.3em] text-color-primary animate-in fade-in slide-in-from-left-4 duration-1000">
             <Sparkles className="h-4 w-4 fill-color-primary" />
-            Estructuración Inteligente de Proyectos
+            {t('hero.badge')}
           </div>
 
           <h1 className="text-5xl md:text-7xl font-black tracking-tighter leading-[0.9] italic uppercase animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
-            Arquitectura Digital <br />
+            {t('hero.titulo_linea1')} <br />
             <span className="text-gradient-magma drop-shadow-[0_0_30px_rgba(16,185,129,0.3)]">
-              de Proyectos
+              {t('hero.titulo_linea2')}
             </span>
           </h1>
 
           <p className="text-xl md:text-2xl font-black italic text-color-primary animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
-            Tu camino directo a la financiación
+            {t('hero.subtitulo')}
           </p>
 
           <p className="text-lg md:text-xl text-color-base-content/80 max-w-xl mx-auto font-medium leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400">
-            Estructuramos, formalizamos y <span className="text-color-base-content font-black">acompañamos la postulación</span> de tu <span className="text-color-base-content font-black">Emprendimiento, Proyecto Social o Sostenible</span> ante <strong className="text-color-primary">convocatorias, subvenciones y fondos de cooperación internacional</strong>, buscando en múltiples plataformas y motores de búsqueda la fuente que mejor encaje con tu proyecto.
+            {t('hero.descripcion_1')}
+            <span className="text-color-base-content font-black">{t('hero.descripcion_bold1')}</span>
+            {t('hero.descripcion_2')}
+            <span className="text-color-base-content font-black">{t('hero.descripcion_bold2')}</span>
+            {t('hero.descripcion_3')}
+            <strong className="text-color-primary">{t('hero.descripcion_bold3')}</strong>
+            {t('hero.descripcion_4')}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-600">
             <a href="#diagnostico" className="contents">
               <GlowButton
                 className="h-14 px-10 text-xs gap-3 font-black italic uppercase tracking-widest bg-gradient-to-r from-color-primary to-teal-500"
               >
-                REALIZAR DIAGNÓSTICO GRATUITO
+                {t('hero.boton_diagnostico')}
                 <ArrowRight className="h-5 w-5" />
               </GlowButton>
             </a>
             <a href="#pricing">
               <button className="h-14 px-8 text-xs font-black uppercase tracking-[0.2em] text-color-base-content/70 hover:text-color-base-content transition-all rounded-2xl bg-white/60 border border-color-base-300 hover:bg-white group">
-                Ver Planes de Acompañamiento
+                {t('hero.boton_planes')}
               </button>
             </a>
           </div>
@@ -116,15 +122,13 @@ export function LandingClient({ user, syncPlans }: LandingClientProps) {
       <section id="pricing" className="relative z-10 py-40 px-6 max-w-[95rem] mx-auto">
         <div className="text-center space-y-6 mb-24">
           <h2 className="text-5xl md:text-7xl font-black uppercase italic tracking-tighter">
-            {language === 'en' ? 'Structuring ' : 'Planes de '}
+            {t('pricing.titulo_1')}
             <span className="text-gradient-magma">
-              {language === 'en' ? 'Plans' : 'Estructuración'}
+              {t('pricing.titulo_2')}
             </span>
           </h2>
           <p className="text-color-base-content/60 font-medium text-xl max-w-2xl mx-auto leading-relaxed">
-            {language === 'en'
-              ? 'Turn your project into a fundable, ready-to-submit proposal.'
-              : 'Convierte tu proyecto en una propuesta lista y financiable.'}
+            {t('pricing.descripcion')}
           </p>
         </div>
 
@@ -148,23 +152,23 @@ export function LandingClient({ user, syncPlans }: LandingClientProps) {
             </div>
             <p className="text-color-base-content/40 text-xs font-bold uppercase tracking-[0.3em] leading-relaxed">
               © 2026 ARQUITECTURA DIGITAL DE PROYECTOS. <br />
-              {language === 'en' ? `YOUR DIRECT PATH TO FUNDING.` : `TU CAMINO DIRECTO A LA FINANCIACIÓN.`}
+              {t('footer.tagline')}
             </p>
           </div>
           <div className="flex justify-md-end gap-10">
             <div className="space-y-4">
               <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-color-base-content">
-                {language === 'en' ? 'Contact & Legal' : 'Contacto y Legal'}
+                {t('footer.contacto_legal')}
               </h4>
               <nav className="flex flex-col gap-2">
                 <a href="mailto:servingbuilderapp@gmail.com" className="text-[10px] font-bold text-color-base-content/60 hover:text-color-base-content transition-colors uppercase">
-                  {language === 'en' ? 'Support' : 'Soporte'}
+                  {t('footer.soporte')}
                 </a>
                 <Link href="/privacy" className="text-[10px] font-bold text-color-base-content/60 hover:text-color-base-content transition-colors uppercase">
-                  {language === 'en' ? 'Privacy Policy' : 'Políticas de Privacidad'}
+                  {t('footer.privacidad')}
                 </Link>
                 <Link href="/terms" className="text-[10px] font-bold text-color-base-content/60 hover:text-color-base-content transition-colors uppercase">
-                  {language === 'en' ? 'Terms of Service' : 'Términos de Servicio'}
+                  {t('footer.terminos')}
                 </Link>
               </nav>
             </div>
