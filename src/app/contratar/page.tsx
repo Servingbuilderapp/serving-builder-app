@@ -7,6 +7,7 @@ import { GlassCard } from '@/components/ui/GlassCard'
 import { CheckCircle2, ShieldCheck, Loader2 } from 'lucide-react'
 import { PayPalButtons } from '@paypal/react-paypal-js'
 import { cn } from '@/lib/utils'
+import { useTranslation } from '@/hooks/useTranslation'
 
 const TASA_COP_POR_USD = 3244 // Actualizar periódicamente según la TRM del día
 
@@ -197,6 +198,7 @@ function formatCOP(v: number) {
 }
 
 function ContratarContent() {
+  const { t } = useTranslation()
   const searchParams = useSearchParams()
   const planSlug = searchParams.get('plan') || 'esencial'
   const montoFondoEmprender = Number(searchParams.get('monto')) || 30000000
@@ -283,7 +285,7 @@ function ContratarContent() {
               <div className="space-y-4">
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-color-base-content/70 mb-2">
-                    Nombre completo *
+                    {t('contratar.campo_nombre')}
                   </label>
                   <input
                     required
@@ -294,7 +296,7 @@ function ContratarContent() {
                 </div>
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-color-base-content/70 mb-2">
-                    Nombre del proyecto u organización
+                    {t('contratar.campo_proyecto')}
                   </label>
                   <input
                     value={formData.nombreIniciativa}
@@ -304,7 +306,7 @@ function ContratarContent() {
                 </div>
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-color-base-content/70 mb-2">
-                    Correo electrónico *
+                    {t('contratar.campo_correo')}
                   </label>
                   <input
                     required
@@ -316,7 +318,7 @@ function ContratarContent() {
                 </div>
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-color-base-content/70 mb-2">
-                    WhatsApp *
+                    {t('contratar.campo_whatsapp')}
                   </label>
                   <input
                     required
@@ -329,7 +331,7 @@ function ContratarContent() {
 
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-color-base-content/70 mb-2">
-                  ¿Desde dónde vas a pagar? *
+                  {t('contratar.pregunta_pais')}
                 </label>
                 <div className="grid grid-cols-2 gap-3">
                   <button
@@ -337,21 +339,21 @@ function ContratarContent() {
                     onClick={() => setPais('colombia')}
                     className={`p-4 rounded-xl border text-sm font-bold transition-all ${pais === 'colombia' ? 'border-color-primary bg-color-primary/10' : 'border-color-base-300'}`}
                   >
-                    🇨🇴 Colombia
+                    {t('contratar.pais_colombia')}
                   </button>
                   <button
                     type="button"
                     onClick={() => setPais('internacional')}
                     className={`p-4 rounded-xl border text-sm font-bold transition-all ${pais === 'internacional' ? 'border-color-primary bg-color-primary/10' : 'border-color-base-300'}`}
                   >
-                    🌎 Otro país
+                    {t('contratar.pais_internacional')}
                   </button>
                 </div>
               </div>
 
               <div className="p-5 rounded-2xl bg-color-base-content/5 border border-color-base-content/10 space-y-3">
                 <h4 className="text-xs font-black uppercase tracking-widest text-color-base-content">
-                  Contrato de Servicio y Autorización de Datos Personales
+                  {t('contratar.titulo_contrato')}
                 </h4>
                 <div
                   onScroll={(e) => {
@@ -366,7 +368,7 @@ function ContratarContent() {
                 </div>
                 {!contratoLeido && (
                   <p className="text-[10px] text-amber-600 font-bold">
-                    ↑ Desplázate hasta el final del documento para poder aceptar.
+                    {t('contratar.aviso_scroll')}
                   </p>
                 )}
                 <label className={cn("flex items-start gap-3", contratoLeido ? "cursor-pointer" : "cursor-not-allowed opacity-50")}>
@@ -378,7 +380,7 @@ function ContratarContent() {
                     className="mt-1"
                   />
                   <span className="text-xs font-bold text-color-base-content">
-                    He leído y acepto el contrato de servicio y el tratamiento de mis datos personales, y confirmo que la información suministrada es veraz.
+                    {t('contratar.checkbox_acepto')}
                   </span>
                 </label>
               </div>
@@ -390,7 +392,7 @@ function ContratarContent() {
                 disabled={!formData.aceptaTerminos || !pais || loading}
                 className="w-full py-4 text-sm font-black uppercase tracking-widest"
               >
-                {loading ? <Loader2 className="h-5 w-5 animate-spin mx-auto" /> : 'Firmar y Continuar al Pago'}
+                {loading ? <Loader2 className="h-5 w-5 animate-spin mx-auto" /> : t('contratar.boton_firmar')}
               </GlowButton>
             </form>
           )}
@@ -398,41 +400,41 @@ function ContratarContent() {
           {step === 2 && (
             <div className="space-y-6 text-center">
               <CheckCircle2 className="h-14 w-14 text-emerald-500 mx-auto" />
-              <h2 className="text-xl font-black text-color-base-content">¡Contrato firmado con éxito!</h2>
+              <h2 className="text-xl font-black text-color-base-content">{t('contratar.titulo_exito')}</h2>
               {passwordTemporal && (
                 <div className="text-left p-5 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-2">
                   <p className="text-xs font-black uppercase tracking-widest text-emerald-700">
-                    Tu acceso a la plataforma
+                    {t('contratar.acceso_titulo')}
                   </p>
                   <p className="text-sm text-color-base-content">
-                    Correo: <strong>{formData.correoCliente}</strong>
+                    {t('contratar.acceso_correo')} <strong>{formData.correoCliente}</strong>
                   </p>
                   <p className="text-sm text-color-base-content">
-                    Contraseña temporal: <strong className="font-mono">{passwordTemporal}</strong>
+                    {t('contratar.acceso_password')} <strong className="font-mono">{passwordTemporal}</strong>
                   </p>
                   <p className="text-xs text-color-base-content/60 pt-1">
-                    Guarda estos datos — los necesitas para entrar a tu panel en{' '}
-                    <a href="/login" className="text-color-primary underline">/login</a>. Te
-                    recomendamos cambiar la contraseña la primera vez que ingreses.
+                    {t('contratar.acceso_nota_1')}{' '}
+                    <a href="/login" className="text-color-primary underline">/login</a>
+                    {t('contratar.acceso_nota_2')}
                   </p>
                 </div>
               )}
 
               {pais === 'colombia' ? (
                 <div className="text-left p-6 rounded-2xl bg-color-base-content/5 border border-color-base-content/10 space-y-2">
-                  <p className="text-sm font-bold text-color-base-content">Realiza tu transferencia a:</p>
-                  <p className="text-sm text-color-base-content/70">Banco: [COMPLETAR]</p>
-                  <p className="text-sm text-color-base-content/70">Cuenta: [COMPLETAR]</p>
-                  <p className="text-sm text-color-base-content/70">Titular: [COMPLETAR]</p>
-                  <p className="text-sm text-color-base-content/70">Valor: {formatCOP(plan.montoCop)}</p>
+                  <p className="text-sm font-bold text-color-base-content">{t('contratar.transferencia_titulo')}</p>
+                  <p className="text-sm text-color-base-content/70">{t('contratar.banco_label')} [COMPLETAR]</p>
+                  <p className="text-sm text-color-base-content/70">{t('contratar.cuenta_label')} [COMPLETAR]</p>
+                  <p className="text-sm text-color-base-content/70">{t('contratar.titular_label')} [COMPLETAR]</p>
+                  <p className="text-sm text-color-base-content/70">{t('contratar.valor_label')} {formatCOP(plan.montoCop)}</p>
                   <p className="text-xs text-color-base-content/50 pt-2">
-                    Una vez hagas la transferencia, envíanos el comprobante por WhatsApp para activar tu proyecto.
+                    {t('contratar.transferencia_nota')}
                   </p>
                 </div>
               ) : (
                 <div className="text-left p-6 rounded-2xl bg-color-base-content/5 border border-color-base-content/10 space-y-4">
                   <p className="text-sm font-bold text-color-base-content">
-                    Paga ${montoUsd.toLocaleString('en-US')} USD (equivalente aproximado)
+                    {t('contratar.pago_usd_prefijo')} ${montoUsd.toLocaleString('en-US')} USD {t('contratar.pago_usd_sufijo')}
                   </p>
                   <PayPalButtons
                     style={{ layout: 'vertical' }}
@@ -450,7 +452,7 @@ function ContratarContent() {
                     onApprove={async (_data, actions) => {
                       if (!actions.order) return
                       await actions.order.capture()
-                      alert('¡Pago recibido! En breve activaremos tu proyecto.')
+                      alert(t('contratar.paypal_alert'))
                     }}
                   />
                 </div>
@@ -462,12 +464,12 @@ function ContratarContent() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-color-primary hover:underline"
               >
-                Enviar comprobante por WhatsApp
+                {t('contratar.boton_whatsapp')}
               </a>
 
               <div className="flex items-center justify-center gap-2 text-[10px] text-color-base-content/40 uppercase tracking-widest font-black pt-4">
                 <ShieldCheck className="h-3 w-3" />
-                Tus datos están protegidos
+                {t('contratar.footer_seguridad')}
               </div>
             </div>
           )}
