@@ -8,13 +8,11 @@
   "menu.planes": "Planes de Estructuración",
   "menu.dashboard": "Ir al Dashboard",
   "menu.oportunidades": "Oportunidades para tu Proyecto",
-
   "nav.diagnostico": "Diagnóstico Gratuito",
   "nav.planes": "Planes de Estructuración",
   "nav.dashboard": "DASHBOARD",
   "nav.login": "Iniciar Sesión",
   "nav.empezar": "EMPEZAR AHORA",
-
   "hero.badge": "Estructuración Inteligente de Proyectos",
   "hero.titulo_linea1": "Arquitectura Digital",
   "hero.titulo_linea2": "de Proyectos",
@@ -28,14 +26,21 @@
   "hero.descripcion_4": ", buscando en múltiples plataformas y motores de búsqueda la fuente que mejor encaje con tu proyecto.",
   "hero.boton_diagnostico": "REALIZAR DIAGNÓSTICO GRATUITO",
   "hero.boton_planes": "Ver Planes de Acompañamiento",
-
   "pricing.titulo_1": "Planes de ",
   "pricing.titulo_2": "Estructuración",
   "pricing.descripcion": "Convierte tu proyecto en una propuesta lista y financiable.",
-
   "footer.tagline": "TU CAMINO DIRECTO A LA FINANCIACIÓN.",
   "footer.contacto_legal": "Contacto y Legal",
   "footer.soporte": "Soporte",
   "footer.privacidad": "Políticas de Privacidad",
-  "footer.terminos": "Términos de Servicio"
-}
+  "footer.terminos": "Términos de Servicio",
+  "contratar.campo_nombre": "Nombre completo *",
+  "contratar.campo_proyecto": "Nombre del proyecto u organización",
+  "contratar.campo_correo": "Correo electrónico *",
+  "contratar.campo_whatsapp": "WhatsApp *",
+  "contratar.pregunta_pais": "¿Desde dónde vas a pagar? *",
+  "contratar.pais_colombia": "🇨🇴 Colombia",
+  "contratar.pais_internacional": "🌎 Otro país",
+  "contratar.titulo_contrato": "Contrato de Servicio y Autorización de Datos Personales",
+  "contratar.aviso_scroll": "↑ Desplázate hasta el final del documento para poder aceptar.",
+  "contratar.checkbox_acepto": "He leído y acepto el contrato de servicio y el tratamiento de mis datos personales, y
