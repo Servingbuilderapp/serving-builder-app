@@ -73,11 +73,10 @@
   "dashboard.portal_replica_titulo": "Portal Réplica",
   "dashboard.portal_replica_texto": "Tu proyecto se presenta, tal como fue estructurado, a todas las convocatorias identificadas. Si más adelante necesitas hacer ajustes o una nueva búsqueda, eso se gestiona en el Portal Réplica, una plataforma aparte con un valor de $1.800 USD. Ahí encontrarás todos los términos y condiciones.",
   "dashboard.portal_replica_boton": "Ir al Portal Réplica",
-  "comun.volver_inicio": "VOLVER AL INICIO"
-{
+  "comun.volver_inicio": "VOLVER AL INICIO",
   "mga.volver_estructuracion": "VOLVER A ESTRUCTURACIÓN (BLOQUE 2)",
   "mga.badge": "BLOQUE 3 • MOTOR MGA & FORMULARIOS SENA",
   "mga.titulo": "Marco Lógico Automatizado & Fichas Presupuestales",
   "mga.descripcion": "Generación inteligente del Árbol de Problemas, Árbol de Objetivos, Matriz de Riesgos y Cronograma de Inversión bajo la Metodología General Ajustada (MGA) exigida en Colombia por el Fondo Emprender SENA y convocatorias internacionales.",
   "mga.nombre_proyecto_defecto": "Proyecto de Innovación & Estructuración MGA"
-}}
+}
