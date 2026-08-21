@@ -72,5 +72,6 @@
   "dashboard.pagado_texto_2": ") para que empecemos a trabajar en tu estructuración.",
   "dashboard.portal_replica_titulo": "Portal Réplica",
   "dashboard.portal_replica_texto": "Tu proyecto se presenta, tal como fue estructurado, a todas las convocatorias identificadas. Si más adelante necesitas hacer ajustes o una nueva búsqueda, eso se gestiona en el Portal Réplica, una plataforma aparte con un valor de $1.800 USD. Ahí encontrarás todos los términos y condiciones.",
-  "dashboard.portal_replica_boton": "Ir al Portal Réplica"
-"comun.volver_inicio": "VOLVER AL INICIO"}
+  "dashboard.portal_replica_boton": "Ir al Portal Réplica",
+  "comun.volver_inicio": "VOLVER AL INICIO"
+}
