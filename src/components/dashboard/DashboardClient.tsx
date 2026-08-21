@@ -1,20 +1,17 @@
 'use client'
 
 import React from 'react'
-import { SubirDocumentoProyecto } from '@/components/dashboard/SubirDocumentoProyecto'
 import { SaludoCliente } from '@/components/dashboard/SaludoCliente'
-import { ChecklistEstructuracion } from '@/components/dashboard/ChecklistEstructuracion'
-import { PreguntasPendientesProyecto } from '@/components/dashboard/PreguntasPendientesProyecto'
-import { EstadoProyecto } from '@/components/dashboard/EstadoProyecto'
-import { ConvocatoriasEncontradas } from '@/components/dashboard/ConvocatoriasEncontradas'
 import { useTranslation } from '@/hooks/useTranslation'
 
 interface DashboardClientProps {
   proyecto: any
   nombreMostrar: string
+  subirDocumento?: React.ReactNode
+  otrosPagado?: React.ReactNode
 }
 
-export function DashboardClient({ proyecto, nombreMostrar }: DashboardClientProps) {
+export function DashboardClient({ proyecto, nombreMostrar, subirDocumento, otrosPagado }: DashboardClientProps) {
   const { t } = useTranslation()
 
   const mensajePortalReplica = proyecto
@@ -52,29 +49,11 @@ export function DashboardClient({ proyecto, nombreMostrar }: DashboardClientProp
           <p className="text-emerald-700 text-sm">
             {t('dashboard.pagado_texto_1')}{proyecto.nombre_iniciativa}{t('dashboard.pagado_texto_2')}
           </p>
-          <SubirDocumentoProyecto
-            proyectoId={proyecto.id}
-            archivoActualNombre={proyecto.archivo_proyecto_nombre}
-            archivoActualUrl={proyecto.archivo_proyecto_url}
-          />
+          {subirDocumento}
         </div>
       )}
 
-      {proyecto && proyecto.estado_actual === 'pagado' && (
-        <ChecklistEstructuracion proyectoId={proyecto.id} />
-      )}
-
-      {proyecto && proyecto.estado_actual === 'pagado' && (
-        <EstadoProyecto proyectoId={proyecto.id} />
-      )}
-
-      {proyecto && proyecto.estado_actual === 'pagado' && (
-        <PreguntasPendientesProyecto proyectoId={proyecto.id} />
-      )}
-
-      {proyecto && proyecto.estado_actual === 'pagado' && (
-        <ConvocatoriasEncontradas proyectoId={proyecto.id} />
-      )}
+      {otrosPagado}
 
       {proyecto && (
         <div className="p-8 rounded-3xl border border-color-base-content/10 bg-color-base-content/5 space-y-3">
