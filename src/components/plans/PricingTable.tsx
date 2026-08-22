@@ -1,17 +1,14 @@
 'use client'
-
 import React from 'react'
 import { useTranslation } from '@/hooks/useTranslation'
 import { CheckCircle2, Crown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { GlowButton } from '@/components/ui/GlowButton'
 import { useRouter } from 'next/navigation'
-
 interface PricingTableProps {
   plans: any[]
   currentPlanId: string | null
 }
-
 function formatCOP(value: number) {
   return new Intl.NumberFormat('es-CO', {
     style: 'currency',
@@ -19,29 +16,25 @@ function formatCOP(value: number) {
     maximumFractionDigits: 0,
   }).format(value)
 }
-
 export function PricingTable({ plans }: PricingTableProps) {
   const { language } = useTranslation()
   const router = useRouter()
-
   const PlanCard = ({ plan }: { plan: any }) => {
     const features = language === 'en' ? plan.items_en : plan.items_es
     const featured = !!plan.featured
-
     return (
       <div className={cn(
-        "relative group flex flex-col h-full border rounded-3xl p-8 transition-all duration-500 overflow-hidden shadow-2xl bg-white",
+        "relative group flex flex-col h-full rounded-3xl p-8 transition-all duration-500 overflow-hidden glass-card",
         featured
-          ? "border-orange-500/40 hover:border-orange-400/60 shadow-xl hover:shadow-2xl ring-1 ring-orange-500/30 md:scale-105"
-          : "border-color-base-content/10 hover:border-color-primary/40"
+          ? "border border-color-accent-violet/40 hover:border-color-accent-magenta/60 ring-1 ring-color-accent-violet/30 md:scale-105"
+          : "border border-color-base-content/10 hover:border-color-primary/40"
       )}>
         {featured && (
-          <div className="absolute top-6 right-6 px-3 py-1 rounded-full bg-linear-to-r from-orange-500 to-purple-600 text-white text-[10px] font-black uppercase tracking-widest flex items-center gap-1 z-20">
+          <div className="absolute top-6 right-6 px-3 py-1 rounded-full bg-linear-to-r from-color-accent-violet to-color-accent-magenta text-white text-[10px] font-black uppercase tracking-widest flex items-center gap-1 z-20">
             <Crown className="h-3 w-3" />
             {language === 'en' ? 'Recommended' : 'Recomendado'}
           </div>
         )}
-
         <div className="relative space-y-6 flex-1">
           <div className="space-y-2">
             <h3 className="text-2xl font-bold text-color-base-content leading-tight">
@@ -51,7 +44,6 @@ export function PricingTable({ plans }: PricingTableProps) {
               {language === 'en' ? plan.description_en : plan.description_es}
             </p>
           </div>
-
           <div className="flex items-baseline gap-2">
             <span className="text-4xl font-black text-color-base-content tracking-tighter">
               {formatCOP(plan.price_monthly)}
@@ -60,7 +52,6 @@ export function PricingTable({ plans }: PricingTableProps) {
               {language === 'en' ? 'one-time' : 'pago único'}
             </span>
           </div>
-
           <div className="space-y-4 pt-4">
             <div className="h-px bg-color-base-content/10 w-full" />
             <ul className="space-y-4">
@@ -75,7 +66,6 @@ export function PricingTable({ plans }: PricingTableProps) {
             </ul>
           </div>
         </div>
-
         <div className="mt-8">
           <GlowButton
             onClick={() => router.push(`/contratar?plan=${plan.slug}`)}
@@ -87,7 +77,6 @@ export function PricingTable({ plans }: PricingTableProps) {
       </div>
     )
   }
-
   return (
     <div className="space-y-16">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto items-stretch">
