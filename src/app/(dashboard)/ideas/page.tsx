@@ -12,11 +12,5 @@ export default async function IdeasPage() {
     redirect('/login')
   }
 
-  const { data: profile } = await supabase
-    .from('users')
-    .select('plan_slug')
-    .eq('id', user.id)
-    .single()
-
-  return <IdeasClient planSlug={profile?.plan_slug || 'free'} />
+  return <IdeasClient />
 }
