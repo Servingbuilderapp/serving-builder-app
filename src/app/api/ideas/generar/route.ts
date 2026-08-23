@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { callGemini } from '@/lib/gemini'
 
 export interface IdeasGenerarInput {
-  // Descripción libre de lo que el usuario está pensando (obligatorio)
+  // Descripción libre de lo que el usuario está pensando (obligatorio). Puede ser "no tengo idea todavía".
   descripcionIdea: string
   sectorActual?: string
 
@@ -15,15 +15,12 @@ export interface IdeasGenerarInput {
     crear?: string
   }
 
-  // Herramienta 2: Mapa de Convergencia Tecnológica (id de la tecnología elegida)
-  tecnologiaSeleccionada?: string
+  // Herramienta 2: Mapa de Convergencia Tecnológica (hasta 2 tecnologías elegidas)
+  tecnologiasSeleccionadas?: string[]
 
-  // Herramienta 3: Brújula de Necesidades Humanas (ids elegidos)
+  // Herramienta 3: Brújula de Necesidades Humanas
   necesidadSeleccionada?: string
   formaSeleccionada?: string
-
-  // Si es true: genera el documento final descargable (cuenta contra el tope semanal de 4)
-  generarDocumentoFinal: boolean
 }
 
 export interface IdeaPropuesta {
@@ -34,13 +31,57 @@ export interface IdeaPropuesta {
 }
 
 export interface IdeasResultado {
+  // Comentario breve sobre la Matriz de Reinvención: qué le sugiere la IA eliminar/reducir/incrementar/crear
+  sugerenciasReinvencion?: {
+    eliminar: string
+    reducir: string
+    incrementar: string
+    crear: string
+  }
+  // Ideas concretas nacidas del cruce sector x tecnología elegida
+  ideasConvergencia?: IdeaPropuesta[]
+  // Cómo la necesidad humana elegida ancla el proyecto
+  notaNecesidades?: string
+  // Ideas generales (siempre presentes)
   ideas: IdeaPropuesta[]
-  notaConceptoMarkdown?: string
-  documentosRestantesSemana?: number
+  notaConceptoMarkdown: string
+  disponible: boolean
+  proximaFechaDisponible?: string
 }
 
-const LIMITE_DOCUMENTOS = 1
 const DIAS_VENTANA_LIMITE = 15
+
+async function calcularDisponibilidad(supabase: any, userId: string) {
+  const { data } = await supabase
+    .from('app_ideas_documentos')
+    .select('created_at')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (!data) return { disponible: true, proximaFechaDisponible: undefined as string | undefined }
+
+  const proximaFecha = new Date(new Date(data.created_at).getTime() + DIAS_VENTANA_LIMITE * 24 * 60 * 60 * 1000)
+  const disponible = proximaFecha.getTime() <= Date.now()
+  return { disponible, proximaFechaDisponible: disponible ? undefined : proximaFecha.toISOString() }
+}
+
+// GET: consultar si el usuario tiene disponible su generación quincenal (para deshabilitar el botón antes de intentar)
+export async function GET() {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 })
+    }
+    const estado = await calcularDisponibilidad(supabase, user.id)
+    return NextResponse.json(estado)
+  } catch (error: any) {
+    console.error('Error en GET /api/ideas/generar:', error)
+    return NextResponse.json({ error: 'Error al verificar disponibilidad' }, { status: 500 })
+  }
+}
 
 export async function POST(req: Request) {
   try {
@@ -53,77 +94,80 @@ export async function POST(req: Request) {
 
     const body: IdeasGenerarInput = await req.json()
 
-    if (!body.descripcionIdea || body.descripcionIdea.trim().length < 5) {
-      return NextResponse.json({ error: 'Cuéntanos un poco más sobre tu idea o negocio' }, { status: 400 })
+    if (!body.descripcionIdea || body.descripcionIdea.trim().length < 3) {
+      return NextResponse.json({ error: 'Cuéntanos algo sobre ti o tu negocio, aunque sea que todavía no tienes una idea clara' }, { status: 400 })
     }
 
-    // Si pide documento final, primero validar el tope de 4 por semana
-    if (body.generarDocumentoFinal) {
-      const inicioVentana = new Date(Date.now() - DIAS_VENTANA_LIMITE * 24 * 60 * 60 * 1000).toISOString()
-      const { count, error: countError } = await supabase
-        .from('app_ideas_documentos')
-        .select('id', { count: 'exact', head: true })
-        .eq('user_id', user.id)
-        .gte('created_at', inicioVentana)
-
-      if (countError) {
-        console.error('No se pudo verificar el límite de documentos:', countError)
-      } else if ((count || 0) >= LIMITE_DOCUMENTOS) {
-        return NextResponse.json(
-          { error: `Ya generaste tu documento de estos últimos ${DIAS_VENTANA_LIMITE} días. Vuelve a intentarlo más adelante, o sigue explorando ideas sin descargar el documento.` },
-          { status: 429 }
-        )
-      }
+    // Un solo uso cada 15 días — se valida ANTES de gastar la llamada a Gemini
+    const { disponible, proximaFechaDisponible } = await calcularDisponibilidad(supabase, user.id)
+    if (!disponible) {
+      return NextResponse.json(
+        {
+          error: `Ya usaste tu generación de estos 15 días. Vuelve a intentarlo a partir del ${new Date(proximaFechaDisponible!).toLocaleDateString('es-CO', { day: 'numeric', month: 'long' })}.`,
+          disponible: false,
+          proximaFechaDisponible
+        },
+        { status: 429 }
+      )
     }
 
-    // Construir el detalle de las herramientas usadas (solo las que el usuario llenó)
+    // Construir el contexto de las 3 herramientas (solo lo que el usuario llenó)
+    const tieneReinvencion = body.matrizReinvencion && Object.values(body.matrizReinvencion).some(Boolean)
+    const tieneTecnologias = body.tecnologiasSeleccionadas && body.tecnologiasSeleccionadas.length > 0
+    const tieneNecesidad = body.necesidadSeleccionada || body.formaSeleccionada
+
     const partesHerramientas: string[] = []
 
     if (body.sectorActual) {
-      partesHerramientas.push(`Sector/industria actual del usuario: ${body.sectorActual}`)
+      partesHerramientas.push(`Sector/industria actual o de interés: ${body.sectorActual}`)
     }
-
-    if (body.matrizReinvencion && Object.values(body.matrizReinvencion).some(Boolean)) {
-      partesHerramientas.push(`Respuestas de la Matriz de Reinvención:
-- Qué eliminar: ${body.matrizReinvencion.eliminar || '(sin respuesta)'}
-- Qué reducir: ${body.matrizReinvencion.reducir || '(sin respuesta)'}
-- Qué incrementar: ${body.matrizReinvencion.incrementar || '(sin respuesta)'}
-- Qué crear: ${body.matrizReinvencion.crear || '(sin respuesta)'}`)
+    if (tieneReinvencion) {
+      partesHerramientas.push(`El usuario respondió (o dejó en blanco) estas preguntas de reinvención — si dejó algo en blanco, PROPÓN TÚ una sugerencia concreta y justificada, no genérica:
+- Qué eliminar: ${body.matrizReinvencion?.eliminar || '(el usuario no respondió — sugiere tú algo concreto)'}
+- Qué reducir: ${body.matrizReinvencion?.reducir || '(el usuario no respondió — sugiere tú algo concreto)'}
+- Qué incrementar: ${body.matrizReinvencion?.incrementar || '(el usuario no respondió — sugiere tú algo concreto)'}
+- Qué crear: ${body.matrizReinvencion?.crear || '(el usuario no respondió — sugiere tú algo concreto)'}`)
     }
-
-    if (body.tecnologiaSeleccionada) {
-      partesHerramientas.push(`Tecnología emergente elegida para cruzar con el sector (Mapa de Convergencia Tecnológica): ${body.tecnologiaSeleccionada}`)
+    if (tieneTecnologias) {
+      partesHerramientas.push(`Tecnologías emergentes elegidas para cruzar con su sector: ${body.tecnologiasSeleccionadas!.join(', ')}`)
     }
-
-    if (body.necesidadSeleccionada || body.formaSeleccionada) {
-      partesHerramientas.push(`Brújula de Necesidades Humanas — necesidad humana a satisfacer: ${body.necesidadSeleccionada || '(sin elegir)'}, forma de satisfacerla: ${body.formaSeleccionada || '(sin elegir)'}`)
+    if (tieneNecesidad) {
+      partesHerramientas.push(`Necesidad humana a satisfacer: ${body.necesidadSeleccionada || '(no eligió, sugiere tú la más relevante)'}, forma de satisfacerla: ${body.formaSeleccionada || '(no eligió, sugiere tú la más relevante)'}`)
     }
 
     const contextoHerramientas = partesHerramientas.length > 0
-      ? `\n\nEl usuario también usó estas herramientas de exploración, tenlas en cuenta como inspiración (no las menciones por nombre técnico en la respuesta, solo úsalas como insumo):\n${partesHerramientas.join('\n\n')}`
-      : ''
+      ? `\n\nHerramientas de exploración que el usuario usó:\n${partesHerramientas.join('\n\n')}`
+      : '\n\nEl usuario no usó ninguna herramienta adicional — trabaja solo con su descripción libre.'
 
-    const prompt = `Eres un consultor experto en desarrollo de ideas de negocio y proyectos, especializado en Latinoamérica, subvenciones y cooperación internacional. Un usuario te describe una idea o negocio. Genera propuestas de proyecto concretas, realistas y accionables. Responde ÚNICAMENTE con un JSON válido (sin texto adicional, sin markdown, sin \`\`\`json), con exactamente esta forma:
+    const prompt = `Eres un consultor experto en desarrollo de ideas de negocio y proyectos, especializado en Latinoamérica, subvenciones y cooperación internacional. Un usuario puede llegar con una idea clara, o completamente sin ideas ("no sé qué hacer") — en ambos casos tu trabajo es darle algo concreto y accionable, nunca una lista fría de conceptos sin explicación.
+
+Responde ÚNICAMENTE con un JSON válido (sin texto adicional, sin markdown, sin \`\`\`json), con exactamente esta forma:
 
 {
+  ${tieneReinvencion ? `"sugerenciasReinvencion": {
+    "eliminar": "<1 frase concreta y justificada, como si le hablaras directo>",
+    "reducir": "<1 frase concreta y justificada>",
+    "incrementar": "<1 frase concreta y justificada>",
+    "crear": "<1 frase concreta y justificada>"
+  },` : ''}
+  ${tieneTecnologias ? `"ideasConvergencia": [
+    { "titulo": "...", "descripcion": "...", "porQueFunciona": "...", "primerPaso": "..." }
+    // 3 a 5 ideas que nazcan ESPECÍFICAMENTE de cruzar su sector con las tecnologías elegidas
+  ],` : ''}
+  ${tieneNecesidad ? `"notaNecesidades": "<2-3 frases explicando cómo esa necesidad humana y esa forma de satisfacerla debería ser el punto de partida de sus proyectos, y qué necesitan sus clientes/beneficiarios reales a partir de ahí>",` : ''}
   "ideas": [
-    {
-      "titulo": "<nombre corto y claro de la idea>",
-      "descripcion": "<2-3 frases explicando en qué consiste>",
-      "porQueFunciona": "<1-2 frases: por qué esta idea tiene potencial real>",
-      "primerPaso": "<una acción concreta y específica para empezar esta semana>"
-    }
-    // exactamente 5 ideas, variadas entre sí
-  ]${body.generarDocumentoFinal ? `,
-  "notaConceptoMarkdown": "<documento en formato markdown, 1-2 páginas, con estas secciones: Resumen de la Idea, Problema que Resuelve, A Quién Ayuda, Cómo Funciona, Primeros Pasos Sugeridos, Posibles Fuentes de Financiación — listo para que el usuario lo use como punto de partida si decide estructurar el proyecto formalmente>` : ''}
+    { "titulo": "...", "descripcion": "...", "porQueFunciona": "...", "primerPaso": "..." }
+    // exactamente 5 ideas generales, variadas, tomando en cuenta TODO el contexto de arriba
+  ],
+  "notaConceptoMarkdown": "<documento en formato markdown, 1-2 páginas, con estas secciones: Resumen de la Idea, Problema que Resuelve, A Quién Ayuda, Cómo Funciona, Primeros Pasos Sugeridos, Posibles Fuentes de Financiación — listo para que el usuario lo use como punto de partida si decide estructurar el proyecto formalmente>"
 }
 
-LO QUE EL USUARIO CONTÓ SOBRE SU IDEA O NEGOCIO:
+LO QUE EL USUARIO CONTÓ SOBRE SÍ MISMO O SU IDEA:
 ${body.descripcionIdea}${contextoHerramientas}`
 
     const respuestaIA = await callGemini(prompt)
 
-    let resultado: IdeasResultado
+    let resultado: Partial<IdeasResultado>
     try {
       const jsonLimpio = respuestaIA.replace(/```json\n?|\n?```/g, '').trim()
       resultado = JSON.parse(jsonLimpio)
@@ -132,36 +176,30 @@ ${body.descripcionIdea}${contextoHerramientas}`
       throw new Error('No se pudieron generar las ideas, intenta de nuevo')
     }
 
-    // Si era documento final, guardarlo (esto es lo que cuenta contra el tope de 4/semana)
-    if (body.generarDocumentoFinal) {
-      const { error: insertError } = await supabase.from('app_ideas_documentos').insert({
-        user_id: user.id,
-        sector_actual: body.sectorActual || null,
-        descripcion_idea: body.descripcionIdea,
-        matriz_reinvencion: body.matrizReinvencion || null,
-        matriz_convergencia: body.tecnologiaSeleccionada ? { tecnologia: body.tecnologiaSeleccionada } : null,
-        matriz_necesidades: (body.necesidadSeleccionada || body.formaSeleccionada)
-          ? { necesidad: body.necesidadSeleccionada, forma: body.formaSeleccionada }
-          : null,
-        resultado
-      })
+    // Guardar el uso (esto es lo que cuenta contra el único uso cada 15 días)
+    const { error: insertError } = await supabase.from('app_ideas_documentos').insert({
+      user_id: user.id,
+      sector_actual: body.sectorActual || null,
+      descripcion_idea: body.descripcionIdea,
+      matriz_reinvencion: body.matrizReinvencion || null,
+      matriz_convergencia: tieneTecnologias ? { tecnologias: body.tecnologiasSeleccionadas } : null,
+      matriz_necesidades: tieneNecesidad ? { necesidad: body.necesidadSeleccionada, forma: body.formaSeleccionada } : null,
+      resultado
+    })
 
-      if (insertError) {
-        console.error('No se pudo guardar el documento de ideas:', insertError)
-      }
+    if (insertError) {
+      console.error('No se pudo guardar el documento de ideas:', insertError)
     }
 
-    // Informar cuántos documentos le quedan esta semana
-    const inicioVentanaActual = new Date(Date.now() - DIAS_VENTANA_LIMITE * 24 * 60 * 60 * 1000).toISOString()
-    const { count: usadosAhora } = await supabase
-      .from('app_ideas_documentos')
-      .select('id', { count: 'exact', head: true })
-      .eq('user_id', user.id)
-      .gte('created_at', inicioVentanaActual)
+    const respuestaFinal: IdeasResultado = {
+      ...resultado,
+      ideas: resultado.ideas || [],
+      notaConceptoMarkdown: resultado.notaConceptoMarkdown || '',
+      disponible: false,
+      proximaFechaDisponible: new Date(Date.now() + DIAS_VENTANA_LIMITE * 24 * 60 * 60 * 1000).toISOString()
+    }
 
-    resultado.documentosRestantesSemana = Math.max(0, LIMITE_DOCUMENTOS - (usadosAhora || 0))
-
-    return NextResponse.json(resultado)
+    return NextResponse.json(respuestaFinal)
   } catch (error: any) {
     console.error('Error en /api/ideas/generar:', error)
     return NextResponse.json(
