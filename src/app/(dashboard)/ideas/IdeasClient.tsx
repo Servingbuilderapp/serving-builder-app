@@ -46,6 +46,8 @@ export default function IdeasClient() {
       .finally(() => setVerificando(false))
   }, [])
 
+  const [pidiendoConfirmacion, setPidiendoConfirmacion] = useState(false)
+
   const puedeGenerar = descripcionIdea.trim().length >= 3 && !cargando && disponible === true
 
   const toggleTecnologia = (id: string) => {
@@ -56,6 +58,7 @@ export default function IdeasClient() {
 
   const generar = async () => {
     if (!puedeGenerar) return
+    setPidiendoConfirmacion(false)
     setError(null)
     setCargando(true)
 
@@ -275,8 +278,35 @@ export default function IdeasClient() {
           </div>
         )}
 
+        <p className="text-center text-[11px] text-color-base-content/40 font-medium -mb-2">
+          Escribir aquí y explorar las herramientas no gasta nada — solo el botón de abajo consume tu única generación de estos 15 días.
+        </p>
+
+        {pidiendoConfirmacion ? (
+          <div className="space-y-3 p-5 rounded-2xl border border-color-primary/30 bg-color-primary/5">
+            <p className="text-sm font-bold text-color-base-content text-center">
+              ¿Ya estás conforme con lo que escribiste? Esto va a usar tu única generación de estos 15 días.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <GlowButton
+                variant="ghost"
+                onClick={() => setPidiendoConfirmacion(false)}
+                className="flex-1 h-12 text-xs"
+              >
+                SEGUIR PENSANDO
+              </GlowButton>
+              <GlowButton
+                onClick={generar}
+                className="flex-1 h-12 text-xs gap-2"
+              >
+                SÍ, GENERAR AHORA
+                <Download className="h-4 w-4" />
+              </GlowButton>
+            </div>
+          </div>
+        ) : (
         <GlowButton
-          onClick={generar}
+          onClick={() => setPidiendoConfirmacion(true)}
           disabled={!puedeGenerar}
           className="w-full h-14 text-xs gap-2"
         >
@@ -297,6 +327,7 @@ export default function IdeasClient() {
             </>
           )}
         </GlowButton>
+        )}
       </GlassCard>
 
       {/* Resultado */}
