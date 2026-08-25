@@ -4,7 +4,7 @@ export async function callGemini(prompt: string): Promise<string> {
     throw new Error('GEMINI_API_KEY is not defined');
   }
 
-  const MAX_INTENTOS = 3
+  const MAX_INTENTOS = 4
   let ultimoError: Error | null = null
 
   for (let intento = 1; intento <= MAX_INTENTOS; intento++) {
@@ -37,7 +37,7 @@ export async function callGemini(prompt: string): Promise<string> {
         const esTemporal = response.status === 503 || response.status === 429;
         if (esTemporal && intento < MAX_INTENTOS) {
           ultimoError = new Error(`Gemini API error: ${mensaje}`);
-          await new Promise(resolve => setTimeout(resolve, intento * 1500)); // espera progresiva: 1.5s, 3s
+          await new Promise(resolve => setTimeout(resolve, intento * 2000)); // espera progresiva: 2s, 4s, 6s
           continue;
         }
         throw new Error(`Gemini API error: ${mensaje}`);
@@ -48,7 +48,7 @@ export async function callGemini(prompt: string): Promise<string> {
     } catch (err: any) {
       ultimoError = err
       if (intento < MAX_INTENTOS) {
-        await new Promise(resolve => setTimeout(resolve, intento * 1500));
+        await new Promise(resolve => setTimeout(resolve, intento * 2000));
         continue;
       }
     }
