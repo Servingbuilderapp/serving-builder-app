@@ -70,7 +70,16 @@ export function RuedaDiagnostico({ titulo, ejes, size = 380 }: RuedaDiagnosticoP
         </h3>
       )}
 
-      <div className="relative glass-card p-6 rounded-3xl">
+      <div
+        className="relative glass-card p-6 rounded-3xl overflow-hidden"
+        style={{
+          boxShadow: '0 0 40px color-mix(in srgb, var(--color-accent-violet) 20%, transparent)',
+        }}
+      >
+        <div
+          className="absolute top-0 left-0 right-0 h-1.5"
+          style={{ background: 'linear-gradient(to right, var(--color-accent-violet), var(--color-accent-magenta, var(--color-accent-violet)))' }}
+        />
         <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
           {/* Anillos guía */}
           {rings.map((frac, ri) => {
@@ -109,31 +118,47 @@ export function RuedaDiagnostico({ titulo, ejes, size = 380 }: RuedaDiagnosticoP
             )
           })}
 
-          {/* Área de puntajes reales, con degradado violeta-magenta (nuestro protagonista) */}
+          {/* Área de puntajes reales, con degradado violeta-magenta vívido + brillo */}
           <defs>
             <linearGradient id="ruedaFill" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="var(--color-accent-violet)" stopOpacity={0.35} />
-              <stop offset="100%" stopColor="var(--color-accent-magenta, var(--color-accent-violet))" stopOpacity={0.35} />
+              <stop offset="0%" stopColor="var(--color-accent-violet)" stopOpacity={0.7} />
+              <stop offset="100%" stopColor="var(--color-accent-magenta, var(--color-accent-violet))" stopOpacity={0.7} />
             </linearGradient>
+            <radialGradient id="ruedaGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="var(--color-accent-violet)" stopOpacity={0.35} />
+              <stop offset="100%" stopColor="var(--color-accent-violet)" stopOpacity={0} />
+            </radialGradient>
+            <filter id="ruedaSombra" x="-50%" y="-50%" width="200%" height="200%">
+              <feDropShadow dx="0" dy="0" stdDeviation="6" floodColor="var(--color-accent-violet)" floodOpacity="0.5" />
+            </filter>
+            <filter id="puntoBrillo" x="-100%" y="-100%" width="300%" height="300%">
+              <feDropShadow dx="0" dy="0" stdDeviation="4" floodOpacity="0.9" />
+            </filter>
           </defs>
+
+          {/* Resplandor de fondo detrás de toda la rueda */}
+          <circle cx={center} cy={center} r={maxRadius * 1.15} fill="url(#ruedaGlow)" />
+
           <polygon
             points={dataPath}
             fill="url(#ruedaFill)"
-            stroke="var(--color-accent-violet)"
-            strokeWidth={2}
+            stroke="var(--color-accent-magenta, var(--color-accent-violet))"
+            strokeWidth={3.5}
+            filter="url(#ruedaSombra)"
           />
 
-          {/* Puntos de cada eje, coloreados según su puntaje individual */}
+          {/* Puntos de cada eje, coloreados según su puntaje individual, con halo brillante */}
           {dataPoints.map((p, i) => (
-            <circle
-              key={i}
-              cx={p.x}
-              cy={p.y}
-              r={5}
-              fill={colorForScore(ejes[i].score)}
-              stroke="var(--color-base-100)"
-              strokeWidth={2}
-            />
+            <g key={i} filter="url(#puntoBrillo)">
+              <circle
+                cx={p.x}
+                cy={p.y}
+                r={9}
+                fill={colorForScore(ejes[i].score)}
+                stroke="var(--color-base-100)"
+                strokeWidth={3}
+              />
+            </g>
           ))}
 
           {/* Etiquetas de cada eje */}
@@ -156,14 +181,20 @@ export function RuedaDiagnostico({ titulo, ejes, size = 380 }: RuedaDiagnosticoP
             )
           })}
 
-          {/* Puntaje promedio en el centro */}
+          {/* Puntaje promedio en el centro, con degradado de texto */}
+          <defs>
+            <linearGradient id="textoPromedio" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="var(--color-accent-violet)" />
+              <stop offset="100%" stopColor="var(--color-accent-magenta, var(--color-accent-violet))" />
+            </linearGradient>
+          </defs>
           <text
             x={center}
             y={center - 6}
             textAnchor="middle"
-            fontSize={28}
+            fontSize={34}
             fontWeight={900}
-            fill="var(--color-base-content)"
+            fill="url(#textoPromedio)"
           >
             {promedio.toFixed(1)}
           </text>
