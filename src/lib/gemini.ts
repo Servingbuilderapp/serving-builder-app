@@ -1,7 +1,7 @@
 export async function callGemini(prompt: string): Promise<string> {
-  const apiKey = process.env.GEMINI_KEY;
+  const apiKey = process.env.GEMINI_API_KEY || process.env.GEMINI_KEY;
   if (!apiKey) {
-    throw new Error('GEMINI_KEY is not defined');
+    throw new Error('GEMINI_API_KEY is not defined');
   }
 
   const response = await fetch(
