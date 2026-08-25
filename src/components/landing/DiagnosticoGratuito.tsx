@@ -7,6 +7,7 @@ import {
 } from 'lucide-react'
 import { GlowButton } from '@/components/ui/GlowButton'
 import { GlassCard } from '@/components/ui/GlassCard'
+import { RuedaDiagnostico } from '@/components/diagnostico/RuedaDiagnostico'
 import type { DiagnosticoResultadoV2 } from '@/app/api/diagnostico-v2/route'
 
 const initialForm = {
@@ -303,6 +304,16 @@ export function DiagnosticoGratuito() {
                 </div>
               </div>
             </div>
+
+            {resultado.ejesRueda && resultado.ejesRueda.length > 0 && (
+              <div className="flex justify-center py-4">
+                <RuedaDiagnostico
+                  titulo="Tu Rueda de Diagnóstico"
+                  ejes={resultado.ejesRueda}
+                  size={340}
+                />
+              </div>
+            )}
 
             <div>
               <h4 className="text-sm font-black uppercase tracking-wider text-color-base-content/80 mb-4">Tus Sectores/Nichos con Mayor Afinidad</h4>
