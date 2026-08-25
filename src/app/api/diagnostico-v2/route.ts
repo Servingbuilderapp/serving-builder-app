@@ -42,6 +42,12 @@ export interface MecanismoSugerido {
   descripcion: string
 }
 
+export interface EjeRueda {
+  label: string
+  score: number
+  recomendacion: string
+}
+
 export interface DiagnosticoResultadoV2 {
   scoreGeneral: number
   esViable: boolean
@@ -51,6 +57,7 @@ export interface DiagnosticoResultadoV2 {
   brechasCriticas: string[]
   pasosRecomendados: string[]
   notaConceptoMarkdown: string
+  ejesRueda: EjeRueda[]
 }
 
 export async function POST(req: Request) {
@@ -74,7 +81,14 @@ export async function POST(req: Request) {
   ],
   "brechasCriticas": ["<brecha 1>", "<brecha 2>", "<brecha 3>"],
   "pasosRecomendados": ["<paso 1>", "<paso 2>", "<paso 3>"],
-  "notaConceptoMarkdown": "<una nota concepto profesional en formato markdown, de 1 a 5 páginas equivalentes de extensión, con secciones: Resumen Ejecutivo, Problema, Solución, Objetivos, Beneficiarios, Presupuesto Estimado, Resultados Esperados, Sostenibilidad y Escalabilidad — lista para usarse como base de un pitch deck>"
+  "notaConceptoMarkdown": "<una nota concepto profesional en formato markdown, de 1 a 5 páginas equivalentes de extensión, con secciones: Resumen Ejecutivo, Problema, Solución, Objetivos, Beneficiarios, Presupuesto Estimado, Resultados Esperados, Sostenibilidad y Escalabilidad — lista para usarse como base de un pitch deck>",
+  "ejesRueda": [
+    { "label": "Claridad de la Idea", "score": <0-10>, "recomendacion": "<1 frase corta y clara de qué hacer para mejorar este eje>" },
+    { "label": "Viabilidad", "score": <0-10>, "recomendacion": "<1 frase>" },
+    { "label": "Innovación/Diferenciación", "score": <0-10>, "recomendacion": "<1 frase>" },
+    { "label": "Encaje con el Público", "score": <0-10>, "recomendacion": "<1 frase>" },
+    { "label": "Recursos y Capacidad", "score": <0-10>, "recomendacion": "<1 frase>" }
+  ]
 }
 
 DATOS DEL PROYECTO:
