@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { callGemini } from '@/lib/gemini'
 
+export const maxDuration = 60
+
 export interface DiagnosticoInputV2 {
   // Datos del solicitante
   nombreEmpresa: string
@@ -81,14 +83,14 @@ export async function POST(req: Request) {
   ],
   "brechasCriticas": ["<brecha 1>", "<brecha 2>", "<brecha 3>"],
   "pasosRecomendados": ["<paso 1>", "<paso 2>", "<paso 3>"],
-  "notaConceptoMarkdown": "<una nota concepto profesional en formato markdown, de 1 a 5 páginas equivalentes de extensión, con secciones: Resumen Ejecutivo, Problema, Solución, Objetivos, Beneficiarios, Presupuesto Estimado, Resultados Esperados, Sostenibilidad y Escalabilidad — lista para usarse como base de un pitch deck>",
   "ejesRueda": [
     { "label": "Claridad de la Idea", "score": <0-10>, "recomendacion": "<1 frase corta y clara de qué hacer para mejorar este eje>" },
     { "label": "Viabilidad", "score": <0-10>, "recomendacion": "<1 frase>" },
     { "label": "Innovación/Diferenciación", "score": <0-10>, "recomendacion": "<1 frase>" },
     { "label": "Encaje con el Público", "score": <0-10>, "recomendacion": "<1 frase>" },
     { "label": "Recursos y Capacidad", "score": <0-10>, "recomendacion": "<1 frase>" }
-  ]
+  ],
+  "notaConceptoMarkdown": "<una nota concepto profesional en formato markdown, de 1 a 5 páginas equivalentes de extensión, con secciones: Resumen Ejecutivo, Problema, Solución, Objetivos, Beneficiarios, Presupuesto Estimado, Resultados Esperados, Sostenibilidad y Escalabilidad — lista para usarse como base de un pitch deck. IMPORTANTE: escribe este campo AL FINAL, después de completar todos los demás campos del JSON>"
 }
 
 DATOS DEL PROYECTO:
@@ -116,6 +118,20 @@ Estrategia de escalabilidad: ${data.estrategiaEscalabilidad}`
     } catch (parseError) {
       console.error('No se pudo interpretar la respuesta de la IA:', respuestaIA)
       throw new Error('La IA no devolvió un formato válido, intenta de nuevo')
+    }
+
+    // Respaldo: si por cualquier motivo la IA no devolvió ejesRueda (ej. respuesta cortada
+    // por longitud), lo calculamos aquí mismo a partir del score general para que la Rueda
+    // de Diagnóstico nunca desaparezca en silencio.
+    if (!resultado.ejesRueda || resultado.ejesRueda.length === 0) {
+      const scorePromedio = (resultado.scoreGeneral || 50) / 10
+      resultado.ejesRueda = [
+        { label: 'Claridad de la Idea', score: scorePromedio, recomendacion: 'Vuelve a generar el diagnóstico para una recomendación más precisa en este eje.' },
+        { label: 'Viabilidad', score: scorePromedio, recomendacion: 'Vuelve a generar el diagnóstico para una recomendación más precisa en este eje.' },
+        { label: 'Innovación/Diferenciación', score: scorePromedio, recomendacion: 'Vuelve a generar el diagnóstico para una recomendación más precisa en este eje.' },
+        { label: 'Encaje con el Público', score: scorePromedio, recomendacion: 'Vuelve a generar el diagnóstico para una recomendación más precisa en este eje.' },
+        { label: 'Recursos y Capacidad', score: scorePromedio, recomendacion: 'Vuelve a generar el diagnóstico para una recomendación más precisa en este eje.' },
+      ]
     }
 
     // Guardar el diagnóstico como cliente potencial
