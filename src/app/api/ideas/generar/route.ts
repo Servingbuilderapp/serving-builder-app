@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { callGemini } from '@/lib/gemini'
 
+export const maxDuration = 60
+
 export interface IdeasGenerarInput {
   // Descripción libre de lo que el usuario está pensando (obligatorio). Puede ser "no tengo idea todavía".
   descripcionIdea: string
