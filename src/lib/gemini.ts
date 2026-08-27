@@ -10,7 +10,7 @@ export async function callGemini(prompt: string): Promise<string> {
   for (let intento = 1; intento <= MAX_INTENTOS; intento++) {
     try {
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`,
         {
           method: 'POST',
           headers: {
