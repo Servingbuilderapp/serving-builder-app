@@ -55,8 +55,8 @@ export function RuedaDiagnostico({ titulo, ejes, size = 380 }: RuedaDiagnosticoP
   })
   const dataPath = dataPoints.map(p => `${p.x},${p.y}`).join(' ')
 
-  // Anillos de fondo (guías en 2.5 / 5 / 7.5 / 10)
-  const rings = [0.25, 0.5, 0.75, 1]
+  // Anillos de fondo: uno por cada 2 puntos de la escala (2, 4, 6, 8, 10)
+  const rings = [0.2, 0.4, 0.6, 0.8, 1]
 
   const promedio = ejes.length
     ? ejes.reduce((acc, e) => acc + e.score, 0) / ejes.length
@@ -81,43 +81,6 @@ export function RuedaDiagnostico({ titulo, ejes, size = 380 }: RuedaDiagnosticoP
           style={{ background: 'linear-gradient(to right, var(--color-accent-violet), var(--color-accent-magenta, var(--color-accent-violet)))' }}
         />
         <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-          {/* Anillos guía */}
-          {rings.map((frac, ri) => {
-            const pts = ejes
-              .map((_, i) => {
-                const p = pointFor(i, maxRadius * frac)
-                return `${p.x},${p.y}`
-              })
-              .join(' ')
-            return (
-              <polygon
-                key={ri}
-                points={pts}
-                fill="none"
-                stroke="var(--color-base-300)"
-                strokeOpacity={0.5}
-                strokeWidth={1}
-              />
-            )
-          })}
-
-          {/* Líneas radiales (un eje por cada dimensión) */}
-          {ejes.map((_, i) => {
-            const p = pointFor(i, maxRadius)
-            return (
-              <line
-                key={i}
-                x1={center}
-                y1={center}
-                x2={p.x}
-                y2={p.y}
-                stroke="var(--color-base-300)"
-                strokeOpacity={0.5}
-                strokeWidth={1}
-              />
-            )
-          })}
-
           {/* Área de puntajes reales, con degradado violeta-magenta vívido + brillo */}
           <defs>
             <linearGradient id="ruedaFill" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -138,6 +101,65 @@ export function RuedaDiagnostico({ titulo, ejes, size = 380 }: RuedaDiagnosticoP
 
           {/* Resplandor de fondo detrás de toda la rueda */}
           <circle cx={center} cy={center} r={maxRadius * 1.15} fill="url(#ruedaGlow)" />
+
+          {/* Anillos guía: círculos concéntricos reales (formato rueda) */}
+          {rings.map((frac, ri) => (
+            <circle
+              key={ri}
+              cx={center}
+              cy={center}
+              r={maxRadius * frac}
+              fill="none"
+              stroke="var(--color-base-300)"
+              strokeOpacity={0.85}
+              strokeWidth={1.25}
+            />
+          ))}
+
+          {/* Marco exterior grueso de la rueda */}
+          <circle
+            cx={center}
+            cy={center}
+            r={maxRadius}
+            fill="none"
+            stroke="var(--color-accent-violet)"
+            strokeOpacity={0.55}
+            strokeWidth={3}
+          />
+
+          {/* Rayos: una línea del centro a la periferia por cada dimensión */}
+          {ejes.map((_, i) => {
+            const p = pointFor(i, maxRadius)
+            return (
+              <line
+                key={i}
+                x1={center}
+                y1={center}
+                x2={p.x}
+                y2={p.y}
+                stroke="var(--color-base-300)"
+                strokeOpacity={0.9}
+                strokeWidth={1.25}
+              />
+            )
+          })}
+
+          {/* Números de la escala (2, 4, 6, 8, 10) sobre el rayo superior */}
+          {rings.map((frac, ri) => (
+            <text
+              key={`escala-${ri}`}
+              x={center + 9}
+              y={center - maxRadius * frac}
+              textAnchor="start"
+              dominantBaseline="middle"
+              fontSize={9}
+              fontWeight={700}
+              fill="var(--color-base-content)"
+              opacity={0.45}
+            >
+              {Math.round(frac * 10)}
+            </text>
+          ))}
 
           <polygon
             points={dataPath}
