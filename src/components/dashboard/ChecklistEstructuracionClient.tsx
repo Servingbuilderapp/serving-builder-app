@@ -88,6 +88,15 @@ export function ChecklistEstructuracionClient({ proyectoId, pasosIniciales, porc
 
   const avancePorCategoria = useMemo(() => calcularAvancePorCategoria(pasos), [pasos])
 
+  // Pasos que la IA completó pero dejó marcados como flojos: no bloquean nada,
+  // pero el cliente debería reforzarlos antes de postular a una convocatoria real.
+  const pasosPorReforzar = useMemo(
+    () => pasos.filter((p) => p.completado && p.advertencia),
+    [pasos]
+  )
+  const [soloPorReforzar, setSoloPorReforzar] = useState(false)
+  const pasosVisibles = soloPorReforzar ? pasosPorReforzar : pasos
+
   const radio = 48
   const circunferencia = 2 * Math.PI * radio
   const offset = circunferencia - (porcentajeAvance / 100) * circunferencia
@@ -125,8 +134,37 @@ export function ChecklistEstructuracionClient({ proyectoId, pasosIniciales, porc
         </div>
       </div>
 
+      {/* Aviso resumido: cuántos pasos quedaron flojos y qué significa */}
+      {pasosPorReforzar.length > 0 && (
+        <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 space-y-2">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <p className="text-sm font-bold text-color-base-content">
+                {pasosPorReforzar.length === 1
+                  ? 'Hay 1 paso que conviene reforzar'
+                  : `Hay ${pasosPorReforzar.length} pasos que conviene reforzar`}
+              </p>
+              <p className="text-xs text-color-base-content/70 leading-relaxed">
+                Tu proyecto quedó completo y puede seguir avanzando: esto no bloquea nada. Pero en
+                esos pasos la información que nos diste es todavía flojita, y si postulas así a una
+                convocatoria real te lo van a notar. Abajo, en cada paso marcado en ámbar, te decimos
+                exactamente qué reforzar.
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setSoloPorReforzar(!soloPorReforzar)}
+            className="ml-8 text-xs font-bold text-amber-600 hover:text-amber-500 underline underline-offset-2 transition-colors"
+          >
+            {soloPorReforzar ? 'Ver los 42 pasos otra vez' : 'Ver solo los pasos por reforzar'}
+          </button>
+        </div>
+      )}
+
       <div className="space-y-2 pt-2 border-t border-color-base-content/10">
-        {pasos.map((paso) => (
+        {pasosVisibles.map((paso) => (
           <div key={paso.id} className="py-1.5">
             <div className="flex items-center gap-3">
               <div
