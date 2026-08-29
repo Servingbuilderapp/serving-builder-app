@@ -41,11 +41,13 @@ import { useTranslation } from '@/hooks/useTranslation'
 
 /**
  * Video de bienvenida.
- * Pega aquí SOLO el identificador del video de YouTube (lo que va después de
- * "v=" en la dirección). Ejemplo: 'dQw4w9WgXcQ'.
- * Mientras esté vacío se muestra la tarjeta de presentación sin reproductor.
+ * El video vive dentro del propio proyecto (carpeta public), no en YouTube ni en
+ * ningún servicio externo. Para cambiarlo basta con reemplazar el archivo en
+ * public por otro con el mismo nombre.
+ * Si se deja vacío, se muestra la tarjeta sin reproductor y sin errores.
  */
-const VIDEO_YOUTUBE_ID = ''
+const VIDEO_ARCHIVO = '/video-bienvenida.mp4'
+const VIDEO_PORTADA = '/video-portada.jpg'
 
 /**
  * Logos de entidades con las que se ha trabajado.
@@ -542,20 +544,22 @@ export function LandingClient({ user }: LandingClientProps) {
             {/* Columna centro: video */}
             <div className="lg:col-span-5">
               <div className="relative rounded-2xl overflow-hidden border border-[#E2E8F0] bg-gradient-to-br from-[#0C2E5C] to-[#1D4ED8] aspect-video">
-                {videoAbierto && VIDEO_YOUTUBE_ID ? (
-                  <iframe
-                    className="absolute inset-0 h-full w-full"
-                    src={`https://www.youtube.com/embed/${VIDEO_YOUTUBE_ID}?autoplay=1&rel=0`}
-                    title={t('w.video.titulo')}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
+                {videoAbierto && VIDEO_ARCHIVO ? (
+                  <video
+                    className="absolute inset-0 h-full w-full object-cover bg-[#081F3F]"
+                    src={VIDEO_ARCHIVO}
+                    poster={VIDEO_PORTADA}
+                    controls
+                    autoPlay
+                    playsInline
+                    preload="metadata"
                   />
                 ) : (
                   <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
                     <button
                       type="button"
                       onClick={() => setVideoAbierto(true)}
-                      disabled={!VIDEO_YOUTUBE_ID}
+                      disabled={!VIDEO_ARCHIVO}
                       aria-label={t('w.video.boton')}
                       className="h-16 w-16 rounded-full bg-white shadow-lg flex items-center justify-center hover:scale-105 transition-transform disabled:opacity-70 disabled:hover:scale-100"
                     >
@@ -565,7 +569,7 @@ export function LandingClient({ user }: LandingClientProps) {
                       {t('w.video.titulo')}
                     </div>
                     <div className="mt-1 text-white/70 text-xs">
-                      {VIDEO_YOUTUBE_ID ? t('w.video.duracion') : t('w.video.proximamente')}
+                      {VIDEO_ARCHIVO ? t('w.video.duracion') : t('w.video.proximamente')}
                     </div>
                   </div>
                 )}
