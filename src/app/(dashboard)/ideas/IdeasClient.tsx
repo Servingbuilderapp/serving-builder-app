@@ -173,6 +173,16 @@ export default function IdeasClient() {
             abierta={herramientaAbierta === 'reinvencion'}
             onToggle={() => setHerramientaAbierta(herramientaAbierta === 'reinvencion' ? null : 'reinvencion')}
           >
+            <ExplicacionHerramienta
+              paraQue="Para mirar tu negocio (o el negocio al que quieres entrar) y decidir qué le sobra, qué le falta y qué nadie más está haciendo. Así no terminas montando lo mismo que el vecino."
+              ejemplo={
+                <>
+                  <strong>Ejemplo — una panadería de barrio:</strong> <em>Eliminar:</em> la vitrina con 40 productos que casi nadie compra.{' '}
+                  <em>Reducir:</em> las horas de madrugada. <em>Incrementar:</em> los pedidos por WhatsApp.{' '}
+                  <em>Crear:</em> una suscripción mensual de pan fresco a domicilio. Con eso ya no es una panadería más: es otro negocio.
+                </>
+              }
+            />
             <div className="grid md:grid-cols-2 gap-4">
               {PREGUNTAS_REINVENCION.map((p) => (
                 <div key={p.id} className="space-y-1.5">
@@ -197,6 +207,16 @@ export default function IdeasClient() {
             abierta={herramientaAbierta === 'convergencia'}
             onToggle={() => setHerramientaAbierta(herramientaAbierta === 'convergencia' ? null : 'convergencia')}
           >
+            <ExplicacionHerramienta
+              paraQue="Para cruzar tu sector con una tecnología y encontrar el negocio que todavía nadie montó en tu región. La idea nueva casi nunca está en el sector solo: está en el cruce."
+              ejemplo={
+                <>
+                  <strong>Ejemplo — Agricultura:</strong> Agricultura × <em>Inteligencia Artificial</em> = una app que le dice al campesino
+                  cuándo sembrar según el clima de su propia vereda. Agricultura × <em>Impresión 3D</em> = repuestos de maquinaria
+                  agrícola impresos en el pueblo, sin esperar meses una importación. Es el mismo sector, dos negocios distintos.
+                </>
+              }
+            />
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
               {TECNOLOGIAS_EMERGENTES.map((t) => {
                 const seleccionada = tecnologiasSeleccionadas.includes(t.id)
@@ -230,6 +250,17 @@ export default function IdeasClient() {
             onToggle={() => setHerramientaAbierta(herramientaAbierta === 'necesidades' ? null : 'necesidades')}
           >
             <div className="space-y-4">
+              <ExplicacionHerramienta
+                paraQue="Para anclar tu idea en una necesidad real de la gente. Los proyectos que consiguen financiación no arrancan de un producto, arrancan de una necesidad humana concreta que alguien tiene hoy."
+                ejemplo={
+                  <>
+                    <strong>Ejemplo — la misma idea cambia según lo que elijas:</strong> si eliges <em>Entendimiento + Hacer</em>, tu
+                    proyecto no vende un curso: enseña a la gente a hacer algo con sus propias manos. Si eliges{' '}
+                    <em>Protección + Tener</em>, tu proyecto le da algo que la resguarda (un ahorro, una vivienda, un seguro).
+                    Primero eliges la necesidad, después el negocio.
+                  </>
+                }
+              />
               <div>
                 <p className="text-xs font-bold text-color-base-content/70 mb-2">¿Qué necesidad humana busca satisfacer tu idea?</p>
                 <div className="grid grid-cols-3 md:grid-cols-5 gap-2">
@@ -409,6 +440,26 @@ function IdeaCard({ idea, idx }: { idea: { titulo: string; descripcion: string; 
         <span className="text-[11px] font-bold">{idea.primerPaso}</span>
       </div>
     </GlassCard>
+  )
+}
+
+/**
+ * Recuadro de introducción que aparece al abrir cada herramienta: explica en
+ * lenguaje simple para qué sirve y muestra un ejemplo concreto de negocio,
+ * para que nadie quede perdido viendo solo el título.
+ */
+function ExplicacionHerramienta({ paraQue, ejemplo }: { paraQue: string; ejemplo: React.ReactNode }) {
+  return (
+    <div className="mb-4 rounded-2xl border border-color-primary/25 bg-color-primary/[0.06] p-4 space-y-2">
+      <div className="flex items-center gap-2">
+        <Lightbulb className="h-3.5 w-3.5 text-color-primary shrink-0" />
+        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-color-primary">¿Para qué sirve?</p>
+      </div>
+      <p className="text-xs text-color-base-content/70 leading-relaxed">{paraQue}</p>
+      <p className="text-[11px] text-color-base-content/50 leading-relaxed border-t border-color-primary/15 pt-2">
+        {ejemplo}
+      </p>
+    </div>
   )
 }
 
