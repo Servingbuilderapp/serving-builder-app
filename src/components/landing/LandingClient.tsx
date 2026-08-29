@@ -73,6 +73,14 @@ const CORREO = 'servingproyectosgi@gmail.com'
 
 /* ========================================================================== */
 
+/* Relieve: sombras y micro-movimiento para que se sienta un portal y no un PDF */
+const RELIEVE_BOTON =
+  'shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-200'
+const RELIEVE_BOTON_SUAVE =
+  'shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200'
+const RELIEVE_TARJETA =
+  'shadow-[0_1px_2px_rgba(11,42,74,0.06),0_10px_28px_-14px_rgba(11,42,74,0.22)] hover:shadow-[0_2px_6px_rgba(11,42,74,0.10),0_20px_44px_-16px_rgba(11,42,74,0.32)] hover:-translate-y-1 transition-all duration-300'
+
 interface LandingClientProps {
   user: unknown
   /* Propiedades que enviaba la versión anterior de la página.
@@ -150,7 +158,7 @@ const ESCALERA: Escalon[] = [
     color: 'text-slate-700',
     fondo: 'bg-slate-50',
     borde: 'border-slate-200',
-    boton: 'border border-slate-300 text-slate-700 hover:bg-slate-100',
+    boton: 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50',
   },
   {
     numero: '2',
@@ -170,7 +178,7 @@ const ESCALERA: Escalon[] = [
     color: 'text-emerald-700',
     fondo: 'bg-emerald-50/70',
     borde: 'border-emerald-200',
-    boton: 'bg-emerald-600 text-white hover:bg-emerald-700',
+    boton: 'bg-gradient-to-b from-emerald-500 to-emerald-600 text-white hover:from-emerald-500 hover:to-emerald-700 shadow-emerald-600/25',
   },
   {
     numero: '3',
@@ -190,7 +198,7 @@ const ESCALERA: Escalon[] = [
     color: 'text-blue-700',
     fondo: 'bg-blue-50/70',
     borde: 'border-blue-200',
-    boton: 'bg-blue-700 text-white hover:bg-blue-800',
+    boton: 'bg-gradient-to-b from-blue-600 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800 shadow-blue-700/25',
   },
   {
     numero: '4',
@@ -209,7 +217,7 @@ const ESCALERA: Escalon[] = [
     color: 'text-amber-700',
     fondo: 'bg-amber-50/70',
     borde: 'border-amber-200',
-    boton: 'border border-amber-400 text-amber-800 hover:bg-amber-100',
+    boton: 'bg-white border border-amber-400 text-amber-800 hover:bg-amber-50',
   },
   {
     numero: '5',
@@ -228,7 +236,7 @@ const ESCALERA: Escalon[] = [
     color: 'text-violet-700',
     fondo: 'bg-violet-50/70',
     borde: 'border-violet-200',
-    boton: 'bg-violet-600 text-white hover:bg-violet-700',
+    boton: 'bg-gradient-to-b from-violet-500 to-violet-600 text-white hover:from-violet-500 hover:to-violet-700 shadow-violet-600/25',
   },
   {
     numero: '6',
@@ -247,7 +255,7 @@ const ESCALERA: Escalon[] = [
     color: 'text-cyan-800',
     fondo: 'bg-cyan-50/70',
     borde: 'border-cyan-200',
-    boton: 'bg-cyan-700 text-white hover:bg-cyan-800',
+    boton: 'bg-gradient-to-b from-cyan-600 to-cyan-700 text-white hover:from-cyan-600 hover:to-cyan-800 shadow-cyan-700/25',
   },
   {
     numero: '7',
@@ -266,7 +274,7 @@ const ESCALERA: Escalon[] = [
     color: 'text-rose-700',
     fondo: 'bg-rose-50/70',
     borde: 'border-rose-200',
-    boton: 'bg-rose-600 text-white hover:bg-rose-700',
+    boton: 'bg-gradient-to-b from-rose-500 to-rose-600 text-white hover:from-rose-500 hover:to-rose-700 shadow-rose-600/25',
   },
 ]
 
@@ -430,7 +438,7 @@ export function LandingClient({ user }: LandingClientProps) {
             {user ? (
               <Link
                 href="/dashboard"
-                className="h-10 px-5 inline-flex items-center rounded-lg bg-[#0C2E5C] text-white text-[13px] font-semibold hover:bg-[#0A2547] transition-colors"
+                className={`h-10 px-5 inline-flex items-center rounded-lg bg-gradient-to-b from-[#143E77] to-[#0C2E5C] text-white text-[13px] font-semibold hover:from-[#16457F] hover:to-[#0A2547] shadow-[#0C2E5C]/25 ${RELIEVE_BOTON}`}
               >
                 {t('w.nav.dashboard')}
               </Link>
@@ -438,13 +446,13 @@ export function LandingClient({ user }: LandingClientProps) {
               <>
                 <a
                   href="/login"
-                  className="h-10 px-5 inline-flex items-center rounded-lg border border-[#CBD5E1] text-[#0B2A4A] text-[13px] font-semibold hover:bg-[#F1F5F9] transition-colors"
+                  className={`h-10 px-5 inline-flex items-center rounded-lg border border-[#CBD5E1] bg-white text-[#0B2A4A] text-[13px] font-semibold hover:bg-[#F8FAFC] ${RELIEVE_BOTON_SUAVE}`}
                 >
                   {t('w.nav.login')}
                 </a>
                 <a
                   href="/signup"
-                  className="h-10 px-5 inline-flex items-center rounded-lg bg-[#0C2E5C] text-white text-[13px] font-semibold hover:bg-[#0A2547] transition-colors"
+                  className={`h-10 px-5 inline-flex items-center rounded-lg bg-gradient-to-b from-[#143E77] to-[#0C2E5C] text-white text-[13px] font-semibold hover:from-[#16457F] hover:to-[#0A2547] shadow-[#0C2E5C]/25 ${RELIEVE_BOTON}`}
                 >
                   {t('w.nav.crear_cuenta')}
                 </a>
@@ -527,14 +535,14 @@ export function LandingClient({ user }: LandingClientProps) {
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
                   href="/diagnostico"
-                  className="h-12 px-6 inline-flex items-center gap-2 rounded-lg bg-[#0C2E5C] text-white text-sm font-semibold hover:bg-[#0A2547] transition-colors"
+                  className={`h-12 px-6 inline-flex items-center gap-2 rounded-lg bg-gradient-to-b from-[#143E77] to-[#0C2E5C] text-white text-sm font-semibold hover:from-[#16457F] hover:to-[#0A2547] shadow-[#0C2E5C]/30 ${RELIEVE_BOTON}`}
                 >
                   {t('w.hero.cta_principal')}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <a
                   href="#como-funciona"
-                  className="h-12 px-6 inline-flex items-center rounded-lg border border-[#CBD5E1] text-[#0B2A4A] text-sm font-semibold hover:bg-[#F1F5F9] transition-colors"
+                  className={`h-12 px-6 inline-flex items-center rounded-lg border border-[#CBD5E1] bg-white text-[#0B2A4A] text-sm font-semibold hover:bg-[#F8FAFC] ${RELIEVE_BOTON_SUAVE}`}
                 >
                   {t('w.hero.cta_secundario')}
                 </a>
@@ -594,7 +602,7 @@ export function LandingClient({ user }: LandingClientProps) {
                     <Link
                       key={claveT}
                       href="/diagnostico"
-                      className="group flex items-start gap-3 rounded-xl bg-white border border-[#E2E8F0] p-4 hover:border-[#1D4ED8] hover:shadow-sm transition-all"
+                      className={`group flex items-start gap-3 rounded-xl bg-white border border-[#E2E8F0] p-4 hover:border-[#1D4ED8] ${RELIEVE_BOTON_SUAVE}`}
                     >
                       <div className="h-9 w-9 rounded-lg bg-[#EEF4FF] flex items-center justify-center shrink-0">
                         <Icono className="h-4 w-4 text-[#1D4ED8]" />
@@ -668,7 +676,7 @@ export function LandingClient({ user }: LandingClientProps) {
             {RUTA_PROYECTO.map(({ icono: Icono, clave }, i) => (
               <div
                 key={clave}
-                className="relative rounded-xl border border-[#E2E8F0] bg-white p-5 text-center hover:border-[#1D4ED8] transition-colors"
+                className={`relative rounded-xl border border-[#E2E8F0] bg-white p-5 text-center hover:border-[#1D4ED8] ${RELIEVE_TARJETA}`}
               >
                 <div className="h-11 w-11 rounded-xl bg-[#EEF4FF] flex items-center justify-center mx-auto mb-3">
                   <Icono className="h-5 w-5 text-[#1D4ED8]" />
@@ -698,7 +706,7 @@ export function LandingClient({ user }: LandingClientProps) {
 
           <div className="grid md:grid-cols-3 gap-6">
             {PROPUESTA_VALOR.map(({ icono: Icono, claveTitulo, claveTexto }) => (
-              <div key={claveTitulo} className="rounded-2xl bg-white border border-[#E2E8F0] p-7">
+              <div key={claveTitulo} className={`rounded-2xl bg-white border border-[#E2E8F0] p-7 ${RELIEVE_TARJETA}`}>
                 <div className="h-12 w-12 rounded-xl bg-[#EEF4FF] flex items-center justify-center mb-5">
                   <Icono className="h-5 w-5 text-[#1D4ED8]" />
                 </div>
@@ -755,7 +763,7 @@ export function LandingClient({ user }: LandingClientProps) {
               return (
                 <div
                   key={escalon.numero}
-                  className={`rounded-2xl border ${escalon.borde} ${escalon.fondo} p-5 flex flex-col`}
+                  className={`rounded-2xl border ${escalon.borde} ${escalon.fondo} p-5 flex flex-col ${RELIEVE_TARJETA}`}
                 >
                   <div className="text-[11px] font-bold text-[#94A3B8] mb-1">{escalon.numero}</div>
                   <h3 className="text-[15px] font-extrabold text-[#0B2A4A] leading-snug min-h-[38px]">
@@ -784,7 +792,7 @@ export function LandingClient({ user }: LandingClientProps) {
 
                   <Link
                     href={escalon.href}
-                    className={`min-h-9 px-3 py-2 rounded-lg text-[12px] font-semibold inline-flex items-center justify-center text-center leading-tight transition-colors ${escalon.boton}`}
+                    className={`min-h-9 px-3 py-2 rounded-lg text-[12px] font-semibold inline-flex items-center justify-center text-center leading-tight ${RELIEVE_BOTON} ${escalon.boton}`}
                   >
                     {t(escalon.claveBoton)}
                   </Link>
@@ -885,8 +893,8 @@ export function LandingClient({ user }: LandingClientProps) {
                   href="/signup"
                   className={`mt-6 h-11 rounded-lg inline-flex w-full items-center justify-center text-[13px] font-semibold transition-colors ${
                     plan.destacado
-                      ? 'bg-[#1D4ED8] text-white hover:bg-[#1E40AF]'
-                      : 'border border-white/30 text-white hover:bg-white/10'
+                      ? `bg-gradient-to-b from-[#2563EB] to-[#1D4ED8] text-white hover:from-[#2563EB] hover:to-[#1E40AF] shadow-[#1D4ED8]/35 ${RELIEVE_BOTON}`
+                      : `border border-white/30 text-white hover:bg-white/10 ${RELIEVE_BOTON_SUAVE}`
                   }`}
                 >
                   {t('w.membresias.boton')}
@@ -918,7 +926,7 @@ export function LandingClient({ user }: LandingClientProps) {
               <div className="mt-7 flex flex-wrap gap-3">
                 <Link
                   href="/diagnostico"
-                  className="h-12 px-6 inline-flex items-center gap-2 rounded-lg bg-[#0C2E5C] text-white text-sm font-semibold hover:bg-[#0A2547] transition-colors"
+                  className={`h-12 px-6 inline-flex items-center gap-2 rounded-lg bg-gradient-to-b from-[#143E77] to-[#0C2E5C] text-white text-sm font-semibold hover:from-[#16457F] hover:to-[#0A2547] shadow-[#0C2E5C]/30 ${RELIEVE_BOTON}`}
                 >
                   {t('w.diagnostico.boton')}
                   <ArrowRight className="h-4 w-4" />
@@ -927,7 +935,7 @@ export function LandingClient({ user }: LandingClientProps) {
                   href={`https://wa.me/${TELEFONO_WHATSAPP}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="h-12 px-6 inline-flex items-center rounded-lg border border-[#CBD5E1] text-[#0B2A4A] text-sm font-semibold hover:bg-[#F1F5F9] transition-colors"
+                  className={`h-12 px-6 inline-flex items-center rounded-lg border border-[#CBD5E1] bg-white text-[#0B2A4A] text-sm font-semibold hover:bg-[#F8FAFC] ${RELIEVE_BOTON_SUAVE}`}
                 >
                   {t('w.diagnostico.boton_hablar')}
                 </a>
@@ -970,7 +978,7 @@ export function LandingClient({ user }: LandingClientProps) {
               <Link
                 key={clave}
                 href={href}
-                className="group flex items-center gap-4 rounded-xl bg-white border border-[#E2E8F0] p-5 hover:border-[#1D4ED8] hover:shadow-sm transition-all"
+                className={`group flex items-center gap-4 rounded-xl bg-white border border-[#E2E8F0] p-5 hover:border-[#1D4ED8] ${RELIEVE_TARJETA}`}
               >
                 <div className="h-11 w-11 rounded-xl bg-[#EEF4FF] flex items-center justify-center shrink-0">
                   <Icono className="h-5 w-5 text-[#1D4ED8]" />
@@ -995,7 +1003,7 @@ export function LandingClient({ user }: LandingClientProps) {
           />
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 max-w-4xl mx-auto">
             {CON_QUIEN.map(({ icono: Icono, clave }) => (
-              <div key={clave} className="rounded-xl border border-[#E2E8F0] bg-white p-5 text-center">
+              <div key={clave} className={`rounded-xl border border-[#E2E8F0] bg-white p-5 text-center ${RELIEVE_TARJETA}`}>
                 <div className="h-11 w-11 rounded-xl bg-[#EEF4FF] flex items-center justify-center mx-auto mb-3">
                   <Icono className="h-5 w-5 text-[#1D4ED8]" />
                 </div>
@@ -1027,7 +1035,7 @@ export function LandingClient({ user }: LandingClientProps) {
             <div className="lg:col-span-4 lg:text-right">
               <Link
                 href="/dashboard"
-                className="h-12 px-6 inline-flex items-center gap-2 rounded-lg bg-rose-600 text-white text-sm font-semibold hover:bg-rose-700 transition-colors"
+                className={`h-12 px-6 inline-flex items-center gap-2 rounded-lg bg-gradient-to-b from-rose-500 to-rose-600 text-white text-sm font-semibold hover:from-rose-500 hover:to-rose-700 shadow-rose-600/30 ${RELIEVE_BOTON}`}
               >
                 {t('w.replicas.boton')}
                 <ArrowUpRight className="h-4 w-4" />
@@ -1086,7 +1094,7 @@ export function LandingClient({ user }: LandingClientProps) {
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
               href="/diagnostico"
-              className="h-12 px-7 inline-flex items-center gap-2 rounded-lg bg-white text-[#0C2E5C] text-sm font-bold hover:bg-[#F1F5F9] transition-colors"
+              className={`h-12 px-7 inline-flex items-center gap-2 rounded-lg bg-white text-[#0C2E5C] text-sm font-bold hover:bg-[#F1F5F9] shadow-black/25 ${RELIEVE_BOTON}`}
             >
               {t('w.cta.boton')}
               <ArrowRight className="h-4 w-4" />
