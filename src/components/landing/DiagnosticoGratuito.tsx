@@ -36,7 +36,9 @@ const initialForm = {
 
 type FormData = typeof initialForm
 
-const inputClass = "w-full px-4 py-3 rounded-xl border border-color-base-300 bg-white/50 focus:bg-white focus:ring-2 focus:ring-color-primary outline-none transition-all text-sm font-medium"
+// El color del texto va explícito: sin él, el input heredaba el color claro del
+// tema oscuro y lo que el usuario escribía quedaba invisible sobre el fondo blanco.
+const inputClass = "w-full px-4 py-3 rounded-xl border border-color-base-300 bg-white/70 focus:bg-white text-slate-900 placeholder:text-slate-400 caret-slate-900 focus:ring-2 focus:ring-color-primary outline-none transition-all text-sm font-medium"
 const labelClass = "block text-xs font-bold uppercase tracking-wider text-color-base-content/80 mb-2"
 
 export function DiagnosticoGratuito() {
