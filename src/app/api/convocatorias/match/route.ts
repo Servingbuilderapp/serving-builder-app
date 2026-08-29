@@ -250,7 +250,7 @@ export async function POST(req: Request) {
     // 2. Si hay API Key de Gemini, llamar a Google AI Studio
     if (geminiApiKey) {
       try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`;
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${geminiApiKey}`;
         
         const simplifiedConvs = convocatorias.map(c => ({
           id: c.id,
