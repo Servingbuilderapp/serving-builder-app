@@ -80,16 +80,16 @@ export default function PaymentSuccessPage() {
       )}
 
       <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-        <Link href="/apps" className="w-full sm:w-auto">
+        <Link href="/dashboard" className="w-full sm:w-auto">
           <GlowButton className="w-full px-12">
             <span className="flex items-center gap-2">
-              {language === 'en' ? 'Start Using Apps' : 'Comenzar a usar Apps'}
+              {language === 'en' ? 'Go to my panel' : 'Ir a mi panel'}
               <ArrowRight className="h-4 w-4" />
             </span>
           </GlowButton>
         </Link>
         <Link href="/" className="text-white/40 hover:text-white transition-colors text-sm font-bold">
-          {language === 'en' ? 'Return to Dashboard' : 'Volver al Panel'}
+          {language === 'en' ? 'Back to home' : 'Volver al inicio'}
         </Link>
       </div>
     </div>

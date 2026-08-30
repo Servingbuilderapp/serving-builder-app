@@ -163,7 +163,7 @@ export async function POST(req: Request) {
     const pasosRecomendados: string[] = []
 
     if (data.tipoAcceso === 'socio_anual') {
-      pasosRecomendados.push('Acceder al canal directo de radicación preferencial en 32 pasos con prioridad de revisión.')
+      pasosRecomendados.push('Acceder al canal directo de radicación preferencial con prioridad de revisión.')
     }
 
     if (data.estadoLegal === 'idea' || data.estadoLegal === 'persona_natural') {

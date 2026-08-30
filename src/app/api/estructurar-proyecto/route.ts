@@ -255,7 +255,7 @@ export async function POST(req: NextRequest) {
     if (errorPasos || !pasos) {
       console.error("Error leyendo pasos_estructuracion:", JSON.stringify(errorPasos));
       return NextResponse.json(
-        { error: "No se pudieron leer los 42 pasos", detalle: JSON.stringify(errorPasos) },
+        { error: "No se pudieron leer los pasos de estructuración", detalle: JSON.stringify(errorPasos) },
         { status: 500 }
       );
     }

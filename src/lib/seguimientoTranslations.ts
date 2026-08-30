@@ -14,7 +14,7 @@ export const traduccionesSeguimiento = {
     // Bloque 4 Dashboard & Semáforo
     title: 'Dashboard de Seguimiento de Convocatorias',
     subtitle: 'Monitoreo en tiempo real de la estructuración técnica y convocatorias asignadas.',
-    progressTitle: 'Progreso de Estructuración (Metodología de 32 Pasos)',
+    progressTitle: 'Progreso de Estructuración (Metodología Arquitectura Digital)',
     stepsCompleted: 'pasos completados',
     overallProgress: 'Avance General',
     convocatoriasTitle: 'Convocatorias Asignadas & Estatus de Postulación',
@@ -52,7 +52,7 @@ export const traduccionesSeguimiento = {
     // Block 4 Dashboard & Semáforo
     title: 'Grants & Calls Tracking Dashboard',
     subtitle: 'Real-time monitoring of technical project structuring and assigned calls.',
-    progressTitle: 'Structuring Progress (32-Step Methodology)',
+    progressTitle: 'Structuring Progress (Arquitectura Digital Methodology)',
     stepsCompleted: 'steps completed',
     overallProgress: 'Overall Progress',
     convocatoriasTitle: 'Assigned Calls & Application Status',

@@ -738,7 +738,7 @@ export default function ProyectoDetallePage() {
                 Motor de Auto-formulación Activo
               </h3>
               <p className="text-sm text-gray-400 max-w-md mx-auto mt-2 font-medium">
-                Procesando metodología estricta de 32 pasos en menos de 5 minutos. Analizando archivos subidos e insumos del cliente.
+                Procesando la metodología completa de estructuración en menos de 5 minutos. Analizando archivos subidos e insumos del cliente.
               </p>
 
               {/* Progress HUD */}
@@ -1470,7 +1470,7 @@ export default function ProyectoDetallePage() {
                   <div className="p-4 bg-brand-blue/5 border border-brand-blue/20 rounded-xl mt-6 flex gap-3 items-center">
                     <FileCheck className="w-5 h-5 text-cyan-400 shrink-0" />
                     <p className="text-xs text-gray-400 font-medium">
-                      El reporte detallado de **32 pasos** se encuentra consolidado y listo para auditoría. Un especialista financiero se pondrá en contacto para afinar la presentación técnica final.
+                      El reporte detallado de estructuración se encuentra consolidado y listo para auditoría. Un especialista financiero se pondrá en contacto para afinar la presentación técnica final.
                     </p>
                   </div>
                 </div>
@@ -1491,7 +1491,7 @@ export default function ProyectoDetallePage() {
                </div>
                <h3 className="text-xl font-bold mb-2 text-white">Estructuración Técnica No Iniciada</h3>
                <p className="text-gray-400 max-w-sm mx-auto font-medium leading-relaxed mb-6">
-                 Completa el levantamiento técnico (Fase 2) seleccionando un plan de estructuración y subiendo el archivo de tu proyecto para activar la auto-formulación de 32 pasos.
+                 Completa el levantamiento técnico (Fase 2) seleccionando un plan de estructuración y subiendo el archivo de tu proyecto para activar la auto-formulación del proyecto.
                </p>
                <GlowButton onClick={() => router.push(`/dashboard/formulario-tecnico/${project.id}`)} className="bg-brand-blue hover:bg-cyan-600 text-white border-0 flex items-center gap-2">
                  Iniciar Formulario Técnico (22 Preguntas) <ArrowRight className="w-4 h-4" />

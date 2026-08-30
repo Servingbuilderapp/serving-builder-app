@@ -97,7 +97,7 @@ export function VerticalSelector({
             <div className="flex items-center gap-2.5">
               <Sparkles className="h-4 w-4 text-amber-500 shrink-0" />
               <span>
-                <strong>Modo Socio Anual Activo:</strong> Priorización de radicación en 32 pasos, soporte personalizado en convocatorias ilimitadas y 0% comisión sobre desembolsos.
+                <strong>Modo Socio Anual Activo:</strong> Priorización de radicación en la ruta de estructuración, soporte personalizado en convocatorias ilimitadas y 0% comisión sobre desembolsos.
               </span>
             </div>
             <span className="text-[10px] font-black uppercase tracking-wider bg-amber-500/20 text-amber-800 dark:text-amber-300 px-2.5 py-1 rounded-md border border-amber-500/40 shrink-0 hidden sm:inline-block">

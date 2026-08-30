@@ -158,7 +158,7 @@ export function ChecklistEstructuracionClient({ proyectoId, pasosIniciales, porc
             onClick={() => setSoloPorReforzar(!soloPorReforzar)}
             className="ml-8 text-xs font-bold text-amber-600 hover:text-amber-500 underline underline-offset-2 transition-colors"
           >
-            {soloPorReforzar ? 'Ver los 42 pasos otra vez' : 'Ver solo los pasos por reforzar'}
+            {soloPorReforzar ? 'Ver todos los pasos otra vez' : 'Ver solo los pasos por reforzar'}
           </button>
         </div>
       )}
