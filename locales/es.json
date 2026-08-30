@@ -314,5 +314,7 @@
   "w.hero.caso2": "Tengo un proyecto estructurado",
   "w.hero.panel_boton": "Empezar ahora",
   "w.cifras.idiomas": "idiomas disponibles en la plataforma, para postular también fuera del país",
-  "w.membresias.anual": "Disponible en pago mensual o anual"
+  "w.membresias.anual": "Pago mensual o anual — al pagar el año se cobran 10 meses",
+  "w.escalera.membresia1.i6": "Dos meses de regalo al pagar el año",
+  "w.escalera.membresia2.i6": "Dos meses de regalo al pagar el año"
 }
