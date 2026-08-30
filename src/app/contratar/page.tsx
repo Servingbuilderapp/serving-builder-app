@@ -11,9 +11,39 @@ import { useTranslation } from '@/hooks/useTranslation'
 
 const TASA_COP_POR_USD = 3244 // Actualizar periódicamente según la TRM del día
 
-const PLANES: Record<string, { nombre: string; montoCop: number }> = {
-  esencial: { nombre: 'Estructuración Esencial', montoCop: 12000000 },
-  completo: { nombre: 'Estructuración Completa', montoCop: 17000000 },
+/**
+ * Modalidades de estructuración.
+ * El identificador (esencial / completo) NO se cambia: es el que queda guardado
+ * en la base de datos de los proyectos. Lo que cambia es el nombre visible.
+ */
+const PLANES: Record<
+  string,
+  { nombre: string; montoCop: number; resumen: string; incluye: string[] }
+> = {
+  esencial: {
+    nombre: 'Estructuración Estratégica',
+    montoCop: 12000000,
+    resumen: 'Formulación completa de tu proyecto y tres meses buscando convocatorias.',
+    incluye: [
+      'Diagnóstico incluido',
+      'Formulación completa del proyecto',
+      '3 meses de búsqueda de convocatorias',
+      'Encaje con los términos de referencia',
+      '3 meses adicionales de cortesía si no se gana nada',
+    ],
+  },
+  completo: {
+    nombre: 'Estructuración Élite',
+    montoCop: 17000000,
+    resumen: 'El acompañamiento más completo: seis meses de búsqueda y encaje prioritario.',
+    incluye: [
+      'Todo lo de la Estructuración Estratégica',
+      '6 meses de búsqueda de convocatorias',
+      'Encaje prioritario con los términos de referencia',
+      '6 meses adicionales de cortesía si no se gana nada',
+      'Atención prioritaria',
+    ],
+  },
 }
 
 function calcularPrecioFondoEmprender(montoSolicitado: number) {
@@ -160,7 +190,8 @@ establecido en la Cláusula 7 (Valor del Plan) y en la Cláusula 11 (Comisión
 de Éxito general) únicamente para este tipo de proyecto:
 
 1. Valor de estructuración: en lugar de los valores establecidos para los
-   planes Esencial o Completo, el servicio de estructuración, formulación y
+   planes Estructuración Estratégica o Estructuración Élite, el servicio de
+   estructuración, formulación y
    acompañamiento para proyectos de Fondo Emprender tiene un valor fijo
    según el rango de financiación solicitada, así:
 
@@ -200,12 +231,20 @@ function formatCOP(v: number) {
 function ContratarContent() {
   const { t } = useTranslation()
   const searchParams = useSearchParams()
-  const planSlug = searchParams.get('plan') || 'esencial'
+  // Si no llega ningún plan en la dirección, se le muestran las opciones en vez
+  // de imponerle uno por defecto.
+  const [planSlug, setPlanSlug] = useState<string>(searchParams.get('plan') || '')
   const montoFondoEmprender = Number(searchParams.get('monto')) || 30000000
   const esFondoEmprender = planSlug === 'fondo_emprender'
+  const debeElegirPlan = !planSlug
 
   const plan = esFondoEmprender
-    ? { nombre: 'Estructuración — Fondo Emprender', montoCop: calcularPrecioFondoEmprender(montoFondoEmprender) }
+    ? {
+        nombre: 'Estructuración — Fondo Emprender',
+        montoCop: calcularPrecioFondoEmprender(montoFondoEmprender),
+        resumen: 'Estructuración orientada específicamente a la postulación al Fondo Emprender.',
+        incluye: [] as string[],
+      }
     : (PLANES[planSlug] || PLANES.esencial)
   const montoUsd = Math.round(plan.montoCop / TASA_COP_POR_USD)
 
@@ -266,6 +305,80 @@ function ContratarContent() {
 
   const mensajeWhatsapp = 'Hola, firme el contrato para el plan ' + plan.nombre + ' (proyecto ' + proyectoId + '). Aqui esta mi comprobante de pago.'
   const mensajeWhatsappUrl = 'https://wa.me/573227008727?text=' + encodeURIComponent(mensajeWhatsapp)
+
+  if (debeElegirPlan) {
+    return (
+      <div className="min-h-screen bg-color-base-100 py-16 px-4">
+        <div className="max-w-4xl mx-auto space-y-8">
+          <div className="text-center space-y-2">
+            <h1 className="text-2xl md:text-3xl font-black uppercase italic tracking-tighter text-color-base-content">
+              Elige tu modalidad
+            </h1>
+            <p className="text-color-base-content/60 text-sm max-w-xl mx-auto">
+              Las tres llevan tu proyecto hasta la postulación. Cambian el alcance del
+              acompañamiento y el tiempo de búsqueda de convocatorias.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {(['esencial', 'completo'] as const).map((slug) => {
+              const opcion = PLANES[slug]
+              const destacado = slug === 'completo'
+              return (
+                <GlassCard
+                  key={slug}
+                  className={cn(
+                    'p-7 flex flex-col gap-5',
+                    destacado && 'ring-2 ring-color-primary/50'
+                  )}
+                >
+                  <div className="space-y-1">
+                    <h2 className="text-xl font-black text-color-base-content">{opcion.nombre}</h2>
+                    <p className="text-color-base-content/60 text-sm">{opcion.resumen}</p>
+                  </div>
+                  <div className="text-2xl font-black text-color-primary">
+                    {formatCOP(opcion.montoCop)}
+                    <span className="text-xs font-bold text-color-base-content/50 ml-2">+ IVA</span>
+                  </div>
+                  <ul className="space-y-2 flex-1">
+                    {opcion.incluye.map((linea) => (
+                      <li
+                        key={linea}
+                        className="flex items-start gap-2 text-sm text-color-base-content/80"
+                      >
+                        <CheckCircle2 className="h-4 w-4 text-color-accent-pink shrink-0 mt-0.5" />
+                        <span>{linea}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <GlowButton className="w-full" onClick={() => setPlanSlug(slug)}>
+                    Elegir esta modalidad
+                  </GlowButton>
+                </GlassCard>
+              )
+            })}
+          </div>
+
+          <GlassCard className="p-6 flex flex-col md:flex-row md:items-center gap-4 justify-between">
+            <div>
+              <h3 className="font-black text-color-base-content">Fondo Emprender</h3>
+              <p className="text-color-base-content/60 text-sm">
+                Si tu proyecto se va a postular al Fondo Emprender, el valor depende del
+                monto que solicites.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setPlanSlug('fondo_emprender')}
+              className="shrink-0 px-6 py-3 rounded-xl border border-color-base-300 text-sm font-bold text-color-base-content hover:bg-color-base-200 transition-colors"
+            >
+              Ver condiciones
+            </button>
+          </GlassCard>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-color-base-100 py-16 px-4">
