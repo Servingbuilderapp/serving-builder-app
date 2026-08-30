@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import {
   ArrowRight,
@@ -322,6 +322,65 @@ function Marca({ oscuro = false }: { oscuro?: boolean }) {
   )
 }
 
+/**
+ * Fondo decorativo: manchas de color muy suaves, fijas detrás de todo el
+ * contenido. Le quitan la sensación de hoja blanca sin robar protagonismo.
+ */
+function FondoDecorativo() {
+  return (
+    <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+      <div className="absolute -top-40 -left-32 h-[520px] w-[520px] rounded-full bg-[#1D4ED8]/[0.07] blur-[110px]" />
+      <div className="absolute top-[38%] -right-40 h-[560px] w-[560px] rounded-full bg-[#7C3AED]/[0.06] blur-[120px]" />
+      <div className="absolute bottom-[-12%] left-[22%] h-[480px] w-[480px] rounded-full bg-[#06B6D4]/[0.06] blur-[110px]" />
+    </div>
+  )
+}
+
+/** Envoltorio que hace aparecer el contenido suavemente al llegar con el scroll */
+function Aparece({
+  children,
+  delay = 0,
+  className = '',
+}: {
+  children: React.ReactNode
+  delay?: number
+  className?: string
+}) {
+  const ref = useRef<HTMLDivElement | null>(null)
+  // Si el navegador no soporta la detección de scroll, el contenido nace visible
+  const [visible, setVisible] = useState(
+    () => typeof IntersectionObserver === 'undefined'
+  )
+
+  useEffect(() => {
+    const nodo = ref.current
+    if (!nodo || typeof IntersectionObserver === 'undefined') return
+    const observador = new IntersectionObserver(
+      (entradas) => {
+        if (entradas[0]?.isIntersecting) {
+          setVisible(true)
+          observador.disconnect()
+        }
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -60px 0px' }
+    )
+    observador.observe(nodo)
+    return () => observador.disconnect()
+  }, [])
+
+  return (
+    <div
+      ref={ref}
+      style={{ transitionDelay: `${delay}ms` }}
+      className={`transition-all duration-700 ease-out ${
+        visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+      } ${className}`}
+    >
+      {children}
+    </div>
+  )
+}
+
 function TituloSeccion({
   eyebrow,
   titulo,
@@ -334,10 +393,14 @@ function TituloSeccion({
   centrado?: boolean
 }) {
   return (
-    <div className={`max-w-3xl ${centrado ? 'mx-auto text-center' : ''} mb-12`}>
+    <Aparece className={`max-w-3xl ${centrado ? 'mx-auto text-center' : ''} mb-12`}>
       {eyebrow ? (
-        <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#1D4ED8] mb-3">
-          {eyebrow}
+        <div className={`flex items-center gap-2.5 mb-3 ${centrado ? 'justify-center' : ''}`}>
+          <span className="h-px w-8 bg-gradient-to-r from-transparent to-[#1D4ED8]" />
+          <span className="text-[11px] font-bold uppercase tracking-[0.2em] bg-gradient-to-r from-[#1D4ED8] to-[#7C3AED] bg-clip-text text-transparent">
+            {eyebrow}
+          </span>
+          <span className="h-px w-8 bg-gradient-to-l from-transparent to-[#7C3AED]" />
         </div>
       ) : null}
       <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#0B2A4A]">
@@ -346,7 +409,7 @@ function TituloSeccion({
       {subtitulo ? (
         <p className="mt-4 text-base md:text-lg text-[#5B6B84] leading-relaxed">{subtitulo}</p>
       ) : null}
-    </div>
+    </Aparece>
   )
 }
 
@@ -414,7 +477,8 @@ export function LandingClient({ user }: LandingClientProps) {
   const [faqAbierta, setFaqAbierta] = useState<string | null>(null)
 
   return (
-    <div className="min-h-screen bg-white text-[#0F172A] font-sans">
+    <div className="relative min-h-screen bg-[#FBFCFE] text-[#0F172A] font-sans">
+      <FondoDecorativo />
       {/* ================= HEADER ================= */}
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-[#E8EDF5]">
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8 h-[72px] flex items-center justify-between gap-6">
@@ -501,15 +565,25 @@ export function LandingClient({ user }: LandingClientProps) {
       </header>
 
       {/* ================= HERO ================= */}
-      <section id="inicio" className="relative border-b border-[#EEF2F8]">
-        <div className="max-w-[1400px] mx-auto px-5 lg:px-8 py-12 lg:py-16">
+      <section id="inicio" className="relative border-b border-[#EEF2F8] overflow-hidden">
+        <div
+          aria-hidden
+          className="absolute -top-32 left-[-6%] h-[420px] w-[420px] rounded-full bg-gradient-to-br from-[#1D4ED8]/12 to-[#7C3AED]/10 blur-[90px]"
+        />
+        <div className="relative max-w-[1400px] mx-auto px-5 lg:px-8 py-12 lg:py-16">
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-start">
             {/* Columna izquierda: mensaje */}
             <div className="lg:col-span-4">
               <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-[#0B2A4A] leading-[1.08]">
                 {t('w.hero.titulo1')}
                 <br />
-                {t('w.hero.titulo2')}
+                <span className="relative inline-block">
+                  {t('w.hero.titulo2')}
+                  <span
+                    aria-hidden
+                    className="absolute -bottom-1 left-0 h-[6px] w-full rounded-full bg-gradient-to-r from-[#1D4ED8] via-[#4F46E5] to-[#06B6D4] opacity-80"
+                  />
+                </span>
               </h1>
               <p className="mt-5 text-base text-[#475569] leading-relaxed max-w-md">
                 {t('w.hero.descripcion')}
@@ -522,7 +596,7 @@ export function LandingClient({ user }: LandingClientProps) {
                   { icono: Target, clave: 'w.hero.pilar3' },
                 ].map(({ icono: Icono, clave }) => (
                   <div key={clave}>
-                    <div className="h-11 w-11 rounded-xl bg-[#EEF4FF] flex items-center justify-center mb-2.5">
+                    <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-[#E6EEFF] to-[#EDE7FF] ring-1 ring-[#1D4ED8]/10 flex items-center justify-center mb-2.5">
                       <Icono className="h-5 w-5 text-[#1D4ED8]" />
                     </div>
                     <div className="text-[12px] font-semibold text-[#0B2A4A] leading-snug">
@@ -551,7 +625,8 @@ export function LandingClient({ user }: LandingClientProps) {
 
             {/* Columna centro: video */}
             <div className="lg:col-span-5">
-              <div className="relative rounded-2xl overflow-hidden border border-[#E2E8F0] bg-gradient-to-br from-[#0C2E5C] to-[#1D4ED8] aspect-video">
+              <div className="relative rounded-2xl overflow-hidden p-[2px] bg-gradient-to-br from-[#1D4ED8] via-[#4F46E5] to-[#06B6D4] shadow-[0_18px_50px_-18px_rgba(29,78,216,0.55)]">
+              <div className="relative rounded-[14px] overflow-hidden bg-gradient-to-br from-[#0C2E5C] to-[#1D4ED8] aspect-video">
                 {videoAbierto && VIDEO_ARCHIVO ? (
                   <video
                     className="absolute inset-0 h-full w-full object-cover bg-[#081F3F]"
@@ -582,6 +657,7 @@ export function LandingClient({ user }: LandingClientProps) {
                   </div>
                 )}
               </div>
+              </div>
             </div>
 
             {/* Columna derecha: diagnóstico */}
@@ -604,7 +680,7 @@ export function LandingClient({ user }: LandingClientProps) {
                       href="/diagnostico"
                       className={`group flex items-start gap-3 rounded-xl bg-white border border-[#E2E8F0] p-4 hover:border-[#1D4ED8] ${RELIEVE_BOTON_SUAVE}`}
                     >
-                      <div className="h-9 w-9 rounded-lg bg-[#EEF4FF] flex items-center justify-center shrink-0">
+                      <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-[#E6EEFF] to-[#EDE7FF] ring-1 ring-[#1D4ED8]/10 flex items-center justify-center shrink-0">
                         <Icono className="h-4 w-4 text-[#1D4ED8]" />
                       </div>
                       <div className="min-w-0 flex-1">
@@ -632,28 +708,42 @@ export function LandingClient({ user }: LandingClientProps) {
         </div>
       </section>
 
-      {/* ================= FRANJA DEL PROBLEMA ================= */}
-      <section className="bg-[#F5F8FC] border-b border-[#EEF2F8]">
-        <div className="max-w-[1400px] mx-auto px-5 lg:px-8 py-10">
-          <div className="rounded-2xl bg-white border border-[#E2E8F0] p-6 lg:p-8 grid lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-5 flex items-start gap-4">
-              <div className="h-12 w-12 rounded-xl bg-[#0C2E5C] flex items-center justify-center shrink-0">
+      {/* ================= FRANJA DEL PROBLEMA (banda de color) ================= */}
+      <section className="relative overflow-hidden bg-gradient-to-r from-[#081F3F] via-[#0C2E5C] to-[#1D4ED8]">
+        {/* destello diagonal que cruza la banda */}
+        <div
+          aria-hidden
+          className="absolute inset-y-0 -left-1/4 w-2/3 rotate-12 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+        />
+        <div
+          aria-hidden
+          className="absolute -bottom-24 right-[8%] h-64 w-64 rounded-full bg-[#7EC3FF]/20 blur-3xl"
+        />
+        <div className="relative max-w-[1400px] mx-auto px-5 lg:px-8 py-12 lg:py-14">
+          <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+            <div className="lg:col-span-6 flex items-start gap-4">
+              <div className="h-12 w-12 rounded-xl bg-white/12 ring-1 ring-white/25 backdrop-blur flex items-center justify-center shrink-0">
                 <Briefcase className="h-5 w-5 text-white" />
               </div>
               <div>
-                <div className="text-lg font-extrabold text-[#0B2A4A] leading-snug">
+                <div className="text-xl lg:text-2xl font-extrabold text-white leading-snug">
                   {t('w.problema.titulo')}
                 </div>
-                <div className="text-base font-semibold text-[#1D4ED8] leading-snug mt-1">
+                <div className="text-lg lg:text-xl font-semibold text-[#9DC7FF] leading-snug mt-1">
                   {t('w.problema.subtitulo')}
                 </div>
               </div>
             </div>
-            <div className="lg:col-span-7 grid sm:grid-cols-2 gap-6">
+            <div className="lg:col-span-6 grid sm:grid-cols-2 gap-5">
               {CIFRAS_CONTEXTO.map((cifra) => (
-                <div key={cifra.claveTexto} className="flex items-start gap-3">
-                  <div className="text-2xl font-extrabold text-[#0B2A4A] shrink-0">{cifra.valor}</div>
-                  <div className="text-[13px] text-[#5B6B84] leading-snug pt-1">
+                <div
+                  key={cifra.claveTexto}
+                  className="rounded-2xl bg-white/8 ring-1 ring-white/15 backdrop-blur px-5 py-4"
+                >
+                  <div className="text-3xl font-extrabold bg-gradient-to-r from-white to-[#9DC7FF] bg-clip-text text-transparent">
+                    {cifra.valor}
+                  </div>
+                  <div className="text-[13px] text-white/70 leading-snug mt-1.5">
                     {t(cifra.claveTexto)}
                   </div>
                 </div>
@@ -672,13 +762,22 @@ export function LandingClient({ user }: LandingClientProps) {
             subtitulo={t('w.que_hacemos.subtitulo')}
           />
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div className="relative grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {/* hilo de color que cruza las seis etapas */}
+            <div
+              aria-hidden
+              className="hidden lg:block absolute left-8 right-8 top-[52px] h-0.5 bg-gradient-to-r from-[#1D4ED8]/15 via-[#7C3AED]/45 to-[#06B6D4]/15"
+            />
             {RUTA_PROYECTO.map(({ icono: Icono, clave }, i) => (
+              <Aparece key={clave} delay={i * 80}>
               <div
-                key={clave}
-                className={`relative rounded-xl border border-[#E2E8F0] bg-white p-5 text-center hover:border-[#1D4ED8] ${RELIEVE_TARJETA}`}
+                className={`relative overflow-hidden rounded-xl border border-[#E2E8F0] bg-white p-5 text-center hover:border-[#1D4ED8] ${RELIEVE_TARJETA}`}
               >
-                <div className="h-11 w-11 rounded-xl bg-[#EEF4FF] flex items-center justify-center mx-auto mb-3">
+                <span
+                  aria-hidden
+                  className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#1D4ED8] via-[#4F46E5] to-[#06B6D4] opacity-70"
+                />
+                <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-[#E6EEFF] to-[#EDE7FF] ring-1 ring-[#1D4ED8]/10 flex items-center justify-center mx-auto mb-3">
                   <Icono className="h-5 w-5 text-[#1D4ED8]" />
                 </div>
                 <div className="text-[10px] font-bold text-[#94A3B8] mb-1">
@@ -686,6 +785,7 @@ export function LandingClient({ user }: LandingClientProps) {
                 </div>
                 <div className="text-[13px] font-bold text-[#0B2A4A] leading-snug">{t(clave)}</div>
               </div>
+              </Aparece>
             ))}
           </div>
 
@@ -696,7 +796,7 @@ export function LandingClient({ user }: LandingClientProps) {
       </section>
 
       {/* ================= PROPUESTA DE VALOR ================= */}
-      <section id="como-funciona" className="bg-[#F5F8FC] py-16 lg:py-20 border-y border-[#EEF2F8]">
+      <section id="como-funciona" className="bg-gradient-to-b from-[#F3F7FD] via-[#F7FAFE] to-[#F3F7FD] py-16 lg:py-20 border-y border-[#E7EEF9]">
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
           <TituloSeccion
             eyebrow={t('w.valor.eyebrow')}
@@ -705,14 +805,26 @@ export function LandingClient({ user }: LandingClientProps) {
           />
 
           <div className="grid md:grid-cols-3 gap-6">
-            {PROPUESTA_VALOR.map(({ icono: Icono, claveTitulo, claveTexto }) => (
-              <div key={claveTitulo} className={`rounded-2xl bg-white border border-[#E2E8F0] p-7 ${RELIEVE_TARJETA}`}>
-                <div className="h-12 w-12 rounded-xl bg-[#EEF4FF] flex items-center justify-center mb-5">
+            {PROPUESTA_VALOR.map(({ icono: Icono, claveTitulo, claveTexto }, i) => (
+              <Aparece key={claveTitulo} delay={i * 110}>
+              <div
+                className={`relative overflow-hidden rounded-2xl bg-white border border-[#E2E8F0] p-7 ${RELIEVE_TARJETA}`}
+              >
+                <span
+                  aria-hidden
+                  className={`absolute inset-x-0 top-0 h-1 ${
+                    ['bg-gradient-to-r from-[#1D4ED8] to-[#60A5FA]',
+                     'bg-gradient-to-r from-[#4F46E5] to-[#A78BFA]',
+                     'bg-gradient-to-r from-[#0891B2] to-[#67E8F9]'][i]
+                  }`}
+                />
+                <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-[#E6EEFF] to-[#EDE7FF] ring-1 ring-[#1D4ED8]/10 flex items-center justify-center mb-5">
                   <Icono className="h-5 w-5 text-[#1D4ED8]" />
                 </div>
                 <h3 className="text-lg font-extrabold text-[#0B2A4A] mb-2">{t(claveTitulo)}</h3>
                 <p className="text-[14px] text-[#5B6B84] leading-relaxed">{t(claveTexto)}</p>
               </div>
+              </Aparece>
             ))}
           </div>
 
@@ -761,9 +873,9 @@ export function LandingClient({ user }: LandingClientProps) {
             {ESCALERA.map((escalon) => {
               const Icono = escalon.icono
               return (
+                <Aparece key={escalon.numero} delay={Number(escalon.numero) * 70} className="flex">
                 <div
-                  key={escalon.numero}
-                  className={`rounded-2xl border ${escalon.borde} ${escalon.fondo} p-5 flex flex-col ${RELIEVE_TARJETA}`}
+                  className={`w-full rounded-2xl border ${escalon.borde} ${escalon.fondo} p-5 flex flex-col ${RELIEVE_TARJETA}`}
                 >
                   <div className="text-[11px] font-bold text-[#94A3B8] mb-1">{escalon.numero}</div>
                   <h3 className="text-[15px] font-extrabold text-[#0B2A4A] leading-snug min-h-[38px]">
@@ -797,6 +909,7 @@ export function LandingClient({ user }: LandingClientProps) {
                     {t(escalon.claveBoton)}
                   </Link>
                 </div>
+                </Aparece>
               )
             })}
           </div>
@@ -809,7 +922,7 @@ export function LandingClient({ user }: LandingClientProps) {
 
       {/* ================= ENTIDADES (solo si hay autorización) ================= */}
       {ENTIDADES_ALIADAS.length > 0 ? (
-        <section className="bg-[#F5F8FC] border-y border-[#EEF2F8] py-8">
+        <section className="bg-gradient-to-b from-[#F3F7FD] to-[#F7FAFE] border-y border-[#E7EEF9] py-8">
           <div className="max-w-[1400px] mx-auto px-5 lg:px-8 flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
             <span className="text-[12px] font-bold uppercase tracking-wider text-[#5B6B84]">
               {t('w.aliados.titulo')}
@@ -828,7 +941,9 @@ export function LandingClient({ user }: LandingClientProps) {
       ) : null}
 
       {/* ================= MEMBRESÍAS ================= */}
-      <section id="membresias" className="bg-[#0C2E5C] py-16 lg:py-20">
+      <section id="membresias" className="relative overflow-hidden bg-gradient-to-br from-[#081F3F] via-[#0C2E5C] to-[#15305F] py-16 lg:py-20">
+        <div aria-hidden className="absolute -top-24 left-[10%] h-72 w-72 rounded-full bg-[#1D4ED8]/30 blur-3xl" />
+        <div aria-hidden className="absolute -bottom-28 right-[6%] h-80 w-80 rounded-full bg-[#7C3AED]/25 blur-3xl" />
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
           <div className="max-w-3xl mx-auto text-center mb-12">
             <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#7EA6E8] mb-3">
@@ -966,7 +1081,7 @@ export function LandingClient({ user }: LandingClientProps) {
       </section>
 
       {/* ================= CAMINOS ================= */}
-      <section className="bg-[#F5F8FC] py-16 lg:py-20 border-y border-[#EEF2F8]">
+      <section className="bg-gradient-to-b from-[#F3F7FD] via-[#F7FAFE] to-[#F3F7FD] py-16 lg:py-20 border-y border-[#E7EEF9]">
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
           <TituloSeccion
             eyebrow={t('w.caminos.eyebrow')}
@@ -974,13 +1089,13 @@ export function LandingClient({ user }: LandingClientProps) {
             subtitulo={t('w.caminos.subtitulo')}
           />
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
-            {CAMINOS.map(({ icono: Icono, clave, href }) => (
+            {CAMINOS.map(({ icono: Icono, clave, href }, i) => (
+              <Aparece key={clave} delay={i * 70}>
               <Link
-                key={clave}
                 href={href}
                 className={`group flex items-center gap-4 rounded-xl bg-white border border-[#E2E8F0] p-5 hover:border-[#1D4ED8] ${RELIEVE_TARJETA}`}
               >
-                <div className="h-11 w-11 rounded-xl bg-[#EEF4FF] flex items-center justify-center shrink-0">
+                <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-[#E6EEFF] to-[#EDE7FF] ring-1 ring-[#1D4ED8]/10 flex items-center justify-center shrink-0">
                   <Icono className="h-5 w-5 text-[#1D4ED8]" />
                 </div>
                 <span className="text-[14px] font-semibold text-[#0B2A4A] leading-snug flex-1">
@@ -988,6 +1103,7 @@ export function LandingClient({ user }: LandingClientProps) {
                 </span>
                 <ArrowUpRight className="h-4 w-4 text-[#94A3B8] group-hover:text-[#1D4ED8] shrink-0" />
               </Link>
+              </Aparece>
             ))}
           </div>
         </div>
@@ -1004,7 +1120,7 @@ export function LandingClient({ user }: LandingClientProps) {
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 max-w-4xl mx-auto">
             {CON_QUIEN.map(({ icono: Icono, clave }) => (
               <div key={clave} className={`rounded-xl border border-[#E2E8F0] bg-white p-5 text-center ${RELIEVE_TARJETA}`}>
-                <div className="h-11 w-11 rounded-xl bg-[#EEF4FF] flex items-center justify-center mx-auto mb-3">
+                <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-[#E6EEFF] to-[#EDE7FF] ring-1 ring-[#1D4ED8]/10 flex items-center justify-center mx-auto mb-3">
                   <Icono className="h-5 w-5 text-[#1D4ED8]" />
                 </div>
                 <div className="text-[13px] font-bold text-[#0B2A4A] leading-snug">{t(clave)}</div>
@@ -1018,7 +1134,7 @@ export function LandingClient({ user }: LandingClientProps) {
       </section>
 
       {/* ================= PORTAL DE RÉPLICAS ================= */}
-      <section id="replicas" className="bg-[#F5F8FC] border-y border-[#EEF2F8] py-14">
+      <section id="replicas" className="bg-gradient-to-b from-[#F3F7FD] to-[#F7FAFE] border-y border-[#E7EEF9] py-14">
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
           <div className="rounded-2xl bg-white border border-[#E2E8F0] p-7 lg:p-9 grid lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-8">
@@ -1083,8 +1199,12 @@ export function LandingClient({ user }: LandingClientProps) {
       </section>
 
       {/* ================= CTA FINAL ================= */}
-      <section className="bg-[#0C2E5C] py-16 lg:py-20">
-        <div className="max-w-[1400px] mx-auto px-5 lg:px-8 text-center">
+      <section className="relative overflow-hidden bg-gradient-to-r from-[#0C2E5C] via-[#123C77] to-[#1D4ED8] py-16 lg:py-20">
+        <div
+          aria-hidden
+          className="absolute inset-y-0 left-[-15%] w-1/2 -rotate-12 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+        />
+        <div className="relative max-w-[1400px] mx-auto px-5 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white leading-tight">
             {t('w.cta.titulo')}
           </h2>
