@@ -133,6 +133,7 @@ type Escalon = {
   clavesItems: string[]
   claveBoton: string
   href: string
+  externo?: boolean
   icono: React.ElementType
   color: string
   fondo: string
@@ -212,7 +213,8 @@ const ESCALERA: Escalon[] = [
       'w.escalera.academia.i4',
     ],
     claveBoton: 'w.escalera.academia.boton',
-    href: '#servicios',
+    href: `https://wa.me/${TELEFONO_WHATSAPP}?text=${encodeURIComponent('Hola, quiero información sobre la Academia de estructuración de proyectos.')}`,
+    externo: true,
     icono: BookOpen,
     color: 'text-amber-700',
     fondo: 'bg-amber-50/70',
@@ -231,7 +233,8 @@ const ESCALERA: Escalon[] = [
       'w.escalera.mentoria.i4',
     ],
     claveBoton: 'w.escalera.mentoria.boton',
-    href: '#servicios',
+    href: `https://wa.me/${TELEFONO_WHATSAPP}?text=${encodeURIComponent('Hola, quiero información sobre la Mentoría de estructuración.')}`,
+    externo: true,
     icono: Users,
     color: 'text-violet-700',
     fondo: 'bg-violet-50/70',
@@ -926,12 +929,23 @@ export function LandingClient({ user }: LandingClientProps) {
                     ))}
                   </ul>
 
-                  <Link
-                    href={escalon.href}
-                    className={`min-h-9 px-3 py-2 rounded-lg text-[12px] font-semibold inline-flex items-center justify-center text-center leading-tight ${RELIEVE_BOTON} ${escalon.boton}`}
-                  >
-                    {t(escalon.claveBoton)}
-                  </Link>
+                  {escalon.externo ? (
+                    <a
+                      href={escalon.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`min-h-9 px-3 py-2 rounded-lg text-[12px] font-semibold inline-flex items-center justify-center text-center leading-tight ${RELIEVE_BOTON} ${escalon.boton}`}
+                    >
+                      {t(escalon.claveBoton)}
+                    </a>
+                  ) : (
+                    <Link
+                      href={escalon.href}
+                      className={`min-h-9 px-3 py-2 rounded-lg text-[12px] font-semibold inline-flex items-center justify-center text-center leading-tight ${RELIEVE_BOTON} ${escalon.boton}`}
+                    >
+                      {t(escalon.claveBoton)}
+                    </Link>
+                  )}
                 </div>
                 </Aparece>
               )
@@ -1009,12 +1023,21 @@ export function LandingClient({ user }: LandingClientProps) {
                 <h3 className={`text-lg font-extrabold ${plan.destacado ? 'text-[#0B2A4A]' : 'text-white'}`}>
                   {t(plan.claveT)}
                 </h3>
-                <div className={`mt-2 text-3xl font-extrabold ${plan.destacado ? 'text-[#1D4ED8]' : 'text-white'}`}>
+                <div className={`mt-1 text-[15px] font-bold ${plan.destacado ? 'text-[#1D4ED8]' : 'text-[#9DC7FF]'}`}>
                   {t(plan.claveP)}
                 </div>
                 <p className={`mt-3 text-[13px] leading-relaxed ${plan.destacado ? 'text-[#5B6B84]' : 'text-white/60'}`}>
                   {t(plan.claveD)}
                 </p>
+                <div
+                  className={`mt-3 inline-flex items-center gap-1.5 text-[11.5px] font-semibold px-2.5 py-1 rounded-full ${
+                    plan.destacado
+                      ? 'bg-[#EEF4FF] text-[#1D4ED8] border border-[#DBE7FF]'
+                      : 'bg-white/10 text-[#CFE0FF] border border-white/20'
+                  }`}
+                >
+                  {t('w.membresias.anual')}
+                </div>
                 <ul className="mt-5 space-y-2">
                   {plan.items.map((clave) => (
                     <li
