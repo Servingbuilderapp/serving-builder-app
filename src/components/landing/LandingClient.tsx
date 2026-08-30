@@ -63,8 +63,8 @@ const ENTIDADES_ALIADAS: { nombre: string; logo: string }[] = []
  * Para ocultar una, basta con borrar su línea.
  */
 const CIFRAS_CONTEXTO = [
-  { valor: '+42', claveTexto: 'w.cifras.pasos' },
   { valor: '6', claveTexto: 'w.cifras.etapas' },
+  { valor: '9', claveTexto: 'w.cifras.idiomas' },
 ]
 
 const TELEFONO = '322 700 8727'
@@ -679,28 +679,28 @@ export function LandingClient({ user }: LandingClientProps) {
                   {t('w.hero.panel_texto')}
                 </p>
 
-                <div className="mt-5 space-y-3">
+                <div className="mt-5 rounded-xl bg-white border border-[#E2E8F0] p-4 space-y-2.5">
                   {[
-                    { icono: Lightbulb, claveT: 'w.hero.opcion1_titulo', claveD: 'w.hero.opcion1_texto' },
-                    { icono: FileText, claveT: 'w.hero.opcion2_titulo', claveD: 'w.hero.opcion2_texto' },
-                  ].map(({ icono: Icono, claveT, claveD }) => (
-                    <Link
-                      key={claveT}
-                      href="/diagnostico"
-                      className={`group flex items-start gap-3 rounded-xl bg-white border border-[#E2E8F0] p-4 hover:border-[#1D4ED8] ${RELIEVE_BOTON_SUAVE}`}
-                    >
-                      <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-[#E6EEFF] to-[#EDE7FF] ring-1 ring-[#1D4ED8]/10 flex items-center justify-center shrink-0">
+                    { icono: Lightbulb, clave: 'w.hero.caso1' },
+                    { icono: FileText, clave: 'w.hero.caso2' },
+                  ].map(({ icono: Icono, clave }) => (
+                    <div key={clave} className="flex items-center gap-2.5">
+                      <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-[#E6EEFF] to-[#EDE7FF] ring-1 ring-[#1D4ED8]/10 flex items-center justify-center shrink-0">
                         <Icono className="h-4 w-4 text-[#1D4ED8]" />
                       </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="text-[13px] font-bold text-[#0B2A4A]">{t(claveT)}</div>
-                        <div className="text-[12px] text-[#5B6B84] leading-snug mt-0.5">
-                          {t(claveD)}
-                        </div>
-                      </div>
-                      <ArrowUpRight className="h-4 w-4 text-[#94A3B8] group-hover:text-[#1D4ED8] shrink-0 mt-0.5" />
-                    </Link>
+                      <span className="text-[13px] font-semibold text-[#0B2A4A] leading-snug">
+                        {t(clave)}
+                      </span>
+                    </div>
                   ))}
+
+                  <Link
+                    href="/diagnostico"
+                    className={`mt-1 min-h-11 py-2 w-full inline-flex items-center justify-center gap-2 rounded-lg text-center leading-tight bg-gradient-to-b from-[#143E77] to-[#0C2E5C] text-white text-[13px] font-semibold shadow-[#0C2E5C]/25 ${RELIEVE_BOTON}`}
+                  >
+                    {t('w.hero.panel_boton')}
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
                 </div>
 
                 <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2">
