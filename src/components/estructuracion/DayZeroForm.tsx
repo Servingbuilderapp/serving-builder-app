@@ -137,7 +137,7 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
   return (
     <div className="w-full max-w-4xl mx-auto my-6 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Banner de Day Zero */}
-      <GlassCard className="p-8 border border-color-primary/30 bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900 text-white shadow-2xl relative overflow-hidden">
+      <GlassCard className="p-8 border border-color-primary/30 bg-gradient-to-r from-slate-900 via-[#0B2A4A] to-slate-900 text-white shadow-2xl relative overflow-hidden">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
           <div>
             <span className="text-[10px] font-black uppercase tracking-[0.25em] text-color-primary bg-color-primary/20 px-3 py-1 rounded-full border border-color-primary/40">

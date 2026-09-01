@@ -11,7 +11,7 @@ export async function POST(req: Request) {
       nombreProyecto: nombreProyecto || 'Proyecto de Innovación & Estructuración MGA',
       sector: sector || 'Tecnología e Innovación Agroindustrial',
       montoObjetivo: montoObjetivo || '$180.000.000 COP',
-      planId: planId || 'crecimiento',
+      planId: planId || 'esencial',
       pasosCompletados: 24,
       totalPasos: 32,
       fechaUltimaActualizacion: new Date().toISOString(),

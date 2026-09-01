@@ -1,4 +1,19 @@
-export type RangoCapitalId = 'inicial' | 'crecimiento' | 'avanzado'
+/**
+ * Modalidades de estructuración.
+ *
+ * Son DOS, y solo dos:
+ *   - Estructuración Estratégica  ($12.000.000 COP)  -> id interno `esencial`
+ *   - Estructuración Élite        ($17.000.000 COP)  -> id interno `completo`
+ *
+ * Los identificadores `esencial` y `completo` NO se cambian: son los que
+ * quedan guardados en la base de datos de los proyectos. Lo que se muestra
+ * al cliente es el nombre visible.
+ *
+ * Las dos modalidades no compiten entre sí: se describen por propósito
+ * (a qué tipo de convocatoria apunta cada una), no como "básica" y "avanzada".
+ */
+
+export type RangoCapitalId = 'esencial' | 'completo'
 
 export interface PlanEstructuracionMapeado {
   id: RangoCapitalId
@@ -17,94 +32,95 @@ export interface PlanEstructuracionMapeado {
   incluye: string[]
 }
 
+export const ESTRUCTURACION_ESTRATEGICA: PlanEstructuracionMapeado = {
+  id: 'esencial',
+  nombre: 'Estructuración Estratégica',
+  subtitulo: 'Para convocatorias nacionales: ministerios, banca de desarrollo y fondos públicos',
+  rangoCapitalText: 'Convocatorias nacionales en pesos',
+  honorariosEstructuracion: '$12.000.000 COP',
+  honorariosEstructuracionDetalle: 'Honorarios de Estructuración para convocatorias nacionales',
+  duracionEntrega: 'Entrega Técnica Profesional en 30 días calendario',
+  garantiaAcompanamiento: 'Garantía 6+6 meses: si no ganas en 6 meses, recibes +6 meses gratis',
+  desgloseTecnico: {
+    componenteTecnico:
+      'Formulación completa bajo metodología MGA (Metodología General Ajustada) y requerimientos SENA.',
+    componenteFinanciero:
+      'Presupuesto detallado por rubros financiables, plan de ventas, nómina y flujo de caja proyectado a 5 años.',
+    componenteLegal:
+      'Acompañamiento en la constitución de la sociedad SAS ante Cámara de Comercio y gobernanza de socios.'
+  },
+  incluye: [
+    'Formulación MGA & Plan de Negocio SENA',
+    'Presupuesto Detallado y Flujo de Caja 5 Años',
+    'Acompañamiento en Constitución SAS / RUT',
+    '6 Meses de Búsqueda y Radicación Activa',
+    'Garantía 6+6 de Acompañamiento Extendido'
+  ]
+}
+
+export const ESTRUCTURACION_ELITE: PlanEstructuracionMapeado = {
+  id: 'completo',
+  nombre: 'Estructuración Élite',
+  subtitulo: 'Para cooperación internacional y convocatorias multilaterales, con dossier traducido',
+  rangoCapitalText: 'Cooperación internacional y fondos en divisas',
+  honorariosEstructuracion: '$17.000.000 COP',
+  honorariosEstructuracionDetalle:
+    'Honorarios de Estructuración para convocatorias complejas e internacionales',
+  duracionEntrega: 'Entrega Técnica Integral en 30 días calendario',
+  garantiaAcompanamiento: 'Garantía Extendida de 12 meses de radicación y seguimiento continuo',
+  desgloseTecnico: {
+    componenteTecnico:
+      'Matriz de Marco Lógico Internacional, Teoría del Cambio e indicadores socioambientales medibles.',
+    componenteFinanciero:
+      'Modelación Financiera Multimoneda (USD / EUR / COP) con flujo de caja proyectado a 5 años y análisis de sensibilidad.',
+    componenteLegal:
+      'Dossier institucional para alianzas estratégicas, régimen tributario ESAL/SAS y gobernanza para transferencias internacionales.'
+  },
+  incluye: [
+    'Matriz de Marco Lógico & Teoría del Cambio',
+    'Modelación Financiera Multimoneda a 5 Años',
+    'Dossier Técnico Traducido para Cooperación',
+    'Estructuración Jurídica y Gobernanza Institucional',
+    '12 Meses de Acompañamiento Continuo'
+  ]
+}
+
+export const MODALIDADES_ESTRUCTURACION: PlanEstructuracionMapeado[] = [
+  ESTRUCTURACION_ESTRATEGICA,
+  ESTRUCTURACION_ELITE
+]
+
+/**
+ * Sugiere una modalidad a partir de lo que el cliente respondió en el
+ * diagnóstico. Es una SUGERENCIA: el cliente puede escoger la otra.
+ *
+ * Se va a Élite cuando lo que busca apunta a cooperación internacional o a
+ * fondos en divisas. En cualquier otro caso, Estratégica.
+ */
 export function clasificarRangoCapital(montoObjetivo: string): PlanEstructuracionMapeado {
-  const montoLower = (montoObjetivo || '').toLowerCase()
+  const texto = (montoObjetivo || '').toLowerCase()
 
-  // 1. Plan Inicial / Microproyectos: Hasta $30.000.000 COP
-  if (
-    (montoLower.includes('30m') && !montoLower.includes('80m') && !montoLower.includes('250m')) ||
-    montoLower.includes('micro') ||
-    montoLower.includes('semilla inicial')
-  ) {
-    return {
-      id: 'inicial',
-      nombre: 'Plan Inicial / Microproyectos',
-      subtitulo: 'Fases Tempranas - Ruta Emprendedora SENA',
-      rangoCapitalText: 'Hasta $30.000.000 COP',
-      honorariosEstructuracion: '$7.000.000 COP',
-      honorariosEstructuracionDetalle: 'Honorarios de Estructuración para microproyectos e ideación',
-      duracionEntrega: 'Entrega Técnica en 20 días hábiles',
-      garantiaAcompanamiento: 'Garantía 3+3 meses de acompañamiento activo',
-      desgloseTecnico: {
-        componenteTecnico: 'Ficha técnica resumida SENA / Formato simplificado de ideación y propuesta de valor.',
-        componenteFinanciero: 'Estructura básica de costos, precio de venta y margen de rentabilidad unitario.',
-        componenteLegal: 'Orientación para registro como Persona Natural con RUT y formalización básica.'
-      },
-      incluye: [
-        'Ficha Técnica Simplificada SENA',
-        'Presupuesto de Inversión y Análisis de Costos',
-        'Asesoría en Requisitos de Postulación',
-        '3 Meses de Acompañamiento en Búsqueda'
-      ]
-    }
+  const senalesInternacionales = [
+    'usd',
+    'eur',
+    'dólar',
+    'dolar',
+    'euro',
+    'internacional',
+    'cooperacion',
+    'cooperación',
+    'multilateral',
+    'global',
+    '300m',
+    '300.000.000',
+    '100.000'
+  ]
+
+  if (senalesInternacionales.some((senal) => texto.includes(senal))) {
+    return ESTRUCTURACION_ELITE
   }
 
-  // 3. Plan Avanzado: $73.000.000 a $300.000.000 COP y superiores (o montos en USD)
-  if (
-    montoLower.includes('usd') ||
-    montoLower.includes('100.000') ||
-    montoLower.includes('300m') ||
-    montoLower.includes('más de $100.000') ||
-    montoLower.includes('global') ||
-    montoLower.includes('cooperacion')
-  ) {
-    return {
-      id: 'avanzado',
-      nombre: 'Plan Avanzado / Expansión y Fortalecimiento',
-      subtitulo: 'Planes de Alto Impacto, APC Colombia, BID Lab & DRK Foundation',
-      rangoCapitalText: '$73.000.000 a $300.000.000 COP (y Fondos Internacionales USD)',
-      honorariosEstructuracion: '$17.000.000 COP',
-      honorariosEstructuracionDetalle: 'Honorarios de Estructuración para convocatorias complejas e internacionales',
-      duracionEntrega: 'Entrega Técnica Integral en 30 días calendario',
-      garantiaAcompanamiento: 'Garantía Extendida de 12 meses de radicación y seguimiento continuo',
-      desgloseTecnico: {
-        componenteTecnico: 'Matriz de Marco Lógico Internacional, Teoría del Cambio e indicadores socioambientales medibles.',
-        componenteFinanciero: 'Modelación Financiera Multimoneda (USD / EUR / COP) con flujo de caja proyectado a 5 años y análisis de sensibilidad.',
-        componenteLegal: 'Dossier institucional para alianzas estratégicas, régimen tributario ESAL/SAS y gobernanza para transferencias internacionales.'
-      },
-      incluye: [
-        'Matriz de Marco Lógico & Teoría del Cambio',
-        'Modelación Financiera Multimoneda a 5 Años',
-        'Dossier Técnico Traducido para Cooperación (APC / BID)',
-        'Estructuración Jurídica y Gobernanza Institucional',
-        '12 Meses de Acompañamiento Continuo'
-      ]
-    }
-  }
-
-  // 2. Plan Crecimiento (Por defecto para rangos $30M - $80M COP, $80M - $180M COP)
-  return {
-    id: 'crecimiento',
-    nombre: 'Plan Crecimiento / Convocatoria Estándar',
-    subtitulo: 'Líneas de Creación y Formalización - Fondo Emprender SENA',
-    rangoCapitalText: '$30.000.000 a $73.000.000 COP (hasta $180.000.000 COP)',
-    honorariosEstructuracion: '$12.000.000 COP',
-    honorariosEstructuracionDetalle: 'Honorarios de Estructuración Estándar para convocatorias nacionales',
-    duracionEntrega: 'Entrega Técnica Profesional en 30 días calendario',
-    garantiaAcompanamiento: 'Garantía 6+6 meses: si no ganas en 6 meses, recibes +6 meses gratis',
-    desgloseTecnico: {
-      componenteTecnico: 'Formulación completa bajo metodología MGA (Metodología General Ajustada) y requerimientos SENA.',
-      componenteFinanciero: 'Presupuesto detallado por rubros financiables, plan de ventas, nómina y flujo de caja proyectado a 5 años.',
-      componenteLegal: 'Acompañamiento en la constitución de la sociedad SAS ante Cámara de Comercio y gobernanza de socios.'
-    },
-    incluye: [
-      'Formulación MGA & Plan de Negocio SENA',
-      'Presupuesto Detallado y Flujo de Caja 5 Años',
-      'Acompañamiento en Constitución SAS / RUT',
-      '6 Meses de Búsqueda y Radicación Activa',
-      'Garantía 6+6 de Acompañamiento Extendido'
-    ]
-  }
+  return ESTRUCTURACION_ESTRATEGICA
 }
 
 export interface GenerarWhatsappOptions {
@@ -116,6 +132,9 @@ export interface GenerarWhatsappOptions {
   montoObjetivo: string
   planMapeado: PlanEstructuracionMapeado
 }
+
+/** WhatsApp de contacto público de Serving. */
+export const WHATSAPP_SERVING = '573227008727'
 
 export function generarUrlWhatsappBloque2(options: GenerarWhatsappOptions): string {
   const { nombre, empresa, email, scorePreparacion, montoObjetivo, planMapeado } = options
@@ -129,7 +148,7 @@ export function generarUrlWhatsappBloque2(options: GenerarWhatsappOptions): stri
     `*Score Diagnóstico Gratuito:* ${scorePreparacion}% (Apto para Postulación)`,
     `*Meta de Financiamiento:* ${montoObjetivo}`,
     ``,
-    `*PLAN ASIGNADO:* ${planMapeado.nombre}`,
+    `*MODALIDAD SELECCIONADA:* ${planMapeado.nombre}`,
     `*Enfoque:* ${planMapeado.subtitulo}`,
     `*Honorarios de Estructuración:* ${planMapeado.honorariosEstructuracion}`,
     `*Garantía:* ${planMapeado.garantiaAcompanamiento}`,
@@ -137,5 +156,5 @@ export function generarUrlWhatsappBloque2(options: GenerarWhatsappOptions): stri
     `Hola equipo de *Arquitectura Digital*, acabo de completar mi Diagnóstico Gratuito. Deseo formalizar la contratación de los Honorarios de Estructuración para mi proyecto y recibir la propuesta formal.`
   ].join('\n')
 
-  return `https://wa.me/573000000000?text=${encodeURIComponent(texto)}`
+  return `https://wa.me/${WHATSAPP_SERVING}?text=${encodeURIComponent(texto)}`
 }

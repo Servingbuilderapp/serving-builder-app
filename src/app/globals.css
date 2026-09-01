@@ -60,6 +60,24 @@
   --color-accent-red: #9B2C2C;
   --color-color-accent-red: #9B2C2C;
 
+  /* === TURQUESA REDIRIGIDO A AZUL ===
+     El diseño viejo usaba "teal" como pareja del color principal en los
+     degradados (from-color-primary to-teal-500). En un producto azul eso
+     se ve verdoso y fuera de sitio. En vez de tocar las 15 pantallas que
+     lo usan, se reescribe aquí la escala completa con los valores del azul:
+     toda clase teal-* pasa a ser azul, sin cambiar las pantallas. */
+  --color-teal-50: #EFF6FF;
+  --color-teal-100: #DBEAFE;
+  --color-teal-200: #BFDBFE;
+  --color-teal-300: #93C5FD;
+  --color-teal-400: #60A5FA;
+  --color-teal-500: #3B82F6;
+  --color-teal-600: #2563EB;
+  --color-teal-700: #1D4ED8;
+  --color-teal-800: #1E40AF;
+  --color-teal-900: #1E3A8A;
+  --color-teal-950: #172554;
+
   --font-sans: var(--font-inter);
   --font-display: var(--font-outfit);
 }

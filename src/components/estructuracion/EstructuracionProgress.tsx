@@ -19,7 +19,7 @@ export function EstructuracionProgress({ plan }: EstructuracionProgressProps) {
   return (
     <div className="w-full max-w-4xl mx-auto my-8 space-y-8 animate-in fade-in zoom-in-95 duration-500">
       {/* Banner Principal de Confirmación */}
-      <GlassCard className="p-8 md:p-12 border border-color-primary/30 bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 text-white shadow-2xl relative overflow-hidden space-y-8">
+      <GlassCard className="p-8 md:p-12 border border-color-primary/30 bg-gradient-to-br from-slate-900 via-[#0B2A4A] to-slate-900 text-white shadow-2xl relative overflow-hidden space-y-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10 border-b border-white/10 pb-6">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-[10px] font-black uppercase tracking-widest">

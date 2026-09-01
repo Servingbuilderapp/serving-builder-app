@@ -123,7 +123,7 @@ export function DashboardSeguimiento({ proyectoNombre = 'Proyecto EcoInnovación
       <SemaforoConvocatorias convocatorias={convocatoriasSimuladas} idioma={idioma} />
 
       {/* 3. CANAL DIRECTO DE SOPORTE CON EL ESTRUCTURADOR */}
-      <GlassCard className="p-8 border border-color-primary/30 bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900 text-white shadow-2xl relative overflow-hidden space-y-4">
+      <GlassCard className="p-8 border border-color-primary/30 bg-gradient-to-r from-slate-900 via-[#0B2A4A] to-slate-900 text-white shadow-2xl relative overflow-hidden space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-color-primary/20 border border-color-primary/30 text-color-primary text-[10px] font-black uppercase tracking-widest">

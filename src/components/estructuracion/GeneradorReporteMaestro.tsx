@@ -27,7 +27,7 @@ export function GeneradorReporteMaestro({ idioma, onAvanzarBloque4 }: GeneradorR
 
   return (
     <>
-      <div className="bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 text-white rounded-3xl p-8 border border-color-primary/30 shadow-2xl space-y-6">
+      <div className="bg-gradient-to-br from-slate-900 via-[#0B2A4A] to-slate-900 text-white rounded-3xl p-8 border border-color-primary/30 shadow-2xl space-y-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2">
             <span className="text-[10px] font-black uppercase tracking-[0.25em] text-color-primary bg-color-primary/20 px-3 py-1 rounded-full border border-color-primary/30">

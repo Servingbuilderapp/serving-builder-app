@@ -93,7 +93,7 @@ export function DiagnosticoGratuito() {
   return (
     <div id="diagnostico" className="w-full max-w-5xl mx-auto my-12 px-4">
       <GlassCard className="p-8 md:p-12 relative overflow-hidden border border-color-primary/20 shadow-2xl backdrop-blur-2xl bg-white/80">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-2 bg-gradient-to-r from-color-primary via-emerald-400 to-teal-500 rounded-b-full blur-[1px]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-2 bg-gradient-to-r from-color-primary via-color-accent-blue to-teal-500 rounded-b-full blur-[1px]" />
 
         <div className="text-center space-y-4 mb-10">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-color-primary/10 border border-color-primary/20 text-color-primary text-xs font-black uppercase tracking-widest">
@@ -286,7 +286,7 @@ export function DiagnosticoGratuito() {
 
         {step === 4 && resultado && (
           <div className="space-y-10 animate-in fade-in zoom-in-95 duration-700">
-            <div className="bg-gradient-to-br from-color-primary/10 via-emerald-500/5 to-teal-500/10 p-6 md:p-8 rounded-3xl border border-color-primary/20">
+            <div className="bg-gradient-to-br from-color-primary/10 via-color-primary/5 to-teal-500/10 p-6 md:p-8 rounded-3xl border border-color-primary/20">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>
                   <span className="text-[10px] font-black uppercase tracking-[0.2em] text-color-primary bg-white/80 px-3 py-1 rounded-full border border-color-primary/30">
@@ -385,7 +385,7 @@ export function DiagnosticoGratuito() {
               </button>
             </div>
 
-            <div className="bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900 text-white p-8 rounded-3xl shadow-2xl relative overflow-hidden space-y-6">
+            <div className="bg-gradient-to-r from-slate-900 via-[#0B2A4A] to-slate-900 text-white p-8 rounded-3xl shadow-2xl relative overflow-hidden space-y-6">
               <div className="relative z-10 max-w-2xl space-y-3">
                 <h4 className="text-2xl md:text-3xl font-black italic uppercase tracking-tight">¿Listo para estructurar tu proyecto?</h4>
                 <p className="text-xs md:text-sm text-slate-300 font-medium leading-relaxed">

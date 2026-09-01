@@ -173,7 +173,7 @@ export function ResumenPagoEstructuracion({
           ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-950 dark:text-emerald-200'
           : calculo.tipoHonorarios === 'revision'
           ? 'bg-amber-500/10 border-amber-500/30 text-amber-950 dark:text-amber-200'
-          : 'bg-gradient-to-br from-slate-900 via-slate-900 to-emerald-950 text-white border-color-primary/40 shadow-2xl'
+          : 'bg-gradient-to-br from-slate-900 via-slate-900 to-[#0B2A4A] text-white border-color-primary/40 shadow-2xl'
       }`}>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2">
