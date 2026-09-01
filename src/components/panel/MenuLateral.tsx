@@ -5,33 +5,10 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   Home,
-  Info,
-  FileText,
-  Users,
-  UserCheck,
-  MapPin,
   ListChecks,
-  GitBranch,
-  Target,
-  Workflow,
-  Wallet,
-  BarChart3,
-  ShieldCheck,
-  Search,
-  Inbox,
-  Archive,
-  Library,
-  Crosshair,
-  CheckSquare,
-  Wand2,
-  ScrollText,
-  FileCheck2,
-  Send,
-  Activity,
-  MessagesSquare,
-  RefreshCw,
+  FolderKanban,
+  Settings,
   Lightbulb,
-  LifeBuoy,
   X,
 } from 'lucide-react'
 
@@ -49,86 +26,57 @@ type Seccion = {
 /**
  * Menú del panel.
  *
- * Un item SIN `href` todavía no tiene pantalla construida: se muestra en gris
- * y no navega a ninguna parte, para que el usuario vea el mapa completo del
- * camino sin encontrarse con páginas vacías.
+ * REGLA DE FONDO: la estructuración la hace SERVING, no el cliente. Por eso el
+ * cliente no ve en su menú el árbol de problemas, la cadena de valor, el
+ * presupuesto ni las validaciones: ese es trabajo interno del equipo y, si lo
+ * ve, entiende que le toca a él hacerlo.
+ *
+ * Tampoco se le muestran entradas en gris de pantallas que aún no existen: un
+ * menú lleno de renglones apagados se lee como un producto a medio hacer. Aquí
+ * solo va lo que se puede abrir.
+ *
+ * Un item SIN `href` se muestra en gris y no navega; se deja el soporte por si
+ * hace falta anunciar algo que está por salir.
  */
-const SECCIONES: Seccion[] = [
+const SECCIONES_CLIENTE: Seccion[] = [
   {
-    items: [{ nombre: 'Resumen general', href: '/dashboard', icono: Home }],
-  },
-  {
-    titulo: 'Mi proyecto',
     items: [
-      { nombre: 'Información general', icono: Info },
-      { nombre: 'Documentos', icono: FileText },
-      { nombre: 'Equipo y aliados', icono: Users },
-      { nombre: 'Beneficiarios', icono: UserCheck },
-      { nombre: 'Territorio', icono: MapPin },
+      { nombre: 'Resumen general', href: '/dashboard', icono: Home },
+      { nombre: 'Avance de mi proyecto', href: '/estructuracion', icono: ListChecks },
+      { nombre: 'App de Ideas', href: '/ideas', icono: Lightbulb },
     ],
   },
+]
+
+/** Lo que solo ve el equipo de Serving. */
+const SECCIONES_EQUIPO: Seccion[] = [
   {
-    titulo: 'Estructuración',
+    titulo: 'Equipo Serving',
     items: [
-      { nombre: 'Estructura del proyecto', href: '/estructuracion', icono: ListChecks },
-      { nombre: 'Árbol de problemas', icono: GitBranch },
-      { nombre: 'Árbol de objetivos', icono: Target },
-      { nombre: 'Cadena de valor', icono: Workflow },
-      { nombre: 'Presupuesto', icono: Wallet },
-      { nombre: 'Indicadores', icono: BarChart3 },
-      { nombre: 'Validaciones', icono: ShieldCheck },
+      { nombre: 'Proyectos de clientes', href: '/admin/proyectos', icono: FolderKanban },
+      { nombre: 'Administración', href: '/admin', icono: Settings },
     ],
-  },
-  {
-    titulo: 'Convocatorias',
-    items: [
-      { nombre: 'Búsqueda', icono: Search },
-      { nombre: 'Convocatorias encontradas', icono: Inbox },
-      { nombre: 'Convocatorias descartadas', icono: Archive },
-      { nombre: 'Biblioteca', icono: Library },
-    ],
-  },
-  {
-    titulo: 'Encaje y adaptación',
-    items: [
-      { nombre: 'Análisis de encaje', icono: Crosshair },
-      { nombre: 'Convocatoria seleccionada', icono: CheckSquare },
-      { nombre: 'Adaptación del proyecto', icono: Wand2 },
-      { nombre: 'Términos de referencia', icono: ScrollText },
-    ],
-  },
-  {
-    titulo: 'Postulación y seguimiento',
-    items: [
-      { nombre: 'Documentos requeridos', icono: FileCheck2 },
-      { nombre: 'Postulación', icono: Send },
-      { nombre: 'Seguimiento', icono: Activity },
-      { nombre: 'Comunicaciones', icono: MessagesSquare },
-    ],
-  },
-  {
-    titulo: 'Réplicas',
-    items: [{ nombre: 'Mis réplicas', icono: RefreshCw }],
-  },
-  {
-    titulo: 'Herramientas',
-    items: [{ nombre: 'App de Ideas', href: '/ideas', icono: Lightbulb }],
   },
 ]
 
 export function MenuLateral({
   abiertoEnMovil,
   onCerrar,
+  esEquipo = false,
 }: {
   abiertoEnMovil: boolean
   onCerrar: () => void
+  /** true solo para el equipo de Serving: le agrega sus secciones internas. */
+  esEquipo?: boolean
 }) {
   const ruta = usePathname()
+
+  const secciones = esEquipo ? [...SECCIONES_CLIENTE, ...SECCIONES_EQUIPO] : SECCIONES_CLIENTE
 
   const contenido = (
     <div className="flex h-full flex-col bg-[#0C2E5C] text-white/85">
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5">
-        {SECCIONES.map((seccion, i) => (
+        {secciones.map((seccion, i) => (
           <div key={seccion.titulo || `seccion-${i}`}>
             {seccion.titulo ? (
               <div className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-white/40">
@@ -184,12 +132,17 @@ export function MenuLateral({
       </nav>
 
       <div className="border-t border-white/10 p-3">
-        <div
-          className="flex items-center gap-2.5 rounded-lg bg-white/[0.06] px-3 py-2.5 text-[13px] text-white/60"
-          title="En construcción"
-        >
-          <LifeBuoy className="h-4 w-4 shrink-0" />
-          <span>Centro de ayuda</span>
+        <div className="px-3 py-2 text-[12px] leading-relaxed text-white/45">
+          ¿Necesitas ayuda?
+          <br />
+          <a
+            href="https://wa.me/573227008727"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white/75 underline hover:text-white"
+          >
+            Escríbenos por WhatsApp
+          </a>
         </div>
       </div>
     </div>

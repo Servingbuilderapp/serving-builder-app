@@ -21,7 +21,11 @@ export function PanelShell({
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-[#F4F7FC] text-[#0F172A]">
-      <MenuLateral abiertoEnMovil={menuMovil} onCerrar={() => setMenuMovil(false)} />
+      <MenuLateral
+        abiertoEnMovil={menuMovil}
+        onCerrar={() => setMenuMovil(false)}
+        esEquipo={rolUsuario === 'Administrador'}
+      />
 
       <div className="flex-1 flex flex-col min-w-0">
         <CabeceraPanel
