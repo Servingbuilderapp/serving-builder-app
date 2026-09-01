@@ -97,6 +97,12 @@ export default async function AdminProyectosPage() {
                       >
                         Cadena de valor
                       </Link>
+                      <Link
+                        href={`/admin/proyectos/${p.id}/presupuesto`}
+                        className="px-3 py-1.5 rounded-full bg-color-primary/10 text-color-primary text-xs font-bold hover:underline whitespace-nowrap"
+                      >
+                        Presupuesto
+                      </Link>
                     </div>
                   </td>
                   <td className="p-3">

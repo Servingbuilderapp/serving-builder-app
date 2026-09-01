@@ -434,6 +434,12 @@ export function CadenaValorClient({
               meta, y para lograrlo hay seis actividades: cuatro propias del objetivo más
               administrar y supervisar el proyecto.
             </p>
+            <Link
+              href={`/admin/proyectos/${proyectoId}/presupuesto`}
+              className="mt-3 inline-flex items-center gap-1.5 text-[12px] font-bold text-[#1D4ED8] hover:underline"
+            >
+              Ir al presupuesto <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
           </Tarjeta>
         </aside>
       </div>
