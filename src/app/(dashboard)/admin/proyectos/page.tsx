@@ -85,6 +85,12 @@ export default async function AdminProyectosPage() {
                       >
                         Árbol de problemas
                       </Link>
+                      <Link
+                        href={`/admin/proyectos/${p.id}/objetivos`}
+                        className="px-3 py-1.5 rounded-full bg-color-primary/10 text-color-primary text-xs font-bold hover:underline whitespace-nowrap"
+                      >
+                        Árbol de objetivos
+                      </Link>
                     </div>
                   </td>
                   <td className="p-3">
