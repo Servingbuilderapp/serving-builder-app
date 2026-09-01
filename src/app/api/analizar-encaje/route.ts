@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { prepararPostulacion } from "@/lib/motorPostulacion";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -322,7 +323,37 @@ ${convocatoriaTexto}
     return { status: 500, body: { error: "Error al guardar el encaje", detalle: errorGuardar } };
   }
 
-  return { status: 200, body: { ok: true, semaforo: resultado.semaforo, puntaje_general: resultado.puntaje_general } };
+  // Si el encaje da verde, se prepara sola la postulación (Motor 4): checklist
+  // de requisitos, adaptaciones, carta y evaluación de 100 puntos. Así la
+  // cadena completa —estructurar, buscar, encajar, postular— corre sin que
+  // nadie tenga que dispararla a mano. Solo se hace cuando la convocatoria
+  // tiene ficha en la biblioteca, que es de donde el Motor 4 la lee.
+  const semaforo = String(resultado.semaforo || "").toUpperCase();
+  const puntaje = Number(resultado.puntaje_general) || 0;
+  const mereceLaPena = semaforo.includes("VERDE") || puntaje >= 70;
+
+  if (mereceLaPena && convocatoria.biblioteca_id) {
+    after(async () => {
+      try {
+        const preparada = await prepararPostulacion(supabase, id_proyecto, convocatoria.biblioteca_id);
+        console.log(
+          `[Motor 3 -> Motor 4] Postulación de ${id_proyecto} a "${convocatoria.nombre}": ${preparada.mensaje}`
+        );
+      } catch (e) {
+        console.error("[Motor 3 -> Motor 4] No se pudo preparar la postulación:", e);
+      }
+    });
+  }
+
+  return {
+    status: 200,
+    body: {
+      ok: true,
+      semaforo: resultado.semaforo,
+      puntaje_general: resultado.puntaje_general,
+      postulacion_en_preparacion: Boolean(mereceLaPena && convocatoria.biblioteca_id),
+    },
+  };
 }
 
 export async function POST(req: NextRequest) {
