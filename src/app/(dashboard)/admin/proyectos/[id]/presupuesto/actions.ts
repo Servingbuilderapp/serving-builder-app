@@ -16,7 +16,9 @@ import { createClient } from '@/lib/supabase/server'
 
 const CORREO_ADMIN = 'servingbuilderapp@gmail.com'
 
-export const RUBROS = [
+// Solo se pueden exportar funciones async desde un archivo 'use server',
+// así que estas listas se quedan aquí adentro.
+const RUBROS = [
   'TALENTO_HUMANO',
   'EQUIPOS_Y_SOFTWARE',
   'MATERIALES_E_INSUMOS',
@@ -25,10 +27,10 @@ export const RUBROS = [
   'OTROS',
 ] as const
 
-export type Rubro = (typeof RUBROS)[number]
+type Rubro = (typeof RUBROS)[number]
 
-export const FUENTES = ['SOLICITADO', 'CONTRAPARTIDA'] as const
-export type Fuente = (typeof FUENTES)[number]
+const FUENTES = ['SOLICITADO', 'CONTRAPARTIDA'] as const
+type Fuente = (typeof FUENTES)[number]
 
 export type ReglasAGuardar = {
   moneda: string

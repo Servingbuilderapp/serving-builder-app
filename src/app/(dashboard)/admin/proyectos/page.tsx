@@ -103,6 +103,12 @@ export default async function AdminProyectosPage() {
                       >
                         Presupuesto
                       </Link>
+                      <Link
+                        href={`/admin/proyectos/${p.id}/cronograma`}
+                        className="px-3 py-1.5 rounded-full bg-color-primary/10 text-color-primary text-xs font-bold hover:underline whitespace-nowrap"
+                      >
+                        Cronograma
+                      </Link>
                     </div>
                   </td>
                   <td className="p-3">

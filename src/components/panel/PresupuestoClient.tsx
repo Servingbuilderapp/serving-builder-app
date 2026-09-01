@@ -767,6 +767,21 @@ export function PresupuestoClient({
               </p>
             </Tarjeta>
           ) : null}
+
+          <Tarjeta className="p-4">
+            <h2 className={`mb-2 text-[13px] font-bold uppercase tracking-wider ${TINTA}`}>
+              Lo que sigue
+            </h2>
+            <p className={`text-[12.5px] leading-snug ${TINTA_SUAVE}`}>
+              Con los gastos ya repartidos por actividad, falta ubicar cada actividad mes a mes.
+            </p>
+            <Link
+              href={`/admin/proyectos/${proyectoId}/cronograma`}
+              className="mt-3 inline-flex items-center gap-1.5 text-[12px] font-bold text-[#1D4ED8] hover:underline"
+            >
+              Ir al cronograma <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </Tarjeta>
         </aside>
       </div>
     </div>
