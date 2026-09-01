@@ -61,11 +61,11 @@ export default function ResetPasswordPage() {
   return (
     <GlassCard className="p-8 w-full">
       <div className="flex flex-col items-center mb-8">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-color-primary to-color-accent-pink shadow-lg shadow-color-primary/20 mb-4">
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-color-primary shadow-lg shadow-color-primary/25 mb-4">
           <span className="text-2xl font-bold text-white">A</span>
         </div>
-        <h1 className="text-2xl font-black text-color-base-content uppercase tracking-tighter">
-          ARQUITECTURA<span className="text-color-primary">DIGITAL</span>
+        <h1 className="text-2xl font-black text-color-base-content uppercase tracking-tight">
+          ARQUITECTURA <span className="text-color-primary">DIGITAL</span>
         </h1>
         <p className="text-sm text-color-base-content/60 mt-2 text-center">
           Escribe tu nueva contraseña

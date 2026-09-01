@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/buscar-convocatorias",
-      "schedule": "0 12 * * *"
+      "schedule": "0 13 * * 1"
     }
   ]
 }

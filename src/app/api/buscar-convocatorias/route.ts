@@ -275,7 +275,8 @@ Responde ÚNICAMENTE con un JSON válido, sin texto antes ni después, con este 
       "nombre": "...", "entidad": "...", "tipo": "abierta actualmente | próxima apertura | recurrente | permanente | periódica | especial | cerrada pero reutilizable | futura | pendiente de nueva edición",
       "estado_convocatoria": "...", "fecha_cierre": "...", "monto": "...", "beneficiarios": "...", "territorio": "...",
       "linea_tematica": "...", "arista_relacionada": "...", "razon_relevancia": "...", "fuente_oficial": "URL real y verificable",
-      "terminos_referencia": "...", "mecanismo_postulacion": "...", "alertas": "...", "informacion_faltante": "..."
+      "terminos_referencia": "...", "mecanismo_postulacion": "...", "alertas": "...", "informacion_faltante": "...",
+      "tipo_financiador": "una sola de la lista del mapa", "ambito": "una sola de la lista del mapa"
     }
   ],
   "descartadas": [
@@ -283,10 +284,30 @@ Responde ÚNICAMENTE con un JSON válido, sin texto antes ni después, con este 
       "nombre": "...", "entidad": "...", "tipo": "...", "estado_convocatoria": "...", "fecha_cierre": "...", "monto": "...",
       "beneficiarios": "...", "territorio": "...", "linea_tematica": "...", "arista_relacionada": "...", "razon_relevancia": "...",
       "fuente_oficial": "...", "terminos_referencia": "...", "mecanismo_postulacion": "...", "alertas": "...",
-      "informacion_faltante": "...", "motivo_descarte": "explica brevemente por qué no quedó en el lote"
+      "informacion_faltante": "...", "tipo_financiador": "...", "ambito": "...",
+      "motivo_descarte": "explica brevemente por qué no quedó en el lote"
     }
   ]
 }
+
+EL MAPA DE LA FINANCIACIÓN (obligatorio en cada ficha, seleccionada o descartada).
+
+"tipo_financiador" — quién pone la plata. Escoge UNA:
+  estado_nacional          ministerios, agencias y fondos del gobierno nacional
+  estado_local             gobernaciones y alcaldías (Cali, Barranquilla, una gobernación)
+  cooperacion_bilateral    embajadas y agencias de un país (USAID, GIZ, AECID, JICA)
+  cooperacion_multilateral BID, Banco Mundial, CAF, Unión Europea
+  onu                      PNUD, UNICEF, FAO, OIT, ONU Mujeres, UNESCO
+  banca_desarrollo         Bancóldex, Findeter, IFC, KfW
+  filantropia_privada      fundaciones familiares o independientes
+  filantropia_corporativa  fundaciones de empresas
+  academia                 universidades y centros de investigación
+  empresa_privada          premios de empresa, aceleradoras, fondos de inversión
+  ong                      corporaciones, federaciones y asociaciones sin ánimo de lucro
+  por_clasificar           úsalo si de verdad no se puede saber; no adivines
+
+"ambito" — hasta dónde llega. Escoge UNA: municipal, departamental, nacional, regional
+(América Latina y el Caribe), internacional, o por_definir si no se puede saber.
 `;
 
   const cuerpoSolicitud = {
@@ -327,13 +348,20 @@ Responde ÚNICAMENTE con un JSON válido, sin texto antes ni después, con este 
     console.error("[Motor 2] No se pudo guardar en la biblioteca:", e);
   }
 
-  const conFicha = (c: any, seleccionada: boolean) => ({
-    ...c,
-    id_proyecto,
-    lote: numeroLote,
-    seleccionada,
-    biblioteca_id: fichasBiblioteca.get(claveDeConvocatoria(c?.nombre || "", c?.entidad || "")) || null,
-  });
+  // La clasificación del mapa vive en la biblioteca, no en la tabla de
+  // candidatas: si se cuela aquí, el insert falla por columna inexistente.
+  const conFicha = (c: any, seleccionada: boolean) => {
+    const { tipo_financiador, ambito, ...resto } = c || {};
+    void tipo_financiador;
+    void ambito;
+    return {
+      ...resto,
+      id_proyecto,
+      lote: numeroLote,
+      seleccionada,
+      biblioteca_id: fichasBiblioteca.get(claveDeConvocatoria(c?.nombre || "", c?.entidad || "")) || null,
+    };
+  };
 
   const filasSeleccionadas = (resultado.seleccionadas || []).map((c: any) => conFicha(c, true));
   const filasDescartadas = (resultado.descartadas || []).map((c: any) => conFicha(c, false));

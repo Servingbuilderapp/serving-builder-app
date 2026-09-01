@@ -1,55 +1,64 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+/* ============================================================================
+   SISTEMA VISUAL ÚNICO — versión CLARA (la del panel del cliente)
+   Decidido el 1 sep 2026: el cliente ve SIEMPRE este diseño, y el equipo usa
+   el mismo para que no existan dos productos distintos.
+   Los nombres de los tokens NO cambian: cambian solo sus valores, para que
+   todas las pantallas que ya usan el sistema se pasen solas al tema claro.
+   Si algún día hay que cambiar el azul de la marca, se cambia AQUÍ.
+   ========================================================================== */
 @theme {
-  /* === NEUTROS (tema oscuro) === */
-  --color-base-100: #0A0E1A; /* Fondo principal - negro azulado profundo */
-  --color-base-200: #12172A; /* Fondo de tarjetas/superficies secundarias */
-  --color-base-300: #232A45; /* Bordes y separadores */
-  --color-base-content: #F1F5F9; /* Texto principal - blanco casi puro */
+  /* === NEUTROS (tema claro) === */
+  --color-base-100: #F4F7FC; /* Fondo principal - gris azulado muy claro */
+  --color-base-200: #FFFFFF; /* Fondo de tarjetas/superficies secundarias */
+  --color-base-300: #E4EAF3; /* Bordes y separadores */
+  --color-base-content: #0B2A4A; /* Texto principal - azul marino profundo */
 
   /* Aliases para Tailwind v4 (genera .bg-color-primary, etc) */
-  --color-color-base-100: #0A0E1A;
-  --color-color-base-200: #12172A;
-  --color-color-base-300: #232A45;
-  --color-color-base-content: #F1F5F9;
+  --color-color-base-100: #F4F7FC;
+  --color-color-base-200: #FFFFFF;
+  --color-color-base-300: #E4EAF3;
+  --color-color-base-content: #0B2A4A;
 
-  /* === COLOR PRINCIPAL: Azul tecnológico ===
+  /* === COLOR PRINCIPAL: Azul institucional ===
      Uso: navegación, encabezados, elementos estructurales, botones principales */
-  --color-primary: #3B82F6;
+  --color-primary: #1D4ED8;
   --color-primary-content: #FFFFFF;
-  --color-color-primary: #3B82F6;
+  --color-color-primary: #1D4ED8;
   --color-color-primary-content: #FFFFFF;
 
-  /* === COLOR SECUNDARIO: Violeta tecnológico ===
+  /* === COLOR SECUNDARIO: Índigo ===
      Uso: IA, análisis, diagnóstico, recomendaciones, automatización.
-     Es la mitad "fría" del degradado protagonista violeta→magenta */
-  --color-accent-violet: #8B5CF6;
-  --color-color-accent-violet: #8B5CF6;
+     Es la mitad "fría" del degradado de títulos destacados */
+  --color-accent-violet: #4F46E5;
+  --color-color-accent-violet: #4F46E5;
 
-  /* === ACENTO PROTAGONISTA: Magenta/rosa ===
-     Uso: junto con el violeta, forma el degradado principal de títulos y
-     botones destacados (inspirado en las referencias que enviaste) */
-  --color-accent-magenta: #EC4899;
-  --color-color-accent-magenta: #EC4899;
+  /* === ACENTO: Violeta ===
+     Uso: junto con el índigo, forma el degradado de títulos y botones
+     destacados. En claro se usa con moderación, no como protagonista */
+  --color-accent-magenta: #7C3AED;
+  --color-color-accent-magenta: #7C3AED;
 
-  /* === COLOR DE PROGRESO: Verde/turquesa ===
+  /* === COLOR DE PROGRESO: Verde ===
      Uso: progreso, viabilidad, cumplimiento, resultados positivos, completado */
-  --color-accent-pink: #10B981;
-  --color-color-accent-pink: #10B981;
+  --color-accent-pink: #186A46;
+  --color-color-accent-pink: #186A46;
 
-  /* === COLOR DE ATENCIÓN: Ámbar/amarillo ===
-     Uso: pendiente, oportunidad, advertencia */
-  --color-accent-warm: #FBBF24;
-  --color-color-accent-warm: #FBBF24;
+  /* === COLOR DE ATENCIÓN: Ámbar oscuro ===
+     Uso: pendiente, oportunidad, advertencia. Oscuro a propósito: sobre fondo
+     blanco un amarillo brillante no se puede leer */
+  --color-accent-warm: #8A5307;
+  --color-color-accent-warm: #8A5307;
 
   /* === AZUL SECUNDARIO (apoyo del primario) === */
-  --color-accent-blue: #60A5FA;
-  --color-color-accent-blue: #60A5FA;
+  --color-accent-blue: #2563EB;
+  --color-color-accent-blue: #2563EB;
 
-  /* === COLOR DE RIESGO: Rojo/coral (uso EXCLUSIVO: bloqueo, riesgo crítico) === */
-  --color-accent-red: #F87171;
-  --color-color-accent-red: #F87171;
+  /* === COLOR DE RIESGO: Rojo (uso EXCLUSIVO: bloqueo, riesgo crítico) === */
+  --color-accent-red: #9B2C2C;
+  --color-color-accent-red: #9B2C2C;
 
   --font-sans: var(--font-inter);
   --font-display: var(--font-outfit);
@@ -102,7 +111,7 @@ body {
   width: 100%;
 }
 
-/* Resplandor sutil de fondo (versión oscura: glow violeta/magenta en vez de blancos) */
+/* Resplandor sutil de fondo (versión clara: un lavado azul apenas perceptible) */
 body::before {
   content: "";
   position: fixed;
@@ -111,9 +120,9 @@ body::before {
   width: 100%;
   height: 100%;
   z-index: -1;
-  background: 
-    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--color-accent-violet) 15%, transparent) 0%, transparent 50%),
-    radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--color-accent-magenta) 12%, transparent) 0%, transparent 50%);
+  background:
+    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--color-primary) 6%, transparent) 0%, transparent 55%),
+    radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--color-accent-violet) 5%, transparent) 0%, transparent 55%);
   filter: blur(60px);
 }
 
@@ -164,47 +173,44 @@ body::before {
 .delay-400 { animation-delay: 400ms; }
 .delay-600 { animation-delay: 600ms; }
 
-/* Premium Text Glows */
-.text-glow-primary {
-  text-shadow: 0 0 15px color-mix(in srgb, var(--color-primary) 60%, transparent);
-}
-
+/* Resplandores de texto: sobre fondo claro un halo se lee como un error de
+   impresión, así que quedan desactivados. Las clases se conservan porque
+   varias pantallas las usan */
+.text-glow-primary,
 .text-glow-accent {
-  text-shadow: 0 0 15px color-mix(in srgb, var(--color-accent-magenta) 60%, transparent);
+  text-shadow: none;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
 }
 
-/* Glassmorphism (versión oscura): tarjetas de vidrio oscuro translúcido */
+/* Tarjetas (versión clara): superficie blanca, borde suave, sombra discreta.
+   Conserva el nombre .glass-card porque lo usan ~29 pantallas; lo que cambia
+   es cómo se ve, no dónde está */
 .glass-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 2rem;
-  box-shadow: 
-    0 20px 40px -10px rgba(0, 0, 0, 0.4),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.03);
-  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  background: var(--color-base-200);
+  border: 1px solid var(--color-base-300);
+  border-radius: 1rem;
+  box-shadow:
+    0 1px 2px rgba(11, 42, 74, 0.04),
+    0 8px 24px -12px rgba(11, 42, 74, 0.10);
+  transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
   position: relative;
   overflow: hidden;
 }
 
+/* Menú lateral: azul marino sólido, como en el panel del cliente */
 .glass-sidebar {
-  background: linear-gradient(180deg, rgba(10, 14, 26, 0.95), rgba(10, 14, 26, 0.98));
-  backdrop-filter: blur(50px);
-  -webkit-backdrop-filter: blur(50px);
+  background: linear-gradient(180deg, #0B2A4A, #0C2E5C);
   border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+/* Barra superior: blanca, separada del contenido por una línea fina */
 .glass-header {
-  background: rgba(10, 14, 26, 0.85);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  background: var(--color-base-200);
+  border-bottom: 1px solid var(--color-base-300);
+  box-shadow: 0 1px 3px rgba(11, 42, 74, 0.05);
 }
 
 .premium-border-glow {
@@ -231,11 +237,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .glass-card:hover {
-  border-color: color-mix(in srgb, var(--color-accent-violet) 40%, transparent);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03));
-  box-shadow: 
-    0 10px 25px -3px rgba(0, 0, 0, 0.5), 
-    0 0 25px color-mix(in srgb, var(--color-accent-violet) 15%, transparent);
+  border-color: color-mix(in srgb, var(--color-primary) 35%, var(--color-base-300));
+  box-shadow:
+    0 2px 4px rgba(11, 42, 74, 0.05),
+    0 14px 32px -14px rgba(11, 42, 74, 0.18);
   transform: translateY(-2px);
 }
 
@@ -247,14 +252,14 @@ h1, h2, h3, h4, h5, h6 {
   background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(11, 42, 74, 0.18);
   border-radius: 10px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: var(--color-primary);
 }
 
-/* Typography Overrides (versión oscura) */
+/* Typography Overrides (versión clara) */
 .prose {
   color: var(--color-base-content) !important;
 }
@@ -271,22 +276,22 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   border-radius: 1rem;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-base-300);
 }
 
 .prose table thead th {
-  background-color: rgba(255, 255, 255, 0.05) !important;
+  background-color: #EEF2F8 !important;
   color: var(--color-base-content) !important;
   padding: 1rem !important;
   text-transform: uppercase;
   font-size: 0.75rem;
   letter-spacing: 0.05em;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-bottom: 1px solid var(--color-base-300) !important;
 }
 
 .prose table tbody td {
   padding: 1rem !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  border-bottom: 1px solid var(--color-base-300) !important;
 }
 
 .prose table tbody tr:last-child td {
@@ -294,5 +299,5 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .prose table tbody tr:hover {
-  background-color: rgba(255, 255, 255, 0.03);
+  background-color: #F7FAFF;
 }

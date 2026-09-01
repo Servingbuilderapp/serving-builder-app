@@ -30,7 +30,41 @@ export type ConvocatoriaEncontrada = {
   fuente_oficial?: string
   alertas?: string
   informacion_faltante?: string
+  /** El mapa: quién pone la plata y hasta dónde llega. */
+  tipo_financiador?: string
+  ambito?: string
 }
+
+/**
+ * El mapa de la financiación.
+ *
+ * Buscar bien no es buscar más: es saber a qué puerta se toca. Estas son las
+ * únicas categorías válidas; lo que no encaje queda 'por_clasificar' y lo
+ * corrige el equipo, en vez de inventar una categoría nueva.
+ */
+export const TIPOS_FINANCIADOR = [
+  'estado_nacional',
+  'estado_local',
+  'cooperacion_bilateral',
+  'cooperacion_multilateral',
+  'onu',
+  'banca_desarrollo',
+  'filantropia_privada',
+  'filantropia_corporativa',
+  'academia',
+  'empresa_privada',
+  'ong',
+  'por_clasificar',
+] as const
+
+export const AMBITOS = [
+  'municipal',
+  'departamental',
+  'nacional',
+  'regional',
+  'internacional',
+  'por_definir',
+] as const
 
 const MESES: Record<string, number> = {
   enero: 1, febrero: 2, marzo: 3, abril: 4, mayo: 5, junio: 6,
@@ -121,18 +155,31 @@ type FilaBiblioteca = {
   alertas: string | null
   informacion_faltante: string | null
   veces_encontrada: number | null
+  tipo_financiador: string | null
+  ambito: string | null
 }
 
 const CAMPOS =
   'id, clave, nombre, entidad, tipo, estado_convocatoria, fecha_cierre, fecha_cierre_texto, monto, ' +
   'beneficiarios, territorio, linea_tematica, requisitos, mecanismo_postulacion, terminos_referencia, ' +
-  'fuente_oficial, alertas, informacion_faltante, veces_encontrada'
+  'fuente_oficial, alertas, informacion_faltante, veces_encontrada, tipo_financiador, ambito'
 
 /** Se queda con el dato nuevo solo si el viejo estaba vacío. */
 function completar(viejo: string | null, nuevo: string): string | null {
   const limpio = texto(nuevo)
   if (texto(viejo)) return viejo
   return limpio || null
+}
+
+/** Acepta la categoría solo si es una de las del mapa; si no, la deja sin clasificar. */
+function tipoValido(valor: unknown): string {
+  const limpio = texto(valor).toLowerCase().replace(/\s+/g, '_')
+  return (TIPOS_FINANCIADOR as readonly string[]).includes(limpio) ? limpio : 'por_clasificar'
+}
+
+function ambitoValido(valor: unknown): string {
+  const limpio = texto(valor).toLowerCase().replace(/\s+/g, '_')
+  return (AMBITOS as readonly string[]).includes(limpio) ? limpio : 'por_definir'
 }
 
 /**
@@ -211,6 +258,16 @@ export async function guardarEnBiblioteca(
           alertas: texto(c.alertas) || anterior.alertas,
           informacion_faltante: texto(c.informacion_faltante) || anterior.informacion_faltante,
           veces_encontrada: (anterior.veces_encontrada || 1) + 1,
+          // El mapa solo se rellena si la ficha aún no estaba clasificada:
+          // lo que el equipo corrigió a mano no se pisa.
+          tipo_financiador:
+            anterior.tipo_financiador && anterior.tipo_financiador !== 'por_clasificar'
+              ? anterior.tipo_financiador
+              : tipoValido(c.tipo_financiador),
+          ambito:
+            anterior.ambito && anterior.ambito !== 'por_definir'
+              ? anterior.ambito
+              : ambitoValido(c.ambito),
           ultima_vez_vista: ahora,
           actualizado_en: ahora,
         })
@@ -241,6 +298,8 @@ export async function guardarEnBiblioteca(
         fuente_oficial: texto(c.fuente_oficial) || null,
         alertas: texto(c.alertas) || null,
         informacion_faltante: texto(c.informacion_faltante) || null,
+        tipo_financiador: tipoValido(c.tipo_financiador),
+        ambito: ambitoValido(c.ambito),
         primera_vez_vista: ahora,
         ultima_vez_vista: ahora,
         actualizado_en: ahora,
@@ -267,7 +326,7 @@ export async function leerBibliotecaParaPrompt(supabase: any, limite = 60): Prom
 
   const { data, error } = await supabase
     .from('biblioteca_convocatorias')
-    .select('nombre, entidad, tipo, estado_convocatoria, fecha_cierre, fecha_cierre_texto, monto, territorio, linea_tematica, fuente_oficial')
+    .select('nombre, entidad, tipo, estado_convocatoria, fecha_cierre, fecha_cierre_texto, monto, territorio, linea_tematica, fuente_oficial, tipo_financiador, ambito')
     .or(`fecha_cierre.is.null,fecha_cierre.gte.${hoy}`)
     .order('fecha_cierre', { ascending: true, nullsFirst: false })
     .limit(limite)
@@ -284,7 +343,7 @@ export async function leerBibliotecaParaPrompt(supabase: any, limite = 60): Prom
   const filas = data
     .map(
       (c: any) =>
-        `- ${c.nombre} | entidad: ${c.entidad || 'sin dato'} | tipo: ${c.tipo || 'sin dato'} | estado: ${c.estado_convocatoria || 'sin dato'} | cierra: ${c.fecha_cierre || c.fecha_cierre_texto || 'sin fecha'} | monto: ${c.monto || 'sin dato'} | territorio: ${c.territorio || 'sin dato'} | línea: ${c.linea_tematica || 'sin dato'} | enlace: ${c.fuente_oficial || 'sin enlace'}`,
+        `- ${c.nombre} | entidad: ${c.entidad || 'sin dato'} | financiador: ${c.tipo_financiador || 'por_clasificar'} (${c.ambito || 'por_definir'}) | tipo: ${c.tipo || 'sin dato'} | estado: ${c.estado_convocatoria || 'sin dato'} | cierra: ${c.fecha_cierre || c.fecha_cierre_texto || 'sin fecha'} | monto: ${c.monto || 'sin dato'} | territorio: ${c.territorio || 'sin dato'} | línea: ${c.linea_tematica || 'sin dato'} | enlace: ${c.fuente_oficial || 'sin enlace'}`,
     )
     .join('\n')
 
