@@ -9,17 +9,11 @@ const getSupabaseClient = () => {
   );
 };
 
-// Proyecto Mock de fallback
-const MOCK_PROYECTO = {
-  id: 'p1',
-  nombre_cliente: 'Carlos Mendoza',
-  nombre_iniciativa: 'Reforestación Andina SAS',
-  plan_pago: 'TOP',
-  monto_solicitado_cop: 250000000,
-  vertical_asignada: 'Medio Ambiente',
-  q3_sector: 'Reforestación y Restauración Ecológica',
-  descripcion: 'Proyecto de reforestación nativa con fito-remediación en el corredor andino para mitigar la huella de carbono y regenerar los suelos erosionados. Se requiere presupuesto para la siembra inicial y equipos de monitoreo satelital.'
-};
+// Antes había aquí un proyecto de mentira ("Carlos Mendoza / Reforestación
+// Andina SAS") que se usaba cuando fallaba la base de datos: la carta salía
+// redactada sobre un cliente que no existe y el sistema respondía que todo
+// había salido bien. Se eliminó. Si no se puede leer el proyecto real, esto
+// se detiene y lo dice.
 
 export async function POST(req: Request) {
   try {
@@ -30,33 +24,32 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Faltan parámetros obligatorios (proyectoId o convocatoria)' }, { status: 400 });
     }
 
-    // 1. Obtener datos del proyecto (Supabase o Fallback Local)
-    let proyectoData = { ...MOCK_PROYECTO };
-    let supabaseWorks = false;
+    // 1. Obtener los datos reales del proyecto
     const supabase = getSupabaseClient();
-    try {
-      const { data: dbProy, error: dbErr } = await supabase
-        .from('proyectos_clientes_serving')
-        .select('*')
-        .eq('id', proyectoId)
-        .maybeSingle();
+    const { data: dbProy, error: dbErr } = await supabase
+      .from('proyectos_clientes_serving')
+      .select('*')
+      .eq('id', proyectoId)
+      .maybeSingle();
 
-      if (!dbErr && dbProy) {
-        proyectoData = {
-          id: dbProy.id,
-          nombre_cliente: dbProy.nombre_cliente || 'Cliente de Serving',
-          nombre_iniciativa: dbProy.nombre_iniciativa || 'Iniciativa Sin Nombre',
-          plan_pago: dbProy.plan_pago || 'BASE',
-          monto_solicitado_cop: dbProy.monto_solicitado_cop || 0,
-          vertical_asignada: dbProy.vertical_asignada || 'General',
-          q3_sector: dbProy.q3_sector || 'General',
-          descripcion: dbProy.respuestas_fase2_json?.q14_descripcion_detallada || dbProy.respuestas_fase1_json?.q1_nombre_iniciativa || 'Proyecto de Consultoría y Estructuración'
-        };
-        supabaseWorks = true;
-      }
-    } catch (e) {
-      console.warn("Fallo de conexión a Supabase al pre-postular. Usando proyecto semilla local.");
+    if (dbErr || !dbProy) {
+      console.error('No se pudo leer el proyecto al pre-postular:', dbErr);
+      return NextResponse.json(
+        { error: 'No se encontró el proyecto en la base de datos. No se redacta ninguna carta sin los datos reales del cliente.' },
+        { status: 404 }
+      );
     }
+
+    const proyectoData = {
+      id: dbProy.id,
+      nombre_cliente: dbProy.nombre_cliente || 'Cliente de Serving',
+      nombre_iniciativa: dbProy.nombre_iniciativa || 'Iniciativa Sin Nombre',
+      plan_pago: dbProy.plan_pago || 'BASE',
+      monto_solicitado_cop: dbProy.monto_solicitado_cop || 0,
+      vertical_asignada: dbProy.vertical_asignada || 'General',
+      q3_sector: dbProy.q3_sector || 'General',
+      descripcion: dbProy.respuestas_fase2_json?.q14_descripcion_detallada || dbProy.respuestas_fase1_json?.q1_nombre_iniciativa || 'Proyecto de Consultoría y Estructuración'
+    };
 
     const targetLang = convocatoria.idioma_origen || 'es';
     const geminiApiKey = process.env.GEMINI_API_KEY;
@@ -145,7 +138,7 @@ ${JSON.stringify(convocatoria)}
       const { error: logErr } = await supabase
         .from('logs_postulacion')
         .insert([{
-          proyecto_id: proyectoData.id === 'p1' ? null : proyectoData.id, // Solo vincular UUID si es real
+          proyecto_id: proyectoData.id,
           nombre_proyecto: proyectoData.nombre_iniciativa,
           convocatoria_nombre: convocatoria.titulo,
           estado: 'Postulado'
