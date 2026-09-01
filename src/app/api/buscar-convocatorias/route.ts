@@ -153,19 +153,55 @@ async function ejecutarBusquedaConvocatorias(id_proyecto: string) {
     .select("id_paso, contenido")
     .eq("id_proyecto", id_proyecto);
 
-  if (errorContenido || !contenido || contenido.length === 0) {
-    return { status: 400, body: { error: "No hay contenido estructurado para este proyecto todavía" }, idsSeleccionadas: [] as string[] };
-  }
-
   const { data: pasos } = await supabase
     .from("pasos_estructuracion")
     .select("id, nombre_paso, orden_secuencia")
     .order("orden_secuencia");
 
   const mapaNombres = new Map((pasos || []).map((p) => [p.id, p.nombre_paso]));
-  const proyectoMaestroTexto = contenido
+
+  let proyectoMaestroTexto = (contenido || [])
     .map((c) => `--- ${mapaNombres.get(c.id_paso) || "paso"} ---\n${c.contenido}`)
     .join("\n\n");
+
+  // Hay dos caminos para estructurar: el documento que sube el cliente (Motor 1,
+  // que llena contenido_pasos_proyecto) y el formulario técnico (que llena el
+  // árbol, la cadena de valor y el dossier). Si el proyecto vino por el segundo
+  // camino no hay pasos, y antes esto se detenía aquí y el proyecto nunca
+  // llegaba a buscar convocatorias. Ahora se usa lo que haya.
+  if (!proyectoMaestroTexto.trim()) {
+    const { data: proyecto } = await supabase
+      .from("proyectos_clientes_serving")
+      .select("nombre_iniciativa, dossier_markdown, monto_solicitado_cop")
+      .eq("id", id_proyecto)
+      .maybeSingle();
+
+    const { data: nodos } = await supabase
+      .from("problemas_proyecto")
+      .select("tipo, orden, descripcion")
+      .eq("proyecto_id", id_proyecto)
+      .order("tipo")
+      .order("orden");
+
+    const arbol = (nodos || []).map((n) => `- [${n.tipo} ${n.orden}] ${n.descripcion}`).join("\n");
+
+    proyectoMaestroTexto = [
+      proyecto?.nombre_iniciativa ? `--- Iniciativa ---\n${proyecto.nombre_iniciativa}` : "",
+      proyecto?.monto_solicitado_cop ? `--- Monto solicitado ---\n${proyecto.monto_solicitado_cop}` : "",
+      arbol ? `--- Árbol del proyecto ---\n${arbol}` : "",
+      proyecto?.dossier_markdown ? `--- Dossier ---\n${String(proyecto.dossier_markdown).slice(0, 12000)}` : "",
+    ]
+      .filter(Boolean)
+      .join("\n\n");
+  }
+
+  if (errorContenido && !proyectoMaestroTexto.trim()) {
+    console.error("Error leyendo el contenido estructurado:", JSON.stringify(errorContenido));
+  }
+
+  if (!proyectoMaestroTexto.trim()) {
+    return { status: 400, body: { error: "No hay contenido estructurado para este proyecto todavía" }, idsSeleccionadas: [] as string[] };
+  }
 
   const { data: matrizHunter } = await supabase
     .from("matriz_hunter_convocatorias")

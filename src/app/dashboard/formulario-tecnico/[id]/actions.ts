@@ -457,7 +457,63 @@ async function ejecutarEstructuracion(
       `${guardado.preguntasDejadas} preguntas dejadas al cliente, ${guardado.avisos.length} pendientes.`,
   )
 
+  // 6. Enganche con la búsqueda de convocatorias.
+  //
+  // Un proyecto estructurado por este camino no llenaba contenido_pasos_proyecto,
+  // así que nunca quedaba marcado como listo y nunca entraba a buscar
+  // convocatorias: la cadena se cortaba aquí. Ahora, si no quedaron preguntas
+  // críticas sin responder, el proyecto queda listo y se dispara la búsqueda.
+  await marcarListoParaEncaje(supabase, id)
+
   return proyectoFinal
+}
+
+/**
+ * Marca el proyecto como listo para buscar convocatorias cuando no le quedan
+ * preguntas críticas pendientes, y arranca el Motor 2.
+ *
+ * Si no hay dirección del sitio configurada (NEXT_PUBLIC_SITE_URL), no pasa
+ * nada malo: el proyecto queda marcado y la búsqueda masiva lo recoge en su
+ * siguiente corrida.
+ */
+async function marcarListoParaEncaje(supabase: any, id: string) {
+  try {
+    const { data: criticas } = await supabase
+      .from('preguntas_pendientes_proyecto')
+      .select('id')
+      .eq('id_proyecto', id)
+      .eq('respondida', false)
+      .eq('critico', true)
+
+    const listo = !criticas || criticas.length === 0
+
+    const { data: antes } = await supabase
+      .from('proyectos_clientes_serving')
+      .select('listo_para_encaje')
+      .eq('id', id)
+      .maybeSingle()
+
+    await supabase
+      .from('proyectos_clientes_serving')
+      .update({ listo_para_encaje: listo })
+      .eq('id', id)
+
+    if (!listo || antes?.listo_para_encaje === true) return
+
+    const sitio = process.env.NEXT_PUBLIC_SITE_URL
+    if (!sitio) {
+      console.log('[Motor] Proyecto listo para encaje. Sin NEXT_PUBLIC_SITE_URL: lo recogerá la búsqueda masiva.')
+      return
+    }
+
+    await fetch(`${sitio.replace(/\/$/, '')}/api/buscar-convocatorias`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id_proyecto: id }),
+    })
+  } catch (error) {
+    console.warn('[Motor] No se pudo arrancar la búsqueda de convocatorias:', error)
+  }
 }
 
 /** Punto de entrada que usa n8n cuando el webhook sí responde. */
