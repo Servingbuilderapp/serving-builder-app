@@ -382,6 +382,12 @@ export function ArbolObjetivosClient({
               Con los objetivos específicos y las actividades ya escritos, la cadena de valor se arma casi
               sola: falta ponerle a cada objetivo su producto, su unidad de medida y su meta.
             </p>
+            <Link
+              href={`/admin/proyectos/${proyectoId}/cadena-valor`}
+              className="mt-3 inline-flex items-center gap-1.5 text-[12px] font-bold text-[#1D4ED8] hover:underline"
+            >
+              Ir a la cadena de valor <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
           </Tarjeta>
         </aside>
       </div>
