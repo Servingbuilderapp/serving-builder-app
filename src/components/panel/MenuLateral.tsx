@@ -71,7 +71,7 @@ const SECCIONES: Seccion[] = [
     titulo: 'Estructuración',
     items: [
       { nombre: 'Estructura del proyecto', href: '/estructuracion', icono: ListChecks },
-      { nombre: 'Árbol de problemas', href: '/arbol-problemas', icono: GitBranch },
+      { nombre: 'Árbol de problemas', icono: GitBranch },
       { nombre: 'Árbol de objetivos', icono: Target },
       { nombre: 'Cadena de valor', icono: Workflow },
       { nombre: 'Presupuesto', icono: Wallet },

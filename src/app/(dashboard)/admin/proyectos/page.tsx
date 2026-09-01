@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { MarcarPagadoButton } from '@/components/admin/MarcarPagadoButton'
@@ -74,9 +75,17 @@ export default async function AdminProyectosPage() {
                     </span>
                   </td>
                   <td className="p-3">
-                    {p.estado_actual !== 'pagado' && (
-                      <MarcarPagadoButton proyectoId={p.id} />
-                    )}
+                    <div className="flex flex-col gap-2 items-start">
+                      {p.estado_actual !== 'pagado' && (
+                        <MarcarPagadoButton proyectoId={p.id} />
+                      )}
+                      <Link
+                        href={`/admin/proyectos/${p.id}/arbol`}
+                        className="px-3 py-1.5 rounded-full bg-color-primary/10 text-color-primary text-xs font-bold hover:underline whitespace-nowrap"
+                      >
+                        Árbol de problemas
+                      </Link>
+                    </div>
                   </td>
                   <td className="p-3">
                     {linkPortalReplica && (
