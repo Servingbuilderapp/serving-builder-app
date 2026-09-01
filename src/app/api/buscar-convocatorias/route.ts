@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { after } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { claveDeConvocatoria, guardarEnBiblioteca, leerBibliotecaParaPrompt } from "@/lib/bibliotecaConvocatorias";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -176,7 +177,14 @@ async function ejecutarBusquedaConvocatorias(id_proyecto: string) {
     .from("aliados_financiamiento")
     .select("nombre_fondo, politica_inversion, sectores_preferenciales, sectores_excluidos, etapa_empresa, cobertura_geografica, rango_inversion");
 
+  // La biblioteca propia: todo lo que el motor ha encontrado en búsquedas
+  // anteriores, para cualquier proyecto. Se lee primero para no volver a
+  // descubrir desde cero lo que ya está catalogado.
+  const bibliotecaPropia = await leerBibliotecaParaPrompt(supabase);
+
   const bibliotecaTexto = `
+${bibliotecaPropia}
+
 MATRIZ HUNTER (biblioteca interna de convocatorias ya catalogadas):
 ${(matrizHunter || [])
   .map(
@@ -271,8 +279,28 @@ Responde ÚNICAMENTE con un JSON válido, sin texto antes ni después, con este 
     return { status: 500, body: { error: "Respuesta de Gemini no fue JSON válido", detalle: partesTexto.slice(0, 2000) }, idsSeleccionadas: [] as string[] };
   }
 
-  const filasSeleccionadas = (resultado.seleccionadas || []).map((c: any) => ({ ...c, id_proyecto, lote: numeroLote, seleccionada: true }));
-  const filasDescartadas = (resultado.descartadas || []).map((c: any) => ({ ...c, id_proyecto, lote: numeroLote, seleccionada: false }));
+  // TODO lo encontrado —lo elegido y lo descartado— pasa a la biblioteca.
+  // Una convocatoria descartada hoy por este proyecto puede servir mañana
+  // para otro cliente, y así no se vuelve a buscar desde cero.
+  const encontradas = [...(resultado.seleccionadas || []), ...(resultado.descartadas || [])];
+  let fichasBiblioteca = new Map<string, string>();
+  try {
+    fichasBiblioteca = await guardarEnBiblioteca(supabase, encontradas);
+    console.log(`[Motor 2] ${fichasBiblioteca.size} fichas guardadas o actualizadas en la biblioteca.`);
+  } catch (e) {
+    console.error("[Motor 2] No se pudo guardar en la biblioteca:", e);
+  }
+
+  const conFicha = (c: any, seleccionada: boolean) => ({
+    ...c,
+    id_proyecto,
+    lote: numeroLote,
+    seleccionada,
+    biblioteca_id: fichasBiblioteca.get(claveDeConvocatoria(c?.nombre || "", c?.entidad || "")) || null,
+  });
+
+  const filasSeleccionadas = (resultado.seleccionadas || []).map((c: any) => conFicha(c, true));
+  const filasDescartadas = (resultado.descartadas || []).map((c: any) => conFicha(c, false));
 
   let idsSeleccionadas: string[] = [];
 
