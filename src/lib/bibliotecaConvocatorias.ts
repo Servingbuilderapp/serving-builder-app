@@ -157,7 +157,16 @@ export async function guardarEnBiblioteca(
     porClave.set(claveDeConvocatoria(c.nombre!, c.entidad!), c)
   }
 
-  const claves = [...porClave.keys()]
+  // Se busca por la clave completa (nombre + entidad) y además por la clave de
+  // solo nombre: las fichas sembradas desde el archivo de importación quedaron
+  // sin entidad, y sin esto la misma convocatoria entraría dos veces en cuanto
+  // el motor la encontrara con su entidad puesta.
+  const claveSoloNombre = new Map<string, string>()
+  for (const [claveCompleta, c] of porClave) {
+    claveSoloNombre.set(claveCompleta, claveDeConvocatoria(c.nombre || '', ''))
+  }
+
+  const claves = [...new Set([...porClave.keys(), ...claveSoloNombre.values()])]
 
   const { data: existentesRaw, error: errorLectura } = await supabase
     .from('biblioteca_convocatorias')
@@ -178,13 +187,14 @@ export async function guardarEnBiblioteca(
   for (const [clave, c] of porClave) {
     const fechaTexto = texto(c.fecha_cierre)
     const fecha = interpretarFecha(fechaTexto)
-    const anterior = existentes.get(clave)
+    const anterior = existentes.get(clave) || existentes.get(claveSoloNombre.get(clave) || '')
 
     if (anterior) {
       const { error } = await supabase
         .from('biblioteca_convocatorias')
         .update({
           // los datos nuevos solo rellenan huecos...
+          entidad: texto(anterior.entidad) || texto(c.entidad),
           tipo: completar(anterior.tipo, texto(c.tipo)),
           beneficiarios: completar(anterior.beneficiarios, texto(c.beneficiarios)),
           territorio: completar(anterior.territorio, texto(c.territorio)),
