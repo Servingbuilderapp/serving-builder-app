@@ -10,6 +10,7 @@ import {
   TEXTO_CONVERSION_EXITO,
   PLAZO_PAGO_EXITO_DIAS,
 } from '@/lib/comisionExito'
+import { PARRAFOS_CLAUSULA_REPLICA, TITULO_CLAUSULA_REPLICA } from '@/lib/clausulaReplica'
 
 export interface ContratoFirmado {
   nombreFirmante: string
@@ -130,7 +131,14 @@ export function ContratoDigitalModal({ plan, onContratoFirmado, onBack }: Contra
             La comisión será exigible y pagadera dentro de los <strong>{PLAZO_PAGO_EXITO_DIAS} días calendario</strong> siguientes a la fecha en que EL CLIENTE reciba el desembolso, o según el calendario de desembolsos propio de cada convocatoria o fondo, lo que resulte aplicable. Para postulaciones al <strong>Fondo Emprender</strong> aplica una escala distinta, detallada en los Términos y Condiciones del servicio.
           </p>
 
-          <h5 className="font-bold text-slate-900 uppercase pt-2">CLÁUSULA SÉPTIMA - DOCUMENTOS QUE HACEN PARTE DEL CONTRATO:</h5>
+          <h5 className="font-bold text-slate-900 uppercase pt-2">
+            CLÁUSULA SÉPTIMA - {TITULO_CLAUSULA_REPLICA}:
+          </h5>
+          {PARRAFOS_CLAUSULA_REPLICA.map((parrafo, i) => (
+            <p key={i}>{parrafo}</p>
+          ))}
+
+          <h5 className="font-bold text-slate-900 uppercase pt-2">CLÁUSULA OCTAVA - DOCUMENTOS QUE HACEN PARTE DEL CONTRATO:</h5>
           <p>
             Forman parte integral de este contrato los Términos y Condiciones del servicio publicados en la plataforma <strong>Arquitectura Digital</strong>, incluido el anexo de condiciones específicas para proyectos de Fondo Emprender. EL CLIENTE declara conocerlos y aceptarlos. En caso de discrepancia entre aquellos y el presente documento, prevalecerá lo aquí estipulado.
           </p>

@@ -8,6 +8,7 @@ import {
   TEXTO_CONVERSION_EXITO,
   PLAZO_PAGO_EXITO_DIAS,
 } from '@/lib/comisionExito'
+import { TEXTO_CLAUSULA_REPLICA, TITULO_CLAUSULA_REPLICA } from '@/lib/clausulaReplica'
 import { useSearchParams } from 'next/navigation'
 import { GlowButton } from '@/components/ui/GlowButton'
 import { GlassCard } from '@/components/ui/GlassCard'
@@ -242,6 +243,9 @@ ${TEXTO_ESCALA_EXITO_FONDO_EMPRENDER}
 Usted declara que la información suministrada es veraz, completa y de su
 autoría o representación legítima, y que cuenta con la facultad para
 autorizar su tratamiento y contratar este servicio.
+
+13. ${TITULO_CLAUSULA_REPLICA}
+${TEXTO_CLAUSULA_REPLICA}
 
 Al marcar la casilla de aceptación, usted confirma que ha leído y acepta
 este documento en su totalidad, y que dicha aceptación, junto con la fecha,
