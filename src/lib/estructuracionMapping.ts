@@ -34,59 +34,61 @@ export interface PlanEstructuracionMapeado {
   incluye: string[]
 }
 
+/**
+ * El trabajo técnico es EL MISMO en las dos modalidades.
+ *
+ * Lo único que cambia entre Estratégica y Élite es el TIEMPO de búsqueda y el
+ * nivel de atención. No hay una modalidad "para lo nacional" y otra "para lo
+ * internacional": en las dos se formula lo que la convocatoria exija, sea un
+ * fondo público colombiano o un cooperante extranjero.
+ */
+const DESGLOSE_TECNICO_COMUN = {
+  componenteTecnico:
+    'Formulación completa con la metodología que exija la convocatoria: MGA, Marco Lógico o Teoría del Cambio, con indicadores medibles.',
+  componenteFinanciero:
+    'Presupuesto detallado por rubros financiables, plan de ventas, nómina y flujo de caja proyectado a 5 años.',
+  componenteLegal:
+    'Acompañamiento en la constitución o el ajuste de la figura jurídica, régimen tributario y gobernanza de socios.'
+}
+
 export const ESTRUCTURACION_ESTRATEGICA: PlanEstructuracionMapeado = {
   id: 'esencial',
   nombre: 'Estructuración Estratégica',
-  subtitulo: 'Para convocatorias nacionales: ministerios, banca de desarrollo y fondos públicos',
-  rangoCapitalText: 'Convocatorias nacionales en pesos',
+  subtitulo: 'Formulación completa de tu proyecto y tres meses buscando convocatorias',
+  rangoCapitalText: 'Tres meses de búsqueda y acompañamiento',
   honorariosBase: 12000000,
   honorariosEstructuracion: '$12.000.000 COP + IVA',
-  honorariosEstructuracionDetalle: 'Honorarios de Estructuración para convocatorias nacionales',
+  honorariosEstructuracionDetalle: 'Honorarios de Estructuración — modalidad de tres meses',
   duracionEntrega: 'Entrega en 5 días hábiles desde que completas el formulario',
   garantiaAcompanamiento: 'Garantía 3+3: si en 3 meses no consigues la financiación, te damos 3 meses más sin costo',
-  desgloseTecnico: {
-    componenteTecnico:
-      'Formulación completa bajo metodología MGA (Metodología General Ajustada) y requerimientos SENA.',
-    componenteFinanciero:
-      'Presupuesto detallado por rubros financiables, plan de ventas, nómina y flujo de caja proyectado a 5 años.',
-    componenteLegal:
-      'Acompañamiento en la constitución de la sociedad SAS ante Cámara de Comercio y gobernanza de socios.'
-  },
+  desgloseTecnico: DESGLOSE_TECNICO_COMUN,
   incluye: [
-    'Formulación MGA & Plan de Negocio SENA',
-    'Presupuesto Detallado y Flujo de Caja 5 Años',
-    'Acompañamiento en Constitución SAS / RUT',
-    '3 meses de búsqueda y radicación activa',
-    'Garantía 3+3 de acompañamiento extendido'
+    'Diagnóstico incluido',
+    'Formulación completa del proyecto',
+    '3 meses de búsqueda de convocatorias',
+    'Encaje con los términos de referencia',
+    '3 meses adicionales de cortesía si no se gana nada'
   ]
 }
 
 export const ESTRUCTURACION_ELITE: PlanEstructuracionMapeado = {
   id: 'completo',
   nombre: 'Estructuración Élite',
-  subtitulo: 'Para cooperación internacional y convocatorias multilaterales, con dossier traducido',
-  rangoCapitalText: 'Cooperación internacional y fondos en divisas',
+  subtitulo: 'El acompañamiento más completo: seis meses de búsqueda y encaje prioritario',
+  rangoCapitalText: 'Seis meses de búsqueda y atención prioritaria',
   honorariosBase: 17000000,
   honorariosEstructuracion: '$17.000.000 COP + IVA',
   honorariosEstructuracionDetalle:
-    'Honorarios de Estructuración para convocatorias complejas e internacionales',
+    'Honorarios de Estructuración — modalidad de seis meses con atención prioritaria',
   duracionEntrega: 'Entrega en 5 días hábiles desde que completas el formulario',
   garantiaAcompanamiento: 'Garantía 6+6: si en 6 meses no consigues la financiación, te damos 6 meses más sin costo',
-  desgloseTecnico: {
-    componenteTecnico:
-      'Matriz de Marco Lógico Internacional, Teoría del Cambio e indicadores socioambientales medibles.',
-    componenteFinanciero:
-      'Modelación Financiera Multimoneda (USD / EUR / COP) con flujo de caja proyectado a 5 años y análisis de sensibilidad.',
-    componenteLegal:
-      'Dossier institucional para alianzas estratégicas, régimen tributario ESAL/SAS y gobernanza para transferencias internacionales.'
-  },
+  desgloseTecnico: DESGLOSE_TECNICO_COMUN,
   incluye: [
-    'Matriz de Marco Lógico & Teoría del Cambio',
-    'Modelación Financiera Multimoneda a 5 Años',
-    'Dossier Técnico Traducido para Cooperación',
-    'Estructuración Jurídica y Gobernanza Institucional',
-    '6 meses de búsqueda y radicación activa',
-    'Garantía 6+6 de acompañamiento extendido'
+    'Todo lo de la Estructuración Estratégica',
+    '6 meses de búsqueda de convocatorias',
+    'Encaje prioritario con los términos de referencia',
+    '6 meses adicionales de cortesía si no se gana nada',
+    'Atención prioritaria'
   ]
 }
 
@@ -99,13 +101,17 @@ export const MODALIDADES_ESTRUCTURACION: PlanEstructuracionMapeado[] = [
  * Sugiere una modalidad a partir de lo que el cliente respondió en el
  * diagnóstico. Es una SUGERENCIA: el cliente puede escoger la otra.
  *
- * Se va a Élite cuando lo que busca apunta a cooperación internacional o a
- * fondos en divisas. En cualquier otro caso, Estratégica.
+ * Las dos modalidades hacen el mismo trabajo técnico. Lo que cambia es el
+ * tiempo de búsqueda: 3 meses en la Estratégica y 6 en la Élite.
+ *
+ * Por eso se sugiere Élite cuando la búsqueda pinta larga — montos altos,
+ * cooperación internacional, fondos en divisas o convocatorias que abren pocas
+ * veces al año. No porque el proyecto sea "de otra clase".
  */
 export function clasificarRangoCapital(montoObjetivo: string): PlanEstructuracionMapeado {
   const texto = (montoObjetivo || '').toLowerCase()
 
-  const senalesInternacionales = [
+  const senalesDeBusquedaLarga = [
     'usd',
     'eur',
     'dólar',
@@ -121,7 +127,7 @@ export function clasificarRangoCapital(montoObjetivo: string): PlanEstructuracio
     '100.000'
   ]
 
-  if (senalesInternacionales.some((senal) => texto.includes(senal))) {
+  if (senalesDeBusquedaLarga.some((senal) => texto.includes(senal))) {
     return ESTRUCTURACION_ELITE
   }
 

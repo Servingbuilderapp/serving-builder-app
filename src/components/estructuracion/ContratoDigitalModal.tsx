@@ -138,7 +138,21 @@ export function ContratoDigitalModal({ plan, onContratoFirmado, onBack }: Contra
             <p key={i}>{parrafo}</p>
           ))}
 
-          <h5 className="font-bold text-slate-900 uppercase pt-2">CLÁUSULA OCTAVA - DOCUMENTOS QUE HACEN PARTE DEL CONTRATO:</h5>
+          <h5 className="font-bold text-slate-900 uppercase pt-2">CLÁUSULA OCTAVA - NATURALEZA DE LA OBLIGACIÓN (OBLIGACIÓN DE MEDIO):</h5>
+          <p>
+            Las obligaciones de EL PRESTADOR bajo este contrato son de <strong>medio y no de resultado</strong>. EL PRESTADOR se obliga a estructurar el proyecto con la mayor calidad técnica, a entregarlo en el plazo pactado, a identificar y encajar convocatorias pertinentes y a preparar y radicar las postulaciones durante el período contratado, poniendo en ello toda su diligencia y capacidad profesional.
+          </p>
+          <p>
+            EL PRESTADOR <strong>no garantiza</strong>, y nada en este contrato podrá interpretarse como promesa de, la aprobación del proyecto, su selección, su adjudicación ni el desembolso de recursos. Esas decisiones corresponden de manera exclusiva a las entidades financiadoras, que aplican sus propios criterios, cupos, calendarios y disponibilidad presupuestal, ajenos por completo al control de las partes.
+          </p>
+          <p>
+            Ninguna manifestación verbal, publicitaria, comercial o de cualquier otra naturaleza, anterior o posterior a la firma, podrá entenderse como una promesa de obtención de financiación. La <strong>garantía de acompañamiento extendido</strong> de la Cláusula Tercera es una ampliación del tiempo de servicio y no una promesa de resultado ni un derecho a devolución.
+          </p>
+          <p>
+            En consecuencia, el hecho de que el proyecto no resulte financiado <strong>no da lugar a devolución de los honorarios</strong> pagados, por corresponder estos al trabajo efectivamente ejecutado. Los plazos y obligaciones de EL PRESTADOR se suspenderán mientras EL CLIENTE no entregue la información, los documentos o las firmas que le sean requeridos, o mientras incumpla los pagos pactados.
+          </p>
+
+          <h5 className="font-bold text-slate-900 uppercase pt-2">CLÁUSULA NOVENA - DOCUMENTOS QUE HACEN PARTE DEL CONTRATO:</h5>
           <p>
             Forman parte integral de este contrato los Términos y Condiciones del servicio publicados en la plataforma <strong>Arquitectura Digital</strong>, incluido el anexo de condiciones específicas para proyectos de Fondo Emprender. EL CLIENTE declara conocerlos y aceptarlos. En caso de discrepancia entre aquellos y el presente documento, prevalecerá lo aquí estipulado.
           </p>
