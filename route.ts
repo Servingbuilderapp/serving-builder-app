@@ -1,102 +1,92 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { crearProyectoReplica, prepararReplica, TIPOS_REPLICA } from '@/lib/motorReplica'
 import { esEquipoServing } from '@/lib/guardiaEquipo'
 
 /**
- * Réplicas.
+ * Guarda la corrección que el equipo de Serving hace sobre el contenido de un
+ * paso de estructuración.
  *
- * POST /api/replica
- *   { "accion": "preparar", "proyectoId": "...", "tipo": "otro territorio",
- *     "destino": "Nariño", "convocatoriaId": "opcional" }
- *      Piensa la réplica: qué núcleo no se toca, qué se adapta y qué obliga
- *      la convocatoria.
- *
- *   { "accion": "crear", "replicaId": "..." }
- *      Crea el proyecto nuevo copiando árbol, objetivos y cadena de valor.
- *
- * GET /api/replica?proyectoId=...   las réplicas de ese proyecto
- * GET /api/replica?tipos=1          los once tipos de réplica que existen
+ * La IA (Motor 1) redacta el contenido de cada paso; esta ruta es la que deja
+ * que una persona lo corrija. Trabaja con la llave de servicio, así que el
+ * candado `esEquipoServing()` es obligatorio: sin él, cualquiera que supiera
+ * la dirección podría reescribir el proyecto de otro.
  */
-
-function cliente() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  )
-}
-
-export async function POST(req: Request) {
-  try {
-    if (!(await esEquipoServing())) {
-      return NextResponse.json({ error: 'Solo el equipo de Serving puede usar esta ruta' }, { status: 401 })
-    }
-
-    const cuerpo = await req.json()
-    const supabase = cliente()
-
-    if (cuerpo?.accion === 'crear') {
-      if (!cuerpo?.replicaId) {
-        return NextResponse.json({ error: 'Falta replicaId' }, { status: 400 })
-      }
-      const resultado = await crearProyectoReplica(supabase, cuerpo.replicaId)
-      return NextResponse.json(resultado, { status: resultado.ok ? 200 : 400 })
-    }
-
-    if (!cuerpo?.proyectoId || !cuerpo?.tipo) {
-      return NextResponse.json(
-        { error: 'Faltan proyectoId y tipo', tipos_validos: TIPOS_REPLICA },
-        { status: 400 },
-      )
-    }
-
-    const resultado = await prepararReplica(supabase, cuerpo.proyectoId, {
-      tipo: cuerpo.tipo,
-      destino: cuerpo.destino,
-      convocatoriaId: cuerpo.convocatoriaId,
-    })
-
-    return NextResponse.json(resultado, { status: resultado.ok ? 200 : 400 })
-  } catch (error: any) {
-    console.error('[Réplicas] Error:', error)
-    return NextResponse.json(
-      { error: 'Error al trabajar la réplica', detalle: error?.message || String(error) },
-      { status: 500 },
-    )
+export async function POST(request: NextRequest) {
+  if (!(await esEquipoServing())) {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
   }
-}
 
-export async function GET(req: Request) {
-  try {
-    if (!(await esEquipoServing())) {
-      return NextResponse.json({ error: 'Solo el equipo de Serving puede usar esta ruta' }, { status: 401 })
-    }
-
-    const url = new URL(req.url)
-
-    if (url.searchParams.get('tipos')) {
-      return NextResponse.json({ ok: true, tipos: TIPOS_REPLICA })
-    }
-
-    const proyectoId = url.searchParams.get('proyectoId')
-    if (!proyectoId) {
-      return NextResponse.json({ error: 'Falta proyectoId' }, { status: 400 })
-    }
-
-    const supabase = cliente()
-    const { data, error } = await supabase
-      .from('replicas')
-      .select('*')
-      .eq('proyecto_origen_id', proyectoId)
-      .order('creada_en', { ascending: false })
-
-    if (error) {
-      return NextResponse.json({ error: 'No se pudieron leer las réplicas' }, { status: 500 })
-    }
-
-    return NextResponse.json({ ok: true, replicas: data || [] })
-  } catch (error: any) {
-    console.error('[Réplicas] Error leyendo:', error)
-    return NextResponse.json({ error: error?.message || String(error) }, { status: 500 })
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const llave = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !llave) {
+    return NextResponse.json({ error: 'Falta configuración del servidor' }, { status: 500 })
   }
+
+  let cuerpo: {
+    proyectoId?: string
+    pasoId?: number | string
+    contenido?: string
+    advertencia?: string | null
+  }
+
+  try {
+    cuerpo = await request.json()
+  } catch {
+    return NextResponse.json({ error: 'Petición mal formada' }, { status: 400 })
+  }
+
+  const proyectoId = String(cuerpo.proyectoId || '').trim()
+  const pasoId = Number(cuerpo.pasoId)
+  const contenido = String(cuerpo.contenido ?? '').trim()
+
+  if (!proyectoId || !Number.isFinite(pasoId)) {
+    return NextResponse.json({ error: 'Falta el proyecto o el paso' }, { status: 400 })
+  }
+  if (!contenido) {
+    return NextResponse.json({ error: 'El contenido no puede quedar vacío' }, { status: 400 })
+  }
+
+  const advertenciaTexto = String(cuerpo.advertencia ?? '').trim()
+  const advertencia = advertenciaTexto ? advertenciaTexto : null
+
+  const supabase = createClient(url, llave)
+
+  // Se intenta actualizar la fila existente; si el paso todavía no tenía
+  // contenido, se crea. Así no depende de cómo esté definida la llave de la
+  // tabla y nunca quedan dos filas para el mismo paso.
+  const { data: actualizadas, error: errorUpdate } = await supabase
+    .from('contenido_pasos_proyecto')
+    .update({ contenido, advertencia })
+    .eq('id_proyecto', proyectoId)
+    .eq('id_paso', pasoId)
+    .select('id_paso')
+
+  if (errorUpdate) {
+    return NextResponse.json({ error: errorUpdate.message }, { status: 500 })
+  }
+
+  if (!actualizadas || actualizadas.length === 0) {
+    const { error: errorInsert } = await supabase
+      .from('contenido_pasos_proyecto')
+      .insert({ id_proyecto: proyectoId, id_paso: pasoId, contenido, advertencia })
+
+    if (errorInsert) {
+      return NextResponse.json({ error: errorInsert.message }, { status: 500 })
+    }
+  }
+
+  // Un paso corregido a mano queda dado por completado: si el equipo escribió
+  // ahí, ese paso ya tiene contenido válido.
+  const { error: errorAvance } = await supabase.from('avance_estructuracion_proyecto').upsert({
+    proyecto_id: proyectoId,
+    paso_id: pasoId,
+    completado: true,
+    fecha_completado: new Date().toISOString(),
+  })
+
+  if (errorAvance) {
+    return NextResponse.json({ error: errorAvance.message }, { status: 500 })
+  }
+
+  return NextResponse.json({ ok: true })
 }
