@@ -147,14 +147,21 @@ function Anillo({ valor }: { valor: number }) {
 }
 
 /** Rueda de diagnóstico compacta */
+export function escalaRueda(ejes: { puntaje: number }[]): number {
+  return ejes.some((e) => e.puntaje > 10) ? 100 : 10
+}
+
 function Rueda({ ejes }: { ejes: { nombre: string; puntaje: number }[] }) {
   if (ejes.length < 3) return null
   const cx = 170
   const cy = 128
   const radioMax = 74
+  // Los motores guardan el puntaje unas veces de 1 a 10 y otras de 1 a 100.
+  // Se deduce de los datos para que la telaraña no salga siempre al tope.
+  const tope = escalaRueda(ejes)
   const puntos = ejes.map((eje, i) => {
     const angulo = (Math.PI * 2 * i) / ejes.length - Math.PI / 2
-    const r = (Math.max(0, Math.min(10, eje.puntaje)) / 10) * radioMax
+    const r = (Math.max(0, Math.min(tope, eje.puntaje)) / tope) * radioMax
     return {
       x: cx + Math.cos(angulo) * r,
       y: cy + Math.sin(angulo) * r,
@@ -201,12 +208,32 @@ function Rueda({ ejes }: { ejes: { nombre: string; puntaje: number }[] }) {
             {p.nombre}
           </tspan>
           <tspan x={p.lx} dy="11" className="fill-[#0B2A4A]" style={{ fontWeight: 800 }}>
-            {p.puntaje.toFixed(1)}
+            {tope === 100 ? Math.round(p.puntaje) : p.puntaje.toFixed(1)}
           </tspan>
         </text>
       ))}
     </svg>
   )
+}
+
+const MESES = [
+  'enero','febrero','marzo','abril','mayo','junio',
+  'julio','agosto','septiembre','octubre','noviembre','diciembre',
+]
+
+/**
+ * Fechas en lenguaje humano: "15 de octubre de 2026" en vez de "2026-10-15".
+ * Si el texto no es una fecha reconocible se devuelve tal cual.
+ */
+function fechaBonita(valor: string | null): string | null {
+  if (!valor) return null
+  const partes = valor.slice(0, 10).split('-')
+  if (partes.length !== 3) return valor
+  const anio = Number(partes[0])
+  const mes = Number(partes[1])
+  const dia = Number(partes[2])
+  if (!anio || !mes || !dia || mes < 1 || mes > 12) return valor
+  return `${dia} de ${MESES[mes - 1]} de ${anio}`
 }
 
 function Vacio({ texto }: { texto: string }) {
@@ -223,7 +250,6 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
   const {
     proyecto,
     progresoGeneral,
-    pasos,
     pasoActual,
     convocatoria,
     documentos,
@@ -273,8 +299,8 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
       </div>
 
       {/* ============ TARJETAS SUPERIORES ============ */}
-      <div className="grid gap-4 grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
-        <Tarjeta className="p-4 col-span-2 xl:col-span-1">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        <Tarjeta className="p-4 sm:col-span-2">
           <div className="text-[10px] font-bold uppercase tracking-wider text-[#94A3B8] mb-3">
             Progreso general
           </div>
@@ -283,7 +309,7 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
             <div className="min-w-0">
               <div className="text-[13px] font-bold text-[#0B2A4A]">{etiquetaProgreso}</div>
               <div className="text-[12px] text-[#7C8CA5] leading-snug">
-                {pasos.completados} pasos completados
+                del recorrido de tu proyecto ya está listo
               </div>
             </div>
           </div>
@@ -298,7 +324,7 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
           </div>
           {pasoActual ? (
             <>
-              <div className="text-[12px] text-[#7C8CA5] mt-1">Paso {pasoActual.orden}</div>
+              <div className="text-[12px] text-[#7C8CA5] mt-1">Trabajando ahora en</div>
               <div className="text-[12.5px] font-semibold text-[#0B2A4A] mt-1 line-clamp-2">
                 {pasoActual.nombre}
               </div>
@@ -318,7 +344,9 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
                 {convocatoria.nombre}
               </div>
               {convocatoria.fechaCierre ? (
-                <div className="text-[12px] text-[#7C8CA5] mt-1">Cierre: {convocatoria.fechaCierre}</div>
+                <div className="text-[12px] text-[#7C8CA5] mt-1">
+                  Cierra el {fechaBonita(convocatoria.fechaCierre)}
+                </div>
               ) : null}
               {convocatoria.diasRestantes !== null ? (
                 <div
@@ -393,22 +421,17 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
           )}
         </Tarjeta>
 
-        <Tarjeta className="p-4 col-span-2 xl:col-span-1">
+        <Tarjeta className="p-4">
           <div className="text-[10px] font-bold uppercase tracking-wider text-[#94A3B8] mb-3">
             Semáforos principales
           </div>
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             {semaforos.map((s) => (
-              <div
-                key={s.etiqueta}
-                className="flex items-center justify-between gap-1 rounded-lg border border-[#E4EAF3] px-2 py-1.5"
-              >
-                <span className="text-[11.5px] text-[#475569] truncate">{s.etiqueta}</span>
-                <span className="flex items-center gap-1 shrink-0">
-                  <span className={`h-2 w-2 rounded-full ${colorSemaforo(s.estado)}`} />
-                  <span className={`text-[9.5px] font-bold ${claseTextoSemaforo(s.estado)}`}>
-                    {textoSemaforo(s.estado)}
-                  </span>
+              <div key={s.etiqueta} className="flex items-center gap-2">
+                <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${colorSemaforo(s.estado)}`} />
+                <span className="text-[12.5px] text-[#475569]">{s.etiqueta}</span>
+                <span className={`ml-auto text-[10px] font-bold ${claseTextoSemaforo(s.estado)}`}>
+                  {textoSemaforo(s.estado)}
                 </span>
               </div>
             ))}
@@ -520,7 +543,9 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
               <TituloBloque texto="Rueda de diagnóstico" />
               {ejesRueda.length >= 3 ? (
                 <>
-                  <div className="text-[11px] text-[#94A3B8] -mt-2 mb-2">Calificación de 1 a 10</div>
+                  <div className="text-[11px] text-[#94A3B8] -mt-2 mb-2">
+                    Calificación de 1 a {escalaRueda(ejesRueda)}
+                  </div>
                   <Rueda ejes={ejesRueda} />
                 </>
               ) : (
@@ -552,7 +577,7 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
                       </div>
                       <div className="mt-2 flex items-center justify-between gap-2">
                         <div className="text-[11.5px] text-[#7C8CA5]">
-                          {c.cierre ? `Cierre ${c.cierre}` : 'Sin fecha'}
+                          {c.cierre ? `Cierra el ${fechaBonita(c.cierre)}` : 'Sin fecha'}
                           {c.dias !== null ? ` · ${c.dias} días` : ''}
                         </div>
                         <div className="flex items-center gap-1.5">
