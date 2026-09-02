@@ -42,7 +42,7 @@ const SECCIONES_CLIENTE: Seccion[] = [
   {
     items: [
       { nombre: 'Resumen general', href: '/dashboard', icono: Home },
-      { nombre: 'Avance de mi proyecto', href: '/estructuracion', icono: ListChecks },
+      { nombre: 'Avance de mi proyecto', href: '/mi-proyecto', icono: ListChecks },
       { nombre: 'App de Ideas', href: '/ideas', icono: Lightbulb },
     ],
   },

@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import { partirEnDos } from '@/lib/mediosDePago'
 import {
   Check,
   Sparkles,
@@ -173,6 +174,16 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
                   <span className="text-3xl font-black text-color-base-content">
                     {plan.honorariosEstructuracion}
                   </span>
+                  {(() => {
+                    const total = Number(String(plan.honorariosEstructuracion).replace(/[^0-9]/g, ''))
+                    const partes = total > 0 ? partirEnDos(total) : null
+                    if (!partes || !partes.hayDosPartes) return null
+                    return (
+                      <p className="text-[12px] font-bold text-color-base-content mt-1">
+                        Mitad al firmar (${partes.anticipo.toLocaleString('es-CO')}) y mitad al recibir tu proyecto
+                      </p>
+                    )
+                  })()}
                   <p className="text-[11px] text-color-primary font-bold mt-1">
                     {plan.duracionEntrega}
                   </p>

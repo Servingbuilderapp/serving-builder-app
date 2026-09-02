@@ -109,6 +109,18 @@ export default async function AdminProyectosPage() {
                       >
                         Cronograma
                       </Link>
+                      <Link
+                        href={`/admin/proyectos/${p.id}/postulaciones`}
+                        className="px-3 py-1.5 rounded-full bg-emerald-600/10 text-emerald-700 text-xs font-bold hover:underline whitespace-nowrap"
+                      >
+                        Postulaciones
+                      </Link>
+                      <Link
+                        href={`/admin/proyectos/${p.id}/replicas`}
+                        className="px-3 py-1.5 rounded-full bg-emerald-600/10 text-emerald-700 text-xs font-bold hover:underline whitespace-nowrap"
+                      >
+                        Réplicas
+                      </Link>
                     </div>
                   </td>
                   <td className="p-3">

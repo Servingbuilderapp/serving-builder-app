@@ -5,14 +5,15 @@ import { Clock, CheckCircle2, FileCheck2, Sparkles, MessageSquare, ShieldCheck, 
 import { GlowButton } from '@/components/ui/GlowButton'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { PlanSeleccionado } from './PlanSelector'
+import { WHATSAPP_SERVING } from '@/lib/estructuracionMapping'
 
 interface EstructuracionProgressProps {
   plan: PlanSeleccionado
 }
 
 export function EstructuracionProgress({ plan }: EstructuracionProgressProps) {
-  // Simulador de contador regresivo de 30 días
-  const [daysLeft, setDaysLeft] = useState(29)
+  // Contador regresivo del plazo de entrega (5 días hábiles)
+  const [daysLeft, setDaysLeft] = useState(5)
   const [hoursLeft, setHoursLeft] = useState(23)
   const [minutesLeft, setMinutesLeft] = useState(59)
 
@@ -47,11 +48,11 @@ export function EstructuracionProgress({ plan }: EstructuracionProgressProps) {
           </div>
         </div>
 
-        {/* Cronómetro de Entrega a 30 Días */}
+        {/* Cronómetro del plazo de entrega */}
         <div className="bg-white/10 backdrop-blur-xl p-6 rounded-3xl border border-white/20 text-center space-y-4">
           <span className="text-xs font-black uppercase tracking-widest text-emerald-300 flex items-center justify-center gap-2">
             <Clock className="h-4 w-4 animate-pulse" />
-            Compromiso de Entrega Técnica Máxima en 30 Días
+            Compromiso de entrega en 5 días hábiles
           </span>
 
           <div className="flex justify-center items-center gap-4 text-white">
@@ -151,7 +152,7 @@ export function EstructuracionProgress({ plan }: EstructuracionProgressProps) {
             ¿Tienes dudas o necesitas actualizar información de tu proyecto?
           </p>
           <a
-            href="https://wa.me/573000000000?text=Hola%20Arquitectura%20Digital,%20quisiera%20consultar%20el%20estado%20de%20mi%20proceso%20de%20estructuraci%C3%B3n."
+            href={`https://wa.me/${WHATSAPP_SERVING}?text=${encodeURIComponent('Hola Arquitectura Digital, quisiera consultar el estado de mi proceso de estructuración.')}`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-color-primary text-white font-black text-xs uppercase tracking-wider hover:brightness-110 shadow-lg shadow-color-primary/20 transition-all"

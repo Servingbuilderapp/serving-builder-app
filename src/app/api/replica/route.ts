@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { crearProyectoReplica, prepararReplica, TIPOS_REPLICA } from '@/lib/motorReplica'
+import { esEquipoServing } from '@/lib/guardiaEquipo'
 
 /**
  * Réplicas.
@@ -27,6 +28,10 @@ function cliente() {
 
 export async function POST(req: Request) {
   try {
+    if (!(await esEquipoServing())) {
+      return NextResponse.json({ error: 'Solo el equipo de Serving puede usar esta ruta' }, { status: 401 })
+    }
+
     const cuerpo = await req.json()
     const supabase = cliente()
 
@@ -63,6 +68,10 @@ export async function POST(req: Request) {
 
 export async function GET(req: Request) {
   try {
+    if (!(await esEquipoServing())) {
+      return NextResponse.json({ error: 'Solo el equipo de Serving puede usar esta ruta' }, { status: 401 })
+    }
+
     const url = new URL(req.url)
 
     if (url.searchParams.get('tipos')) {

@@ -39,8 +39,8 @@ export const ESTRUCTURACION_ESTRATEGICA: PlanEstructuracionMapeado = {
   rangoCapitalText: 'Convocatorias nacionales en pesos',
   honorariosEstructuracion: '$12.000.000 COP',
   honorariosEstructuracionDetalle: 'Honorarios de Estructuración para convocatorias nacionales',
-  duracionEntrega: 'Entrega Técnica Profesional en 30 días calendario',
-  garantiaAcompanamiento: 'Garantía 6+6 meses: si no ganas en 6 meses, recibes +6 meses gratis',
+  duracionEntrega: 'Entrega en 5 días hábiles desde que completas el formulario',
+  garantiaAcompanamiento: 'Garantía 3+3: si en 3 meses no consigues la financiación, te damos 3 meses más sin costo',
   desgloseTecnico: {
     componenteTecnico:
       'Formulación completa bajo metodología MGA (Metodología General Ajustada) y requerimientos SENA.',
@@ -53,8 +53,8 @@ export const ESTRUCTURACION_ESTRATEGICA: PlanEstructuracionMapeado = {
     'Formulación MGA & Plan de Negocio SENA',
     'Presupuesto Detallado y Flujo de Caja 5 Años',
     'Acompañamiento en Constitución SAS / RUT',
-    '6 Meses de Búsqueda y Radicación Activa',
-    'Garantía 6+6 de Acompañamiento Extendido'
+    '3 meses de búsqueda y radicación activa',
+    'Garantía 3+3 de acompañamiento extendido'
   ]
 }
 
@@ -66,8 +66,8 @@ export const ESTRUCTURACION_ELITE: PlanEstructuracionMapeado = {
   honorariosEstructuracion: '$17.000.000 COP',
   honorariosEstructuracionDetalle:
     'Honorarios de Estructuración para convocatorias complejas e internacionales',
-  duracionEntrega: 'Entrega Técnica Integral en 30 días calendario',
-  garantiaAcompanamiento: 'Garantía Extendida de 12 meses de radicación y seguimiento continuo',
+  duracionEntrega: 'Entrega en 5 días hábiles desde que completas el formulario',
+  garantiaAcompanamiento: 'Garantía 6+6: si en 6 meses no consigues la financiación, te damos 6 meses más sin costo',
   desgloseTecnico: {
     componenteTecnico:
       'Matriz de Marco Lógico Internacional, Teoría del Cambio e indicadores socioambientales medibles.',
@@ -81,7 +81,8 @@ export const ESTRUCTURACION_ELITE: PlanEstructuracionMapeado = {
     'Modelación Financiera Multimoneda a 5 Años',
     'Dossier Técnico Traducido para Cooperación',
     'Estructuración Jurídica y Gobernanza Institucional',
-    '12 Meses de Acompañamiento Continuo'
+    '6 meses de búsqueda y radicación activa',
+    'Garantía 6+6 de acompañamiento extendido'
   ]
 }
 

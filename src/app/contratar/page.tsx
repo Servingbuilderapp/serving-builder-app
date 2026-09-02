@@ -1,6 +1,7 @@
 'use client'
 
 import React, { Suspense, useState } from 'react'
+import { COBRO_COLOMBIA, COBRO_EXTERIOR, partirEnDos } from '@/lib/mediosDePago'
 import { useSearchParams } from 'next/navigation'
 import { GlowButton } from '@/components/ui/GlowButton'
 import { GlassCard } from '@/components/ui/GlassCard'
@@ -533,16 +534,97 @@ function ContratarContent() {
                 </div>
               )}
 
-              {pais === 'colombia' ? (
-                <div className="text-left p-6 rounded-2xl bg-color-base-content/5 border border-color-base-content/10 space-y-2">
-                  <p className="text-sm font-bold text-color-base-content">{t('contratar.transferencia_titulo')}</p>
-                  <p className="text-sm text-color-base-content/70">{t('contratar.banco_label')} [COMPLETAR]</p>
-                  <p className="text-sm text-color-base-content/70">{t('contratar.cuenta_label')} [COMPLETAR]</p>
-                  <p className="text-sm text-color-base-content/70">{t('contratar.titular_label')} [COMPLETAR]</p>
-                  <p className="text-sm text-color-base-content/70">{t('contratar.valor_label')} {formatCOP(plan.montoCop)}</p>
-                  <p className="text-xs text-color-base-content/50 pt-2">
+              {/* Cómo se cobra se decide en src/lib/mediosDePago.ts, no aquí. */}
+              {pais === 'colombia' && COBRO_COLOMBIA.modo === 'transferencia' && COBRO_COLOMBIA.cuenta ? (
+                <div className="text-left p-6 rounded-2xl bg-color-base-content/5 border border-color-base-content/10 space-y-5">
+                  <div>
+                    <p className="text-sm font-bold text-color-base-content">{t('contratar.transferencia_titulo')}</p>
+                    {(() => {
+                      const partes = partirEnDos(plan.montoCop)
+                      if (!partes.hayDosPartes) {
+                        return (
+                          <p className="text-sm text-color-base-content/70 mt-1">
+                            {t('contratar.valor_label')} {formatCOP(plan.montoCop)}
+                          </p>
+                        )
+                      }
+                      return (
+                        <div className="mt-2 space-y-1">
+                          <p className="text-sm font-bold text-color-base-content">
+                            {t('contratar.anticipo_label')} {formatCOP(partes.anticipo)}
+                          </p>
+                          <p className="text-sm text-color-base-content/70">
+                            {t('contratar.saldo_label')} {formatCOP(partes.saldo)}
+                          </p>
+                        </div>
+                      )
+                    })()}
+                  </div>
+
+                  {COBRO_COLOMBIA.cuenta.llaves?.length ? (
+                    <div className="rounded-xl border border-color-primary/25 bg-color-primary/5 p-4 space-y-1.5">
+                      <p className="text-xs font-black uppercase tracking-widest text-color-primary">
+                        {t('contratar.llave_titulo')}
+                      </p>
+                      {COBRO_COLOMBIA.cuenta.llaves.map((llave) => (
+                        <p key={llave.valor} className="text-sm text-color-base-content">
+                          {llave.etiqueta}: <strong>{llave.valor}</strong>
+                        </p>
+                      ))}
+                      <p className="text-xs text-color-base-content/60 pt-1">{t('contratar.llave_nota')}</p>
+                    </div>
+                  ) : null}
+
+                  <div className="space-y-1">
+                    <p className="text-xs font-black uppercase tracking-widest text-color-base-content/60">
+                      {t('contratar.transferencia_alterna')}
+                    </p>
+                    <p className="text-sm text-color-base-content/70">
+                      {t('contratar.banco_label')} {COBRO_COLOMBIA.cuenta.banco}
+                      {COBRO_COLOMBIA.cuenta.codigoEntidad ? ` (código ${COBRO_COLOMBIA.cuenta.codigoEntidad})` : ''}
+                    </p>
+                    <p className="text-sm text-color-base-content/70">
+                      {t('contratar.cuenta_label')} {COBRO_COLOMBIA.cuenta.tipo} · {COBRO_COLOMBIA.cuenta.numero}
+                    </p>
+                    <p className="text-sm text-color-base-content/70">
+                      {t('contratar.titular_label')} {COBRO_COLOMBIA.cuenta.titular} · NIT {COBRO_COLOMBIA.cuenta.nit}
+                    </p>
+                    <p className="text-xs text-color-base-content/50 pt-1">
+                      {t('contratar.transferencia_alterna_nota')}
+                    </p>
+                  </div>
+
+                  <p className="text-xs text-color-base-content/50 border-t border-color-base-content/10 pt-3">
                     {t('contratar.transferencia_nota')}
                   </p>
+                </div>
+              ) : pais === 'colombia' || !COBRO_EXTERIOR.paypal ? (
+                <div className="text-left p-6 rounded-2xl bg-color-base-content/5 border border-color-base-content/10 space-y-2">
+                  <p className="text-sm font-bold text-color-base-content">{t('contratar.factura_titulo')}</p>
+                  <p className="text-sm text-color-base-content/70 leading-relaxed">{t('contratar.factura_texto')}</p>
+                  {(() => {
+                    const partes = partirEnDos(plan.montoCop)
+                    if (!partes.hayDosPartes) {
+                      return (
+                        <p className="text-sm text-color-base-content/70 pt-1">
+                          {t('contratar.valor_label')} {pais === 'colombia' ? formatCOP(plan.montoCop) : `$${montoUsd.toLocaleString('en-US')} USD`}
+                        </p>
+                      )
+                    }
+                    return (
+                      <div className="pt-2 space-y-1">
+                        <p className="text-sm font-bold text-color-base-content">
+                          {t('contratar.anticipo_label')} {formatCOP(partes.anticipo)}
+                        </p>
+                        <p className="text-sm text-color-base-content/70">
+                          {t('contratar.saldo_label')} {formatCOP(partes.saldo)}
+                        </p>
+                        <p className="text-xs text-color-base-content/50">
+                          {t('contratar.valor_label')} {formatCOP(plan.montoCop)}
+                        </p>
+                      </div>
+                    )
+                  })()}
                 </div>
               ) : (
                 <div className="text-left p-6 rounded-2xl bg-color-base-content/5 border border-color-base-content/10 space-y-4">
@@ -577,7 +659,9 @@ function ContratarContent() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-color-primary hover:underline"
               >
-                {t('contratar.boton_whatsapp')}
+                {COBRO_COLOMBIA.modo === 'transferencia' && COBRO_COLOMBIA.cuenta
+                  ? t('contratar.boton_whatsapp')
+                  : t('contratar.boton_whatsapp_factura')}
               </a>
 
               <div className="flex items-center justify-center gap-2 text-[10px] text-color-base-content/40 uppercase tracking-widest font-black pt-4">

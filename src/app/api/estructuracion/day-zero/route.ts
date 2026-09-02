@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     const dayZeroRecord = {
       id: `dz-${Date.now()}`,
       fechaRegistro: new Date().toISOString(),
-      fechaLimiteEntrega: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 días
+      fechaLimiteEntrega: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 5 días hábiles ≈ 7 calendario
       planId: plan.id,
       cliente: contrato.nombreFirmante,
       documento: contrato.documentoIdentidad,

@@ -6,6 +6,7 @@ import { GlassCard } from '@/components/ui/GlassCard'
 import { IdiomaSeguimiento, traduccionesSeguimiento } from '@/lib/seguimientoTranslations'
 import { SemaforoConvocatorias, ConvocatoriaAsignada } from './SemaforoConvocatorias'
 import { ProgresoMetodologia32Pasos } from './ProgresoMetodologia32Pasos'
+import { WHATSAPP_SERVING } from '@/lib/estructuracionMapping'
 
 interface DashboardSeguimientoProps {
   proyectoNombre?: string
@@ -67,7 +68,7 @@ export function DashboardSeguimiento({ proyectoNombre = 'Proyecto EcoInnovación
     const msg = encodeURIComponent(
       `Hola Arquitectura Digital, soy cliente del proyecto "${proyectoNombre}". Quisiera ponerme en contacto con mi estructurador asignado para revisar el avance de mi propuesta.`
     )
-    return `https://wa.me/573000000000?text=${msg}`
+    return `https://wa.me/${WHATSAPP_SERVING}?text=${msg}`
   }
 
   return (

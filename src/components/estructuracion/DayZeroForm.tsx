@@ -147,7 +147,7 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
               Puerta de Enlace <span className="text-color-primary font-black">Day Zero</span>
             </h2>
             <p className="text-xs md:text-sm text-slate-300 font-medium max-w-xl mt-1">
-              El tiempo garantizado de <strong className="text-white">entrega en 30 días</strong> se activa únicamente cuando se completen los 3 entregables requeridos a continuación.
+              El plazo de <strong className="text-white">entrega en 5 días hábiles</strong> empieza a contar únicamente cuando completes los 3 entregables de aquí abajo.
             </p>
           </div>
 
@@ -323,7 +323,7 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
         <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3">
           <ShieldAlert className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
           <p className="text-xs text-amber-900 font-medium">
-            <strong>Atención:</strong> El sistema de estructuración de <strong>Arquitectura Digital</strong> no iniciará la producción ni habilitará el plazo de 30 días de entrega hasta que los 3 entregables arriba detallados estén al 100% completados.
+            <strong>Atención:</strong> El sistema de estructuración de <strong>Arquitectura Digital</strong> no inicia la producción ni empieza a contar el plazo de 5 días hábiles hasta que los 3 entregables de arriba estén al 100% completados.
           </p>
         </div>
       )}

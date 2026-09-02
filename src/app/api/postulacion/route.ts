@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { prepararPostulacion, registrarRadicacion } from '@/lib/motorPostulacion'
+import { esEquipoServing } from '@/lib/guardiaEquipo'
 
 /**
  * Motor 4 — postulación.
@@ -25,6 +26,10 @@ function cliente() {
 
 export async function POST(req: Request) {
   try {
+    if (!(await esEquipoServing())) {
+      return NextResponse.json({ error: 'Solo el equipo de Serving puede usar esta ruta' }, { status: 401 })
+    }
+
     const cuerpo = await req.json()
     const accion = cuerpo?.accion || 'preparar'
     const supabase = cliente()
@@ -59,6 +64,10 @@ export async function POST(req: Request) {
  */
 export async function GET(req: Request) {
   try {
+    if (!(await esEquipoServing())) {
+      return NextResponse.json({ error: 'Solo el equipo de Serving puede usar esta ruta' }, { status: 401 })
+    }
+
     const url = new URL(req.url)
     const proyectoId = url.searchParams.get('proyectoId')
     if (!proyectoId) {
