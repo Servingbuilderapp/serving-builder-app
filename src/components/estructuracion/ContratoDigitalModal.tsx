@@ -5,6 +5,11 @@ import { FileText, CheckCircle2, Lock, Shield, ArrowRight, ArrowLeft } from 'luc
 import { GlowButton } from '@/components/ui/GlowButton'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { PlanSeleccionado } from './PlanSelector'
+import {
+  ESCALA_EXITO_GENERAL,
+  TEXTO_CONVERSION_EXITO,
+  PLAZO_PAGO_EXITO_DIAS,
+} from '@/lib/comisionExito'
 
 export interface ContratoFirmado {
   nombreFirmante: string
@@ -107,6 +112,27 @@ export function ContratoDigitalModal({ plan, onContratoFirmado, onBack }: Contra
           <h5 className="font-bold text-slate-900 uppercase pt-2">CLÁUSULA QUINTA - CONDICIÓN SUSPENSIVA (DAY ZERO):</h5>
           <p>
             Las partes declaran expresamente que el término de cinco (5) días hábiles para la entrega del proyecto estructurado comenzará a contarse únicamente a partir del día hábil siguiente en que EL CLIENTE complete los tres (3) requisitos del <strong>Day Zero</strong> (Video Pitch de máx 3 min, Documento Actual del Proyecto y Formulario de 22 Preguntas).
+          </p>
+
+          <h5 className="font-bold text-slate-900 uppercase pt-2">CLÁUSULA SEXTA - COMISIÓN DE ÉXITO:</h5>
+          <p>
+            El valor pactado en la Cláusula Segunda corresponde únicamente al servicio de estructuración, formulación y búsqueda/encaje de convocatorias. En caso de que el proyecto sea aprobado y reciba desembolso de financiación como resultado de una postulación gestionada por EL PRESTADOR, EL CLIENTE reconocerá adicionalmente una <strong>comisión de éxito</strong> sobre el monto efectivamente desembolsado, según la siguiente escala:
+          </p>
+          <ul className="list-disc pl-5 space-y-1">
+            {ESCALA_EXITO_GENERAL.map((escalon) => (
+              <li key={escalon.etiqueta}>
+                <strong>{escalon.etiqueta}:</strong> {escalon.porcentaje}%
+              </li>
+            ))}
+          </ul>
+          <p>{TEXTO_CONVERSION_EXITO}</p>
+          <p>
+            La comisión será exigible y pagadera dentro de los <strong>{PLAZO_PAGO_EXITO_DIAS} días calendario</strong> siguientes a la fecha en que EL CLIENTE reciba el desembolso, o según el calendario de desembolsos propio de cada convocatoria o fondo, lo que resulte aplicable. Para postulaciones al <strong>Fondo Emprender</strong> aplica una escala distinta, detallada en los Términos y Condiciones del servicio.
+          </p>
+
+          <h5 className="font-bold text-slate-900 uppercase pt-2">CLÁUSULA SÉPTIMA - DOCUMENTOS QUE HACEN PARTE DEL CONTRATO:</h5>
+          <p>
+            Forman parte integral de este contrato los Términos y Condiciones del servicio publicados en la plataforma <strong>Arquitectura Digital</strong>, incluido el anexo de condiciones específicas para proyectos de Fondo Emprender. EL CLIENTE declara conocerlos y aceptarlos. En caso de discrepancia entre aquellos y el presente documento, prevalecerá lo aquí estipulado.
           </p>
         </div>
 

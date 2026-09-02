@@ -2,6 +2,12 @@
 
 import React, { Suspense, useState } from 'react'
 import { COBRO_COLOMBIA, COBRO_EXTERIOR, desglosarPrecio } from '@/lib/mediosDePago'
+import {
+  TEXTO_ESCALA_EXITO_GENERAL,
+  TEXTO_ESCALA_EXITO_FONDO_EMPRENDER,
+  TEXTO_CONVERSION_EXITO,
+  PLAZO_PAGO_EXITO_DIAS,
+} from '@/lib/comisionExito'
 import { useSearchParams } from 'next/navigation'
 import { GlowButton } from '@/components/ui/GlowButton'
 import { GlassCard } from '@/components/ui/GlassCard'
@@ -189,18 +195,12 @@ resultado de una postulación gestionada por ARQUITECTURA DIGITAL, el
 cliente reconocerá adicionalmente una comisión de éxito sobre el monto
 efectivamente desembolsado, según la siguiente escala:
 
-  - De $20.000 a $100.000 USD (aprox. $65.000.000 a $324.000.000 COP): 12%
-  - De $101.000 a $400.000 USD (aprox. $328.000.000 a $1.298.000.000 COP): 10%
-  - De $401.000 a $999.000 USD (aprox. $1.301.000.000 a $3.241.000.000 COP): 7%
-  - De $1.000.000 a $2.000.000 USD (aprox. $3.244.000.000 a $6.488.000.000 COP): 4%
+${TEXTO_ESCALA_EXITO_GENERAL}
 
-La conversión a pesos colombianos es referencial, calculada a la tasa de
-cambio vigente al momento de la firma de este contrato; la comisión se
-calculará siempre sobre el monto real desembolsado por la entidad
-financiadora, en la moneda en que dicho desembolso se realice.
+${TEXTO_CONVERSION_EXITO}
 
 La comisión será exigible y pagadera inmediatamente el cliente reciba el
-desembolso, dentro de un plazo máximo de diez (10) días calendario desde la
+desembolso, dentro de un plazo máximo de ${PLAZO_PAGO_EXITO_DIAS} días calendario desde la
 fecha de recepción del dinero, o según las estipulaciones y calendario de
 desembolsos propios de cada convocatoria o fondo, lo que resulte aplicable.
 
@@ -232,17 +232,14 @@ de Éxito general) únicamente para este tipo de proyecto:
    adicionalmente una comisión de éxito, calculada como un porcentaje sobre
    el monto de financiación aprobada, según el siguiente rango:
 
-   - Hasta $30.000.000 COP: 20%
-   - De $30.000.001 a $73.000.000 COP: 17%
-   - De $73.000.001 a $300.000.000 COP: 10%
-   - De $300.000.001 a $1.000.000.000 COP: 10%
+${TEXTO_ESCALA_EXITO_FONDO_EMPRENDER}
 
    Esta comisión de éxito es exigible y pagadera bajo las mismas condiciones
    de plazo establecidas en la Cláusula 11 para el resto de fuentes de
    financiamiento.
 
 12. VERACIDAD DE LA INFORMACIÓN
-Usted declara Usted declara que la información suministrada es veraz, completa y de su
+Usted declara que la información suministrada es veraz, completa y de su
 autoría o representación legítima, y que cuenta con la facultad para
 autorizar su tratamiento y contratar este servicio.
 
