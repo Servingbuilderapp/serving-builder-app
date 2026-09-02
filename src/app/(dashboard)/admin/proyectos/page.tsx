@@ -80,46 +80,10 @@ export default async function AdminProyectosPage() {
                         <MarcarPagadoButton proyectoId={p.id} />
                       )}
                       <Link
-                        href={`/admin/proyectos/${p.id}/arbol`}
+                        href={`/admin/proyectos/${p.id}`}
                         className="px-3 py-1.5 rounded-full bg-color-primary/10 text-color-primary text-xs font-bold hover:underline whitespace-nowrap"
                       >
-                        Árbol de problemas
-                      </Link>
-                      <Link
-                        href={`/admin/proyectos/${p.id}/objetivos`}
-                        className="px-3 py-1.5 rounded-full bg-color-primary/10 text-color-primary text-xs font-bold hover:underline whitespace-nowrap"
-                      >
-                        Árbol de objetivos
-                      </Link>
-                      <Link
-                        href={`/admin/proyectos/${p.id}/cadena-valor`}
-                        className="px-3 py-1.5 rounded-full bg-color-primary/10 text-color-primary text-xs font-bold hover:underline whitespace-nowrap"
-                      >
-                        Cadena de valor
-                      </Link>
-                      <Link
-                        href={`/admin/proyectos/${p.id}/presupuesto`}
-                        className="px-3 py-1.5 rounded-full bg-color-primary/10 text-color-primary text-xs font-bold hover:underline whitespace-nowrap"
-                      >
-                        Presupuesto
-                      </Link>
-                      <Link
-                        href={`/admin/proyectos/${p.id}/cronograma`}
-                        className="px-3 py-1.5 rounded-full bg-color-primary/10 text-color-primary text-xs font-bold hover:underline whitespace-nowrap"
-                      >
-                        Cronograma
-                      </Link>
-                      <Link
-                        href={`/admin/proyectos/${p.id}/postulaciones`}
-                        className="px-3 py-1.5 rounded-full bg-emerald-600/10 text-emerald-700 text-xs font-bold hover:underline whitespace-nowrap"
-                      >
-                        Postulaciones
-                      </Link>
-                      <Link
-                        href={`/admin/proyectos/${p.id}/replicas`}
-                        className="px-3 py-1.5 rounded-full bg-emerald-600/10 text-emerald-700 text-xs font-bold hover:underline whitespace-nowrap"
-                      >
-                        Réplicas
+                        Abrir proyecto
                       </Link>
                     </div>
                   </td>
