@@ -1212,13 +1212,17 @@ export function LandingClient({ user }: LandingClientProps) {
               </p>
             </div>
             <div className="lg:col-span-4 lg:text-right">
-              <Link
-                href="/dashboard"
+              <a
+                href={`https://wa.me/${TELEFONO_WHATSAPP}?text=${encodeURIComponent(
+                  'Hola, ya presenté un proyecto y quiero saber si se puede replicar en otras convocatorias.',
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className={`h-12 px-6 inline-flex items-center gap-2 rounded-lg bg-gradient-to-b from-rose-500 to-rose-600 text-white text-sm font-semibold hover:from-rose-500 hover:to-rose-700 shadow-rose-600/30 ${RELIEVE_BOTON}`}
               >
                 {t('w.replicas.boton')}
                 <ArrowUpRight className="h-4 w-4" />
-              </Link>
+              </a>
             </div>
           </div>
         </div>
