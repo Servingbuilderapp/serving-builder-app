@@ -1,613 +1,109 @@
-'use client'
+import React from 'react'
+import { redirect } from 'next/navigation'
+import { createClient } from '@/lib/supabase/server'
+import {
+  EstructuracionClient,
+  type PasoEstructuracion,
+} from '@/components/panel/EstructuracionClient'
 
-import React, { Suspense, useState } from 'react'
-import { COBRO_COLOMBIA, COBRO_EXTERIOR } from '@/lib/mediosDePago'
-import { useSearchParams } from 'next/navigation'
-import { GlowButton } from '@/components/ui/GlowButton'
-import { GlassCard } from '@/components/ui/GlassCard'
-import { CheckCircle2, ShieldCheck, Loader2 } from 'lucide-react'
-import { PayPalButtons } from '@paypal/react-paypal-js'
-import { cn } from '@/lib/utils'
-import { useTranslation } from '@/hooks/useTranslation'
+export const dynamic = 'force-dynamic'
 
-const TASA_COP_POR_USD = 3244 // Actualizar periódicamente según la TRM del día
+const CORREO_ADMIN = 'servingbuilderapp@gmail.com'
 
 /**
- * Modalidades de estructuración.
- * El identificador (esencial / completo) NO se cambia: es el que queda guardado
- * en la base de datos de los proyectos. Lo que cambia es el nombre visible.
+ * "Estructuración" del proyecto (equipo Serving).
+ *
+ * El Motor 1 guarda en `contenido_pasos_proyecto` el texto de cada paso, pero
+ * hasta ahora ninguna pantalla lo mostraba. Esta lo saca a la luz para que el
+ * equipo pueda leerlo y corregirlo antes de que se use en las convocatorias.
  */
-const PLANES: Record<
-  string,
-  { nombre: string; montoCop: number; resumen: string; incluye: string[] }
-> = {
-  esencial: {
-    nombre: 'Estructuración Estratégica',
-    montoCop: 12000000,
-    resumen: 'Formulación completa de tu proyecto y tres meses buscando convocatorias.',
-    incluye: [
-      'Diagnóstico incluido',
-      'Formulación completa del proyecto',
-      '3 meses de búsqueda de convocatorias',
-      'Encaje con los términos de referencia',
-      '3 meses adicionales de cortesía si no se gana nada',
-    ],
-  },
-  completo: {
-    nombre: 'Estructuración Élite',
-    montoCop: 17000000,
-    resumen: 'El acompañamiento más completo: seis meses de búsqueda y encaje prioritario.',
-    incluye: [
-      'Todo lo de la Estructuración Estratégica',
-      '6 meses de búsqueda de convocatorias',
-      'Encaje prioritario con los términos de referencia',
-      '6 meses adicionales de cortesía si no se gana nada',
-      'Atención prioritaria',
-    ],
-  },
-}
+export default async function PaginaEstructuracionInterna({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const { id } = await params
+  const supabase = await createClient()
 
-function calcularPrecioFondoEmprender(montoSolicitado: number) {
-  if (montoSolicitado <= 30000000) return 3500000
-  if (montoSolicitado <= 73000000) return 2300000
-  if (montoSolicitado <= 300000000) return 12000000
-  return 17000000
-}
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
-const TEXTO_CONTRATO = `AUTORIZACIÓN PARA EL TRATAMIENTO DE DATOS PERSONALES
-Y TÉRMINOS DEL SERVICIO DE DIAGNÓSTICO Y ESTRUCTURACIÓN DE PROYECTOS
+  if (!user) redirect('/login')
 
-1. RESPONSABLE DEL TRATAMIENTO
-SERVING PROYECTOS ESTRATÉGICOS SAS, [NIT], propietaria y operadora de la
-plataforma "Arquitectura Digital", con correo de contacto
-servingbuilderapp@gmail.com, es responsable del tratamiento de los datos
-personales que usted suministra a través de esta plataforma.
+  const esCorreoAdmin = (user.email || '').toLowerCase().trim() === CORREO_ADMIN
+  let permitido = esCorreoAdmin
 
-2. FINALIDAD DEL TRATAMIENTO
-Los datos personales, financieros y del proyecto que usted suministra serán
-utilizados exclusivamente para:
-  a) Elaborar el diagnóstico de viabilidad de su proyecto.
-  b) Realizar la estructuración, formulación técnica y documentación de su
-     proyecto conforme al plan contratado.
-  c) Identificar convocatorias, fondos, cooperantes internacionales y
-     entidades de financiamiento compatibles con su perfil, y acompañar la
-     postulación de su proyecto ante dichas fuentes una vez el cliente
-     entregue la información y documentación que cada una exija.
-  d) Contactarlo por correo electrónico o WhatsApp para dar seguimiento a su
-     proceso.
-  e) Fines administrativos, contables y de facturación del servicio
-     contratado.
+  if (!permitido) {
+    const { data: perfil } = await supabase
+      .from('users')
+      .select('role')
+      .eq('id', user.id)
+      .maybeSingle<{ role: string | null }>()
+    permitido = perfil?.role === 'admin'
+  }
 
-3. DATOS QUE SE RECOLECTAN
-Nombre, correo electrónico, número de teléfono/WhatsApp, información sobre
-su proyecto u organización, estado legal de la empresa, monto de
-financiamiento requerido, y demás información que usted suministre
-voluntariamente durante el diagnóstico y la estructuración.
+  if (!permitido) redirect('/dashboard')
 
-4. TRANSFERENCIA A TERCEROS
-Como parte necesaria del servicio, su información y la documentación de su
-proyecto podrán ser compartidas con los fondos, cooperantes, entidades
-gubernamentales o financiadores específicos ante quienes se postule su
-proyecto, únicamente con el fin de tramitar dicha postulación.
-No se venderá ni cederá su información a terceros con fines distintos a los
-aquí descritos.
+  const { data: proyecto } = await supabase
+    .from('proyectos_clientes_serving')
+    .select('id, nombre_iniciativa, nombre_cliente, correo_cliente')
+    .eq('id', id)
+    .maybeSingle<{
+      id: string
+      nombre_iniciativa: string | null
+      nombre_cliente: string | null
+      correo_cliente: string | null
+    }>()
 
-5. DERECHOS DEL TITULAR (Ley 1581 de 2012)
-Usted tiene derecho a conocer, actualizar, rectificar y solicitar la
-supresión de sus datos personales, así como a revocar esta autorización en
-cualquier momento, enviando su solicitud al correo
-servingbuilderapp@gmail.com.
+  if (!proyecto?.id) redirect('/admin/proyectos')
 
-6. VIGENCIA
-Sus datos serán conservados durante el tiempo que dure la relación
-comercial y el tiempo adicional que exijan las obligaciones legales,
-contables o fiscales aplicables.
+  const [pasosRes, contenidoRes, avanceRes] = await Promise.all([
+    supabase
+      .from('pasos_estructuracion')
+      .select('id, orden_secuencia, nombre_paso')
+      .order('orden_secuencia', { ascending: true }),
+    supabase
+      .from('contenido_pasos_proyecto')
+      .select('id_paso, contenido, advertencia')
+      .eq('id_proyecto', proyecto.id),
+    supabase
+      .from('avance_estructuracion_proyecto')
+      .select('paso_id, completado')
+      .eq('proyecto_id', proyecto.id),
+  ])
 
-7. CONDICIONES DEL SERVICIO CONTRATADO
-Al firmar y proceder con el pago del plan seleccionado, usted contrata el
-servicio de estructuración de proyecto descrito en la oferta, que incluye
-el proceso de formulación técnica y el período de búsqueda, encaje y
-acompañamiento para la postulación a convocatorias indicado en el plan
-elegido (3 o 6 meses, según el plan), sujeto a lo establecido en la
-Cláusula 9 sobre el alcance y límite de esta responsabilidad. Si al
-finalizar dicho período no se ha logrado la aprobación de financiamiento,
-ARQUITECTURA DIGITAL extenderá el período de búsqueda de convocatorias por
-el mismo tiempo adicional, sin costo extra, en los términos ofrecidos.
+  const mapaContenido = new Map(
+    (contenidoRes.data || []).map((c) => [
+      Number(c.id_paso),
+      {
+        contenido: c.contenido ? String(c.contenido) : '',
+        advertencia: c.advertencia ? String(c.advertencia) : null,
+      },
+    ]),
+  )
+  const mapaAvance = new Map(
+    (avanceRes.data || []).map((a) => [Number(a.paso_id), a.completado === true]),
+  )
 
-8. NATURALEZA DEL SERVICIO Y AUSENCIA DE GARANTÍA DE RESULTADO
-Los diagnósticos, calificaciones y análisis que muestra esta plataforma
-tienen como finalidad optimizar y fortalecer la estructuración de su
-proyecto. ARQUITECTURA DIGITAL no puede garantizar la aprobación,
-adjudicación o desembolso de ninguna subvención, convocatoria, beca o
-fuente de financiamiento, ya que dicha decisión depende exclusivamente de
-los analistas y comités evaluadores de cada entidad convocante, ajenos a
-esta plataforma.
-
-El resultado final de cada postulación dependerá de su esfuerzo,
-experiencia y capacidad de ejecución, combinados con la rapidez y
-tecnología que ARQUITECTURA DIGITAL aporta para producir proyectos más
-robustos, profesionales y con alta probabilidad de éxito. El servicio
-contratado incluye el derecho a que su proyecto sea presentado, sin
-restricción de cantidad, a todas las convocatorias que la plataforma
-identifique como compatibles durante el período contratado, siempre sujeto
-a que el cliente entregue oportunamente la información y documentación que
-cada convocatoria exija, conforme a la Cláusula 9.
-
-9. ALCANCE Y LÍMITE DE LA RESPONSABILIDAD DEL SERVICIO
-La responsabilidad de ARQUITECTURA DIGITAL consiste en: (i) identificar
-convocatorias y fuentes de financiamiento compatibles con el proyecto,
-(ii) realizar el encaje técnico entre el proyecto y cada convocatoria
-identificada, y (iii) entregar al cliente los Términos de Referencia (TDR)
-de dichas convocatorias en el menor tiempo posible.
-
-Una vez el cliente entrega la totalidad de la información y documentación
-que cada TDR exige, ARQUITECTURA DIGITAL acompaña al cliente hasta la
-radicación de la postulación. La consecución de los documentos,
-certificaciones, requisitos o información particular que cada convocatoria
-exija al postulante es responsabilidad exclusiva del cliente; ARQUITECTURA
-DIGITAL no es responsable de la demora o imposibilidad de reunir dichos
-requisitos.
-
-10. POLÍTICA DE NO DEVOLUCIÓN
-Una vez firmado este contrato y confirmado el pago, el valor pagado por el
-servicio de estructuración no es reembolsable bajo ninguna circunstancia,
-incluyendo la no obtención de financiamiento en las convocatorias
-postuladas, dado que el servicio contratado corresponde al trabajo de
-estructuración, encaje y acompañamiento descrito en este documento, y no a
-la obtención garantizada de un resultado final que depende de terceros.
-
-11. VALOR DEL SERVICIO Y COMISIÓN DE ÉXITO
-El valor del plan contratado corresponde únicamente al servicio de
-estructuración, formulación y búsqueda/encaje de convocatorias. En caso de
-que el proyecto sea aprobado y reciba desembolso de financiamiento como
-resultado de una postulación gestionada por ARQUITECTURA DIGITAL, el
-cliente reconocerá adicionalmente una comisión de éxito sobre el monto
-efectivamente desembolsado, según la siguiente escala:
-
-  - De $20.000 a $100.000 USD (aprox. $65.000.000 a $324.000.000 COP): 12%
-  - De $101.000 a $400.000 USD (aprox. $328.000.000 a $1.298.000.000 COP): 10%
-  - De $401.000 a $999.000 USD (aprox. $1.301.000.000 a $3.241.000.000 COP): 7%
-  - De $1.000.000 a $2.000.000 USD (aprox. $3.244.000.000 a $6.488.000.000 COP): 4%
-
-La conversión a pesos colombianos es referencial, calculada a la tasa de
-cambio vigente al momento de la firma de este contrato; la comisión se
-calculará siempre sobre el monto real desembolsado por la entidad
-financiadora, en la moneda en que dicho desembolso se realice.
-
-La comisión será exigible y pagadera inmediatamente el cliente reciba el
-desembolso, dentro de un plazo máximo de diez (10) días calendario desde la
-fecha de recepción del dinero, o según las estipulaciones y calendario de
-desembolsos propios de cada convocatoria o fondo, lo que resulte aplicable.
-
-Nota: en el caso específico de postulaciones al Fondo Emprender, la
-comisión de éxito se rige por condiciones diferentes a las aquí descritas,
-detalladas en el Anexo 1 de este contrato.
-
-ANEXO 1 — CONDICIONES ESPECÍFICAS PARA PROYECTOS DE FONDO EMPRENDER
-
-Para proyectos que se estructuren con el objetivo específico de postularse
-al Fondo Emprender, aplican las siguientes condiciones, que reemplazan lo
-establecido en la Cláusula 7 (Valor del Plan) y en la Cláusula 11 (Comisión
-de Éxito general) únicamente para este tipo de proyecto:
-
-1. Valor de estructuración: en lugar de los valores establecidos para los
-   planes Estructuración Estratégica o Estructuración Élite, el servicio de
-   estructuración, formulación y
-   acompañamiento para proyectos de Fondo Emprender tiene un valor fijo
-   según el rango de financiación solicitada, así:
-
-   - Hasta $30.000.000 COP: $3.500.000 COP
-   - De $30.000.001 a $73.000.000 COP: $2.300.000 COP
-   - De $73.000.001 a $300.000.000 COP: $12.000.000 COP
-   - De $300.000.001 a $1.000.000.000 COP: $17.000.000 COP
-
-2. Comisión de éxito: en caso de que el proyecto sea aprobado y reciba
-   desembolso por parte del Fondo Emprender, el cliente reconocerá
-   adicionalmente una comisión de éxito, calculada como un porcentaje sobre
-   el monto de financiación aprobada, según el siguiente rango:
-
-   - Hasta $30.000.000 COP: 20%
-   - De $30.000.001 a $73.000.000 COP: 17%
-   - De $73.000.001 a $300.000.000 COP: 10%
-   - De $300.000.001 a $1.000.000.000 COP: 10%
-
-   Esta comisión de éxito es exigible y pagadera bajo las mismas condiciones
-   de plazo establecidas en la Cláusula 11 para el resto de fuentes de
-   financiamiento.
-
-12. VERACIDAD DE LA INFORMACIÓN
-Usted declara Usted declara que la información suministrada es veraz, completa y de su
-autoría o representación legítima, y que cuenta con la facultad para
-autorizar su tratamiento y contratar este servicio.
-
-Al marcar la casilla de aceptación, usted confirma que ha leído y acepta
-este documento en su totalidad, y que dicha aceptación, junto con la fecha,
-hora e IP de la sesión, quedará registrada como constancia de firma
-electrónica.`
-
-function formatCOP(v: number) {
-  return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(v)
-}
-
-function ContratarContent() {
-  const { t } = useTranslation()
-  const searchParams = useSearchParams()
-  // Si no llega ningún plan en la dirección, se le muestran las opciones en vez
-  // de imponerle uno por defecto.
-  const [planSlug, setPlanSlug] = useState<string>(searchParams.get('plan') || '')
-  const montoFondoEmprender = Number(searchParams.get('monto')) || 30000000
-  const esFondoEmprender = planSlug === 'fondo_emprender'
-  const debeElegirPlan = !planSlug
-
-  const plan = esFondoEmprender
-    ? {
-        nombre: 'Estructuración — Fondo Emprender',
-        montoCop: calcularPrecioFondoEmprender(montoFondoEmprender),
-        resumen: 'Estructuración orientada específicamente a la postulación al Fondo Emprender.',
-        incluye: [] as string[],
-      }
-    : (PLANES[planSlug] || PLANES.esencial)
-  const montoUsd = Math.round(plan.montoCop / TASA_COP_POR_USD)
-
-  const [step, setStep] = useState<1 | 2>(1)
-  const [pais, setPais] = useState<'colombia' | 'internacional' | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [proyectoId, setProyectoId] = useState<string | null>(null)
-  const [passwordTemporal, setPasswordTemporal] = useState<string | null>(null)
-  const [error, setError] = useState('')
-  const [verticalDiagnostico, setVerticalDiagnostico] = useState<string | null>(null)
-  const [contratoLeido, setContratoLeido] = useState(false)
-
-  React.useEffect(() => {
-    const guardado = sessionStorage.getItem('diagnostico_vertical_principal')
-    if (guardado) setVerticalDiagnostico(guardado)
-  }, [])
-
-  const [formData, setFormData] = useState({
-    nombreCliente: '',
-    nombreIniciativa: '',
-    correoCliente: '',
-    whatsapp: '',
-    aceptaTerminos: false,
+  const pasos: PasoEstructuracion[] = (pasosRes.data || []).map((p) => {
+    const guardado = mapaContenido.get(Number(p.id))
+    return {
+      id: Number(p.id),
+      orden: Number(p.orden_secuencia ?? 0),
+      nombre: String(p.nombre_paso || 'Paso sin nombre'),
+      completado: Boolean(mapaAvance.get(Number(p.id))),
+      contenido: guardado?.contenido || '',
+      advertencia: guardado?.advertencia || null,
+    }
   })
 
-  const handleFirmar = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!formData.aceptaTerminos || !pais) return
-    setLoading(true)
-    setError('')
-    try {
-      const res = await fetch('/api/proyectos/crear', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          nombreCliente: formData.nombreCliente,
-          correoCliente: formData.correoCliente,
-          whatsapp: formData.whatsapp,
-          nombreIniciativa: formData.nombreIniciativa,
-          planPago: planSlug,
-          montoCop: plan.montoCop,
-          montoUsd,
-          pais,
-          verticalDiagnostico,
-        }),
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Error al crear el proyecto')
-      setProyectoId(data.proyectoId)
-      setPasswordTemporal(data.passwordTemporal || null)
-      setStep(2)
-    } catch (err: any) {
-      setError(err.message || 'Hubo un problema. Intenta de nuevo.')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const mensajeWhatsapp = 'Hola, firme el contrato para el plan ' + plan.nombre + ' (proyecto ' + proyectoId + '). Aqui esta mi comprobante de pago.'
-  const mensajeWhatsappUrl = 'https://wa.me/573227008727?text=' + encodeURIComponent(mensajeWhatsapp)
-
-  if (debeElegirPlan) {
-    return (
-      <div className="min-h-screen bg-color-base-100 py-16 px-4">
-        <div className="max-w-4xl mx-auto space-y-8">
-          <div className="text-center space-y-2">
-            <h1 className="text-2xl md:text-3xl font-black uppercase italic tracking-tighter text-color-base-content">
-              Elige tu modalidad
-            </h1>
-            <p className="text-color-base-content/60 text-sm max-w-xl mx-auto">
-              Las tres llevan tu proyecto hasta la postulación. Cambian el alcance del
-              acompañamiento y el tiempo de búsqueda de convocatorias.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {(['esencial', 'completo'] as const).map((slug) => {
-              const opcion = PLANES[slug]
-              const destacado = slug === 'completo'
-              return (
-                <GlassCard
-                  key={slug}
-                  className={cn(
-                    'p-7 flex flex-col gap-5',
-                    destacado && 'ring-2 ring-color-primary/50'
-                  )}
-                >
-                  <div className="space-y-1">
-                    <h2 className="text-xl font-black text-color-base-content">{opcion.nombre}</h2>
-                    <p className="text-color-base-content/60 text-sm">{opcion.resumen}</p>
-                  </div>
-                  <div className="text-2xl font-black text-color-primary">
-                    {formatCOP(opcion.montoCop)}
-                    <span className="text-xs font-bold text-color-base-content/50 ml-2">+ IVA</span>
-                  </div>
-                  <ul className="space-y-2 flex-1">
-                    {opcion.incluye.map((linea) => (
-                      <li
-                        key={linea}
-                        className="flex items-start gap-2 text-sm text-color-base-content/80"
-                      >
-                        <CheckCircle2 className="h-4 w-4 text-color-accent-pink shrink-0 mt-0.5" />
-                        <span>{linea}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <GlowButton className="w-full" onClick={() => setPlanSlug(slug)}>
-                    Elegir esta modalidad
-                  </GlowButton>
-                </GlassCard>
-              )
-            })}
-          </div>
-
-          <GlassCard className="p-6 flex flex-col md:flex-row md:items-center gap-4 justify-between">
-            <div>
-              <h3 className="font-black text-color-base-content">Fondo Emprender</h3>
-              <p className="text-color-base-content/60 text-sm">
-                Si tu proyecto se va a postular al Fondo Emprender, el valor depende del
-                monto que solicites.
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => setPlanSlug('fondo_emprender')}
-              className="shrink-0 px-6 py-3 rounded-xl border border-color-base-300 text-sm font-bold text-color-base-content hover:bg-color-base-200 transition-colors"
-            >
-              Ver condiciones
-            </button>
-          </GlassCard>
-        </div>
-      </div>
-    )
-  }
-
   return (
-    <div className="min-h-screen bg-color-base-100 py-16 px-4">
-      <div className="max-w-2xl mx-auto">
-        <GlassCard className="p-8 md:p-10 space-y-8">
-          <div className="text-center space-y-2">
-            <h1 className="text-2xl md:text-3xl font-black uppercase italic tracking-tighter text-color-base-content">
-              {plan.nombre}
-            </h1>
-            <p className="text-color-base-content/60 text-sm">
-              {formatCOP(plan.montoCop)} COP · aprox. ${montoUsd.toLocaleString('en-US')} USD
-            </p>
-          </div>
-
-          {step === 1 && (
-            <form onSubmit={handleFirmar} className="space-y-6">
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-color-base-content/70 mb-2">
-                    {t('contratar.campo_nombre')}
-                  </label>
-                  <input
-                    required
-                    value={formData.nombreCliente}
-                    onChange={(e) => setFormData({ ...formData, nombreCliente: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border border-color-base-300 text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-color-base-content/70 mb-2">
-                    {t('contratar.campo_proyecto')}
-                  </label>
-                  <input
-                    value={formData.nombreIniciativa}
-                    onChange={(e) => setFormData({ ...formData, nombreIniciativa: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border border-color-base-300 text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-color-base-content/70 mb-2">
-                    {t('contratar.campo_correo')}
-                  </label>
-                  <input
-                    required
-                    type="email"
-                    value={formData.correoCliente}
-                    onChange={(e) => setFormData({ ...formData, correoCliente: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border border-color-base-300 text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-color-base-content/70 mb-2">
-                    {t('contratar.campo_whatsapp')}
-                  </label>
-                  <input
-                    required
-                    value={formData.whatsapp}
-                    onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border border-color-base-300 text-sm"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-color-base-content/70 mb-2">
-                  {t('contratar.pregunta_pais')}
-                </label>
-                <div className="grid grid-cols-2 gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setPais('colombia')}
-                    className={`p-4 rounded-xl border text-sm font-bold transition-all ${pais === 'colombia' ? 'border-color-primary bg-color-primary/10' : 'border-color-base-300'}`}
-                  >
-                    {t('contratar.pais_colombia')}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setPais('internacional')}
-                    className={`p-4 rounded-xl border text-sm font-bold transition-all ${pais === 'internacional' ? 'border-color-primary bg-color-primary/10' : 'border-color-base-300'}`}
-                  >
-                    {t('contratar.pais_internacional')}
-                  </button>
-                </div>
-              </div>
-
-              <div className="p-5 rounded-2xl bg-color-base-content/5 border border-color-base-content/10 space-y-3">
-                <h4 className="text-xs font-black uppercase tracking-widest text-color-base-content">
-                  {t('contratar.titulo_contrato')}
-                </h4>
-                <div
-                  onScroll={(e) => {
-                    const el = e.currentTarget
-                    if (el.scrollTop + el.clientHeight >= el.scrollHeight - 10) {
-                      setContratoLeido(true)
-                    }
-                  }}
-                  className="text-xs text-color-base-content/70 max-h-56 overflow-y-auto leading-relaxed pr-2 whitespace-pre-line border border-color-base-content/10 rounded-xl p-3 bg-white"
-                >
-                  {TEXTO_CONTRATO}
-                </div>
-                {!contratoLeido && (
-                  <p className="text-[10px] text-amber-600 font-bold">
-                    {t('contratar.aviso_scroll')}
-                  </p>
-                )}
-                <label className={cn("flex items-start gap-3", contratoLeido ? "cursor-pointer" : "cursor-not-allowed opacity-50")}>
-                  <input
-                    type="checkbox"
-                    disabled={!contratoLeido}
-                    checked={formData.aceptaTerminos}
-                    onChange={(e) => setFormData({ ...formData, aceptaTerminos: e.target.checked })}
-                    className="mt-1"
-                  />
-                  <span className="text-xs font-bold text-color-base-content">
-                    {t('contratar.checkbox_acepto')}
-                  </span>
-                </label>
-              </div>
-
-              {error && <p className="text-xs text-red-500 font-bold">{error}</p>}
-
-              <GlowButton
-                type="submit"
-                disabled={!formData.aceptaTerminos || !pais || loading}
-                className="w-full py-4 text-sm font-black uppercase tracking-widest"
-              >
-                {loading ? <Loader2 className="h-5 w-5 animate-spin mx-auto" /> : t('contratar.boton_firmar')}
-              </GlowButton>
-            </form>
-          )}
-
-          {step === 2 && (
-            <div className="space-y-6 text-center">
-              <CheckCircle2 className="h-14 w-14 text-emerald-500 mx-auto" />
-              <h2 className="text-xl font-black text-color-base-content">{t('contratar.titulo_exito')}</h2>
-              {passwordTemporal && (
-                <div className="text-left p-5 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-2">
-                  <p className="text-xs font-black uppercase tracking-widest text-emerald-700">
-                    {t('contratar.acceso_titulo')}
-                  </p>
-                  <p className="text-sm text-color-base-content">
-                    {t('contratar.acceso_correo')} <strong>{formData.correoCliente}</strong>
-                  </p>
-                  <p className="text-sm text-color-base-content">
-                    {t('contratar.acceso_password')} <strong className="font-mono">{passwordTemporal}</strong>
-                  </p>
-                  <p className="text-xs text-color-base-content/60 pt-1">
-                    {t('contratar.acceso_nota_1')}{' '}
-                    <a href="/login" className="text-color-primary underline">/login</a>
-                    {t('contratar.acceso_nota_2')}
-                  </p>
-                </div>
-              )}
-
-              {/* Cómo se cobra se decide en src/lib/mediosDePago.ts, no aquí. */}
-              {pais === 'colombia' && COBRO_COLOMBIA.modo === 'transferencia' && COBRO_COLOMBIA.cuenta ? (
-                <div className="text-left p-6 rounded-2xl bg-color-base-content/5 border border-color-base-content/10 space-y-2">
-                  <p className="text-sm font-bold text-color-base-content">{t('contratar.transferencia_titulo')}</p>
-                  <p className="text-sm text-color-base-content/70">{t('contratar.banco_label')} {COBRO_COLOMBIA.cuenta.banco}</p>
-                  <p className="text-sm text-color-base-content/70">{t('contratar.cuenta_label')} {COBRO_COLOMBIA.cuenta.tipo} {COBRO_COLOMBIA.cuenta.numero}</p>
-                  <p className="text-sm text-color-base-content/70">{t('contratar.titular_label')} {COBRO_COLOMBIA.cuenta.titular} · NIT {COBRO_COLOMBIA.cuenta.nit}</p>
-                  <p className="text-sm text-color-base-content/70">{t('contratar.valor_label')} {formatCOP(plan.montoCop)}</p>
-                  <p className="text-xs text-color-base-content/50 pt-2">
-                    {t('contratar.transferencia_nota')}
-                  </p>
-                </div>
-              ) : pais === 'colombia' || !COBRO_EXTERIOR.paypal ? (
-                <div className="text-left p-6 rounded-2xl bg-color-base-content/5 border border-color-base-content/10 space-y-2">
-                  <p className="text-sm font-bold text-color-base-content">{t('contratar.factura_titulo')}</p>
-                  <p className="text-sm text-color-base-content/70 leading-relaxed">{t('contratar.factura_texto')}</p>
-                  <p className="text-sm text-color-base-content/70 pt-1">
-                    {t('contratar.valor_label')} {pais === 'colombia' ? formatCOP(plan.montoCop) : `$${montoUsd.toLocaleString('en-US')} USD`}
-                  </p>
-                </div>
-              ) : (
-                <div className="text-left p-6 rounded-2xl bg-color-base-content/5 border border-color-base-content/10 space-y-4">
-                  <p className="text-sm font-bold text-color-base-content">
-                    {t('contratar.pago_usd_prefijo')} ${montoUsd.toLocaleString('en-US')} USD {t('contratar.pago_usd_sufijo')}
-                  </p>
-                  <PayPalButtons
-                    style={{ layout: 'vertical' }}
-                    createOrder={(_data, actions) =>
-                      actions.order.create({
-                        intent: 'CAPTURE',
-                        purchase_units: [
-                          {
-                            amount: { currency_code: 'USD', value: montoUsd.toString() },
-                            description: plan.nombre + ' - Arquitectura Digital',
-                          },
-                        ],
-                      })
-                    }
-                    onApprove={async (_data, actions) => {
-                      if (!actions.order) return
-                      await actions.order.capture()
-                      alert(t('contratar.paypal_alert'))
-                    }}
-                  />
-                </div>
-              )}
-
-              
-                <a href={mensajeWhatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-color-primary hover:underline"
-              >
-                {COBRO_COLOMBIA.modo === 'transferencia' && COBRO_COLOMBIA.cuenta
-                  ? t('contratar.boton_whatsapp')
-                  : t('contratar.boton_whatsapp_factura')}
-              </a>
-
-              <div className="flex items-center justify-center gap-2 text-[10px] text-color-base-content/40 uppercase tracking-widest font-black pt-4">
-                <ShieldCheck className="h-3 w-3" />
-                {t('contratar.footer_seguridad')}
-              </div>
-            </div>
-          )}
-        </GlassCard>
-      </div>
-    </div>
-  )
-}
-
-export default function ContratarPage() {
-  return (
-    <Suspense fallback={null}>
-      <ContratarContent />
-    </Suspense>
+    <EstructuracionClient
+      proyectoId={String(proyecto.id)}
+      nombreProyecto={proyecto.nombre_iniciativa || 'Proyecto sin nombre'}
+      nombreCliente={proyecto.nombre_cliente || proyecto.correo_cliente || ''}
+      pasosIniciales={pasos}
+    />
   )
 }
