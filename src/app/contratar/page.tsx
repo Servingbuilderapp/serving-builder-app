@@ -47,11 +47,29 @@ const PLANES: Record<
   },
 }
 
+/**
+ * Fondo Emprender cobra distinto a las dos modalidades normales, porque por
+ * debajo de cierto monto no se hace la estructuración completa.
+ *
+ * Los escalones (todos + IVA):
+ *   hasta $60.000.000             -> sin costo de estructuración
+ *   de $60.000.001 a $70.000.000  ->  $2.000.000
+ *   de $70.000.001 a $150.000.000 ->  $7.000.000
+ *   más de $150.000.000           -> $10.000.000
+ *
+ * El primer escalón es CERO a propósito: en proyectos pequeños no se cobra la
+ * estructuración, se gana con la comisión de éxito si el proyecto es aprobado.
+ */
+export const ESCALONES_FONDO_EMPRENDER = [
+  { hasta: 60000000, valor: 0, etiqueta: 'Hasta $60.000.000', precio: 'Sin costo de estructuración' },
+  { hasta: 70000000, valor: 2000000, etiqueta: 'De $60.000.001 a $70.000.000', precio: '$2.000.000 + IVA' },
+  { hasta: 150000000, valor: 7000000, etiqueta: 'De $70.000.001 a $150.000.000', precio: '$7.000.000 + IVA' },
+  { hasta: Infinity, valor: 10000000, etiqueta: 'Más de $150.000.000', precio: '$10.000.000 + IVA' },
+]
+
 function calcularPrecioFondoEmprender(montoSolicitado: number) {
-  if (montoSolicitado <= 30000000) return 3500000
-  if (montoSolicitado <= 73000000) return 2300000
-  if (montoSolicitado <= 300000000) return 12000000
-  return 17000000
+  const escalon = ESCALONES_FONDO_EMPRENDER.find((e) => montoSolicitado <= e.hasta)
+  return escalon ? escalon.valor : 10000000
 }
 
 const TEXTO_CONTRATO = `AUTORIZACIÓN PARA EL TRATAMIENTO DE DATOS PERSONALES
@@ -203,10 +221,11 @@ de Éxito general) únicamente para este tipo de proyecto:
    acompañamiento para proyectos de Fondo Emprender tiene un valor fijo
    según el rango de financiación solicitada, así:
 
-   - Hasta $30.000.000 COP: $3.500.000 COP + IVA
-   - De $30.000.001 a $73.000.000 COP: $2.300.000 COP + IVA
-   - De $73.000.001 a $300.000.000 COP: $12.000.000 COP + IVA
-   - De $300.000.001 a $1.000.000.000 COP: $17.000.000 COP + IVA
+   - Hasta $60.000.000 COP: sin costo de estructuración (solo aplica la
+     comisión de éxito del numeral 2)
+   - De $60.000.001 a $70.000.000 COP: $2.000.000 COP + IVA
+   - De $70.000.001 a $150.000.000 COP: $7.000.000 COP + IVA
+   - Más de $150.000.000 COP: $10.000.000 COP + IVA
 
 2. Comisión de éxito: en caso de que el proyecto sea aprobado y reciba
    desembolso por parte del Fondo Emprender, el cliente reconocerá
@@ -382,6 +401,13 @@ function ContratarContent() {
                 Si tu proyecto se va a postular al Fondo Emprender, el valor depende del
                 monto que solicites.
               </p>
+              <ul className="mt-3 space-y-1 text-sm text-color-base-content/80">
+                {ESCALONES_FONDO_EMPRENDER.map((e) => (
+                  <li key={e.etiqueta}>
+                    {e.etiqueta}: <strong>{e.precio}</strong>
+                  </li>
+                ))}
+              </ul>
             </div>
             <button
               type="button"
@@ -405,7 +431,9 @@ function ContratarContent() {
               {plan.nombre}
             </h1>
             <p className="text-color-base-content/60 text-sm">
-              {desglosarPrecio(plan.montoCop).baseConSufijo} · {desglosarPrecio(plan.montoCop).totalConEtiqueta} · aprox. ${montoUsd.toLocaleString('en-US')} USD
+              {plan.montoCop === 0
+                ? 'Sin costo de estructuración · solo comisión de éxito si el proyecto es aprobado'
+                : `${desglosarPrecio(plan.montoCop).baseConSufijo} · ${desglosarPrecio(plan.montoCop).totalConEtiqueta} · aprox. $${montoUsd.toLocaleString('en-US')} USD`}
             </p>
           </div>
 
@@ -556,6 +584,14 @@ function ContratarContent() {
                     <p className="text-sm font-bold text-color-base-content">{t('contratar.transferencia_titulo')}</p>
                     {(() => {
                       const precio = desglosarPrecio(plan.montoCop)
+                      if (precio.base === 0) {
+                        return (
+                          <p className="text-sm text-color-base-content/70 mt-1">
+                            No hay que pagar nada por la estructuración. Solo se cobra la
+                            comisión de éxito si el proyecto resulta aprobado y desembolsado.
+                          </p>
+                        )
+                      }
                       if (precio.anticipoConIva === 0) {
                         return (
                           <p className="text-sm text-color-base-content/70 mt-1">
@@ -622,6 +658,14 @@ function ContratarContent() {
                   <p className="text-sm text-color-base-content/70 leading-relaxed">{t('contratar.factura_texto')}</p>
                   {(() => {
                     const precio = desglosarPrecio(plan.montoCop)
+                    if (precio.base === 0) {
+                      return (
+                        <p className="text-sm text-color-base-content/70 pt-1">
+                          No hay que pagar nada por la estructuración. Solo se cobra la
+                          comisión de éxito si el proyecto resulta aprobado y desembolsado.
+                        </p>
+                      )
+                    }
                     if (precio.anticipoConIva === 0) {
                       return (
                         <p className="text-sm text-color-base-content/70 pt-1">

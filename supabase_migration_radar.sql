@@ -66,6 +66,44 @@ ALTER TABLE public.biblioteca_convocatorias
   ADD COLUMN IF NOT EXISTS origen_ficha TEXT NOT NULL DEFAULT 'motor',
   ADD COLUMN IF NOT EXISTS cargada_por TEXT;
 
+-- ---------------------------------------------------------------------------
+-- ARREGLO: columnas que ya existían como texto suelto
+--
+-- En la base ya había paises_elegibles y tipo_postulante creadas como TEXT
+-- (una sola cadena), de una carga anterior. Como arriba dice "IF NOT EXISTS",
+-- Postgres las deja como estaban y después el índice falla, porque un índice
+-- GIN no sabe indexar texto suelto.
+--
+-- Esto las pasa a lista (TEXT[]) sin perder lo que ya tuvieran: lo que estaba
+-- escrito separado por comas queda como los elementos de la lista.
+-- ---------------------------------------------------------------------------
+DO $$
+DECLARE
+  columna TEXT;
+BEGIN
+  FOREACH columna IN ARRAY ARRAY['paises_elegibles', 'tipo_postulante']
+  LOOP
+    IF EXISTS (
+      SELECT 1 FROM information_schema.columns
+      WHERE table_schema = 'public'
+        AND table_name = 'biblioteca_convocatorias'
+        AND column_name = columna
+        AND data_type <> 'ARRAY'
+    ) THEN
+      EXECUTE format('ALTER TABLE public.biblioteca_convocatorias ALTER COLUMN %I DROP DEFAULT', columna);
+      -- sin subconsulta: en un USING de ALTER COLUMN no se permiten
+      EXECUTE format(
+        'ALTER TABLE public.biblioteca_convocatorias ALTER COLUMN %I TYPE TEXT[] USING '
+        || 'CASE WHEN %I IS NULL OR btrim(%I::text) = '''' THEN ''{}''::TEXT[] '
+        || 'ELSE string_to_array(btrim(regexp_replace(%I::text, ''\s*,\s*'', '','', ''g'')), '','') END',
+        columna, columna, columna, columna);
+      EXECUTE format('ALTER TABLE public.biblioteca_convocatorias ALTER COLUMN %I SET DEFAULT ''{}''::TEXT[]', columna);
+      RAISE NOTICE 'La columna % pasó de texto a lista', columna;
+    END IF;
+  END LOOP;
+END $$;
+
+
 ALTER TABLE public.biblioteca_convocatorias
   DROP CONSTRAINT IF EXISTS chk_mes_apertura;
 ALTER TABLE public.biblioteca_convocatorias
@@ -128,15 +166,19 @@ CREATE INDEX IF NOT EXISTS idx_convocatoria_documentos_conv
 
 ALTER TABLE public.convocatoria_documentos ENABLE ROW LEVEL SECURITY;
 
+-- Quién puede LEER: cualquiera que haya iniciado sesión. Es el mismo patrón
+-- que ya usan las demás tablas del proyecto.
+--
+-- Quién puede ESCRIBIR: nadie por esta vía. No se crea ninguna política de
+-- escritura a propósito — los documentos solo entran por /api/convocatorias/
+-- documentos, que usa la llave de servicio (pasa por encima de RLS) y tiene
+-- su propio candado de equipo. Así, aunque alguien tenga sesión, no puede
+-- meter ni borrar pliegos desde fuera.
 DROP POLICY IF EXISTS "documentos solo equipo" ON public.convocatoria_documentos;
-CREATE POLICY "documentos solo equipo"
-  ON public.convocatoria_documentos FOR ALL
-  USING (
-    EXISTS (
-      SELECT 1 FROM public.users u
-      WHERE u.id = auth.uid() AND u.role = 'admin'
-    )
-  );
+DROP POLICY IF EXISTS "documentos lectura autenticada" ON public.convocatoria_documentos;
+CREATE POLICY "documentos lectura autenticada"
+  ON public.convocatoria_documentos FOR SELECT
+  USING (auth.role() = 'authenticated');
 
 
 -- ---------------------------------------------------------------------------
@@ -187,15 +229,13 @@ CREATE INDEX IF NOT EXISTS idx_financiadores_excluidos
 
 ALTER TABLE public.financiadores ENABLE ROW LEVEL SECURITY;
 
+-- Misma regla que los documentos: leer con sesión, escribir solo por la ruta
+-- con llave de servicio.
 DROP POLICY IF EXISTS "financiadores solo equipo" ON public.financiadores;
-CREATE POLICY "financiadores solo equipo"
-  ON public.financiadores FOR ALL
-  USING (
-    EXISTS (
-      SELECT 1 FROM public.users u
-      WHERE u.id = auth.uid() AND u.role = 'admin'
-    )
-  );
+DROP POLICY IF EXISTS "financiadores lectura autenticada" ON public.financiadores;
+CREATE POLICY "financiadores lectura autenticada"
+  ON public.financiadores FOR SELECT
+  USING (auth.role() = 'authenticated');
 
 
 -- ---------------------------------------------------------------------------
