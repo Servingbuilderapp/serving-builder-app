@@ -7,6 +7,7 @@ import {
   AlertTriangle,
   ArrowRight,
   Check,
+  ChevronDown,
   Clock,
   MessageSquare,
 } from 'lucide-react'
@@ -69,6 +70,7 @@ export function AvanceProyecto({ datos }: { datos: DatosAvance }) {
   const [pasos, setPasos] = useState<PasoAvance[]>(datos.pasos)
   const [porcentaje, setPorcentaje] = useState<number>(datos.porcentaje)
   const [soloPorReforzar, setSoloPorReforzar] = useState(false)
+  const [abiertas, setAbiertas] = useState<string[]>([])
 
   const proyectoId = datos.proyecto.id
 
@@ -155,7 +157,12 @@ export function AvanceProyecto({ datos }: { datos: DatosAvance }) {
   const offset = circunferencia - (porcentaje / 100) * circunferencia
 
   const renglon = (paso: PasoAvance) => (
-    <li key={paso.id} className="border-b border-[#F2F5FA] px-5 py-3 last:border-b-0">
+    <li
+      key={paso.id}
+      className={`border-b border-[#F2F5FA] px-5 py-3 last:border-b-0 ${
+        pasoActual && paso.id === pasoActual.id ? 'bg-[#F2F6FE]' : ''
+      }`}
+    >
       <div className="flex items-start gap-3">
         <span
           className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${
@@ -167,9 +174,22 @@ export function AvanceProyecto({ datos }: { datos: DatosAvance }) {
 
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <span className={`text-[13.5px] ${paso.completado ? 'text-[#0B2A4A]' : 'text-[#94A3B8]'}`}>
+            <span
+              className={`text-[13.5px] ${
+                paso.completado
+                  ? 'text-[#0B2A4A]'
+                  : pasoActual && paso.id === pasoActual.id
+                    ? 'font-semibold text-[#1D4ED8]'
+                    : 'text-[#94A3B8]'
+              }`}
+            >
               {paso.nombre}
             </span>
+            {pasoActual && paso.id === pasoActual.id ? (
+              <span className="shrink-0 rounded-full bg-[#1D4ED8] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
+                Aquí vamos
+              </span>
+            ) : null}
             {paso.completado && paso.advertencia ? (
               <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-[#8A5307]" />
             ) : null}
@@ -304,15 +324,48 @@ export function AvanceProyecto({ datos }: { datos: DatosAvance }) {
           ETAPAS.map((etapa) => {
             const dentro = visibles.filter((p) => p.orden >= etapa.desde && p.orden <= etapa.hasta)
             if (dentro.length === 0) return null
+
+            const tieneElActual = Boolean(
+              pasoActual && pasoActual.orden >= etapa.desde && pasoActual.orden <= etapa.hasta
+            )
+            const tocada = abiertas.includes(etapa.nombre)
+            // Por defecto solo se despliega la etapa en la que va el equipo:
+            // así no se ve una lista larguísima de renglones seguidos.
+            const abierta = tocada ? !tieneElActual : tieneElActual
+            const hechos = dentro.filter((p) => p.completado).length
+            const terminada = hechos === dentro.length
+
             return (
               <div key={etapa.nombre}>
-                <div className="flex items-center gap-2 border-b border-[#EEF2F8] bg-[#F8FAFD] px-5 py-2">
-                  <span className="h-2 w-2 rounded-full" style={{ backgroundColor: etapa.color }} />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setAbiertas((actuales) =>
+                      actuales.includes(etapa.nombre)
+                        ? actuales.filter((n) => n !== etapa.nombre)
+                        : [...actuales, etapa.nombre]
+                    )
+                  }
+                  className="flex w-full items-center gap-2 border-b border-[#EEF2F8] bg-[#F8FAFD] px-5 py-3 text-left hover:bg-[#F2F6FE]"
+                >
+                  <span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: etapa.color }} />
                   <span className="text-[11px] font-bold uppercase tracking-wider text-[#5B6B84]">
                     {etapa.nombre}
                   </span>
-                </div>
-                <ul>{dentro.map((paso) => renglon(paso))}</ul>
+                  <span
+                    className={`ml-auto shrink-0 text-[11.5px] font-semibold ${
+                      terminada ? 'text-[#186A46]' : tieneElActual ? 'text-[#1D4ED8]' : 'text-[#94A3B8]'
+                    }`}
+                  >
+                    {terminada ? 'Lista' : tieneElActual ? 'En curso' : 'Pendiente'}
+                  </span>
+                  <ChevronDown
+                    className={`h-4 w-4 shrink-0 text-[#94A3B8] transition-transform ${
+                      abierta ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+                {abierta ? <ul>{dentro.map((paso) => renglon(paso))}</ul> : null}
               </div>
             )
           })
