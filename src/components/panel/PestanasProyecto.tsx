@@ -8,6 +8,7 @@ import {
   CalendarRange,
   Coins,
   Copy,
+  FileText,
   LayoutGrid,
   ListTree,
   Send,
@@ -26,7 +27,8 @@ import {
 
 export const PESTANAS = [
   { clave: '', nombre: 'Ficha', icono: LayoutGrid },
-  { clave: 'arbol', nombre: 'Árbol de problemas', icono: ListTree },
+  { clave: 'estructuracion', nombre: 'Estructuración', icono: FileText },
+  { clave: 'arbol', nombre: 'Problemas', icono: ListTree },
   { clave: 'objetivos', nombre: 'Objetivos', icono: Target },
   { clave: 'cadena-valor', nombre: 'Cadena de valor', icono: Workflow },
   { clave: 'presupuesto', nombre: 'Presupuesto', icono: Coins },
