@@ -1,146 +1,79 @@
 import React from 'react'
-import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { MarcarPagadoButton } from '@/components/admin/MarcarPagadoButton'
+import {
+  PostulacionesClient,
+  type Postulacion,
+  type ConvocatoriaOpcion,
+  type Requisito,
+} from '@/components/admin/PostulacionesClient'
 
 export const dynamic = 'force-dynamic'
 
-export default async function AdminProyectosPage() {
+const CORREO_ADMIN = 'servingbuilderapp@gmail.com'
+
+/** Motor 4 — pantalla interna del equipo para preparar y radicar postulaciones. */
+export default async function PostulacionesPage({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const { id } = await params
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user || user.email?.toLowerCase() !== 'servingbuilderapp@gmail.com') {
-    redirect('/dashboard')
-  }
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
-  const { data: proyectos } = await supabase
+  if (!user || user.email?.toLowerCase() !== CORREO_ADMIN) redirect('/dashboard')
+
+  const { data: proyecto } = await supabase
     .from('proyectos_clientes_serving')
-    .select('id, nombre_cliente, correo_cliente, telefono_whatsapp, nombre_iniciativa, plan_pago, monto_solicitado_cop, monto_solicitado_usd, estado_actual, pasarela_pago, created_at')
-    .order('created_at', { ascending: false })
+    .select('id, nombre_iniciativa')
+    .eq('id', id)
+    .maybeSingle()
+
+  if (!proyecto) redirect('/admin/proyectos')
+
+  const { data: postulaciones } = await supabase
+    .from('postulaciones')
+    .select(
+      'id, biblioteca_id, convocatoria_nombre, entidad, fecha_cierre, estado, puntaje_tecnica, puntaje_impacto, puntaje_capacidades, puntaje_sostenibilidad, puntaje_replicabilidad, puntaje_total, veredicto, corrida, mejoras_json, adaptaciones_json, carta_intencion, alertas'
+    )
+    .eq('proyecto_id', id)
+    .order('fecha_cierre', { ascending: true, nullsFirst: false })
+
+  const ids = (postulaciones || []).map((p) => p.id)
+
+  type FilaRequisito = Requisito & { postulacion_id: string }
+
+  const { data: requisitos } = ids.length
+    ? await supabase
+        .from('postulacion_requisitos')
+        .select('id, postulacion_id, requisito, tipo, obligatorio, cumplido, responsable, nota')
+        .in('postulacion_id', ids)
+        .order('orden', { ascending: true })
+    : { data: [] as FilaRequisito[] }
+
+  const filas = (requisitos || []) as FilaRequisito[]
+
+  const conRequisitos: Postulacion[] = (postulaciones || []).map((p) => ({
+    ...(p as unknown as Omit<Postulacion, 'requisitos'>),
+    requisitos: filas.filter((r) => r.postulacion_id === p.id),
+  }))
+
+  const { data: convocatorias } = await supabase
+    .from('biblioteca_convocatorias')
+    .select('id, nombre, entidad, fecha_cierre')
+    .order('fecha_cierre', { ascending: true, nullsFirst: false })
+    .limit(300)
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-6 md:p-8 space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-color-base-content">Proyectos de Clientes</h1>
-        <p className="text-color-base-content/60 text-sm mt-1">
-          Confirma el pago de cada proyecto para activar su estructuración.
-        </p>
-      </div>
-
-      <div className="overflow-x-auto rounded-2xl border border-color-base-content/10">
-        <table className="w-full text-sm">
-          <thead className="bg-color-base-content/5">
-            <tr className="text-left">
-              <th className="p-3 font-black text-xs uppercase tracking-wider">Cliente</th>
-              <th className="p-3 font-black text-xs uppercase tracking-wider">Proyecto</th>
-              <th className="p-3 font-black text-xs uppercase tracking-wider">Plan</th>
-              <th className="p-3 font-black text-xs uppercase tracking-wider">Monto</th>
-              <th className="p-3 font-black text-xs uppercase tracking-wider">Estado</th>
-              <th className="p-3 font-black text-xs uppercase tracking-wider">Acción</th>
-              <th className="p-3 font-black text-xs uppercase tracking-wider">Portal Réplica</th>
-            </tr>
-          </thead>
-          <tbody>
-            {(proyectos || []).map((p) => {
-              const telefonoLimpio = (p.telefono_whatsapp || '').replace(/[^0-9]/g, '')
-              const mensajeAdmin = `Hola ${p.nombre_cliente}, te escribimos de Arquitectura Digital sobre el Portal Réplica para tu proyecto "${p.nombre_iniciativa}".`
-              const linkPortalReplica = telefonoLimpio
-                ? `https://wa.me/${telefonoLimpio}?text=${encodeURIComponent(mensajeAdmin)}`
-                : null
-
-              return (
-                <tr key={p.id} className="border-t border-color-base-content/5">
-                  <td className="p-3">
-                    <div className="font-bold">{p.nombre_cliente}</div>
-                    <div className="text-color-base-content/50 text-xs">{p.correo_cliente}</div>
-                    <div className="text-color-base-content/50 text-xs">{p.telefono_whatsapp}</div>
-                  </td>
-                  <td className="p-3">{p.nombre_iniciativa}</td>
-                  <td className="p-3">{p.plan_pago}</td>
-                  <td className="p-3">
-                    {p.monto_solicitado_cop
-                      ? new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(p.monto_solicitado_cop)
-                      : p.monto_solicitado_usd
-                      ? `$${p.monto_solicitado_usd} USD`
-                      : '-'}
-                  </td>
-                  <td className="p-3">
-                    <span className={
-                      p.estado_actual === 'pagado'
-                        ? 'px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold'
-                        : 'px-2 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-bold'
-                    }>
-                      {p.estado_actual}
-                    </span>
-                  </td>
-                  <td className="p-3">
-                    <div className="flex flex-col gap-2 items-start">
-                      {p.estado_actual !== 'pagado' && (
-                        <MarcarPagadoButton proyectoId={p.id} />
-                      )}
-                      <Link
-                        href={`/admin/proyectos/${p.id}/arbol`}
-                        className="px-3 py-1.5 rounded-full bg-color-primary/10 text-color-primary text-xs font-bold hover:underline whitespace-nowrap"
-                      >
-                        Árbol de problemas
-                      </Link>
-                      <Link
-                        href={`/admin/proyectos/${p.id}/objetivos`}
-                        className="px-3 py-1.5 rounded-full bg-color-primary/10 text-color-primary text-xs font-bold hover:underline whitespace-nowrap"
-                      >
-                        Árbol de objetivos
-                      </Link>
-                      <Link
-                        href={`/admin/proyectos/${p.id}/cadena-valor`}
-                        className="px-3 py-1.5 rounded-full bg-color-primary/10 text-color-primary text-xs font-bold hover:underline whitespace-nowrap"
-                      >
-                        Cadena de valor
-                      </Link>
-                      <Link
-                        href={`/admin/proyectos/${p.id}/presupuesto`}
-                        className="px-3 py-1.5 rounded-full bg-color-primary/10 text-color-primary text-xs font-bold hover:underline whitespace-nowrap"
-                      >
-                        Presupuesto
-                      </Link>
-                      <Link
-                        href={`/admin/proyectos/${p.id}/cronograma`}
-                        className="px-3 py-1.5 rounded-full bg-color-primary/10 text-color-primary text-xs font-bold hover:underline whitespace-nowrap"
-                      >
-                        Cronograma
-                      </Link>
-                      <Link
-                        href={`/admin/proyectos/${p.id}/postulaciones`}
-                        className="px-3 py-1.5 rounded-full bg-emerald-600/10 text-emerald-700 text-xs font-bold hover:underline whitespace-nowrap"
-                      >
-                        Postulaciones
-                      </Link>
-                      <Link
-                        href={`/admin/proyectos/${p.id}/replicas`}
-                        className="px-3 py-1.5 rounded-full bg-emerald-600/10 text-emerald-700 text-xs font-bold hover:underline whitespace-nowrap"
-                      >
-                        Réplicas
-                      </Link>
-                    </div>
-                  </td>
-                  <td className="p-3">
-                    {linkPortalReplica && (
-                      <a
-                        href={linkPortalReplica}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-3 py-1.5 rounded-full bg-color-primary/10 text-color-primary text-xs font-bold hover:underline whitespace-nowrap"
-                      >
-                        Ofrecer Portal Réplica
-                      </a>
-                    )}
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <PostulacionesClient
+      proyectoId={String(proyecto.id)}
+      nombreProyecto={String(proyecto.nombre_iniciativa || 'Proyecto sin nombre')}
+      postulaciones={conRequisitos}
+      convocatorias={(convocatorias || []) as ConvocatoriaOpcion[]}
+    />
   )
 }
