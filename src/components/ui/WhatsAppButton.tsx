@@ -1,11 +1,32 @@
 'use client'
 
 import React from 'react'
+import { usePathname } from 'next/navigation'
 import { MessageCircle } from 'lucide-react'
 import { useTranslation } from '@/hooks/useTranslation'
 
+/**
+ * Rutas del panel donde NO va la burbuja: adentro el cliente ya tiene su propio
+ * botón para hablar con el estructurador, y la burbuja verde se le montaba
+ * encima. La burbuja se queda en el website público, que es donde sirve.
+ */
+const RUTAS_DEL_PANEL = [
+  '/dashboard',
+  '/mi-proyecto',
+  '/ideas',
+  '/admin',
+  '/apps',
+  '/plans',
+  '/profile',
+  '/settings',
+]
+
 export function WhatsAppButton() {
   const { language } = useTranslation()
+  const ruta = usePathname() || ''
+
+  if (RUTAS_DEL_PANEL.some((r) => ruta === r || ruta.startsWith(`${r}/`))) return null
+
   const phoneNumber = '573227008727'
   const message = language === 'en' 
     ? 'Hello, I need support with Arquitectura Digital de Proyectos' 
