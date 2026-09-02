@@ -81,17 +81,17 @@ export function ContratoDigitalModal({ plan, onContratoFirmado, onBack }: Contra
           </h4>
 
           <p>
-            Entre los suscritos a saber: <strong>ARQUITECTURA DIGITAL S.A.S.</strong>, en adelante EL PRESTADOR, y el usuario identificado en la firma del presente documento, en adelante EL CLIENTE, se celebra el presente contrato sujeto a las siguientes cláusulas:
+            Entre los suscritos a saber: <strong>SERVING PROYECTOS ESTRATÉGICOS S.A.S.</strong>, NIT 901.972.451-7, en adelante EL PRESTADOR, y el usuario identificado en la firma del presente documento, en adelante EL CLIENTE, se celebra el presente contrato sujeto a las siguientes cláusulas:
           </p>
 
           <h5 className="font-bold text-slate-900 uppercase pt-2">CLÁUSULA PRIMERA - OBJETO:</h5>
           <p>
-            EL PRESTADOR se compromete a realizar la estructuración técnica del proyecto del CLIENTE bajo metodologías estandarizadas (Marco Lógico, Ficha MGA o matriz técnica exigida por cooperantes y fondos de financiación), entregando la documentación final en un plazo máximo de <strong>treinta (30) días calendario</strong> a partir del cumplimiento total del <strong>Day Zero</strong>.
+            EL PRESTADOR se compromete a realizar la estructuración técnica del proyecto del CLIENTE bajo metodologías estandarizadas (Marco Lógico, Ficha MGA o matriz técnica exigida por cooperantes y fondos de financiación), entregando la documentación final en un plazo máximo de <strong>cinco (5) días hábiles</strong> a partir del cumplimiento total del <strong>Day Zero</strong>.
           </p>
 
           <h5 className="font-bold text-slate-900 uppercase pt-2">CLÁUSULA SEGUNDA - VALOR Y FORMA DE PAGO:</h5>
           <p>
-            El valor acordado para el plan seleccionado (<strong>{plan.nombre}</strong>) es de <strong>{plan.precioTotalDisplay}</strong>. {plan.id === 'esencial' ? 'EL CLIENTE realiza un pago inicial de $7.000.000 COP para iniciar la estructuración y podrá activar los módulos de búsqueda según su conveniencia.' : 'Incluye período de acompañamiento activo y garantías de postulación.'}
+            El valor acordado para el plan seleccionado (<strong>{plan.nombre}</strong>) es de <strong>{plan.precioTotalDisplay}</strong>. El pago se realiza en dos contados iguales de <strong>{plan.pagoInicial}</strong> (IVA incluido): el primero al firmar este contrato, con el cual inicia la estructuración; y el segundo el día de la entrega del proyecto estructurado, con el cual inicia el período de búsqueda de convocatorias, postulación y radicación. Todos los valores están expresados en pesos colombianos e incluyen el IVA a la tarifa vigente, que EL PRESTADOR factura y declara conforme a la ley.
           </p>
 
           <h5 className="font-bold text-slate-900 uppercase pt-2">CLÁUSULA TERCERA - GARANTÍA DE ACOMPAÑAMIENTO EXTENDIDO:</h5>
@@ -101,12 +101,12 @@ export function ContratoDigitalModal({ plan, onContratoFirmado, onBack }: Contra
 
           <h5 className="font-bold text-slate-900 uppercase pt-2">CLÁUSULA CUARTA - POLÍTICA DE HABEAS DATA Y PRIVACIDAD (LEY 1581 DE 2012):</h5>
           <p>
-            EL CLIENTE autoriza de manera explícita a ARQUITECTURA DIGITAL S.A.S. para el tratamiento de sus datos personales, información empresarial y documentos técnicos con el único fin de ejecutar el objeto de este contrato y gestionar postulaciones a convocatorias.
+            EL CLIENTE autoriza de manera explícita a SERVING PROYECTOS ESTRATÉGICOS S.A.S. para el tratamiento de sus datos personales, información empresarial y documentos técnicos con el único fin de ejecutar el objeto de este contrato y gestionar postulaciones a convocatorias.
           </p>
 
           <h5 className="font-bold text-slate-900 uppercase pt-2">CLÁUSULA QUINTA - CONDICIÓN SUSPENSIVA (DAY ZERO):</h5>
           <p>
-            Las partes declaran expresamente que el término de treinta (30) días para la entrega del proyecto estructurado comenzará a contarse únicamente a partir del día hábil siguiente en que EL CLIENTE complete los tres (3) requisitos del <strong>Day Zero</strong> (Video Pitch de máx 3 min, Documento Actual del Proyecto y Formulario de 22 Preguntas).
+            Las partes declaran expresamente que el término de cinco (5) días hábiles para la entrega del proyecto estructurado comenzará a contarse únicamente a partir del día hábil siguiente en que EL CLIENTE complete los tres (3) requisitos del <strong>Day Zero</strong> (Video Pitch de máx 3 min, Documento Actual del Proyecto y Formulario de 22 Preguntas).
           </p>
         </div>
 

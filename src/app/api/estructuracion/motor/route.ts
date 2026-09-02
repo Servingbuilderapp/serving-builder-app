@@ -34,7 +34,7 @@ export async function POST(req: Request) {
         totalSolicitadoFondo: 120000000,
         totalContrapartida: 25000000,
         totalProyecto: 145000000,
-        honorariosEstructuracion: '$12.000.000 COP',
+        honorariosEstructuracion: '$12.000.000 COP + IVA',
         garantiaAcompanamiento: 'Garantía 3+3 Meses'
       }
     }

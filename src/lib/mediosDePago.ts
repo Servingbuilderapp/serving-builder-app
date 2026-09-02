@@ -105,3 +105,81 @@ export function partirEnDos(total: number) {
   const anticipo = Math.round((total * PAGO_EN_DOS_PARTES.porcentajeAnticipo) / 100 / 1000) * 1000
   return { hayDosPartes: true as const, anticipo, saldo: total - anticipo }
 }
+
+/**
+ * IVA
+ * ===
+ *
+ * Los precios de las modalidades son BASE, sin IVA. La regla que se sigue en
+ * todo el portal es mostrar SIEMPRE las dos cifras juntas: la base con el
+ * "+ IVA" al lado y el total que el cliente va a ver en la factura.
+ *
+ * Lo que golpea al cliente no es el total: es enterarse tarde.
+ *
+ * El IVA nunca es nuestro — se recauda y se gira a la DIAN. Por eso no se
+ * "absorbe" ni se descuenta: si hay que negociar, se negocia la base.
+ *
+ * Para cambiar la tarifa o apagarlo (por ejemplo si un cliente es de zona
+ * franca o el servicio se exporta), se toca solo este objeto.
+ */
+export const IVA = {
+  activo: true,
+  tarifa: 0.19,
+  etiqueta: 'IVA 19%',
+}
+
+/** Formatea un valor en pesos: 12000000 -> "$12.000.000" */
+export function formatoCOP(valor: number): string {
+  return new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: 'COP',
+    maximumFractionDigits: 0,
+  }).format(valor)
+}
+
+export type PrecioDesglosado = {
+  base: number
+  iva: number
+  total: number
+  hayIva: boolean
+  /** "$12.000.000" */
+  baseTexto: string
+  /** "$14.280.000" */
+  totalTexto: string
+  /** "$12.000.000 + IVA" */
+  baseConSufijo: string
+  /** "Total con IVA: $14.280.000" */
+  totalConEtiqueta: string
+  /** Mitad de arranque, con IVA incluido. 0 si el pago no va en dos partes. */
+  anticipoConIva: number
+  anticipoConIvaTexto: string
+  saldoConIva: number
+  saldoConIvaTexto: string
+}
+
+/**
+ * Único sitio donde se calcula el precio que ve el cliente.
+ * Recibe la BASE (sin IVA) y devuelve todo lo que hace falta para pintarlo.
+ */
+export function desglosarPrecio(base: number): PrecioDesglosado {
+  const iva = IVA.activo ? Math.round(base * IVA.tarifa) : 0
+  const total = base + iva
+  const partes = partirEnDos(total)
+  const anticipoConIva = partes.hayDosPartes ? partes.anticipo : 0
+  const saldoConIva = partes.hayDosPartes ? partes.saldo : 0
+
+  return {
+    base,
+    iva,
+    total,
+    hayIva: iva > 0,
+    baseTexto: formatoCOP(base),
+    totalTexto: formatoCOP(total),
+    baseConSufijo: iva > 0 ? `${formatoCOP(base)} + IVA` : formatoCOP(base),
+    totalConEtiqueta: iva > 0 ? `Total con IVA: ${formatoCOP(total)}` : formatoCOP(total),
+    anticipoConIva,
+    anticipoConIvaTexto: formatoCOP(anticipoConIva),
+    saldoConIva,
+    saldoConIvaTexto: formatoCOP(saldoConIva),
+  }
+}

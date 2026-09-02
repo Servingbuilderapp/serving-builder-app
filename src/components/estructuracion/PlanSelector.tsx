@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { partirEnDos } from '@/lib/mediosDePago'
+import { desglosarPrecio } from '@/lib/mediosDePago'
 import {
   Check,
   Sparkles,
@@ -84,8 +84,8 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
   const convertToPlanSeleccionado = (plan: PlanEstructuracionMapeado): PlanSeleccionado => ({
     id: plan.id,
     nombre: plan.nombre,
-    precioTotalDisplay: plan.honorariosEstructuracion,
-    pagoInicial: plan.honorariosEstructuracion,
+    precioTotalDisplay: `${desglosarPrecio(plan.honorariosBase).baseTexto} + IVA (total ${desglosarPrecio(plan.honorariosBase).totalTexto})`,
+    pagoInicial: desglosarPrecio(plan.honorariosBase).anticipoConIvaTexto,
     detalles: plan.subtitulo,
     garantia: plan.garantiaAcompanamiento,
     modulosIncluidos: plan.incluye
@@ -168,25 +168,35 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
                 </div>
 
                 <div className="py-3 border-y border-color-base-200">
-                  <span className="text-xs font-bold uppercase tracking-wider text-color-base-content/60 block">
-                    Honorarios de Estructuración
-                  </span>
-                  <span className="text-3xl font-black text-color-base-content">
-                    {plan.honorariosEstructuracion}
-                  </span>
                   {(() => {
-                    const total = Number(String(plan.honorariosEstructuracion).replace(/[^0-9]/g, ''))
-                    const partes = total > 0 ? partirEnDos(total) : null
-                    if (!partes || !partes.hayDosPartes) return null
+                    const precio = desglosarPrecio(plan.honorariosBase)
                     return (
-                      <p className="text-[12px] font-bold text-color-base-content mt-1">
-                        Mitad al firmar (${partes.anticipo.toLocaleString('es-CO')}) y mitad al recibir tu proyecto
-                      </p>
+                      <>
+                        <span className="text-xs font-bold uppercase tracking-wider text-color-base-content/60 block">
+                          Honorarios de Estructuración
+                        </span>
+                        <span className="text-3xl font-black text-color-base-content">
+                          {precio.baseTexto}
+                        </span>
+                        {precio.hayIva && (
+                          <span className="text-sm font-bold text-color-base-content/60 ml-2">+ IVA</span>
+                        )}
+                        {precio.hayIva && (
+                          <p className="text-[12px] font-bold text-color-base-content/70 mt-0.5">
+                            {precio.totalConEtiqueta}
+                          </p>
+                        )}
+                        {precio.anticipoConIva > 0 && (
+                          <p className="text-[12px] font-bold text-color-base-content mt-1">
+                            Mitad al firmar ({precio.anticipoConIvaTexto}) y mitad al recibir tu proyecto
+                          </p>
+                        )}
+                        <p className="text-[11px] text-color-primary font-bold mt-1">
+                          {plan.duracionEntrega}
+                        </p>
+                      </>
                     )
                   })()}
-                  <p className="text-[11px] text-color-primary font-bold mt-1">
-                    {plan.duracionEntrega}
-                  </p>
                 </div>
 
                 <ul className="space-y-2.5 text-xs font-medium text-color-base-content/80">
@@ -217,7 +227,7 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
             </h3>
           </div>
           <span className="text-xs font-bold text-color-primary bg-color-primary/10 px-3 py-1.5 rounded-full border border-color-primary/20">
-            Honorarios de Estructuración: {currentPlanObj.honorariosEstructuracion}
+            Honorarios: {desglosarPrecio(currentPlanObj.honorariosBase).baseConSufijo} · {desglosarPrecio(currentPlanObj.honorariosBase).totalConEtiqueta}
           </span>
         </div>
 
@@ -261,7 +271,7 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
             Formalización
           </span>
           <h4 className="text-2xl font-black italic uppercase">
-            Formalizar {currentPlanObj.nombre} ({currentPlanObj.honorariosEstructuracion})
+            Formalizar {currentPlanObj.nombre} ({desglosarPrecio(currentPlanObj.honorariosBase).baseConSufijo})
           </h4>
           <p className="text-xs text-slate-300 font-medium leading-relaxed">
             Contacta de inmediato a nuestro equipo técnico por WhatsApp con los datos consolidados de tu diagnóstico o procede directamente a la firma digital del contrato.

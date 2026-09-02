@@ -1,7 +1,7 @@
 'use client'
 
 import React, { Suspense, useState } from 'react'
-import { COBRO_COLOMBIA, COBRO_EXTERIOR, partirEnDos } from '@/lib/mediosDePago'
+import { COBRO_COLOMBIA, COBRO_EXTERIOR, desglosarPrecio } from '@/lib/mediosDePago'
 import { useSearchParams } from 'next/navigation'
 import { GlowButton } from '@/components/ui/GlowButton'
 import { GlassCard } from '@/components/ui/GlassCard'
@@ -58,7 +58,7 @@ const TEXTO_CONTRATO = `AUTORIZACIÓN PARA EL TRATAMIENTO DE DATOS PERSONALES
 Y TÉRMINOS DEL SERVICIO DE DIAGNÓSTICO Y ESTRUCTURACIÓN DE PROYECTOS
 
 1. RESPONSABLE DEL TRATAMIENTO
-SERVING PROYECTOS ESTRATÉGICOS SAS, [NIT], propietaria y operadora de la
+SERVING PROYECTOS ESTRATÉGICOS SAS, NIT 901.972.451-7, propietaria y operadora de la
 plataforma "Arquitectura Digital", con correo de contacto
 servingbuilderapp@gmail.com, es responsable del tratamiento de los datos
 personales que usted suministra a través de esta plataforma.
@@ -113,6 +113,13 @@ Cláusula 9 sobre el alcance y límite de esta responsabilidad. Si al
 finalizar dicho período no se ha logrado la aprobación de financiamiento,
 ARQUITECTURA DIGITAL extenderá el período de búsqueda de convocatorias por
 el mismo tiempo adicional, sin costo extra, en los términos ofrecidos.
+
+Todos los valores de los planes se expresan SIN IVA. Al valor del plan se
+suma el IVA a la tarifa vigente (19%), que se factura y declara conforme a
+la ley. El valor total se paga en dos contados iguales, IVA incluido: el
+primero al firmar, con el cual inicia la estructuración; y el segundo el
+día de la entrega del proyecto estructurado, con el cual inicia el período
+de búsqueda de convocatorias, postulación y radicación.
 
 8. NATURALEZA DEL SERVICIO Y AUSENCIA DE GARANTÍA DE RESULTADO
 Los diagnósticos, calificaciones y análisis que muestra esta plataforma
@@ -196,10 +203,10 @@ de Éxito general) únicamente para este tipo de proyecto:
    acompañamiento para proyectos de Fondo Emprender tiene un valor fijo
    según el rango de financiación solicitada, así:
 
-   - Hasta $30.000.000 COP: $3.500.000 COP
-   - De $30.000.001 a $73.000.000 COP: $2.300.000 COP
-   - De $73.000.001 a $300.000.000 COP: $12.000.000 COP
-   - De $300.000.001 a $1.000.000.000 COP: $17.000.000 COP
+   - Hasta $30.000.000 COP: $3.500.000 COP + IVA
+   - De $30.000.001 a $73.000.000 COP: $2.300.000 COP + IVA
+   - De $73.000.001 a $300.000.000 COP: $12.000.000 COP + IVA
+   - De $300.000.001 a $1.000.000.000 COP: $17.000.000 COP + IVA
 
 2. Comisión de éxito: en caso de que el proyecto sea aprobado y reciba
    desembolso por parte del Fondo Emprender, el cliente reconocerá
@@ -316,7 +323,7 @@ function ContratarContent() {
               Elige tu modalidad
             </h1>
             <p className="text-color-base-content/60 text-sm max-w-xl mx-auto">
-              Las tres llevan tu proyecto hasta la postulación. Cambian el alcance del
+              Cada una lleva tu proyecto hasta la postulación. Cambian el alcance del
               acompañamiento y el tiempo de búsqueda de convocatorias.
             </p>
           </div>
@@ -337,9 +344,17 @@ function ContratarContent() {
                     <h2 className="text-xl font-black text-color-base-content">{opcion.nombre}</h2>
                     <p className="text-color-base-content/60 text-sm">{opcion.resumen}</p>
                   </div>
-                  <div className="text-2xl font-black text-color-primary">
-                    {formatCOP(opcion.montoCop)}
-                    <span className="text-xs font-bold text-color-base-content/50 ml-2">+ IVA</span>
+                  <div>
+                    <div className="text-2xl font-black text-color-primary">
+                      {formatCOP(opcion.montoCop)}
+                      <span className="text-xs font-bold text-color-base-content/50 ml-2">+ IVA</span>
+                    </div>
+                    <p className="text-xs font-bold text-color-base-content/60 mt-0.5">
+                      {desglosarPrecio(opcion.montoCop).totalConEtiqueta}
+                    </p>
+                    <p className="text-xs font-bold text-color-base-content mt-0.5">
+                      Mitad al firmar ({desglosarPrecio(opcion.montoCop).anticipoConIvaTexto}) y mitad al recibir tu proyecto
+                    </p>
                   </div>
                   <ul className="space-y-2 flex-1">
                     {opcion.incluye.map((linea) => (
@@ -390,7 +405,7 @@ function ContratarContent() {
               {plan.nombre}
             </h1>
             <p className="text-color-base-content/60 text-sm">
-              {formatCOP(plan.montoCop)} COP · aprox. ${montoUsd.toLocaleString('en-US')} USD
+              {desglosarPrecio(plan.montoCop).baseConSufijo} · {desglosarPrecio(plan.montoCop).totalConEtiqueta} · aprox. ${montoUsd.toLocaleString('en-US')} USD
             </p>
           </div>
 
@@ -540,21 +555,24 @@ function ContratarContent() {
                   <div>
                     <p className="text-sm font-bold text-color-base-content">{t('contratar.transferencia_titulo')}</p>
                     {(() => {
-                      const partes = partirEnDos(plan.montoCop)
-                      if (!partes.hayDosPartes) {
+                      const precio = desglosarPrecio(plan.montoCop)
+                      if (precio.anticipoConIva === 0) {
                         return (
                           <p className="text-sm text-color-base-content/70 mt-1">
-                            {t('contratar.valor_label')} {formatCOP(plan.montoCop)}
+                            {t('contratar.valor_label')} {precio.baseConSufijo} · {precio.totalConEtiqueta}
                           </p>
                         )
                       }
                       return (
                         <div className="mt-2 space-y-1">
                           <p className="text-sm font-bold text-color-base-content">
-                            {t('contratar.anticipo_label')} {formatCOP(partes.anticipo)}
+                            {t('contratar.anticipo_label')} {precio.anticipoConIvaTexto}
                           </p>
                           <p className="text-sm text-color-base-content/70">
-                            {t('contratar.saldo_label')} {formatCOP(partes.saldo)}
+                            {t('contratar.saldo_label')} {precio.saldoConIvaTexto}
+                          </p>
+                          <p className="text-xs text-color-base-content/60 pt-1">
+                            {precio.baseConSufijo} · {precio.totalConEtiqueta}
                           </p>
                         </div>
                       )
@@ -603,24 +621,24 @@ function ContratarContent() {
                   <p className="text-sm font-bold text-color-base-content">{t('contratar.factura_titulo')}</p>
                   <p className="text-sm text-color-base-content/70 leading-relaxed">{t('contratar.factura_texto')}</p>
                   {(() => {
-                    const partes = partirEnDos(plan.montoCop)
-                    if (!partes.hayDosPartes) {
+                    const precio = desglosarPrecio(plan.montoCop)
+                    if (precio.anticipoConIva === 0) {
                       return (
                         <p className="text-sm text-color-base-content/70 pt-1">
-                          {t('contratar.valor_label')} {pais === 'colombia' ? formatCOP(plan.montoCop) : `$${montoUsd.toLocaleString('en-US')} USD`}
+                          {t('contratar.valor_label')} {pais === 'colombia' ? `${precio.baseConSufijo} · ${precio.totalConEtiqueta}` : `$${montoUsd.toLocaleString('en-US')} USD`}
                         </p>
                       )
                     }
                     return (
                       <div className="pt-2 space-y-1">
                         <p className="text-sm font-bold text-color-base-content">
-                          {t('contratar.anticipo_label')} {formatCOP(partes.anticipo)}
+                          {t('contratar.anticipo_label')} {precio.anticipoConIvaTexto}
                         </p>
                         <p className="text-sm text-color-base-content/70">
-                          {t('contratar.saldo_label')} {formatCOP(partes.saldo)}
+                          {t('contratar.saldo_label')} {precio.saldoConIvaTexto}
                         </p>
                         <p className="text-xs text-color-base-content/50">
-                          {t('contratar.valor_label')} {formatCOP(plan.montoCop)}
+                          {precio.baseConSufijo} · {precio.totalConEtiqueta}
                         </p>
                       </div>
                     )

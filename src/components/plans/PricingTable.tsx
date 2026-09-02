@@ -5,16 +5,10 @@ import { CheckCircle2, Crown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { GlowButton } from '@/components/ui/GlowButton'
 import { useRouter } from 'next/navigation'
+import { desglosarPrecio } from '@/lib/mediosDePago'
 interface PricingTableProps {
   plans: any[]
   currentPlanId: string | null
-}
-function formatCOP(value: number) {
-  return new Intl.NumberFormat('es-CO', {
-    style: 'currency',
-    currency: 'COP',
-    maximumFractionDigits: 0,
-  }).format(value)
 }
 export function PricingTable({ plans }: PricingTableProps) {
   const { language } = useTranslation()
@@ -44,14 +38,37 @@ export function PricingTable({ plans }: PricingTableProps) {
               {language === 'en' ? plan.description_en : plan.description_es}
             </p>
           </div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-4xl font-black text-color-base-content tracking-tighter">
-              {formatCOP(plan.price_monthly)}
-            </span>
-            <span className="text-xs text-color-base-content/40 font-bold uppercase tracking-wide">
-              {language === 'en' ? 'one-time' : 'pago único'}
-            </span>
-          </div>
+          {(() => {
+            const precio = desglosarPrecio(plan.price_monthly)
+            return (
+              <div className="space-y-1">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-4xl font-black text-color-base-content tracking-tighter">
+                    {precio.baseTexto}
+                  </span>
+                  {precio.hayIva && (
+                    <span className="text-xs text-color-base-content/50 font-bold uppercase tracking-wide">
+                      {language === 'en' ? '+ VAT' : '+ IVA'}
+                    </span>
+                  )}
+                </div>
+                {precio.hayIva && (
+                  <p className="text-xs font-bold text-color-base-content/60">
+                    {language === 'en'
+                      ? `Total with VAT: ${precio.totalTexto}`
+                      : precio.totalConEtiqueta}
+                  </p>
+                )}
+                {precio.anticipoConIva > 0 && (
+                  <p className="text-xs font-bold text-color-base-content">
+                    {language === 'en'
+                      ? `Half on signing (${precio.anticipoConIvaTexto}) and half on delivery`
+                      : `Mitad al firmar (${precio.anticipoConIvaTexto}) y mitad al recibir tu proyecto`}
+                  </p>
+                )}
+              </div>
+            )
+          })()}
           <div className="space-y-4 pt-4">
             <div className="h-px bg-color-base-content/10 w-full" />
             <ul className="space-y-4">

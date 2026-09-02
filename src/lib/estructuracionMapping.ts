@@ -2,8 +2,8 @@
  * Modalidades de estructuración.
  *
  * Son DOS, y solo dos:
- *   - Estructuración Estratégica  ($12.000.000 COP)  -> id interno `esencial`
- *   - Estructuración Élite        ($17.000.000 COP)  -> id interno `completo`
+ *   - Estructuración Estratégica  ($12.000.000 COP + IVA)  -> id interno `esencial`
+ *   - Estructuración Élite        ($17.000.000 COP + IVA)  -> id interno `completo`
  *
  * Los identificadores `esencial` y `completo` NO se cambian: son los que
  * quedan guardados en la base de datos de los proyectos. Lo que se muestra
@@ -20,6 +20,8 @@ export interface PlanEstructuracionMapeado {
   nombre: string
   subtitulo: string
   rangoCapitalText: string
+  /** Precio BASE en pesos, SIN IVA. Es el número con el que se calcula todo. */
+  honorariosBase: number
   honorariosEstructuracion: string
   honorariosEstructuracionDetalle: string
   duracionEntrega: string
@@ -37,7 +39,8 @@ export const ESTRUCTURACION_ESTRATEGICA: PlanEstructuracionMapeado = {
   nombre: 'Estructuración Estratégica',
   subtitulo: 'Para convocatorias nacionales: ministerios, banca de desarrollo y fondos públicos',
   rangoCapitalText: 'Convocatorias nacionales en pesos',
-  honorariosEstructuracion: '$12.000.000 COP',
+  honorariosBase: 12000000,
+  honorariosEstructuracion: '$12.000.000 COP + IVA',
   honorariosEstructuracionDetalle: 'Honorarios de Estructuración para convocatorias nacionales',
   duracionEntrega: 'Entrega en 5 días hábiles desde que completas el formulario',
   garantiaAcompanamiento: 'Garantía 3+3: si en 3 meses no consigues la financiación, te damos 3 meses más sin costo',
@@ -63,7 +66,8 @@ export const ESTRUCTURACION_ELITE: PlanEstructuracionMapeado = {
   nombre: 'Estructuración Élite',
   subtitulo: 'Para cooperación internacional y convocatorias multilaterales, con dossier traducido',
   rangoCapitalText: 'Cooperación internacional y fondos en divisas',
-  honorariosEstructuracion: '$17.000.000 COP',
+  honorariosBase: 17000000,
+  honorariosEstructuracion: '$17.000.000 COP + IVA',
   honorariosEstructuracionDetalle:
     'Honorarios de Estructuración para convocatorias complejas e internacionales',
   duracionEntrega: 'Entrega en 5 días hábiles desde que completas el formulario',

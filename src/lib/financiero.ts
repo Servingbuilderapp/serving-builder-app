@@ -87,7 +87,7 @@ export function calcularHonorariosEstructuracion(montoInput: number | string): R
     return {
       montoSolicitadoNum,
       tipoHonorarios: 'fijo',
-      valorDisplay: '$12.000.000 COP',
+      valorDisplay: '$12.000.000 COP + IVA',
       valorNumerico: 12000000,
       honorariosTexto: 'Honorarios de Estructuración: $12.000.000 COP',
       descripcion: 'Honorarios de Estructuración para convocatorias de $121M a $299M COP con acompañamiento continuo por hitos.',
@@ -101,7 +101,7 @@ export function calcularHonorariosEstructuracion(montoInput: number | string): R
   return {
     montoSolicitadoNum,
     tipoHonorarios: 'fijo',
-    valorDisplay: '$17.000.000 COP',
+    valorDisplay: '$17.000.000 COP + IVA',
     valorNumerico: 17000000,
     honorariosTexto: 'Honorarios de Estructuración: $17.000.000 COP',
     descripcion: 'Honorarios de Estructuración técnica avanzada para proyectos de gran escala, alianzas y cooperación internacional.',
