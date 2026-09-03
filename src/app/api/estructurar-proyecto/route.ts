@@ -193,21 +193,32 @@ const MODELOS_GEMINI = [
   "gemini-2.5-flash",
 ];
 
+/**
+ * Cuanto se le concede a un modelo antes de darlo por perdido y pasar al
+ * siguiente. Un modelo congestionado puede tardar mas de un minuto solo para
+ * contestar que no puede atender: sin este tope se consumia todo el tiempo
+ * disponible en las esperas y no quedaba margen para el que si funciona.
+ */
+const TOPE_POR_MODELO_MS = 80000;
+
 async function llamarGeminiConReintentos(
   apiKey: string,
-  body: any,
-  maxIntentos = 2
+  body: any
 ): Promise<{ ok: boolean; data: any }> {
-  let ultimoResultado: { ok: boolean; data: any } = { ok: false, data: null };
+  let ultimoResultado: { ok: boolean; data: any } = {
+    ok: false,
+    data: { error: { message: "Ningun modelo de Gemini pudo atender" } },
+  };
 
   for (const modelo of MODELOS_GEMINI) {
-    for (let intento = 1; intento <= maxIntentos; intento++) {
+    try {
       const respuesta = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${apiKey}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
+          signal: AbortSignal.timeout(TOPE_POR_MODELO_MS),
         }
       );
 
@@ -219,20 +230,19 @@ async function llamarGeminiConReintentos(
 
       ultimoResultado = { ok: false, data };
 
-      const esErrorTemporal = respuesta.status === 503 || respuesta.status === 429;
+      const esErrorTemporal =
+        respuesta.status === 503 || respuesta.status === 429;
 
-      // Si el modelo esta saturado, se reintenta una vez y despues se pasa al
-      // siguiente modelo de la lista en vez de insistir contra una pared.
-      if (esErrorTemporal && intento < maxIntentos) {
-        await esperar(intento * 4000);
-        continue;
-      }
-
-      if (esErrorTemporal) break;
-
-      // Error que no es de congestion (llave mala, peticion mal formada): no
-      // tiene sentido probar con otro modelo.
-      return ultimoResultado;
+      // Congestion: no se insiste contra la pared, se prueba el siguiente
+      // modelo de la lista. Cualquier otro error (llave mala, peticion mal
+      // formada) se repetiria igual con otro modelo, asi que se corta aqui.
+      if (!esErrorTemporal) return ultimoResultado;
+    } catch (e) {
+      // Se agoto el tope de este modelo, o la red fallo. Se pasa al siguiente.
+      ultimoResultado = {
+        ok: false,
+        data: { error: { message: `El modelo ${modelo} no respondio a tiempo` } },
+      };
     }
   }
 
