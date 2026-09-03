@@ -2,6 +2,23 @@ import { NextRequest, NextResponse } from "next/server";
 import { after } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { claveDeConvocatoria, guardarEnBiblioteca, leerBibliotecaParaPrompt } from "@/lib/bibliotecaConvocatorias";
+import { motorAutorizado, cabecerasInternas } from "@/lib/candadoMotores";
+
+// El motor puede tardar minutos: sin esto Vercel lo corta antes de terminar.
+export const maxDuration = 300;
+
+/**
+ * Modelos de Gemini que sabe usar este motor, en orden de preferencia.
+ * Google reparte el cupo por modelo: cuando uno se agota o se congestiona, los
+ * demas siguen disponibles. Cada reintento usa el siguiente de la lista, asi
+ * que quedarse sin cupo en uno ya no deja el motor muerto.
+ */
+const MODELOS_GEMINI = [
+  "gemini-3.6-flash",
+  "gemini-3.5-flash",
+  "gemini-2.5-flash",
+];
+
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -106,13 +123,13 @@ function esperar(ms: number) {
 async function llamarGeminiConReintentos(
   apiKey: string,
   body: any,
-  maxIntentos = 3
+  maxIntentos = MODELOS_GEMINI.length
 ): Promise<{ ok: boolean; data: any }> {
   let ultimoResultado: { ok: boolean; data: any } = { ok: false, data: null };
 
   for (let intento = 1; intento <= maxIntentos; intento++) {
     const respuesta = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/${MODELOS_GEMINI[Math.min(intento - 1, MODELOS_GEMINI.length - 1)]}:generateContent?key=${apiKey}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -444,7 +461,7 @@ function dispararEncajesEnSegundoPlano(origen: string, idsSeleccionadas: string[
       try {
         await fetch(`${origen}/api/analizar-encaje`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", ...cabecerasInternas() },
           body: JSON.stringify({ id_convocatoria }),
         });
       } catch (e) {
@@ -460,6 +477,11 @@ export async function POST(req: NextRequest) {
     if (!id_proyecto) {
       return NextResponse.json({ error: "Falta id_proyecto" }, { status: 400 });
     }
+
+    if (!(await motorAutorizado(req, id_proyecto))) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+
     const resultado = await ejecutarBusquedaConvocatorias(id_proyecto);
     if (resultado.idsSeleccionadas.length > 0) {
       dispararEncajesEnSegundoPlano(req.nextUrl.origin, resultado.idsSeleccionadas);
@@ -483,6 +505,10 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
   try {
     const id_proyecto = req.nextUrl.searchParams.get("id_proyecto");
+
+    if (!(await motorAutorizado(req, id_proyecto))) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
 
     if (!id_proyecto) {
       // Sin id_proyecto en la URL = lo está llamando el cron job semanal, no una prueba manual.

@@ -1,5 +1,6 @@
 import { after } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { cabecerasInternas } from '@/lib/candadoMotores'
 
 const BUCKET = 'documentos-proyectos'
 
@@ -104,7 +105,7 @@ export async function arrancarEstructuracion(
       try {
         await fetch(`${origen}/api/estructurar-proyecto`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', ...cabecerasInternas() },
           body: JSON.stringify({
             id_proyecto: proyectoId,
             ruta_documento: `${proyectoId}/${documento.nombre}`,

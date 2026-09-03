@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { after } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import mammoth from "mammoth";
+import { motorAutorizado, cabecerasInternas } from "@/lib/candadoMotores";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -260,6 +261,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    if (!(await motorAutorizado(req, id_proyecto))) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+
+
     const apiKeyGemini = process.env.GEMINI_API_KEY || process.env.GEMINI_KEY;
     if (!apiKeyGemini) {
       return NextResponse.json(
@@ -441,7 +447,7 @@ El campo "advertencia" solo aplica a pasos "completo" y va en null si no hay nin
         try {
           await fetch(`${origen}/api/buscar-convocatorias`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", ...cabecerasInternas() },
             body: JSON.stringify({ id_proyecto }),
           });
         } catch (e) {

@@ -1,6 +1,23 @@
 import { NextRequest, NextResponse, after } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { prepararPostulacion } from "@/lib/motorPostulacion";
+import { motorAutorizado } from "@/lib/candadoMotores";
+
+// El motor puede tardar minutos: sin esto Vercel lo corta antes de terminar.
+export const maxDuration = 300;
+
+/**
+ * Modelos de Gemini que sabe usar este motor, en orden de preferencia.
+ * Google reparte el cupo por modelo: cuando uno se agota o se congestiona, los
+ * demas siguen disponibles. Cada reintento usa el siguiente de la lista, asi
+ * que quedarse sin cupo en uno ya no deja el motor muerto.
+ */
+const MODELOS_GEMINI = [
+  "gemini-3.6-flash",
+  "gemini-3.5-flash",
+  "gemini-2.5-flash",
+];
+
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -166,13 +183,13 @@ function esperar(ms: number) {
 async function llamarGeminiConReintentos(
   apiKey: string,
   body: any,
-  maxIntentos = 3
+  maxIntentos = MODELOS_GEMINI.length
 ): Promise<{ ok: boolean; data: any }> {
   let ultimoResultado: { ok: boolean; data: any } = { ok: false, data: null };
 
   for (let intento = 1; intento <= maxIntentos; intento++) {
     const respuesta = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/${MODELOS_GEMINI[Math.min(intento - 1, MODELOS_GEMINI.length - 1)]}:generateContent?key=${apiKey}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -362,6 +379,11 @@ export async function POST(req: NextRequest) {
     if (!id_convocatoria) {
       return NextResponse.json({ error: "Falta id_convocatoria" }, { status: 400 });
     }
+
+    if (!(await motorAutorizado(req, null))) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+
     const resultado = await ejecutarEncaje(id_convocatoria);
     return NextResponse.json(resultado.body, { status: resultado.status });
   } catch (err: any) {
@@ -381,6 +403,11 @@ export async function GET(req: NextRequest) {
     if (!id_convocatoria) {
       return NextResponse.json({ error: "Falta ?id_convocatoria= en la URL" }, { status: 400 });
     }
+
+    if (!(await motorAutorizado(req, null))) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+
     const resultado = await ejecutarEncaje(id_convocatoria);
     return NextResponse.json(resultado.body, { status: resultado.status });
   } catch (err: any) {
