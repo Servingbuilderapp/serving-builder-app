@@ -179,40 +179,61 @@ function esperar(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+/**
+ * Modelos de Gemini que sabe usar el motor, en orden de preferencia.
+ *
+ * Todos son modelos estables. El primero es el que queremos; los siguientes
+ * son el paracaidas para cuando ese esta congestionado. Un modelo saturado
+ * responde 503 ("high demand") y antes eso dejaba el motor muerto: ahora
+ * simplemente se pasa al siguiente de la lista y el proyecto sigue avanzando.
+ */
+const MODELOS_GEMINI = [
+  "gemini-3.6-flash",
+  "gemini-3.5-flash",
+  "gemini-2.5-flash",
+];
+
 async function llamarGeminiConReintentos(
   apiKey: string,
   body: any,
-  maxIntentos = 3
+  maxIntentos = 2
 ): Promise<{ ok: boolean; data: any }> {
   let ultimoResultado: { ok: boolean; data: any } = { ok: false, data: null };
 
-  for (let intento = 1; intento <= maxIntentos; intento++) {
-    const respuesta = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
+  for (const modelo of MODELOS_GEMINI) {
+    for (let intento = 1; intento <= maxIntentos; intento++) {
+      const respuesta = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${apiKey}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        }
+      );
+
+      const data = await respuesta.json();
+
+      if (respuesta.ok) {
+        return { ok: true, data };
       }
-    );
 
-    const data = await respuesta.json();
+      ultimoResultado = { ok: false, data };
 
-    if (respuesta.ok) {
-      return { ok: true, data };
+      const esErrorTemporal = respuesta.status === 503 || respuesta.status === 429;
+
+      // Si el modelo esta saturado, se reintenta una vez y despues se pasa al
+      // siguiente modelo de la lista en vez de insistir contra una pared.
+      if (esErrorTemporal && intento < maxIntentos) {
+        await esperar(intento * 4000);
+        continue;
+      }
+
+      if (esErrorTemporal) break;
+
+      // Error que no es de congestion (llave mala, peticion mal formada): no
+      // tiene sentido probar con otro modelo.
+      return ultimoResultado;
     }
-
-    ultimoResultado = { ok: false, data };
-
-    const esErrorTemporal = respuesta.status === 503 || respuesta.status === 429;
-    const quedanIntentos = intento < maxIntentos;
-
-    if (esErrorTemporal && quedanIntentos) {
-      await esperar(intento * 5000);
-      continue;
-    }
-
-    return ultimoResultado;
   }
 
   return ultimoResultado;
