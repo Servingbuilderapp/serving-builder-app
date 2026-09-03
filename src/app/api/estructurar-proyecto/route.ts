@@ -10,7 +10,7 @@ const supabase = createClient(
 
 // Sin esto la función se corta a los pocos segundos y el motor nunca alcanza a
 // terminar de escribir los pasos.
-export const maxDuration = 60;
+export const maxDuration = 300;
 
 const UMBRAL_MINIMO_PORCENTAJE = 90;
 
