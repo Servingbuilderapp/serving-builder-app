@@ -13,6 +13,8 @@ import { useTranslation } from '@/hooks/useTranslation'
 const RUTAS_DEL_PANEL = [
   '/dashboard',
   '/mi-proyecto',
+  '/pendientes',
+  '/mis-convocatorias',
   '/ideas',
   '/admin',
   '/apps',

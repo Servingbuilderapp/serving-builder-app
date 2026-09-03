@@ -44,7 +44,19 @@ export default async function MiProyectoPage() {
   const estado = String(proyecto.estado_actual || '').toLowerCase()
 
   // Mientras no esté confirmado el pago no hay estructuración que mostrar.
-  const activo = estado === 'pagado' || estado === 'en_estructuracion' || estado === 'estructurado'
+  // El pago quedó confirmado con cualquiera de estos nombres: la plataforma
+  // guarda unas veces 'pagado' y otras 'pago_aprobado', y de ahí en adelante el
+  // estado va cambiando a medida que avanza el proyecto.
+  const ESTADOS_CON_PAGO_CONFIRMADO = [
+    'pagado',
+    'pago_aprobado',
+    'en_estructuracion',
+    'estructurando_ia',
+    'estructurado',
+    'en_encaje',
+    'postulado',
+  ]
+  const activo = ESTADOS_CON_PAGO_CONFIRMADO.includes(estado)
   if (!activo) return <AvancePendienteDePago nombreProyecto={nombreProyecto} />
 
   const proyectoId = String(proyecto.id)
