@@ -11,6 +11,10 @@ import {
   Pencil,
   X,
 } from 'lucide-react'
+import {
+  MotorEstructuracion,
+  type DocumentoDePartida,
+} from '@/components/panel/MotorEstructuracion'
 
 export type PasoEstructuracion = {
   id: number
@@ -52,13 +56,25 @@ export function EstructuracionClient({
   nombreProyecto,
   nombreCliente,
   pasosIniciales,
+  documentos = [],
 }: {
   proyectoId: string
   nombreProyecto: string
   nombreCliente: string
   pasosIniciales: PasoEstructuracion[]
+  documentos?: DocumentoDePartida[]
 }) {
   const [pasos, setPasos] = useState<PasoEstructuracion[]>(pasosIniciales)
+
+  // Mientras el motor trabaja, la pantalla se vuelve a pedir al servidor cada
+  // pocos segundos. Sin esto los contadores se quedarían congelados en los
+  // datos con los que se abrió la página. Se compara contra lo último que llegó
+  // del servidor para no pisar una corrección a medio escribir.
+  const [ultimoDelServidor, setUltimoDelServidor] = useState(pasosIniciales)
+  if (pasosIniciales !== ultimoDelServidor) {
+    setUltimoDelServidor(pasosIniciales)
+    setPasos(pasosIniciales)
+  }
   const [filtro, setFiltro] = useState<Filtro>('todos')
   const [abiertas, setAbiertas] = useState<string[] | null>(null)
   const [pasoAbierto, setPasoAbierto] = useState<number | null>(null)
@@ -238,6 +254,14 @@ export function EstructuracionClient({
           ))}
         </div>
       </div>
+
+      {/* El botón que enciende el Motor 1 */}
+      <MotorEstructuracion
+        proyectoId={proyectoId}
+        documentos={documentos}
+        pasosEscritos={conContenido}
+        totalPasos={pasos.length}
+      />
 
       {/* Etapas */}
       {ETAPAS.map((etapa) => {

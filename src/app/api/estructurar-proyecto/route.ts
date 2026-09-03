@@ -8,6 +8,10 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
+// Sin esto la función se corta a los pocos segundos y el motor nunca alcanza a
+// terminar de escribir los pasos.
+export const maxDuration = 60;
+
 const UMBRAL_MINIMO_PORCENTAJE = 90;
 
 const PROMPT_MOTOR_1 = `

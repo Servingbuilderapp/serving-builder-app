@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
+import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { arrancarEstructuracion } from '@/lib/arrancarEstructuracion'
 
 export async function POST(req: Request) {
   try {
@@ -25,8 +27,18 @@ export async function POST(req: Request) {
 
     if (error) throw error
 
+    // Aprobar el pago es lo que pone el proyecto en marcha. Si el cliente ya
+    // había cargado su documento en la contratación, la estructuración arranca
+    // aquí mismo, sin que nadie tenga que apretar nada. Si todavía no hay
+    // documento, no pasa nada: arrancará sola cuando el cliente lo suba.
+    const origen = new URL(req.url).origin
+    after(async () => {
+      await arrancarEstructuracion(String(proyectoId), origen)
+    })
+
     return NextResponse.json({ success: true })
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message || 'Error al actualizar' }, { status: 500 })
+  } catch (error) {
+    const mensaje = error instanceof Error ? error.message : 'Error al actualizar'
+    return NextResponse.json({ error: mensaje }, { status: 500 })
   }
 }

@@ -1,14 +1,66 @@
 import React from 'react'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { createClient as crearClienteDeServicio } from '@supabase/supabase-js'
 import {
   EstructuracionClient,
   type PasoEstructuracion,
 } from '@/components/panel/EstructuracionClient'
+import type { DocumentoDePartida } from '@/components/panel/MotorEstructuracion'
 
 export const dynamic = 'force-dynamic'
 
 const CORREO_ADMIN = 'servingbuilderapp@gmail.com'
+
+const BUCKET_DOCUMENTOS = 'documentos-proyectos'
+
+/**
+ * El motor solo sabe leer PDF, Word e imágenes. Cualquier otro archivo que el
+ * cliente haya subido (un Excel, un comprimido) se deja por fuera de la lista
+ * para no ofrecer un arranque que iba a fallar.
+ */
+function tipoDeArchivo(nombre: string): DocumentoDePartida['tipo'] | null {
+  const extension = nombre.split('.').pop()?.toLowerCase() || ''
+  if (extension === 'pdf') return 'pdf'
+  if (['jpg', 'jpeg', 'png'].includes(extension)) return 'imagen'
+  if (['doc', 'docx'].includes(extension)) return 'word'
+  return null
+}
+
+/**
+ * Los documentos del cliente viven en el bucket, bajo una carpeta con el id
+ * del proyecto. Se leen con la llave de servicio porque quien mira esta
+ * pantalla es el equipo, no el dueño de los archivos.
+ */
+async function documentosDelProyecto(proyectoId: string): Promise<DocumentoDePartida[]> {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const llave = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !llave) return []
+
+  try {
+    const servicio = crearClienteDeServicio(url, llave)
+    const { data, error } = await servicio.storage
+      .from(BUCKET_DOCUMENTOS)
+      .list(proyectoId, { limit: 100, sortBy: { column: 'created_at', order: 'desc' } })
+
+    if (error || !data) return []
+
+    return data
+      .filter((archivo) => archivo.name && archivo.name !== '.emptyFolderPlaceholder')
+      .map((archivo) => {
+        const tipo = tipoDeArchivo(archivo.name)
+        if (!tipo) return null
+        return {
+          nombre: archivo.name.replace(/^\d+-/, ''),
+          ruta: `${proyectoId}/${archivo.name}`,
+          tipo,
+        }
+      })
+      .filter((d): d is DocumentoDePartida => d !== null)
+  } catch {
+    return []
+  }
+}
 
 /**
  * "Estructuración" del proyecto (equipo Serving).
@@ -58,6 +110,8 @@ export default async function PaginaEstructuracionInterna({
 
   if (!proyecto?.id) redirect('/admin/proyectos')
 
+  const documentos = await documentosDelProyecto(String(proyecto.id))
+
   const [pasosRes, contenidoRes, avanceRes] = await Promise.all([
     supabase
       .from('pasos_estructuracion')
@@ -104,6 +158,7 @@ export default async function PaginaEstructuracionInterna({
       nombreProyecto={proyecto.nombre_iniciativa || 'Proyecto sin nombre'}
       nombreCliente={proyecto.nombre_cliente || proyecto.correo_cliente || ''}
       pasosIniciales={pasos}
+      documentos={documentos}
     />
   )
 }

@@ -254,6 +254,7 @@ function BloqueDocumentos({
   const [archivos, setArchivos] = useState<ArchivoSubido[]>(archivosIniciales)
   const [subiendo, setSubiendo] = useState(false)
   const [error, setError] = useState('')
+  const [aviso, setAviso] = useState('')
 
   /**
    * La lista inicial la arma el servidor. Esto solo se vuelve a llamar después
@@ -307,12 +308,32 @@ function BloqueDocumentos({
 
     setSubiendo(true)
     setError('')
+    setAviso('')
     try {
       const supabase = createClient()
       const ruta = `${proyectoId}/${Date.now()}-${archivo.name}`
       const { error: errorSubida } = await supabase.storage.from(BUCKET).upload(ruta, archivo)
       if (errorSubida) throw errorSubida
       await listar()
+
+      // Con el documento en la mano ya se puede trabajar: se enciende la
+      // estructuración sola. De ahí en adelante la cadena sigue por su cuenta
+      // hasta las convocatorias, sin que nadie tenga que estar pendiente.
+      try {
+        const respuesta = await fetch('/api/arrancar-estructuracion', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ proyectoId }),
+        })
+        const datos = await respuesta.json().catch(() => ({}))
+        if (datos?.arrancado) {
+          setAviso(
+            'Recibido. Ya empezamos a trabajar tu proyecto: en un rato vas a ver el avance en «Avance de mi proyecto».',
+          )
+        }
+      } catch {
+        /* si no se pudo avisar, el archivo ya quedó guardado igual */
+      }
     } catch (err) {
       setError(
         err instanceof Error
@@ -461,6 +482,12 @@ function BloqueDocumentos({
             PDF, Word, Excel, PowerPoint, imágenes o un comprimido. Un archivo a la vez.
           </p>
           {error ? <p className="mt-2 text-[12.5px] font-semibold text-[#B42318]">{error}</p> : null}
+
+          {aviso ? (
+            <p className="mt-3 rounded-xl border border-[#BFE7D2] bg-[#F1FBF6] px-4 py-3 text-[12.5px] font-semibold text-[#186A46]">
+              {aviso}
+            </p>
+          ) : null}
         </div>
       </div>
     </Tarjeta>
