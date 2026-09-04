@@ -520,9 +520,12 @@
     nota.textContent = e.nota;
     url.textContent  = 'servingproyectos.com' + e.url;
     lienzo.innerHTML = e.pinta();
-    requestAnimationFrame(()=>{
-      lienzo.querySelectorAll('.relleno').forEach(r=>{ r.style.width = r.dataset.pct + '%'; });
-    });
+    // Se fuerza un recálculo del navegador y enseguida se fijan los anchos: así la
+    // barra sale de cero y se llena sola. (Antes esto esperaba un momento del
+    // navegador que no ocurre si la pestaña no está a la vista, y las barras
+    // se quedaban vacías.)
+    void lienzo.offsetHeight;
+    lienzo.querySelectorAll('.relleno').forEach(r=>{ r.style.width = r.dataset.pct + '%'; });
   }
 
   mostrar(0);
