@@ -11,6 +11,7 @@ import {
   Settings,
   Lightbulb,
   Radar,
+  Satellite,
   Target,
   X,
 } from 'lucide-react'
@@ -60,6 +61,7 @@ const SECCIONES_EQUIPO: Seccion[] = [
     items: [
       { nombre: 'Proyectos de clientes', href: '/admin/proyectos', icono: FolderKanban },
       { nombre: 'Convocatorias', href: '/admin/convocatorias', icono: Radar },
+      { nombre: 'Centinela Digital', href: '/admin/centinela', icono: Satellite },
       { nombre: 'Administración', href: '/admin', icono: Settings },
     ],
   },

@@ -36,13 +36,9 @@ export default async function AdminConvocatoriasPage() {
 
   const { data: convocatorias, error } = await supabase
     .from('biblioteca_convocatorias')
-    .select(
-      'id, nombre, entidad, tipo_financiador, ambito, pais, paises_elegibles, tipo_postulante, ' +
-        'sector, objetivo, monto, monto_maximo, moneda, contrapartida_exigida, ' +
-        'fecha_cierre, fecha_cierre_texto, fecha_apertura, abierta_todo_el_anio, ' +
-        'mes_apertura_tipico, periodicidad, enlace_aplicacion, fuente_oficial, ' +
-        'linea_tematica, territorio, origen_ficha, actualizado_en',
-    )
+    // En una sola línea: partido con "+", TypeScript no reconoce las columnas y
+    // el resultado llega a la pantalla sin tipo.
+    .select('id, nombre, entidad, tipo_financiador, ambito, pais, paises_elegibles, tipo_postulante, sector, objetivo, monto, monto_maximo, moneda, contrapartida_exigida, fecha_cierre, fecha_cierre_texto, fecha_apertura, abierta_todo_el_anio, mes_apertura_tipico, periodicidad, enlace_aplicacion, fuente_oficial, linea_tematica, territorio, origen_ficha, actualizado_en')
     .order('fecha_cierre', { ascending: true, nullsFirst: false })
     .limit(1000)
 
