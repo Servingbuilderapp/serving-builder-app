@@ -34,7 +34,7 @@ export default async function ReplicasPage({ params }: { params: Promise<{ id: s
   const { data: replicas } = await supabase
     .from('replicas')
     .select(
-      'id, tipo, destino, estado, riesgos, nucleo_json, adaptaciones_json, obligados_json, proyecto_replica_id'
+      'id, tipo, destino, estado, riesgos, nucleo_json, adaptaciones_json, obligados_json, proyecto_replica_id, modalidad_cobro, estado_pago'
     )
     .eq('proyecto_origen_id', id)
     .order('creada_en', { ascending: false })
