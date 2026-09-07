@@ -79,7 +79,12 @@ function listaDePuntos(valor: unknown, maximo = 12): PuntoDeReplica[] {
 export async function prepararReplica(
   supabase: any,
   proyectoOrigenId: string,
-  opciones: { tipo: TipoReplica; destino?: string; convocatoriaId?: string },
+  opciones: {
+    tipo: TipoReplica
+    destino?: string
+    convocatoriaId?: string
+    modalidadCobro?: 'ya_presentado' | 'no_presentado'
+  },
 ): Promise<ResultadoReplica> {
   if (!TIPOS_REPLICA.includes(opciones.tipo)) {
     return { ok: false, mensaje: 'Ese tipo de réplica no existe.' }
@@ -180,6 +185,8 @@ DEVUELVE ÚNICAMENTE UN JSON:
       obligados_json: plan.obligados,
       riesgos: plan.riesgos || null,
       estado: 'Planeada',
+      modalidad_cobro: opciones.modalidadCobro || null,
+      estado_pago: 'Sin cotizar',
     })
     .select('id')
     .single()
