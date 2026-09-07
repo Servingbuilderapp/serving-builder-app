@@ -20,19 +20,17 @@
  *                      proponente, otro territorio, otro presupuesto, etc.
  *                      (ver TIPOS_REPLICA en motorReplica.ts).
  *
- * OJO — dos cosas que quedaron sin confirmar con el dueño, por la prisa del
- * día en que se definió el precio. Revisar antes de cobrar el primer cliente:
+ * CONFIRMADO por el dueño el 7 de septiembre de 2026, tarde:
  *
- *   1. El precio de 'no_presentado' se dejó como un PAGO ÚNICO por el
- *      proyecto base, sin importar en cuántas convocatorias distintas
- *      termine postulándose. Si el dueño quiere cobrar por cada variante o
- *      poner un tope de variantes incluidas, hay que cambiar `precioUSD` por
- *      una función que reciba el número de variantes.
+ *   - El precio de 'no_presentado' (USD 2.500) es un PAGO ÚNICO por el
+ *     proyecto base, sin importar en cuántas formas distintas termine
+ *     postulándose (otro territorio, otro beneficiario, otro proponente,
+ *     otro presupuesto, etc. — todas incluidas en ese precio).
  *
- *   2. El precio está en dólares. Para un cliente colombiano que paga en
- *      pesos hace falta decidir la tasa de conversión (o dejarlo también en
- *      dólares, como ya se hace en `COBRO_EXTERIOR` de mediosDePago.ts). Por
- *      ahora este archivo solo entrega el valor en USD.
+ *   - Los precios quedan en dólares en toda la plataforma, con el
+ *     equivalente en pesos mostrado al lado como referencia (no como cobro
+ *     real). Ver `conversionMoneda.ts` para cómo se calcula y cómo
+ *     actualizar la tasa de cambio.
  */
 
 export type ModalidadReplica = 'ya_presentado' | 'no_presentado'
@@ -69,16 +67,18 @@ export const PRECIOS_REPLICA: Record<ModalidadReplica, PrecioReplica> = {
   },
 }
 
-/** Formatea un valor en dólares: 1800 -> "US$ 1.800" */
-export function formatoUSD(valor: number): string {
-  return new Intl.NumberFormat('es-CO', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0,
-  }).format(valor)
-}
+export { formatoUSD, formatoCOP, convertirUsdACop, precioConEquivalenciaCOP } from './conversionMoneda'
+import { formatoUSD, precioConEquivalenciaCOP } from './conversionMoneda'
 
-/** Atajo para mostrar el precio de una modalidad ya formateado. */
+/** Atajo para mostrar el precio de una modalidad ya formateado, solo en dólares. */
 export function precioReplicaTexto(modalidad: ModalidadReplica): string {
   return formatoUSD(PRECIOS_REPLICA[modalidad].precioUSD)
+}
+
+/**
+ * El mismo precio, pero con el equivalente en pesos al lado, para mostrar en
+ * pantalla. Ej: "US$ 1.800 (aprox. $5.627.000 COP)"
+ */
+export function precioReplicaConEquivalencia(modalidad: ModalidadReplica): string {
+  return precioConEquivalenciaCOP(PRECIOS_REPLICA[modalidad].precioUSD)
 }
