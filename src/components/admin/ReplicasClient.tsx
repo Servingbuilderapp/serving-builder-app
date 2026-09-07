@@ -3,7 +3,19 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { AlertTriangle, ArrowRight, Copy, Layers, Lock, Shuffle, Sparkles } from 'lucide-react'
+import {
+  AlertTriangle,
+  ArrowRight,
+  Banknote,
+  Copy,
+  Layers,
+  Lock,
+  Shuffle,
+  Sparkles,
+} from 'lucide-react'
+import { PRECIOS_REPLICA, type ModalidadReplica } from '@/lib/precioReplicas'
+import { precioConEquivalenciaCOP } from '@/lib/conversionMoneda'
+import { COBRO_COLOMBIA, COBRO_EXTERIOR } from '@/lib/mediosDePago'
 
 /* -------------------------------------------------------------------------- */
 
@@ -17,6 +29,8 @@ export type Replica = {
   adaptaciones_json: unknown
   obligados_json: unknown
   proyecto_replica_id: string | null
+  modalidad_cobro: ModalidadReplica | null
+  estado_pago: 'Sin cotizar' | 'Cotizado' | 'Pagado'
 }
 
 export type ConvocatoriaOpcion = {
@@ -34,6 +48,12 @@ const COLOR_ESTADO: Record<string, string> = {
   'Proyecto creado': 'bg-[#E7EDFB] text-[#1D4ED8]',
   Postulada: 'bg-[#E4F2EB] text-[#186A46]',
   Descartada: 'bg-[#EEF2F8] text-[#7C8CA5]',
+}
+
+const COLOR_ESTADO_PAGO: Record<string, string> = {
+  'Sin cotizar': 'bg-[#EEF2F8] text-[#7C8CA5]',
+  Cotizado: 'bg-[#FBF0DF] text-[#8A5307]',
+  Pagado: 'bg-[#E4F2EB] text-[#186A46]',
 }
 
 /** Qué se le pide al equipo según el tipo, para que el campo destino no quede en blanco. */
@@ -107,6 +127,159 @@ function Columna({
   )
 }
 
+/** Cómo se le cobra al cliente — mismos datos que ve en /contratar, en modo lectura. */
+function InfoDeCobro() {
+  return (
+    <div className="mt-3 rounded-lg border border-[#E4EAF3] bg-white p-3.5 text-[12.5px] leading-relaxed text-[#5B6B84]">
+      <p className="font-semibold text-[#0B2A4A]">Cómo cobrarle</p>
+      <p className="mt-1">
+        Cliente en Colombia: transferencia a {COBRO_COLOMBIA.cuenta?.banco}, cuenta{' '}
+        {COBRO_COLOMBIA.cuenta?.tipo} {COBRO_COLOMBIA.cuenta?.numero}, a nombre de{' '}
+        {COBRO_COLOMBIA.cuenta?.titular} (NIT {COBRO_COLOMBIA.cuenta?.nit}).
+        {COBRO_COLOMBIA.cuenta?.llaves?.length
+          ? ` También por llave Bre-B: ${COBRO_COLOMBIA.cuenta.llaves
+              .map((l) => `${l.etiqueta} ${l.valor}`)
+              .join(' o ')}.`
+          : ''}
+      </p>
+      <p className="mt-1.5">
+        Cliente en el exterior: {COBRO_EXTERIOR.paypal ? 'PayPal' : 'factura, sin PayPal por ahora'}.
+      </p>
+      <p className="mt-1.5 text-[11.5px] text-[#94A3B8]">
+        El peso al lado del dólar es solo referencia — el cobro real siempre es en dólares.
+      </p>
+    </div>
+  )
+}
+
+/** Tarjeta de cotización de una réplica: elegir modalidad, ver precio, mover el estado de pago. */
+function Cotizacion({
+  replica,
+  yaCubiertaPor,
+  onCotizar,
+  onCambiarEstadoPago,
+  trabajando,
+}: {
+  replica: Replica
+  yaCubiertaPor: Replica | null
+  onCotizar: (modalidad: ModalidadReplica) => void
+  onCambiarEstadoPago: (estado: 'Sin cotizar' | 'Cotizado' | 'Pagado') => void
+  trabajando: boolean
+}) {
+  const [modalidadElegida, setModalidadElegida] = useState<ModalidadReplica | ''>('')
+
+  if (!replica.modalidad_cobro) {
+    return (
+      <div className="mx-5 mb-5 rounded-xl border border-dashed border-[#DCE4F0] bg-[#F8FAFD] p-4">
+        <div className="flex items-center gap-2">
+          <Banknote className="h-4 w-4 text-[#8A5307]" />
+          <h4 className="text-[12px] font-bold uppercase tracking-wider text-[#0B2A4A]">
+            Sin cotizar todavía
+          </h4>
+        </div>
+        <p className="mt-1.5 text-[12.5px] leading-relaxed text-[#5B6B84]">
+          Elegí en cuál de las dos modalidades entra esta réplica para saber cuánto cobrarle.
+        </p>
+        <div className="mt-3 grid gap-2 sm:grid-cols-2">
+          {(Object.values(PRECIOS_REPLICA)).map((p) => (
+            <button
+              key={p.id}
+              type="button"
+              onClick={() => setModalidadElegida(p.id)}
+              className={`rounded-lg border p-3 text-left transition ${
+                modalidadElegida === p.id
+                  ? 'border-[#1D4ED8] bg-[#E7EDFB]'
+                  : 'border-[#DCE4F0] bg-white hover:border-[#B7C6DD]'
+              }`}
+            >
+              <p className="text-[12.5px] font-semibold text-[#0B2A4A]">{p.nombre}</p>
+              <p className="mt-0.5 text-[11.5px] text-[#7C8CA5]">{p.descripcionCorta}</p>
+              <p className="mt-1.5 text-[13px] font-bold text-[#1D4ED8]">
+                {precioConEquivalenciaCOP(p.precioUSD)}
+              </p>
+            </button>
+          ))}
+        </div>
+        <button
+          type="button"
+          disabled={!modalidadElegida || trabajando}
+          onClick={() => modalidadElegida && onCotizar(modalidadElegida)}
+          className="mt-3 inline-flex h-9 items-center gap-2 rounded-lg bg-gradient-to-b from-[#2563EB] to-[#1D4ED8] px-4 text-[12.5px] font-semibold text-white disabled:opacity-45"
+        >
+          Guardar cotización
+        </button>
+      </div>
+    )
+  }
+
+  const precio = PRECIOS_REPLICA[replica.modalidad_cobro]
+
+  if (yaCubiertaPor) {
+    return (
+      <div className="mx-5 mb-5 rounded-xl border border-[#DCE4F0] bg-[#F8FAFD] p-4">
+        <div className="flex items-center gap-2">
+          <Banknote className="h-4 w-4 text-[#186A46]" />
+          <h4 className="text-[12px] font-bold uppercase tracking-wider text-[#0B2A4A]">
+            Incluida en un pago único
+          </h4>
+        </div>
+        <p className="mt-1.5 text-[12.5px] leading-relaxed text-[#5B6B84]">
+          Es &ldquo;{precio.nombre.toLowerCase()}&rdquo; — ese pago ya se cotizó ({yaCubiertaPor.estado_pago.toLowerCase()})
+          con otra réplica de este mismo proyecto, y cubre todas las formas en que se postule. No se cobra
+          aparte por esta.
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="mx-5 mb-5 rounded-xl border border-[#DCE4F0] bg-[#F8FAFD] p-4">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <Banknote className="h-4 w-4 text-[#1D4ED8]" />
+          <h4 className="text-[12px] font-bold uppercase tracking-wider text-[#0B2A4A]">
+            {precio.nombre}
+          </h4>
+        </div>
+        <span
+          className={`rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${COLOR_ESTADO_PAGO[replica.estado_pago]}`}
+        >
+          {replica.estado_pago}
+        </span>
+      </div>
+      <p className="mt-1.5 text-[12.5px] leading-relaxed text-[#5B6B84]">{precio.descripcion}</p>
+      <p className="mt-2 text-[16px] font-extrabold text-[#0B2A4A]">
+        {precioConEquivalenciaCOP(precio.precioUSD)}
+      </p>
+
+      <div className="mt-3 flex flex-wrap gap-2">
+        {replica.estado_pago !== 'Cotizado' ? (
+          <button
+            type="button"
+            disabled={trabajando}
+            onClick={() => onCambiarEstadoPago('Cotizado')}
+            className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-[#DCE4F0] bg-white px-3.5 text-[12.5px] font-semibold text-[#0B2A4A] disabled:opacity-45"
+          >
+            Marcar como cotizado
+          </button>
+        ) : null}
+        {replica.estado_pago !== 'Pagado' ? (
+          <button
+            type="button"
+            disabled={trabajando}
+            onClick={() => onCambiarEstadoPago('Pagado')}
+            className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-gradient-to-b from-[#186A46] to-[#125536] px-3.5 text-[12.5px] font-semibold text-white disabled:opacity-45"
+          >
+            Marcar como pagado
+          </button>
+        ) : null}
+      </div>
+
+      <InfoDeCobro />
+    </div>
+  )
+}
+
 /* -------------------------------------------------------------------------- */
 
 export function ReplicasClient({
@@ -126,6 +299,7 @@ export function ReplicasClient({
   const [tipo, setTipo] = useState('')
   const [destino, setDestino] = useState('')
   const [convocatoriaId, setConvocatoriaId] = useState('')
+  const [modalidadCobro, setModalidadCobro] = useState<ModalidadReplica | ''>('')
   const [trabajando, setTrabajando] = useState<string | null>(null)
   const [aviso, setAviso] = useState<{ tono: 'ok' | 'mal'; texto: string } | null>(null)
 
@@ -206,6 +380,19 @@ export function ReplicasClient({
               </option>
             ))}
           </select>
+
+          <select
+            value={modalidadCobro}
+            onChange={(e) => setModalidadCobro(e.target.value as ModalidadReplica | '')}
+            className="h-11 rounded-lg border border-[#DCE4F0] bg-white px-3 text-[13.5px] text-[#0B2A4A] outline-none focus:border-[#1D4ED8] sm:col-span-2"
+          >
+            <option value="">Modalidad de cobro (se puede fijar después)…</option>
+            {Object.values(PRECIOS_REPLICA).map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.nombre} — {precioConEquivalenciaCOP(p.precioUSD)}
+              </option>
+            ))}
+          </select>
         </div>
 
         <button
@@ -219,6 +406,7 @@ export function ReplicasClient({
                 tipo,
                 destino: destino || undefined,
                 convocatoriaId: convocatoriaId || undefined,
+                modalidadCobro: modalidadCobro || undefined,
               },
               'preparar'
             )
@@ -318,6 +506,29 @@ export function ReplicasClient({
                 <p className="text-[13px] leading-relaxed text-[#5B6B84]">{r.riesgos}</p>
               </div>
             ) : null}
+
+            <Cotizacion
+              replica={r}
+              trabajando={trabajando !== null}
+              yaCubiertaPor={
+                // "no_presentado" es un pago único por proyecto: si otra réplica de esta
+                // misma modalidad ya se cotizó o se pagó, esta va incluida, no se cobra aparte.
+                r.modalidad_cobro === 'no_presentado'
+                  ? replicas.find(
+                      (otra) =>
+                        otra.id !== r.id &&
+                        otra.modalidad_cobro === 'no_presentado' &&
+                        otra.estado_pago !== 'Sin cotizar'
+                    ) || null
+                  : null
+              }
+              onCotizar={(modalidad) =>
+                llamar({ accion: 'cotizar', replicaId: r.id, modalidadCobro: modalidad }, `cotizar-${r.id}`)
+              }
+              onCambiarEstadoPago={(estado) =>
+                llamar({ accion: 'marcar_pago', replicaId: r.id, estadoPago: estado }, `pago-${r.id}`)
+              }
+            />
           </div>
         ))
       )}
