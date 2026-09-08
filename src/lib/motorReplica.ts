@@ -15,7 +15,9 @@
  * es lo que hace que el proyecto siga siendo el mismo proyecto.
  */
 
+import { after } from 'next/server'
 import { callGemini } from '@/lib/gemini'
+import { cabecerasInternas } from '@/lib/candadoMotores'
 
 export const TIPOS_REPLICA = [
   'misma convocatoria',
@@ -394,10 +396,38 @@ export async function crearProyectoReplica(supabase: any, replicaId: string): Pr
     })
     .eq('id', replicaId)
 
+  // Una réplica NUNCA pasa por estructuración: el proyecto de origen ya está
+  // estructurado (o ya se presentó) — es la regla de fondo del método. Por
+  // eso, apenas se crea el proyecto de la réplica, queda listo para que el
+  // Motor 2 (búsqueda de convocatorias) y el Motor 3 (encaje) lo tomen solos,
+  // igual que a cualquier proyecto que ya terminó su estructuración. Sin este
+  // paso, el proyecto de la réplica se quedaba creado pero nunca entraba a
+  // buscar convocatorias hasta que alguien lo empujara a mano.
+  await supabase
+    .from('proyectos_clientes_serving')
+    .update({ listo_para_encaje: true })
+    .eq('id', nuevoId)
+
+  const sitio = process.env.NEXT_PUBLIC_SITE_URL
+  if (sitio) {
+    after(async () => {
+      try {
+        await fetch(`${sitio.replace(/\/$/, '')}/api/buscar-convocatorias`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', ...cabecerasInternas() },
+          body: JSON.stringify({ id_proyecto: nuevoId }),
+        })
+      } catch (e) {
+        console.error('[Réplicas] No se pudo arrancar la búsqueda de convocatorias:', e)
+      }
+    })
+  }
+
   return {
     ok: true,
     replicaId,
     proyectoReplicaId: nuevoId,
-    mensaje: 'Se creó el proyecto de la réplica con la estructura del origen copiada. Falta adaptarlo.',
+    mensaje:
+      'Se creó el proyecto de la réplica con la estructura del origen copiada, y ya quedó buscando convocatorias. Falta adaptarlo en las pantallas de siempre.',
   }
 }
