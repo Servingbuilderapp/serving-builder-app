@@ -13,6 +13,7 @@ import {
   Radar,
   Satellite,
   Target,
+  Copy,
   X,
 } from 'lucide-react'
 
@@ -49,6 +50,7 @@ const SECCIONES_CLIENTE: Seccion[] = [
       { nombre: 'Avance de mi proyecto', href: '/mi-proyecto', icono: ListChecks },
       { nombre: 'Lo que me piden', href: '/pendientes', icono: Inbox },
       { nombre: 'Mis convocatorias', href: '/mis-convocatorias', icono: Target },
+      { nombre: 'Mis réplicas', href: '/mis-replicas', icono: Copy },
       { nombre: 'App de Ideas', href: '/ideas', icono: Lightbulb },
     ],
   },

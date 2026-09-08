@@ -105,7 +105,33 @@ export async function prepararReplica(
     .order('tipo')
     .order('orden')
 
-  if (!nodos || nodos.length === 0) {
+  // Hay dos caminos para estructurar un proyecto: el formulario técnico (que
+  // llena este árbol) y el documento que sube el cliente (Motor 1, que llena
+  // contenido_pasos_proyecto — es el camino que usa la puerta de entrada de
+  // Réplicas). Si el proyecto vino por el segundo camino no hay árbol, y antes
+  // esto se detenía aquí diciendo que el proyecto "no estaba estructurado"
+  // aunque sí lo estuviera. Ahora se usa lo que haya, igual que ya hace el
+  // Motor 2 al buscar convocatorias (ver /api/buscar-convocatorias).
+  let arbolOContenido = (nodos || []).map((n: any) => `- [${n.tipo} ${n.orden}] ${n.descripcion}`).join('\n')
+
+  if (!arbolOContenido.trim()) {
+    const { data: contenido } = await supabase
+      .from('contenido_pasos_proyecto')
+      .select('id_paso, contenido')
+      .eq('id_proyecto', proyectoOrigenId)
+
+    const { data: pasos } = await supabase
+      .from('pasos_estructuracion')
+      .select('id, nombre_paso')
+
+    const mapaNombres = new Map((pasos || []).map((p: any) => [p.id, p.nombre_paso]))
+
+    arbolOContenido = (contenido || [])
+      .map((c: any) => `--- ${mapaNombres.get(c.id_paso) || 'paso'} ---\n${c.contenido}`)
+      .join('\n\n')
+  }
+
+  if (!arbolOContenido.trim()) {
     return { ok: false, mensaje: 'El proyecto de origen todavía no está estructurado: no hay qué replicar.' }
   }
 
@@ -118,8 +144,6 @@ export async function prepararReplica(
       .maybeSingle()
     convocatoria = data
   }
-
-  const arbol = nodos.map((n: any) => `- [${n.tipo} ${n.orden}] ${n.descripcion}`).join('\n')
 
   const prompt = `Eres un formulador de proyectos. Vas a planear la RÉPLICA de un proyecto que ya está estructurado.
 
@@ -135,8 +159,8 @@ Territorio actual: ${texto(origen.respuestas_fase1_json?.q2_ubicacion) || 'no in
 Población actual: ${texto(origen.respuestas_fase1_json?.q6_afectados) || 'no indicada'}
 Monto actual: ${origen.monto_solicitado_cop ?? 'no definido'}
 
-Árbol:
-${arbol}
+Árbol o contenido estructurado:
+${arbolOContenido}
 
 Dossier:
 ${texto(origen.dossier_markdown).slice(0, 8000) || 'sin dossier'}
@@ -345,6 +369,22 @@ export async function crearProyectoReplica(supabase: any, replicaId: string): Pr
     }
   }
 
+  // --- Copiar el contenido por pasos, si el origen vino por el camino del
+  //     documento (Motor 1) en vez del árbol -------------------------------
+  const { data: contenidoOrigen } = await supabase
+    .from('contenido_pasos_proyecto')
+    .select('id_paso, contenido, advertencia')
+    .eq('id_proyecto', replica.proyecto_origen_id)
+
+  for (const fila of contenidoOrigen || []) {
+    await supabase.from('contenido_pasos_proyecto').upsert({
+      id_proyecto: nuevoId,
+      id_paso: fila.id_paso,
+      contenido: fila.contenido,
+      advertencia: fila.advertencia,
+    })
+  }
+
   await supabase
     .from('replicas')
     .update({
@@ -358,6 +398,6 @@ export async function crearProyectoReplica(supabase: any, replicaId: string): Pr
     ok: true,
     replicaId,
     proyectoReplicaId: nuevoId,
-    mensaje: 'Se creó el proyecto de la réplica con el árbol, los objetivos y la cadena de valor copiados. Falta adaptarlo.',
+    mensaje: 'Se creó el proyecto de la réplica con la estructura del origen copiada. Falta adaptarlo.',
   }
 }
