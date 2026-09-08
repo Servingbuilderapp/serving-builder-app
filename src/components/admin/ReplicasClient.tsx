@@ -407,9 +407,11 @@ export function ReplicasClient({
           Preparar una réplica
         </h2>
         <p className="mt-1.5 text-[13px] leading-relaxed text-[#5B6B84]">
-          Primero se piensa: qué se conserva del proyecto, qué se adapta y qué exige el destino.
-          Después, con un botón, se crea el proyecto nuevo copiando el árbol, los objetivos y la
-          cadena de valor. La adaptación fina la hace el equipo en las pantallas de siempre.
+          Este proyecto ya está estructurado, o ya se presentó — aquí no se vuelve a estructurar
+          nada. Primero se piensa: qué se conserva, qué se adapta y qué exige el destino. Después,
+          con un botón, se crea el proyecto nuevo llevando todo lo que el cliente ya armó, sin
+          empezar de cero, y queda buscando convocatorias solo. La adaptación fina la hace el
+          equipo en las pantallas de siempre.
         </p>
 
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
