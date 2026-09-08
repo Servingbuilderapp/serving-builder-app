@@ -56,19 +56,74 @@ const COLOR_ESTADO_PAGO: Record<string, string> = {
   Pagado: 'bg-[#E4F2EB] text-[#186A46]',
 }
 
-/** Qué se le pide al equipo según el tipo, para que el campo destino no quede en blanco. */
-const PISTA_DESTINO: Record<string, string> = {
-  'misma convocatoria': 'La misma convocatoria, en su próxima apertura',
-  'otra convocatoria': 'Nombre de la otra convocatoria',
-  'otro territorio': 'Departamento, municipio o país',
-  'otros beneficiarios': 'Qué población nueva',
-  'otro proponente': 'Qué entidad presentaría el proyecto',
-  'otros aliados': 'Qué aliados entran',
-  'otra linea tematica': 'Qué línea temática',
-  'otro enfoque sectorial': 'Qué sector',
-  'otro enfoque de innovacion': 'Qué enfoque de innovación',
-  'otro monto': 'A qué monto se lleva',
-  'otro alcance de metas': 'Qué alcance de metas',
+/**
+ * Antes esto era una sola casilla de texto libre, con un ejemplo que cambiaba
+ * de placeholder según el tipo — pero el que la llenaba tenía que redactar el
+ * enunciado completo a mano. Ahora cada tipo sabe qué palabra pedir (el
+ * territorio, la entidad, el monto…) y arma solo el enunciado técnico; quien
+ * llena el formulario solo escribe el dato, y puede agregar una nota aparte.
+ */
+const CAMPO_DESTINO: Record<
+  string,
+  { etiqueta: string; ejemplo: string; opcional?: boolean; frase: (valor: string) => string }
+> = {
+  'misma convocatoria': {
+    etiqueta: 'Detalle de la próxima apertura (opcional)',
+    ejemplo: 'Ej: edición 2027',
+    opcional: true,
+    frase: (valor) =>
+      valor ? `En la misma convocatoria, en su próxima apertura (${valor}).` : 'En la misma convocatoria, en su próxima apertura.',
+  },
+  'otra convocatoria': {
+    etiqueta: 'Nombre de la convocatoria de destino',
+    ejemplo: 'Ej: Fondo Emprender, convocatoria 2027',
+    frase: (valor) => `Hacia la convocatoria «${valor}».`,
+  },
+  'otro territorio': {
+    etiqueta: 'Departamento, municipio o país',
+    ejemplo: 'Ej: Nariño, o Pasto (Nariño), o Ecuador',
+    frase: (valor) => `Hacia el territorio: ${valor}.`,
+  },
+  'otros beneficiarios': {
+    etiqueta: 'Población beneficiaria nueva',
+    ejemplo: 'Ej: mujeres cabeza de familia rurales',
+    frase: (valor) => `Hacia la población beneficiaria: ${valor}.`,
+  },
+  'otro proponente': {
+    etiqueta: 'Entidad que presentaría el proyecto',
+    ejemplo: 'Ej: Alcaldía de Pasto',
+    frase: (valor) => `Con la entidad proponente: ${valor}.`,
+  },
+  'otros aliados': {
+    etiqueta: 'Aliados nuevos que entran',
+    ejemplo: 'Ej: Cámara de Comercio, Universidad de Nariño',
+    frase: (valor) => `Con los aliados: ${valor}.`,
+  },
+  'otra linea tematica': {
+    etiqueta: 'Línea temática nueva',
+    ejemplo: 'Ej: economía circular',
+    frase: (valor) => `Hacia la línea temática: ${valor}.`,
+  },
+  'otro enfoque sectorial': {
+    etiqueta: 'Sector nuevo',
+    ejemplo: 'Ej: turismo rural',
+    frase: (valor) => `Hacia el sector: ${valor}.`,
+  },
+  'otro enfoque de innovacion': {
+    etiqueta: 'Enfoque de innovación nuevo',
+    ejemplo: 'Ej: innovación social en vez de tecnológica',
+    frase: (valor) => `Hacia el enfoque de innovación: ${valor}.`,
+  },
+  'otro monto': {
+    etiqueta: 'Monto al que se lleva',
+    ejemplo: 'Ej: 300 millones de pesos',
+    frase: (valor) => `Al monto: ${valor}.`,
+  },
+  'otro alcance de metas': {
+    etiqueta: 'Nuevo alcance de metas',
+    ejemplo: 'Ej: el doble de beneficiarios',
+    frase: (valor) => `Al alcance de metas: ${valor}.`,
+  },
 }
 
 type Punto = { que: string; detalle: string }
@@ -297,11 +352,22 @@ export function ReplicasClient({
 }) {
   const router = useRouter()
   const [tipo, setTipo] = useState('')
-  const [destino, setDestino] = useState('')
+  const [valorCampoDestino, setValorCampoDestino] = useState('')
+  const [notaAdicional, setNotaAdicional] = useState('')
   const [convocatoriaId, setConvocatoriaId] = useState('')
   const [modalidadCobro, setModalidadCobro] = useState<ModalidadReplica | ''>('')
   const [trabajando, setTrabajando] = useState<string | null>(null)
   const [aviso, setAviso] = useState<{ tono: 'ok' | 'mal'; texto: string } | null>(null)
+
+  const campoDestino = tipo ? CAMPO_DESTINO[tipo] : null
+  const faltaValorCampo = Boolean(campoDestino && !campoDestino.opcional && !valorCampoDestino.trim())
+
+  // El enunciado técnico completo, armado solo — nadie tiene que redactarlo.
+  const destinoCompuesto = campoDestino
+    ? [campoDestino.frase(valorCampoDestino.trim()), notaAdicional.trim() ? `Nota: ${notaAdicional.trim()}` : '']
+        .filter(Boolean)
+        .join(' ')
+    : ''
 
   const llamar = async (cuerpo: Record<string, unknown>, etiqueta: string) => {
     setTrabajando(etiqueta)
@@ -318,7 +384,8 @@ export function ReplicasClient({
         return
       }
       setAviso({ tono: 'ok', texto: datos?.mensaje || 'Listo.' })
-      setDestino('')
+      setValorCampoDestino('')
+      setNotaAdicional('')
       router.refresh()
     } catch {
       setAviso({ tono: 'mal', texto: 'Se cayó la conexión. Intenta otra vez.' })
@@ -348,8 +415,12 @@ export function ReplicasClient({
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <select
             value={tipo}
-            onChange={(e) => setTipo(e.target.value)}
-            className="h-11 rounded-lg border border-[#DCE4F0] bg-white px-3 text-[13.5px] text-[#0B2A4A] outline-none focus:border-[#1D4ED8]"
+            onChange={(e) => {
+              setTipo(e.target.value)
+              setValorCampoDestino('')
+              setNotaAdicional('')
+            }}
+            className="h-11 rounded-lg border border-[#DCE4F0] bg-white px-3 text-[13.5px] text-[#0B2A4A] outline-none focus:border-[#1D4ED8] sm:col-span-2"
           >
             <option value="">Tipo de réplica…</option>
             {tipos.map((t) => (
@@ -359,13 +430,37 @@ export function ReplicasClient({
             ))}
           </select>
 
-          <input
-            type="text"
-            value={destino}
-            onChange={(e) => setDestino(e.target.value)}
-            placeholder={tipo ? PISTA_DESTINO[tipo] || 'A dónde va la réplica' : 'A dónde va la réplica'}
-            className="h-11 rounded-lg border border-[#DCE4F0] bg-white px-3 text-[13.5px] text-[#0B2A4A] outline-none placeholder:text-[#A9B7CB] focus:border-[#1D4ED8]"
-          />
+          {campoDestino ? (
+            <div className="sm:col-span-2">
+              <label className="mb-1 block text-[12px] font-semibold text-[#5B6B84]">
+                {campoDestino.etiqueta}
+              </label>
+              <input
+                type="text"
+                value={valorCampoDestino}
+                onChange={(e) => setValorCampoDestino(e.target.value)}
+                placeholder={campoDestino.ejemplo}
+                className="h-11 w-full rounded-lg border border-[#DCE4F0] bg-white px-3 text-[13.5px] text-[#0B2A4A] outline-none placeholder:text-[#A9B7CB] focus:border-[#1D4ED8]"
+              />
+
+              <label className="mb-1 mt-3 block text-[12px] font-semibold text-[#5B6B84]">
+                Nota adicional (opcional)
+              </label>
+              <textarea
+                value={notaAdicional}
+                onChange={(e) => setNotaAdicional(e.target.value)}
+                rows={2}
+                placeholder="Algo más que el equipo deba saber sobre esta réplica"
+                className="w-full rounded-lg border border-[#DCE4F0] bg-white px-3 py-2.5 text-[13.5px] text-[#0B2A4A] outline-none placeholder:text-[#A9B7CB] focus:border-[#1D4ED8]"
+              />
+
+              {destinoCompuesto ? (
+                <p className="mt-2 rounded-lg bg-[#F8FAFD] px-3 py-2 text-[12.5px] italic leading-relaxed text-[#5B6B84]">
+                  Así va a quedar redactado: &ldquo;{destinoCompuesto}&rdquo;
+                </p>
+              ) : null}
+            </div>
+          ) : null}
 
           <select
             value={convocatoriaId}
@@ -397,14 +492,14 @@ export function ReplicasClient({
 
         <button
           type="button"
-          disabled={!tipo || trabajando !== null}
+          disabled={!tipo || faltaValorCampo || trabajando !== null}
           onClick={() =>
             llamar(
               {
                 accion: 'preparar',
                 proyectoId,
                 tipo,
-                destino: destino || undefined,
+                destino: destinoCompuesto || undefined,
                 convocatoriaId: convocatoriaId || undefined,
                 modalidadCobro: modalidadCobro || undefined,
               },
