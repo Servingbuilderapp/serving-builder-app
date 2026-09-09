@@ -5,7 +5,7 @@ import {
   Search, Plus, FileText, Upload, Link2, X, AlertTriangle,
   CalendarClock, Globe2, Building2, Check,
 } from 'lucide-react'
-import { MESES, PERIODICIDADES, TIPOS_POSTULANTE, semaforoCierre } from '@/lib/radar'
+import { MESES, PERIODICIDADES, TIPOS_POSTULANTE, semaforoCierre } from '@/lib/radiografiaPliego'
 
 /**
  * LA BIBLIOTECA DE CONVOCATORIAS
