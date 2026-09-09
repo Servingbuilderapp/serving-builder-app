@@ -5,9 +5,9 @@ import { esEquipoServing } from '@/lib/guardiaEquipo'
 /**
  * LOS TÉRMINOS DE REFERENCIA DE UNA CONVOCATORIA
  *
- * Es la pieza que sostiene todo radar: sin el texto del pliego no hay contra
- * qué encajar el proyecto. Un resumen no sirve — las reglas están en el
- * documento.
+ * Es la pieza que sostiene toda la Radiografía del Pliego: sin el texto del
+ * pliego no hay contra qué encajar el proyecto. Un resumen no sirve — las
+ * reglas están en el documento.
  *
  * Entra de dos maneras:
  *
