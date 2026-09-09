@@ -1,8 +1,10 @@
 import React from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
+import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { Copy, Plus } from 'lucide-react'
 import { PRECIOS_REPLICA, type ModalidadReplica } from '@/lib/precioReplicas'
+import { VariantesReplicaClient, type VarianteReplica } from '@/components/panel/VariantesReplicaClient'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -50,6 +52,31 @@ export default async function MisReplicasPage() {
     .order('created_at', { ascending: false })
 
   const lista = (solicitudes || []) as SolicitudReplica[]
+
+  // Se lee con la llave de servicio: "replicas" nunca antes la había leído un
+  // cliente, y no hay que depender de un permiso de base de datos que quizás
+  // no está puesto. Los proyectos ya se filtraron arriba por su propio correo,
+  // así que solo se traen réplicas de proyectos que ya son suyos.
+  const idsProyectos = lista.map((s) => s.id)
+  const servicio = createAdminClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  )
+  const { data: variantes } =
+    idsProyectos.length > 0
+      ? await servicio
+          .from('replicas')
+          .select('id, proyecto_origen_id, tipo, destino, estado')
+          .in('proyecto_origen_id', idsProyectos)
+          .order('creada_en', { ascending: false })
+      : { data: [] as { id: string; proyecto_origen_id: string; tipo: string; destino: string | null; estado: string }[] }
+
+  const variantesPorProyecto = new Map<string, VarianteReplica[]>()
+  for (const v of variantes || []) {
+    const lista2 = variantesPorProyecto.get(v.proyecto_origen_id) || []
+    lista2.push({ id: v.id, tipo: v.tipo, destino: v.destino, estado: v.estado })
+    variantesPorProyecto.set(v.proyecto_origen_id, lista2)
+  }
 
   return (
     <div className="px-4 py-6 lg:px-6">
@@ -104,6 +131,13 @@ export default async function MisReplicasPage() {
                     />
                   </div>
                 ) : null}
+
+                <VariantesReplicaClient
+                  proyectoOrigenId={solicitud.id}
+                  modalidad={solicitud.modalidad_replica_solicitada}
+                  variantesIniciales={variantesPorProyecto.get(solicitud.id) || []}
+                  puedeProcesar={(solicitud.estado_actual || '').toLowerCase() !== 'estructurando_ia'}
+                />
               </div>
             )
           })}
