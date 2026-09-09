@@ -3,6 +3,7 @@ import { after } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import mammoth from "mammoth";
 import { motorAutorizado, cabecerasInternas } from "@/lib/candadoMotores";
+import { correrEvaluadorEstructuracion } from "@/lib/motorEvaluadorEstructuracion";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -441,17 +442,19 @@ El campo "advertencia" solo aplica a pasos "completo" y va en null si no hay nin
       .update({ listo_para_encaje: listoParaEncaje })
       .eq("id", id_proyecto);
 
+    // El proyecto quedó completo (sin preguntas críticas de estructuración
+    // pendientes), pero antes de dejarlo pasar a buscar convocatorias, el
+    // evaluador automático lo compara contra el documento original del
+    // cliente. Solo si el evaluador lo aprueba arranca el Motor 2 — si
+    // encuentra algo mal, le pregunta al cliente en vez de avisarle a alguien
+    // del equipo.
     if (listoParaEncaje && !yaEstabaListo) {
       const origen = req.nextUrl.origin;
       after(async () => {
         try {
-          await fetch(`${origen}/api/buscar-convocatorias`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", ...cabecerasInternas() },
-            body: JSON.stringify({ id_proyecto }),
-          });
+          await correrEvaluadorEstructuracion(supabase, id_proyecto, origen);
         } catch (e) {
-          console.error("Error disparando Motor 2 desde estructurar-proyecto:", e);
+          console.error("Error corriendo el evaluador de estructuración:", e);
         }
       });
     }
