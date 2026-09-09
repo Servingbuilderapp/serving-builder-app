@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 /**
  * LA BIBLIOTECA DE CONVOCATORIAS — pantalla del equipo.
  *
- * Es la puerta de radar: aquí se busca con los filtros de la anatomía, se
+ * Es la puerta de la Radiografía del Pliego: aquí se busca con los filtros de la anatomía, se
  * cargan a mano las convocatorias que llegan por fuera del motor (boletines,
  * redes, un aliado) y se guardan los términos de referencia.
  */
