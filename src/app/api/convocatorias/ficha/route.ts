@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { esEquipoServing } from '@/lib/guardiaEquipo'
-import { aLista, claveDeConvocatoria } from '@/lib/radar'
+import { aLista, claveDeConvocatoria } from '@/lib/radiografiaPliego'
 
 /**
  * CARGAR UNA CONVOCATORIA A MANO
