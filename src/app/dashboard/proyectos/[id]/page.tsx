@@ -410,7 +410,7 @@ export default function ProyectoDetallePage() {
                   <b className="text-brand-orange">2. Política de No Reembolso:</b> Debido al aprovisionamiento automático e inmediato de tokens de inteligencia artificial, la entrega de activos de software y la asignación del especialista financiero real desde el inicio del proceso, no se realizarán devoluciones ni reembolsos bajo ninguna circunstancia.
                 </div>
                 <div className="border-t border-white/5 pt-2">
-                  <b className="text-brand-orange">3. Validación y Alcance de la Biblioteca:</b> Los datos extraídos del radar se consolidan en Supabase. La biblioteca metodológica del sistema aloja única y exclusivamente el conocimiento estratégico sobre "Cómo detectar aliados" y "Cómo hacer red de aliados".
+                  <b className="text-brand-orange">3. Validación y Alcance de la Biblioteca:</b> Los datos extraídos de los términos de referencia se consolidan en Supabase. La biblioteca metodológica del sistema aloja única y exclusivamente el conocimiento estratégico sobre "Cómo detectar aliados" y "Cómo hacer red de aliados".
                 </div>
               </div>
 
