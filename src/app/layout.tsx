@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Outfit, Inter } from "next/font/google"
+import { Outfit, Inter, Cormorant_Garamond } from "next/font/google"
 import "./globals.css"
 import { LanguageProvider } from "@/context/LanguageContext"
 import { ToastProvider } from "@/components/ui/ToastProvider"
@@ -17,6 +17,14 @@ const inter = Inter({
   subsets: ["latin"],
 })
 
+// Dirección 5 (9 sep 2026): serif de títulos, vino/dorado sobre fondo oscuro.
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+})
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Arquitectura Digital | Estructuración de Proyectos & Fondos",
@@ -32,7 +40,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${outfit.variable} ${inter.variable} font-sans antialiased`}
+        className={`${outfit.variable} ${inter.variable} ${cormorant.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
         <LanguageProvider>
