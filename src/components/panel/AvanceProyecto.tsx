@@ -12,6 +12,7 @@ import {
   MessageSquare,
 } from 'lucide-react'
 import { WHATSAPP_SERVING } from '@/lib/estructuracionMapping'
+import { Aviso } from '@/components/ui/Aviso'
 
 /* ========================================================================== */
 /* Tipos                                                                      */
@@ -32,11 +33,12 @@ export type DatosAvance = {
 }
 
 /* ========================================================================== */
-/* Estilo del panel (mismo lenguaje que el Resumen general)                   */
+/* Estilo del panel (vino/dorado, igual que el resto del panel del cliente)   */
 /* ========================================================================== */
 
-const SOMBRA_TARJETA =
-  'shadow-[0_1px_2px_rgba(11,42,74,0.06),0_8px_24px_-14px_rgba(11,42,74,0.20)]'
+/** Botón de acento dorado, mismo lenguaje visual que GlowButton, para usarlo en un <a>. */
+const BOTON_DORADO =
+  'bg-gradient-to-b from-[#C39F68] to-[#A8804B] text-[#3A1420] border border-[#8A6636] shadow-[0_1px_0_rgba(255,255,255,0.35)_inset,0_8px_20px_-10px_rgba(0,0,0,0.5)] hover:from-[#CDAC79] hover:to-[#B08D57]'
 
 function Tarjeta({
   children,
@@ -45,11 +47,7 @@ function Tarjeta({
   children: React.ReactNode
   className?: string
 }) {
-  return (
-    <div className={`rounded-2xl border border-[#E4EAF3] bg-white ${SOMBRA_TARJETA} ${className}`}>
-      {children}
-    </div>
-  )
+  return <div className={`glass-card ${className}`}>{children}</div>
 }
 
 /**
@@ -58,10 +56,10 @@ function Tarjeta({
  * reducirse y ningún texto debe quedar desactualizado.
  */
 const ETAPAS = [
-  { nombre: 'Diagnóstico', desde: 1, hasta: 19, color: '#1D4ED8' },
-  { nombre: 'Objetivos y solución', desde: 20, hasta: 26, color: '#2563EB' },
-  { nombre: 'Ejecución', desde: 27, hasta: 37, color: '#8A5307' },
-  { nombre: 'Cierre', desde: 38, hasta: 42, color: '#186A46' },
+  { nombre: 'Diagnóstico', desde: 1, hasta: 19, color: '#8C93A6' },
+  { nombre: 'Objetivos y solución', desde: 20, hasta: 26, color: '#8C3654' },
+  { nombre: 'Ejecución', desde: 27, hasta: 37, color: '#C99A3D' },
+  { nombre: 'Cierre', desde: 38, hasta: 42, color: '#7A8B6F' },
 ] as const
 
 /* ========================================================================== */
@@ -159,14 +157,14 @@ export function AvanceProyecto({ datos }: { datos: DatosAvance }) {
   const renglon = (paso: PasoAvance) => (
     <li
       key={paso.id}
-      className={`border-b border-[#F2F5FA] px-5 py-3 last:border-b-0 ${
-        pasoActual && paso.id === pasoActual.id ? 'bg-[#F2F6FE]' : ''
+      className={`border-b border-color-base-300/40 px-5 py-3 last:border-b-0 ${
+        pasoActual && paso.id === pasoActual.id ? 'bg-color-primary/10' : ''
       }`}
     >
       <div className="flex items-start gap-3">
         <span
           className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${
-            paso.completado ? 'bg-[#186A46]' : 'border-2 border-[#DCE4F0]'
+            paso.completado ? 'bg-[#7A8B6F]' : 'border-2 border-color-base-300'
           }`}
         >
           {paso.completado ? <Check className="h-3 w-3 text-white" strokeWidth={3.5} /> : null}
@@ -177,25 +175,25 @@ export function AvanceProyecto({ datos }: { datos: DatosAvance }) {
             <span
               className={`text-[13.5px] ${
                 paso.completado
-                  ? 'text-[#0B2A4A]'
+                  ? 'text-color-base-content'
                   : pasoActual && paso.id === pasoActual.id
-                    ? 'font-semibold text-[#1D4ED8]'
-                    : 'text-[#94A3B8]'
+                    ? 'font-semibold text-color-primary'
+                    : 'text-color-base-content/45'
               }`}
             >
               {paso.nombre}
             </span>
             {pasoActual && paso.id === pasoActual.id ? (
-              <span className="shrink-0 rounded-full bg-[#1D4ED8] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
+              <span className="shrink-0 rounded-full bg-color-primary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#3A1420]">
                 Aquí vamos
               </span>
             ) : null}
             {paso.completado && paso.advertencia ? (
-              <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-[#8A5307]" />
+              <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-[#C99A3D]" />
             ) : null}
           </div>
           {paso.completado && paso.advertencia ? (
-            <p className="mt-1 text-[12.5px] leading-relaxed text-[#8A5307]">{paso.advertencia}</p>
+            <p className="mt-1 text-[12.5px] leading-relaxed text-[#C99A3D]">{paso.advertencia}</p>
           ) : null}
         </div>
       </div>
@@ -210,10 +208,10 @@ export function AvanceProyecto({ datos }: { datos: DatosAvance }) {
     <div className="p-4 lg:p-6 space-y-5">
       {/* encabezado ------------------------------------------------------- */}
       <header className="space-y-1">
-        <h1 className="text-[19px] font-extrabold uppercase tracking-tight text-[#0B2A4A]">
+        <h1 className="text-[19px] font-extrabold uppercase tracking-tight text-color-base-content">
           Avance de mi proyecto
         </h1>
-        <p className="text-[13px] text-[#7C8CA5]">
+        <p className="text-[13px] text-color-base-content/60">
           {datos.proyecto.nombre}
           {datos.proyecto.modalidad ? ` · ${datos.proyecto.modalidad}` : ''}
         </p>
@@ -224,13 +222,13 @@ export function AvanceProyecto({ datos }: { datos: DatosAvance }) {
         <div className="flex flex-col sm:flex-row items-center gap-6">
           <div className="relative shrink-0">
             <svg viewBox="0 0 120 120" className="h-[112px] w-[112px] -rotate-90">
-              <circle cx="60" cy="60" r={radio} fill="none" stroke="#E4EAF3" strokeWidth="13" />
+              <circle cx="60" cy="60" r={radio} fill="none" stroke="#6E4A50" strokeWidth="13" />
               <circle
                 cx="60"
                 cy="60"
                 r={radio}
                 fill="none"
-                stroke="#1D4ED8"
+                stroke="#B08D57"
                 strokeWidth="13"
                 strokeLinecap="round"
                 strokeDasharray={circunferencia}
@@ -239,21 +237,21 @@ export function AvanceProyecto({ datos }: { datos: DatosAvance }) {
               />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-[24px] font-extrabold text-[#0B2A4A]">{porcentaje}%</span>
+              <span className="text-[24px] font-extrabold text-color-base-content">{porcentaje}%</span>
             </div>
           </div>
 
           <div className="flex-1 w-full space-y-2.5">
             {etapas.map((etapa) => (
               <div key={etapa.nombre} className="flex items-center gap-3">
-                <span className="w-[150px] shrink-0 text-[12.5px] text-[#5B6B84]">{etapa.nombre}</span>
-                <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-[#EEF2F8]">
+                <span className="w-[150px] shrink-0 text-[12.5px] text-color-base-content/70">{etapa.nombre}</span>
+                <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-color-base-300/30">
                   <div
                     className="h-full rounded-full transition-all duration-500"
                     style={{ width: `${etapa.porcentaje}%`, backgroundColor: etapa.color }}
                   />
                 </div>
-                <span className="w-9 shrink-0 text-right text-[12px] tabular-nums text-[#94A3B8]">
+                <span className="w-9 shrink-0 text-right text-[12px] tabular-nums text-color-base-content/45">
                   {etapa.porcentaje}%
                 </span>
               </div>
@@ -261,16 +259,16 @@ export function AvanceProyecto({ datos }: { datos: DatosAvance }) {
           </div>
         </div>
 
-        <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-[#EEF2F8] pt-4">
-          <Clock className="h-4 w-4 shrink-0 text-[#1D4ED8]" />
-          <span className="text-[13px] text-[#5B6B84]">
+        <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-color-base-300/40 pt-4">
+          <Clock className="h-4 w-4 shrink-0 text-color-primary" />
+          <span className="text-[13px] text-color-base-content/70">
             {pasoActual ? (
               <>
                 Ahora mismo tu equipo está en{' '}
-                <strong className="font-semibold text-[#0B2A4A]">{pasoActual.nombre}</strong>
+                <strong className="font-semibold text-color-base-content">{pasoActual.nombre}</strong>
               </>
             ) : (
-              <strong className="font-semibold text-[#186A46]">
+              <strong className="font-semibold text-[#7A8B6F]">
                 Tu proyecto quedó completo. Ya puede entrar a búsqueda de convocatorias.
               </strong>
             )}
@@ -280,42 +278,37 @@ export function AvanceProyecto({ datos }: { datos: DatosAvance }) {
 
       {/* aviso de pasos flojos -------------------------------------------- */}
       {porReforzar.length > 0 ? (
-        <Tarjeta className="border-[#F0DCBB] bg-[#FDF8F0] p-5">
-          <div className="flex items-start gap-3">
-            <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-[#8A5307]" />
-            <div className="space-y-1.5">
-              <p className="text-[14px] font-bold text-[#0B2A4A]">
-                {porReforzar.length === 1
-                  ? 'Hay un punto que conviene reforzar'
-                  : `Hay ${porReforzar.length} puntos que conviene reforzar`}
-              </p>
-              <p className="text-[13px] leading-relaxed text-[#5B6B84]">
-                Tu proyecto está completo y sigue avanzando: esto no detiene nada. Pero en esos
-                puntos la información que nos diste todavía queda corta, y en una convocatoria real
-                se nota. Abajo, en cada uno, te decimos qué falta.
-              </p>
-              <button
-                type="button"
-                onClick={() => setSoloPorReforzar(!soloPorReforzar)}
-                className="text-[12.5px] font-semibold text-[#8A5307] underline underline-offset-2 hover:text-[#6B4106]"
-              >
-                {soloPorReforzar ? 'Ver todo el recorrido' : 'Ver solo lo que hay que reforzar'}
-              </button>
-            </div>
-          </div>
-        </Tarjeta>
+        <Aviso
+          tipo="alerta"
+          titulo={
+            porReforzar.length === 1
+              ? 'Hay un punto que conviene reforzar'
+              : `Hay ${porReforzar.length} puntos que conviene reforzar`
+          }
+        >
+          Tu proyecto está completo y sigue avanzando: esto no detiene nada. Pero en esos puntos la
+          información que nos diste todavía queda corta, y en una convocatoria real se nota. Abajo,
+          en cada uno, te decimos qué falta.{' '}
+          <button
+            type="button"
+            onClick={() => setSoloPorReforzar(!soloPorReforzar)}
+            className="font-semibold underline underline-offset-2"
+          >
+            {soloPorReforzar ? 'Ver todo el recorrido' : 'Ver solo lo que hay que reforzar'}
+          </button>
+        </Aviso>
       ) : null}
 
       {/* recorrido --------------------------------------------------------- */}
       <Tarjeta className="overflow-hidden">
-        <div className="border-b border-[#EEF2F8] px-5 py-4">
-          <h2 className="text-[13px] font-bold uppercase tracking-wider text-[#0B2A4A]">
+        <div className="border-b border-color-base-300/40 px-5 py-4">
+          <h2 className="text-[13px] font-bold uppercase tracking-wider text-color-base-content">
             {soloPorReforzar ? 'Puntos por reforzar' : 'El recorrido de tu proyecto'}
           </h2>
         </div>
 
         {visibles.length === 0 ? (
-          <p className="px-5 py-8 text-center text-[13px] text-[#7C8CA5]">
+          <p className="px-5 py-8 text-center text-[13px] text-color-base-content/60">
             Todavía no hay nada que mostrar aquí.
           </p>
         ) : soloPorReforzar ? (
@@ -346,21 +339,21 @@ export function AvanceProyecto({ datos }: { datos: DatosAvance }) {
                         : [...actuales, etapa.nombre]
                     )
                   }
-                  className="flex w-full items-center gap-2 border-b border-[#EEF2F8] bg-[#F8FAFD] px-5 py-3 text-left hover:bg-[#F2F6FE]"
+                  className="flex w-full items-center gap-2 border-b border-color-base-300/40 bg-color-base-200/40 px-5 py-3 text-left hover:bg-color-primary/10"
                 >
                   <span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: etapa.color }} />
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#5B6B84]">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-color-base-content/70">
                     {etapa.nombre}
                   </span>
                   <span
                     className={`ml-auto shrink-0 text-[11.5px] font-semibold ${
-                      terminada ? 'text-[#186A46]' : tieneElActual ? 'text-[#1D4ED8]' : 'text-[#94A3B8]'
+                      terminada ? 'text-[#7A8B6F]' : tieneElActual ? 'text-color-primary' : 'text-color-base-content/45'
                     }`}
                   >
                     {terminada ? 'Lista' : tieneElActual ? 'En curso' : 'Pendiente'}
                   </span>
                   <ChevronDown
-                    className={`h-4 w-4 shrink-0 text-[#94A3B8] transition-transform ${
+                    className={`h-4 w-4 shrink-0 text-color-base-content/45 transition-transform ${
                       abierta ? 'rotate-180' : ''
                     }`}
                   />
@@ -374,14 +367,14 @@ export function AvanceProyecto({ datos }: { datos: DatosAvance }) {
 
       {/* ayuda ------------------------------------------------------------- */}
       <Tarjeta className="flex flex-col items-start justify-between gap-3 p-5 sm:flex-row sm:items-center">
-        <p className="text-[13px] text-[#5B6B84]">
+        <p className="text-[13px] text-color-base-content/70">
           ¿Tienes dudas o quieres actualizar información de tu proyecto?
         </p>
         <a
           href={`https://wa.me/${WHATSAPP_SERVING}?text=${mensajeWhatsapp}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex h-10 shrink-0 items-center gap-2 rounded-lg bg-gradient-to-b from-[#2563EB] to-[#1D4ED8] px-5 text-[13px] font-semibold text-white shadow-[0_1px_2px_rgba(11,42,74,0.18)] hover:brightness-105"
+          className={`inline-flex h-10 shrink-0 items-center gap-2 rounded-lg px-5 text-[13px] font-semibold ${BOTON_DORADO}`}
         >
           <MessageSquare className="h-4 w-4" />
           Hablar con mi estructurador
@@ -399,14 +392,14 @@ export function AvanceSinProyecto() {
   return (
     <div className="p-6 lg:p-8">
       <Tarjeta className="mx-auto max-w-xl p-10 text-center">
-        <h1 className="text-xl font-extrabold text-[#0B2A4A]">Todavía no tienes un proyecto activo</h1>
-        <p className="mt-3 text-[14px] leading-relaxed text-[#5B6B84]">
+        <h1 className="text-xl font-extrabold text-color-base-content">Todavía no tienes un proyecto activo</h1>
+        <p className="mt-3 text-[14px] leading-relaxed text-color-base-content/70">
           Cuando contrates tu estructuración, aquí vas a ver el recorrido completo de tu proyecto y
           en qué punto va tu equipo, actualizado en vivo.
         </p>
         <Link
           href="/estructuracion"
-          className="mt-6 inline-flex h-11 items-center gap-2 rounded-lg bg-gradient-to-b from-[#143E77] to-[#0C2E5C] px-6 text-sm font-semibold text-white"
+          className={`mt-6 inline-flex h-11 items-center gap-2 rounded-lg px-6 text-sm font-semibold ${BOTON_DORADO}`}
         >
           Ver las modalidades <ArrowRight className="h-4 w-4" />
         </Link>
@@ -423,9 +416,9 @@ export function AvancePendienteDePago({ nombreProyecto }: { nombreProyecto: stri
   return (
     <div className="p-6 lg:p-8">
       <Tarjeta className="mx-auto max-w-xl p-10 text-center">
-        <h1 className="text-xl font-extrabold text-[#0B2A4A]">Estamos confirmando tu pago</h1>
-        <p className="mt-3 text-[14px] leading-relaxed text-[#5B6B84]">
-          Tu proyecto <strong className="text-[#0B2A4A]">{nombreProyecto}</strong> ya quedó
+        <h1 className="text-xl font-extrabold text-color-base-content">Estamos confirmando tu pago</h1>
+        <p className="mt-3 text-[14px] leading-relaxed text-color-base-content/70">
+          Tu proyecto <strong className="text-color-base-content">{nombreProyecto}</strong> ya quedó
           registrado. En cuanto confirmemos el pago, tu equipo arranca la estructuración y este
           recorrido empieza a llenarse solo.
         </p>
@@ -433,7 +426,7 @@ export function AvancePendienteDePago({ nombreProyecto }: { nombreProyecto: stri
           href={`https://wa.me/${WHATSAPP_SERVING}?text=${mensaje}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-6 inline-flex h-11 items-center gap-2 rounded-lg bg-gradient-to-b from-[#2563EB] to-[#1D4ED8] px-6 text-sm font-semibold text-white"
+          className={`mt-6 inline-flex h-11 items-center gap-2 rounded-lg px-6 text-sm font-semibold ${BOTON_DORADO}`}
         >
           <MessageSquare className="h-4 w-4" />
           Enviar mi comprobante
