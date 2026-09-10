@@ -1,64 +1,79 @@
 import React from 'react'
-import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { ConvocatoriasClient } from '@/components/admin/ConvocatoriasClient'
+import {
+  CalificacionFinal,
+  CalificacionFinalSinProyecto,
+  CalificacionFinalSinEvaluar,
+  type HallazgoParaMostrar,
+} from '@/components/panel/CalificacionFinal'
 
 export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 /**
- * LA BIBLIOTECA DE CONVOCATORIAS — pantalla del equipo.
+ * "Calificación final" — la pantalla del CLIENTE con la nota que le puso el
+ * evaluador automático de estructuración: puntaje sobre 100, si quedó
+ * aprobado, y el detalle de lo revisado. Solo muestra lo que el evaluador ya
+ * calculó y guardó en `evaluaciones_estructuracion` — no inventa nada nuevo.
  *
- * Es la puerta de la Radiografía del Pliego: aquí se busca con los filtros de la anatomía, se
- * cargan a mano las convocatorias que llegan por fuera del motor (boletines,
- * redes, un aliado) y se guardan los términos de referencia.
+ * Si el proyecto quedó aprobado, aquí mismo el cliente puede decir "sí,
+ * busquemos convocatorias" (tiene 3 días; si no dice nada, el reloj de
+ * /api/revisar-aprobaciones-vencidas arranca la búsqueda solo).
  */
-export default async function AdminConvocatoriasPage() {
+export default async function CalificacionPage() {
   const supabase = await createClient()
+
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) redirect('/login')
+  const correo = user?.email || ''
 
-  const correo = (user.email || '').toLowerCase().trim()
-  let esEquipo = correo === 'servingbuilderapp@gmail.com'
+  const { data: proyecto } = await supabase
+    .from('proyectos_clientes_serving')
+    .select(
+      'id, nombre_iniciativa, evaluacion_aprobada, evaluacion_aprobada_en, busqueda_convocatorias_iniciada',
+    )
+    .eq('correo_cliente', correo)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
 
-  if (!esEquipo) {
-    const { data: perfil } = await supabase
-      .from('users')
-      .select('role')
-      .eq('id', user.id)
-      .maybeSingle<{ role: string | null }>()
-    esEquipo = perfil?.role === 'admin'
-  }
+  if (!proyecto) return <CalificacionFinalSinProyecto />
 
-  if (!esEquipo) redirect('/dashboard')
+  const nombreProyecto = String(proyecto.nombre_iniciativa || 'Tu proyecto')
+  const proyectoId = String(proyecto.id)
 
-  const { data: convocatorias, error } = await supabase
-    .from('biblioteca_convocatorias')
-    // En una sola línea: partido con "+", TypeScript no reconoce las columnas y
-    // el resultado llega a la pantalla sin tipo.
-    .select('id, nombre, entidad, tipo_financiador, ambito, pais, paises_elegibles, tipo_postulante, sector, objetivo, monto, monto_maximo, moneda, contrapartida_exigida, fecha_cierre, fecha_cierre_texto, fecha_apertura, abierta_todo_el_anio, mes_apertura_tipico, periodicidad, enlace_aplicacion, fuente_oficial, linea_tematica, territorio, origen_ficha, actualizado_en')
-    .order('fecha_cierre', { ascending: true, nullsFirst: false })
-    .limit(1000)
+  const { data: evaluacion } = await supabase
+    .from('evaluaciones_estructuracion')
+    .select('puntaje, veredicto, hallazgos_json')
+    .eq('proyecto_id', proyectoId)
+    .order('corrida', { ascending: false })
+    .limit(1)
+    .maybeSingle()
 
-  // Cuántos documentos tiene cada convocatoria: es lo que dice si ya se puede
-  // encajar contra ella o si todavía es solo un resumen.
-  const { data: documentos } = await supabase
-    .from('convocatoria_documentos')
-    .select('convocatoria_id')
+  if (!evaluacion) return <CalificacionFinalSinEvaluar nombreProyecto={nombreProyecto} />
 
-  const conteoDocumentos: Record<string, number> = {}
-  ;(documentos || []).forEach((d: { convocatoria_id: string }) => {
-    conteoDocumentos[d.convocatoria_id] = (conteoDocumentos[d.convocatoria_id] || 0) + 1
-  })
+  const hallazgos: HallazgoParaMostrar[] = (Array.isArray(evaluacion.hallazgos_json)
+    ? evaluacion.hallazgos_json
+    : []
+  ).map((h: any) => ({
+    categoria: String(h?.categoria || 'otro'),
+    descripcion: String(h?.descripcion || ''),
+    critico: h?.critico === true,
+  }))
 
   return (
-    <ConvocatoriasClient
-      convocatorias={convocatorias || []}
-      conteoDocumentos={conteoDocumentos}
-      errorCarga={error?.message || null}
-      correoEquipo={correo}
+    <CalificacionFinal
+      datos={{
+        idProyecto: proyectoId,
+        nombreProyecto,
+        puntaje: Number(evaluacion.puntaje) || 0,
+        veredicto: evaluacion.veredicto === 'aprobado' ? 'aprobado' : 'con_observaciones',
+        hallazgos,
+        busquedaIniciada: Boolean(proyecto.busqueda_convocatorias_iniciada),
+        aprobadoEnISO: proyecto.evaluacion_aprobada_en || null,
+      }}
     />
   )
 }
