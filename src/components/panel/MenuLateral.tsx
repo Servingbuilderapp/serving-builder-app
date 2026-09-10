@@ -14,6 +14,10 @@ import {
   Satellite,
   Target,
   Copy,
+  Wallet,
+  LineChart,
+  ShieldAlert,
+  CheckSquare,
   X,
 } from 'lucide-react'
 
@@ -48,6 +52,9 @@ const SECCIONES_CLIENTE: Seccion[] = [
     items: [
       { nombre: 'Resumen general', href: '/dashboard', icono: Home },
       { nombre: 'Avance de mi proyecto', href: '/mi-proyecto', icono: ListChecks },
+      { nombre: 'Calificación final', href: '/calificacion', icono: CheckSquare },
+      { nombre: 'Resultados e indicadores', href: '/resultados-indicadores', icono: LineChart },
+      { nombre: 'Riesgos y talento humano', href: '/riesgos-talento-humano', icono: ShieldAlert },
       { nombre: 'Lo que me piden', href: '/pendientes', icono: Inbox },
       { nombre: 'Mis convocatorias', href: '/mis-convocatorias', icono: Target },
       { nombre: 'Mis réplicas', href: '/mis-replicas', icono: Copy },
@@ -64,6 +71,7 @@ const SECCIONES_EQUIPO: Seccion[] = [
       { nombre: 'Proyectos de clientes', href: '/admin/proyectos', icono: FolderKanban },
       { nombre: 'Convocatorias', href: '/admin/convocatorias', icono: Radar },
       { nombre: 'Centinela Digital', href: '/admin/centinela', icono: Satellite },
+      { nombre: 'Membresías', href: '/admin/membresias', icono: Wallet },
       { nombre: 'Administración', href: '/admin', icono: Settings },
     ],
   },
