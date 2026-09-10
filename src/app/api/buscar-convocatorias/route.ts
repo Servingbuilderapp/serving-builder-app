@@ -25,7 +25,16 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-const TAMANO_LOTE = 2;
+// Cuántas convocatorias se le presentan al cliente por semana, según la
+// modalidad que contrató. Decisión del dueño (10 sep 2026): cada convocatoria
+// que se selecciona le cuesta a la plataforma una corrida de Gemini para el
+// Motor 2 y otra para el Motor 3 (encaje) — de ahí que Élite, que vale más,
+// tenga más cupo semanal que Estratégica.
+const CONVOCATORIAS_POR_SEMANA: Record<string, number> = {
+  esencial: 1, // Estructuración Estratégica ($12.000.000)
+  completo: 3, // Estructuración Élite ($17.000.000)
+};
+const TAMANO_LOTE_POR_DEFECTO = 1;
 
 const PROMPT_MOTOR_2 = `
 Eres el MOTOR DE BÚSQUEDA del sistema de Arquitectura Digital de Proyectos.
@@ -165,6 +174,15 @@ async function ejecutarBusquedaConvocatorias(id_proyecto: string) {
     return { status: 500, body: { error: "Falta configurar GEMINI_API_KEY en el servidor" }, idsSeleccionadas: [] as string[] };
   }
 
+  const { data: proyectoParaPlan } = await supabase
+    .from("proyectos_clientes_serving")
+    .select("plan_pago")
+    .eq("id", id_proyecto)
+    .maybeSingle();
+
+  const tamanoLote =
+    CONVOCATORIAS_POR_SEMANA[proyectoParaPlan?.plan_pago || ""] ?? TAMANO_LOTE_POR_DEFECTO;
+
   const { data: contenido, error: errorContenido } = await supabase
     .from("contenido_pasos_proyecto")
     .select("id_paso, contenido")
@@ -283,7 +301,7 @@ ${bibliotecaTexto}
 OPORTUNIDADES YA EVALUADAS ANTES PARA ESTE PROYECTO (no las repitas, ni seleccionadas ni descartadas):
 ${listaYaEvaluadas}
 
-TAMAÑO DEL LOTE: selecciona exactamente ${TAMANO_LOTE} oportunidades para el lote de esta vez (las mejores, según tu criterio de priorización). Registra también las demás candidatas que evaluaste y no quedaron en el lote, como descartadas con su motivo.
+TAMAÑO DEL LOTE: selecciona exactamente ${tamanoLote} oportunidades para el lote de esta vez (las mejores, según tu criterio de priorización). Registra también las demás candidatas que evaluaste y no quedaron en el lote, como descartadas con su motivo.
 
 Responde ÚNICAMENTE con un JSON válido, sin texto antes ni después, con este formato exacto:
 {
@@ -351,6 +369,15 @@ EL MAPA DE LA FINANCIACIÓN (obligatorio en cada ficha, seleccionada o descartad
   } catch (e) {
     console.error("No se pudo interpretar la respuesta de Gemini como JSON:", partesTexto);
     return { status: 500, body: { error: "Respuesta de Gemini no fue JSON válido", detalle: partesTexto.slice(0, 2000) }, idsSeleccionadas: [] as string[] };
+  }
+
+  // Candado de seguridad: si Gemini no respetó el tamaño del lote pedido, se
+  // recorta aquí mismo. Lo que sobra no se pierde — pasa a descartadas, como
+  // cualquier otra candidata que no entró esta semana.
+  if (Array.isArray(resultado.seleccionadas) && resultado.seleccionadas.length > tamanoLote) {
+    const excedentes = resultado.seleccionadas.slice(tamanoLote);
+    resultado.seleccionadas = resultado.seleccionadas.slice(0, tamanoLote);
+    resultado.descartadas = [...(Array.isArray(resultado.descartadas) ? resultado.descartadas : []), ...excedentes];
   }
 
   // TODO lo encontrado —lo elegido y lo descartado— pasa a la biblioteca.
