@@ -3,6 +3,10 @@
     {
       "path": "/api/buscar-convocatorias",
       "schedule": "0 13 * * 1"
+    },
+    {
+      "path": "/api/revisar-aprobaciones-vencidas",
+      "schedule": "0 13 * * *"
     }
   ]
 }
