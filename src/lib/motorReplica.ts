@@ -19,21 +19,12 @@ import { after } from 'next/server'
 import { callGemini } from '@/lib/gemini'
 import { cabecerasInternas } from '@/lib/candadoMotores'
 
-export const TIPOS_REPLICA = [
-  'misma convocatoria',
-  'otra convocatoria',
-  'otro territorio',
-  'otros beneficiarios',
-  'otro proponente',
-  'otros aliados',
-  'otra linea tematica',
-  'otro enfoque sectorial',
-  'otro enfoque de innovacion',
-  'otro monto',
-  'otro alcance de metas',
-] as const
-
-export type TipoReplica = (typeof TIPOS_REPLICA)[number]
+// Los tipos de réplica viven en su propio archivo (sin nada de servidor) para
+// que una pantalla del cliente los pueda usar sin arrastrar código de
+// servidor al navegador. Se re-exportan aquí para no romper a nadie que ya
+// los importa desde este archivo.
+import { TIPOS_REPLICA, type TipoReplica } from '@/lib/tiposReplica'
+export { TIPOS_REPLICA, type TipoReplica }
 
 export type PuntoDeReplica = { que: string; detalle: string }
 
