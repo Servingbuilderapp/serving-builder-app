@@ -92,12 +92,12 @@ export function MenuLateral({
   const secciones = esEquipo ? [...SECCIONES_CLIENTE, ...SECCIONES_EQUIPO] : SECCIONES_CLIENTE
 
   const contenido = (
-    <div className="flex h-full flex-col bg-[#F8FAFD] text-[#334155] border-r border-[#E4EAF3] shadow-[2px_0_12px_-8px_rgba(11,42,74,0.25)]">
+    <div className="flex h-full flex-col bg-color-base-200 text-color-base-content border-r border-color-base-300/40 shadow-[2px_0_12px_-8px_rgba(0,0,0,0.5)]">
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5">
         {secciones.map((seccion, i) => (
           <div key={seccion.titulo || `seccion-${i}`}>
             {seccion.titulo ? (
-              <div className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[#94A3B8]">
+              <div className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-color-base-content/45">
                 {seccion.titulo}
               </div>
             ) : null}
@@ -111,10 +111,10 @@ export function MenuLateral({
                 const clases = [
                   'flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] transition-colors',
                   activo
-                    ? 'bg-[#EFF6FF] font-semibold text-[#1D4ED8] shadow-[inset_3px_0_0_0_#1D4ED8,0_1px_2px_rgba(11,42,74,0.06)]'
+                    ? 'bg-color-primary/15 font-semibold text-color-primary shadow-[inset_3px_0_0_0_#B08D57,0_1px_2px_rgba(0,0,0,0.3)]'
                     : disponible
-                      ? 'text-[#475569] hover:bg-[#F1F5F9] hover:text-[#0B2A4A]'
-                      : 'text-[#A3B0C2] cursor-default',
+                      ? 'text-color-base-content/70 hover:bg-color-primary/10 hover:text-color-base-content'
+                      : 'text-color-base-content/35 cursor-default',
                 ].join(' ')
 
                 const interior = (
@@ -123,7 +123,7 @@ export function MenuLateral({
                     <span className="truncate">{item.nombre}</span>
                     {!disponible ? (
                       <span
-                        className="ml-auto h-1.5 w-1.5 rounded-full bg-[#CBD5E1] shrink-0"
+                        className="ml-auto h-1.5 w-1.5 rounded-full bg-color-base-content/25 shrink-0"
                         title="En construcción"
                       />
                     ) : null}
@@ -149,15 +149,15 @@ export function MenuLateral({
         ))}
       </nav>
 
-      <div className="border-t border-[#E4EAF3] p-3">
-        <div className="px-3 py-2 text-[12px] leading-relaxed text-[#5B6B84]">
+      <div className="border-t border-color-base-300/40 p-3">
+        <div className="px-3 py-2 text-[12px] leading-relaxed text-color-base-content/70">
           ¿Necesitas ayuda?
           <br />
           <a
             href="https://wa.me/573227008727"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-semibold text-[#1D4ED8] underline hover:text-[#1E40AF]"
+            className="font-semibold text-color-primary underline hover:brightness-110"
           >
             Escríbenos por WhatsApp
           </a>
@@ -179,7 +179,7 @@ export function MenuLateral({
               type="button"
               onClick={onCerrar}
               aria-label="Cerrar menú"
-              className="absolute right-2 top-2 z-10 h-8 w-8 rounded-lg border border-[#E2E8F0] bg-[#F1F5F9] text-[#0B2A4A] flex items-center justify-center"
+              className="absolute right-2 top-2 z-10 h-8 w-8 rounded-lg border border-color-base-300/40 bg-color-base-200 text-color-base-content flex items-center justify-center"
             >
               <X className="h-4 w-4" />
             </button>
@@ -189,7 +189,7 @@ export function MenuLateral({
             type="button"
             aria-label="Cerrar menú"
             onClick={onCerrar}
-            className="flex-1 bg-[#0B2A4A]/35 backdrop-blur-sm"
+            className="flex-1 bg-black/50 backdrop-blur-sm"
           />
         </div>
       ) : null}
