@@ -1,7 +1,18 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Building2, CalendarClock, ChevronDown, Coins, ExternalLink, Search } from 'lucide-react'
+import {
+  Building2,
+  CalendarClock,
+  CheckCircle2,
+  ChevronDown,
+  Clock,
+  Coins,
+  ExternalLink,
+  PartyPopper,
+  Search,
+  XCircle,
+} from 'lucide-react'
 
 /* ========================================================================== */
 /* Tipos                                                                      */
@@ -18,6 +29,25 @@ export type EncajeCliente = {
   documentacionFaltante: string | null
 }
 
+/**
+ * Estados que puede tener una postulación, tal como los maneja el Motor 4
+ * (tabla `postulaciones`). Se traducen a lenguaje simple para el cliente en
+ * `ESTADOS_POSTULACION` más abajo.
+ */
+export type EstadoPostulacion =
+  | 'Preparando'
+  | 'Lista para radicar'
+  | 'Radicada'
+  | 'Adjudicada'
+  | 'Rechazada'
+  | 'Descartada'
+
+export type PostulacionCliente = {
+  estado: EstadoPostulacion
+  fechaRadicacion: string | null
+  puntaje: number | null
+} | null
+
 export type ConvocatoriaCliente = {
   id: string
   nombre: string
@@ -27,6 +57,8 @@ export type ConvocatoriaCliente = {
   monto: string | null
   fuenteOficial: string | null
   encaje: EncajeCliente | null
+  /** null = todavía no arrancó ningún trámite de postulación para esta convocatoria. */
+  postulacion: PostulacionCliente
 }
 
 /* ========================================================================== */
@@ -63,6 +95,102 @@ function estiloSemaforo(valor: string | null) {
   if (clave.includes('amarillo') || clave.includes('naranja')) return SEMAFOROS.amarillo
   if (clave.includes('rojo')) return SEMAFOROS.rojo
   return null
+}
+
+/* -------------------------------------------------------------------------- */
+/* Estado de la postulación — en palabras simples, no en jerga del sistema    */
+/* -------------------------------------------------------------------------- */
+
+type EstiloPostulacion = {
+  fondo: string
+  texto: string
+  borde: string
+  titulo: string
+  Icono: typeof Clock
+}
+
+const ESTADOS_POSTULACION: Record<EstadoPostulacion, EstiloPostulacion> = {
+  Preparando: {
+    fondo: 'bg-[#EFF6FF]',
+    texto: 'text-[#1D4ED8]',
+    borde: 'border-[#C7DBFB]',
+    titulo: 'Se está preparando la postulación',
+    Icono: Clock,
+  },
+  'Lista para radicar': {
+    fondo: 'bg-[#FEF3C7]',
+    texto: 'text-[#8A5307]',
+    borde: 'border-[#FADFA2]',
+    titulo: 'Lista para radicar, en revisión final',
+    Icono: Clock,
+  },
+  Radicada: {
+    fondo: 'bg-[#E8F6F0]',
+    texto: 'text-[#186A46]',
+    borde: 'border-[#B9E3D0]',
+    titulo: 'Ya se radicó la postulación',
+    Icono: CheckCircle2,
+  },
+  Adjudicada: {
+    fondo: 'bg-[#E8F6F0]',
+    texto: 'text-[#186A46]',
+    borde: 'border-[#B9E3D0]',
+    titulo: '¡La convocatoria fue adjudicada!',
+    Icono: PartyPopper,
+  },
+  Rechazada: {
+    fondo: 'bg-[#FDECEA]',
+    texto: 'text-[#B42318]',
+    borde: 'border-[#F6C9C4]',
+    titulo: 'No fue seleccionada esta vez',
+    Icono: XCircle,
+  },
+  Descartada: {
+    fondo: 'bg-[#F8FAFD]',
+    texto: 'text-[#7C8CA5]',
+    borde: 'border-[#E4EAF3]',
+    titulo: 'Se descartó esta convocatoria',
+    Icono: XCircle,
+  },
+}
+
+const SIN_POSTULAR: EstiloPostulacion = {
+  fondo: 'bg-[#F8FAFD]',
+  texto: 'text-[#7C8CA5]',
+  borde: 'border-[#E4EAF3]',
+  titulo: 'Todavía no se ha postulado',
+  Icono: Clock,
+}
+
+function formatearFecha(valor: string): string {
+  try {
+    return new Date(valor).toLocaleDateString('es-CO', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    })
+  } catch {
+    return valor
+  }
+}
+
+function EstadoPostulacionBanner({ postulacion }: { postulacion: PostulacionCliente }) {
+  const estilo = postulacion ? ESTADOS_POSTULACION[postulacion.estado] : SIN_POSTULAR
+  const { Icono } = estilo
+
+  return (
+    <div
+      className={`mt-3 flex items-center gap-2 rounded-xl border px-3.5 py-2.5 ${estilo.fondo} ${estilo.texto} ${estilo.borde}`}
+    >
+      <Icono className="h-4 w-4 shrink-0" />
+      <span className="text-[13px] font-bold leading-snug">
+        {estilo.titulo}
+        {postulacion?.estado === 'Radicada' && postulacion.fechaRadicacion
+          ? ` — el ${formatearFecha(postulacion.fechaRadicacion)}`
+          : null}
+      </span>
+    </div>
+  )
 }
 
 function Barra({ puntaje }: { puntaje: number }) {
@@ -158,6 +286,8 @@ function TarjetaConvocatoria({ convocatoria }: { convocatoria: ConvocatoriaClien
             </span>
           )}
         </div>
+
+        <EstadoPostulacionBanner postulacion={convocatoria.postulacion} />
 
         {typeof encaje?.puntaje === 'number' ? (
           <div className="mt-4 max-w-xs">
