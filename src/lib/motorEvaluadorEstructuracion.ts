@@ -26,9 +26,7 @@
  * adivinar que está bien.
  */
 
-import { after } from 'next/server'
 import mammoth from 'mammoth'
-import { cabecerasInternas } from '@/lib/candadoMotores'
 
 const BUCKET = 'documentos-proyectos'
 const UMBRAL_APROBACION = 90
@@ -238,7 +236,9 @@ export type ResultadoCorridaEvaluador = {
 export async function correrEvaluadorEstructuracion(
   supabase: any,
   proyectoId: string,
-  origen: string,
+  // Ya no se usa para llamar al Motor 2 desde aquí (ver más abajo), pero se
+  // deja el parámetro para no romper a quien ya llama a esta función.
+  _origen: string,
 ): Promise<ResultadoCorridaEvaluador> {
   const apiKeyGemini = process.env.GEMINI_API_KEY || process.env.GEMINI_KEY
   if (!apiKeyGemini) return { ok: false, mensaje: 'Falta configurar GEMINI_API_KEY.' }
@@ -336,21 +336,20 @@ export async function correrEvaluadorEstructuracion(
     }
   }
 
-  await supabase.from('proyectos_clientes_serving').update({ evaluacion_aprobada: aprobado }).eq('id', proyectoId)
-
-  if (aprobado) {
-    after(async () => {
-      try {
-        await fetch(`${origen}/api/buscar-convocatorias`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', ...cabecerasInternas() },
-          body: JSON.stringify({ id_proyecto: proyectoId }),
-        })
-      } catch (e) {
-        console.error('Error disparando Motor 2 desde el evaluador de estructuración:', e)
-      }
+  await supabase
+    .from('proyectos_clientes_serving')
+    .update({
+      evaluacion_aprobada: aprobado,
+      evaluacion_aprobada_en: aprobado ? new Date().toISOString() : null,
     })
-  }
+    .eq('id', proyectoId)
+
+  // Aquí ya NO se dispara el Motor 2 de una vez. El proyecto queda esperando
+  // a que el cliente diga "sí, busquemos convocatorias" en su panel — tiene 3
+  // días para revisar el resultado del evaluador y decidir. Si no contesta en
+  // ese plazo, el reloj de /api/revisar-aprobaciones-vencidas lo arranca solo,
+  // para que nadie se quede esperando para siempre. Ver cabecerasInternas()
+  // y motorAutorizado(), que son los que firman esa llamada automática.
 
   return {
     ok: true,
