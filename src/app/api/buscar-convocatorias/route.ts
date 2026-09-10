@@ -25,14 +25,17 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-// Cuántas convocatorias se le presentan al cliente por semana, según la
-// modalidad que contrató. Decisión del dueño (10 sep 2026): cada convocatoria
-// que se selecciona le cuesta a la plataforma una corrida de Gemini para el
-// Motor 2 y otra para el Motor 3 (encaje) — de ahí que Élite, que vale más,
-// tenga más cupo semanal que Estratégica.
+// Cuántas convocatorias, COMO MÁXIMO, se le presentan al cliente por semana,
+// según la modalidad que contrató. Es un tope, no una promesa: si esa semana
+// no hay tantas oportunidades que encajen de verdad, se entregan menos (o
+// ninguna) — nunca se rellena el lote solo para completar el número.
+// Decisión del dueño (10 sep 2026): cada convocatoria que se selecciona le
+// cuesta a la plataforma una corrida de Gemini para el Motor 2 y otra para
+// el Motor 3 (encaje) — de ahí que Élite, que vale más, tenga más cupo
+// semanal que Estratégica.
 const CONVOCATORIAS_POR_SEMANA: Record<string, number> = {
-  esencial: 1, // Estructuración Estratégica ($12.000.000)
-  completo: 3, // Estructuración Élite ($17.000.000)
+  esencial: 1, // Estructuración Estratégica ($12.000.000) — máximo por semana
+  completo: 3, // Estructuración Élite ($17.000.000) — máximo por semana
 };
 const TAMANO_LOTE_POR_DEFECTO = 1;
 
@@ -301,7 +304,7 @@ ${bibliotecaTexto}
 OPORTUNIDADES YA EVALUADAS ANTES PARA ESTE PROYECTO (no las repitas, ni seleccionadas ni descartadas):
 ${listaYaEvaluadas}
 
-TAMAÑO DEL LOTE: selecciona exactamente ${tamanoLote} oportunidades para el lote de esta vez (las mejores, según tu criterio de priorización). Registra también las demás candidatas que evaluaste y no quedaron en el lote, como descartadas con su motivo.
+TAMAÑO DEL LOTE: selecciona COMO MÁXIMO ${tamanoLote} oportunidad${tamanoLote === 1 ? "" : "es"} para el lote de esta vez — nunca más de esa cantidad. Es un tope, no una meta: si esta semana solo hay ${tamanoLote === 1 ? "una oportunidad que de verdad encaje" : "una o dos que de verdad encajen"}, selecciona solo esas, y si ninguna encaja de verdad, no selecciones ninguna. PROHIBIDO rellenar el lote con una oportunidad débil solo para completar el número. Registra también las demás candidatas que evaluaste y no quedaron en el lote, como descartadas con su motivo.
 
 Responde ÚNICAMENTE con un JSON válido, sin texto antes ni después, con este formato exacto:
 {
