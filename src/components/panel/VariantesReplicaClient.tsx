@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { ChevronRight, Loader2, Plus, Sparkles } from 'lucide-react'
 import { CAMPO_DESTINO } from '@/lib/plantillasReplica'
-import { TIPOS_REPLICA, type TipoReplica } from '@/lib/motorReplica'
+import { TIPOS_REPLICA, type TipoReplica } from '@/lib/tiposReplica'
 
 const RELIEVE_BOTON =
   'shadow-[0_1px_0_rgba(255,255,255,0.35)_inset,0_2px_4px_rgba(11,42,74,0.18),0_8px_18px_-10px_rgba(29,78,216,0.55)]'
