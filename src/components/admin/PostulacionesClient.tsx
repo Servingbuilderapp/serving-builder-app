@@ -47,7 +47,7 @@ export type ConvocatoriaOpcion = {
 
 /* -------------------------------------------------------------------------- */
 
-const SOMBRA = 'shadow-[0_1px_2px_rgba(11,42,74,0.06),0_8px_24px_-14px_rgba(11,42,74,0.20)]'
+const SOMBRA = 'shadow-[0_1px_2px_rgba(0,0,0,0.30),0_8px_24px_-14px_rgba(0,0,0,0.50)]'
 
 const CRITERIOS = [
   { clave: 'puntaje_tecnica', nombre: 'Propuesta técnica', tope: 30 },
@@ -58,12 +58,12 @@ const CRITERIOS = [
 ] as const
 
 const COLOR_ESTADO: Record<string, string> = {
-  Preparando: 'bg-[#FBF0DF] text-[#8A5307]',
-  'Lista para radicar': 'bg-[#E7EDFB] text-[#1D4ED8]',
-  Radicada: 'bg-[#E4F2EB] text-[#186A46]',
-  Adjudicada: 'bg-[#E4F2EB] text-[#186A46]',
-  Rechazada: 'bg-[#FAE7E7] text-[#9B2C2C]',
-  Descartada: 'bg-[#EEF2F8] text-[#7C8CA5]',
+  Preparando: 'bg-[#C99A3D]/20 text-[#E0B868]',
+  'Lista para radicar': 'bg-[#8C93A6]/20 text-[#AEB4C4]',
+  Radicada: 'bg-[#7A8B6F]/20 text-[#9BB18D]',
+  Adjudicada: 'bg-[#7A8B6F]/20 text-[#9BB18D]',
+  Rechazada: 'bg-[#C0604A]/20 text-[#E0917E]',
+  Descartada: 'bg-[#6E4A50]/40 text-[#F3E7DC]/60',
 }
 
 function comoLista(valor: unknown): string[] {
@@ -125,18 +125,18 @@ export function PostulacionesClient({
   return (
     <div className="mx-auto w-full max-w-5xl space-y-5 p-4 lg:p-6">
       <header className="space-y-1">
-        <h1 className="text-[19px] font-extrabold uppercase tracking-tight text-[#0B2A4A]">
+        <h1 className="text-[19px] font-extrabold uppercase tracking-tight text-[#F3E7DC]">
           Postulaciones
         </h1>
-        <p className="text-[13px] text-[#7C8CA5]">{nombreProyecto}</p>
+        <p className="text-[13px] text-[#F3E7DC]/55">{nombreProyecto}</p>
       </header>
 
       {/* preparar una nueva ---------------------------------------------- */}
-      <div className={`rounded-2xl border border-[#E4EAF3] bg-white p-5 ${SOMBRA}`}>
-        <h2 className="text-[13px] font-bold uppercase tracking-wider text-[#0B2A4A]">
+      <div className={`rounded-2xl border border-[#6E4A50] bg-[#3B1727] p-5 ${SOMBRA}`}>
+        <h2 className="text-[13px] font-bold uppercase tracking-wider text-[#F3E7DC]">
           Preparar una postulación
         </h2>
-        <p className="mt-1.5 text-[13px] leading-relaxed text-[#5B6B84]">
+        <p className="mt-1.5 text-[13px] leading-relaxed text-[#F3E7DC]/65">
           Escoge la convocatoria y el motor arma los requisitos, las adaptaciones, la carta de
           intención y la evaluación sobre cien. Se puede volver a correr las veces que haga falta:
           cada corrida debería subir el puntaje.
@@ -146,7 +146,7 @@ export function PostulacionesClient({
           <select
             value={convocatoriaId}
             onChange={(e) => setConvocatoriaId(e.target.value)}
-            className="h-11 flex-1 rounded-lg border border-[#DCE4F0] bg-white px-3 text-[13.5px] text-[#0B2A4A] outline-none focus:border-[#1D4ED8]"
+            className="h-11 flex-1 rounded-lg border border-[#6E4A50] bg-[#3B1727] px-3 text-[13.5px] text-[#F3E7DC] outline-none focus:border-[#B08D57]"
           >
             <option value="">Escoge una convocatoria de la biblioteca…</option>
             {convocatorias.map((c) => (
@@ -161,7 +161,7 @@ export function PostulacionesClient({
             type="button"
             disabled={!convocatoriaId || trabajando !== null}
             onClick={() => llamar({ accion: 'preparar', proyectoId, convocatoriaId }, 'preparar')}
-            className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-[#2563EB] to-[#1D4ED8] px-6 text-[13px] font-semibold text-white disabled:opacity-45"
+            className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-6 text-[13px] font-semibold text-[#3A1420] disabled:opacity-45"
           >
             <Sparkles className="h-4 w-4" />
             {trabajando === 'preparar' ? 'Trabajando…' : 'Preparar'}
@@ -169,7 +169,7 @@ export function PostulacionesClient({
         </div>
 
         {convocatorias.length === 0 ? (
-          <p className="mt-3 text-[12.5px] text-[#8A5307]">
+          <p className="mt-3 text-[12.5px] text-[#E0B868]">
             La biblioteca de convocatorias está vacía. Corre primero la búsqueda de convocatorias.
           </p>
         ) : null}
@@ -177,7 +177,7 @@ export function PostulacionesClient({
         {aviso ? (
           <p
             className={`mt-3 rounded-lg px-3 py-2 text-[13px] ${
-              aviso.tono === 'ok' ? 'bg-[#E4F2EB] text-[#186A46]' : 'bg-[#FAE7E7] text-[#9B2C2C]'
+              aviso.tono === 'ok' ? 'bg-[#7A8B6F]/20 text-[#9BB18D]' : 'bg-[#C0604A]/20 text-[#E0917E]'
             }`}
           >
             {aviso.texto}
@@ -187,9 +187,9 @@ export function PostulacionesClient({
 
       {/* listado ---------------------------------------------------------- */}
       {postulaciones.length === 0 ? (
-        <div className={`rounded-2xl border border-dashed border-[#DCE4F0] bg-[#F8FAFD] p-10 text-center ${SOMBRA}`}>
-          <FileText className="mx-auto h-6 w-6 text-[#94A3B8]" />
-          <p className="mt-3 text-[13.5px] text-[#5B6B84]">
+        <div className={`rounded-2xl border border-dashed border-[#6E4A50] bg-[#4C2032] p-10 text-center ${SOMBRA}`}>
+          <FileText className="mx-auto h-6 w-6 text-[#F3E7DC]/50" />
+          <p className="mt-3 text-[13.5px] text-[#F3E7DC]/65">
             Este proyecto todavía no tiene ninguna postulación preparada.
           </p>
         </div>
@@ -201,7 +201,7 @@ export function PostulacionesClient({
           const cumplidos = p.requisitos.filter((r) => r.cumplido).length
 
           return (
-            <div key={p.id} className={`overflow-hidden rounded-2xl border border-[#E4EAF3] bg-white ${SOMBRA}`}>
+            <div key={p.id} className={`overflow-hidden rounded-2xl border border-[#6E4A50] bg-[#3B1727] ${SOMBRA}`}>
               <button
                 type="button"
                 onClick={() => setAbierta(desplegada ? null : p.id)}
@@ -209,52 +209,52 @@ export function PostulacionesClient({
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-[15px] font-bold text-[#0B2A4A]">{p.convocatoria_nombre}</span>
+                    <span className="text-[15px] font-bold text-[#F3E7DC]">{p.convocatoria_nombre}</span>
                     <span
                       className={`rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${
-                        COLOR_ESTADO[p.estado] || 'bg-[#EEF2F8] text-[#7C8CA5]'
+                        COLOR_ESTADO[p.estado] || 'bg-[#6E4A50]/40 text-[#F3E7DC]/60'
                       }`}
                     >
                       {p.estado}
                     </span>
                   </div>
-                  <p className="mt-1 text-[12.5px] text-[#7C8CA5]">
+                  <p className="mt-1 text-[12.5px] text-[#F3E7DC]/55">
                     {p.entidad || 'Sin entidad'} · cierra el {fecha(p.fecha_cierre)} · corrida {p.corrida}
                   </p>
                 </div>
 
                 <div className="flex shrink-0 items-center gap-3">
                   <div className="text-right">
-                    <div className="text-[20px] font-extrabold tabular-nums text-[#0B2A4A]">
+                    <div className="text-[20px] font-extrabold tabular-nums text-[#F3E7DC]">
                       {p.puntaje_total ?? '—'}
-                      <span className="text-[12px] font-semibold text-[#94A3B8]">/100</span>
+                      <span className="text-[12px] font-semibold text-[#F3E7DC]/50">/100</span>
                     </div>
                     {p.veredicto ? (
-                      <div className="text-[11px] text-[#7C8CA5]">{p.veredicto}</div>
+                      <div className="text-[11px] text-[#F3E7DC]/55">{p.veredicto}</div>
                     ) : null}
                   </div>
                   <ChevronDown
-                    className={`h-4 w-4 text-[#94A3B8] transition-transform ${desplegada ? 'rotate-180' : ''}`}
+                    className={`h-4 w-4 text-[#F3E7DC]/50 transition-transform ${desplegada ? 'rotate-180' : ''}`}
                   />
                 </div>
               </button>
 
               {desplegada ? (
-                <div className="space-y-5 border-t border-[#EEF2F8] px-5 py-5">
+                <div className="space-y-5 border-t border-[#6E4A50]/40 px-5 py-5">
                   {/* puntaje por criterio */}
                   <div className="space-y-2">
                     {CRITERIOS.map((c) => {
                       const valor = (p[c.clave] as number | null) ?? 0
                       return (
                         <div key={c.clave} className="flex items-center gap-3">
-                          <span className="w-[150px] shrink-0 text-[12.5px] text-[#5B6B84]">{c.nombre}</span>
-                          <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-[#EEF2F8]">
+                          <span className="w-[150px] shrink-0 text-[12.5px] text-[#F3E7DC]/65">{c.nombre}</span>
+                          <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-[#3B1727]">
                             <div
-                              className="h-full rounded-full bg-[#1D4ED8]"
+                              className="h-full rounded-full bg-[#B08D57]"
                               style={{ width: `${Math.round((valor / c.tope) * 100)}%` }}
                             />
                           </div>
-                          <span className="w-12 shrink-0 text-right text-[12px] tabular-nums text-[#94A3B8]">
+                          <span className="w-12 shrink-0 text-right text-[12px] tabular-nums text-[#F3E7DC]/50">
                             {valor}/{c.tope}
                           </span>
                         </div>
@@ -263,21 +263,21 @@ export function PostulacionesClient({
                   </div>
 
                   {p.alertas ? (
-                    <div className="flex items-start gap-2.5 rounded-xl border border-[#F0DCBB] bg-[#FDF8F0] p-4">
-                      <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-[#8A5307]" />
-                      <p className="text-[13px] leading-relaxed text-[#5B6B84]">{p.alertas}</p>
+                    <div className="flex items-start gap-2.5 rounded-xl border border-[#C99A3D]/40 bg-[#C99A3D]/10 p-4">
+                      <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-[#E0B868]" />
+                      <p className="text-[13px] leading-relaxed text-[#F3E7DC]/65">{p.alertas}</p>
                     </div>
                   ) : null}
 
                   {mejoras.length > 0 ? (
                     <div>
-                      <h3 className="text-[12px] font-bold uppercase tracking-wider text-[#0B2A4A]">
+                      <h3 className="text-[12px] font-bold uppercase tracking-wider text-[#F3E7DC]">
                         Qué hay que corregir para subir el puntaje
                       </h3>
                       <ul className="mt-2 space-y-1.5">
                         {mejoras.map((m, i) => (
-                          <li key={i} className="flex gap-2 text-[13px] leading-relaxed text-[#5B6B84]">
-                            <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-[#1D4ED8]" />
+                          <li key={i} className="flex gap-2 text-[13px] leading-relaxed text-[#F3E7DC]/65">
+                            <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-[#B08D57]" />
                             {m}
                           </li>
                         ))}
@@ -287,13 +287,13 @@ export function PostulacionesClient({
 
                   {adaptaciones.length > 0 ? (
                     <div>
-                      <h3 className="text-[12px] font-bold uppercase tracking-wider text-[#0B2A4A]">
+                      <h3 className="text-[12px] font-bold uppercase tracking-wider text-[#F3E7DC]">
                         Qué se adaptó del proyecto base
                       </h3>
                       <ul className="mt-2 space-y-1.5">
                         {adaptaciones.map((a, i) => (
-                          <li key={i} className="flex gap-2 text-[13px] leading-relaxed text-[#5B6B84]">
-                            <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-[#94A3B8]" />
+                          <li key={i} className="flex gap-2 text-[13px] leading-relaxed text-[#F3E7DC]/65">
+                            <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-[#8C93A6]" />
                             {a}
                           </li>
                         ))}
@@ -303,31 +303,31 @@ export function PostulacionesClient({
 
                   {p.requisitos.length > 0 ? (
                     <div>
-                      <h3 className="text-[12px] font-bold uppercase tracking-wider text-[#0B2A4A]">
+                      <h3 className="text-[12px] font-bold uppercase tracking-wider text-[#F3E7DC]">
                         Requisitos ({cumplidos} de {p.requisitos.length} listos)
                       </h3>
-                      <ul className="mt-2 divide-y divide-[#F2F5FA]">
+                      <ul className="mt-2 divide-y divide-[#6E4A50]/40">
                         {p.requisitos.map((r) => (
                           <li key={r.id} className="flex items-start gap-3 py-2">
                             <span
                               className={`mt-0.5 flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full ${
-                                r.cumplido ? 'bg-[#186A46]' : 'border-2 border-[#DCE4F0]'
+                                r.cumplido ? 'bg-[#7A8B6F]' : 'border-2 border-[#6E4A50]'
                               }`}
                               style={{ height: 18, width: 18 }}
                             >
-                              {r.cumplido ? <CheckCircle2 className="h-3 w-3 text-white" /> : null}
+                              {r.cumplido ? <CheckCircle2 className="h-3 w-3 text-[#1C2417]" /> : null}
                             </span>
                             <div className="min-w-0 flex-1">
-                              <span className="text-[13px] text-[#0B2A4A]">{r.requisito}</span>
+                              <span className="text-[13px] text-[#F3E7DC]">{r.requisito}</span>
                               {!r.obligatorio ? (
-                                <span className="ml-2 text-[11px] text-[#94A3B8]">(opcional)</span>
+                                <span className="ml-2 text-[11px] text-[#F3E7DC]/50">(opcional)</span>
                               ) : null}
                               {r.nota ? (
-                                <p className="mt-0.5 text-[12px] text-[#7C8CA5]">{r.nota}</p>
+                                <p className="mt-0.5 text-[12px] text-[#F3E7DC]/55">{r.nota}</p>
                               ) : null}
                             </div>
                             {r.responsable ? (
-                              <span className="shrink-0 text-[11.5px] text-[#94A3B8]">{r.responsable}</span>
+                              <span className="shrink-0 text-[11.5px] text-[#F3E7DC]/50">{r.responsable}</span>
                             ) : null}
                           </li>
                         ))}
@@ -336,17 +336,17 @@ export function PostulacionesClient({
                   ) : null}
 
                   {p.carta_intencion ? (
-                    <details className="rounded-xl border border-[#E4EAF3] bg-[#F8FAFD] p-4">
-                      <summary className="cursor-pointer text-[12.5px] font-semibold text-[#1D4ED8]">
+                    <details className="rounded-xl border border-[#6E4A50] bg-[#4C2032] p-4">
+                      <summary className="cursor-pointer text-[12.5px] font-semibold text-[#B08D57]">
                         Ver la carta de intención
                       </summary>
-                      <p className="mt-3 whitespace-pre-wrap text-[13px] leading-relaxed text-[#5B6B84]">
+                      <p className="mt-3 whitespace-pre-wrap text-[13px] leading-relaxed text-[#F3E7DC]/65">
                         {p.carta_intencion}
                       </p>
                     </details>
                   ) : null}
 
-                  <div className="flex flex-wrap gap-3 border-t border-[#EEF2F8] pt-4">
+                  <div className="flex flex-wrap gap-3 border-t border-[#6E4A50]/40 pt-4">
                     {p.biblioteca_id ? (
                       <button
                         type="button"
@@ -357,7 +357,7 @@ export function PostulacionesClient({
                             `reevaluar-${p.id}`
                           )
                         }
-                        className="inline-flex h-10 items-center gap-2 rounded-lg border border-[#DCE4F0] bg-white px-4 text-[13px] font-semibold text-[#1D4ED8] disabled:opacity-45"
+                        className="inline-flex h-10 items-center gap-2 rounded-lg border border-[#6E4A50] bg-[#3B1727] px-4 text-[13px] font-semibold text-[#B08D57] disabled:opacity-45"
                       >
                         <Sparkles className="h-4 w-4" />
                         {trabajando === `reevaluar-${p.id}` ? 'Evaluando…' : 'Volver a evaluar'}
@@ -369,7 +369,7 @@ export function PostulacionesClient({
                         type="button"
                         disabled={trabajando !== null}
                         onClick={() => llamar({ accion: 'radicar', postulacionId: p.id }, `radicar-${p.id}`)}
-                        className="inline-flex h-10 items-center gap-2 rounded-lg bg-gradient-to-b from-[#1F7D55] to-[#186A46] px-5 text-[13px] font-semibold text-white disabled:opacity-45"
+                        className="inline-flex h-10 items-center gap-2 rounded-lg bg-gradient-to-b from-[#7A8B6F] to-[#5F6E56] px-5 text-[13px] font-semibold text-white disabled:opacity-45"
                       >
                         <Send className="h-4 w-4" />
                         {trabajando === `radicar-${p.id}` ? 'Registrando…' : 'Registrar radicación'}
