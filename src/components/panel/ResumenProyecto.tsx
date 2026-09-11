@@ -62,7 +62,7 @@ export type DatosResumen = {
 /* ========================================================================== */
 
 const SOMBRA_TARJETA =
-  'shadow-[0_1px_2px_rgba(11,42,74,0.06),0_8px_24px_-14px_rgba(11,42,74,0.20)]'
+  'shadow-[0_1px_2px_rgba(0,0,0,0.15),0_8px_24px_-14px_rgba(0,0,0,0.35)]'
 
 function Tarjeta({
   children,
@@ -72,7 +72,7 @@ function Tarjeta({
   className?: string
 }) {
   return (
-    <div className={`rounded-2xl border border-[#E4EAF3] bg-white ${SOMBRA_TARJETA} ${className}`}>
+    <div className={`rounded-2xl border border-[#6E4A50] bg-[#4C2032] ${SOMBRA_TARJETA} ${className}`}>
       {children}
     </div>
   )
@@ -89,11 +89,11 @@ function TituloBloque({
 }) {
   return (
     <div className="flex items-center justify-between mb-4">
-      <h2 className="text-[13px] font-bold uppercase tracking-wider text-[#0B2A4A]">{texto}</h2>
+      <h2 className="text-[13px] font-bold uppercase tracking-wider text-[#F3E7DC]">{texto}</h2>
       {enlace && destino ? (
         <Link
           href={destino}
-          className="text-[12px] font-semibold text-[#1D4ED8] inline-flex items-center gap-1 hover:underline"
+          className="text-[12px] font-semibold text-[#B08D57] inline-flex items-center gap-1 hover:underline"
         >
           {enlace} <ArrowRight className="h-3 w-3" />
         </Link>
@@ -104,10 +104,10 @@ function TituloBloque({
 
 function colorSemaforo(estado: EstadoSemaforo) {
   return {
-    verde: 'bg-emerald-500',
-    amarillo: 'bg-amber-400',
-    rojo: 'bg-rose-500',
-    gris: 'bg-slate-300',
+    verde: 'bg-[#7A8B6F]',
+    amarillo: 'bg-[#C99A3D]',
+    rojo: 'bg-[#C0604A]',
+    gris: 'bg-[#6E4A50]',
   }[estado]
 }
 
@@ -117,10 +117,10 @@ function textoSemaforo(estado: EstadoSemaforo) {
 
 function claseTextoSemaforo(estado: EstadoSemaforo) {
   return {
-    verde: 'text-emerald-600',
-    amarillo: 'text-amber-600',
-    rojo: 'text-rose-600',
-    gris: 'text-slate-400',
+    verde: 'text-[#9BB18D]',
+    amarillo: 'text-[#E0B868]',
+    rojo: 'text-[#E0917E]',
+    gris: 'text-[#F3E7DC]/40',
   }[estado]
 }
 
@@ -132,7 +132,7 @@ function Anillo({ valor }: { valor: number }) {
   return (
     <div className="relative h-[70px] w-[70px] shrink-0">
       <svg viewBox="0 0 80 80" className="h-[70px] w-[70px] -rotate-90">
-        <circle cx="40" cy="40" r={radio} fill="none" stroke="#E8EEF7" strokeWidth="8" />
+        <circle cx="40" cy="40" r={radio} fill="none" stroke="#6E4A50" strokeWidth="8" />
         <circle
           cx="40"
           cy="40"
@@ -145,13 +145,13 @@ function Anillo({ valor }: { valor: number }) {
         />
         <defs>
           <linearGradient id="degradadoAnillo" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#1D4ED8" />
-            <stop offset="100%" stopColor="#22C55E" />
+            <stop offset="0%" stopColor="#C9A46B" />
+            <stop offset="100%" stopColor="#B08D57" />
           </linearGradient>
         </defs>
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">
-        <span className="text-[17px] font-extrabold text-[#0B2A4A]">{avance}%</span>
+        <span className="text-[17px] font-extrabold text-[#F3E7DC]">{avance}%</span>
       </div>
     </div>
   )
@@ -194,16 +194,16 @@ function Rueda({ ejes }: { ejes: { nombre: string; puntaje: number }[] }) {
           cy={cy}
           r={radioMax * f}
           fill="none"
-          stroke="#E4EAF3"
+          stroke="#6E4A50"
           strokeWidth="1"
         />
       ))}
       {puntos.map((p) => (
-        <line key={`r-${p.nombre}`} x1={cx} y1={cy} x2={p.ex} y2={p.ey} stroke="#E4EAF3" strokeWidth="1" />
+        <line key={`r-${p.nombre}`} x1={cx} y1={cy} x2={p.ex} y2={p.ey} stroke="#6E4A50" strokeWidth="1" />
       ))}
-      <polygon points={poligono} fill="#1D4ED8" fillOpacity="0.18" stroke="#1D4ED8" strokeWidth="2" />
+      <polygon points={poligono} fill="#B08D57" fillOpacity="0.20" stroke="#B08D57" strokeWidth="2" />
       {puntos.map((p) => (
-        <circle key={`p-${p.nombre}`} cx={p.x} cy={p.y} r="3.5" fill="#1D4ED8" />
+        <circle key={`p-${p.nombre}`} cx={p.x} cy={p.y} r="3.5" fill="#B08D57" />
       ))}
       {puntos.map((p) => (
         <text
@@ -212,13 +212,13 @@ function Rueda({ ejes }: { ejes: { nombre: string; puntaje: number }[] }) {
           y={p.ly}
           textAnchor="middle"
           dominantBaseline="middle"
-          className="fill-[#475569]"
+          className="fill-[#F3E7DC]/70"
           style={{ fontSize: 8.5, fontWeight: 600 }}
         >
           <tspan x={p.lx} dy="-4">
             {p.nombre}
           </tspan>
-          <tspan x={p.lx} dy="11" className="fill-[#0B2A4A]" style={{ fontWeight: 800 }}>
+          <tspan x={p.lx} dy="11" className="fill-[#F3E7DC]" style={{ fontWeight: 800 }}>
             {tope === 100 ? Math.round(p.puntaje) : p.puntaje.toFixed(1)}
           </tspan>
         </text>
@@ -249,7 +249,7 @@ function fechaBonita(valor: string | null): string | null {
 
 function Vacio({ texto }: { texto: string }) {
   return (
-    <div className="rounded-xl border border-dashed border-[#DCE4F0] bg-[#F8FAFD] px-4 py-6 text-center text-[12.5px] text-[#7C8CA5]">
+    <div className="rounded-xl border border-dashed border-[#6E4A50] bg-[#3B1727] px-4 py-6 text-center text-[12.5px] text-[#F3E7DC]/60">
       {texto}
     </div>
   )
@@ -281,14 +281,14 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
     return (
       <div className="p-6 lg:p-8">
         <Tarjeta className="p-10 text-center max-w-xl mx-auto">
-          <h1 className="text-xl font-extrabold text-[#0B2A4A]">Todavía no tienes un proyecto activo</h1>
-          <p className="mt-3 text-[14px] text-[#5B6B84] leading-relaxed">
+          <h1 className="text-xl font-extrabold text-[#F3E7DC]">Todavía no tienes un proyecto activo</h1>
+          <p className="mt-3 text-[14px] text-[#F3E7DC]/70 leading-relaxed">
             Cuando contrates una modalidad de estructuración, aquí verás el centro de control de tu
             proyecto: avance, convocatorias, encaje y el siguiente paso a dar.
           </p>
           <Link
             href="/contratar"
-            className="mt-6 inline-flex items-center gap-2 h-11 px-6 rounded-lg bg-gradient-to-b from-[#143E77] to-[#0C2E5C] text-white text-sm font-semibold"
+            className="mt-6 inline-flex items-center gap-2 h-11 px-6 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-sm font-semibold"
           >
             Ver las modalidades <ArrowRight className="h-4 w-4" />
           </Link>
@@ -309,23 +309,23 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
   return (
     <div className="p-4 lg:p-6 space-y-5">
       <div>
-        <h1 className="text-[19px] font-extrabold uppercase tracking-tight text-[#0B2A4A]">
+        <h1 className="text-[19px] font-extrabold uppercase tracking-tight text-[#F3E7DC]">
           Resumen del proyecto
         </h1>
-        <p className="text-[13px] text-[#7C8CA5]">Visión general del estado actual</p>
+        <p className="text-[13px] text-[#F3E7DC]/60">Visión general del estado actual</p>
       </div>
 
       {/* ============ TARJETAS SUPERIORES ============ */}
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Tarjeta className="p-4 sm:col-span-2">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-[#94A3B8] mb-3">
+          <div className="text-[10px] font-bold uppercase tracking-wider text-[#F3E7DC]/50 mb-3">
             Progreso general
           </div>
           <div className="flex items-center gap-3">
             <Anillo valor={progresoGeneral} />
             <div className="min-w-0">
-              <div className="text-[13px] font-bold text-[#0B2A4A]">{etiquetaProgreso}</div>
-              <div className="text-[12px] text-[#7C8CA5] leading-snug">
+              <div className="text-[13px] font-bold text-[#F3E7DC]">{etiquetaProgreso}</div>
+              <div className="text-[12px] text-[#F3E7DC]/60 leading-snug">
                 del recorrido de tu proyecto ya está listo
               </div>
             </div>
@@ -333,42 +333,42 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
         </Tarjeta>
 
         <Tarjeta className="p-4">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-[#94A3B8] mb-2">
+          <div className="text-[10px] font-bold uppercase tracking-wider text-[#F3E7DC]/50 mb-2">
             Etapa actual
           </div>
-          <div className="text-[15px] font-extrabold text-[#0B2A4A] leading-snug">
+          <div className="text-[15px] font-extrabold text-[#F3E7DC] leading-snug">
             {pasoActual ? 'Estructuración' : 'Sin iniciar'}
           </div>
           {pasoActual ? (
             <>
-              <div className="text-[12px] text-[#7C8CA5] mt-1">Trabajando ahora en</div>
-              <div className="text-[12.5px] font-semibold text-[#0B2A4A] mt-1 line-clamp-2">
+              <div className="text-[12px] text-[#F3E7DC]/60 mt-1">Trabajando ahora en</div>
+              <div className="text-[12.5px] font-semibold text-[#F3E7DC] mt-1 line-clamp-2">
                 {pasoActual.nombre}
               </div>
             </>
           ) : (
-            <div className="text-[12px] text-[#7C8CA5] mt-1">Aún no comienza la estructuración</div>
+            <div className="text-[12px] text-[#F3E7DC]/60 mt-1">Aún no comienza la estructuración</div>
           )}
         </Tarjeta>
 
         <Tarjeta className="p-4">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-[#94A3B8] mb-2">
+          <div className="text-[10px] font-bold uppercase tracking-wider text-[#F3E7DC]/50 mb-2">
             Convocatoria activa
           </div>
           {convocatoria ? (
             <>
-              <div className="text-[13.5px] font-extrabold text-[#0B2A4A] leading-snug line-clamp-2">
+              <div className="text-[13.5px] font-extrabold text-[#F3E7DC] leading-snug line-clamp-2">
                 {convocatoria.nombre}
               </div>
               {convocatoria.fechaCierre ? (
-                <div className="text-[12px] text-[#7C8CA5] mt-1">
+                <div className="text-[12px] text-[#F3E7DC]/60 mt-1">
                   Cierra el {fechaBonita(convocatoria.fechaCierre)}
                 </div>
               ) : null}
               {convocatoria.diasRestantes !== null ? (
                 <div
                   className={`text-[12.5px] font-bold mt-1 ${
-                    convocatoria.diasRestantes <= 15 ? 'text-amber-600' : 'text-[#0B2A4A]'
+                    convocatoria.diasRestantes <= 15 ? 'text-[#E0B868]' : 'text-[#F3E7DC]'
                   }`}
                 >
                   {convocatoria.diasRestantes} días restantes
@@ -376,77 +376,77 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
               ) : null}
             </>
           ) : (
-            <div className="text-[12.5px] text-[#7C8CA5]">Todavía no hay una seleccionada</div>
+            <div className="text-[12.5px] text-[#F3E7DC]/60">Todavía no hay una seleccionada</div>
           )}
         </Tarjeta>
 
         <Tarjeta className="p-4">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-[#94A3B8] mb-2">
+          <div className="text-[10px] font-bold uppercase tracking-wider text-[#F3E7DC]/50 mb-2">
             Documentos
           </div>
           {documentos ? (
             <>
-              <div className="text-[22px] font-extrabold text-[#0B2A4A] leading-none">
+              <div className="text-[22px] font-extrabold text-[#F3E7DC] leading-none">
                 {documentos.completos} / {documentos.total}
               </div>
-              <div className="text-[12px] text-[#7C8CA5] mt-1.5">Documentos listos</div>
+              <div className="text-[12px] text-[#F3E7DC]/60 mt-1.5">Documentos listos</div>
               {documentos.total - documentos.completos > 0 ? (
-                <div className="text-[12.5px] font-bold text-amber-600 mt-0.5">
+                <div className="text-[12.5px] font-bold text-[#E0B868] mt-0.5">
                   {documentos.total - documentos.completos} pendientes
                 </div>
               ) : null}
             </>
           ) : (
-            <div className="text-[12.5px] text-[#7C8CA5]">Se define al elegir convocatoria</div>
+            <div className="text-[12.5px] text-[#F3E7DC]/60">Se define al elegir convocatoria</div>
           )}
         </Tarjeta>
 
         <Tarjeta className="p-4">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-[#94A3B8] mb-2">
+          <div className="text-[10px] font-bold uppercase tracking-wider text-[#F3E7DC]/50 mb-2">
             Encaje actual
           </div>
           {encaje ? (
             <>
-              <div className="text-[24px] font-extrabold text-emerald-600 leading-none">
+              <div className="text-[24px] font-extrabold text-[#9BB18D] leading-none">
                 {encaje.actual}%
               </div>
-              <div className="text-[12px] text-[#7C8CA5] mt-1.5">Encaje con convocatoria</div>
+              <div className="text-[12px] text-[#F3E7DC]/60 mt-1.5">Encaje con convocatoria</div>
               {encaje.potencial !== null ? (
-                <div className="text-[12.5px] text-[#0B2A4A] mt-0.5">
+                <div className="text-[12.5px] text-[#F3E7DC] mt-0.5">
                   Potencial <span className="font-bold">{encaje.potencial}%</span>
                 </div>
               ) : null}
             </>
           ) : (
-            <div className="text-[12.5px] text-[#7C8CA5]">Se calcula tras elegir convocatoria</div>
+            <div className="text-[12.5px] text-[#F3E7DC]/60">Se calcula tras elegir convocatoria</div>
           )}
         </Tarjeta>
 
         <Tarjeta className="p-4">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-[#94A3B8] mb-2">
+          <div className="text-[10px] font-bold uppercase tracking-wider text-[#F3E7DC]/50 mb-2">
             Próximo paso
           </div>
           {proximoPaso ? (
             <>
-              <div className="text-[14px] font-extrabold text-[#0B2A4A] leading-snug">
+              <div className="text-[14px] font-extrabold text-[#F3E7DC] leading-snug">
                 {proximoPaso.titulo}
               </div>
-              <div className="text-[12px] text-[#7C8CA5] mt-1 line-clamp-3">{proximoPaso.detalle}</div>
+              <div className="text-[12px] text-[#F3E7DC]/60 mt-1 line-clamp-3">{proximoPaso.detalle}</div>
             </>
           ) : (
-            <div className="text-[12.5px] text-[#7C8CA5]">Sin acciones pendientes</div>
+            <div className="text-[12.5px] text-[#F3E7DC]/60">Sin acciones pendientes</div>
           )}
         </Tarjeta>
 
         <Tarjeta className="p-4">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-[#94A3B8] mb-3">
+          <div className="text-[10px] font-bold uppercase tracking-wider text-[#F3E7DC]/50 mb-3">
             Semáforos principales
           </div>
           <div className="space-y-1.5">
             {semaforos.map((s) => (
               <div key={s.etiqueta} className="flex items-center gap-2">
                 <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${colorSemaforo(s.estado)}`} />
-                <span className="text-[12.5px] text-[#475569]">{s.etiqueta}</span>
+                <span className="text-[12.5px] text-[#F3E7DC]/80">{s.etiqueta}</span>
                 <span className={`ml-auto text-[10px] font-bold ${claseTextoSemaforo(s.estado)}`}>
                   {textoSemaforo(s.estado)}
                 </span>
@@ -473,17 +473,17 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
                         <div
                           className={`h-8 w-8 rounded-full flex items-center justify-center text-[12px] font-bold ${
                             completado
-                              ? 'bg-emerald-500 text-white'
+                              ? 'bg-[#7A8B6F] text-white'
                               : enProceso
-                                ? 'bg-[#1D4ED8] text-white ring-4 ring-[#1D4ED8]/15'
-                                : 'bg-[#E8EEF7] text-[#94A3B8]'
+                                ? 'bg-[#B08D57] text-[#3A1420] ring-4 ring-[#B08D57]/25'
+                                : 'bg-[#3B1727] text-[#F3E7DC]/50'
                           }`}
                         >
                           {completado ? <Check className="h-4 w-4" /> : i + 1}
                         </div>
                         <div
                           className={`text-[11px] text-center leading-tight ${
-                            enProceso ? 'font-bold text-[#0B2A4A]' : 'text-[#7C8CA5]'
+                            enProceso ? 'font-bold text-[#F3E7DC]' : 'text-[#F3E7DC]/50'
                           }`}
                         >
                           {etapa.nombre}
@@ -492,7 +492,7 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
                       {i < ruta.length - 1 ? (
                         <div
                           className={`h-0.5 flex-1 mt-4 rounded ${
-                            completado ? 'bg-emerald-400' : 'bg-[#E8EEF7]'
+                            completado ? 'bg-[#7A8B6F]' : 'bg-[#3B1727]'
                           }`}
                         />
                       ) : null}
@@ -508,17 +508,17 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
             <Tarjeta className="p-5">
               <TituloBloque texto="Recomendación" />
               <div className="flex gap-3">
-                <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#1D4ED8] to-[#7C3AED] flex items-center justify-center shrink-0">
-                  <Sparkles className="h-5 w-5 text-white" />
+                <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#C9A46B] to-[#B08D57] flex items-center justify-center shrink-0">
+                  <Sparkles className="h-5 w-5 text-[#3A1420]" />
                 </div>
-                <p className="text-[13px] text-[#475569] leading-relaxed">
+                <p className="text-[13px] text-[#F3E7DC]/80 leading-relaxed">
                   {recomendacionIA || 'Cuando avance la estructuración aparecerán aquí las recomendaciones.'}
                 </p>
               </div>
               {proximoPaso ? (
                 <Link
                   href="/mi-proyecto"
-                  className="mt-4 inline-flex items-center gap-2 rounded-lg border border-[#CBD5E1] bg-white px-4 py-2 text-[12.5px] font-semibold text-[#0B2A4A] hover:border-[#1D4ED8] hover:text-[#1D4ED8] transition-colors"
+                  className="mt-4 inline-flex items-center gap-2 rounded-lg border border-[#6E4A50] bg-[#3B1727] px-4 py-2 text-[12.5px] font-semibold text-[#F3E7DC] hover:border-[#B08D57] hover:text-[#B08D57] transition-colors"
                 >
                   {proximoPaso.titulo} <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
@@ -531,24 +531,24 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
               <div className="space-y-2.5">
                 {progresoAreas.map((area) => (
                   <div key={area.nombre} className="flex items-center gap-3">
-                    <div className="w-[130px] shrink-0 text-[12px] text-[#475569] truncate">
+                    <div className="w-[130px] shrink-0 text-[12px] text-[#F3E7DC]/80 truncate">
                       {area.nombre}
                     </div>
-                    <div className="flex-1 h-2 rounded-full bg-[#E8EEF7] overflow-hidden">
+                    <div className="flex-1 h-2 rounded-full bg-[#3B1727] overflow-hidden">
                       <div
                         className={`h-full rounded-full ${
                           area.valor >= 90
-                            ? 'bg-emerald-500'
+                            ? 'bg-[#7A8B6F]'
                             : area.valor >= 50
-                              ? 'bg-[#1D4ED8]'
+                              ? 'bg-[#B08D57]'
                               : area.valor > 0
-                                ? 'bg-amber-400'
+                                ? 'bg-[#C99A3D]'
                                 : 'bg-transparent'
                         }`}
                         style={{ width: `${Math.max(0, Math.min(100, area.valor))}%` }}
                       />
                     </div>
-                    <div className="w-10 shrink-0 text-right text-[12px] font-bold text-[#0B2A4A]">
+                    <div className="w-10 shrink-0 text-right text-[12px] font-bold text-[#F3E7DC]">
                       {area.valor}%
                     </div>
                   </div>
@@ -563,7 +563,7 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
               <TituloBloque texto="Rueda de diagnóstico" />
               {ejesRueda.length >= 3 ? (
                 <>
-                  <div className="text-[11px] text-[#94A3B8] -mt-2 mb-2">
+                  <div className="text-[11px] text-[#F3E7DC]/50 -mt-2 mb-2">
                     Calificación de 1 a {escalaRueda(ejesRueda)}
                   </div>
                   <Rueda ejes={ejesRueda} />
@@ -579,29 +579,29 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
               {convocatoriasTop.length ? (
                 <div className="space-y-3">
                   {convocatoriasTop.map((c, i) => (
-                    <div key={`${c.nombre}-${i}`} className="rounded-xl border border-[#E4EAF3] p-3">
+                    <div key={`${c.nombre}-${i}`} className="rounded-xl border border-[#6E4A50] p-3">
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
-                          <div className="text-[13px] font-bold text-[#0B2A4A] leading-snug line-clamp-2">
+                          <div className="text-[13px] font-bold text-[#F3E7DC] leading-snug line-clamp-2">
                             {i + 1}. {c.nombre}
                           </div>
                           {c.entidad ? (
-                            <div className="text-[11.5px] text-[#7C8CA5] mt-0.5 truncate">{c.entidad}</div>
+                            <div className="text-[11.5px] text-[#F3E7DC]/55 mt-0.5 truncate">{c.entidad}</div>
                           ) : null}
                         </div>
                         {c.afinidad !== null ? (
-                          <div className="text-[15px] font-extrabold text-emerald-600 shrink-0">
+                          <div className="text-[15px] font-extrabold text-[#9BB18D] shrink-0">
                             {c.afinidad}%
                           </div>
                         ) : null}
                       </div>
                       <div className="mt-2 flex items-center justify-between gap-2">
-                        <div className="text-[11.5px] text-[#7C8CA5]">
+                        <div className="text-[11.5px] text-[#F3E7DC]/55">
                           {c.cierre ? `Cierra el ${fechaBonita(c.cierre)}` : 'Sin fecha'}
                           {c.dias !== null ? ` · ${c.dias} días` : ''}
                         </div>
                         <div className="flex items-center gap-1.5">
-                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#7A8B6F]/20 text-[#9BB18D] border border-[#7A8B6F]/40">
                             {c.estado}
                           </span>
                           {c.semaforos.map((s, j) => (
@@ -630,21 +630,21 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
                     a.tipo === 'critica' ? AlertCircle : a.tipo === 'atencion' ? AlertTriangle : Info
                   const color =
                     a.tipo === 'critica'
-                      ? 'text-rose-500'
+                      ? 'text-[#E0917E]'
                       : a.tipo === 'atencion'
-                        ? 'text-amber-500'
-                        : 'text-[#1D4ED8]'
+                        ? 'text-[#E0B868]'
+                        : 'text-[#B08D57]'
                   return (
                     <div key={i} className="flex gap-2.5">
                       <Icono className={`h-4 w-4 shrink-0 mt-0.5 ${color}`} />
                       <div className="min-w-0 flex-1">
-                        <div className="text-[12.5px] font-semibold text-[#0B2A4A] leading-snug">
+                        <div className="text-[12.5px] font-semibold text-[#F3E7DC] leading-snug">
                           {a.titulo}
                         </div>
-                        <div className="text-[11.5px] text-[#7C8CA5] leading-snug">{a.detalle}</div>
+                        <div className="text-[11.5px] text-[#F3E7DC]/55 leading-snug">{a.detalle}</div>
                       </div>
                       {a.fecha ? (
-                        <div className="text-[11px] text-rose-500 font-semibold shrink-0">{a.fecha}</div>
+                        <div className="text-[11px] text-[#E0917E] font-semibold shrink-0">{a.fecha}</div>
                       ) : null}
                     </div>
                   )
@@ -661,9 +661,9 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
               <div className="space-y-2.5">
                 {actividades.map((a, i) => (
                   <div key={i} className="flex items-center gap-2.5">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
-                    <div className="text-[12.5px] text-[#334155] flex-1 truncate">{a.texto}</div>
-                    <div className="text-[11px] text-[#94A3B8] shrink-0">{a.cuando}</div>
+                    <CheckCircle2 className="h-4 w-4 text-[#9BB18D] shrink-0" />
+                    <div className="text-[12.5px] text-[#F3E7DC]/80 flex-1 truncate">{a.texto}</div>
+                    <div className="text-[11px] text-[#F3E7DC]/50 shrink-0">{a.cuando}</div>
                   </div>
                 ))}
               </div>
@@ -678,21 +678,21 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
               <div className="space-y-2.5">
                 {pendientes.map((p, i) => (
                   <div key={i} className="flex items-start gap-2.5">
-                    <Circle className="h-4 w-4 text-[#CBD5E1] shrink-0 mt-0.5" />
+                    <Circle className="h-4 w-4 text-[#6E4A50] shrink-0 mt-0.5" />
                     <div className="min-w-0 flex-1">
-                      <div className="text-[12.5px] text-[#334155] leading-snug">{p.texto}</div>
+                      <div className="text-[12.5px] text-[#F3E7DC]/80 leading-snug">{p.texto}</div>
                       <span
                         className={`inline-block mt-1 text-[10px] font-semibold px-1.5 py-0.5 rounded ${
                           p.prioridad === 'alta'
-                            ? 'bg-rose-50 text-rose-600'
-                            : 'bg-amber-50 text-amber-700'
+                            ? 'bg-[#C0604A]/20 text-[#E0917E]'
+                            : 'bg-[#C99A3D]/20 text-[#E0B868]'
                         }`}
                       >
                         Prioridad {p.prioridad}
                       </span>
                     </div>
                     {p.fecha ? (
-                      <div className="text-[11px] text-[#94A3B8] shrink-0">{p.fecha}</div>
+                      <div className="text-[11px] text-[#F3E7DC]/50 shrink-0">{p.fecha}</div>
                     ) : null}
                   </div>
                 ))}
@@ -708,13 +708,13 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
       <Tarjeta className="p-5 lg:p-6">
         <div className="flex flex-col lg:flex-row lg:items-center gap-6">
           <div className="lg:w-64 shrink-0">
-            <h2 className="text-[17px] font-extrabold text-[#0B2A4A]">¿Listo para continuar?</h2>
-            <p className="text-[12.5px] text-[#7C8CA5] mt-1 leading-snug">
+            <h2 className="text-[17px] font-extrabold text-[#F3E7DC]">¿Listo para continuar?</h2>
+            <p className="text-[12.5px] text-[#F3E7DC]/60 mt-1 leading-snug">
               Sigue avanzando paso a paso hacia la postulación de tu proyecto.
             </p>
           </div>
           <div className="flex-1">
-            <div className="text-[11px] font-bold uppercase tracking-wider text-[#94A3B8] text-center mb-3">
+            <div className="text-[11px] font-bold uppercase tracking-wider text-[#F3E7DC]/50 text-center mb-3">
               Lo que viene por delante
             </div>
             <div className="flex items-start justify-center gap-3 flex-wrap">
@@ -726,11 +726,11 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
               ].map(({ icono: Icono, texto }, i, arr) => (
                 <React.Fragment key={texto}>
                   <div className="flex flex-col items-center gap-1.5 w-[92px]">
-                    <Icono className="h-5 w-5 text-[#94A3B8]" />
-                    <div className="text-[11px] text-center text-[#7C8CA5] leading-tight">{texto}</div>
+                    <Icono className="h-5 w-5 text-[#B08D57]" />
+                    <div className="text-[11px] text-center text-[#F3E7DC]/60 leading-tight">{texto}</div>
                   </div>
                   {i < arr.length - 1 ? (
-                    <ArrowRight className="h-4 w-4 text-[#CBD5E1] mt-0.5 hidden sm:block" />
+                    <ArrowRight className="h-4 w-4 text-[#6E4A50] mt-0.5 hidden sm:block" />
                   ) : null}
                 </React.Fragment>
               ))}
@@ -738,7 +738,7 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
           </div>
           <Link
             href={destinoContinuar.href}
-            className="shrink-0 h-12 px-6 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-[#143E77] to-[#0C2E5C] text-white text-[14px] font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all"
+            className="shrink-0 h-12 px-6 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-[14px] font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all"
           >
             {destinoContinuar.texto} <ArrowRight className="h-4 w-4" />
           </Link>
