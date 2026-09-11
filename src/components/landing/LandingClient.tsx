@@ -103,12 +103,12 @@ const NAV_LINKS = [
 ]
 
 const RUTA_PROYECTO = [
-  { icono: Lightbulb, clave: 'w.ruta.idea', de: 'from-[#F59E0B]', a: 'to-[#FBBF24]', tinte: 'bg-amber-50/80', borde: 'border-amber-200' },
-  { icono: FileText, clave: 'w.ruta.estructuracion', de: 'from-[#2563EB]', a: 'to-[#60A5FA]', tinte: 'bg-blue-50/80', borde: 'border-blue-200' },
-  { icono: Search, clave: 'w.ruta.busqueda', de: 'from-[#0891B2]', a: 'to-[#22D3EE]', tinte: 'bg-cyan-50/80', borde: 'border-cyan-200' },
-  { icono: Target, clave: 'w.ruta.encaje', de: 'from-[#7C3AED]', a: 'to-[#A78BFA]', tinte: 'bg-violet-50/80', borde: 'border-violet-200' },
-  { icono: RefreshCw, clave: 'w.ruta.adaptacion', de: 'from-[#DB2777]', a: 'to-[#F472B6]', tinte: 'bg-pink-50/80', borde: 'border-pink-200' },
-  { icono: Send, clave: 'w.ruta.postulacion', de: 'from-[#059669]', a: 'to-[#34D399]', tinte: 'bg-emerald-50/80', borde: 'border-emerald-200' },
+  { icono: Lightbulb, clave: 'w.ruta.idea', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#4C2032]/80', borde: 'border-[#6E4A50]' },
+  { icono: FileText, clave: 'w.ruta.estructuracion', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#4C2032]/80', borde: 'border-[#6E4A50]' },
+  { icono: Search, clave: 'w.ruta.busqueda', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#4C2032]/80', borde: 'border-[#6E4A50]' },
+  { icono: Target, clave: 'w.ruta.encaje', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#4C2032]/80', borde: 'border-[#6E4A50]' },
+  { icono: RefreshCw, clave: 'w.ruta.adaptacion', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#4C2032]/80', borde: 'border-[#6E4A50]' },
+  { icono: Send, clave: 'w.ruta.postulacion', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#4C2032]/80', borde: 'border-[#6E4A50]' },
 ]
 
 const PROPUESTA_VALOR = [
@@ -156,10 +156,10 @@ const ESCALERA: Escalon[] = [
     claveBoton: 'w.escalera.diagnostico.boton',
     href: '/diagnostico',
     icono: Stethoscope,
-    color: 'text-slate-700',
-    fondo: 'bg-slate-50',
-    borde: 'border-slate-200',
-    boton: 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50',
+    color: 'text-[#B08D57]',
+    fondo: 'bg-[#4C2032]/70',
+    borde: 'border-[#6E4A50]',
+    boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
   {
     numero: '2',
@@ -177,10 +177,10 @@ const ESCALERA: Escalon[] = [
     claveBoton: 'w.escalera.membresia1.boton',
     href: '#membresias',
     icono: GraduationCap,
-    color: 'text-emerald-700',
-    fondo: 'bg-emerald-50/70',
-    borde: 'border-emerald-200',
-    boton: 'bg-gradient-to-b from-emerald-500 to-emerald-600 text-white hover:from-emerald-500 hover:to-emerald-700 shadow-emerald-600/25',
+    color: 'text-[#B08D57]',
+    fondo: 'bg-[#4C2032]/70',
+    borde: 'border-[#6E4A50]',
+    boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
   {
     numero: '3',
@@ -198,10 +198,10 @@ const ESCALERA: Escalon[] = [
     claveBoton: 'w.escalera.membresia2.boton',
     href: '#membresias',
     icono: Rocket,
-    color: 'text-blue-700',
-    fondo: 'bg-blue-50/70',
-    borde: 'border-blue-200',
-    boton: 'bg-gradient-to-b from-blue-600 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800 shadow-blue-700/25',
+    color: 'text-[#B08D57]',
+    fondo: 'bg-[#4C2032]/70',
+    borde: 'border-[#6E4A50]',
+    boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
   {
     numero: '4',
@@ -218,10 +218,10 @@ const ESCALERA: Escalon[] = [
     href: `https://wa.me/${TELEFONO_WHATSAPP}?text=${encodeURIComponent('Hola, quiero información sobre la Academia de estructuración de proyectos.')}`,
     externo: true,
     icono: BookOpen,
-    color: 'text-amber-700',
-    fondo: 'bg-amber-50/70',
-    borde: 'border-amber-200',
-    boton: 'bg-white border border-amber-400 text-amber-800 hover:bg-amber-50',
+    color: 'text-[#B08D57]',
+    fondo: 'bg-[#4C2032]/70',
+    borde: 'border-[#6E4A50]',
+    boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
   {
     numero: '5',
@@ -238,10 +238,10 @@ const ESCALERA: Escalon[] = [
     href: `https://wa.me/${TELEFONO_WHATSAPP}?text=${encodeURIComponent('Hola, quiero información sobre la Mentoría de estructuración.')}`,
     externo: true,
     icono: Users,
-    color: 'text-violet-700',
-    fondo: 'bg-violet-50/70',
-    borde: 'border-violet-200',
-    boton: 'bg-gradient-to-b from-violet-500 to-violet-600 text-white hover:from-violet-500 hover:to-violet-700 shadow-violet-600/25',
+    color: 'text-[#B08D57]',
+    fondo: 'bg-[#4C2032]/70',
+    borde: 'border-[#6E4A50]',
+    boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
   {
     numero: '6',
@@ -257,10 +257,10 @@ const ESCALERA: Escalon[] = [
     claveBoton: 'w.escalera.estructuracion.boton',
     href: '/contratar',
     icono: Briefcase,
-    color: 'text-cyan-800',
-    fondo: 'bg-cyan-50/70',
-    borde: 'border-cyan-200',
-    boton: 'bg-gradient-to-b from-cyan-600 to-cyan-700 text-white hover:from-cyan-600 hover:to-cyan-800 shadow-cyan-700/25',
+    color: 'text-[#B08D57]',
+    fondo: 'bg-[#4C2032]/70',
+    borde: 'border-[#6E4A50]',
+    boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
   {
     numero: '7',
@@ -276,20 +276,20 @@ const ESCALERA: Escalon[] = [
     claveBoton: 'w.escalera.replicas.boton',
     href: '#replicas',
     icono: RefreshCw,
-    color: 'text-rose-700',
-    fondo: 'bg-rose-50/70',
-    borde: 'border-rose-200',
-    boton: 'bg-gradient-to-b from-rose-500 to-rose-600 text-white hover:from-rose-500 hover:to-rose-700 shadow-rose-600/25',
+    color: 'text-[#B08D57]',
+    fondo: 'bg-[#4C2032]/70',
+    borde: 'border-[#6E4A50]',
+    boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
 ]
 
 const CAMINOS = [
-  { icono: FileText, clave: 'w.caminos.estructurar', href: '/contratar', color: 'from-[#2563EB] to-[#60A5FA]' },
-  { icono: BookOpen, clave: 'w.caminos.aprender', href: '#servicios', color: 'from-[#D97706] to-[#FBBF24]' },
-  { icono: Users, clave: 'w.caminos.acompanado', href: '#servicios', color: 'from-[#7C3AED] to-[#A78BFA]' },
-  { icono: Briefcase, clave: 'w.caminos.delegar', href: '/contratar', color: 'from-[#0891B2] to-[#22D3EE]' },
-  { icono: GraduationCap, clave: 'w.caminos.membresias', href: '#membresias', color: 'from-[#059669] to-[#34D399]' },
-  { icono: RefreshCw, clave: 'w.caminos.replica', href: '#replicas', color: 'from-[#DB2777] to-[#F472B6]' },
+  { icono: FileText, clave: 'w.caminos.estructurar', href: '/contratar', color: 'from-[#C9A46B] to-[#B08D57]' },
+  { icono: BookOpen, clave: 'w.caminos.aprender', href: '#servicios', color: 'from-[#C9A46B] to-[#B08D57]' },
+  { icono: Users, clave: 'w.caminos.acompanado', href: '#servicios', color: 'from-[#C9A46B] to-[#B08D57]' },
+  { icono: Briefcase, clave: 'w.caminos.delegar', href: '/contratar', color: 'from-[#C9A46B] to-[#B08D57]' },
+  { icono: GraduationCap, clave: 'w.caminos.membresias', href: '#membresias', color: 'from-[#C9A46B] to-[#B08D57]' },
+  { icono: RefreshCw, clave: 'w.caminos.replica', href: '#replicas', color: 'from-[#C9A46B] to-[#B08D57]' },
 ]
 
 const DIAGNOSTICO_ENTREGA = [
@@ -312,14 +312,14 @@ function Marca({ oscuro = false }: { oscuro?: boolean }) {
   const { t } = useTranslation()
   return (
     <div className="flex items-center gap-3">
-      <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#1D4ED8] to-[#0C2E5C] flex items-center justify-center shrink-0">
+      <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#C9A46B] to-[#B08D57] flex items-center justify-center shrink-0">
         <span className="text-lg font-black text-white leading-none">A</span>
       </div>
       <div className="leading-tight">
-        <div className={`text-[15px] font-extrabold tracking-tight ${oscuro ? 'text-white' : 'text-[#0B2A4A]'}`}>
+        <div className={`text-[15px] font-extrabold tracking-tight ${oscuro ? 'text-[#F3E7DC]' : 'text-[#F3E7DC]'}`}>
           {t('w.marca.nombre')}
         </div>
-        <div className={`text-[10px] font-medium ${oscuro ? 'text-white/60' : 'text-[#5B6B84]'}`}>
+        <div className={`text-[10px] font-medium ${oscuro ? 'text-[#F3E7DC]/60' : 'text-[#F3E7DC]/70'}`}>
           {t('w.marca.tagline')}
         </div>
       </div>
@@ -334,9 +334,9 @@ function Marca({ oscuro = false }: { oscuro?: boolean }) {
 function FondoDecorativo() {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-      <div className="absolute -top-40 -left-32 h-[620px] w-[620px] rounded-full bg-[#1D4ED8]/[0.18] blur-[120px]" />
-      <div className="absolute top-[34%] -right-44 h-[640px] w-[640px] rounded-full bg-[#7C3AED]/[0.16] blur-[130px]" />
-      <div className="absolute bottom-[-10%] left-[18%] h-[560px] w-[560px] rounded-full bg-[#06B6D4]/[0.15] blur-[120px]" />
+      <div className="absolute -top-40 -left-32 h-[620px] w-[620px] rounded-full bg-[#B08D57]/[0.16] blur-[120px]" />
+      <div className="absolute top-[34%] -right-44 h-[640px] w-[640px] rounded-full bg-[#C9A46B]/[0.14] blur-[130px]" />
+      <div className="absolute bottom-[-10%] left-[18%] h-[560px] w-[560px] rounded-full bg-[#8A6636]/[0.14] blur-[120px]" />
     </div>
   )
 }
@@ -401,18 +401,18 @@ function TituloSeccion({
     <Aparece className={`max-w-3xl ${centrado ? 'mx-auto text-center' : ''} mb-12`}>
       {eyebrow ? (
         <div className={`flex items-center gap-2.5 mb-3 ${centrado ? 'justify-center' : ''}`}>
-          <span className="h-px w-8 bg-gradient-to-r from-transparent to-[#1D4ED8]" />
-          <span className="text-[11px] font-bold uppercase tracking-[0.2em] bg-gradient-to-r from-[#1D4ED8] to-[#7C3AED] bg-clip-text text-transparent">
+          <span className="h-px w-8 bg-gradient-to-r from-transparent to-[#B08D57]" />
+          <span className="text-[11px] font-bold uppercase tracking-[0.2em] bg-gradient-to-r from-[#C9A46B] to-[#B08D57] bg-clip-text text-transparent">
             {eyebrow}
           </span>
-          <span className="h-px w-8 bg-gradient-to-l from-transparent to-[#7C3AED]" />
+          <span className="h-px w-8 bg-gradient-to-l from-transparent to-[#B08D57]" />
         </div>
       ) : null}
-      <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#0B2A4A]">
+      <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#F3E7DC]">
         {titulo}
       </h2>
       {subtitulo ? (
-        <p className="mt-4 text-base md:text-lg text-[#5B6B84] leading-relaxed">{subtitulo}</p>
+        <p className="mt-4 text-base md:text-lg text-[#F3E7DC]/70 leading-relaxed">{subtitulo}</p>
       ) : null}
     </Aparece>
   )
@@ -422,39 +422,39 @@ function VistaPreviaPanel() {
   const { t } = useTranslation()
   const barras = [72, 88, 54, 95, 63]
   return (
-    <div className="rounded-2xl bg-white border border-[#E2E8F0] shadow-sm p-5">
+    <div className="rounded-2xl bg-[#4C2032] border border-[#6E4A50] shadow-sm p-5">
       <div className="flex items-center justify-between mb-5">
-        <span className="text-[11px] font-bold uppercase tracking-wider text-[#5B6B84]">
+        <span className="text-[11px] font-bold uppercase tracking-wider text-[#F3E7DC]/70">
           {t('w.preview.titulo')}
         </span>
-        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#7A8B6F]/20 text-[#9BB18D] border border-[#7A8B6F]/40">
           {t('w.preview.estado')}
         </span>
       </div>
       <div className="flex items-center gap-5">
         <div className="relative h-24 w-24 shrink-0">
           <svg viewBox="0 0 100 100" className="h-24 w-24 -rotate-90">
-            <circle cx="50" cy="50" r="42" fill="none" stroke="#E2E8F0" strokeWidth="10" />
+            <circle cx="50" cy="50" r="42" fill="none" stroke="#6E4A50" strokeWidth="10" />
             <circle
               cx="50"
               cy="50"
               r="42"
               fill="none"
-              stroke="#1D4ED8"
+              stroke="#B08D57"
               strokeWidth="10"
               strokeLinecap="round"
               strokeDasharray={`${2 * Math.PI * 42 * 0.78} ${2 * Math.PI * 42}`}
             />
           </svg>
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-xl font-extrabold text-[#0B2A4A]">78%</span>
+            <span className="text-xl font-extrabold text-[#F3E7DC]">78%</span>
           </div>
         </div>
         <div className="flex-1 flex items-end gap-2 h-24">
           {barras.map((altura, i) => (
             <div key={i} className="flex-1 flex flex-col justify-end h-full">
               <div
-                className="w-full rounded-t-md bg-gradient-to-t from-[#1D4ED8] to-[#60A5FA]"
+                className="w-full rounded-t-md bg-gradient-to-t from-[#B08D57] to-[#C9A46B]"
                 style={{ height: `${altura}%` }}
               />
             </div>
@@ -463,8 +463,8 @@ function VistaPreviaPanel() {
       </div>
       <div className="mt-5 space-y-2">
         {[t('w.preview.linea1'), t('w.preview.linea2'), t('w.preview.linea3')].map((linea, i) => (
-          <div key={i} className="flex items-center gap-2 text-[12px] text-[#334155]">
-            <Check className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+          <div key={i} className="flex items-center gap-2 text-[12px] text-[#F3E7DC]/85">
+            <Check className="h-3.5 w-3.5 text-[#B08D57] shrink-0" />
             <span className="truncate">{linea}</span>
           </div>
         ))}
@@ -482,10 +482,10 @@ export function LandingClient({ user }: LandingClientProps) {
   const [faqAbierta, setFaqAbierta] = useState<string | null>(null)
 
   return (
-    <div className="relative min-h-screen bg-[#FBFCFE] text-[#0F172A] font-sans">
+    <div className="relative min-h-screen bg-[#54142B] text-[#F3E7DC] font-sans">
       <FondoDecorativo />
       {/* ================= HEADER ================= */}
-      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-[#E8EDF5]">
+      <header className="sticky top-0 z-50 bg-[#54142B]/95 backdrop-blur border-b border-[#6E4A50]">
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8 h-[72px] flex items-center justify-between gap-6">
           <Link href="/" className="shrink-0">
             <Marca />
@@ -496,7 +496,7 @@ export function LandingClient({ user }: LandingClientProps) {
               <a
                 key={enlace.href}
                 href={enlace.href}
-                className="text-[13px] font-medium text-[#334155] hover:text-[#1D4ED8] transition-colors"
+                className="text-[13px] font-medium text-[#F3E7DC]/80 hover:text-[#B08D57] transition-colors"
               >
                 {t(enlace.clave)}
               </a>
@@ -507,7 +507,7 @@ export function LandingClient({ user }: LandingClientProps) {
             {user ? (
               <Link
                 href="/dashboard"
-                className={`h-10 px-5 inline-flex items-center rounded-lg bg-gradient-to-b from-[#143E77] to-[#0C2E5C] text-white text-[13px] font-semibold hover:from-[#16457F] hover:to-[#0A2547] shadow-[#0C2E5C]/25 ${RELIEVE_BOTON}`}
+                className={`h-10 px-5 inline-flex items-center rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-[13px] font-semibold hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25 ${RELIEVE_BOTON}`}
               >
                 {t('w.nav.dashboard')}
               </Link>
@@ -515,13 +515,13 @@ export function LandingClient({ user }: LandingClientProps) {
               <>
                 <a
                   href="/login"
-                  className={`h-10 px-5 inline-flex items-center rounded-lg border border-[#CBD5E1] bg-white text-[#0B2A4A] text-[13px] font-semibold hover:bg-[#F8FAFC] ${RELIEVE_BOTON_SUAVE}`}
+                  className={`h-10 px-5 inline-flex items-center rounded-lg border border-[#6E4A50] bg-[#3B1727] text-[#F3E7DC] text-[13px] font-semibold hover:bg-[#4C2032] ${RELIEVE_BOTON_SUAVE}`}
                 >
                   {t('w.nav.login')}
                 </a>
                 <a
                   href="/signup"
-                  className={`h-10 px-5 inline-flex items-center rounded-lg bg-gradient-to-b from-[#143E77] to-[#0C2E5C] text-white text-[13px] font-semibold hover:from-[#16457F] hover:to-[#0A2547] shadow-[#0C2E5C]/25 ${RELIEVE_BOTON}`}
+                  className={`h-10 px-5 inline-flex items-center rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-[13px] font-semibold hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25 ${RELIEVE_BOTON}`}
                 >
                   {t('w.nav.crear_cuenta')}
                 </a>
@@ -533,20 +533,20 @@ export function LandingClient({ user }: LandingClientProps) {
             type="button"
             onClick={() => setMenuAbierto((v) => !v)}
             aria-label={t('w.nav.menu')}
-            className="lg:hidden h-10 w-10 inline-flex items-center justify-center rounded-lg border border-[#E2E8F0] text-[#0B2A4A]"
+            className="lg:hidden h-10 w-10 inline-flex items-center justify-center rounded-lg border border-[#6E4A50] text-[#F3E7DC]"
           >
             {menuAbierto ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
 
         {menuAbierto ? (
-          <div className="lg:hidden border-t border-[#E8EDF5] bg-white px-5 py-4 space-y-1">
+          <div className="lg:hidden border-t border-[#6E4A50] bg-[#54142B] px-5 py-4 space-y-1">
             {NAV_LINKS.map((enlace) => (
               <a
                 key={enlace.href}
                 href={enlace.href}
                 onClick={() => setMenuAbierto(false)}
-                className="block py-2.5 text-[15px] font-medium text-[#334155]"
+                className="block py-2.5 text-[15px] font-medium text-[#F3E7DC]/80"
               >
                 {t(enlace.clave)}
               </a>
@@ -554,13 +554,13 @@ export function LandingClient({ user }: LandingClientProps) {
             <div className="pt-3 flex flex-col gap-2">
               <a
                 href="/login"
-                className="h-11 inline-flex items-center justify-center rounded-lg border border-[#CBD5E1] text-[#0B2A4A] text-sm font-semibold"
+                className="h-11 inline-flex items-center justify-center rounded-lg border border-[#6E4A50] text-[#F3E7DC] text-sm font-semibold"
               >
                 {t('w.nav.login')}
               </a>
               <a
                 href="/signup"
-                className="h-11 inline-flex items-center justify-center rounded-lg bg-[#0C2E5C] text-white text-sm font-semibold"
+                className="h-11 inline-flex items-center justify-center rounded-lg bg-[#B08D57] text-[#3A1420] text-sm font-semibold"
               >
                 {t('w.nav.crear_cuenta')}
               </a>
@@ -570,36 +570,36 @@ export function LandingClient({ user }: LandingClientProps) {
       </header>
 
       {/* ================= HERO ================= */}
-      <section id="inicio" className="relative overflow-hidden bg-gradient-to-b from-[#E8F0FF] via-[#F4F8FF] to-[#FBFCFE]">
+      <section id="inicio" className="relative overflow-hidden bg-[#54142B]">
         <div
           aria-hidden
-          className="absolute -top-40 left-[-8%] h-[520px] w-[520px] rounded-full bg-gradient-to-br from-[#1D4ED8]/30 to-[#7C3AED]/25 blur-[100px]"
+          className="absolute -top-40 left-[-8%] h-[520px] w-[520px] rounded-full bg-gradient-to-br from-[#C9A46B]/20 to-[#B08D57]/15 blur-[100px]"
         />
         <div
           aria-hidden
-          className="absolute top-[-10%] right-[-6%] h-[460px] w-[460px] rounded-full bg-gradient-to-br from-[#06B6D4]/25 to-[#3B82F6]/25 blur-[100px]"
+          className="absolute top-[-10%] right-[-6%] h-[460px] w-[460px] rounded-full bg-gradient-to-br from-[#B08D57]/20 to-[#C9A46B]/15 blur-[100px]"
         />
         {/* retícula sutil que le da textura al encabezado */}
         <div
           aria-hidden
-          className="absolute inset-0 opacity-[0.55] [background-image:linear-gradient(to_right,rgba(29,78,216,0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgba(29,78,216,0.07)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_at_top,black,transparent_72%)]"
+          className="absolute inset-0 opacity-[0.55] [background-image:linear-gradient(to_right,rgba(176,141,87,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(176,141,87,0.08)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_at_top,black,transparent_72%)]"
         />
         <div className="relative max-w-[1400px] mx-auto px-5 lg:px-8 py-12 lg:py-16">
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-start">
             {/* Columna izquierda: mensaje */}
             <div className="lg:col-span-4">
-              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-[#0B2A4A] leading-[1.08]">
+              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-[#F3E7DC] leading-[1.08]">
                 {t('w.hero.titulo1')}
                 <br />
                 <span className="relative inline-block">
                   {t('w.hero.titulo2')}
                   <span
                     aria-hidden
-                    className="absolute -bottom-1 left-0 h-[6px] w-full rounded-full bg-gradient-to-r from-[#1D4ED8] via-[#4F46E5] to-[#06B6D4] opacity-80"
+                    className="absolute -bottom-1 left-0 h-[6px] w-full rounded-full bg-gradient-to-r from-[#C9A46B] via-[#B08D57] to-[#8A6636] opacity-80"
                   />
                 </span>
               </h1>
-              <p className="mt-5 text-base text-[#475569] leading-relaxed max-w-md">
+              <p className="mt-5 text-base text-[#F3E7DC]/70 leading-relaxed max-w-md">
                 {t('w.hero.descripcion')}
               </p>
 
@@ -610,10 +610,10 @@ export function LandingClient({ user }: LandingClientProps) {
                   { icono: Target, clave: 'w.hero.pilar3' },
                 ].map(({ icono: Icono, clave }) => (
                   <div key={clave}>
-                    <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-[#E6EEFF] to-[#EDE7FF] ring-1 ring-[#1D4ED8]/10 flex items-center justify-center mb-2.5">
-                      <Icono className="h-5 w-5 text-[#1D4ED8]" />
+                    <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-[#4C2032] to-[#3B1727] ring-1 ring-[#B08D57]/20 flex items-center justify-center mb-2.5">
+                      <Icono className="h-5 w-5 text-[#B08D57]" />
                     </div>
-                    <div className="text-[12px] font-semibold text-[#0B2A4A] leading-snug">
+                    <div className="text-[12px] font-semibold text-[#F3E7DC] leading-snug">
                       {t(clave)}
                     </div>
                   </div>
@@ -623,14 +623,14 @@ export function LandingClient({ user }: LandingClientProps) {
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
                   href="/diagnostico"
-                  className={`h-12 px-6 inline-flex items-center gap-2 rounded-lg bg-gradient-to-b from-[#143E77] to-[#0C2E5C] text-white text-sm font-semibold hover:from-[#16457F] hover:to-[#0A2547] shadow-[#0C2E5C]/30 ${RELIEVE_BOTON}`}
+                  className={`h-12 px-6 inline-flex items-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-sm font-semibold hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/30 ${RELIEVE_BOTON}`}
                 >
                   {t('w.hero.cta_principal')}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <a
                   href="#como-funciona"
-                  className={`h-12 px-6 inline-flex items-center rounded-lg border border-[#CBD5E1] bg-white text-[#0B2A4A] text-sm font-semibold hover:bg-[#F8FAFC] ${RELIEVE_BOTON_SUAVE}`}
+                  className={`h-12 px-6 inline-flex items-center rounded-lg border border-[#6E4A50] bg-[#3B1727] text-[#F3E7DC] text-sm font-semibold hover:bg-[#4C2032] ${RELIEVE_BOTON_SUAVE}`}
                 >
                   {t('w.hero.cta_secundario')}
                 </a>
@@ -639,11 +639,11 @@ export function LandingClient({ user }: LandingClientProps) {
 
             {/* Columna centro: video */}
             <div className="lg:col-span-5">
-              <div className="relative rounded-2xl overflow-hidden p-[2px] bg-gradient-to-br from-[#1D4ED8] via-[#4F46E5] to-[#06B6D4] shadow-[0_18px_50px_-18px_rgba(29,78,216,0.55)]">
-              <div className="relative rounded-[14px] overflow-hidden bg-gradient-to-br from-[#0C2E5C] to-[#1D4ED8] aspect-video">
+              <div className="relative rounded-2xl overflow-hidden p-[2px] bg-gradient-to-br from-[#C9A46B] via-[#B08D57] to-[#8A6636] shadow-[0_18px_50px_-18px_rgba(176,141,87,0.4)]">
+              <div className="relative rounded-[14px] overflow-hidden bg-gradient-to-br from-[#3B1727] to-[#54142B] aspect-video">
                 {videoAbierto && VIDEO_ARCHIVO ? (
                   <video
-                    className="absolute inset-0 h-full w-full object-cover bg-[#081F3F]"
+                    className="absolute inset-0 h-full w-full object-cover bg-[#2E0E1A]"
                     src={VIDEO_ARCHIVO}
                     poster={VIDEO_PORTADA}
                     controls
@@ -658,9 +658,9 @@ export function LandingClient({ user }: LandingClientProps) {
                       onClick={() => setVideoAbierto(true)}
                       disabled={!VIDEO_ARCHIVO}
                       aria-label={t('w.video.boton')}
-                      className="h-16 w-16 rounded-full bg-white shadow-lg flex items-center justify-center hover:scale-105 transition-transform disabled:opacity-70 disabled:hover:scale-100"
+                      className="h-16 w-16 rounded-full bg-[#F3E7DC] shadow-lg flex items-center justify-center hover:scale-105 transition-transform disabled:opacity-70 disabled:hover:scale-100"
                     >
-                      <Play className="h-6 w-6 text-[#1D4ED8] fill-[#1D4ED8] ml-1" />
+                      <Play className="h-6 w-6 text-[#B08D57] fill-[#B08D57] ml-1" />
                     </button>
                     <div className="mt-4 text-white font-semibold text-sm">
                       {t('w.video.titulo')}
@@ -676,24 +676,24 @@ export function LandingClient({ user }: LandingClientProps) {
 
             {/* Columna derecha: diagnóstico */}
             <div className="lg:col-span-3">
-              <div className="rounded-2xl border border-[#E2E8F0] bg-[#F8FAFD] p-6">
-                <h2 className="text-xl font-extrabold text-[#0B2A4A] leading-snug">
+              <div className="rounded-2xl border border-[#6E4A50] bg-[#3B1727] p-6">
+                <h2 className="text-xl font-extrabold text-[#F3E7DC] leading-snug">
                   {t('w.hero.panel_titulo')}
                 </h2>
-                <p className="mt-2 text-[13px] text-[#5B6B84] leading-relaxed">
+                <p className="mt-2 text-[13px] text-[#F3E7DC]/70 leading-relaxed">
                   {t('w.hero.panel_texto')}
                 </p>
 
-                <div className="mt-5 rounded-xl bg-white border border-[#E2E8F0] p-4 space-y-2.5">
+                <div className="mt-5 rounded-xl bg-[#4C2032] border border-[#6E4A50] p-4 space-y-2.5">
                   {[
                     { icono: Lightbulb, clave: 'w.hero.caso1' },
                     { icono: FileText, clave: 'w.hero.caso2' },
                   ].map(({ icono: Icono, clave }) => (
                     <div key={clave} className="flex items-center gap-2.5">
-                      <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-[#E6EEFF] to-[#EDE7FF] ring-1 ring-[#1D4ED8]/10 flex items-center justify-center shrink-0">
-                        <Icono className="h-4 w-4 text-[#1D4ED8]" />
+                      <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-[#4C2032] to-[#3B1727] ring-1 ring-[#B08D57]/20 flex items-center justify-center shrink-0">
+                        <Icono className="h-4 w-4 text-[#B08D57]" />
                       </div>
-                      <span className="text-[13px] font-semibold text-[#0B2A4A] leading-snug">
+                      <span className="text-[13px] font-semibold text-[#F3E7DC] leading-snug">
                         {t(clave)}
                       </span>
                     </div>
@@ -701,7 +701,7 @@ export function LandingClient({ user }: LandingClientProps) {
 
                   <Link
                     href="/diagnostico"
-                    className={`mt-1 min-h-11 py-2 w-full inline-flex items-center justify-center gap-2 rounded-lg text-center leading-tight bg-gradient-to-b from-[#143E77] to-[#0C2E5C] text-white text-[13px] font-semibold shadow-[#0C2E5C]/25 ${RELIEVE_BOTON}`}
+                    className={`mt-1 min-h-11 py-2 w-full inline-flex items-center justify-center gap-2 rounded-lg text-center leading-tight bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-[13px] font-semibold shadow-[#B08D57]/25 ${RELIEVE_BOTON}`}
                   >
                     {t('w.hero.panel_boton')}
                     <ArrowRight className="h-4 w-4" />
@@ -710,8 +710,8 @@ export function LandingClient({ user }: LandingClientProps) {
 
                 <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2">
                   {['w.hero.sello1', 'w.hero.sello2', 'w.hero.sello3'].map((clave) => (
-                    <div key={clave} className="flex items-center gap-1.5 text-[11px] font-medium text-[#5B6B84]">
-                      <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+                    <div key={clave} className="flex items-center gap-1.5 text-[11px] font-medium text-[#F3E7DC]/70">
+                      <ShieldCheck className="h-3.5 w-3.5 text-[#B08D57]" />
                       {t(clave)}
                     </div>
                   ))}
@@ -723,7 +723,7 @@ export function LandingClient({ user }: LandingClientProps) {
       </section>
 
       {/* ================= FRANJA DEL PROBLEMA (banda de color) ================= */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-[#081F3F] via-[#0C2E5C] to-[#1D4ED8]">
+      <section className="relative overflow-hidden bg-gradient-to-r from-[#3B1727] via-[#2E0E1A] to-[#54142B]">
         {/* destello diagonal que cruza la banda */}
         <div
           aria-hidden
@@ -731,7 +731,7 @@ export function LandingClient({ user }: LandingClientProps) {
         />
         <div
           aria-hidden
-          className="absolute -bottom-24 right-[8%] h-64 w-64 rounded-full bg-[#7EC3FF]/20 blur-3xl"
+          className="absolute -bottom-24 right-[8%] h-64 w-64 rounded-full bg-[#B08D57]/20 blur-3xl"
         />
         <div className="relative max-w-[1400px] mx-auto px-5 lg:px-8 py-12 lg:py-14">
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
@@ -743,7 +743,7 @@ export function LandingClient({ user }: LandingClientProps) {
                 <div className="text-xl lg:text-2xl font-extrabold text-white leading-snug">
                   {t('w.problema.titulo')}
                 </div>
-                <div className="text-lg lg:text-xl font-semibold text-[#9DC7FF] leading-snug mt-1">
+                <div className="text-lg lg:text-xl font-semibold text-[#E0B868] leading-snug mt-1">
                   {t('w.problema.subtitulo')}
                 </div>
               </div>
@@ -754,7 +754,7 @@ export function LandingClient({ user }: LandingClientProps) {
                   key={cifra.claveTexto}
                   className="rounded-2xl bg-white/8 ring-1 ring-white/15 backdrop-blur px-5 py-4"
                 >
-                  <div className="text-3xl font-extrabold bg-gradient-to-r from-white to-[#9DC7FF] bg-clip-text text-transparent">
+                  <div className="text-3xl font-extrabold bg-gradient-to-r from-white to-[#E0B868] bg-clip-text text-transparent">
                     {cifra.valor}
                   </div>
                   <div className="text-[13px] text-white/70 leading-snug mt-1.5">
@@ -780,7 +780,7 @@ export function LandingClient({ user }: LandingClientProps) {
             {/* hilo de color que cruza las seis etapas */}
             <div
               aria-hidden
-              className="hidden lg:block absolute left-8 right-8 top-[52px] h-0.5 bg-gradient-to-r from-[#1D4ED8]/15 via-[#7C3AED]/45 to-[#06B6D4]/15"
+              className="hidden lg:block absolute left-8 right-8 top-[52px] h-0.5 bg-gradient-to-r from-[#C9A46B]/15 via-[#B08D57]/45 to-[#8A6636]/15"
             />
             {RUTA_PROYECTO.map(({ icono: Icono, clave, de, a, tinte, borde }, i) => (
               <Aparece key={clave} delay={i * 80}>
@@ -793,23 +793,23 @@ export function LandingClient({ user }: LandingClientProps) {
                 >
                   <Icono className="h-5 w-5 text-white" />
                 </div>
-                <div className="text-[10px] font-black tracking-widest text-[#94A3B8] mb-1">
+                <div className="text-[10px] font-black tracking-widest text-[#F3E7DC]/50 mb-1">
                   {String(i + 1).padStart(2, '0')}
                 </div>
-                <div className="text-[13px] font-bold text-[#0B2A4A] leading-snug">{t(clave)}</div>
+                <div className="text-[13px] font-bold text-[#F3E7DC] leading-snug">{t(clave)}</div>
               </div>
               </Aparece>
             ))}
           </div>
 
-          <p className="mt-6 text-center text-[13px] text-[#5B6B84] max-w-2xl mx-auto">
+          <p className="mt-6 text-center text-[13px] text-[#F3E7DC]/70 max-w-2xl mx-auto">
             {t('w.que_hacemos.nota')}
           </p>
         </div>
       </section>
 
       {/* ================= PROPUESTA DE VALOR ================= */}
-      <section id="como-funciona" className="bg-gradient-to-b from-[#F3F7FD] via-[#F7FAFE] to-[#F3F7FD] py-16 lg:py-20 border-y border-[#E7EEF9]">
+      <section id="como-funciona" className="bg-[#4C2032] py-16 lg:py-20 border-y border-[#6E4A50]">
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
           <TituloSeccion
             eyebrow={t('w.valor.eyebrow')}
@@ -822,43 +822,43 @@ export function LandingClient({ user }: LandingClientProps) {
               <Aparece key={claveTitulo} delay={i * 110}>
               <div
                 className={`relative overflow-hidden rounded-2xl border p-7 ${
-                  ['bg-gradient-to-br from-[#EFF5FF] to-white border-blue-200',
-                   'bg-gradient-to-br from-[#F3F0FF] to-white border-violet-200',
-                   'bg-gradient-to-br from-[#ECFBFF] to-white border-cyan-200'][i]
+                  ['bg-gradient-to-br from-[#4C2032] to-[#3B1727] border-[#6E4A50]',
+                   'bg-gradient-to-br from-[#4C2032] to-[#3B1727] border-[#6E4A50]',
+                   'bg-gradient-to-br from-[#4C2032] to-[#3B1727] border-[#6E4A50]'][i]
                 } ${RELIEVE_TARJETA}`}
               >
                 <span
                   aria-hidden
                   className={`absolute inset-x-0 top-0 h-1.5 ${
-                    ['bg-gradient-to-r from-[#1D4ED8] to-[#60A5FA]',
-                     'bg-gradient-to-r from-[#4F46E5] to-[#A78BFA]',
-                     'bg-gradient-to-r from-[#0891B2] to-[#67E8F9]'][i]
+                    ['bg-gradient-to-r from-[#C9A46B] to-[#B08D57]',
+                     'bg-gradient-to-r from-[#C9A46B] to-[#B08D57]',
+                     'bg-gradient-to-r from-[#C9A46B] to-[#B08D57]'][i]
                   }`}
                 />
                 <div
                   className={`h-12 w-12 rounded-2xl flex items-center justify-center mb-5 shadow-lg ${
-                    ['bg-gradient-to-br from-[#1D4ED8] to-[#60A5FA]',
-                     'bg-gradient-to-br from-[#4F46E5] to-[#A78BFA]',
-                     'bg-gradient-to-br from-[#0891B2] to-[#22D3EE]'][i]
+                    ['bg-gradient-to-br from-[#C9A46B] to-[#B08D57]',
+                     'bg-gradient-to-br from-[#C9A46B] to-[#B08D57]',
+                     'bg-gradient-to-br from-[#C9A46B] to-[#B08D57]'][i]
                   }`}
                 >
-                  <Icono className="h-5 w-5 text-white" />
+                  <Icono className="h-5 w-5 text-[#3A1420]" />
                 </div>
-                <h3 className="text-lg font-extrabold text-[#0B2A4A] mb-2">{t(claveTitulo)}</h3>
-                <p className="text-[14px] text-[#5B6B84] leading-relaxed">{t(claveTexto)}</p>
+                <h3 className="text-lg font-extrabold text-[#F3E7DC] mb-2">{t(claveTitulo)}</h3>
+                <p className="text-[14px] text-[#F3E7DC]/70 leading-relaxed">{t(claveTexto)}</p>
               </div>
               </Aparece>
             ))}
           </div>
 
-          <div className="relative mt-12 grid lg:grid-cols-12 gap-8 items-center overflow-hidden rounded-3xl bg-gradient-to-br from-[#081F3F] via-[#0C2E5C] to-[#1D4ED8] p-8 lg:p-10 shadow-[0_30px_70px_-30px_rgba(11,42,74,0.65)]">
-            <div aria-hidden className="absolute -top-24 -left-16 h-72 w-72 rounded-full bg-[#7C3AED]/35 blur-3xl" />
-            <div aria-hidden className="absolute -bottom-24 right-[10%] h-72 w-72 rounded-full bg-[#06B6D4]/30 blur-3xl" />
+          <div className="relative mt-12 grid lg:grid-cols-12 gap-8 items-center overflow-hidden rounded-3xl bg-gradient-to-br from-[#3B1727] via-[#2E0E1A] to-[#54142B] p-8 lg:p-10 shadow-[0_30px_70px_-30px_rgba(0,0,0,0.5)]">
+            <div aria-hidden className="absolute -top-24 -left-16 h-72 w-72 rounded-full bg-[#B08D57]/30 blur-3xl" />
+            <div aria-hidden className="absolute -bottom-24 right-[10%] h-72 w-72 rounded-full bg-[#C9A46B]/25 blur-3xl" />
             <div className="relative lg:col-span-7">
-              <h3 className="text-2xl font-extrabold text-white leading-snug">
+              <h3 className="text-2xl font-extrabold text-[#F3E7DC] leading-snug">
                 {t('w.mecanismo.titulo')}
               </h3>
-              <p className="mt-3 text-[15px] text-white/75 leading-relaxed">
+              <p className="mt-3 text-[15px] text-[#F3E7DC]/75 leading-relaxed">
                 {t('w.mecanismo.texto')}
               </p>
               <div className="mt-5 flex flex-wrap gap-2">
@@ -871,7 +871,7 @@ export function LandingClient({ user }: LandingClientProps) {
                 ].map((clave) => (
                   <span
                     key={clave}
-                    className="text-[11px] font-semibold px-3 py-1.5 rounded-full bg-white/10 text-[#CFE0FF] border border-white/20 backdrop-blur"
+                    className="text-[11px] font-semibold px-3 py-1.5 rounded-full bg-[#B08D57]/15 text-[#F3E7DC] border border-[#B08D57]/25 backdrop-blur"
                   >
                     {t(clave)}
                   </span>
@@ -903,29 +903,29 @@ export function LandingClient({ user }: LandingClientProps) {
                   className={`w-full rounded-2xl border ${escalon.borde} ${escalon.fondo} p-5 flex flex-col ${RELIEVE_TARJETA}`}
                 >
                   <div
-                    className={`h-6 w-6 rounded-lg bg-white/80 ring-1 ring-black/5 flex items-center justify-center text-[11px] font-black mb-2 ${escalon.color}`}
+                    className={`h-6 w-6 rounded-lg bg-[#3B1727]/90 ring-1 ring-[#6E4A50] flex items-center justify-center text-[11px] font-black mb-2 ${escalon.color}`}
                   >
                     {escalon.numero}
                   </div>
-                  <h3 className="text-[15px] font-extrabold text-[#0B2A4A] leading-snug min-h-[38px]">
+                  <h3 className="text-[15px] font-extrabold text-[#F3E7DC] leading-snug min-h-[38px]">
                     {t(escalon.claveTitulo)}
                   </h3>
                   <div className={`text-[12.5px] font-bold leading-snug ${escalon.color} mt-1 min-h-[34px]`}>
                     {t(escalon.clavePrecio)}
                   </div>
 
-                  <div className="my-4 h-12 w-12 rounded-xl bg-white/80 border border-white flex items-center justify-center mx-auto">
+                  <div className="my-4 h-12 w-12 rounded-xl bg-[#3B1727]/90 border border-[#6E4A50] flex items-center justify-center mx-auto">
                     <Icono className={`h-5 w-5 ${escalon.color}`} />
                   </div>
 
-                  <p className="text-[12px] text-[#5B6B84] leading-snug text-center mb-4 min-h-[32px]">
+                  <p className="text-[12px] text-[#F3E7DC]/70 leading-snug text-center mb-4 min-h-[32px]">
                     {t(escalon.claveResumen)}
                   </p>
 
                   <ul className="space-y-1.5 mb-5 flex-1">
                     {escalon.clavesItems.map((clave) => (
-                      <li key={clave} className="flex items-start gap-1.5 text-[11.5px] text-[#334155] leading-snug">
-                        <Check className="h-3 w-3 text-emerald-600 shrink-0 mt-0.5" />
+                      <li key={clave} className="flex items-start gap-1.5 text-[11.5px] text-[#F3E7DC]/85 leading-snug">
+                        <Check className="h-3 w-3 text-[#B08D57] shrink-0 mt-0.5" />
                         <span>{t(clave)}</span>
                       </li>
                     ))}
@@ -954,7 +954,7 @@ export function LandingClient({ user }: LandingClientProps) {
             })}
           </div>
 
-          <p className="mt-6 text-center text-[12px] text-[#94A3B8] max-w-3xl mx-auto">
+          <p className="mt-6 text-center text-[12px] text-[#F3E7DC]/50 max-w-3xl mx-auto">
             {t('w.escalera.nota_legal')}
           </p>
         </div>
@@ -962,9 +962,9 @@ export function LandingClient({ user }: LandingClientProps) {
 
       {/* ================= ENTIDADES (solo si hay autorización) ================= */}
       {ENTIDADES_ALIADAS.length > 0 ? (
-        <section className="bg-gradient-to-b from-[#F3F7FD] to-[#F7FAFE] border-y border-[#E7EEF9] py-8">
+        <section className="bg-[#4C2032] border-y border-[#6E4A50] py-8">
           <div className="max-w-[1400px] mx-auto px-5 lg:px-8 flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
-            <span className="text-[12px] font-bold uppercase tracking-wider text-[#5B6B84]">
+            <span className="text-[12px] font-bold uppercase tracking-wider text-[#F3E7DC]/70">
               {t('w.aliados.titulo')}
             </span>
             {ENTIDADES_ALIADAS.map((entidad) => (
@@ -981,18 +981,18 @@ export function LandingClient({ user }: LandingClientProps) {
       ) : null}
 
       {/* ================= MEMBRESÍAS ================= */}
-      <section id="membresias" className="relative overflow-hidden bg-gradient-to-br from-[#081F3F] via-[#0C2E5C] to-[#15305F] py-16 lg:py-20">
-        <div aria-hidden className="absolute -top-24 left-[10%] h-72 w-72 rounded-full bg-[#1D4ED8]/30 blur-3xl" />
-        <div aria-hidden className="absolute -bottom-28 right-[6%] h-80 w-80 rounded-full bg-[#7C3AED]/25 blur-3xl" />
+      <section id="membresias" className="relative overflow-hidden bg-gradient-to-br from-[#3B1727] via-[#2E0E1A] to-[#54142B] py-16 lg:py-20">
+        <div aria-hidden className="absolute -top-24 left-[10%] h-72 w-72 rounded-full bg-[#B08D57]/25 blur-3xl" />
+        <div aria-hidden className="absolute -bottom-28 right-[6%] h-80 w-80 rounded-full bg-[#C9A46B]/20 blur-3xl" />
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
           <div className="max-w-3xl mx-auto text-center mb-12">
-            <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#7EA6E8] mb-3">
+            <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#B08D57] mb-3">
               {t('w.membresias.eyebrow')}
             </div>
-            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white">
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#F3E7DC]">
               {t('w.membresias.titulo')}
             </h2>
-            <p className="mt-4 text-base text-white/70 leading-relaxed">
+            <p className="mt-4 text-base text-[#F3E7DC]/70 leading-relaxed">
               {t('w.membresias.subtitulo')}
             </p>
           </div>
@@ -1018,24 +1018,24 @@ export function LandingClient({ user }: LandingClientProps) {
                 key={plan.claveT}
                 className={`rounded-2xl p-7 ${
                   plan.destacado
-                    ? 'bg-white border-2 border-[#60A5FA]'
-                    : 'bg-white/5 border border-white/15'
+                    ? 'bg-[#4C2032] border-2 border-[#B08D57]'
+                    : 'bg-[#3B1727]/60 border border-[#6E4A50]'
                 }`}
               >
-                <h3 className={`text-lg font-extrabold ${plan.destacado ? 'text-[#0B2A4A]' : 'text-white'}`}>
+                <h3 className={`text-lg font-extrabold ${plan.destacado ? 'text-[#F3E7DC]' : 'text-[#F3E7DC]'}`}>
                   {t(plan.claveT)}
                 </h3>
-                <div className={`mt-1 text-[15px] font-bold ${plan.destacado ? 'text-[#1D4ED8]' : 'text-[#9DC7FF]'}`}>
+                <div className={`mt-1 text-[15px] font-bold ${plan.destacado ? 'text-[#B08D57]' : 'text-[#B08D57]'}`}>
                   {t(plan.claveP)}
                 </div>
-                <p className={`mt-3 text-[13px] leading-relaxed ${plan.destacado ? 'text-[#5B6B84]' : 'text-white/60'}`}>
+                <p className={`mt-3 text-[13px] leading-relaxed ${plan.destacado ? 'text-[#F3E7DC]/70' : 'text-[#F3E7DC]/60'}`}>
                   {t(plan.claveD)}
                 </p>
                 <div
                   className={`mt-3 inline-flex items-center gap-1.5 text-[11.5px] font-semibold px-2.5 py-1 rounded-full ${
                     plan.destacado
-                      ? 'bg-[#EEF4FF] text-[#1D4ED8] border border-[#DBE7FF]'
-                      : 'bg-white/10 text-[#CFE0FF] border border-white/20'
+                      ? 'bg-[#3B1727] text-[#B08D57] border border-[#6E4A50]'
+                      : 'bg-[#B08D57]/10 text-[#F3E7DC] border border-[#B08D57]/20'
                   }`}
                 >
                   {t('w.membresias.anual')}
@@ -1045,10 +1045,10 @@ export function LandingClient({ user }: LandingClientProps) {
                     <li
                       key={clave}
                       className={`flex items-start gap-2 text-[13px] leading-snug ${
-                        plan.destacado ? 'text-[#334155]' : 'text-white/80'
+                        plan.destacado ? 'text-[#F3E7DC]/90' : 'text-[#F3E7DC]/80'
                       }`}
                     >
-                      <Check className={`h-3.5 w-3.5 shrink-0 mt-0.5 ${plan.destacado ? 'text-emerald-600' : 'text-[#7EE7C7]'}`} />
+                      <Check className={`h-3.5 w-3.5 shrink-0 mt-0.5 ${plan.destacado ? 'text-[#B08D57]' : 'text-[#B08D57]'}`} />
                       <span>{t(clave)}</span>
                     </li>
                   ))}
@@ -1057,8 +1057,8 @@ export function LandingClient({ user }: LandingClientProps) {
                   href="/signup"
                   className={`mt-6 h-11 rounded-lg inline-flex w-full items-center justify-center text-[13px] font-semibold transition-colors ${
                     plan.destacado
-                      ? `bg-gradient-to-b from-[#2563EB] to-[#1D4ED8] text-white hover:from-[#2563EB] hover:to-[#1E40AF] shadow-[#1D4ED8]/35 ${RELIEVE_BOTON}`
-                      : `border border-white/30 text-white hover:bg-white/10 ${RELIEVE_BOTON_SUAVE}`
+                      ? `bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/35 ${RELIEVE_BOTON}`
+                      : `border border-[#B08D57]/40 text-[#F3E7DC] hover:bg-[#B08D57]/10 ${RELIEVE_BOTON_SUAVE}`
                   }`}
                 >
                   {t('w.membresias.boton')}
@@ -1067,7 +1067,7 @@ export function LandingClient({ user }: LandingClientProps) {
             ))}
           </div>
 
-          <p className="mt-8 text-center text-[12px] text-white/50 max-w-2xl mx-auto">
+          <p className="mt-8 text-center text-[12px] text-[#F3E7DC]/50 max-w-2xl mx-auto">
             {t('w.membresias.nota')}
           </p>
         </div>
@@ -1078,19 +1078,19 @@ export function LandingClient({ user }: LandingClientProps) {
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-10 items-center">
             <div>
-              <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#1D4ED8] mb-3">
+              <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#B08D57] mb-3">
                 {t('w.diagnostico.eyebrow')}
               </div>
-              <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#0B2A4A] leading-tight">
+              <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#F3E7DC] leading-tight">
                 {t('w.diagnostico.titulo')}
               </h2>
-              <p className="mt-4 text-base text-[#5B6B84] leading-relaxed">
+              <p className="mt-4 text-base text-[#F3E7DC]/70 leading-relaxed">
                 {t('w.diagnostico.subtitulo')}
               </p>
               <div className="mt-7 flex flex-wrap gap-3">
                 <Link
                   href="/diagnostico"
-                  className={`h-12 px-6 inline-flex items-center gap-2 rounded-lg bg-gradient-to-b from-[#143E77] to-[#0C2E5C] text-white text-sm font-semibold hover:from-[#16457F] hover:to-[#0A2547] shadow-[#0C2E5C]/30 ${RELIEVE_BOTON}`}
+                  className={`h-12 px-6 inline-flex items-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-sm font-semibold hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/30 ${RELIEVE_BOTON}`}
                 >
                   {t('w.diagnostico.boton')}
                   <ArrowRight className="h-4 w-4" />
@@ -1099,28 +1099,28 @@ export function LandingClient({ user }: LandingClientProps) {
                   href={`https://wa.me/${TELEFONO_WHATSAPP}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`h-12 px-6 inline-flex items-center rounded-lg border border-[#CBD5E1] bg-white text-[#0B2A4A] text-sm font-semibold hover:bg-[#F8FAFC] ${RELIEVE_BOTON_SUAVE}`}
+                  className={`h-12 px-6 inline-flex items-center rounded-lg border border-[#6E4A50] bg-[#3B1727] text-[#F3E7DC] text-sm font-semibold hover:bg-[#4C2032] ${RELIEVE_BOTON_SUAVE}`}
                 >
                   {t('w.diagnostico.boton_hablar')}
                 </a>
               </div>
-              <p className="mt-4 text-[12px] text-[#94A3B8]">{t('w.diagnostico.nota')}</p>
+              <p className="mt-4 text-[12px] text-[#F3E7DC]/50">{t('w.diagnostico.nota')}</p>
             </div>
 
-            <div className="rounded-2xl border border-[#E2E8F0] bg-[#F8FAFD] p-7">
-              <h3 className="text-[15px] font-extrabold text-[#0B2A4A] mb-5">
+            <div className="rounded-2xl border border-[#6E4A50] bg-[#3B1727] p-7">
+              <h3 className="text-[15px] font-extrabold text-[#F3E7DC] mb-5">
                 {t('w.diagnostico.incluye_titulo')}
               </h3>
               <div className="grid sm:grid-cols-2 gap-x-6 gap-y-3">
                 {DIAGNOSTICO_ENTREGA.map((clave) => (
-                  <div key={clave} className="flex items-start gap-2 text-[13px] text-[#334155] leading-snug">
-                    <Check className="h-3.5 w-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                  <div key={clave} className="flex items-start gap-2 text-[13px] text-[#F3E7DC]/85 leading-snug">
+                    <Check className="h-3.5 w-3.5 text-[#B08D57] shrink-0 mt-0.5" />
                     <span>{t(clave)}</span>
                   </div>
                 ))}
               </div>
-              <div className="mt-6 pt-5 border-t border-[#E2E8F0]">
-                <p className="text-[12px] text-[#5B6B84] leading-relaxed">
+              <div className="mt-6 pt-5 border-t border-[#6E4A50]">
+                <p className="text-[12px] text-[#F3E7DC]/70 leading-relaxed">
                   {t('w.diagnostico.no_incluye')}
                 </p>
               </div>
@@ -1130,7 +1130,7 @@ export function LandingClient({ user }: LandingClientProps) {
       </section>
 
       {/* ================= CAMINOS ================= */}
-      <section className="bg-gradient-to-b from-[#F3F7FD] via-[#F7FAFE] to-[#F3F7FD] py-16 lg:py-20 border-y border-[#E7EEF9]">
+      <section className="bg-[#4C2032] py-16 lg:py-20 border-y border-[#6E4A50]">
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
           <TituloSeccion
             eyebrow={t('w.caminos.eyebrow')}
@@ -1142,15 +1142,15 @@ export function LandingClient({ user }: LandingClientProps) {
               <Aparece key={clave} delay={i * 70}>
               <Link
                 href={href}
-                className={`group flex items-center gap-4 rounded-2xl bg-white border border-[#E2E8F0] p-5 hover:border-[#1D4ED8] ${RELIEVE_TARJETA}`}
+                className={`group flex items-center gap-4 rounded-2xl bg-[#3B1727] border border-[#6E4A50] p-5 hover:border-[#B08D57] ${RELIEVE_TARJETA}`}
               >
                 <div className={`h-11 w-11 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center shrink-0 shadow-md`}>
                   <Icono className="h-5 w-5 text-white" />
                 </div>
-                <span className="text-[14px] font-semibold text-[#0B2A4A] leading-snug flex-1">
+                <span className="text-[14px] font-semibold text-[#F3E7DC] leading-snug flex-1">
                   {t(clave)}
                 </span>
-                <ArrowUpRight className="h-4 w-4 text-[#94A3B8] group-hover:text-[#1D4ED8] shrink-0" />
+                <ArrowUpRight className="h-4 w-4 text-[#F3E7DC]/50 group-hover:text-[#B08D57] shrink-0" />
               </Link>
               </Aparece>
             ))}
@@ -1159,22 +1159,22 @@ export function LandingClient({ user }: LandingClientProps) {
       </section>
 
       {/* ================= CON QUIÉN LO HACEMOS ================= */}
-      <section id="nosotros" className="relative overflow-hidden bg-gradient-to-br from-[#0A2650] via-[#0C2E5C] to-[#123C77] py-16 lg:py-20">
-        <div aria-hidden className="absolute -top-20 left-[12%] h-72 w-72 rounded-full bg-[#7C3AED]/25 blur-3xl" />
-        <div aria-hidden className="absolute -bottom-24 right-[10%] h-80 w-80 rounded-full bg-[#06B6D4]/25 blur-3xl" />
+      <section id="nosotros" className="relative overflow-hidden bg-gradient-to-br from-[#3B1727] via-[#2E0E1A] to-[#54142B] py-16 lg:py-20">
+        <div aria-hidden className="absolute -top-20 left-[12%] h-72 w-72 rounded-full bg-[#B08D57]/20 blur-3xl" />
+        <div aria-hidden className="absolute -bottom-24 right-[10%] h-80 w-80 rounded-full bg-[#C9A46B]/20 blur-3xl" />
         <div className="relative max-w-[1400px] mx-auto px-5 lg:px-8">
           <Aparece className="max-w-3xl mx-auto text-center mb-12">
             <div className="flex items-center gap-2.5 mb-3 justify-center">
-              <span className="h-px w-8 bg-gradient-to-r from-transparent to-[#7EC3FF]" />
-              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#7EC3FF]">
+              <span className="h-px w-8 bg-gradient-to-r from-transparent to-[#B08D57]" />
+              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#B08D57]">
                 {t('w.quien.eyebrow')}
               </span>
-              <span className="h-px w-8 bg-gradient-to-l from-transparent to-[#A78BFA]" />
+              <span className="h-px w-8 bg-gradient-to-l from-transparent to-[#B08D57]" />
             </div>
-            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white">
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#F3E7DC]">
               {t('w.quien.titulo')}
             </h2>
-            <p className="mt-4 text-base md:text-lg text-white/70 leading-relaxed">
+            <p className="mt-4 text-base md:text-lg text-[#F3E7DC]/70 leading-relaxed">
               {t('w.quien.subtitulo')}
             </p>
           </Aparece>
@@ -1182,32 +1182,32 @@ export function LandingClient({ user }: LandingClientProps) {
             {CON_QUIEN.map(({ icono: Icono, clave }, i) => (
               <Aparece key={clave} delay={i * 70}>
                 <div className="rounded-2xl border border-white/15 bg-white/[0.07] backdrop-blur p-5 text-center hover:bg-white/[0.12] transition-colors">
-                  <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-[#3B82F6] to-[#7C3AED] flex items-center justify-center mx-auto mb-3 shadow-lg">
+                  <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-[#C9A46B] to-[#B08D57] flex items-center justify-center mx-auto mb-3 shadow-lg">
                     <Icono className="h-5 w-5 text-white" />
                   </div>
-                  <div className="text-[13px] font-bold text-white leading-snug">{t(clave)}</div>
+                  <div className="text-[13px] font-bold text-[#F3E7DC] leading-snug">{t(clave)}</div>
                 </div>
               </Aparece>
             ))}
           </div>
-          <p className="mt-8 text-center text-[13px] text-white/55 max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-8 text-center text-[13px] text-[#F3E7DC]/55 max-w-2xl mx-auto leading-relaxed">
             {t('w.quien.nota_alianzas')}
           </p>
         </div>
       </section>
 
       {/* ================= PORTAL DE RÉPLICAS ================= */}
-      <section id="replicas" className="bg-gradient-to-b from-[#F3F7FD] to-[#F7FAFE] border-y border-[#E7EEF9] py-14">
+      <section id="replicas" className="bg-[#4C2032] border-y border-[#6E4A50] py-14">
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
-          <div className="rounded-2xl bg-white border border-[#E2E8F0] p-7 lg:p-9 grid lg:grid-cols-12 gap-8 items-center">
+          <div className="rounded-2xl bg-[#3B1727] border border-[#6E4A50] p-7 lg:p-9 grid lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-8">
               <div className="flex items-center gap-3 mb-3">
-                <div className="h-10 w-10 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-center">
-                  <RefreshCw className="h-5 w-5 text-rose-600" />
+                <div className="h-10 w-10 rounded-xl bg-[#4C2032] border border-[#6E4A50] flex items-center justify-center">
+                  <RefreshCw className="h-5 w-5 text-[#B08D57]" />
                 </div>
-                <h2 className="text-xl font-extrabold text-[#0B2A4A]">{t('w.replicas.titulo')}</h2>
+                <h2 className="text-xl font-extrabold text-[#F3E7DC]">{t('w.replicas.titulo')}</h2>
               </div>
-              <p className="text-[14px] text-[#5B6B84] leading-relaxed max-w-2xl">
+              <p className="text-[14px] text-[#F3E7DC]/70 leading-relaxed max-w-2xl">
                 {t('w.replicas.texto')}
               </p>
             </div>
@@ -1218,7 +1218,7 @@ export function LandingClient({ user }: LandingClientProps) {
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`h-12 px-6 inline-flex items-center gap-2 rounded-lg bg-gradient-to-b from-rose-500 to-rose-600 text-white text-sm font-semibold hover:from-rose-500 hover:to-rose-700 shadow-rose-600/30 ${RELIEVE_BOTON}`}
+                className={`h-12 px-6 inline-flex items-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-sm font-semibold hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/30 ${RELIEVE_BOTON}`}
               >
                 {t('w.replicas.boton')}
                 <ArrowUpRight className="h-4 w-4" />
@@ -1236,24 +1236,24 @@ export function LandingClient({ user }: LandingClientProps) {
             {FAQ_CLAVES.map((id) => {
               const abierta = faqAbierta === id
               return (
-                <div key={id} className="rounded-xl border border-[#E2E8F0] bg-white overflow-hidden">
+                <div key={id} className="rounded-xl border border-[#6E4A50] bg-[#3B1727] overflow-hidden">
                   <button
                     type="button"
                     onClick={() => setFaqAbierta(abierta ? null : id)}
                     className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left"
                   >
-                    <span className="text-[14px] font-semibold text-[#0B2A4A]">
+                    <span className="text-[14px] font-semibold text-[#F3E7DC]">
                       {t(`w.faq.${id}.p`)}
                     </span>
                     <ChevronDown
-                      className={`h-4 w-4 text-[#94A3B8] shrink-0 transition-transform ${
+                      className={`h-4 w-4 text-[#F3E7DC]/50 shrink-0 transition-transform ${
                         abierta ? 'rotate-180' : ''
                       }`}
                     />
                   </button>
                   {abierta ? (
                     <div className="px-5 pb-4 -mt-1">
-                      <p className="text-[13.5px] text-[#5B6B84] leading-relaxed">
+                      <p className="text-[13.5px] text-[#F3E7DC]/70 leading-relaxed">
                         {t(`w.faq.${id}.r`)}
                       </p>
                     </div>
@@ -1266,33 +1266,33 @@ export function LandingClient({ user }: LandingClientProps) {
       </section>
 
       {/* ================= CTA FINAL ================= */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-[#0C2E5C] via-[#123C77] to-[#1D4ED8] py-16 lg:py-20">
+      <section className="relative overflow-hidden bg-gradient-to-r from-[#3B1727] via-[#2E0E1A] to-[#54142B] py-16 lg:py-20">
         <div
           aria-hidden
           className="absolute inset-y-0 left-[-15%] w-1/2 -rotate-12 bg-gradient-to-r from-transparent via-white/10 to-transparent"
         />
         <div className="relative max-w-[1400px] mx-auto px-5 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white leading-tight">
+          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#F3E7DC] leading-tight">
             {t('w.cta.titulo')}
           </h2>
-          <p className="mt-4 text-base text-white/70 leading-relaxed max-w-xl mx-auto">
+          <p className="mt-4 text-base text-[#F3E7DC]/70 leading-relaxed max-w-xl mx-auto">
             {t('w.cta.texto')}
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
               href="/diagnostico"
-              className={`h-12 px-7 inline-flex items-center gap-2 rounded-lg bg-white text-[#0C2E5C] text-sm font-bold hover:bg-[#F1F5F9] shadow-black/25 ${RELIEVE_BOTON}`}
+              className={`h-12 px-7 inline-flex items-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-sm font-bold hover:from-[#C9A46B] hover:to-[#8A6636] shadow-black/25 ${RELIEVE_BOTON}`}
             >
               {t('w.cta.boton')}
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          <p className="mt-4 text-[12px] text-white/50">{t('w.cta.nota')}</p>
+          <p className="mt-4 text-[12px] text-[#F3E7DC]/50">{t('w.cta.nota')}</p>
         </div>
       </section>
 
       {/* ================= FOOTER ================= */}
-      <footer className="bg-[#081F3F] text-white/70">
+      <footer className="bg-[#2E0E1A] text-[#F3E7DC]/70">
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8 py-12 grid md:grid-cols-3 gap-10">
           <div>
             <Marca oscuro />
@@ -1300,7 +1300,7 @@ export function LandingClient({ user }: LandingClientProps) {
           </div>
 
           <div>
-            <h4 className="text-[12px] font-bold uppercase tracking-wider text-white mb-4">
+            <h4 className="text-[12px] font-bold uppercase tracking-wider text-[#F3E7DC] mb-4">
               {t('w.footer.contacto')}
             </h4>
             <div className="space-y-2.5">
@@ -1324,7 +1324,7 @@ export function LandingClient({ user }: LandingClientProps) {
           </div>
 
           <div>
-            <h4 className="text-[12px] font-bold uppercase tracking-wider text-white mb-4">
+            <h4 className="text-[12px] font-bold uppercase tracking-wider text-[#F3E7DC] mb-4">
               {t('w.footer.legal')}
             </h4>
             <nav className="flex flex-col gap-2.5">
@@ -1344,7 +1344,7 @@ export function LandingClient({ user }: LandingClientProps) {
           </div>
         </div>
 
-        <div className="border-t border-white/10">
+        <div className="border-t border-[#6E4A50]">
           <div className="max-w-[1400px] mx-auto px-5 lg:px-8 py-5 text-[12px] text-white/40">
             © {new Date().getFullYear()} {t('w.footer.copyright')}
           </div>
