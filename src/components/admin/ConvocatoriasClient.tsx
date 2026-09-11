@@ -79,11 +79,11 @@ const ETIQUETAS_FINANCIADOR: Record<string, string> = {
 }
 
 const COLOR_SEMAFORO: Record<string, string> = {
-  critico: 'bg-red-100 text-red-800 border-red-200',
-  corriendo: 'bg-amber-100 text-amber-900 border-amber-200',
-  holgado: 'bg-emerald-100 text-emerald-900 border-emerald-200',
-  cerrada: 'bg-slate-100 text-slate-500 border-slate-200',
-  sin_fecha: 'bg-slate-100 text-slate-600 border-slate-200',
+  critico: 'bg-[#C0604A]/20 text-[#E0917E] border-[#C0604A]/40',
+  corriendo: 'bg-[#C99A3D]/20 text-[#E0B868] border-[#C99A3D]/40',
+  holgado: 'bg-[#7A8B6F]/20 text-[#9BB18D] border-[#7A8B6F]/40',
+  cerrada: 'bg-[#6E4A50]/30 text-[#F3E7DC]/55 border-[#6E4A50]/50',
+  sin_fecha: 'bg-[#6E4A50]/30 text-[#F3E7DC]/55 border-[#6E4A50]/50',
 }
 
 export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarga, correoEquipo }: Props) {
@@ -163,7 +163,7 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
       </div>
 
       {conPliego < convocatorias.length && (
-        <div className="flex items-start gap-3 p-4 rounded-2xl border border-amber-200 bg-amber-50 text-amber-900 text-sm">
+        <div className="flex items-start gap-3 p-4 rounded-2xl border border-[#C99A3D]/40 bg-[#C99A3D]/10 text-[#E0B868] text-sm">
           <AlertTriangle className="h-5 w-5 shrink-0 mt-0.5" />
           <p>
             <strong>{convocatorias.length - conPliego} fichas todavía son solo un resumen.</strong>{' '}
@@ -174,7 +174,7 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
       )}
 
       {errorCarga && (
-        <div className="p-4 rounded-2xl border border-red-200 bg-red-50 text-red-800 text-sm">
+        <div className="p-4 rounded-2xl border border-[#C0604A]/40 bg-[#C0604A]/10 text-[#E0917E] text-sm">
           No se pudo leer la biblioteca: {errorCarga}
           <span className="block text-xs mt-1 opacity-80">
             Si dice que no existe una columna, falta correr supabase_migration_radar.sql.
@@ -190,7 +190,7 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
             value={texto}
             onChange={(e) => setTexto(e.target.value)}
             placeholder="Buscar por nombre, entidad, objetivo, sector o territorio"
-            className="w-full pl-10 pr-4 py-3 rounded-xl border border-color-base-300 bg-white text-sm"
+            className="w-full pl-10 pr-4 py-3 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm"
           />
         </div>
 
@@ -199,13 +199,13 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
             value={pais}
             onChange={(e) => setPais(e.target.value)}
             placeholder="País elegible (ej. Colombia)"
-            className="px-3 py-2.5 rounded-xl border border-color-base-300 bg-white text-sm"
+            className="px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm"
           />
 
           <select
             value={postulante}
             onChange={(e) => setPostulante(e.target.value)}
-            className="px-3 py-2.5 rounded-xl border border-color-base-300 bg-white text-sm"
+            className="px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm"
           >
             <option value="">Cualquier postulante</option>
             {TIPOS_POSTULANTE.map((t) => (
@@ -216,7 +216,7 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
           <select
             value={financiador}
             onChange={(e) => setFinanciador(e.target.value)}
-            className="px-3 py-2.5 rounded-xl border border-color-base-300 bg-white text-sm"
+            className="px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm"
           >
             <option value="">Quién pone la plata</option>
             {TIPOS_FINANCIADOR.map((t) => (
@@ -227,7 +227,7 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
           <select
             value={cuando}
             onChange={(e) => setCuando(e.target.value)}
-            className="px-3 py-2.5 rounded-xl border border-color-base-300 bg-white text-sm"
+            className="px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm"
           >
             <option value="abiertas">Abiertas</option>
             <option value="urgentes">Cierran pronto (20 días o menos)</option>
@@ -261,7 +261,7 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
           return (
             <div
               key={c.id}
-              className="p-5 rounded-2xl border border-color-base-content/10 bg-white space-y-3"
+              className="p-5 rounded-2xl border border-color-base-content/10 bg-[#3B1727] space-y-3"
             >
               <div className="flex flex-col md:flex-row md:items-start justify-between gap-3">
                 <div className="space-y-1 min-w-0">
@@ -286,8 +286,8 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
                   <span
                     className={`text-[11px] font-bold px-2.5 py-1 rounded-full border inline-flex items-center gap-1 ${
                       documentos > 0
-                        ? 'bg-emerald-100 text-emerald-900 border-emerald-200'
-                        : 'bg-slate-100 text-slate-600 border-slate-200'
+                        ? 'bg-[#7A8B6F]/20 text-[#9BB18D] border-[#7A8B6F]/40'
+                        : 'bg-[#6E4A50]/30 text-[#F3E7DC]/55 border-[#6E4A50]/50'
                     }`}
                   >
                     {documentos > 0 ? <Check className="h-3 w-3" /> : <FileText className="h-3 w-3" />}
@@ -438,14 +438,14 @@ function FormularioFicha({ correoEquipo, onCerrar }: { correoEquipo: string; onC
     }
   }
 
-  const campo = 'w-full px-3 py-2.5 rounded-xl border border-color-base-300 bg-white text-sm'
+  const campo = 'w-full px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm'
   const etiqueta = 'block text-[11px] font-black uppercase tracking-wider text-color-base-content/70 mb-1'
 
   return (
     <div className="fixed inset-0 z-50 bg-black/40 overflow-y-auto p-4">
       <form
         onSubmit={guardar}
-        className="max-w-3xl mx-auto my-8 bg-white rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl"
+        className="max-w-3xl mx-auto my-8 bg-[#3B1727] rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl"
       >
         <div className="flex items-start justify-between gap-4">
           <div>
@@ -506,7 +506,7 @@ function FormularioFicha({ correoEquipo, onCerrar }: { correoEquipo: string; onC
                     className={`px-3 py-1.5 rounded-full text-xs font-bold border transition-colors ${
                       activo
                         ? 'bg-color-primary text-white border-color-primary'
-                        : 'bg-white text-color-base-content/70 border-color-base-300'
+                        : 'bg-[#3B1727] text-color-base-content/70 border-color-base-300'
                     }`}
                   >
                     {t.replace(/_/g, ' ')}
@@ -624,8 +624,8 @@ function FormularioFicha({ correoEquipo, onCerrar }: { correoEquipo: string; onC
           </div>
         </Bloque>
 
-        {error && <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-xl p-3">{error}</p>}
-        {mensaje && <p className="text-sm text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-xl p-3">{mensaje}</p>}
+        {error && <p className="text-sm text-[#E0917E] bg-[#C0604A]/10 border border-[#C0604A]/40 rounded-xl p-3">{error}</p>}
+        {mensaje && <p className="text-sm text-[#9BB18D] bg-[#7A8B6F]/10 border border-[#7A8B6F]/40 rounded-xl p-3">{mensaje}</p>}
 
         <div className="flex items-center justify-end gap-3 pt-2 border-t border-color-base-200">
           <button type="button" onClick={onCerrar} className="px-5 py-3 rounded-xl text-sm font-bold text-color-base-content/70">
@@ -709,11 +709,11 @@ function SubirDocumento({ convocatoria, onCerrar }: { convocatoria: Convocatoria
     }
   }
 
-  const campo = 'w-full px-3 py-2.5 rounded-xl border border-color-base-300 bg-white text-sm'
+  const campo = 'w-full px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm'
 
   return (
     <div className="fixed inset-0 z-50 bg-black/40 overflow-y-auto p-4">
-      <form onSubmit={enviar} className="max-w-xl mx-auto my-8 bg-white rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl">
+      <form onSubmit={enviar} className="max-w-xl mx-auto my-8 bg-[#3B1727] rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
             <h2 className="text-lg font-black text-color-base-content">Términos de referencia</h2>
@@ -742,7 +742,7 @@ function SubirDocumento({ convocatoria, onCerrar }: { convocatoria: Convocatoria
               className={`px-3 py-2 rounded-lg text-xs font-bold border ${
                 modo === valor
                   ? 'bg-color-primary text-white border-color-primary'
-                  : 'bg-white text-color-base-content/70 border-color-base-300'
+                  : 'bg-[#3B1727] text-color-base-content/70 border-color-base-300'
               }`}
             >
               {titulo}
@@ -792,10 +792,10 @@ function SubirDocumento({ convocatoria, onCerrar }: { convocatoria: Convocatoria
           />
         )}
 
-        {error && <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-xl p-3">{error}</p>}
-        {resultado && <p className="text-sm text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-xl p-3">{resultado}</p>}
+        {error && <p className="text-sm text-[#E0917E] bg-[#C0604A]/10 border border-[#C0604A]/40 rounded-xl p-3">{error}</p>}
+        {resultado && <p className="text-sm text-[#9BB18D] bg-[#7A8B6F]/10 border border-[#7A8B6F]/40 rounded-xl p-3">{resultado}</p>}
         {aviso && (
-          <p className="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-xl p-3">
+          <p className="text-sm text-[#E0B868] bg-[#C99A3D]/10 border border-[#C99A3D]/40 rounded-xl p-3">
             {aviso}
           </p>
         )}
