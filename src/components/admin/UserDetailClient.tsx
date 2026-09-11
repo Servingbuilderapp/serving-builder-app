@@ -141,7 +141,7 @@ export function UserDetailClient({ user, plans, totalAppsCount, accessibleApps, 
               <button 
                 onClick={handleUpdatePlan}
                 disabled={isUpdating}
-                className="w-full flex items-center justify-center gap-2 py-3 bg-white text-black text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-white/90 disabled:opacity-50 transition-all"
+                className="w-full flex items-center justify-center gap-2 py-3 bg-[#B08D57] text-[#3A1420] text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-[#C9A46B] disabled:opacity-50 transition-all"
               >
                 {isUpdating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                 {language === 'en' ? 'Save Changes' : 'Guardar Cambios'}
@@ -256,7 +256,7 @@ export function UserDetailClient({ user, plans, totalAppsCount, accessibleApps, 
                       <div className="flex items-center gap-4">
                         <div className={cn(
                           "h-10 w-10 rounded-xl bg-white/5 flex items-center justify-center text-white/40",
-                          payment.status === 'processed' ? "text-green-500/50" : "text-red-500/50"
+                          payment.status === 'processed' ? "text-[#9BB18D]/70" : "text-[#E0917E]/70"
                         )}>
                           <CreditCard className="h-5 w-5" />
                         </div>
@@ -322,8 +322,8 @@ export function UserDetailClient({ user, plans, totalAppsCount, accessibleApps, 
                       </div>
                       <div className={cn(
                         "flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest",
-                        ex.status === 'completed' ? "bg-green-500/20 text-green-500" :
-                        ex.status === 'error' ? "bg-red-500/20 text-red-500" :
+                        ex.status === 'completed' ? "bg-[#7A8B6F]/20 text-[#9BB18D]" :
+                        ex.status === 'error' ? "bg-[#C0604A]/20 text-[#E0917E]" :
                         "bg-white/5 text-white/40"
                       )}>
                         {ex.status === 'completed' ? <CheckCircle2 className="h-3 w-3" /> :

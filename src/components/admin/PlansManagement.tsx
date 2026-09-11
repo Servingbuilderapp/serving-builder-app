@@ -236,7 +236,7 @@ export function PlansManagement({ initialPlans, allApps }: PlansManagementProps)
                           onChange={(e) => handleUpdateItem('es', i, e.target.value)}
                           className="flex-1 bg-color-base-content/5 border border-color-base-content/10 rounded-lg px-3 py-1.5 text-xs text-color-base-content"
                         />
-                        <button onClick={() => handleDeleteItem('es', i)} className="p-1.5 text-red-500 hover:bg-red-500/10 rounded-lg transition-all"><X className="h-4 w-4" /></button>
+                        <button onClick={() => handleDeleteItem('es', i)} className="p-1.5 text-[#E0917E] hover:bg-[#C0604A]/10 rounded-lg transition-all"><X className="h-4 w-4" /></button>
                       </div>
                     ))}
                     <button onClick={() => handleAddItem('es')} className="text-[10px] text-primary hover:underline">+ {language === 'en' ? 'Add Item' : 'Añadir Item'}</button>
@@ -359,7 +359,7 @@ export function PlansManagement({ initialPlans, allApps }: PlansManagementProps)
                               onChange={(e) => handleUpdateItem('es', i, e.target.value)}
                               className="flex-1 bg-color-base-content/5 border border-color-base-content/10 rounded-lg px-3 py-1.5 text-xs text-color-base-content"
                             />
-                            <button onClick={() => handleDeleteItem('es', i)} className="p-1.5 text-red-500 hover:bg-red-500/10 rounded-lg transition-all"><X className="h-4 w-4" /></button>
+                            <button onClick={() => handleDeleteItem('es', i)} className="p-1.5 text-[#E0917E] hover:bg-[#C0604A]/10 rounded-lg transition-all"><X className="h-4 w-4" /></button>
                           </div>
                         ))}
                         <button onClick={() => handleAddItem('es')} className="text-[10px] text-primary hover:underline">+ {language === 'en' ? 'Add Item' : 'Añadir Item'}</button>
@@ -369,7 +369,7 @@ export function PlansManagement({ initialPlans, allApps }: PlansManagementProps)
                     <ul className="space-y-2">
                       {(language === 'en' ? plan.items_en : plan.items_es).map((item: string, i: number) => (
                         <li key={i} className="flex items-start gap-2 text-sm text-color-base-content/70">
-                          <Check className="h-4 w-4 text-green-500 shrink-0 mt-0.5" />
+                          <Check className="h-4 w-4 text-[#9BB18D] shrink-0 mt-0.5" />
                           {item}
                         </li>
                       ))}
@@ -435,7 +435,7 @@ export function PlansManagement({ initialPlans, allApps }: PlansManagementProps)
                     <button 
                       onClick={() => handleDeletePlan(plan.id)}
                       disabled={userCount > 0}
-                      className="p-2.5 bg-color-base-content/5 border border-color-base-content/10 text-color-base-content/20 hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all disabled:opacity-30 disabled:hover:text-color-base-content/20 disabled:hover:bg-color-base-content/5"
+                      className="p-2.5 bg-color-base-content/5 border border-color-base-content/10 text-color-base-content/20 hover:text-[#E0917E] hover:bg-[#C0604A]/10 rounded-xl transition-all disabled:opacity-30 disabled:hover:text-color-base-content/20 disabled:hover:bg-color-base-content/5"
                       title={userCount > 0 ? (language === 'en' ? 'Cannot delete - users exist' : 'No se puede borrar - hay usuarios') : ''}
                     >
                       <Trash2 className="h-4 w-4" />

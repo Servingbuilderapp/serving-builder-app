@@ -260,11 +260,11 @@ export function WebhooksClient({ logs: initialLogs, plans }: WebhooksClientProps
           {response && (
             <div className={cn(
               "p-4 rounded-2xl border animate-in slide-in-from-top-4 duration-300",
-              response.status === 200 ? "bg-green-500/10 border-green-500/20" : "bg-red-500/10 border-red-500/20"
+              response.status === 200 ? "bg-[#7A8B6F]/15 border-[#7A8B6F]/40" : "bg-[#C0604A]/15 border-[#C0604A]/40"
             )}>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-bold uppercase text-color-base-content/40">Response Status: {response.status}</span>
-                {response.status === 200 ? <CheckCircle2 className="h-4 w-4 text-green-400" /> : <XCircle className="h-4 w-4 text-red-400" />}
+                {response.status === 200 ? <CheckCircle2 className="h-4 w-4 text-[#9BB18D]" /> : <XCircle className="h-4 w-4 text-[#E0917E]" />}
               </div>
               <pre className="text-[10px] font-mono text-color-base-content/60 overflow-x-auto p-3 bg-black/20 rounded-lg">
                 {JSON.stringify(response.data, null, 2)}
@@ -384,7 +384,7 @@ export function WebhooksClient({ logs: initialLogs, plans }: WebhooksClientProps
                       <td className="px-6 py-4">
                         <span className={cn(
                           "px-2 py-0.5 rounded-full text-[10px] font-bold uppercase",
-                          log.status === 'processed' ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"
+                          log.status === 'processed' ? "bg-[#7A8B6F]/20 text-[#9BB18D]" : "bg-[#C0604A]/20 text-[#E0917E]"
                         )}>
                           {log.status}
                         </span>

@@ -111,12 +111,12 @@ export function EmailSettingsClient({ initialSettings, adminName, adminEmail }: 
       <div className={cn(
         "p-4 rounded-2xl flex items-center gap-4 border animate-in slide-in-from-top-2 duration-500",
         isVerified 
-          ? "bg-green-500/10 border-green-500/20 text-green-400" 
-          : "bg-amber-500/10 border-amber-500/20 text-amber-400"
+          ? "bg-[#7A8B6F]/10 border-[#7A8B6F]/30 text-[#9BB18D]" 
+          : "bg-[#C99A3D]/10 border-[#C99A3D]/30 text-[#E0B868]"
       )}>
         {isVerified ? (
           <>
-            <div className="h-10 w-10 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">
+            <div className="h-10 w-10 rounded-full bg-[#7A8B6F]/25 flex items-center justify-center shrink-0">
               <CheckCircle2 className="h-6 w-6" />
             </div>
             <div>
@@ -130,7 +130,7 @@ export function EmailSettingsClient({ initialSettings, adminName, adminEmail }: 
           </>
         ) : (
           <>
-            <div className="h-10 w-10 rounded-full bg-amber-500/20 flex items-center justify-center shrink-0">
+            <div className="h-10 w-10 rounded-full bg-[#C99A3D]/25 flex items-center justify-center shrink-0">
               <AlertTriangle className="h-6 w-6" />
             </div>
             <div>

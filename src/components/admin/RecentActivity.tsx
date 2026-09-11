@@ -155,7 +155,7 @@ export function RecentActivity() {
   const getColor = (type: string) => {
     switch (type) {
       case 'user': return 'text-color-primary bg-color-primary/20 border-color-primary/30 shadow-[0_0_15px_rgba(249,115,22,0.1)]'
-      case 'payment': return 'text-green-400 bg-green-400/20 border-green-400/30 shadow-[0_0_15px_rgba(74,222,128,0.1)]'
+      case 'payment': return 'text-[#9BB18D] bg-[#7A8B6F]/20 border-[#7A8B6F]/30 shadow-[0_0_15px_rgba(122,139,111,0.15)]'
       case 'execution': return 'text-color-accent-violet bg-color-accent-violet/20 border-color-accent-violet/30 shadow-[0_0_15px_rgba(139,92,246,0.1)]'
       default: return 'text-white/40 bg-color-base-100 border-white/10'
     }
@@ -183,7 +183,7 @@ export function RecentActivity() {
         ) : (
           <div className="space-y-4">
             {activities.map((item) => (
-              <div key={item.id} className="flex items-start gap-4 p-4 rounded-[1.5rem] bg-[#1a233a] border border-white/5 hover:border-color-primary/30 transition-all group shadow-lg hover:shadow-color-primary/5">
+              <div key={item.id} className="flex items-start gap-4 p-4 rounded-[1.5rem] bg-[#4C2032] border border-white/5 hover:border-color-primary/30 transition-all group shadow-lg hover:shadow-color-primary/5">
                 <div className={cn(
                   "p-2.5 rounded-xl border shrink-0 transition-all duration-500 group-hover:rotate-12 group-hover:scale-110 shadow-md",
                   getColor(item.type)

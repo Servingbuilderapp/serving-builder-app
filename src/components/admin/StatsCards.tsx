@@ -65,7 +65,7 @@ export function StatsCards({ userCount, appCount, executionCount }: StatsCardsPr
                 <h3 className="text-3xl font-black text-white tracking-tighter text-glow-primary">
                   {stat.value.toLocaleString()}
                 </h3>
-                <span className="text-[10px] font-bold text-green-400 flex items-center gap-0.5">
+                <span className="text-[10px] font-bold text-[#9BB18D] flex items-center gap-0.5">
                   <TrendingUp className="h-3 w-3" />
                   {stat.trend}
                 </span>

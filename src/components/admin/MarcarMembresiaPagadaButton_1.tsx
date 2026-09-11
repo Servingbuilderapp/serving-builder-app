@@ -3,22 +3,22 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-export function MarcarPagadoButton({ proyectoId }: { proyectoId: string }) {
+export function MarcarMembresiaPagadaButton({ membresiaId }: { membresiaId: string }) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
 
   const handleClick = async () => {
-    if (!confirm('¿Confirmas que el pago de este proyecto ya se recibió?')) return
+    if (!confirm('¿Confirmas que llegó el comprobante de esta membresía?')) return
     setLoading(true)
     try {
-      const res = await fetch('/api/proyectos/marcar-pagado', {
+      const res = await fetch('/api/membresias/marcar-pagado', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ proyectoId }),
+        body: JSON.stringify({ membresiaId }),
       })
-      if (!res.ok) throw new Error('Error al marcar como pagado')
+      if (!res.ok) throw new Error('Error al marcar como pagada')
       router.refresh()
-    } catch (err) {
+    } catch {
       alert('Hubo un problema, intenta de nuevo.')
     } finally {
       setLoading(false)
@@ -31,7 +31,7 @@ export function MarcarPagadoButton({ proyectoId }: { proyectoId: string }) {
       disabled={loading}
       className="px-3 py-1.5 rounded-lg bg-[#7A8B6F] text-[#1C2417] text-xs font-bold hover:bg-[#5F6E56] disabled:opacity-50"
     >
-      {loading ? 'Guardando...' : 'Marcar como pagado'}
+      {loading ? 'Guardando...' : 'Marcar como pagada'}
     </button>
   )
 }
