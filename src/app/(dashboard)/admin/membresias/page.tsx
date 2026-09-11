@@ -66,12 +66,12 @@ export default async function AdminMembresiasPage() {
                 <td className="p-3">
                   <span className={
                     m.estado === 'activa'
-                      ? 'px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold'
+                      ? 'px-2 py-1 rounded-full bg-[#7A8B6F]/20 text-[#9BB18D] text-xs font-bold'
                       : m.estado === 'vencida'
-                      ? 'px-2 py-1 rounded-full bg-red-100 text-red-700 text-xs font-bold'
+                      ? 'px-2 py-1 rounded-full bg-[#C0604A]/20 text-[#E0917E] text-xs font-bold'
                       : m.estado === 'cancelada'
-                      ? 'px-2 py-1 rounded-full bg-gray-200 text-gray-600 text-xs font-bold'
-                      : 'px-2 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-bold'
+                      ? 'px-2 py-1 rounded-full bg-[#6E4A50]/30 text-[#F3E7DC]/55 text-xs font-bold'
+                      : 'px-2 py-1 rounded-full bg-[#C99A3D]/20 text-[#E0B868] text-xs font-bold'
                   }>
                     {m.estado}
                   </span>
