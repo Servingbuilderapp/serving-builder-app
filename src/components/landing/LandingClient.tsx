@@ -17,13 +17,11 @@ import {
   TrendingUp,
   Layers,
   Users,
-  Cpu,
   ShieldCheck,
-  Sparkles,
   GraduationCap,
-  Handshake,
   Briefcase,
   Rocket,
+  Crown,
   BookOpen,
   Stethoscope,
   Clock,
@@ -99,7 +97,6 @@ const NAV_LINKS = [
   { href: '#servicios', clave: 'w.nav.servicios' },
   { href: '#membresias', clave: 'w.nav.membresias' },
   { href: '#recursos', clave: 'w.nav.recursos' },
-  { href: '#nosotros', clave: 'w.nav.nosotros' },
 ]
 
 const RUTA_PROYECTO = [
@@ -115,14 +112,6 @@ const PROPUESTA_VALOR = [
   { icono: Clock, claveTitulo: 'w.valor.rapidez.titulo', claveTexto: 'w.valor.rapidez.texto' },
   { icono: Layers, claveTitulo: 'w.valor.volumen.titulo', claveTexto: 'w.valor.volumen.texto' },
   { icono: Users, claveTitulo: 'w.valor.personas.titulo', claveTexto: 'w.valor.personas.texto' },
-]
-
-const CON_QUIEN = [
-  { icono: Users, clave: 'w.quien.profesionales' },
-  { icono: Briefcase, clave: 'w.quien.estructuradores' },
-  { icono: Handshake, clave: 'w.quien.aliados' },
-  { icono: Cpu, clave: 'w.quien.tecnologia' },
-  { icono: Sparkles, clave: 'w.quien.ia' },
 ]
 
 type Escalon = {
@@ -205,6 +194,27 @@ const ESCALERA: Escalon[] = [
   },
   {
     numero: '4',
+    claveTitulo: 'w.escalera.membresia3.titulo',
+    clavePrecio: 'w.escalera.membresia3.precio',
+    claveResumen: 'w.escalera.membresia3.resumen',
+    clavesItems: [
+      'w.escalera.membresia3.i1',
+      'w.escalera.membresia3.i2',
+      'w.escalera.membresia3.i3',
+      'w.escalera.membresia3.i4',
+      'w.escalera.membresia3.i5',
+      'w.escalera.membresia3.i6',
+    ],
+    claveBoton: 'w.escalera.membresia3.boton',
+    href: '#membresias',
+    icono: Crown,
+    color: 'text-[#B08D57]',
+    fondo: 'bg-[#4C2032]/70',
+    borde: 'border-[#6E4A50]',
+    boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
+  },
+  {
+    numero: '5',
     claveTitulo: 'w.escalera.academia.titulo',
     clavePrecio: 'w.escalera.academia.precio',
     claveResumen: 'w.escalera.academia.resumen',
@@ -224,7 +234,7 @@ const ESCALERA: Escalon[] = [
     boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
   {
-    numero: '5',
+    numero: '6',
     claveTitulo: 'w.escalera.mentoria.titulo',
     clavePrecio: 'w.escalera.mentoria.precio',
     claveResumen: 'w.escalera.mentoria.resumen',
@@ -244,7 +254,7 @@ const ESCALERA: Escalon[] = [
     boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
   {
-    numero: '6',
+    numero: '7',
     claveTitulo: 'w.escalera.estructuracion.titulo',
     clavePrecio: 'w.escalera.estructuracion.precio',
     claveResumen: 'w.escalera.estructuracion.resumen',
@@ -263,7 +273,7 @@ const ESCALERA: Escalon[] = [
     boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
   {
-    numero: '7',
+    numero: '8',
     claveTitulo: 'w.escalera.replicas.titulo',
     clavePrecio: 'w.escalera.replicas.precio',
     claveResumen: 'w.escalera.replicas.resumen',
@@ -274,7 +284,8 @@ const ESCALERA: Escalon[] = [
       'w.escalera.replicas.i4',
     ],
     claveBoton: 'w.escalera.replicas.boton',
-    href: '#replicas',
+    href: `https://wa.me/${TELEFONO_WHATSAPP}?text=${encodeURIComponent('Hola, ya presenté un proyecto y quiero saber si se puede replicar en otras convocatorias.')}`,
+    externo: true,
     icono: RefreshCw,
     color: 'text-[#B08D57]',
     fondo: 'bg-[#4C2032]/70',
@@ -289,7 +300,7 @@ const CAMINOS = [
   { icono: Users, clave: 'w.caminos.acompanado', href: '#servicios', color: 'from-[#C9A46B] to-[#B08D57]' },
   { icono: Briefcase, clave: 'w.caminos.delegar', href: '/contratar', color: 'from-[#C9A46B] to-[#B08D57]' },
   { icono: GraduationCap, clave: 'w.caminos.membresias', href: '#membresias', color: 'from-[#C9A46B] to-[#B08D57]' },
-  { icono: RefreshCw, clave: 'w.caminos.replica', href: '#replicas', color: 'from-[#C9A46B] to-[#B08D57]' },
+  { icono: RefreshCw, clave: 'w.caminos.replica', href: `https://wa.me/${TELEFONO_WHATSAPP}?text=${encodeURIComponent('Hola, ya presenté un proyecto y quiero saber si se puede replicar en otras convocatorias.')}`, color: 'from-[#C9A46B] to-[#B08D57]' },
 ]
 
 const DIAGNOSTICO_ENTREGA = [
@@ -767,6 +778,62 @@ export function LandingClient({ user }: LandingClientProps) {
         </div>
       </section>
 
+      {/* ================= DIAGNÓSTICO GRATUITO ================= */}
+      <section className="py-16 lg:py-20">
+        <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-10 items-center">
+            <div>
+              <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#B08D57] mb-3">
+                {t('w.diagnostico.eyebrow')}
+              </div>
+              <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#F3E7DC] leading-tight">
+                {t('w.diagnostico.titulo')}
+              </h2>
+              <p className="mt-4 text-base text-[#F3E7DC]/70 leading-relaxed">
+                {t('w.diagnostico.subtitulo')}
+              </p>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <Link
+                  href="/diagnostico"
+                  className={`h-12 px-6 inline-flex items-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-sm font-semibold hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/30 ${RELIEVE_BOTON}`}
+                >
+                  {t('w.diagnostico.boton')}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <a
+                  href={`https://wa.me/${TELEFONO_WHATSAPP}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`h-12 px-6 inline-flex items-center rounded-lg border border-[#6E4A50] bg-[#3B1727] text-[#F3E7DC] text-sm font-semibold hover:bg-[#4C2032] ${RELIEVE_BOTON_SUAVE}`}
+                >
+                  {t('w.diagnostico.boton_hablar')}
+                </a>
+              </div>
+              <p className="mt-4 text-[12px] text-[#F3E7DC]/50">{t('w.diagnostico.nota')}</p>
+            </div>
+
+            <div className="rounded-2xl border border-[#6E4A50] bg-[#3B1727] p-7">
+              <h3 className="text-[15px] font-extrabold text-[#F3E7DC] mb-5">
+                {t('w.diagnostico.incluye_titulo')}
+              </h3>
+              <div className="grid sm:grid-cols-2 gap-x-6 gap-y-3">
+                {DIAGNOSTICO_ENTREGA.map((clave) => (
+                  <div key={clave} className="flex items-start gap-2 text-[13px] text-[#F3E7DC]/85 leading-snug">
+                    <Check className="h-3.5 w-3.5 text-[#B08D57] shrink-0 mt-0.5" />
+                    <span>{t(clave)}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 pt-5 border-t border-[#6E4A50]">
+                <p className="text-[12px] text-[#F3E7DC]/70 leading-relaxed">
+                  {t('w.diagnostico.no_incluye')}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ================= QUÉ HACEMOS ================= */}
       <section id="que-hacemos" className="py-16 lg:py-20">
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
@@ -997,7 +1064,7 @@ export function LandingClient({ user }: LandingClientProps) {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {[
               {
                 claveT: 'w.membresias.m1.titulo',
@@ -1012,6 +1079,13 @@ export function LandingClient({ user }: LandingClientProps) {
                 claveD: 'w.membresias.m2.texto',
                 items: ['w.membresias.m2.i1', 'w.membresias.m2.i2', 'w.membresias.m2.i3', 'w.membresias.m2.i4', 'w.membresias.m2.i5', 'w.membresias.m2.i6'],
                 destacado: true,
+              },
+              {
+                claveT: 'w.membresias.m3.titulo',
+                claveP: 'w.membresias.m3.precio',
+                claveD: 'w.membresias.m3.texto',
+                items: ['w.membresias.m3.i1', 'w.membresias.m3.i2', 'w.membresias.m3.i3', 'w.membresias.m3.i4', 'w.membresias.m3.i5', 'w.membresias.m3.i6', 'w.membresias.m3.i7', 'w.membresias.m3.i8'],
+                destacado: false,
               },
             ].map((plan) => (
               <div
@@ -1073,62 +1147,6 @@ export function LandingClient({ user }: LandingClientProps) {
         </div>
       </section>
 
-      {/* ================= DIAGNÓSTICO GRATUITO ================= */}
-      <section className="py-16 lg:py-20">
-        <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-10 items-center">
-            <div>
-              <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#B08D57] mb-3">
-                {t('w.diagnostico.eyebrow')}
-              </div>
-              <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#F3E7DC] leading-tight">
-                {t('w.diagnostico.titulo')}
-              </h2>
-              <p className="mt-4 text-base text-[#F3E7DC]/70 leading-relaxed">
-                {t('w.diagnostico.subtitulo')}
-              </p>
-              <div className="mt-7 flex flex-wrap gap-3">
-                <Link
-                  href="/diagnostico"
-                  className={`h-12 px-6 inline-flex items-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-sm font-semibold hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/30 ${RELIEVE_BOTON}`}
-                >
-                  {t('w.diagnostico.boton')}
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <a
-                  href={`https://wa.me/${TELEFONO_WHATSAPP}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`h-12 px-6 inline-flex items-center rounded-lg border border-[#6E4A50] bg-[#3B1727] text-[#F3E7DC] text-sm font-semibold hover:bg-[#4C2032] ${RELIEVE_BOTON_SUAVE}`}
-                >
-                  {t('w.diagnostico.boton_hablar')}
-                </a>
-              </div>
-              <p className="mt-4 text-[12px] text-[#F3E7DC]/50">{t('w.diagnostico.nota')}</p>
-            </div>
-
-            <div className="rounded-2xl border border-[#6E4A50] bg-[#3B1727] p-7">
-              <h3 className="text-[15px] font-extrabold text-[#F3E7DC] mb-5">
-                {t('w.diagnostico.incluye_titulo')}
-              </h3>
-              <div className="grid sm:grid-cols-2 gap-x-6 gap-y-3">
-                {DIAGNOSTICO_ENTREGA.map((clave) => (
-                  <div key={clave} className="flex items-start gap-2 text-[13px] text-[#F3E7DC]/85 leading-snug">
-                    <Check className="h-3.5 w-3.5 text-[#B08D57] shrink-0 mt-0.5" />
-                    <span>{t(clave)}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-6 pt-5 border-t border-[#6E4A50]">
-                <p className="text-[12px] text-[#F3E7DC]/70 leading-relaxed">
-                  {t('w.diagnostico.no_incluye')}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ================= CAMINOS ================= */}
       <section className="bg-[#4C2032] py-16 lg:py-20 border-y border-[#6E4A50]">
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
@@ -1154,76 +1172,6 @@ export function LandingClient({ user }: LandingClientProps) {
               </Link>
               </Aparece>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ================= CON QUIÉN LO HACEMOS ================= */}
-      <section id="nosotros" className="relative overflow-hidden bg-gradient-to-br from-[#3B1727] via-[#2E0E1A] to-[#54142B] py-16 lg:py-20">
-        <div aria-hidden className="absolute -top-20 left-[12%] h-72 w-72 rounded-full bg-[#B08D57]/20 blur-3xl" />
-        <div aria-hidden className="absolute -bottom-24 right-[10%] h-80 w-80 rounded-full bg-[#C9A46B]/20 blur-3xl" />
-        <div className="relative max-w-[1400px] mx-auto px-5 lg:px-8">
-          <Aparece className="max-w-3xl mx-auto text-center mb-12">
-            <div className="flex items-center gap-2.5 mb-3 justify-center">
-              <span className="h-px w-8 bg-gradient-to-r from-transparent to-[#B08D57]" />
-              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#B08D57]">
-                {t('w.quien.eyebrow')}
-              </span>
-              <span className="h-px w-8 bg-gradient-to-l from-transparent to-[#B08D57]" />
-            </div>
-            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#F3E7DC]">
-              {t('w.quien.titulo')}
-            </h2>
-            <p className="mt-4 text-base md:text-lg text-[#F3E7DC]/70 leading-relaxed">
-              {t('w.quien.subtitulo')}
-            </p>
-          </Aparece>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 max-w-4xl mx-auto">
-            {CON_QUIEN.map(({ icono: Icono, clave }, i) => (
-              <Aparece key={clave} delay={i * 70}>
-                <div className="rounded-2xl border border-white/15 bg-white/[0.07] backdrop-blur p-5 text-center hover:bg-white/[0.12] transition-colors">
-                  <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-[#C9A46B] to-[#B08D57] flex items-center justify-center mx-auto mb-3 shadow-lg">
-                    <Icono className="h-5 w-5 text-white" />
-                  </div>
-                  <div className="text-[13px] font-bold text-[#F3E7DC] leading-snug">{t(clave)}</div>
-                </div>
-              </Aparece>
-            ))}
-          </div>
-          <p className="mt-8 text-center text-[13px] text-[#F3E7DC]/55 max-w-2xl mx-auto leading-relaxed">
-            {t('w.quien.nota_alianzas')}
-          </p>
-        </div>
-      </section>
-
-      {/* ================= PORTAL DE RÉPLICAS ================= */}
-      <section id="replicas" className="bg-[#4C2032] border-y border-[#6E4A50] py-14">
-        <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
-          <div className="rounded-2xl bg-[#3B1727] border border-[#6E4A50] p-7 lg:p-9 grid lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-8">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="h-10 w-10 rounded-xl bg-[#4C2032] border border-[#6E4A50] flex items-center justify-center">
-                  <RefreshCw className="h-5 w-5 text-[#B08D57]" />
-                </div>
-                <h2 className="text-xl font-extrabold text-[#F3E7DC]">{t('w.replicas.titulo')}</h2>
-              </div>
-              <p className="text-[14px] text-[#F3E7DC]/70 leading-relaxed max-w-2xl">
-                {t('w.replicas.texto')}
-              </p>
-            </div>
-            <div className="lg:col-span-4 lg:text-right">
-              <a
-                href={`https://wa.me/${TELEFONO_WHATSAPP}?text=${encodeURIComponent(
-                  'Hola, ya presenté un proyecto y quiero saber si se puede replicar en otras convocatorias.',
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`h-12 px-6 inline-flex items-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-sm font-semibold hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/30 ${RELIEVE_BOTON}`}
-              >
-                {t('w.replicas.boton')}
-                <ArrowUpRight className="h-4 w-4" />
-              </a>
-            </div>
           </div>
         </div>
       </section>
