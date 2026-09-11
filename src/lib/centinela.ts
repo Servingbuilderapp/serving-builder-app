@@ -73,45 +73,45 @@ export const ESTADOS: {
     clave: 'pendiente',
     nombre: 'Falta suscribir',
     explicacion: 'Todavía nadie inscribió el buzón del Centinela a su boletín.',
-    color: 'bg-slate-100 text-slate-600 border-slate-200',
+    color: 'bg-[#6E4A50]/30 text-[#F3E7DC]/55 border-[#6E4A50]/50',
   },
   {
     clave: 'suscrito',
     nombre: 'Suscrito, sin confirmar',
     explicacion:
       'Ya se llenó el formulario de suscripción, pero al buzón todavía no ha llegado el primer correo. Hasta que llegue, no hay prueba de que funcione.',
-    color: 'bg-amber-100 text-amber-800 border-amber-200',
+    color: 'bg-[#C99A3D]/20 text-[#E0B868] border-[#C99A3D]/40',
   },
   {
     clave: 'confirmado',
     nombre: 'Llegando al buzón',
     explicacion: 'Ya llegó al menos un correo. Esta fuente está viva.',
-    color: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    color: 'bg-[#7A8B6F]/20 text-[#9BB18D] border-[#7A8B6F]/40',
   },
   {
     clave: 'sin_boletin',
     nombre: 'No tiene boletín',
     explicacion:
       'Se revisó y no ofrece boletín. Hay que bajarla a lectura automática o a robot semanal.',
-    color: 'bg-orange-100 text-orange-800 border-orange-200',
+    color: 'bg-[#C99A3D]/20 text-[#E0B868] border-[#C99A3D]/40',
   },
   {
     clave: 'sin_revisar',
     nombre: 'Sin revisar',
     explicacion: 'Todavía no se ha mirado cómo publica esta fuente.',
-    color: 'bg-slate-100 text-slate-600 border-slate-200',
+    color: 'bg-[#6E4A50]/30 text-[#F3E7DC]/55 border-[#6E4A50]/50',
   },
   {
     clave: 'no_aplica',
     nombre: 'No se puede seguir',
     explicacion: 'Es por invitación. No entra al sistema automático.',
-    color: 'bg-slate-100 text-slate-500 border-slate-200',
+    color: 'bg-[#6E4A50]/30 text-[#F3E7DC]/50 border-[#6E4A50]/50',
   },
   {
     clave: 'descartada',
     nombre: 'Descartada',
     explicacion: 'Se revisó y no sirve para los clientes del portal.',
-    color: 'bg-red-100 text-red-800 border-red-200',
+    color: 'bg-[#C0604A]/20 text-[#E0917E] border-[#C0604A]/40',
   },
 ]
 
