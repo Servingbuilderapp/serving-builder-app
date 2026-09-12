@@ -18,6 +18,7 @@ import {
   LineChart,
   ShieldAlert,
   CheckSquare,
+  GraduationCap,
   X,
 } from 'lucide-react'
 
@@ -59,6 +60,7 @@ const SECCIONES_CLIENTE: Seccion[] = [
       { nombre: 'Mis convocatorias', href: '/mis-convocatorias', icono: Target },
       { nombre: 'Mis réplicas', href: '/mis-replicas', icono: Copy },
       { nombre: 'App de Ideas', href: '/ideas', icono: Lightbulb },
+      { nombre: 'Academia', href: '/academia', icono: GraduationCap },
     ],
   },
 ]
@@ -72,6 +74,7 @@ const SECCIONES_EQUIPO: Seccion[] = [
       { nombre: 'Convocatorias', href: '/admin/convocatorias', icono: Radar },
       { nombre: 'Centinela Digital', href: '/admin/centinela', icono: Satellite },
       { nombre: 'Membresías', href: '/admin/membresias', icono: Wallet },
+      { nombre: 'Academia', href: '/admin/academia', icono: GraduationCap },
       { nombre: 'Administración', href: '/admin', icono: Settings },
     ],
   },
