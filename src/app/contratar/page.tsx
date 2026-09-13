@@ -16,6 +16,7 @@ import { CheckCircle2, ShieldCheck, Loader2 } from 'lucide-react'
 import { PayPalButtons } from '@paypal/react-paypal-js'
 import { cn } from '@/lib/utils'
 import { useTranslation } from '@/hooks/useTranslation'
+import { BotonPagoBold } from '@/components/pagos/BotonPagoBold'
 
 const TASA_COP_POR_USD = 3244 // Actualizar periódicamente según la TRM del día
 
@@ -615,6 +616,19 @@ function ContratarContent() {
                       )
                     })()}
                   </div>
+
+                  {proyectoId && desglosarPrecio(plan.montoCop).base > 0 && (
+                    <div className="space-y-1.5">
+                      <p className="text-xs font-black uppercase tracking-widest text-color-primary">
+                        Pago automático
+                      </p>
+                      <BotonPagoBold
+                        endpoint="/api/proyectos/bold/iniciar"
+                        campoId="proyectoId"
+                        id={proyectoId}
+                      />
+                    </div>
+                  )}
 
                   {COBRO_COLOMBIA.cuenta.llaves?.length ? (
                     <div className="rounded-xl border border-color-primary/25 bg-color-primary/5 p-4 space-y-1.5">

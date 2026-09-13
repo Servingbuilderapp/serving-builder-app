@@ -7,6 +7,7 @@ import { GlassCard } from '@/components/ui/GlassCard'
 import { cn } from '@/lib/utils'
 import { COBRO_COLOMBIA } from '@/lib/mediosDePago'
 import { NIVELES_MEMBRESIA, nivelPorSlug, precioAnualUsd, aPesos, formatoUSD } from '@/lib/membresias'
+import { BotonPagoBold } from '@/components/pagos/BotonPagoBold'
 
 function formatoCOP(valor: number): string {
   return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(valor)
@@ -259,6 +260,19 @@ export default function MembresiaPage() {
                   <p className="text-sm font-bold text-color-base-content">
                     Valor a pagar: {formatoCOP(montoCop)}
                   </p>
+
+                  {membresiaId && (
+                    <div className="space-y-1.5">
+                      <p className="text-xs font-black uppercase tracking-widest text-color-primary">
+                        Pago automático
+                      </p>
+                      <BotonPagoBold
+                        endpoint="/api/membresias/bold/iniciar"
+                        campoId="membresiaId"
+                        id={membresiaId}
+                      />
+                    </div>
+                  )}
 
                   {COBRO_COLOMBIA.cuenta.llaves?.length ? (
                     <div className="rounded-xl border border-color-primary/25 bg-color-primary/5 p-4 space-y-1.5">
