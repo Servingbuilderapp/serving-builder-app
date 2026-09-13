@@ -14,8 +14,6 @@ const RUTAS_DEL_PANEL = [
   '/dashboard',
   '/mi-proyecto',
   '/calificacion',
-  '/resultados-indicadores',
-  '/riesgos-talento-humano',
   '/pendientes',
   '/mis-convocatorias',
   '/ideas',

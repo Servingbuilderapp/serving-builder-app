@@ -6,6 +6,8 @@ import {
   AvancePendienteDePago,
   type PasoAvance,
 } from '@/components/panel/AvanceProyecto'
+import { MensajesProyecto } from '@/components/panel/MensajesProyecto'
+import { EntregablesProyecto } from '@/components/panel/EntregablesProyecto'
 import Link from 'next/link'
 import { Inbox } from 'lucide-react'
 import { MODALIDADES_ESTRUCTURACION } from '@/lib/estructuracionMapping'
@@ -32,7 +34,7 @@ export default async function MiProyectoPage() {
 
   const { data: proyecto } = await supabase
     .from('proyectos_clientes_serving')
-    .select('id, nombre_iniciativa, estado_actual, plan_pago')
+    .select('id, nombre_iniciativa, estado_actual, plan_pago, dossier_markdown')
     .eq('correo_cliente', correo)
     .order('created_at', { ascending: false })
     .limit(1)
@@ -86,6 +88,16 @@ export default async function MiProyectoPage() {
     .eq('id_proyecto', proyectoId)
     .eq('respondida', false)
 
+  // Entregables: el documento completo (dossier) y la Nota de Concepto, que
+  // se genera sola apenas la estructuración queda lista.
+  const { data: notaConceptoReciente } = await supabase
+    .from('notas_concepto')
+    .select('contenido_es')
+    .eq('proyecto_id', proyectoId)
+    .order('creada_en', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
   const mapaAvance = new Map((avance || []).map((a) => [a.paso_id, a.completado]))
   const mapaAdvertencias = new Map((contenido || []).map((c) => [c.id_paso, c.advertencia]))
 
@@ -132,6 +144,14 @@ export default async function MiProyectoPage() {
           </Link>
         </div>
       ) : null}
+      <div className="space-y-4 px-4 pb-6 lg:px-6">
+        <EntregablesProyecto
+          nombreProyecto={nombreProyecto}
+          dossierMarkdown={(proyecto.dossier_markdown as string) || null}
+          notaConceptoMarkdown={(notaConceptoReciente?.contenido_es as string) || null}
+        />
+        <MensajesProyecto proyectoId={proyectoId} />
+      </div>
     </>
   )
 }

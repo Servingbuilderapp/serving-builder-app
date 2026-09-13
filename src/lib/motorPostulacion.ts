@@ -18,8 +18,8 @@
 
 import { callGemini } from '@/lib/gemini'
 import { cifrasSinRespaldo } from '@/lib/motorEstructuracion'
+import { sendEmail, buildEmailTemplate } from '@/lib/email'
 
-export const PUNTAJE_MINIMO_PARA_RADICAR = 90
 export const DIAS_MINIMOS_ANTES_DEL_CIERRE = 20
 
 export type RequisitoPostulacion = {
@@ -59,8 +59,14 @@ function enRango(valor: unknown, maximo: number): number {
   return Math.min(numero, maximo)
 }
 
+/**
+ * El puntaje de la matriz de 100 es informativo (le dice al equipo qué
+ * mejorar), pero YA NO es lo que decide si se puede radicar. Lo que decide
+ * eso es que el checklist de requisitos de la convocatoria esté al 100% —
+ * ver `puedeRadicar` en `prepararPostulacion`.
+ */
 function veredictoPorPuntaje(total: number): string {
-  if (total >= PUNTAJE_MINIMO_PARA_RADICAR) return 'aprobar'
+  if (total >= 90) return 'aprobar'
   if (total >= 70) return 'aprobar con modificaciones'
   return 'no aprobar'
 }
@@ -427,14 +433,45 @@ export async function prepararPostulacion(
     )
   }
 
-  // Solo queda lista si pasa los 90 puntos y ya se corrió el evaluador dos veces.
-  const puedeRadicar = paquete.evaluacion.total >= PUNTAJE_MINIMO_PARA_RADICAR && corrida >= 2
-  if (paquete.evaluacion.total < PUNTAJE_MINIMO_PARA_RADICAR) {
-    alertas.push(
-      `Puntaje ${paquete.evaluacion.total}/100: por debajo de ${PUNTAJE_MINIMO_PARA_RADICAR}, no se radica todavía.`,
-    )
+  // La lista de requisitos se rehace cada vez que se prepara, pero se
+  // respeta lo que el equipo ya había marcado como cumplido — si no, cada
+  // corrida nueva borraría el trabajo de armar el checklist.
+  const { data: marcados } = await supabase
+    .from('postulacion_requisitos')
+    .select('requisito, cumplido, responsable, nota')
+    .eq('postulacion_id', anterior?.id || '__ninguna__')
+
+  const yaCumplidos = new Map<string, any>(
+    ((marcados || []) as any[]).map((r) => [r.requisito.toLowerCase().trim(), r]),
+  )
+
+  const filasRequisitos = paquete.requisitos.map((r, indice) => {
+    const previo = yaCumplidos.get(r.requisito.toLowerCase().trim())
+    return {
+      requisito: r.requisito,
+      tipo: r.tipo,
+      obligatorio: r.obligatorio,
+      cumplido: Boolean(previo?.cumplido),
+      responsable: previo?.responsable || null,
+      nota: previo?.nota || r.nota || null,
+      orden: indice + 1,
+    }
+  })
+
+  // LA REGLA DE FONDO: no es el puntaje el que decide si se puede radicar,
+  // es que el CHECKLIST de requisitos de la convocatoria esté completo al
+  // 100% ("listo, listo, listo"). El puntaje sobre 100 sigue mostrándose,
+  // pero es solo informativo para saber qué mejorar.
+  const checklistCompleto = filasRequisitos.length > 0 && filasRequisitos.every((r) => r.cumplido)
+  const puedeRadicar = checklistCompleto && corrida >= 2
+
+  if (filasRequisitos.length === 0) {
+    alertas.push('Todavía no hay checklist de requisitos: no se puede evaluar si está listo para radicar.')
+  } else if (!checklistCompleto) {
+    const faltan = filasRequisitos.filter((r) => !r.cumplido).length
+    alertas.push(`Faltan ${faltan} de ${filasRequisitos.length} requisitos del checklist por marcar como listos.`)
   } else if (corrida < 2) {
-    alertas.push('Falta la segunda corrida del evaluador: corrige lo señalado y vuelve a prepararla.')
+    alertas.push('El checklist ya está completo, pero falta la segunda corrida del evaluador antes de poder radicar.')
   }
 
   const fila = {
@@ -477,33 +514,12 @@ export async function prepararPostulacion(
     postulacionId = data.id as string
   }
 
-  // La lista de requisitos se rehace, pero se respeta lo que el equipo ya marcó.
-  const { data: marcados } = await supabase
-    .from('postulacion_requisitos')
-    .select('requisito, cumplido, responsable, nota')
-    .eq('postulacion_id', postulacionId)
-
-  const yaCumplidos = new Map<string, any>(
-    ((marcados || []) as any[]).map((r) => [r.requisito.toLowerCase().trim(), r]),
-  )
-
   await supabase.from('postulacion_requisitos').delete().eq('postulacion_id', postulacionId)
 
-  if (paquete.requisitos.length > 0) {
-    const filas = paquete.requisitos.map((r, indice) => {
-      const previo = yaCumplidos.get(r.requisito.toLowerCase().trim())
-      return {
-        postulacion_id: postulacionId,
-        requisito: r.requisito,
-        tipo: r.tipo,
-        obligatorio: r.obligatorio,
-        cumplido: previo?.cumplido || false,
-        responsable: previo?.responsable || null,
-        nota: previo?.nota || r.nota || null,
-        orden: indice + 1,
-      }
-    })
-    const { error } = await supabase.from('postulacion_requisitos').insert(filas)
+  if (filasRequisitos.length > 0) {
+    const { error } = await supabase
+      .from('postulacion_requisitos')
+      .insert(filasRequisitos.map((f) => ({ ...f, postulacion_id: postulacionId })))
     if (error) console.error('[Motor 4] No se pudieron guardar los requisitos:', error)
   }
 
@@ -529,23 +545,44 @@ export async function prepararPostulacion(
   }
 }
 
-/** Marca la postulación como radicada. Solo si el puntaje lo permite. */
+/**
+ * Marca la postulación como radicada. Solo si el checklist de requisitos
+ * está completo al 100% y ya se corrió el evaluador dos veces — el puntaje
+ * de la matriz de 100 NO es lo que decide esto, es informativo.
+ *
+ * `radicadaPor` deja constancia de quién la presentó de verdad ('cliente' o
+ * 'equipo'), que puede ser distinto de `quien_radica` (la intención que se
+ * había marcado antes).
+ */
 export async function registrarRadicacion(
   supabase: any,
   postulacionId: string,
+  radicadaPor?: 'cliente' | 'equipo',
 ): Promise<ResultadoPostulacion> {
   const { data: postulacion } = await supabase
     .from('postulaciones')
-    .select('id, puntaje_total, corrida, estado')
+    .select('id, corrida, estado')
     .eq('id', postulacionId)
     .maybeSingle()
 
   if (!postulacion) return { ok: false, mensaje: 'No se encontró la postulación.' }
 
-  if ((postulacion.puntaje_total || 0) < PUNTAJE_MINIMO_PARA_RADICAR) {
+  const { data: requisitos } = await supabase
+    .from('postulacion_requisitos')
+    .select('cumplido')
+    .eq('postulacion_id', postulacionId)
+
+  const filas = (requisitos || []) as { cumplido: boolean }[]
+  const checklistCompleto = filas.length > 0 && filas.every((r) => r.cumplido)
+
+  if (!checklistCompleto) {
+    const faltan = filas.filter((r) => !r.cumplido).length
     return {
       ok: false,
-      mensaje: `No se radica con ${postulacion.puntaje_total || 0}/100. El mínimo acordado es ${PUNTAJE_MINIMO_PARA_RADICAR}.`,
+      mensaje:
+        filas.length === 0
+          ? 'Todavía no hay checklist de requisitos para esta postulación.'
+          : `Faltan ${faltan} de ${filas.length} requisitos del checklist por marcar como listos.`,
     }
   }
 
@@ -559,10 +596,143 @@ export async function registrarRadicacion(
       estado: 'Radicada',
       fecha_radicacion: new Date().toISOString(),
       actualizada_en: new Date().toISOString(),
+      ...(radicadaPor ? { radicada_por: radicadaPor } : {}),
     })
     .eq('id', postulacionId)
 
   if (error) return { ok: false, mensaje: 'No se pudo registrar la radicación.' }
 
+  // Correo de TRAZABILIDAD nada más: avisa que quedó radicada, la haya
+  // presentado el cliente o el equipo. No es el mecanismo de envío, solo dEja
+  // constancia por escrito. Si el correo falla, no se revierte la radicación.
+  try {
+    await enviarCorreoRadicacion(supabase, postulacionId, radicadaPor)
+  } catch (error) {
+    console.error('[Motor 4] No se pudo enviar el correo de trazabilidad de la radicación:', error)
+  }
+
   return { ok: true, postulacionId, mensaje: 'Postulación registrada como radicada.' }
+}
+
+async function enviarCorreoRadicacion(
+  supabase: any,
+  postulacionId: string,
+  radicadaPor?: 'cliente' | 'equipo',
+): Promise<void> {
+  const { data: postulacion } = await supabase
+    .from('postulaciones')
+    .select('proyecto_id, convocatoria_nombre, entidad, fecha_radicacion')
+    .eq('id', postulacionId)
+    .maybeSingle()
+  if (!postulacion) return
+
+  const { data: proyecto } = await supabase
+    .from('proyectos_clientes_serving')
+    .select('nombre_iniciativa, correo_cliente')
+    .eq('id', postulacion.proyecto_id)
+    .maybeSingle()
+  if (!proyecto?.correo_cliente) return
+
+  const quien = radicadaPor === 'cliente' ? 'la radicaste tú' : 'la radicó el equipo de Serving'
+  const fecha = postulacion.fecha_radicacion
+    ? new Date(postulacion.fecha_radicacion).toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' })
+    : 'hoy'
+
+  const html = buildEmailTemplate({
+    title: 'Postulación radicada',
+    greeting: `Hola,`,
+    bodyLines: [
+      `Queda constancia de que la postulación de <strong>${proyecto.nombre_iniciativa || 'tu proyecto'}</strong> a <strong>${postulacion.convocatoria_nombre}</strong>${postulacion.entidad ? ` (${postulacion.entidad})` : ''} fue radicada el ${fecha}.`,
+      `Quedó registrado que ${quien}.`,
+      'Este correo es solo de trazabilidad, para que quede por escrito. En "Mis convocatorias" puedes seguir el estado de esta postulación.',
+    ],
+  })
+
+  await sendEmail({
+    to: proyecto.correo_cliente,
+    subject: `Postulación radicada — ${postulacion.convocatoria_nombre}`,
+    html,
+  })
+}
+
+/**
+ * El equipo marca (o desmarca) un requisito del checklist como listo, y
+ * recalcula si con eso la postulación ya queda lista para radicar.
+ */
+export async function marcarRequisito(
+  supabase: any,
+  requisitoId: string,
+  cumplido: boolean,
+  opciones?: { responsable?: string | null; nota?: string | null },
+): Promise<ResultadoPostulacion> {
+  const { data: requisito } = await supabase
+    .from('postulacion_requisitos')
+    .select('id, postulacion_id')
+    .eq('id', requisitoId)
+    .maybeSingle()
+
+  if (!requisito) return { ok: false, mensaje: 'No se encontró ese requisito.' }
+
+  const { error } = await supabase
+    .from('postulacion_requisitos')
+    .update({
+      cumplido,
+      ...(opciones?.responsable !== undefined ? { responsable: opciones.responsable } : {}),
+      ...(opciones?.nota !== undefined ? { nota: opciones.nota } : {}),
+    })
+    .eq('id', requisitoId)
+
+  if (error) return { ok: false, mensaje: 'No se pudo marcar el requisito.' }
+
+  const { data: todos } = await supabase
+    .from('postulacion_requisitos')
+    .select('cumplido')
+    .eq('postulacion_id', requisito.postulacion_id)
+
+  const filas = (todos || []) as { cumplido: boolean }[]
+  const checklistCompleto = filas.length > 0 && filas.every((r) => r.cumplido)
+
+  const { data: postulacion } = await supabase
+    .from('postulaciones')
+    .select('corrida, estado')
+    .eq('id', requisito.postulacion_id)
+    .maybeSingle()
+
+  const puedeRadicar = checklistCompleto && (postulacion?.corrida || 1) >= 2
+  const nuevoEstado = puedeRadicar
+    ? 'Lista para radicar'
+    : postulacion?.estado === 'Radicada' || postulacion?.estado === 'Adjudicada' || postulacion?.estado === 'Rechazada'
+      ? postulacion.estado // no se retrocede un estado que ya avanzó por fuera del checklist
+      : 'Preparando'
+
+  await supabase
+    .from('postulaciones')
+    .update({ estado: nuevoEstado, actualizada_en: new Date().toISOString() })
+    .eq('id', requisito.postulacion_id)
+
+  return { ok: true, postulacionId: requisito.postulacion_id, puedeRadicar, mensaje: 'Requisito actualizado.' }
+}
+
+/**
+ * Decisión humana de quién va a radicar: primero se le pregunta al cliente,
+ * y si no quiere o no puede, el equipo lo hace como respaldo. Se puede
+ * cambiar las veces que haga falta antes de radicar de verdad.
+ */
+export async function elegirQuienRadica(
+  supabase: any,
+  postulacionId: string,
+  quienRadica: 'cliente' | 'equipo',
+): Promise<ResultadoPostulacion> {
+  const { error } = await supabase
+    .from('postulaciones')
+    .update({ quien_radica: quienRadica, actualizada_en: new Date().toISOString() })
+    .eq('id', postulacionId)
+
+  if (error) return { ok: false, mensaje: 'No se pudo guardar la elección.' }
+
+  return {
+    ok: true,
+    postulacionId,
+    mensaje: quienRadica === 'cliente' ? 'Quedó marcado que tú la vas a radicar.' : 'Quedó marcado que el equipo la va a radicar.',
+  }
 }

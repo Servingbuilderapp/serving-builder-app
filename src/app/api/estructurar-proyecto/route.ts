@@ -4,6 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import mammoth from "mammoth";
 import { motorAutorizado, cabecerasInternas } from "@/lib/candadoMotores";
 import { correrEvaluadorEstructuracion } from "@/lib/motorEvaluadorEstructuracion";
+import { generarNotaConcepto } from "@/lib/motorNotaConcepto";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -455,6 +456,20 @@ El campo "advertencia" solo aplica a pasos "completo" y va en null si no hay nin
           await correrEvaluadorEstructuracion(supabase, id_proyecto, origen);
         } catch (e) {
           console.error("Error corriendo el evaluador de estructuración:", e);
+        }
+      });
+
+      // La Nota de Concepto se entrega SIEMPRE junto con el proyecto
+      // completo, sin pago aparte ni que nadie la pida: apenas la
+      // estructuración queda lista, se genera sola.
+      after(async () => {
+        try {
+          const resultado = await generarNotaConcepto(supabase, id_proyecto);
+          if (!resultado.ok) {
+            console.warn("No se pudo generar la Nota de Concepto:", resultado.mensaje);
+          }
+        } catch (e) {
+          console.error("Error generando la Nota de Concepto:", e);
         }
       });
     }

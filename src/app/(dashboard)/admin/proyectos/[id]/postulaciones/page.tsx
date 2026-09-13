@@ -38,7 +38,7 @@ export default async function PostulacionesPage({
   const { data: postulaciones } = await supabase
     .from('postulaciones')
     .select(
-      'id, biblioteca_id, convocatoria_nombre, entidad, fecha_cierre, estado, puntaje_tecnica, puntaje_impacto, puntaje_capacidades, puntaje_sostenibilidad, puntaje_replicabilidad, puntaje_total, veredicto, corrida, mejoras_json, adaptaciones_json, carta_intencion, alertas'
+      'id, biblioteca_id, convocatoria_nombre, entidad, fecha_cierre, estado, puntaje_tecnica, puntaje_impacto, puntaje_capacidades, puntaje_sostenibilidad, puntaje_replicabilidad, puntaje_total, veredicto, corrida, mejoras_json, adaptaciones_json, carta_intencion, alertas, quien_radica, radicada_por'
     )
     .eq('proyecto_id', id)
     .order('fecha_cierre', { ascending: true, nullsFirst: false })

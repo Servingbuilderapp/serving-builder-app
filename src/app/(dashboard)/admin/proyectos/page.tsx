@@ -121,6 +121,12 @@ export default async function AdminProyectosPage() {
                       >
                         Réplicas
                       </Link>
+                      <Link
+                        href={`/admin/proyectos/${p.id}/mensajes`}
+                        className="px-3 py-1.5 rounded-full bg-[#7A8B6F]/15 text-[#9BB18D] text-xs font-bold hover:underline whitespace-nowrap"
+                      >
+                        Mensajes
+                      </Link>
                     </div>
                   </td>
                   <td className="p-3">

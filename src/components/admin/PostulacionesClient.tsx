@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { AlertTriangle, CheckCircle2, ChevronDown, FileText, Send, Sparkles } from 'lucide-react'
+import { AlertTriangle, CheckCircle2, Circle, ChevronDown, FileText, Send, Sparkles } from 'lucide-react'
 
 /* -------------------------------------------------------------------------- */
 
@@ -35,6 +35,8 @@ export type Postulacion = {
   adaptaciones_json: unknown
   carta_intencion: string | null
   alertas: string | null
+  quien_radica: 'cliente' | 'equipo' | null
+  radicada_por: 'cliente' | 'equipo' | null
   requisitos: Requisito[]
 }
 
@@ -304,19 +306,39 @@ export function PostulacionesClient({
                   {p.requisitos.length > 0 ? (
                     <div>
                       <h3 className="text-[12px] font-bold uppercase tracking-wider text-[#F3E7DC]">
-                        Requisitos ({cumplidos} de {p.requisitos.length} listos)
+                        Checklist ({cumplidos} de {p.requisitos.length} listos)
+                        {cumplidos === p.requisitos.length ? (
+                          <span className="ml-2 normal-case text-[11px] font-semibold text-[#9BB18D]">
+                            — checklist completo
+                          </span>
+                        ) : null}
                       </h3>
+                      <p className="mt-1 text-[11.5px] text-[#F3E7DC]/45">
+                        Marca cada requisito cuando el documento o condición ya esté listo. El equipo deja
+                        listos los documentos del checklist; no radica por su cuenta.
+                      </p>
                       <ul className="mt-2 divide-y divide-[#6E4A50]/40">
                         {p.requisitos.map((r) => (
                           <li key={r.id} className="flex items-start gap-3 py-2">
-                            <span
-                              className={`mt-0.5 flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full ${
-                                r.cumplido ? 'bg-[#7A8B6F]' : 'border-2 border-[#6E4A50]'
+                            <button
+                              type="button"
+                              disabled={trabajando !== null}
+                              onClick={() =>
+                                llamar(
+                                  { accion: 'marcar_requisito', requisitoId: r.id, cumplido: !r.cumplido },
+                                  `requisito-${r.id}`,
+                                )
+                              }
+                              className={`mt-0.5 flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full transition-colors ${
+                                r.cumplido ? 'bg-[#7A8B6F]' : 'border-2 border-[#6E4A50] hover:border-[#B08D57]'
                               }`}
-                              style={{ height: 18, width: 18 }}
                             >
-                              {r.cumplido ? <CheckCircle2 className="h-3 w-3 text-[#1C2417]" /> : null}
-                            </span>
+                              {r.cumplido ? (
+                                <CheckCircle2 className="h-3 w-3 text-[#1C2417]" />
+                              ) : (
+                                <Circle className="h-2.5 w-2.5 text-transparent" />
+                              )}
+                            </button>
                             <div className="min-w-0 flex-1">
                               <span className="text-[13px] text-[#F3E7DC]">{r.requisito}</span>
                               {!r.obligatorio ? (
@@ -332,6 +354,40 @@ export function PostulacionesClient({
                           </li>
                         ))}
                       </ul>
+                    </div>
+                  ) : null}
+
+                  {p.estado === 'Lista para radicar' ? (
+                    <div className="rounded-xl border border-[#6E4A50] bg-[#4C2032] px-4 py-3">
+                      <h3 className="text-[12px] font-bold uppercase tracking-wider text-[#F3E7DC]">
+                        ¿Quién la va a radicar?
+                      </h3>
+                      <p className="mt-1 text-[12px] text-[#F3E7DC]/55">
+                        Primero se le pregunta al cliente. Si prefiere que Serving lo haga, se marca aquí.
+                        {p.quien_radica ? (
+                          <span className="ml-1 font-semibold text-[#B08D57]">
+                            Hoy: {p.quien_radica === 'cliente' ? 'la radica el cliente' : 'la radica el equipo'}.
+                          </span>
+                        ) : null}
+                      </p>
+                      <div className="mt-2 flex gap-2">
+                        <button
+                          type="button"
+                          disabled={trabajando !== null}
+                          onClick={() => llamar({ accion: 'elegir_quien_radica', postulacionId: p.id, quienRadica: 'cliente' }, `quien-${p.id}`)}
+                          className={`h-8 rounded-lg border px-3 text-[12px] font-semibold ${p.quien_radica === 'cliente' ? 'border-[#B08D57] bg-[#B08D57]/20 text-[#B08D57]' : 'border-[#6E4A50] text-[#F3E7DC]/70'}`}
+                        >
+                          La radica el cliente
+                        </button>
+                        <button
+                          type="button"
+                          disabled={trabajando !== null}
+                          onClick={() => llamar({ accion: 'elegir_quien_radica', postulacionId: p.id, quienRadica: 'equipo' }, `quien-${p.id}`)}
+                          className={`h-8 rounded-lg border px-3 text-[12px] font-semibold ${p.quien_radica === 'equipo' ? 'border-[#B08D57] bg-[#B08D57]/20 text-[#B08D57]' : 'border-[#6E4A50] text-[#F3E7DC]/70'}`}
+                        >
+                          La radica el equipo
+                        </button>
+                      </div>
                     </div>
                   ) : null}
 
@@ -368,7 +424,12 @@ export function PostulacionesClient({
                       <button
                         type="button"
                         disabled={trabajando !== null}
-                        onClick={() => llamar({ accion: 'radicar', postulacionId: p.id }, `radicar-${p.id}`)}
+                        onClick={() =>
+                          llamar(
+                            { accion: 'radicar', postulacionId: p.id, radicadaPor: p.quien_radica || undefined },
+                            `radicar-${p.id}`,
+                          )
+                        }
                         className="inline-flex h-10 items-center gap-2 rounded-lg bg-gradient-to-b from-[#7A8B6F] to-[#5F6E56] px-5 text-[13px] font-semibold text-white disabled:opacity-45"
                       >
                         <Send className="h-4 w-4" />
