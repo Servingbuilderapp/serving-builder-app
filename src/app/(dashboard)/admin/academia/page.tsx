@@ -1,6 +1,7 @@
 import React from 'react'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { MarcarAcademiaPagadaButton } from '@/components/admin/MarcarAcademiaPagadaButton'
 
 export const dynamic = 'force-dynamic'
@@ -18,7 +19,14 @@ export default async function AdminAcademiaPage() {
     redirect('/dashboard')
   }
 
-  const { data: compras } = await supabase
+  // `academia_compras` tiene el candado de seguridad (RLS) activado sin
+  // políticas abiertas: solo la llave de service role puede leerla.
+  const supabaseAdmin = createAdminClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+
+  const { data: compras } = await supabaseAdmin
     .from('academia_compras')
     .select('id, nombre_cliente, correo_cliente, telefono_whatsapp, pais, curso, monto_usd, monto_cop, estado, fecha_pago, created_at')
     .order('created_at', { ascending: false })

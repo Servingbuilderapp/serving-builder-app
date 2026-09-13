@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { armarBotonBold } from '@/lib/bold'
 import { cursoPorSlug } from '@/lib/academia/cursos'
 
@@ -8,6 +8,9 @@ import { cursoPorSlug } from '@/lib/academia/cursos'
  * compra de Academia que ya se creó como 'pendiente_pago'
  * (ver /api/academia/crear). La firma se calcula aquí, en el servidor,
  * porque necesita la llave secreta — nunca se manda al navegador.
+ *
+ * Usa la llave de service role porque `academia_compras` tiene el candado
+ * de seguridad (RLS) activado sin políticas abiertas.
  */
 export async function POST(req: Request) {
   try {
@@ -16,8 +19,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Falta el id de la compra' }, { status: 400 })
     }
 
-    const supabase = await createClient()
-    const { data: compra, error } = await supabase
+    const supabaseAdmin = createAdminClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
+    const { data: compra, error } = await supabaseAdmin
       .from('academia_compras')
       .select('id, curso, monto_cop, estado, pais')
       .eq('id', compraId)
@@ -51,7 +57,7 @@ export async function POST(req: Request) {
     })
 
     // Se guarda para poder relacionar el webhook con esta compra.
-    await supabase.from('academia_compras').update({ bold_order_id: boton.orderId }).eq('id', compra.id)
+    await supabaseAdmin.from('academia_compras').update({ bold_order_id: boton.orderId }).eq('id', compra.id)
 
     return NextResponse.json(boton)
   } catch (error: unknown) {

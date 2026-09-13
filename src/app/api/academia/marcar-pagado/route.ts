@@ -1,9 +1,13 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createClient as createAdminClient } from '@supabase/supabase-js'
 
 /**
  * Confirma a mano que llegó el comprobante de la compra de un curso.
  * Es pago único: solo cambia el estado y guarda la fecha de pago.
+ *
+ * Usa la llave de service role porque `academia_compras` tiene el candado
+ * de seguridad (RLS) activado sin políticas abiertas — solo esta llave
+ * puede leer y escribir ahí (igual que /api/academia/crear).
  */
 export async function POST(req: Request) {
   try {
@@ -12,9 +16,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Falta el id de la compra' }, { status: 400 })
     }
 
-    const supabase = await createClient()
+    const supabaseAdmin = createAdminClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
 
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from('academia_compras')
       .update({
         estado: 'pagado',
