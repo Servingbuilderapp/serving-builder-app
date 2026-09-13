@@ -7,6 +7,7 @@ import { GlassCard } from '@/components/ui/GlassCard'
 import { cn } from '@/lib/utils'
 import { COBRO_COLOMBIA } from '@/lib/mediosDePago'
 import { type Curso, precioCOP, precioUSDTexto } from '@/lib/academia/cursos'
+import { BotonPagoBold } from './BotonPagoBold'
 
 function formatoCOP(valor: number): string {
   return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(valor)
@@ -181,10 +182,22 @@ export function VentaCursoClient({ curso }: { curso: Curso }) {
               )}
             </div>
 
+            {pais === 'colombia' && (
+              <div className="text-left p-6 rounded-2xl border border-color-primary/25 bg-color-primary/5 space-y-3">
+                <p className="text-sm font-bold text-color-base-content">
+                  Paga en línea con tarjeta, PSE o Nequi — {formatoCOP(montoCop)}
+                </p>
+                <BotonPagoBold compraId={compraId} />
+                <p className="text-[11px] text-color-base-content/50">
+                  Se confirma solo, automáticamente, apenas Bold aprueba el pago.
+                </p>
+              </div>
+            )}
+
             {pais === 'colombia' && COBRO_COLOMBIA.modo === 'transferencia' && COBRO_COLOMBIA.cuenta ? (
               <div className="text-left p-6 rounded-2xl bg-color-base-content/5 border border-color-base-content/10 space-y-4">
                 <p className="text-sm font-bold text-color-base-content">
-                  Valor a pagar: {formatoCOP(montoCop)}
+                  O por transferencia manual — {formatoCOP(montoCop)}
                 </p>
 
                 {COBRO_COLOMBIA.cuenta.llaves?.length ? (
@@ -202,7 +215,7 @@ export function VentaCursoClient({ curso }: { curso: Curso }) {
 
                 <div className="space-y-1">
                   <p className="text-xs font-black uppercase tracking-widest text-color-base-content/60">
-                    O por transferencia
+                    Datos de la cuenta
                   </p>
                   <p className="text-sm text-color-base-content/70">
                     Banco: {COBRO_COLOMBIA.cuenta.banco}

@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Script from "next/script"
 import { Outfit, Inter, Cormorant_Garamond } from "next/font/google"
 import "./globals.css"
 import { LanguageProvider } from "@/context/LanguageContext"
@@ -39,6 +40,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Librería del botón de pagos de Bold — una sola vez para todo el
+            sitio, como pide su documentación. Los datos de cada compra
+            (monto, firma, etc.) se agregan aparte, solo en la pantalla de
+            pago (ver BotonPagoBold.tsx), no aquí. */}
+        <Script src="https://checkout.bold.co/library/boldPaymentButton.js" strategy="afterInteractive" />
+      </head>
       <body
         className={`${outfit.variable} ${inter.variable} ${cormorant.variable} font-sans antialiased`}
         suppressHydrationWarning
