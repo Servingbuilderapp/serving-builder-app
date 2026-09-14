@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { MarcarPagadoButton } from '@/components/admin/MarcarPagadoButton'
+import { MarcarCanalButton } from '@/components/admin/MarcarCanalButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -16,7 +17,7 @@ export default async function AdminProyectosPage() {
 
   const { data: proyectos } = await supabase
     .from('proyectos_clientes_serving')
-    .select('id, nombre_cliente, correo_cliente, telefono_whatsapp, nombre_iniciativa, plan_pago, monto_solicitado_cop, monto_solicitado_usd, estado_actual, pasarela_pago, created_at')
+    .select('id, nombre_cliente, correo_cliente, telefono_whatsapp, nombre_iniciativa, plan_pago, monto_solicitado_cop, monto_solicitado_usd, estado_actual, pasarela_pago, canal_origen, created_at')
     .order('created_at', { ascending: false })
 
   return (
@@ -37,6 +38,7 @@ export default async function AdminProyectosPage() {
               <th className="p-3 font-black text-xs uppercase tracking-wider">Plan</th>
               <th className="p-3 font-black text-xs uppercase tracking-wider">Monto</th>
               <th className="p-3 font-black text-xs uppercase tracking-wider">Estado</th>
+              <th className="p-3 font-black text-xs uppercase tracking-wider">Canal</th>
               <th className="p-3 font-black text-xs uppercase tracking-wider">Acción</th>
               <th className="p-3 font-black text-xs uppercase tracking-wider">Portal Réplica</th>
             </tr>
@@ -75,10 +77,25 @@ export default async function AdminProyectosPage() {
                     </span>
                   </td>
                   <td className="p-3">
+                    {p.canal_origen === 'marca_blanca' ? (
+                      <span className="px-2 py-1 rounded-full bg-color-primary/15 text-color-primary text-xs font-bold whitespace-nowrap">
+                        Marca blanca
+                      </span>
+                    ) : (
+                      <span className="px-2 py-1 rounded-full bg-color-base-content/10 text-color-base-content/60 text-xs font-bold whitespace-nowrap">
+                        Directo
+                      </span>
+                    )}
+                  </td>
+                  <td className="p-3">
                     <div className="flex flex-col gap-2 items-start">
                       {p.estado_actual !== 'pagado' && (
                         <MarcarPagadoButton proyectoId={p.id} />
                       )}
+                      <MarcarCanalButton
+                        proyectoId={p.id}
+                        canalActual={p.canal_origen === 'marca_blanca' ? 'marca_blanca' : 'directo'}
+                      />
                       <Link
                         href={`/admin/proyectos/${p.id}/arbol`}
                         className="px-3 py-1.5 rounded-full bg-color-primary/10 text-color-primary text-xs font-bold hover:underline whitespace-nowrap"

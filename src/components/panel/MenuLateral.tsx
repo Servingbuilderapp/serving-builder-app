@@ -17,6 +17,7 @@ import {
   Wallet,
   CheckSquare,
   GraduationCap,
+  Building2,
   X,
 } from 'lucide-react'
 
@@ -71,6 +72,7 @@ const SECCIONES_EQUIPO: Seccion[] = [
       { nombre: 'Centinela Digital', href: '/admin/centinela', icono: Satellite },
       { nombre: 'Membresías', href: '/admin/membresias', icono: Wallet },
       { nombre: 'Academia', href: '/admin/academia', icono: GraduationCap },
+      { nombre: 'Marca blanca', href: '/admin/marca-blanca', icono: Building2 },
       { nombre: 'Administración', href: '/admin', icono: Settings },
     ],
   },
