@@ -2,21 +2,27 @@ import React from 'react'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { supabaseAdmin } from '@/lib/supabase/admin'
+import { CrearSocioForm } from '@/components/admin/CrearSocioForm'
+import { AsignarSocioSelect } from '@/components/admin/AsignarSocioSelect'
+import { CrearUsuarioSocioForm } from '@/components/admin/CrearUsuarioSocioForm'
 
 export const dynamic = 'force-dynamic'
 
 /**
- * Vista simplificada de canal — solo los proyectos marcados como
- * 'marca_blanca' (ver /admin/proyectos, botón "Marcar como marca blanca").
+ * Vista de canal de marca blanca — la ve el equipo de Serving, y aquí sí
+ * se ven TODOS los socios juntos (a diferencia de /socio, que cada socio
+ * ve solo lo suyo).
  *
- * Es de solo lectura, sin acciones: cuánto proyectos hay, en qué etapa va
- * cada uno, y si alguno está atrasado. No reemplaza el detalle completo de
- * cada proyecto — para eso están los enlaces de /admin/proyectos.
+ * Desde acá el equipo:
+ *   1. Crea los socios reales (nombre, marca, contacto).
+ *   2. Asigna cada proyecto marcado como 'marca_blanca' a un socio
+ *      concreto — eso es lo que separa de verdad los datos de un socio
+ *      de los de otro (la etiqueta canal_origen solo dice "es de marca
+ *      blanca", no de cuál).
  *
- * Esto NO separa datos por socio todavía (cualquiera del equipo Serving
- * que entra aquí ve todos los proyectos de marca blanca, sin importar de
- * qué socio serían). Esa separación (multi-tenant) es un paso aparte, ver
- * `marca-blanca-socio-volumen-2026-09-13.md`.
+ * Sigue sin acciones sobre el proyecto en sí (estructuración, pagos) —
+ * para eso está /admin/proyectos.
  */
 
 type Etapa = 'Pendiente de pago' | 'En estructuración' | 'Buscando convocatorias'
@@ -38,10 +44,20 @@ export default async function AdminMarcaBlancaPage() {
   const { data: proyectos } = await supabase
     .from('proyectos_clientes_serving')
     .select(
-      'id, nombre_cliente, nombre_iniciativa, plan_pago, monto_solicitado_cop, monto_solicitado_usd, estado_actual, listo_para_encaje, fecha_limite_entrega, created_at'
+      'id, nombre_cliente, nombre_iniciativa, plan_pago, monto_solicitado_cop, monto_solicitado_usd, estado_actual, listo_para_encaje, fecha_limite_entrega, socio_id, created_at'
     )
     .eq('canal_origen', 'marca_blanca')
     .order('created_at', { ascending: false })
+
+  // Los socios se leen con la llave de servicio (no con la del usuario que
+  // entró) porque la tabla socios solo la puede tocar el servidor — igual
+  // que el resto de tablas sensibles del proyecto.
+  const { data: socios } = await supabaseAdmin
+    .from('socios')
+    .select('id, nombre, activo')
+    .order('nombre', { ascending: true })
+
+  const listaSocios = socios || []
 
   const ahora = new Date()
   const lista = proyectos || []
@@ -51,13 +67,36 @@ export default async function AdminMarcaBlancaPage() {
       <div>
         <h1 className="text-2xl font-bold text-color-base-content">Marca blanca</h1>
         <p className="text-color-base-content/60 text-sm mt-1">
-          Proyectos marcados como canal de marca blanca. Solo lectura — para actuar
-          sobre un proyecto, entra a{' '}
+          Proyectos marcados como canal de marca blanca. Para actuar sobre un
+          proyecto (estructuración, pagos), entra a{' '}
           <Link href="/admin/proyectos" className="text-color-primary hover:underline">
             Proyectos de clientes
           </Link>
           .
         </p>
+      </div>
+
+      <div className="space-y-3">
+        <h2 className="text-sm font-black uppercase tracking-wider text-color-base-content/50">Socios</h2>
+        {listaSocios.length > 0 ? (
+          <div className="flex flex-wrap gap-2">
+            {listaSocios.map((s) => (
+              <span
+                key={s.id}
+                className="px-3 py-1.5 rounded-full bg-color-base-content/5 border border-color-base-content/10 text-sm font-semibold"
+              >
+                {s.nombre}
+                {!s.activo ? <span className="text-color-base-content/40 font-normal"> (inactivo)</span> : null}
+              </span>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-color-base-content/60">Todavía no has creado ningún socio.</p>
+        )}
+        <div className="flex flex-wrap gap-2">
+          <CrearSocioForm />
+          <CrearUsuarioSocioForm socios={listaSocios.filter((s) => s.activo)} />
+        </div>
       </div>
 
       {lista.length === 0 ? (
@@ -75,6 +114,7 @@ export default async function AdminMarcaBlancaPage() {
               <tr className="text-left">
                 <th className="p-3 font-black text-xs uppercase tracking-wider">Cliente</th>
                 <th className="p-3 font-black text-xs uppercase tracking-wider">Proyecto</th>
+                <th className="p-3 font-black text-xs uppercase tracking-wider">Socio</th>
                 <th className="p-3 font-black text-xs uppercase tracking-wider">Plan</th>
                 <th className="p-3 font-black text-xs uppercase tracking-wider">Monto</th>
                 <th className="p-3 font-black text-xs uppercase tracking-wider">Etapa</th>
@@ -94,6 +134,9 @@ export default async function AdminMarcaBlancaPage() {
                       <Link href={`/admin/proyectos/${p.id}/arbol`} className="hover:underline">
                         {p.nombre_iniciativa}
                       </Link>
+                    </td>
+                    <td className="p-3">
+                      <AsignarSocioSelect proyectoId={String(p.id)} socioIdActual={p.socio_id} socios={listaSocios} />
                     </td>
                     <td className="p-3">{p.plan_pago}</td>
                     <td className="p-3">
