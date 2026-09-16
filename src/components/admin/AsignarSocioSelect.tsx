@@ -1,47 +1,58 @@
-import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+'use client'
 
-const CORREO_ADMIN = 'servingbuilderapp@gmail.com'
+import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
-async function esEquipoServing() {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  if (!user) return false
-  if ((user.email || '').toLowerCase().trim() === CORREO_ADMIN) return true
-  const { data: perfil } = await supabase.from('users').select('role').eq('id', user.id).maybeSingle<{ role: string | null }>()
-  return perfil?.role === 'admin'
-}
+type SocioOpcion = { id: string; nombre: string }
 
 /**
- * Marca de qué socio es un proyecto (o lo deja sin socio si socioId viene
- * vacío). Es lo que separa, de verdad, los proyectos de un socio de los
- * de otro y de los de Serving — no basta con la etiqueta canal_origen,
- * que solo dice "es de marca blanca", no de cuál.
+ * Selector para decir de qué socio es un proyecto de marca blanca. Es lo
+ * que de verdad separa los datos de un socio de los de otro — la
+ * etiqueta canal_origen solo dice "es de marca blanca", no de cuál socio.
  */
-export async function POST(req: Request) {
-  try {
-    if (!(await esEquipoServing())) {
-      return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
+export function AsignarSocioSelect({
+  proyectoId,
+  socioIdActual,
+  socios,
+}: {
+  proyectoId: string
+  socioIdActual: string | null
+  socios: SocioOpcion[]
+}) {
+  const router = useRouter()
+  const [guardando, setGuardando] = useState(false)
+
+  const handleChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const socioId = e.target.value || null
+    setGuardando(true)
+    try {
+      const res = await fetch('/api/admin/asignar-socio', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ proyectoId, socioId }),
+      })
+      if (!res.ok) throw new Error('Error al asignar')
+      router.refresh()
+    } catch {
+      alert('Hubo un problema, intenta de nuevo.')
+    } finally {
+      setGuardando(false)
     }
-
-    const { proyectoId, socioId } = await req.json()
-    if (!proyectoId) {
-      return NextResponse.json({ error: 'Falta el proyecto' }, { status: 400 })
-    }
-
-    const supabase = await createClient()
-    const { error } = await supabase
-      .from('proyectos_clientes_serving')
-      .update({ socio_id: socioId || null })
-      .eq('id', proyectoId)
-
-    if (error) throw error
-
-    return NextResponse.json({ success: true })
-  } catch (error) {
-    const mensaje = error instanceof Error ? error.message : 'Error al asignar el socio'
-    return NextResponse.json({ error: mensaje }, { status: 500 })
   }
+
+  return (
+    <select
+      defaultValue={socioIdActual || ''}
+      onChange={handleChange}
+      disabled={guardando}
+      className="rounded-lg border border-color-base-content/15 px-2 py-1 text-xs bg-color-base-200 disabled:opacity-50"
+    >
+      <option value="">Sin socio</option>
+      {socios.map((s) => (
+        <option key={s.id} value={s.id}>
+          {s.nombre}
+        </option>
+      ))}
+    </select>
+  )
 }
