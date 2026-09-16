@@ -31,9 +31,9 @@ export default async function LayoutPanel({ children }: { children: React.ReactN
 
   const { data: perfil } = await supabase
     .from('users')
-    .select('first_name, last_name, full_name, role, email')
+    .select('first_name, last_name, full_name, role, email, socio_id')
     .eq('id', user?.id || '')
-    .maybeSingle<Perfil>()
+    .maybeSingle<Perfil & { socio_id?: string | null }>()
 
   const { data: proyecto } = await supabase
     .from('proyectos_clientes_serving')
@@ -52,11 +52,17 @@ export default async function LayoutPanel({ children }: { children: React.ReactN
     'Usuario'
 
   const esAdmin = perfil?.role === 'admin' || correo === 'servingbuilderapp@gmail.com'
+  const esSocio = !esAdmin && perfil?.role === 'socio'
+
+  // Un socio de marca blanca no tiene "proyecto activo" propio (administra
+  // varios, no es dueño de uno) — nunca se le muestra el proyecto de otra
+  // persona en la cabecera.
+  const rolUsuario = esAdmin ? 'Administrador' : esSocio ? 'Socio' : 'Cliente'
 
   return (
     <PanelShell
       proyecto={
-        proyecto
+        !esSocio && proyecto
           ? {
               id: String(proyecto.id),
               nombre: String(proyecto.nombre_iniciativa || 'Proyecto sin nombre'),
@@ -65,7 +71,7 @@ export default async function LayoutPanel({ children }: { children: React.ReactN
           : null
       }
       nombreUsuario={nombreUsuario}
-      rolUsuario={esAdmin ? 'Administrador' : 'Cliente'}
+      rolUsuario={rolUsuario}
     >
       {children}
     </PanelShell>
