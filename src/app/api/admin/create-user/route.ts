@@ -19,7 +19,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { email, password, firstName, lastName, planId } = await req.json()
+    const { email, password, firstName, lastName, planId, role, socioId } = await req.json()
 
     // 2. Crear usuario en Auth (bypass confirmación)
     const { data: authUser, error: authError } = await adminClient.auth.admin.createUser({
@@ -40,6 +40,16 @@ export async function POST(req: Request) {
           plan_assigned_at: new Date().toISOString(),
           plan_source: 'manual'
         })
+        .eq('id', authUser.user.id)
+    }
+
+    // 3b. Si es un usuario de un socio de marca blanca, marcarlo como tal.
+    // Puede haber varias personas del mismo socio_id — todas ven los mismos
+    // proyectos de ese socio, nunca los de Serving ni los de otro socio.
+    if (role === 'socio' && socioId && authUser.user) {
+      await adminClient
+        .from('users')
+        .update({ role: 'socio', socio_id: socioId })
         .eq('id', authUser.user.id)
     }
     
