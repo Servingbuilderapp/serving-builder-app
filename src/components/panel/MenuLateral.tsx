@@ -78,19 +78,38 @@ const SECCIONES_EQUIPO: Seccion[] = [
   },
 ]
 
+/**
+ * Lo que ve un socio de marca blanca. A propósito es UNA sola entrada:
+ * el socio no debe ver ni el menú del cliente (árbol, cadena de valor,
+ * etc. — eso es trabajo interno de Serving) ni el panel completo del
+ * equipo. Solo su propio resumen de proyectos.
+ */
+const SECCIONES_SOCIO: Seccion[] = [
+  {
+    items: [{ nombre: 'Mis proyectos', href: '/socio', icono: FolderKanban }],
+  },
+]
+
 export function MenuLateral({
   abiertoEnMovil,
   onCerrar,
   esEquipo = false,
+  esSocio = false,
 }: {
   abiertoEnMovil: boolean
   onCerrar: () => void
   /** true solo para el equipo de Serving: le agrega sus secciones internas. */
   esEquipo?: boolean
+  /** true solo para un socio de marca blanca: reemplaza TODO el menú por el suyo. */
+  esSocio?: boolean
 }) {
   const ruta = usePathname()
 
-  const secciones = esEquipo ? [...SECCIONES_CLIENTE, ...SECCIONES_EQUIPO] : SECCIONES_CLIENTE
+  const secciones = esSocio
+    ? SECCIONES_SOCIO
+    : esEquipo
+      ? [...SECCIONES_CLIENTE, ...SECCIONES_EQUIPO]
+      : SECCIONES_CLIENTE
 
   const contenido = (
     <div className="flex h-full flex-col bg-color-base-200 text-color-base-content border-r border-color-base-300/40 shadow-[2px_0_12px_-8px_rgba(0,0,0,0.5)]">
