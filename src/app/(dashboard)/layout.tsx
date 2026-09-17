@@ -37,11 +37,11 @@ export default async function LayoutPanel({ children }: { children: React.ReactN
 
   const { data: proyecto } = await supabase
     .from('proyectos_clientes_serving')
-    .select('id, nombre_iniciativa, estado_actual')
+    .select('id, nombre_iniciativa, estado_actual, canal_origen')
     .eq('correo_cliente', correo)
     .order('created_at', { ascending: false })
     .limit(1)
-    .maybeSingle()
+    .maybeSingle<{ id: string; nombre_iniciativa: string | null; estado_actual: string | null; canal_origen: string | null }>()
 
   const nombrePartes = [perfil?.first_name, perfil?.last_name].filter(Boolean).join(' ').trim()
   const nombreUsuario =
@@ -59,6 +59,12 @@ export default async function LayoutPanel({ children }: { children: React.ReactN
   // persona en la cabecera.
   const rolUsuario = esAdmin ? 'Administrador' : esSocio ? 'Socio' : 'Cliente'
 
+  // Un cliente que entró por el enlace de un socio de marca blanca solo
+  // recibe el camino de estructuración — sin App de Ideas, Réplicas ni
+  // Academia (acuerdo del 13 sep 2026: esas son cosas de la marca propia
+  // de Serving, el socio no las necesita ni las contrató).
+  const esClienteMarcaBlanca = !esAdmin && !esSocio && proyecto?.canal_origen === 'marca_blanca'
+
   return (
     <PanelShell
       proyecto={
@@ -72,6 +78,7 @@ export default async function LayoutPanel({ children }: { children: React.ReactN
       }
       nombreUsuario={nombreUsuario}
       rolUsuario={rolUsuario}
+      esClienteMarcaBlanca={esClienteMarcaBlanca}
     >
       {children}
     </PanelShell>
