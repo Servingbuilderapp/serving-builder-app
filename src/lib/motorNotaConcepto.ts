@@ -17,6 +17,16 @@
  * inventa nada. La nota se arma ORDENANDO lo que el proyecto ya tiene en
  * `contenido_pasos_proyecto` — no se le vuelve a preguntar al cliente lo que
  * ya contestó. Si un tema no tiene con qué responderse, se dice así.
+ *
+ * VERSIÓN AJUSTADA A UNA CONVOCATORIA: además de la nota general (la que se
+ * genera sola, sin convocatoria todavía), cuando el equipo prepara una
+ * postulación a una convocatoria concreta (Motor 4) se puede generar una
+ * segunda versión — mismos once temas, mismo contenido de origen, pero
+ * redactada pensando en lo que ESA convocatoria pide (sus requisitos y su
+ * mecanismo de postulación). Sirve para llenar el formulario propio de nota
+ * de concepto que piden algunas convocatorias, en vez de mandar siempre la
+ * misma nota genérica. Se guarda aparte, amarrada a esa convocatoria — la
+ * nota general nunca se reemplaza.
  */
 
 import { callGemini } from '@/lib/gemini'
@@ -139,7 +149,22 @@ async function leerContenidoEstructurado(
    Paso 2: pedirle al modelo que ubique, tema por tema, la respuesta
    ========================================================================== */
 
-function construirPrompt(nombreProyecto: string, textoCompleto: string): string {
+type ContextoConvocatoria = {
+  nombre: string
+  entidad: string
+  requisitos: string
+  mecanismoPostulacion: string
+} | null
+
+function construirPrompt(nombreProyecto: string, textoCompleto: string, convocatoria: ContextoConvocatoria): string {
+  const bloqueConvocatoria = convocatoria
+    ? `\n\nESTA NOTA VA DIRIGIDA A UNA CONVOCATORIA CONCRETA — ajusta el énfasis y el orden de los argumentos a lo que ella pide, sin inventar nada que no esté en el contenido estructurado de arriba:
+- Convocatoria: ${convocatoria.nombre}
+- Entidad: ${convocatoria.entidad || 'sin dato'}
+- Requisitos conocidos: ${convocatoria.requisitos || 'sin dato'}
+- Mecanismo de postulación: ${convocatoria.mecanismoPostulacion || 'sin dato'}`
+    : ''
+
   return `Eres un redactor especializado en notas de concepto para convocatorias de financiación y cooperación internacional.
 
 Una Nota de Concepto es un documento corto (1 a 3 páginas) que presenta de forma clara y sintética una idea de proyecto, para que un financiador decida si invita a postular en detalle. NO es la formulación completa: es un resumen ejecutivo persuasivo.
@@ -149,7 +174,7 @@ Te entrego TODO el contenido que ya quedó estructurado de este proyecto. Tu tra
 PROYECTO: ${nombreProyecto}
 
 CONTENIDO YA ESTRUCTURADO DEL PROYECTO:
-${textoCompleto.slice(0, 40000)}
+${textoCompleto.slice(0, 40000)}${bloqueConvocatoria}
 
 DEVUELVE ÚNICAMENTE UN JSON con esta forma exacta, sin explicaciones y sin marcas de código:
 {
@@ -252,11 +277,23 @@ function armarDocumento(nombreProyecto: string, contenido: ContenidoNotaConcepto
    ========================================================================== */
 
 /**
- * Genera la Nota de Concepto de un proyecto y la guarda. Se llama sola,
+ * Genera la Nota de Concepto de un proyecto y la guarda.
+ *
+ * Sin `convocatoria`: es la nota GENERAL del proyecto. Se llama sola,
  * automáticamente, cuando la estructuración queda lista — no hace falta que
  * nadie la pida a mano.
+ *
+ * Con `convocatoria`: es la versión AJUSTADA a esa convocatoria concreta.
+ * La llama `prepararPostulacion` (Motor 4) cada vez que se prepara una
+ * postulación, para dejar lista una nota pensada para el formulario o el
+ * mecanismo propio de esa convocatoria — queda guardada aparte, sin tocar
+ * la nota general.
  */
-export async function generarNotaConcepto(supabase: any, proyectoId: string): Promise<ResultadoNotaConcepto> {
+export async function generarNotaConcepto(
+  supabase: any,
+  proyectoId: string,
+  convocatoria?: { id: string; nombre: string; entidad: string; requisitos: string; mecanismoPostulacion: string } | null,
+): Promise<ResultadoNotaConcepto> {
   const base = await leerContenidoEstructurado(supabase, proyectoId)
   if (!base) {
     return { ok: false, mensaje: 'El proyecto todavía no tiene contenido estructurado: no hay de dónde sacar la nota.' }
@@ -264,7 +301,9 @@ export async function generarNotaConcepto(supabase: any, proyectoId: string): Pr
 
   let datos: any = null
   try {
-    datos = interpretarJson(await callGemini(construirPrompt(base.nombreProyecto, base.textoCompleto)))
+    datos = interpretarJson(
+      await callGemini(construirPrompt(base.nombreProyecto, base.textoCompleto, convocatoria || null)),
+    )
   } catch (error) {
     console.error('[Nota de Concepto] No se pudo consultar el modelo:', error)
     return { ok: false, mensaje: 'No se pudo generar la nota de concepto: el modelo no respondió.' }
@@ -286,6 +325,8 @@ export async function generarNotaConcepto(supabase: any, proyectoId: string): Pr
     .from('notas_concepto')
     .insert({
       proyecto_id: proyectoId,
+      convocatoria_id: convocatoria?.id || null,
+      convocatoria_nombre: convocatoria?.nombre || null,
       idioma: documentoEn ? 'es_en' : 'es',
       contenido_es: documentoEs,
       contenido_en: documentoEn,

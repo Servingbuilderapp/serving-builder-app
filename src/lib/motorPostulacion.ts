@@ -19,6 +19,8 @@
 import { callGemini } from '@/lib/gemini'
 import { cifrasSinRespaldo } from '@/lib/motorEstructuracion'
 import { sendEmail, buildEmailTemplate } from '@/lib/email'
+import { correrValidacionFinal } from '@/lib/motorValidacionFinal'
+import { generarNotaConcepto } from '@/lib/motorNotaConcepto'
 
 export const DIAS_MINIMOS_ANTES_DEL_CIERRE = 20
 
@@ -530,6 +532,36 @@ export async function prepararPostulacion(
     convocatoria_nombre: convocatoria.nombre,
     estado: 'En Proceso',
   })
+
+  // Dos piezas más que se corren solas, en el mismo momento en que se
+  // prepara la postulación — nadie tiene que pedirlas aparte:
+  //   1. La Validación final: revisión cualitativa (sin puntaje) de vacíos y
+  //      párrafos flojos frente a lo que esta convocatoria pide en concreto.
+  //   2. Una Nota de Concepto ajustada a esta convocatoria, por si pide su
+  //      propio formulario o su propia nota — separada de la nota general
+  //      del proyecto, que ya se generó sola cuando la estructuración quedó
+  //      lista.
+  // Ninguna de las dos puede tumbar la preparación de la postulación si
+  // falla: quedan solo como un aviso en el registro del servidor.
+  try {
+    await correrValidacionFinal(supabase, proyectoId, postulacionId, proyecto, convocatoria)
+  } catch (e) {
+    console.error('[Motor 4] Error corriendo la validación final:', e)
+  }
+
+  if (convocatoria.id) {
+    try {
+      await generarNotaConcepto(supabase, proyectoId, {
+        id: convocatoria.id,
+        nombre: convocatoria.nombre,
+        entidad: convocatoria.entidad,
+        requisitos: convocatoria.requisitos,
+        mecanismoPostulacion: convocatoria.mecanismoPostulacion,
+      })
+    } catch (e) {
+      console.error('[Motor 4] Error generando la nota de concepto ajustada:', e)
+    }
+  }
 
   return {
     ok: true,

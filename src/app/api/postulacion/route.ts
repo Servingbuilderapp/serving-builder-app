@@ -9,6 +9,12 @@ import {
 } from '@/lib/motorPostulacion'
 import { esEquipoServing } from '@/lib/guardiaEquipo'
 
+// Preparar una postulación ahora hace, en la misma llamada: el paquete de
+// postulación (Motor 4), la validación final cualitativa y la nota de
+// concepto ajustada a la convocatoria — tres consultas al modelo seguidas.
+// Sin este valor, Vercel corta la función antes de que termine la tercera.
+export const maxDuration = 180
+
 /**
  * Motor 4 — postulación.
  *
@@ -163,9 +169,50 @@ export async function GET(req: Request) {
           .order('orden')
       : { data: [] }
 
+    // Validación final (la más reciente de cada postulación) y la Nota de
+    // Concepto ajustada a cada convocatoria — las dos se generan solas al
+    // preparar la postulación, esta pantalla solo las muestra.
+    const { data: validaciones } = ids.length
+      ? await supabase
+          .from('validaciones_finales')
+          .select('postulacion_id, corrida, hallazgos_json, creada_en')
+          .in('postulacion_id', ids)
+          .order('corrida', { ascending: false })
+      : { data: [] }
+
+    const ultimaValidacionPorPostulacion = new Map<string, any>()
+    for (const v of validaciones || []) {
+      if (!ultimaValidacionPorPostulacion.has(v.postulacion_id)) {
+        ultimaValidacionPorPostulacion.set(v.postulacion_id, v)
+      }
+    }
+
+    const idsConvocatoria = (postulaciones || [])
+      .map((p: any) => p.biblioteca_id)
+      .filter((id: string | null) => Boolean(id))
+
+    const { data: notasAjustadas } = idsConvocatoria.length
+      ? await supabase
+          .from('notas_concepto')
+          .select('convocatoria_id, contenido_es, creada_en')
+          .in('convocatoria_id', idsConvocatoria)
+          .order('creada_en', { ascending: false })
+      : { data: [] }
+
+    const ultimaNotaPorConvocatoria = new Map<string, any>()
+    for (const n of notasAjustadas || []) {
+      if (!ultimaNotaPorConvocatoria.has(n.convocatoria_id)) {
+        ultimaNotaPorConvocatoria.set(n.convocatoria_id, n)
+      }
+    }
+
     const conRequisitos = (postulaciones || []).map((p: any) => ({
       ...p,
       requisitos: (requisitos || []).filter((r: any) => r.postulacion_id === p.id),
+      validacion_final: ultimaValidacionPorPostulacion.get(p.id)?.hallazgos_json || null,
+      nota_concepto_ajustada: p.biblioteca_id
+        ? ultimaNotaPorConvocatoria.get(p.biblioteca_id)?.contenido_es || null
+        : null,
     }))
 
     return NextResponse.json({ ok: true, postulaciones: conRequisitos })
