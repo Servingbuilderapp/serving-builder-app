@@ -6,6 +6,7 @@ import { supabaseAdmin } from '@/lib/supabase/admin'
 import { CrearSocioForm } from '@/components/admin/CrearSocioForm'
 import { AsignarSocioSelect } from '@/components/admin/AsignarSocioSelect'
 import { CrearUsuarioSocioForm } from '@/components/admin/CrearUsuarioSocioForm'
+import { ActivarMantenimientoButton } from '@/components/admin/ActivarMantenimientoButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -54,13 +55,15 @@ export default async function AdminMarcaBlancaPage() {
   // que el resto de tablas sensibles del proyecto.
   const { data: socios } = await supabaseAdmin
     .from('socios')
-    .select('id, nombre, activo')
+    .select('id, nombre, activo, slug, mantenimiento_pagado_hasta, mantenimiento_mensual_usd')
     .order('nombre', { ascending: true })
 
   const listaSocios = socios || []
 
   const ahora = new Date()
+  const hoyTexto = ahora.toISOString().slice(0, 10)
   const lista = proyectos || []
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || ''
 
   return (
     <div className="w-full max-w-6xl mx-auto p-6 md:p-8 space-y-6">
@@ -79,16 +82,48 @@ export default async function AdminMarcaBlancaPage() {
       <div className="space-y-3">
         <h2 className="text-sm font-black uppercase tracking-wider text-color-base-content/50">Socios</h2>
         {listaSocios.length > 0 ? (
-          <div className="flex flex-wrap gap-2">
-            {listaSocios.map((s) => (
-              <span
-                key={s.id}
-                className="px-3 py-1.5 rounded-full bg-color-base-content/5 border border-color-base-content/10 text-sm font-semibold"
-              >
-                {s.nombre}
-                {!s.activo ? <span className="text-color-base-content/40 font-normal"> (inactivo)</span> : null}
-              </span>
-            ))}
+          <div className="space-y-2">
+            {listaSocios.map((s) => {
+              const mantenimientoAlDia = !!s.mantenimiento_pagado_hasta && s.mantenimiento_pagado_hasta >= hoyTexto
+              const enlace = s.slug ? `${baseUrl}/mb/${s.slug}` : null
+
+              return (
+                <div
+                  key={s.id}
+                  className="rounded-xl border border-color-base-content/10 p-3 flex flex-wrap items-center gap-3"
+                >
+                  <div className="min-w-[160px]">
+                    <div className="font-semibold text-sm text-color-base-content">
+                      {s.nombre}
+                      {!s.activo ? <span className="text-color-base-content/40 font-normal"> (inactivo)</span> : null}
+                    </div>
+                    {enlace ? (
+                      <div className="text-xs text-color-base-content/50 break-all">{enlace}</div>
+                    ) : (
+                      <div className="text-xs text-color-base-content/40">Sin enlace todavía</div>
+                    )}
+                  </div>
+
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-bold whitespace-nowrap ${
+                      mantenimientoAlDia
+                        ? 'bg-color-primary/10 text-color-primary'
+                        : 'bg-red-500/15 text-red-600'
+                    }`}
+                  >
+                    {mantenimientoAlDia
+                      ? `Mantenimiento al día hasta ${s.mantenimiento_pagado_hasta}`
+                      : 'Mantenimiento vencido — su enlace no funciona'}
+                  </span>
+
+                  <span className="text-xs text-color-base-content/50 whitespace-nowrap">
+                    US${s.mantenimiento_mensual_usd || 500}/mes
+                  </span>
+
+                  <ActivarMantenimientoButton socioId={s.id} />
+                </div>
+              )
+            })}
           </div>
         ) : (
           <p className="text-sm text-color-base-content/60">Todavía no has creado ningún socio.</p>
