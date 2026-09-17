@@ -79,6 +79,14 @@ const SECCIONES_EQUIPO: Seccion[] = [
 ]
 
 /**
+ * Nombres que quedan afuera del menú de un cliente que entró por el enlace
+ * de un socio de marca blanca (acuerdo del 13 sep 2026): App de Ideas y
+ * Academia son cosas de la marca propia de Serving, no del servicio que
+ * contrató el socio. Réplicas tampoco entra en marca blanca.
+ */
+const NOMBRES_OCULTOS_MARCA_BLANCA = new Set(['App de Ideas', 'Academia', 'Mis réplicas'])
+
+/**
  * Lo que ve un socio de marca blanca. A propósito es UNA sola entrada:
  * el socio no debe ver ni el menú del cliente (árbol, cadena de valor,
  * etc. — eso es trabajo interno de Serving) ni el panel completo del
@@ -95,6 +103,7 @@ export function MenuLateral({
   onCerrar,
   esEquipo = false,
   esSocio = false,
+  esClienteMarcaBlanca = false,
 }: {
   abiertoEnMovil: boolean
   onCerrar: () => void
@@ -102,14 +111,23 @@ export function MenuLateral({
   esEquipo?: boolean
   /** true solo para un socio de marca blanca: reemplaza TODO el menú por el suyo. */
   esSocio?: boolean
+  /** true solo para un cliente final que entró por el enlace de un socio de marca blanca. */
+  esClienteMarcaBlanca?: boolean
 }) {
   const ruta = usePathname()
 
-  const secciones = esSocio
+  const seccionesBase = esSocio
     ? SECCIONES_SOCIO
     : esEquipo
       ? [...SECCIONES_CLIENTE, ...SECCIONES_EQUIPO]
       : SECCIONES_CLIENTE
+
+  const secciones = esClienteMarcaBlanca
+    ? seccionesBase.map((seccion) => ({
+        ...seccion,
+        items: seccion.items.filter((item) => !NOMBRES_OCULTOS_MARCA_BLANCA.has(item.nombre)),
+      }))
+    : seccionesBase
 
   const contenido = (
     <div className="flex h-full flex-col bg-color-base-200 text-color-base-content border-r border-color-base-300/40 shadow-[2px_0_12px_-8px_rgba(0,0,0,0.5)]">
