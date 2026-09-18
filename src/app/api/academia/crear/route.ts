@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     if (!nombreCliente || !correoCliente || !whatsapp || !curso) {
       return NextResponse.json({ error: 'Faltan datos obligatorios' }, { status: 400 })
     }
-    if (curso !== 'estructuracion' && curso !== 'formulacion') {
+    if (curso !== 'estructuracion' && curso !== 'formulacion' && curso !== 'mentoria') {
       return NextResponse.json({ error: 'Curso no reconocido' }, { status: 400 })
     }
 

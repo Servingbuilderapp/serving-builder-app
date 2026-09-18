@@ -149,7 +149,9 @@ export function VentaCursoClient({ curso }: { curso: Curso }) {
                   onChange={(e) => setFormData({ ...formData, aceptaTerminos: e.target.checked })}
                   className="mt-0.5"
                 />
-                Acepto que este es un pago único y que el acceso al curso queda ligado a mi correo.
+                {curso.slug === 'mentoria'
+                  ? 'Acepto que este es un pago único y que la Mentoría queda ligada a mi correo.'
+                  : 'Acepto que este es un pago único y que el acceso al curso queda ligado a mi correo.'}
               </label>
 
               {error && <p className="text-sm text-red-600">{error}</p>}
@@ -157,6 +159,19 @@ export function VentaCursoClient({ curso }: { curso: Curso }) {
               <GlowButton type="submit" className="w-full" disabled={loading || !pais}>
                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Continuar al pago'}
               </GlowButton>
+
+              {curso.slug === 'mentoria' && (
+                <a
+                  href={`https://wa.me/573227008727?text=${encodeURIComponent(
+                    'Hola, quiero información sobre la Mentoría de estructuración antes de pagar.'
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-center text-xs font-bold text-color-base-content/60 hover:underline"
+                >
+                  Prefiero hablar primero por WhatsApp
+                </a>
+              )}
             </form>
           </GlassCard>
         </div>
@@ -172,7 +187,8 @@ export function VentaCursoClient({ curso }: { curso: Curso }) {
             <div>
               <h1 className="text-xl font-black text-color-base-content">¡Ya casi!</h1>
               <p className="text-color-base-content/60 text-sm mt-1">
-                Haz el pago y envíanos el comprobante por WhatsApp para activar tu curso.
+                Haz el pago y envíanos el comprobante por WhatsApp para
+                {curso.slug === 'mentoria' ? ' arrancar tu Mentoría.' : ' activar tu curso.'}
               </p>
               {passwordTemporal && (
                 <p className="text-xs text-color-base-content/60 mt-2">

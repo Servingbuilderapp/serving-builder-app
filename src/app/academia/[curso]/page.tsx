@@ -8,6 +8,7 @@ import { academiaContenidoFormulacion } from '@/lib/academia/academiaContenidoFo
 import { VentaCursoClient } from '../VentaCursoClient'
 import { CursoAcademiaClient } from '../CursoAcademiaClient'
 import { FormulacionSlidesClient } from '../FormulacionSlidesClient'
+import { MentoriaConfirmadaClient } from '../MentoriaConfirmadaClient'
 
 export const dynamic = 'force-dynamic'
 
@@ -49,6 +50,13 @@ export default async function CursoAcademiaPage({
 
   if (curso.slug === 'estructuracion') {
     return <CursoAcademiaClient nombreCurso={curso.nombre} bloques={academiaContenido} />
+  }
+
+  // La Mentoría no tiene contenido para leer, como los cursos — es un
+  // servicio. Después de pagada, se muestra la confirmación de que el
+  // equipo va a contactar al cliente, en vez del lector de curso.
+  if (curso.slug === 'mentoria') {
+    return <MentoriaConfirmadaClient />
   }
 
   // curso.slug === 'formulacion'

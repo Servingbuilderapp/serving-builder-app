@@ -9,6 +9,7 @@ export const dynamic = 'force-dynamic'
 const NOMBRE_CURSO: Record<string, string> = {
   estructuracion: 'Entendiendo la Estructuración de Proyectos',
   formulacion: 'Entendiendo la Formulación de Proyectos',
+  mentoria: 'Mentoría de Estructuración',
 }
 
 export default async function AdminAcademiaPage() {
