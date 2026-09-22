@@ -25,7 +25,7 @@ const RELIEVE_BOTON_SUAVE =
 const RELIEVE_TARJETA =
   'shadow-[0_2px_6px_rgba(11,42,74,0.08),0_18px_44px_-18px_rgba(29,78,216,0.35)] hover:shadow-[0_4px_12px_rgba(11,42,74,0.12),0_28px_60px_-20px_rgba(29,78,216,0.5)] hover:-translate-y-1.5 transition-all duration-300'
 
-const TELEFONO_WHATSAPP = '573227008727'
+const TELEFONO_WHATSAPP = '573123335966'
 const WHATSAPP = `https://wa.me/${TELEFONO_WHATSAPP}?text=${encodeURIComponent(
   'Hola, quiero saber cómo conseguir financiación para mi proyecto.',
 )}`
@@ -439,7 +439,7 @@ export function EmpezarClient({ user }: EmpezarClientProps) {
             Serving Proyectos Estratégicos S.A.S.
           </p>
           <p className="text-[12.5px] text-[#5B6B84]">
-            servingproyectosgi@gmail.com · 322 700 8727
+            servingproyectosgi@gmail.com · 312 333 5966
           </p>
           <div className="mt-2 flex gap-4 text-[12px] text-[#5B6B84]">
             <Link href="/" className="hover:text-[#4F46E5]">
