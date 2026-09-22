@@ -2,7 +2,7 @@ import React from 'react'
 import { CheckCircle2, MessageCircle } from 'lucide-react'
 import { GlassCard } from '@/components/ui/GlassCard'
 
-const TELEFONO_WHATSAPP = '573227008727'
+const TELEFONO_WHATSAPP = '573123335966'
 const MENSAJE_WHATSAPP = 'Hola, ya pagué la Mentoría de Estructuración. Quiero arrancar.'
 const ENLACE_WHATSAPP = `https://wa.me/${TELEFONO_WHATSAPP}?text=${encodeURIComponent(MENSAJE_WHATSAPP)}`
 
