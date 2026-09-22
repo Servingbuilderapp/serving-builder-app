@@ -145,7 +145,7 @@ export interface GenerarWhatsappOptions {
 }
 
 /** WhatsApp de contacto público de Serving. */
-export const WHATSAPP_SERVING = '573227008727'
+export const WHATSAPP_SERVING = '573123335966'
 
 export function generarUrlWhatsappBloque2(options: GenerarWhatsappOptions): string {
   const { nombre, empresa, email, scorePreparacion, montoObjetivo, planMapeado } = options
