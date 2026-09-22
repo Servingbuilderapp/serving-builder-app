@@ -30,7 +30,7 @@ export function WhatsAppButton() {
 
   if (RUTAS_DEL_PANEL.some((r) => ruta === r || ruta.startsWith(`${r}/`))) return null
 
-  const phoneNumber = '573227008727'
+  const phoneNumber = '573123335966'
   const message = language === 'en' 
     ? 'Hello, I need support with Arquitectura Digital de Proyectos' 
     : 'Hola, necesito soporte con Arquitectura Digital de Proyectos'
