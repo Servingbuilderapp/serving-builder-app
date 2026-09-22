@@ -17,7 +17,7 @@ export function DashboardClient({ proyecto, nombreMostrar, subirDocumento, otros
   const mensajePortalReplica = proyecto
     ? `Hola, quiero información sobre el Portal Réplica para mi proyecto "${proyecto.nombre_iniciativa}".`
     : 'Hola, quiero información sobre el Portal Réplica.'
-  const portalReplicaWhatsappUrl = 'https://wa.me/573227008727?text=' + encodeURIComponent(mensajePortalReplica)
+  const portalReplicaWhatsappUrl = 'https://wa.me/573123335966?text=' + encodeURIComponent(mensajePortalReplica)
 
   return (
     <div className="w-full max-w-4xl mx-auto p-6 md:p-8 space-y-8 pb-12">
