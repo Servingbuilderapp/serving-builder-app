@@ -192,7 +192,7 @@ export function MenuLateral({
           ¿Necesitas ayuda?
           <br />
           <a
-            href="https://wa.me/573227008727"
+            href="https://wa.me/573123335966"
             target="_blank"
             rel="noopener noreferrer"
             className="font-semibold text-color-primary underline hover:brightness-110"
