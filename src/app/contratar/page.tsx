@@ -333,7 +333,7 @@ function ContratarContent() {
   }
 
   const mensajeWhatsapp = 'Hola, firme el contrato para el plan ' + plan.nombre + ' (proyecto ' + proyectoId + '). Aqui esta mi comprobante de pago.'
-  const mensajeWhatsappUrl = 'https://wa.me/573227008727?text=' + encodeURIComponent(mensajeWhatsapp)
+  const mensajeWhatsappUrl = 'https://wa.me/573123335966?text=' + encodeURIComponent(mensajeWhatsapp)
 
   if (debeElegirPlan) {
     return (
