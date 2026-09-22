@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Menu, Bell, HelpCircle, ChevronDown, LogOut, User as UserIcon, Settings } from 'lucide-react'
+import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 
 export type ProyectoResumen = {
   id: string
@@ -105,6 +106,8 @@ export function CabeceraPanel({
       </div>
 
       <div className="flex items-center gap-1.5 shrink-0">
+        <LanguageSwitcher className="hidden sm:block" />
+
         <button
           type="button"
           aria-label="Notificaciones"
