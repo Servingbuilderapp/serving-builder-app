@@ -64,7 +64,7 @@ export const COBRO_COLOMBIA: CobroColombia = {
     titular: 'Serving Proyectos Estratégicos SAS',
     nit: '901972451-7',
     llaves: [
-      { etiqueta: 'Celular', valor: '+57 322 700 8727' },
+      { etiqueta: 'Celular', valor: '+57 312 333 5966' },
       { etiqueta: 'Correo', valor: 'servingproyectosgi@gmail.com' },
     ],
   },
