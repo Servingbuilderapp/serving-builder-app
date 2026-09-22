@@ -65,8 +65,8 @@ const CIFRAS_CONTEXTO = [
   { valor: '9', claveTexto: 'w.cifras.idiomas' },
 ]
 
-const TELEFONO = '322 700 8727'
-const TELEFONO_WHATSAPP = '573227008727'
+const TELEFONO = '312 333 5966'
+const TELEFONO_WHATSAPP = '573123335966'
 const CORREO = 'servingproyectosgi@gmail.com'
 
 /* ========================================================================== */
