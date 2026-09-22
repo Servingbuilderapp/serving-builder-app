@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { Suspense, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { CheckCircle2, ShieldCheck, Loader2 } from 'lucide-react'
 import { GlowButton } from '@/components/ui/GlowButton'
 import { GlassCard } from '@/components/ui/GlassCard'
@@ -13,8 +14,15 @@ function formatoCOP(valor: number): string {
   return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(valor)
 }
 
-export default function MembresiaPage() {
-  const [nivelSlug, setNivelSlug] = useState<string | null>(null)
+function MembresiaContent() {
+  // Si llega ?nivel=explorador (o constructor / arquitecto) en la dirección,
+  // se abre directo esa membresía, sin pasar por la pantalla de "elige tu
+  // membresía" con las tres juntas — así el botón de cada tarjeta en la
+  // página pública lleva de una vez a la que se eligió.
+  const searchParams = useSearchParams()
+  const nivelInicial = searchParams.get('nivel')
+
+  const [nivelSlug, setNivelSlug] = useState<string | null>(nivelInicial)
   const [ciclo, setCiclo] = useState<'mensual' | 'anual'>('mensual')
   const [pais, setPais] = useState<'colombia' | 'internacional' | null>(null)
   const [step, setStep] = useState(1)
@@ -331,5 +339,13 @@ export default function MembresiaPage() {
         </GlassCard>
       </div>
     </div>
+  )
+}
+
+export default function MembresiaPage() {
+  return (
+    <Suspense fallback={null}>
+      <MembresiaContent />
+    </Suspense>
   )
 }
