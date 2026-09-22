@@ -76,7 +76,7 @@ export function DiagnosticoGratuito() {
   const getWhatsappLink = () => {
     if (!resultado) return '#'
     const mensaje = `Hola Arquitectura Digital, acabo de realizar mi diagnóstico gratuito para "${formData.nombreProyecto}". Obtuve ${resultado.scoreGeneral}% de viabilidad y quiero avanzar con la estructuración de mi proyecto.`
-    return `https://wa.me/573227008727?text=${encodeURIComponent(mensaje)}`
+    return `https://wa.me/573123335966?text=${encodeURIComponent(mensaje)}`
   }
 
   const descargarNotaConcepto = () => {
