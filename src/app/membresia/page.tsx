@@ -122,7 +122,7 @@ export default function MembresiaPage() {
 
   const mensajeWhatsapp =
     'Hola, me suscribí a la membresía ' + nivel.nombre + ' (' + ciclo + '), solicitud ' + membresiaId + '. Aquí está mi comprobante de pago.'
-  const mensajeWhatsappUrl = 'https://wa.me/573227008727?text=' + encodeURIComponent(mensajeWhatsapp)
+  const mensajeWhatsappUrl = 'https://wa.me/573123335966?text=' + encodeURIComponent(mensajeWhatsapp)
 
   return (
     <div className="min-h-screen bg-color-base-100 py-16 px-4">
