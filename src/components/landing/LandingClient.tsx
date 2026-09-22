@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import {
   ArrowRight,
-  ArrowUpRight,
   Play,
   Check,
   ChevronDown,
@@ -31,6 +30,7 @@ import {
   X,
 } from 'lucide-react'
 import { useTranslation } from '@/hooks/useTranslation'
+import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 
 /* ============================================================================
    BLOQUE DE CONFIGURACIÓN
@@ -225,8 +225,7 @@ const ESCALERA: Escalon[] = [
       'w.escalera.academia.i4',
     ],
     claveBoton: 'w.escalera.academia.boton',
-    href: `https://wa.me/${TELEFONO_WHATSAPP}?text=${encodeURIComponent('Hola, quiero información sobre la Academia de estructuración de proyectos.')}`,
-    externo: true,
+    href: '/academia',
     icono: BookOpen,
     color: 'text-[#B08D57]',
     fondo: 'bg-[#4C2032]/70',
@@ -292,15 +291,6 @@ const ESCALERA: Escalon[] = [
     borde: 'border-[#6E4A50]',
     boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
-]
-
-const CAMINOS = [
-  { icono: FileText, clave: 'w.caminos.estructurar', href: '/contratar', color: 'from-[#C9A46B] to-[#B08D57]' },
-  { icono: BookOpen, clave: 'w.caminos.aprender', href: '#servicios', color: 'from-[#C9A46B] to-[#B08D57]' },
-  { icono: Users, clave: 'w.caminos.acompanado', href: '#servicios', color: 'from-[#C9A46B] to-[#B08D57]' },
-  { icono: Briefcase, clave: 'w.caminos.delegar', href: '/contratar', color: 'from-[#C9A46B] to-[#B08D57]' },
-  { icono: GraduationCap, clave: 'w.caminos.membresias', href: '#membresias', color: 'from-[#C9A46B] to-[#B08D57]' },
-  { icono: RefreshCw, clave: 'w.caminos.replica', href: `https://wa.me/${TELEFONO_WHATSAPP}?text=${encodeURIComponent('Hola, ya presenté un proyecto y quiero saber si se puede replicar en otras convocatorias.')}`, color: 'from-[#C9A46B] to-[#B08D57]' },
 ]
 
 const DIAGNOSTICO_ENTREGA = [
@@ -515,6 +505,7 @@ export function LandingClient({ user }: LandingClientProps) {
           </nav>
 
           <div className="hidden md:flex items-center gap-3 shrink-0">
+            <LanguageSwitcher />
             {user ? (
               <Link
                 href="/dashboard"
@@ -562,7 +553,8 @@ export function LandingClient({ user }: LandingClientProps) {
                 {t(enlace.clave)}
               </a>
             ))}
-            <div className="pt-3 flex flex-col gap-2">
+            <div className="pt-3 flex flex-col gap-3">
+              <LanguageSwitcher className="self-start" />
               <a
                 href="/login"
                 className="h-11 inline-flex items-center justify-center rounded-lg border border-[#6E4A50] text-[#F3E7DC] text-sm font-semibold"
@@ -1007,6 +999,16 @@ export function LandingClient({ user }: LandingClientProps) {
                     >
                       {t(escalon.claveBoton)}
                     </a>
+                  ) : escalon.href.startsWith('#') ? (
+                    // Enlace a una sección de esta misma página: se usa <a> normal
+                    // en vez de <Link>, porque Link no hace scroll dentro de la
+                    // misma página cuando el destino es solo un "#ancla".
+                    <a
+                      href={escalon.href}
+                      className={`min-h-9 px-3 py-2 rounded-lg text-[12px] font-semibold inline-flex items-center justify-center text-center leading-tight ${RELIEVE_BOTON} ${escalon.boton}`}
+                    >
+                      {t(escalon.claveBoton)}
+                    </a>
                   ) : (
                     <Link
                       href={escalon.href}
@@ -1144,35 +1146,6 @@ export function LandingClient({ user }: LandingClientProps) {
           <p className="mt-8 text-center text-[12px] text-[#F3E7DC]/50 max-w-2xl mx-auto">
             {t('w.membresias.nota')}
           </p>
-        </div>
-      </section>
-
-      {/* ================= CAMINOS ================= */}
-      <section className="bg-[#4C2032] py-16 lg:py-20 border-y border-[#6E4A50]">
-        <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
-          <TituloSeccion
-            eyebrow={t('w.caminos.eyebrow')}
-            titulo={t('w.caminos.titulo')}
-            subtitulo={t('w.caminos.subtitulo')}
-          />
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
-            {CAMINOS.map(({ icono: Icono, clave, href, color }, i) => (
-              <Aparece key={clave} delay={i * 70}>
-              <Link
-                href={href}
-                className={`group flex items-center gap-4 rounded-2xl bg-[#3B1727] border border-[#6E4A50] p-5 hover:border-[#B08D57] ${RELIEVE_TARJETA}`}
-              >
-                <div className={`h-11 w-11 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center shrink-0 shadow-md`}>
-                  <Icono className="h-5 w-5 text-white" />
-                </div>
-                <span className="text-[14px] font-semibold text-[#F3E7DC] leading-snug flex-1">
-                  {t(clave)}
-                </span>
-                <ArrowUpRight className="h-4 w-4 text-[#F3E7DC]/50 group-hover:text-[#B08D57] shrink-0" />
-              </Link>
-              </Aparece>
-            ))}
-          </div>
         </div>
       </section>
 
