@@ -63,7 +63,7 @@ export function VentaCursoClient({ curso }: { curso: Curso }) {
 
   const mensajeWhatsapp =
     'Hola, compré el curso ' + curso.nombre + ', solicitud ' + compraId + '. Aquí está mi comprobante de pago.'
-  const mensajeWhatsappUrl = 'https://wa.me/573227008727?text=' + encodeURIComponent(mensajeWhatsapp)
+  const mensajeWhatsappUrl = 'https://wa.me/573123335966?text=' + encodeURIComponent(mensajeWhatsapp)
 
   if (step === 1) {
     return (
@@ -162,7 +162,7 @@ export function VentaCursoClient({ curso }: { curso: Curso }) {
 
               {curso.slug === 'mentoria' && (
                 <a
-                  href={`https://wa.me/573227008727?text=${encodeURIComponent(
+                  href={`https://wa.me/573123335966?text=${encodeURIComponent(
                     'Hola, quiero información sobre la Mentoría de estructuración antes de pagar.'
                   )}`}
                   target="_blank"
