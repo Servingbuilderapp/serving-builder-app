@@ -2,6 +2,7 @@ import React from 'react'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { obtenerSocioDeUsuario } from '@/lib/guardiaSocio'
+import { EditarMarcaSocio } from '@/components/panel/EditarMarcaSocio'
 
 export const dynamic = 'force-dynamic'
 
@@ -42,6 +43,12 @@ export default async function SocioPage() {
     .eq('socio_id', infoSocio.socioId)
     .order('created_at', { ascending: false })
 
+  const { data: marcaSocio } = await supabase
+    .from('socios')
+    .select('logo_url, color_primario')
+    .eq('id', infoSocio.socioId)
+    .maybeSingle<{ logo_url: string | null; color_primario: string | null }>()
+
   const ahora = new Date()
   const lista = proyectos || []
 
@@ -59,6 +66,8 @@ export default async function SocioPage() {
           Estado de tus proyectos. Para cualquier pregunta sobre un proyecto puntual, escríbenos por WhatsApp.
         </p>
       </div>
+
+      <EditarMarcaSocio logoUrlInicial={marcaSocio?.logo_url || null} colorInicial={marcaSocio?.color_primario || null} />
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="rounded-2xl border border-color-base-content/10 p-5">
