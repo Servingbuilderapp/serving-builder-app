@@ -541,10 +541,35 @@ export async function prepararPostulacion(
   //      propio formulario o su propia nota — separada de la nota general
   //      del proyecto, que ya se generó sola cuando la estructuración quedó
   //      lista.
-  // Ninguna de las dos puede tumbar la preparación de la postulación si
-  // falla: quedan solo como un aviso en el registro del servidor.
+  // Si el modelo falla al correr la Validación final, no se tumba la
+  // preparación — queda solo como un aviso en el registro del servidor,
+  // igual que antes (Parada 2, 26 sep 2026: PERO si sí corre y encuentra un
+  // VACÍO genuino —algo que la convocatoria pide y el proyecto no tiene en
+  // ningún lado—, eso sí frena de verdad: la postulación no puede quedar
+  // "Lista para radicar" hasta que se corrija el proyecto y se vuelva a
+  // preparar. Un párrafo flojo, en cambio, no frena nada: solo queda como
+  // sugerencia, porque no es un vacío, es contenido que ya existe).
+  let detenidaPorValidacionFinal = false
   try {
-    await correrValidacionFinal(supabase, proyectoId, postulacionId, proyecto, convocatoria)
+    const resultadoValidacion = await correrValidacionFinal(supabase, proyectoId, postulacionId, proyecto, convocatoria)
+    const vacios = (resultadoValidacion.hallazgos || []).filter((h) => h.tipo === 'vacio')
+    if (vacios.length > 0) {
+      detenidaPorValidacionFinal = true
+      const alertaVacios = `Validación final: la convocatoria pide ${vacios.length} cosa(s) que el proyecto todavía no tiene — ${vacios
+        .map((v) => v.descripcion)
+        .join(' · ')}`
+      const { error: errorFreno } = await supabase
+        .from('postulaciones')
+        .update({
+          estado: 'Preparando',
+          alertas: [alertas.join(' · '), alertaVacios].filter(Boolean).join(' · ') || null,
+          actualizada_en: new Date().toISOString(),
+        })
+        .eq('id', postulacionId)
+      if (errorFreno) {
+        console.error('[Motor 4] No se pudo dejar la postulación detenida por la validación final:', errorFreno)
+      }
+    }
   } catch (e) {
     console.error('[Motor 4] Error corriendo la validación final:', e)
   }
@@ -569,11 +594,13 @@ export async function prepararPostulacion(
     puntaje: paquete.evaluacion.total,
     veredicto: paquete.evaluacion.veredicto,
     corrida,
-    puedeRadicar,
+    puedeRadicar: puedeRadicar && !detenidaPorValidacionFinal,
     diasParaCierre,
-    mensaje: puedeRadicar
-      ? 'La postulación quedó lista para radicar.'
-      : 'La postulación quedó preparada, pero todavía no se puede radicar.',
+    mensaje: detenidaPorValidacionFinal
+      ? 'La postulación quedó detenida: la Validación final encontró algo que la convocatoria pide y el proyecto todavía no tiene. Corrígelo y vuelve a preparar la postulación.'
+      : puedeRadicar
+        ? 'La postulación quedó lista para radicar.'
+        : 'La postulación quedó preparada, pero todavía no se puede radicar.',
   }
 }
 
@@ -620,6 +647,29 @@ export async function registrarRadicacion(
 
   if ((postulacion.corrida || 1) < 2) {
     return { ok: false, mensaje: 'Falta la segunda corrida del evaluador antes de radicar.' }
+  }
+
+  // Defensa aparte de la Parada 2 (26 sep 2026): no basta con confiar en el
+  // estado guardado. Se vuelve a consultar aquí la última Validación final
+  // de esta postulación, por si el proyecto cambió después de la última vez
+  // que se preparó. Si todavía hay un vacío genuino sin corregir, no se deja
+  // radicar aunque el checklist y las dos corridas ya estén completas.
+  const { data: ultimaValidacion } = await supabase
+    .from('validaciones_finales')
+    .select('hallazgos_json')
+    .eq('postulacion_id', postulacionId)
+    .order('corrida', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  const vaciosPendientes = ((ultimaValidacion?.hallazgos_json || []) as { tipo?: string }[]).filter(
+    (h) => h?.tipo === 'vacio',
+  )
+  if (vaciosPendientes.length > 0) {
+    return {
+      ok: false,
+      mensaje: `No se puede radicar: la Validación final encontró ${vaciosPendientes.length} vacío(s) sin corregir frente a esta convocatoria. Corrige el proyecto y vuelve a preparar la postulación.`,
+    }
   }
 
   const { error } = await supabase
