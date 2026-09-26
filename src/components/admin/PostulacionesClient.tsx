@@ -11,6 +11,7 @@ export type Requisito = {
   requisito: string
   tipo: string
   obligatorio: boolean
+  puntaje: number | null
   cumplido: boolean
   responsable: string | null
   nota: string | null
@@ -324,6 +325,12 @@ export function PostulacionesClient({
                       <p className="mt-1 text-[11.5px] text-[#F3E7DC]/45">
                         Marca cada requisito cuando el documento o condición ya esté listo. El equipo deja
                         listos los documentos del checklist; no radica por su cuenta.
+                        {p.requisitos.some((r) => r.puntaje) ? (
+                          <span className="block mt-0.5">
+                            Quedan ordenados de mayor a menor puntaje de la convocatoria — empieza por los de
+                            arriba, pero hay que dejar listos todos para poder radicar.
+                          </span>
+                        ) : null}
                       </p>
                       <ul className="mt-2 divide-y divide-[#6E4A50]/40">
                         {p.requisitos.map((r) => (
@@ -349,6 +356,11 @@ export function PostulacionesClient({
                             </button>
                             <div className="min-w-0 flex-1">
                               <span className="text-[13px] text-[#F3E7DC]">{r.requisito}</span>
+                              {r.puntaje ? (
+                                <span className="ml-2 rounded-full bg-[#B08D57]/20 px-1.5 py-0.5 text-[10.5px] font-semibold text-[#D9B77C]">
+                                  vale {r.puntaje} pts
+                                </span>
+                              ) : null}
                               {!r.obligatorio ? (
                                 <span className="ml-2 text-[11px] text-[#F3E7DC]/50">(opcional)</span>
                               ) : null}
