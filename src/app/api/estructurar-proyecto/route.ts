@@ -318,12 +318,29 @@ export async function POST(req: NextRequest) {
           .join("\n\n")
       : "";
 
+    // Regla de extensión (26 sep 2026): el documento final debe salir SIEMPRE
+    // como un proyecto profesional completo (entre 75 y 150 páginas en
+    // total), sin importar si el cliente subió un documento de origen corto
+    // o largo. Antes no había piso ni techo: el tamaño dependía solo de
+    // cuánto generara el modelo, y a veces salía un proyecto de 3-10
+    // páginas. El cálculo es aproximado (~500 palabras por página) y se
+    // reparte entre los pasos que de verdad queden completos.
+    const PALABRAS_POR_PAGINA = 500;
+    const palabrasMinimasTotal = 75 * PALABRAS_POR_PAGINA;
+    const palabrasMaximasTotal = 150 * PALABRAS_POR_PAGINA;
+    const palabrasMinPorPaso = Math.round(palabrasMinimasTotal / pasos.length);
+    const palabrasMaxPorPaso = Math.round(palabrasMaximasTotal / pasos.length);
+
+    const instruccionExtension = `
+REGLA DE EXTENSIÓN (obligatoria para todo paso que quede "completo"): este es un documento profesional real, no un resumen ni un borrador telegrafiado. Cada paso completo debe desarrollarse con profundidad técnica — contexto, justificación, implicaciones, conexión con el resto del proyecto — apuntando a algo entre ${palabrasMinPorPaso} y ${palabrasMaxPorPaso} palabras (así, entre los ${pasos.length} pasos, el documento completo queda entre 75 y 150 páginas en total). Un paso puede quedar más corto que eso SOLO si de verdad no hay más información real que desarrollar sin inventar — nunca alargues con relleno, repetición de la misma idea con otras palabras, ni cifras o datos que el cliente no dio: la regla de "no inventar nada" sigue por encima de la regla de extensión.
+`;
+
     const instruccionFormato = `
 ${hayContenidoPrevio ? `Este proyecto YA tiene contenido estructurado previamente. Aquí está lo que ya existe:\n\n${resumenContenidoPrevio}\n\nEl documento o texto nuevo que recibes a continuación es INFORMACIÓN COMPLEMENTARIA para completar lo que faltaba de ESE MISMO proyecto. Antes de usarlo, verifica que el contenido nuevo sea coherente con el proyecto ya existente (mismo tema, mismo problema, misma población). Si el contenido nuevo parece pertenecer a un proyecto completamente distinto y no tiene relación con lo ya estructurado, NO lo mezcles: en vez de eso, para el o los pasos afectados, responde con estado "incompleto" y una pregunta que diga textualmente: "La información recibida no parece corresponder a este proyecto. Por favor confirma o sube información relacionada con el mismo proyecto." No inventes conexión donde no la hay.\n\n` : ""}Analiza el documento y complétalo contra esta lista de ${pasos.length} pasos de estructuración:
 ${pasos.map((p) => `- id ${p.id}: ${p.nombre_paso}`).join("\n")}
 
 Para CADA paso, responde si hay información suficiente para desarrollarlo completo, o si falta información esencial.
-
+${instruccionExtension}
 Responde ÚNICAMENTE con un JSON válido, sin texto antes ni después, con este formato exacto:
 {
   "pasos": [
