@@ -8,6 +8,7 @@ import {
   type PostulacionCliente,
   type EstadoPostulacion,
 } from '@/components/panel/ConvocatoriasCliente'
+import { ElegirConvocatorias, type ConvocatoriaPendiente } from '@/components/panel/ElegirConvocatorias'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -97,16 +98,49 @@ export default async function MisConvocatoriasPage() {
 
   const proyectoId = String(proyecto.id)
 
+  // "Parada 1" (26 sep 2026): lo que el Motor 2 encuentra ya no pasa directo
+  // al encaje. Primero se le muestra al cliente para que elija cuál o cuáles
+  // seguir (eleccion_cliente = null, pendiente). Solo lo que el cliente ya
+  // eligió (o que el reloj de 3 días eligió por él) entra a la lista de
+  // abajo con su análisis de encaje.
+  const { data: filasPendientes } = await supabase
+    .from('convocatorias_candidatas_proyecto')
+    .select('id, nombre, entidad, tipo, fecha_cierre, monto, fuente_oficial')
+    .eq('id_proyecto', proyectoId)
+    .eq('seleccionada', true)
+    .is('eleccion_cliente', null)
+    .order('lote', { ascending: false })
+    .order('creado_en', { ascending: false })
+
+  const pendientes: ConvocatoriaPendiente[] = (
+    (filasPendientes || []) as FilaConvocatoria[]
+  ).map((c) => ({
+    id: String(c.id),
+    nombre: String(c.nombre || 'Convocatoria sin nombre'),
+    entidad: c.entidad || null,
+    tipo: c.tipo || null,
+    fechaCierre: c.fecha_cierre || null,
+    monto: c.monto || null,
+    fuenteOficial: c.fuente_oficial || null,
+  }))
+
   const { data: filas } = await supabase
     .from('convocatorias_candidatas_proyecto')
     .select('id, nombre, entidad, tipo, fecha_cierre, monto, fuente_oficial')
     .eq('id_proyecto', proyectoId)
     .eq('seleccionada', true)
+    .eq('eleccion_cliente', 'elegida')
     .order('lote', { ascending: false })
     .order('creado_en', { ascending: false })
 
   const candidatas = (filas || []) as FilaConvocatoria[]
-  if (candidatas.length === 0) return <ConvocatoriasEnBusqueda />
+
+  if (candidatas.length === 0) {
+    if (pendientes.length > 0) {
+      return <ElegirConvocatorias proyectoId={proyectoId} convocatorias={pendientes} />
+    }
+    return <ConvocatoriasEnBusqueda />
+  }
 
   const { data: filasEncaje } = await supabase
     .from('encajes_convocatoria_proyecto')
@@ -166,6 +200,17 @@ export default async function MisConvocatoriasPage() {
       postulacion,
     }
   })
+
+  if (pendientes.length > 0) {
+    return (
+      <div className="px-4 pt-6 lg:px-6">
+        <ElegirConvocatorias proyectoId={proyectoId} convocatorias={pendientes} />
+        <div className="-mx-4 lg:-mx-6">
+          <ConvocatoriasCliente convocatorias={convocatorias} />
+        </div>
+      </div>
+    )
+  }
 
   return <ConvocatoriasCliente convocatorias={convocatorias} />
 }
