@@ -9,6 +9,10 @@
       "schedule": "0 13 * * *"
     },
     {
+      "path": "/api/revisar-eleccion-convocatorias-vencida",
+      "schedule": "0 14 * * *"
+    },
+    {
       "path": "/api/centinela/leer-alertas",
       "schedule": "0 12 * * *"
     }
