@@ -29,6 +29,14 @@ export type RequisitoPostulacion = {
   tipo: 'documento' | 'formulario' | 'condicion'
   obligatorio: boolean
   nota: string
+  // Cuántos puntos vale este requisito EN LA MATRIZ DE EVALUACIÓN DE LA
+  // CONVOCATORIA (no en la matriz de 100 interna) — solo cuando los
+  // términos de referencia de verdad reparten puntos por requisito o
+  // criterio. Si no lo dicen, queda en null: nunca se inventa un número.
+  // Sirve para ordenar el checklist con lo que más pesa primero, aunque
+  // TODOS los requisitos —tengan puntaje o no— siguen siendo obligatorios
+  // por igual para poder radicar (ver `puedeRadicar` más abajo).
+  puntaje: number | null
 }
 
 export type EvaluacionPostulacion = {
@@ -245,9 +253,11 @@ CONVOCATORIA
 - Términos de referencia: ${convocatoria.terminosReferencia || 'sin dato'}
 - Enlace oficial: ${convocatoria.fuenteOficial || 'sin enlace'}
 
+4. Si los términos de referencia o los requisitos conocidos reparten puntos por requisito o por criterio de evaluación, pon ese número en "puntaje" para cada uno. Si la convocatoria no reparte puntos así, o no tienes ese dato, deja "puntaje": null — PROHIBIDO inventar un número aquí también.
+
 DEVUELVE ÚNICAMENTE UN JSON, sin explicaciones y sin marcas de código:
 {
-  "requisitos": [{ "requisito": "...", "tipo": "documento|formulario|condicion", "obligatorio": true, "nota": "qué falta o dónde se consigue" }],
+  "requisitos": [{ "requisito": "...", "tipo": "documento|formulario|condicion", "obligatorio": true, "nota": "qué falta o dónde se consigue", "puntaje": 15 }],
   "adaptaciones": [{ "que_cambia": "...", "por_que": "la convocatoria lo exige porque..." }],
   "carta_intencion": "carta formal de una página dirigida a la entidad, en el idioma de la convocatoria",
   "evaluacion": {
@@ -292,12 +302,16 @@ export async function prepararPaquete(
 
   const requisitos: RequisitoPostulacion[] = (Array.isArray(datos.requisitos) ? datos.requisitos : [])
     .slice(0, 30)
-    .map((r: any) => ({
-      requisito: texto(r?.requisito),
-      tipo: ['documento', 'formulario', 'condicion'].includes(r?.tipo) ? r.tipo : 'documento',
-      obligatorio: r?.obligatorio !== false,
-      nota: texto(r?.nota),
-    }))
+    .map((r: any) => {
+      const puntaje = Number(r?.puntaje)
+      return {
+        requisito: texto(r?.requisito),
+        tipo: ['documento', 'formulario', 'condicion'].includes(r?.tipo) ? r.tipo : 'documento',
+        obligatorio: r?.obligatorio !== false,
+        nota: texto(r?.nota),
+        puntaje: Number.isFinite(puntaje) && puntaje > 0 ? puntaje : null,
+      }
+    })
     .filter((r: RequisitoPostulacion) => r.requisito.length > 3)
 
   const adaptaciones = (Array.isArray(datos.adaptaciones) ? datos.adaptaciones : [])
@@ -447,12 +461,21 @@ export async function prepararPostulacion(
     ((marcados || []) as any[]).map((r) => [r.requisito.toLowerCase().trim(), r]),
   )
 
-  const filasRequisitos = paquete.requisitos.map((r, indice) => {
+  // Orden del checklist: primero lo que más puntos vale en la convocatoria
+  // (el requisito con puntaje más alto queda de primero), después lo que no
+  // tiene puntaje asociado, en el mismo orden en que lo devolvió el modelo.
+  // Esto es solo para saber en qué concentrarse primero — NO cambia que
+  // absolutamente todos los requisitos, tengan puntaje o no, se tengan que
+  // cumplir para poder radicar (eso sigue igual, ver `checklistCompleto`).
+  const requisitosOrdenados = [...paquete.requisitos].sort((a, b) => (b.puntaje ?? -1) - (a.puntaje ?? -1))
+
+  const filasRequisitos = requisitosOrdenados.map((r, indice) => {
     const previo = yaCumplidos.get(r.requisito.toLowerCase().trim())
     return {
       requisito: r.requisito,
       tipo: r.tipo,
       obligatorio: r.obligatorio,
+      puntaje: r.puntaje,
       cumplido: Boolean(previo?.cumplido),
       responsable: previo?.responsable || null,
       nota: previo?.nota || r.nota || null,
