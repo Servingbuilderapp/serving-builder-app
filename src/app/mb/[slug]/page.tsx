@@ -24,9 +24,17 @@ export default async function PortalSocioPage({ params }: { params: Promise<{ sl
 
   const { data: socio } = await supabaseAdmin
     .from('socios')
-    .select('id, nombre, marca, activo, mantenimiento_pagado_hasta')
+    .select('id, nombre, marca, activo, mantenimiento_pagado_hasta, logo_url, color_primario')
     .eq('slug', slug)
-    .maybeSingle<{ id: string; nombre: string; marca: string | null; activo: boolean | null; mantenimiento_pagado_hasta: string | null }>()
+    .maybeSingle<{
+      id: string
+      nombre: string
+      marca: string | null
+      activo: boolean | null
+      mantenimiento_pagado_hasta: string | null
+      logo_url: string | null
+      color_primario: string | null
+    }>()
 
   const hoy = new Date().toISOString().slice(0, 10)
   const activo = !!socio && !!socio.activo && !!socio.mantenimiento_pagado_hasta && socio.mantenimiento_pagado_hasta >= hoy
@@ -44,5 +52,12 @@ export default async function PortalSocioPage({ params }: { params: Promise<{ sl
     )
   }
 
-  return <FormularioIngresoSocio slug={slug} nombreSocio={socio.marca || socio.nombre} />
+  return (
+    <FormularioIngresoSocio
+      slug={slug}
+      nombreSocio={socio.marca || socio.nombre}
+      logoUrl={socio.logo_url}
+      colorPrimario={socio.color_primario}
+    />
+  )
 }
