@@ -50,7 +50,7 @@ export default async function PostulacionesPage({
   const { data: requisitos } = ids.length
     ? await supabase
         .from('postulacion_requisitos')
-        .select('id, postulacion_id, requisito, tipo, obligatorio, cumplido, responsable, nota')
+        .select('id, postulacion_id, requisito, tipo, obligatorio, puntaje, cumplido, responsable, nota')
         .in('postulacion_id', ids)
         .order('orden', { ascending: true })
     : { data: [] as FilaRequisito[] }
