@@ -11,7 +11,24 @@ import React, { useState } from 'react'
  * Los dos paquetes SÍ se explican en lo que hacen (días, cuántas
  * convocatorias), porque eso sí define cómo se va a trabajar su proyecto.
  */
-export function FormularioIngresoSocio({ slug, nombreSocio }: { slug: string; nombreSocio: string }) {
+export function FormularioIngresoSocio({
+  slug,
+  nombreSocio,
+  logoUrl,
+  colorPrimario,
+}: {
+  slug: string
+  nombreSocio: string
+  logoUrl?: string | null
+  colorPrimario?: string | null
+}) {
+  // El color del socio pisa el color de Serving solo dentro de esta
+  // pantalla, usando la misma variable que ya usan las clases
+  // bg-color-primary / text-color-primary / border-color-primario en todo
+  // el producto — así no hay que tocar cada clase, una por una.
+  const estiloMarca = colorPrimario
+    ? ({ ['--color-color-primary' as string]: colorPrimario, ['--color-primary' as string]: colorPrimario } as React.CSSProperties)
+    : undefined
   const [nombreCliente, setNombreCliente] = useState('')
   const [correoCliente, setCorreoCliente] = useState('')
   const [whatsapp, setWhatsapp] = useState('')
@@ -52,7 +69,7 @@ export function FormularioIngresoSocio({ slug, nombreSocio }: { slug: string; no
 
   if (resultado) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#F4F7FC] p-6">
+      <div className="min-h-screen flex items-center justify-center bg-[#F4F7FC] p-6" style={estiloMarca}>
         <div className="max-w-md w-full rounded-2xl border border-[#0F172A]/10 bg-white p-8 text-center space-y-4">
           <h1 className="text-lg font-bold text-[#0F172A]">¡Listo! Tu proyecto quedó registrado</h1>
           <p className="text-sm text-[#0F172A]/70">
@@ -82,9 +99,13 @@ export function FormularioIngresoSocio({ slug, nombreSocio }: { slug: string; no
   }
 
   return (
-    <div className="min-h-screen bg-[#F4F7FC] p-6 flex items-center justify-center">
+    <div className="min-h-screen bg-[#F4F7FC] p-6 flex items-center justify-center" style={estiloMarca}>
       <div className="max-w-lg w-full rounded-2xl border border-[#0F172A]/10 bg-white p-8 space-y-5">
         <div>
+          {logoUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={logoUrl} alt={nombreSocio} className="h-10 max-w-[220px] object-contain mb-2" />
+          ) : null}
           <h1 className="text-xl font-bold text-[#0F172A]">{nombreSocio}</h1>
           <p className="text-sm text-[#0F172A]/60 mt-1">
             Cuéntanos de tu proyecto para empezar a estructurarlo y buscar financiación.
