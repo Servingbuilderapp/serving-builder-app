@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { after } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { claveDeConvocatoria, guardarEnBiblioteca, leerBibliotecaParaPrompt } from "@/lib/bibliotecaConvocatorias";
-import { motorAutorizado, cabecerasInternas } from "@/lib/candadoMotores";
+import { motorAutorizado } from "@/lib/candadoMotores";
 
 // El motor puede tardar minutos: sin esto Vercel lo corta antes de terminar.
 export const maxDuration = 300;
@@ -397,6 +396,12 @@ EL MAPA DE LA FINANCIACIÓN (obligatorio en cada ficha, seleccionada o descartad
 
   // La clasificación del mapa vive en la biblioteca, no en la tabla de
   // candidatas: si se cuela aquí, el insert falla por columna inexistente.
+  //
+  // Decisión del dueño (26 sep 2026, "Parada 1"): una convocatoria seleccionada
+  // por el Motor 2 ya no pasa directo al Motor 3. Primero se le muestra al
+  // cliente para que elija cuál o cuáles quiere seguir. `eleccion_cliente`
+  // empieza en null (pendiente de elegir) y `disponible_para_cliente_desde`
+  // marca desde cuándo puede elegir, para poder contar los 3 días de espera.
   const conFicha = (c: any, seleccionada: boolean) => {
     const { tipo_financiador, ambito, ...resto } = c || {};
     void tipo_financiador;
@@ -407,6 +412,8 @@ EL MAPA DE LA FINANCIACIÓN (obligatorio en cada ficha, seleccionada o descartad
       lote: numeroLote,
       seleccionada,
       biblioteca_id: fichasBiblioteca.get(claveDeConvocatoria(c?.nombre || "", c?.entidad || "")) || null,
+      eleccion_cliente: null,
+      disponible_para_cliente_desde: seleccionada ? new Date().toISOString() : null,
     };
   };
 
@@ -485,21 +492,12 @@ async function ejecutarBusquedaMasiva() {
   };
 }
 
-function dispararEncajesEnSegundoPlano(origen: string, idsSeleccionadas: string[]) {
-  for (const id_convocatoria of idsSeleccionadas) {
-    after(async () => {
-      try {
-        await fetch(`${origen}/api/analizar-encaje`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", ...cabecerasInternas() },
-          body: JSON.stringify({ id_convocatoria }),
-        });
-      } catch (e) {
-        console.error("Error disparando Motor 3 desde buscar-convocatorias:", e);
-      }
-    });
-  }
-}
+// Decisión del dueño (26 sep 2026, "Parada 1"): el Motor 3 (encaje) ya NO se
+// dispara automáticamente al terminar esta búsqueda. Ahora espera a que el
+// cliente elija cuáles convocatorias le interesan seguir, desde
+// /api/elegir-convocatoria, o a que pasen 3 días sin que el cliente decida,
+// caso en el que /api/revisar-eleccion-convocatorias-vencida elige por él.
+// Por eso ya no hay ningún disparo a /api/analizar-encaje en este archivo.
 
 export async function POST(req: NextRequest) {
   try {
@@ -513,9 +511,6 @@ export async function POST(req: NextRequest) {
     }
 
     const resultado = await ejecutarBusquedaConvocatorias(id_proyecto);
-    if (resultado.idsSeleccionadas.length > 0) {
-      dispararEncajesEnSegundoPlano(req.nextUrl.origin, resultado.idsSeleccionadas);
-    }
     return NextResponse.json(resultado.body, { status: resultado.status });
   } catch (err: any) {
     console.error("Error en Motor 2 (buscar-convocatorias, POST):", err);
@@ -543,16 +538,10 @@ export async function GET(req: NextRequest) {
     if (!id_proyecto) {
       // Sin id_proyecto en la URL = lo está llamando el cron job semanal, no una prueba manual.
       const resultadoMasivo = await ejecutarBusquedaMasiva();
-      for (const grupo of resultadoMasivo.idsSeleccionadasPorProyecto || []) {
-        dispararEncajesEnSegundoPlano(req.nextUrl.origin, grupo.idsSeleccionadas);
-      }
       return NextResponse.json(resultadoMasivo.body, { status: resultadoMasivo.status });
     }
 
     const resultado = await ejecutarBusquedaConvocatorias(id_proyecto);
-    if (resultado.idsSeleccionadas.length > 0) {
-      dispararEncajesEnSegundoPlano(req.nextUrl.origin, resultado.idsSeleccionadas);
-    }
     return NextResponse.json(resultado.body, { status: resultado.status });
   } catch (err: any) {
     console.error("Error en Motor 2 (buscar-convocatorias, GET):", err);
