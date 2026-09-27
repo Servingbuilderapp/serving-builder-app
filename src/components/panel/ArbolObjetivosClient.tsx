@@ -39,11 +39,19 @@ type Props = {
   pares: ParEspejo[]
 }
 
-const SOMBRA = 'shadow-[0_1px_2px_rgba(11,42,74,0.06),0_8px_24px_-14px_rgba(11,42,74,0.20)]'
-const TINTA = 'text-[#0B2A4A]'
-const TINTA_SUAVE = 'text-[#5B6B84]'
-const TINTA_TENUE = 'text-[#7C8CA5]'
-const BORDE = 'border-[#E4EAF3]'
+const RELIEVE_TARJETA =
+  'shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]'
+const BOTON_DORADO =
+  'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#2E0E1A] border border-[#7A5A2E]/60 ' +
+  'shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_4px_0_#7A5A2E,0_12px_20px_-6px_rgba(20,5,10,0.55)] ' +
+  'hover:brightness-105 hover:-translate-y-0.5 ' +
+  'active:translate-y-[3px] active:shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_1px_0_#7A5A2E,0_4px_10px_-4px_rgba(20,5,10,0.5)] ' +
+  'disabled:translate-y-0 disabled:hover:translate-y-0 disabled:brightness-90 disabled:shadow-none ' +
+  'transition-all duration-150'
+const TINTA = 'text-[#F3E7DC]'
+const TINTA_SUAVE = 'text-[#F3E7DC]/70'
+const TINTA_TENUE = 'text-[#F3E7DC]/50'
+const BORDE = 'border-[#6E4A50]'
 
 const TITULO_BLOQUE: Record<string, { titulo: string; se_convierte_en: string; ayuda: string }> = {
   EFECTO_INDIRECTO: {
@@ -82,7 +90,7 @@ const ORDEN_BLOQUES = [
 ]
 
 function Tarjeta({ children, className = '' }: { children: React.ReactNode; className?: string }) {
-  return <div className={`rounded-2xl border ${BORDE} bg-white ${SOMBRA} ${className}`}>{children}</div>
+  return <div className={`rounded-2xl border ${BORDE} bg-[#4C2032] ${RELIEVE_TARJETA} ${className}`}>{children}</div>
 }
 
 export function ArbolObjetivosClient({
@@ -187,7 +195,7 @@ export function ArbolObjetivosClient({
 
   if (pares.length === 0) {
     return (
-      <div className="mx-auto max-w-2xl px-4 py-16">
+      <div className="min-h-full bg-[#54142B] mx-auto max-w-2xl px-4 py-16">
         <Tarjeta className="p-8 text-center">
           <h1 className={`text-xl font-extrabold ${TINTA}`}>Todavía no hay árbol de problemas</h1>
           <p className={`mt-3 text-[14px] leading-relaxed ${TINTA_SUAVE}`}>
@@ -195,7 +203,7 @@ export function ArbolObjetivosClient({
           </p>
           <Link
             href={`/admin/proyectos/${proyectoId}/arbol`}
-            className="mt-5 inline-flex items-center gap-2 rounded-xl bg-gradient-to-b from-[#2563EB] to-[#1D4ED8] px-4 py-2.5 text-[13px] font-bold text-white"
+            className={`mt-5 inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-[13px] font-extrabold ${BOTON_DORADO}`}
           >
             Ir al árbol de problemas <ArrowRight className="h-4 w-4" />
           </Link>
@@ -205,11 +213,11 @@ export function ArbolObjetivosClient({
   }
 
   return (
-    <div className="mx-auto max-w-[1180px] px-4 py-6 sm:px-6">
+    <div className="min-h-full bg-[#54142B] mx-auto max-w-[1180px] px-4 py-6 sm:px-6">
       <header className="mb-5">
         <Link
           href={`/admin/proyectos/${proyectoId}/arbol`}
-          className={`mb-2 inline-flex items-center gap-1.5 text-[12px] font-semibold ${TINTA_SUAVE} hover:text-[#1D4ED8]`}
+          className={`mb-2 inline-flex items-center gap-1.5 text-[12px] font-semibold ${TINTA_SUAVE} hover:text-[#C9A46B]`}
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Volver al árbol de problemas
         </Link>
@@ -217,7 +225,7 @@ export function ArbolObjetivosClient({
           <h1 className={`text-[19px] font-extrabold uppercase tracking-tight ${TINTA}`}>
             Árbol de objetivos
           </h1>
-          <span className="rounded-full bg-[#0B2A4A] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
+          <span className="rounded-full bg-[#3B1727] border border-[#6E4A50] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#C9A46B]">
             Interno
           </span>
         </div>
@@ -231,19 +239,19 @@ export function ArbolObjetivosClient({
         <div
           className={`mb-4 rounded-xl border px-4 py-3 text-[13px] font-medium ${
             aviso.ok
-              ? 'border-[#9FD9BC] bg-[#DCF3E6] text-[#186A46]'
-              : 'border-[#F0AFAF] bg-[#FBE3E3] text-[#9B2C2C]'
+              ? 'border-[#7A8B6F]/40 bg-[#7A8B6F]/15 text-[#A9BC9C]'
+              : 'border-[#C0604A]/40 bg-[#C0604A]/15 text-[#E0917E]'
           }`}
           role="status"
         >
-          {aviso.texto}
+          {aviso.text}
         </div>
       ) : null}
 
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
         <div>
           <Tarjeta className="p-4 sm:p-5">
-            <div className="mb-4 flex flex-wrap items-center gap-3 rounded-xl bg-[#F5F9FF] p-3">
+            <div className="mb-4 flex flex-wrap items-center gap-3 rounded-xl bg-[#3B1727] p-3">
               <div className="flex items-center gap-2">
                 <label className={`text-[11px] font-bold uppercase tracking-wider ${TINTA_TENUE}`}>
                   Verbo del objetivo general
@@ -251,7 +259,7 @@ export function ArbolObjetivosClient({
                 <select
                   value={verbo}
                   onChange={(e) => setVerbo(e.target.value)}
-                  className={`rounded-lg border ${BORDE} bg-white px-2.5 py-1.5 text-[12px] ${TINTA} focus:outline-none focus:ring-2 focus:ring-[#1D4ED8]/25`}
+                  className={`rounded-lg border ${BORDE} bg-[#54142B] px-2.5 py-1.5 text-[12px] ${TINTA} focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/25`}
                 >
                   {VERBOS_OBJETIVO.map((v) => (
                     <option key={v} value={v}>
@@ -263,7 +271,7 @@ export function ArbolObjetivosClient({
               <button
                 type="button"
                 onClick={proponerVacios}
-                className={`inline-flex items-center gap-2 rounded-xl border border-[#BCD4F5] bg-white px-3 py-1.5 text-[12px] font-bold text-[#1D4ED8] transition hover:-translate-y-px`}
+                className="inline-flex items-center gap-2 rounded-xl border border-[#B08D57]/40 bg-[#3B1727] px-3 py-1.5 text-[12px] font-bold text-[#C9A46B] transition hover:-translate-y-px"
               >
                 <Sparkles className="h-3.5 w-3.5" /> Proponer los que están vacíos
               </button>
@@ -280,8 +288,8 @@ export function ArbolObjetivosClient({
                     <h3 className={`text-[12px] font-bold uppercase tracking-wider ${TINTA}`}>
                       {info.titulo}
                     </h3>
-                    <ArrowRight className="h-3 w-3 text-[#A9B6C8]" />
-                    <span className="text-[12px] font-semibold text-[#1D4ED8]">
+                    <ArrowRight className="h-3 w-3 text-[#F3E7DC]/40" />
+                    <span className="text-[12px] font-semibold text-[#C9A46B]">
                       {info.se_convierte_en}
                     </span>
                     <p className={`text-[12px] ${TINTA_TENUE}`}>{info.ayuda}</p>
@@ -291,7 +299,7 @@ export function ArbolObjetivosClient({
                     {delBloque.map((par) => (
                       <div
                         key={par.problemaId}
-                        className="grid gap-2.5 rounded-xl border border-[#EEF2F8] bg-[#FAFCFF] p-3 md:grid-cols-2"
+                        className="grid gap-2.5 rounded-xl border border-[#6E4A50] bg-[#3B1727] p-3 md:grid-cols-2"
                       >
                         <div>
                           <span
@@ -313,7 +321,7 @@ export function ArbolObjetivosClient({
                             <button
                               type="button"
                               onClick={() => proponerUno(par)}
-                              className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#1D4ED8] hover:underline"
+                              className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#C9A46B] hover:underline"
                             >
                               <Sparkles className="h-3 w-3" /> Proponer
                             </button>
@@ -323,7 +331,7 @@ export function ArbolObjetivosClient({
                             onChange={(e) => cambiar(par.problemaId, e.target.value)}
                             rows={2}
                             placeholder="Escribe aquí el espejo en positivo…"
-                            className={`w-full resize-none rounded-lg border ${BORDE} bg-white px-2.5 py-2 text-[13px] leading-snug ${TINTA} placeholder:text-[#A9B6C8] focus:outline-none focus:ring-2 focus:ring-[#1D4ED8]/25`}
+                            className={`w-full resize-none rounded-lg border ${BORDE} bg-[#54142B] px-2.5 py-2 text-[13px] leading-snug ${TINTA} placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/25`}
                           />
                         </div>
                       </div>
@@ -333,12 +341,12 @@ export function ArbolObjetivosClient({
               )
             })}
 
-            <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-[#EEF2F8] pt-4">
+            <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-[#6E4A50] pt-4">
               <button
                 type="button"
                 onClick={alGuardar}
                 disabled={guardando}
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-b from-[#2563EB] to-[#1D4ED8] px-4 py-2.5 text-[13px] font-bold text-white shadow-[0_1px_0_rgba(255,255,255,0.25)_inset,0_6px_16px_-8px_rgba(29,78,216,0.9)] transition hover:-translate-y-px disabled:opacity-60 disabled:hover:translate-y-0"
+                className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-[13px] font-extrabold disabled:opacity-70 ${BOTON_DORADO}`}
               >
                 {guardando ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                 {guardando ? 'Guardando…' : 'Guardar los objetivos'}
@@ -361,7 +369,7 @@ export function ArbolObjetivosClient({
                 <li key={p.texto} className="flex items-start gap-2">
                   <span
                     className={`mt-0.5 flex h-4 w-4 flex-none items-center justify-center rounded-full ${
-                      p.bien ? 'bg-[#DCF3E6] text-[#186A46]' : 'bg-[#FCEFD2] text-[#8A5307]'
+                      p.bien ? 'bg-[#7A8B6F]/15 text-[#A9BC9C]' : 'bg-[#C99A3D]/15 text-[#E0B868]'
                     }`}
                   >
                     {p.bien ? <Check className="h-3 w-3" /> : <Minus className="h-3 w-3" />}
@@ -384,7 +392,7 @@ export function ArbolObjetivosClient({
             </p>
             <Link
               href={`/admin/proyectos/${proyectoId}/cadena-valor`}
-              className="mt-3 inline-flex items-center gap-1.5 text-[12px] font-bold text-[#1D4ED8] hover:underline"
+              className="mt-3 inline-flex items-center gap-1.5 text-[12px] font-bold text-[#C9A46B] hover:underline"
             >
               Ir a la cadena de valor <ArrowRight className="h-3.5 w-3.5" />
             </Link>
