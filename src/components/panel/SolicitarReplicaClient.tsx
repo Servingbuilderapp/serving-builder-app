@@ -17,24 +17,29 @@ import { PRECIOS_REPLICA, precioReplicaConEquivalencia, type ModalidadReplica } 
 /* Estilo del panel (mismo lenguaje que el resto de pantallas del cliente)    */
 /* ========================================================================== */
 
-const SOMBRA_TARJETA =
-  'shadow-[0_1px_2px_rgba(11,42,74,0.06),0_8px_24px_-14px_rgba(11,42,74,0.20)]'
+const RELIEVE_TARJETA =
+  'shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]'
 
-const RELIEVE_BOTON =
-  'shadow-[0_1px_0_rgba(255,255,255,0.35)_inset,0_2px_4px_rgba(11,42,74,0.18),0_8px_18px_-10px_rgba(29,78,216,0.55)]'
+const BOTON_DORADO =
+  'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#2E0E1A] border border-[#7A5A2E]/60 ' +
+  'shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_4px_0_#7A5A2E,0_12px_20px_-6px_rgba(20,5,10,0.55)] ' +
+  'hover:brightness-105 hover:-translate-y-0.5 ' +
+  'active:translate-y-[3px] active:shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_1px_0_#7A5A2E,0_4px_10px_-4px_rgba(20,5,10,0.5)] ' +
+  'disabled:translate-y-0 disabled:hover:translate-y-0 disabled:brightness-90 disabled:shadow-none ' +
+  'transition-all duration-150'
 
 const BUCKET = 'documentos-proyectos'
 
 function Tarjeta({ children }: { children: React.ReactNode }) {
   return (
-    <div className={`rounded-2xl border border-[#E4EAF3] bg-white ${SOMBRA_TARJETA}`}>{children}</div>
+    <div className={`rounded-2xl border border-[#6E4A50] bg-[#4C2032] ${RELIEVE_TARJETA}`}>{children}</div>
   )
 }
 
 const CAMPO =
-  'w-full rounded-xl border border-[#DCE4F0] bg-[#FBFDFF] px-3.5 py-3 text-[13.5px] leading-relaxed text-[#0F172A] outline-none transition-colors placeholder:text-[#A3B0C2] focus:border-[#1D4ED8] focus:bg-white'
+  'w-full rounded-xl border border-[#6E4A50] bg-[#3B1727] px-3.5 py-3 text-[13.5px] leading-relaxed text-[#F3E7DC] outline-none transition-colors placeholder:text-[#F3E7DC]/40 focus:border-[#C9A46B] focus:bg-[#3B1727]'
 
-const ETIQUETA = 'mb-1.5 block text-[12.5px] font-bold text-[#334155]'
+const ETIQUETA = 'mb-1.5 block text-[12.5px] font-bold text-[#F3E7DC]/70'
 
 /* ========================================================================== */
 /* Paso 1: los datos de la solicitud                                         */
@@ -93,11 +98,11 @@ function PasoDatos({
 
   return (
     <Tarjeta>
-      <div className="border-b border-[#EEF2F8] px-5 py-4">
-        <h2 className="text-[15px] font-extrabold tracking-tight text-[#0B2A4A]">
+      <div className="border-b border-[#6E4A50] px-5 py-4">
+        <h2 className="text-[15px] font-extrabold tracking-tight text-[#F3E7DC]">
           Cuéntanos de tu proyecto
         </h2>
-        <p className="mt-0.5 text-[12.5px] leading-relaxed text-[#5B6B84]">
+        <p className="mt-0.5 text-[12.5px] leading-relaxed text-[#F3E7DC]/70">
           Con esto registramos la solicitud. El documento se sube en el siguiente paso.
         </p>
       </div>
@@ -147,15 +152,15 @@ function PasoDatos({
                   onClick={() => setModalidad(id)}
                   className={`rounded-xl border px-4 py-3.5 text-left transition-colors ${
                     elegida
-                      ? 'border-[#1D4ED8] bg-[#EFF6FF]'
-                      : 'border-[#DCE4F0] bg-[#FBFDFF] hover:bg-[#F1F5F9]'
+                      ? 'border-[#C9A46B] bg-[#3B1727]'
+                      : 'border-[#6E4A50] bg-[#3B1727] hover:bg-[#4C2032]'
                   }`}
                 >
-                  <p className="text-[13.5px] font-bold text-[#0B2A4A]">
+                  <p className="text-[13.5px] font-bold text-[#F3E7DC]">
                     {id === 'ya_presentado' ? 'Sí, ya la presenté' : 'No, todavía no'}
                   </p>
-                  <p className="mt-1 text-[12.5px] leading-relaxed text-[#5B6B84]">{opcion.descripcionCorta}</p>
-                  <p className="mt-2 text-[12px] font-bold text-[#1D4ED8]">{precioReplicaConEquivalencia(id)}</p>
+                  <p className="mt-1 text-[12.5px] leading-relaxed text-[#F3E7DC]/70">{opcion.descripcionCorta}</p>
+                  <p className="mt-2 text-[12px] font-bold text-[#C9A46B]">{precioReplicaConEquivalencia(id)}</p>
                 </button>
               )
             })}
@@ -172,19 +177,19 @@ function PasoDatos({
               placeholder="Cuéntanos qué te dijeron — aprobado, no aprobado, qué observaciones hicieron…"
               className={CAMPO}
             />
-            <p className="mt-1.5 text-[12px] text-[#94A3B8]">
+            <p className="mt-1.5 text-[12px] text-[#F3E7DC]/50">
               Si tienes el documento con la retroalimentación, lo subes en el siguiente paso.
             </p>
           </div>
         ) : null}
 
-        {error ? <p className="text-[12.5px] font-semibold text-[#B42318]">{error}</p> : null}
+        {error ? <p className="text-[12.5px] font-semibold text-[#E0917E]">{error}</p> : null}
 
         <button
           type="button"
           onClick={enviar}
           disabled={enviando}
-          className={`inline-flex items-center gap-2 rounded-xl bg-[#1D4ED8] px-4 py-2.5 text-[13px] font-bold text-white transition-transform ${RELIEVE_BOTON} hover:-translate-y-px disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0`}
+          className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-[13px] font-extrabold disabled:cursor-not-allowed disabled:opacity-70 ${BOTON_DORADO}`}
         >
           {enviando ? <Loader2 className="h-4 w-4 animate-spin" /> : <ChevronRight className="h-4 w-4" />}
           {enviando ? 'Guardando…' : 'Continuar'}
@@ -285,11 +290,11 @@ function PasoDocumentos({
 
   return (
     <Tarjeta>
-      <div className="border-b border-[#EEF2F8] px-5 py-4">
-        <h2 className="text-[15px] font-extrabold tracking-tight text-[#0B2A4A]">
+      <div className="border-b border-[#6E4A50] px-5 py-4">
+        <h2 className="text-[15px] font-extrabold tracking-tight text-[#F3E7DC]">
           Sube tu proyecto
         </h2>
-        <p className="mt-0.5 text-[12.5px] leading-relaxed text-[#5B6B84]">
+        <p className="mt-0.5 text-[12.5px] leading-relaxed text-[#F3E7DC]/70">
           El documento con tu proyecto ya estructurado. PDF o Word.
         </p>
       </div>
@@ -297,15 +302,15 @@ function PasoDocumentos({
       <div className="space-y-5 px-5 py-5">
         <div>
           {documentoSubido ? (
-            <div className="flex items-center gap-2.5 rounded-xl border border-[#D7EFE3] bg-[#F4FBF8] px-3.5 py-3">
-              <CheckCircle2 className="h-4 w-4 shrink-0 text-[#186A46]" />
-              <span className="min-w-0 flex-1 truncate text-[13px] font-semibold text-[#0B2A4A]">
+            <div className="flex items-center gap-2.5 rounded-xl border border-[#7A8B6F]/40 bg-[#7A8B6F]/15 px-3.5 py-3">
+              <CheckCircle2 className="h-4 w-4 shrink-0 text-[#A9BC9C]" />
+              <span className="min-w-0 flex-1 truncate text-[13px] font-semibold text-[#F3E7DC]">
                 {documentoSubido}
               </span>
             </div>
           ) : (
             <label
-              className={`flex cursor-pointer items-center justify-center gap-2.5 rounded-xl border-2 border-dashed border-[#BFD2F5] bg-[#F7FAFF] px-4 py-5 text-[13.5px] font-bold text-[#1D4ED8] transition-colors hover:bg-[#EFF6FF] ${
+              className={`flex cursor-pointer items-center justify-center gap-2.5 rounded-xl border-2 border-dashed border-[#B08D57]/40 bg-[#3B1727] px-4 py-5 text-[13.5px] font-bold text-[#C9A46B] transition-colors hover:bg-[#4C2032] ${
                 subiendoDocumento ? 'pointer-events-none opacity-70' : ''
               }`}
             >
@@ -326,15 +331,15 @@ function PasoDocumentos({
           <div>
             <p className={ETIQUETA}>Documento de la retroalimentación (opcional)</p>
             {feedbackSubido ? (
-              <div className="flex items-center gap-2.5 rounded-xl border border-[#D7EFE3] bg-[#F4FBF8] px-3.5 py-3">
-                <CheckCircle2 className="h-4 w-4 shrink-0 text-[#186A46]" />
-                <span className="min-w-0 flex-1 truncate text-[13px] font-semibold text-[#0B2A4A]">
+              <div className="flex items-center gap-2.5 rounded-xl border border-[#7A8B6F]/40 bg-[#7A8B6F]/15 px-3.5 py-3">
+                <CheckCircle2 className="h-4 w-4 shrink-0 text-[#A9BC9C]" />
+                <span className="min-w-0 flex-1 truncate text-[13px] font-semibold text-[#F3E7DC]">
                   {feedbackSubido}
                 </span>
               </div>
             ) : (
               <label
-                className={`flex cursor-pointer items-center justify-center gap-2.5 rounded-xl border-2 border-dashed border-[#DCE4F0] bg-[#FBFDFF] px-4 py-4 text-[13px] font-bold text-[#5B6B84] transition-colors hover:bg-[#F1F5F9] ${
+                className={`flex cursor-pointer items-center justify-center gap-2.5 rounded-xl border-2 border-dashed border-[#6E4A50] bg-[#3B1727] px-4 py-4 text-[13px] font-bold text-[#F3E7DC]/70 transition-colors hover:bg-[#4C2032] ${
                   subiendoFeedback ? 'pointer-events-none opacity-70' : ''
                 }`}
               >
@@ -352,21 +357,21 @@ function PasoDocumentos({
           </div>
         ) : null}
 
-        {error ? <p className="text-[12.5px] font-semibold text-[#B42318]">{error}</p> : null}
+        {error ? <p className="text-[12.5px] font-semibold text-[#E0917E]">{error}</p> : null}
 
         {documentoSubido ? (
-          <div className="rounded-xl border border-[#BFE7D2] bg-[#F1FBF6] px-4 py-3.5">
-            <p className="flex items-center gap-2 text-[13px] font-bold text-[#186A46]">
+          <div className="rounded-xl border border-[#7A8B6F]/40 bg-[#7A8B6F]/15 px-4 py-3.5">
+            <p className="flex items-center gap-2 text-[13px] font-bold text-[#A9BC9C]">
               <FileText className="h-4 w-4" /> Quedó registrado
             </p>
-            <p className="mt-1 text-[12.5px] leading-relaxed text-[#186A46]">
+            <p className="mt-1 text-[12.5px] leading-relaxed text-[#A9BC9C]">
               {arrancado
                 ? 'Ya empezamos a trabajar tu proyecto. Nuestro equipo revisa la solicitud y te contacta por WhatsApp.'
                 : 'Tu proyecto quedó guardado. Nuestro equipo lo revisa y te contacta por WhatsApp.'}
             </p>
             <Link
               href="/mis-replicas"
-              className="mt-3 inline-flex items-center gap-1.5 text-[12.5px] font-bold text-[#1D4ED8] underline underline-offset-2"
+              className="mt-3 inline-flex items-center gap-1.5 text-[12.5px] font-bold text-[#C9A46B] underline underline-offset-2"
             >
               Ver mis réplicas <ChevronRight className="h-3.5 w-3.5" />
             </Link>
@@ -386,10 +391,10 @@ export function SolicitarReplicaClient() {
   const [modalidadElegida, setModalidadElegida] = useState<ModalidadReplica | null>(null)
 
   return (
-    <div className="px-4 py-6 lg:px-6">
+    <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
       <header className="mb-5">
-        <h1 className="text-[19px] font-extrabold tracking-tight text-[#0B2A4A]">Solicitar una réplica</h1>
-        <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#5B6B84]">
+        <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">Solicitar una réplica</h1>
+        <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#F3E7DC]/70">
           Súbenos tu proyecto ya estructurado y lo que necesites replicar — otro territorio, otra
           convocatoria, otro presupuesto — y nuestro equipo se encarga del resto.
         </p>
