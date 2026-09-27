@@ -64,19 +64,19 @@ export function SubirDocumentoProyecto({ proyectoId, archivoActualNombre, archiv
   return (
     <div className="space-y-3">
       {archivoActualNombre && (
-        <div className="flex items-center gap-2 p-3 rounded-xl bg-white border border-emerald-200">
-          <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-          <span className="text-sm font-bold text-color-base-content">{archivoActualNombre}</span>
+        <div className="flex items-center gap-2 p-3 rounded-xl bg-[#7A8B6F]/10 border border-[#7A8B6F]/40">
+          <CheckCircle2 className="h-4 w-4 text-[#A9BC9C]" />
+          <span className="text-sm font-bold text-[#F3E7DC]">{archivoActualNombre}</span>
           {archivoActualUrl && (
-            <a href={archivoActualUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-color-primary underline ml-auto">
+            <a href={archivoActualUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-[#C9A46B] underline ml-auto">
               Ver
             </a>
           )}
         </div>
       )}
-      <label className="flex items-center gap-3 p-4 rounded-xl border-2 border-dashed border-emerald-300 bg-white cursor-pointer hover:bg-emerald-50 transition-colors">
-        {loading ? <Loader2 className="h-5 w-5 animate-spin text-emerald-600" /> : <FileText className="h-5 w-5 text-emerald-600" />}
-        <span className="text-sm font-bold text-color-base-content">
+      <label className="flex items-center gap-3 p-4 rounded-xl border-2 border-dashed border-[#7A8B6F]/50 bg-[#3B1727] cursor-pointer hover:bg-[#7A8B6F]/10 transition-colors">
+        {loading ? <Loader2 className="h-5 w-5 animate-spin text-[#A9BC9C]" /> : <FileText className="h-5 w-5 text-[#A9BC9C]" />}
+        <span className="text-sm font-bold text-[#F3E7DC]">
           {loading ? 'Subiendo...' : archivoActualNombre ? 'Subir otro documento (reemplazar)' : 'Haz clic para subir tu documento (PDF o Word)'}
         </span>
         <input
@@ -87,7 +87,7 @@ export function SubirDocumentoProyecto({ proyectoId, archivoActualNombre, archiv
           className="hidden"
         />
       </label>
-      {error && <p className="text-xs text-red-500 font-bold">{error}</p>}
+      {error && <p className="text-xs text-[#E0917E] font-bold">{error}</p>}
     </div>
   )
 }
