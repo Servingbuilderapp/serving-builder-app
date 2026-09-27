@@ -114,7 +114,7 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
             <Award className="h-5 w-5 text-color-primary" />
             <span>Modalidad sugerida por tu diagnóstico:</span>
           </div>
-          <span className="text-color-primary bg-white px-3 py-1 rounded-full font-black uppercase tracking-wider border border-color-primary/30">
+          <span className="text-color-primary bg-[#3B1727] px-3 py-1 rounded-full font-black uppercase tracking-wider border border-color-primary/30">
             {modalidadSugerida.nombre}
           </span>
         </div>
@@ -132,12 +132,12 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
               onClick={() => setSelectedPlanId(plan.id)}
               className={`relative rounded-3xl p-7 transition-all duration-300 cursor-pointer flex flex-col justify-between border ${
                 activa
-                  ? 'bg-white border-color-primary shadow-2xl ring-2 ring-color-primary/40 scale-[1.02]'
-                  : 'bg-white/70 border-color-base-300 hover:border-color-primary/40 shadow-md'
+                  ? 'bg-[#4C2032] border-color-primary shadow-2xl ring-2 ring-color-primary/40 scale-[1.02]'
+                  : 'bg-[#4C2032]/70 border-color-base-300 hover:border-color-primary/40 shadow-md'
               }`}
             >
               {sugerida && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-color-primary text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full shadow-lg whitespace-nowrap">
+                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-color-primary text-[#3A1420] text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full shadow-lg whitespace-nowrap">
                   ★ Sugerida para tu proyecto
                 </div>
               )}
@@ -150,7 +150,7 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
                   <div
                     className={`w-5 h-5 shrink-0 rounded-full border flex items-center justify-center ${
                       activa
-                        ? 'bg-color-primary border-color-primary text-white'
+                        ? 'bg-color-primary border-color-primary text-[#3A1420]'
                         : 'border-color-base-300'
                     }`}
                   >
@@ -218,7 +218,7 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
       </div>
 
       {/* Desglose técnico de la modalidad escogida */}
-      <GlassCard className="p-6 md:p-8 bg-white/90 border border-color-primary/20 space-y-6 shadow-xl">
+      <GlassCard className="p-6 md:p-8 bg-[#4C2032]/95 border border-color-primary/20 space-y-6 shadow-xl">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-color-base-200 pb-4">
           <div className="flex items-center gap-2">
             <Layers className="h-5 w-5 text-color-primary" />
@@ -232,7 +232,7 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
-          <div className="p-5 rounded-2xl bg-color-base-100 border border-color-base-300 space-y-2.5">
+          <div className="p-5 rounded-2xl bg-[#3B1727] border border-color-base-300 space-y-2.5">
             <div className="flex items-center gap-2 text-color-primary font-black text-xs uppercase tracking-wider">
               <FileText className="h-4 w-4" />
               Componente Técnico
@@ -242,7 +242,7 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
             </p>
           </div>
 
-          <div className="p-5 rounded-2xl bg-color-base-100 border border-color-base-300 space-y-2.5">
+          <div className="p-5 rounded-2xl bg-[#3B1727] border border-color-base-300 space-y-2.5">
             <div className="flex items-center gap-2 text-color-primary font-black text-xs uppercase tracking-wider">
               <Coins className="h-4 w-4" />
               Componente Financiero
@@ -252,7 +252,7 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
             </p>
           </div>
 
-          <div className="p-5 rounded-2xl bg-color-base-100 border border-color-base-300 space-y-2.5">
+          <div className="p-5 rounded-2xl bg-[#3B1727] border border-color-base-300 space-y-2.5">
             <div className="flex items-center gap-2 text-color-primary font-black text-xs uppercase tracking-wider">
               <Scale className="h-4 w-4" />
               Componente Legal
@@ -265,15 +265,15 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
       </GlassCard>
 
       {/* Formalización */}
-      <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-[#0B2A4A] text-white p-8 rounded-3xl shadow-2xl border border-color-primary/30 flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="bg-gradient-to-r from-[#2E0E1A] via-[#3B1727] to-[#2E0E1A] text-[#F3E7DC] p-8 rounded-3xl shadow-2xl border border-color-primary/30 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-2 max-w-2xl">
-          <span className="inline-block text-[10px] font-black uppercase tracking-[0.2em] text-white bg-color-primary px-3 py-1 rounded-full">
+          <span className="inline-block text-[10px] font-black uppercase tracking-[0.2em] text-[#3A1420] bg-color-primary px-3 py-1 rounded-full">
             Formalización
           </span>
           <h4 className="text-2xl font-black italic uppercase">
             Formalizar {currentPlanObj.nombre} ({desglosarPrecio(currentPlanObj.honorariosBase).baseConSufijo})
           </h4>
-          <p className="text-xs text-slate-300 font-medium leading-relaxed">
+          <p className="text-xs text-[#F3E7DC]/70 font-medium leading-relaxed">
             Contacta de inmediato a nuestro equipo técnico por WhatsApp con los datos consolidados de tu diagnóstico o procede directamente a la firma digital del contrato.
           </p>
         </div>
@@ -283,7 +283,7 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-color-primary text-white font-black text-xs uppercase tracking-wider hover:brightness-110 shadow-lg shadow-color-primary/30 transition-all text-center"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-color-primary text-[#3A1420] font-black text-xs uppercase tracking-wider hover:brightness-110 shadow-lg shadow-color-primary/30 transition-all text-center"
           >
             <MessageSquare className="h-4 w-4" />
             FORMALIZAR VÍA WHATSAPP
@@ -291,7 +291,7 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
 
           <GlowButton
             onClick={() => onSelectPlan(convertToPlanSeleccionado(currentPlanObj))}
-            className="py-3.5 px-6 text-xs font-black tracking-widest gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20"
+            className="py-3.5 px-6 text-xs font-black tracking-widest gap-2 bg-[#F3E7DC]/10 hover:bg-[#F3E7DC]/20 text-[#F3E7DC] border border-[#F3E7DC]/25"
           >
             <FileCheck2 className="h-4 w-4" />
             FIRMAR CONTRATO DIGITAL
