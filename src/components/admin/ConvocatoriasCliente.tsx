@@ -65,26 +65,31 @@ export type ConvocatoriaCliente = {
 /* Estilo del panel                                                           */
 /* ========================================================================== */
 
-const SOMBRA_TARJETA =
-  'shadow-[0_1px_2px_rgba(11,42,74,0.06),0_8px_24px_-14px_rgba(11,42,74,0.20)]'
+const RELIEVE_TARJETA =
+  'shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]'
+
+const TINTA = 'text-[#F3E7DC]'
+const TINTA_SUAVE = 'text-[#F3E7DC]/70'
+const TINTA_TENUE = 'text-[#F3E7DC]/50'
+const BORDE = 'border-[#6E4A50]'
 
 const SEMAFOROS: Record<string, { fondo: string; texto: string; borde: string; nombre: string }> = {
   verde: {
-    fondo: 'bg-[#E8F6F0]',
-    texto: 'text-[#186A46]',
-    borde: 'border-[#B9E3D0]',
+    fondo: 'bg-[#7A8B6F]/15',
+    texto: 'text-[#A9BC9C]',
+    borde: 'border-[#7A8B6F]/40',
     nombre: 'Encaja bien',
   },
   amarillo: {
-    fondo: 'bg-[#FEF3C7]',
-    texto: 'text-[#8A5307]',
-    borde: 'border-[#FADFA2]',
+    fondo: 'bg-[#C99A3D]/15',
+    texto: 'text-[#E0B868]',
+    borde: 'border-[#C99A3D]/40',
     nombre: 'Encaja con ajustes',
   },
   rojo: {
-    fondo: 'bg-[#FDECEA]',
-    texto: 'text-[#B42318]',
-    borde: 'border-[#F6C9C4]',
+    fondo: 'bg-[#C0604A]/15',
+    texto: 'text-[#E0917E]',
+    borde: 'border-[#C0604A]/40',
     nombre: 'Encaje difícil',
   },
 }
@@ -111,53 +116,53 @@ type EstiloPostulacion = {
 
 const ESTADOS_POSTULACION: Record<EstadoPostulacion, EstiloPostulacion> = {
   Preparando: {
-    fondo: 'bg-[#EFF6FF]',
-    texto: 'text-[#1D4ED8]',
-    borde: 'border-[#C7DBFB]',
+    fondo: 'bg-[#3B1727]',
+    texto: 'text-[#C9A46B]',
+    borde: 'border-[#6E4A50]',
     titulo: 'Se está preparando la postulación',
     Icono: Clock,
   },
   'Lista para radicar': {
-    fondo: 'bg-[#FEF3C7]',
-    texto: 'text-[#8A5307]',
-    borde: 'border-[#FADFA2]',
+    fondo: 'bg-[#C99A3D]/15',
+    texto: 'text-[#E0B868]',
+    borde: 'border-[#C99A3D]/40',
     titulo: 'Lista para radicar, en revisión final',
     Icono: Clock,
   },
   Radicada: {
-    fondo: 'bg-[#E8F6F0]',
-    texto: 'text-[#186A46]',
-    borde: 'border-[#B9E3D0]',
+    fondo: 'bg-[#7A8B6F]/15',
+    texto: 'text-[#A9BC9C]',
+    borde: 'border-[#7A8B6F]/40',
     titulo: 'Ya se radicó la postulación',
     Icono: CheckCircle2,
   },
   Adjudicada: {
-    fondo: 'bg-[#E8F6F0]',
-    texto: 'text-[#186A46]',
-    borde: 'border-[#B9E3D0]',
+    fondo: 'bg-[#7A8B6F]/15',
+    texto: 'text-[#A9BC9C]',
+    borde: 'border-[#7A8B6F]/40',
     titulo: '¡La convocatoria fue adjudicada!',
     Icono: PartyPopper,
   },
   Rechazada: {
-    fondo: 'bg-[#FDECEA]',
-    texto: 'text-[#B42318]',
-    borde: 'border-[#F6C9C4]',
+    fondo: 'bg-[#C0604A]/15',
+    texto: 'text-[#E0917E]',
+    borde: 'border-[#C0604A]/40',
     titulo: 'No fue seleccionada esta vez',
     Icono: XCircle,
   },
   Descartada: {
-    fondo: 'bg-[#F8FAFD]',
-    texto: 'text-[#7C8CA5]',
-    borde: 'border-[#E4EAF3]',
+    fondo: 'bg-[#3B1727]',
+    texto: TINTA_TENUE,
+    borde: BORDE,
     titulo: 'Se descartó esta convocatoria',
     Icono: XCircle,
   },
 }
 
 const SIN_POSTULAR: EstiloPostulacion = {
-  fondo: 'bg-[#F8FAFD]',
-  texto: 'text-[#7C8CA5]',
-  borde: 'border-[#E4EAF3]',
+  fondo: 'bg-[#3B1727]',
+  texto: TINTA_TENUE,
+  borde: BORDE,
   titulo: 'Todavía no se ha postulado',
   Icono: Clock,
 }
@@ -194,19 +199,19 @@ function EstadoPostulacionBanner({ postulacion }: { postulacion: PostulacionClie
 }
 
 function Barra({ puntaje }: { puntaje: number }) {
-  const color = puntaje >= 70 ? '#186A46' : puntaje >= 40 ? '#B07A16' : '#B42318'
+  const color = puntaje >= 70 ? '#A9BC9C' : puntaje >= 40 ? '#E0B868' : '#E0917E'
   return (
     <div className="w-full">
       <div className="flex items-baseline justify-between">
-        <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#94A3B8]">
+        <span className={`text-[11px] font-bold uppercase tracking-[0.12em] ${TINTA_TENUE}`}>
           Encaje
         </span>
         <span className="text-[15px] font-extrabold" style={{ color }}>
           {puntaje}
-          <span className="text-[11px] font-bold text-[#94A3B8]"> /100</span>
+          <span className={`text-[11px] font-bold ${TINTA_TENUE}`}> /100</span>
         </span>
       </div>
-      <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-[#EEF2F8]">
+      <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-[#3B1727]">
         <div
           className="h-full rounded-full transition-[width] duration-700"
           style={{ width: `${Math.max(0, Math.min(100, puntaje))}%`, backgroundColor: color }}
@@ -219,8 +224,8 @@ function Barra({ puntaje }: { puntaje: number }) {
 function Parrafo({ titulo, texto }: { titulo: string; texto: string }) {
   return (
     <div>
-      <h4 className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#94A3B8]">{titulo}</h4>
-      <p className="mt-1.5 whitespace-pre-line text-[13px] leading-relaxed text-[#334155]">{texto}</p>
+      <h4 className={`text-[11px] font-bold uppercase tracking-[0.12em] ${TINTA_TENUE}`}>{titulo}</h4>
+      <p className={`mt-1.5 whitespace-pre-line text-[13px] leading-relaxed ${TINTA_SUAVE}`}>{texto}</p>
     </div>
   )
 }
@@ -244,30 +249,30 @@ function TarjetaConvocatoria({ convocatoria }: { convocatoria: ConvocatoriaClien
   )
 
   return (
-    <div className={`rounded-2xl border border-[#E4EAF3] bg-white ${SOMBRA_TARJETA}`}>
+    <div className={`rounded-2xl border ${BORDE} bg-[#4C2032] ${RELIEVE_TARJETA}`}>
       <div className="px-5 py-4">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
-            <h3 className="text-[15px] font-extrabold leading-snug tracking-tight text-[#0B2A4A]">
+            <h3 className={`text-[15px] font-extrabold leading-snug tracking-tight ${TINTA}`}>
               {convocatoria.nombre}
             </h3>
 
-            <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[12.5px] text-[#5B6B84]">
+            <div className={`mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[12.5px] ${TINTA_SUAVE}`}>
               {convocatoria.entidad ? (
                 <span className="inline-flex items-center gap-1.5">
-                  <Building2 className="h-3.5 w-3.5 text-[#94A3B8]" />
+                  <Building2 className={`h-3.5 w-3.5 ${TINTA_TENUE}`} />
                   {convocatoria.entidad}
                 </span>
               ) : null}
               {convocatoria.fechaCierre ? (
                 <span className="inline-flex items-center gap-1.5">
-                  <CalendarClock className="h-3.5 w-3.5 text-[#94A3B8]" />
+                  <CalendarClock className={`h-3.5 w-3.5 ${TINTA_TENUE}`} />
                   Cierra: {convocatoria.fechaCierre}
                 </span>
               ) : null}
               {convocatoria.monto ? (
                 <span className="inline-flex items-center gap-1.5">
-                  <Coins className="h-3.5 w-3.5 text-[#94A3B8]" />
+                  <Coins className={`h-3.5 w-3.5 ${TINTA_TENUE}`} />
                   {convocatoria.monto}
                 </span>
               ) : null}
@@ -281,7 +286,7 @@ function TarjetaConvocatoria({ convocatoria }: { convocatoria: ConvocatoriaClien
               {semaforo.nombre}
             </span>
           ) : (
-            <span className="shrink-0 rounded-full border border-[#E4EAF3] bg-[#F8FAFD] px-3 py-1 text-[11.5px] font-bold text-[#7C8CA5]">
+            <span className={`shrink-0 rounded-full border ${BORDE} bg-[#3B1727] px-3 py-1 text-[11.5px] font-bold ${TINTA_TENUE}`}>
               En análisis
             </span>
           )}
@@ -300,7 +305,7 @@ function TarjetaConvocatoria({ convocatoria }: { convocatoria: ConvocatoriaClien
             <button
               type="button"
               onClick={() => setAbierta((v) => !v)}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-[#DCE4F0] bg-[#F8FAFD] px-3 py-1.5 text-[12.5px] font-bold text-[#1D4ED8] transition-colors hover:bg-[#EFF6FF]"
+              className={`inline-flex items-center gap-1.5 rounded-lg border ${BORDE} bg-[#3B1727] px-3 py-1.5 text-[12.5px] font-bold text-[#C9A46B] transition-colors hover:bg-[#4C2032]`}
             >
               {abierta ? 'Ocultar el análisis' : 'Ver el análisis'}
               <ChevronDown
@@ -314,7 +319,7 @@ function TarjetaConvocatoria({ convocatoria }: { convocatoria: ConvocatoriaClien
               href={convocatoria.fuenteOficial}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-[12.5px] font-bold text-[#5B6B84] underline underline-offset-2 hover:text-[#1D4ED8]"
+              className={`inline-flex items-center gap-1.5 text-[12.5px] font-bold ${TINTA_SUAVE} underline underline-offset-2 hover:text-[#C9A46B]`}
             >
               Ver la convocatoria <ExternalLink className="h-3.5 w-3.5" />
             </a>
@@ -323,7 +328,7 @@ function TarjetaConvocatoria({ convocatoria }: { convocatoria: ConvocatoriaClien
       </div>
 
       {abierta && encaje ? (
-        <div className="space-y-4 border-t border-[#EEF2F8] bg-[#FBFDFF] px-5 py-4">
+        <div className={`space-y-4 border-t ${BORDE} bg-[#3B1727] px-5 py-4`}>
           {encaje.resumen ? <Parrafo titulo="De qué se trata" texto={encaje.resumen} /> : null}
           {encaje.encajeActual ? (
             <Parrafo titulo="Cómo estás hoy frente a ella" texto={encaje.encajeActual} />
@@ -337,13 +342,13 @@ function TarjetaConvocatoria({ convocatoria }: { convocatoria: ConvocatoriaClien
 
           {encaje.checklist.length > 0 ? (
             <div>
-              <h4 className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#94A3B8]">
+              <h4 className={`text-[11px] font-bold uppercase tracking-[0.12em] ${TINTA_TENUE}`}>
                 Para preparar la postulación
               </h4>
               <ul className="mt-2 space-y-1.5">
                 {encaje.checklist.map((punto, i) => (
-                  <li key={i} className="flex gap-2 text-[13px] leading-relaxed text-[#334155]">
-                    <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-[#1D4ED8]" />
+                  <li key={i} className={`flex gap-2 text-[13px] leading-relaxed ${TINTA_SUAVE}`}>
+                    <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-[#C9A46B]" />
                     {punto}
                   </li>
                 ))}
@@ -352,11 +357,11 @@ function TarjetaConvocatoria({ convocatoria }: { convocatoria: ConvocatoriaClien
           ) : null}
 
           {encaje.documentacionFaltante ? (
-            <div className="rounded-xl border border-[#FDE6C8] bg-[#FFFBF3] px-3.5 py-3">
-              <h4 className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#8A5307]">
+            <div className="rounded-xl border border-[#C99A3D]/40 bg-[#C99A3D]/10 px-3.5 py-3">
+              <h4 className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#E0B868]">
                 Documentación que falta
               </h4>
-              <p className="mt-1.5 text-[13px] leading-relaxed text-[#5B4327]">
+              <p className="mt-1.5 text-[13px] leading-relaxed text-[#E0B868]/90">
                 {encaje.documentacionFaltante}
               </p>
             </div>
@@ -375,12 +380,12 @@ export function ConvocatoriasCliente({ convocatorias }: { convocatorias: Convoca
   const conEncaje = convocatorias.filter((c) => typeof c.encaje?.puntaje === 'number').length
 
   return (
-    <div className="px-4 py-6 lg:px-6">
+    <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
       <header className="mb-5">
-        <h1 className="text-[19px] font-extrabold tracking-tight text-[#0B2A4A]">
+        <h1 className={`text-[19px] font-extrabold tracking-tight ${TINTA}`}>
           Mis convocatorias
         </h1>
-        <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#5B6B84]">
+        <p className={`mt-1 max-w-2xl text-[13.5px] leading-relaxed ${TINTA_SUAVE}`}>
           Las oportunidades de financiación que el equipo encontró para tu proyecto, con qué tan
           bien encaja cada una.
           {conEncaje > 0 ? ` ${conEncaje} ya tienen análisis de encaje.` : ''}
@@ -400,15 +405,15 @@ export function ConvocatoriasCliente({ convocatorias }: { convocatorias: Convoca
 
 function Aviso({ titulo, texto }: { titulo: string; texto: string }) {
   return (
-    <div className="px-4 py-10 lg:px-6">
+    <div className="min-h-full bg-[#54142B] px-4 py-10 lg:px-6">
       <div
-        className={`mx-auto max-w-xl rounded-2xl border border-[#E4EAF3] bg-white p-8 text-center ${SOMBRA_TARJETA}`}
+        className={`mx-auto max-w-xl rounded-2xl border ${BORDE} bg-[#4C2032] p-8 text-center ${RELIEVE_TARJETA}`}
       >
-        <span className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-[#EFF6FF] text-[#1D4ED8]">
+        <span className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-[#3B1727] text-[#C9A46B]">
           <Search className="h-5 w-5" />
         </span>
-        <h1 className="text-[17px] font-extrabold text-[#0B2A4A]">{titulo}</h1>
-        <p className="mx-auto mt-2 max-w-md text-[13.5px] leading-relaxed text-[#5B6B84]">{texto}</p>
+        <h1 className={`text-[17px] font-extrabold ${TINTA}`}>{titulo}</h1>
+        <p className={`mx-auto mt-2 max-w-md text-[13.5px] leading-relaxed ${TINTA_SUAVE}`}>{texto}</p>
       </div>
     </div>
   )
