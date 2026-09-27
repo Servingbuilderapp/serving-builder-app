@@ -50,20 +50,20 @@ export function PestanasProyecto({
   const base = `/admin/proyectos/${proyectoId}`
 
   return (
-    <div className="border-b border-[#E4EAF3] bg-white">
+    <div className="border-b border-[#6E4A50] bg-[#4C2032]">
       <div className="px-4 pt-4 lg:px-6">
         <Link
           href="/admin/proyectos"
-          className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#7C8CA5] hover:text-[#1D4ED8]"
+          className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#F3E7DC]/60 hover:text-[#C9A46B]"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Volver a proyectos
         </Link>
 
-        <h1 className="mt-1 text-[17px] font-extrabold tracking-tight text-[#0B2A4A]">
+        <h1 className="mt-1 text-[17px] font-extrabold tracking-tight text-[#F3E7DC]">
           {nombreProyecto}
         </h1>
         {nombreCliente ? (
-          <p className="text-[12.5px] text-[#7C8CA5]">{nombreCliente}</p>
+          <p className="text-[12.5px] text-[#F3E7DC]/60">{nombreCliente}</p>
         ) : null}
       </div>
 
@@ -81,8 +81,8 @@ export function PestanasProyecto({
               href={destino}
               className={`flex shrink-0 items-center gap-1.5 border-b-2 px-3 py-2.5 text-[12.5px] font-semibold transition-colors ${
                 activa
-                  ? 'border-[#1D4ED8] text-[#1D4ED8]'
-                  : 'border-transparent text-[#5B6B84] hover:border-[#DCE4F0] hover:text-[#0B2A4A]'
+                  ? 'border-[#C9A46B] text-[#C9A46B]'
+                  : 'border-transparent text-[#F3E7DC]/60 hover:border-[#B08D57]/40 hover:text-[#F3E7DC]'
               }`}
             >
               <Icono className="h-4 w-4 shrink-0" />
