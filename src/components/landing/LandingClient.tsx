@@ -100,12 +100,12 @@ const NAV_LINKS = [
 ]
 
 const RUTA_PROYECTO = [
-  { icono: Lightbulb, clave: 'w.ruta.idea', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#4C2032]/80', borde: 'border-[#6E4A50]' },
-  { icono: FileText, clave: 'w.ruta.estructuracion', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#4C2032]/80', borde: 'border-[#6E4A50]' },
-  { icono: Search, clave: 'w.ruta.busqueda', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#4C2032]/80', borde: 'border-[#6E4A50]' },
-  { icono: Target, clave: 'w.ruta.encaje', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#4C2032]/80', borde: 'border-[#6E4A50]' },
-  { icono: RefreshCw, clave: 'w.ruta.adaptacion', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#4C2032]/80', borde: 'border-[#6E4A50]' },
-  { icono: Send, clave: 'w.ruta.postulacion', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#4C2032]/80', borde: 'border-[#6E4A50]' },
+  { icono: Lightbulb, clave: 'w.ruta.idea', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#4C2032]', borde: 'border-[#B08D57]/35' },
+  { icono: FileText, clave: 'w.ruta.estructuracion', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#4C2032]', borde: 'border-[#B08D57]/35' },
+  { icono: Search, clave: 'w.ruta.busqueda', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#4C2032]', borde: 'border-[#B08D57]/35' },
+  { icono: Target, clave: 'w.ruta.encaje', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#4C2032]', borde: 'border-[#B08D57]/35' },
+  { icono: RefreshCw, clave: 'w.ruta.adaptacion', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#4C2032]', borde: 'border-[#B08D57]/35' },
+  { icono: Send, clave: 'w.ruta.postulacion', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#4C2032]', borde: 'border-[#B08D57]/35' },
 ]
 
 const PROPUESTA_VALOR = [
@@ -146,8 +146,8 @@ const ESCALERA: Escalon[] = [
     href: '/diagnostico',
     icono: Stethoscope,
     color: 'text-[#B08D57]',
-    fondo: 'bg-[#4C2032]/70',
-    borde: 'border-[#6E4A50]',
+    fondo: 'bg-[#4C2032]',
+    borde: 'border-[#B08D57]/35',
     boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
   {
@@ -167,8 +167,8 @@ const ESCALERA: Escalon[] = [
     href: '/membresia?nivel=explorador',
     icono: GraduationCap,
     color: 'text-[#B08D57]',
-    fondo: 'bg-[#4C2032]/70',
-    borde: 'border-[#6E4A50]',
+    fondo: 'bg-[#4C2032]',
+    borde: 'border-[#B08D57]/35',
     boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
   {
@@ -188,8 +188,8 @@ const ESCALERA: Escalon[] = [
     href: '/membresia?nivel=constructor',
     icono: Rocket,
     color: 'text-[#B08D57]',
-    fondo: 'bg-[#4C2032]/70',
-    borde: 'border-[#6E4A50]',
+    fondo: 'bg-[#4C2032]',
+    borde: 'border-[#B08D57]/35',
     boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
   {
@@ -209,8 +209,8 @@ const ESCALERA: Escalon[] = [
     href: '/membresia?nivel=arquitecto',
     icono: Crown,
     color: 'text-[#B08D57]',
-    fondo: 'bg-[#4C2032]/70',
-    borde: 'border-[#6E4A50]',
+    fondo: 'bg-[#4C2032]',
+    borde: 'border-[#B08D57]/35',
     boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
   {
@@ -228,8 +228,8 @@ const ESCALERA: Escalon[] = [
     href: '/academia',
     icono: BookOpen,
     color: 'text-[#B08D57]',
-    fondo: 'bg-[#4C2032]/70',
-    borde: 'border-[#6E4A50]',
+    fondo: 'bg-[#4C2032]',
+    borde: 'border-[#B08D57]/35',
     boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
   {
@@ -248,8 +248,8 @@ const ESCALERA: Escalon[] = [
     externo: false,
     icono: Users,
     color: 'text-[#B08D57]',
-    fondo: 'bg-[#4C2032]/70',
-    borde: 'border-[#6E4A50]',
+    fondo: 'bg-[#4C2032]',
+    borde: 'border-[#B08D57]/35',
     boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
   {
@@ -267,8 +267,8 @@ const ESCALERA: Escalon[] = [
     href: '/contratar',
     icono: Briefcase,
     color: 'text-[#B08D57]',
-    fondo: 'bg-[#4C2032]/70',
-    borde: 'border-[#6E4A50]',
+    fondo: 'bg-[#4C2032]',
+    borde: 'border-[#B08D57]/35',
     boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
   {
@@ -286,8 +286,8 @@ const ESCALERA: Escalon[] = [
     href: '/mis-replicas',
     icono: RefreshCw,
     color: 'text-[#B08D57]',
-    fondo: 'bg-[#4C2032]/70',
-    borde: 'border-[#6E4A50]',
+    fondo: 'bg-[#4C2032]',
+    borde: 'border-[#B08D57]/35',
     boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
 ]
