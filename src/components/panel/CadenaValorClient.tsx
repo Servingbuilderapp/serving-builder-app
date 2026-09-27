@@ -37,11 +37,19 @@ type Props = {
   filas: FilaCadena[]
 }
 
-const SOMBRA = 'shadow-[0_1px_2px_rgba(11,42,74,0.06),0_8px_24px_-14px_rgba(11,42,74,0.20)]'
-const TINTA = 'text-[#0B2A4A]'
-const TINTA_SUAVE = 'text-[#5B6B84]'
-const TINTA_TENUE = 'text-[#7C8CA5]'
-const BORDE = 'border-[#E4EAF3]'
+const RELIEVE_TARJETA =
+  'shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]'
+const BOTON_DORADO =
+  'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#2E0E1A] border border-[#7A5A2E]/60 ' +
+  'shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_4px_0_#7A5A2E,0_12px_20px_-6px_rgba(20,5,10,0.55)] ' +
+  'hover:brightness-105 hover:-translate-y-0.5 ' +
+  'active:translate-y-[3px] active:shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_1px_0_#7A5A2E,0_4px_10px_-4px_rgba(20,5,10,0.5)] ' +
+  'disabled:translate-y-0 disabled:hover:translate-y-0 disabled:brightness-90 disabled:shadow-none ' +
+  'transition-all duration-150'
+const TINTA = 'text-[#F3E7DC]'
+const TINTA_SUAVE = 'text-[#F3E7DC]/70'
+const TINTA_TENUE = 'text-[#F3E7DC]/50'
+const BORDE = 'border-[#6E4A50]'
 
 const CUANTAS_ACTIVIDADES = 6
 const ACTIVIDADES_FIJAS = ['Administrar el proyecto', 'Supervisar el proyecto']
@@ -49,10 +57,10 @@ const ACTIVIDADES_FIJAS = ['Administrar el proyecto', 'Supervisar el proyecto']
 const PRIMERA_FIJA = CUANTAS_ACTIVIDADES - ACTIVIDADES_FIJAS.length
 
 const CAMPO =
-  'w-full rounded-lg border border-[#E4EAF3] bg-white px-2.5 py-2 text-[13px] leading-snug text-[#0B2A4A] placeholder:text-[#A9B6C8] focus:outline-none focus:ring-2 focus:ring-[#1D4ED8]/25'
+  'w-full rounded-lg border border-[#6E4A50] bg-[#3B1727] px-2.5 py-2 text-[13px] leading-snug text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/25'
 
 function Tarjeta({ children, className = '' }: { children: React.ReactNode; className?: string }) {
-  return <div className={`rounded-2xl border ${BORDE} bg-white ${SOMBRA} ${className}`}>{children}</div>
+  return <div className={`rounded-2xl border ${BORDE} bg-[#4C2032] ${RELIEVE_TARJETA} ${className}`}>{children}</div>
 }
 
 function Etiqueta({ children }: { children: React.ReactNode }) {
@@ -189,7 +197,7 @@ export function CadenaValorClient({
 
   if (datos.length === 0) {
     return (
-      <div className="mx-auto max-w-2xl px-4 py-16">
+      <div className="min-h-full bg-[#54142B] mx-auto max-w-2xl px-4 py-16">
         <Tarjeta className="p-8 text-center">
           <h1 className={`text-xl font-extrabold ${TINTA}`}>Todavía no hay objetivos específicos</h1>
           <p className={`mt-3 text-[14px] leading-relaxed ${TINTA_SUAVE}`}>
@@ -198,7 +206,7 @@ export function CadenaValorClient({
           </p>
           <Link
             href={`/admin/proyectos/${proyectoId}/objetivos`}
-            className="mt-5 inline-flex items-center gap-2 rounded-xl bg-gradient-to-b from-[#2563EB] to-[#1D4ED8] px-4 py-2.5 text-[13px] font-bold text-white"
+            className={`mt-5 inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-[13px] font-extrabold ${BOTON_DORADO}`}
           >
             Ir al árbol de objetivos <ArrowRight className="h-4 w-4" />
           </Link>
@@ -208,11 +216,11 @@ export function CadenaValorClient({
   }
 
   return (
-    <div className="mx-auto max-w-[1180px] px-4 py-6 sm:px-6">
+    <div className="min-h-full bg-[#54142B] mx-auto max-w-[1180px] px-4 py-6 sm:px-6">
       <header className="mb-5">
         <Link
           href={`/admin/proyectos/${proyectoId}/objetivos`}
-          className={`mb-2 inline-flex items-center gap-1.5 text-[12px] font-semibold ${TINTA_SUAVE} hover:text-[#1D4ED8]`}
+          className={`mb-2 inline-flex items-center gap-1.5 text-[12px] font-semibold ${TINTA_SUAVE} hover:text-[#C9A46B]`}
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Volver al árbol de objetivos
         </Link>
@@ -220,7 +228,7 @@ export function CadenaValorClient({
           <h1 className={`text-[19px] font-extrabold uppercase tracking-tight ${TINTA}`}>
             Cadena de valor
           </h1>
-          <span className="rounded-full bg-[#0B2A4A] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
+          <span className="rounded-full bg-[#3B1727] border border-[#6E4A50] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#C9A46B]">
             Interno
           </span>
         </div>
@@ -231,7 +239,7 @@ export function CadenaValorClient({
       </header>
 
       {objetivoGeneral ? (
-        <div className={`mb-4 rounded-xl border ${BORDE} bg-[#F5F9FF] px-4 py-3`}>
+        <div className={`mb-4 rounded-xl border ${BORDE} bg-[#3B1727] px-4 py-3`}>
           <Etiqueta>Objetivo general</Etiqueta>
           <p className={`text-[13.5px] leading-snug ${TINTA}`}>{objetivoGeneral}</p>
         </div>
@@ -241,12 +249,12 @@ export function CadenaValorClient({
         <div
           className={`mb-4 rounded-xl border px-4 py-3 text-[13px] font-medium ${
             aviso.ok
-              ? 'border-[#9FD9BC] bg-[#DCF3E6] text-[#186A46]'
-              : 'border-[#F0AFAF] bg-[#FBE3E3] text-[#9B2C2C]'
+              ? 'border-[#7A8B6F]/40 bg-[#7A8B6F]/15 text-[#A9BC9C]'
+              : 'border-[#C0604A]/40 bg-[#C0604A]/15 text-[#E0917E]'
           }`}
           role="status"
         >
-          {aviso.texto}
+          {aviso.text}
         </div>
       ) : null}
 
@@ -255,7 +263,7 @@ export function CadenaValorClient({
           {datos.map((fila) => (
             <Tarjeta key={fila.objetivoId} className="p-4 sm:p-5">
               <div className="mb-3 flex items-start gap-3">
-                <span className="mt-0.5 flex h-7 w-7 flex-none items-center justify-center rounded-full bg-[#0B2A4A] text-[12px] font-bold text-white">
+                <span className="mt-0.5 flex h-7 w-7 flex-none items-center justify-center rounded-full bg-[#3B1727] border border-[#6E4A50] text-[12px] font-bold text-[#C9A46B]">
                   {fila.numero}
                 </span>
                 <div className="min-w-0">
@@ -320,14 +328,14 @@ export function CadenaValorClient({
                       type="checkbox"
                       checked={fila.rutaCritica}
                       onChange={(e) => cambiar(fila.objetivoId, { rutaCritica: e.target.checked })}
-                      className="h-4 w-4 rounded border-[#C9D6E8] text-[#1D4ED8] focus:ring-[#1D4ED8]/25"
+                      className="h-4 w-4 rounded border-[#6E4A50] text-[#C9A46B] focus:ring-[#C9A46B]/25"
                     />
                     <span className={`text-[12px] font-semibold ${TINTA_SUAVE}`}>Ruta crítica</span>
                   </label>
                 </div>
               </div>
 
-              <div className="mt-4 rounded-xl border border-[#EEF2F8] bg-[#FAFCFF] p-3">
+              <div className="mt-4 rounded-xl border border-[#6E4A50] bg-[#3B1727] p-3">
                 <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
                   <span className={`text-[11px] font-bold uppercase tracking-wider ${TINTA}`}>
                     Seis actividades · todas en infinitivo
@@ -336,7 +344,7 @@ export function CadenaValorClient({
                     <button
                       type="button"
                       onClick={() => traerDelArbol(fila.objetivoId)}
-                      className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#1D4ED8] hover:underline"
+                      className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#C9A46B] hover:underline"
                     >
                       <Sparkles className="h-3 w-3" /> Traer del árbol de objetivos
                     </button>
@@ -352,7 +360,7 @@ export function CadenaValorClient({
                       <div key={posicion} className="flex items-start gap-2">
                         <span
                           className={`mt-2 flex h-5 w-5 flex-none items-center justify-center rounded-full text-[10px] font-bold ${
-                            esFija ? 'bg-[#E9EEF6] text-[#5B6B84]' : 'bg-[#DBE8FB] text-[#1D4ED8]'
+                            esFija ? 'bg-[#54142B] text-[#F3E7DC]/60' : 'bg-[#B08D57]/15 text-[#C9A46B]'
                           }`}
                         >
                           {posicion + 1}
@@ -371,7 +379,7 @@ export function CadenaValorClient({
                             className={CAMPO}
                           />
                           {malArranque ? (
-                            <p className="mt-1 flex items-center gap-1 text-[11px] font-medium text-[#8A5307]">
+                            <p className="mt-1 flex items-center gap-1 text-[11px] font-medium text-[#E0B868]">
                               <AlertTriangle className="h-3 w-3" /> No arranca con un verbo en
                               infinitivo
                             </p>
@@ -390,7 +398,7 @@ export function CadenaValorClient({
               type="button"
               onClick={alGuardar}
               disabled={guardando}
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-b from-[#2563EB] to-[#1D4ED8] px-4 py-2.5 text-[13px] font-bold text-white shadow-[0_1px_0_rgba(255,255,255,0.25)_inset,0_6px_16px_-8px_rgba(29,78,216,0.9)] transition hover:-translate-y-px disabled:opacity-60 disabled:hover:translate-y-0"
+              className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-[13px] font-extrabold disabled:opacity-70 ${BOTON_DORADO}`}
             >
               {guardando ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               {guardando ? 'Guardando…' : 'Guardar la cadena de valor'}
@@ -412,7 +420,7 @@ export function CadenaValorClient({
                 <li key={p.texto} className="flex items-start gap-2">
                   <span
                     className={`mt-0.5 flex h-4 w-4 flex-none items-center justify-center rounded-full ${
-                      p.bien ? 'bg-[#DCF3E6] text-[#186A46]' : 'bg-[#FCEFD2] text-[#8A5307]'
+                      p.bien ? 'bg-[#7A8B6F]/15 text-[#A9BC9C]' : 'bg-[#C99A3D]/15 text-[#E0B868]'
                     }`}
                   >
                     {p.bien ? <Check className="h-3 w-3" /> : <Minus className="h-3 w-3" />}
@@ -436,7 +444,7 @@ export function CadenaValorClient({
             </p>
             <Link
               href={`/admin/proyectos/${proyectoId}/presupuesto`}
-              className="mt-3 inline-flex items-center gap-1.5 text-[12px] font-bold text-[#1D4ED8] hover:underline"
+              className="mt-3 inline-flex items-center gap-1.5 text-[12px] font-bold text-[#C9A46B] hover:underline"
             >
               Ir al presupuesto <ArrowRight className="h-3.5 w-3.5" />
             </Link>
