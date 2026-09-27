@@ -28,7 +28,7 @@ export function EditarMarcaSocio({
 }) {
   const supabase = createClient()
   const [logoUrl, setLogoUrl] = useState<string | null>(logoUrlInicial)
-  const [color, setColor] = useState<string>(colorInicial || '#1D4ED8')
+  const [color, setColor] = useState<string>(colorInicial || '#C9A46B')
   const [subiendo, setSubiendo] = useState(false)
   const [guardando, setGuardando] = useState(false)
   const [mensaje, setMensaje] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
@@ -100,7 +100,7 @@ export function EditarMarcaSocio({
 
   const handleGuardarColor = async () => {
     if (!/^#[0-9a-fA-F]{6}$/.test(color)) {
-      setMensaje({ tipo: 'error', texto: 'Escribe el color como un código de 6 letras/números, ej. #1D4ED8' })
+      setMensaje({ tipo: 'error', texto: 'Escribe el color como un código de 6 letras/números, ej. #C9A46B' })
       return
     }
     await guardar({ colorPrimario: color })
@@ -148,7 +148,7 @@ export function EditarMarcaSocio({
         <div className="flex items-center gap-2">
           <input
             type="color"
-            value={/^#[0-9a-fA-F]{6}$/.test(color) ? color : '#1D4ED8'}
+            value={/^#[0-9a-fA-F]{6}$/.test(color) ? color : '#C9A46B'}
             onChange={(e) => setColor(e.target.value)}
             className="h-9 w-9 rounded-lg border border-color-base-content/10 cursor-pointer"
           />
@@ -156,7 +156,7 @@ export function EditarMarcaSocio({
             type="text"
             value={color}
             onChange={(e) => setColor(e.target.value)}
-            placeholder="#1D4ED8"
+            placeholder="#C9A46B"
             className="w-28 rounded-lg border border-color-base-content/15 px-2.5 py-1.5 text-xs"
           />
           <button
@@ -171,7 +171,7 @@ export function EditarMarcaSocio({
       </div>
 
       {mensaje ? (
-        <p className={`text-xs ${mensaje.tipo === 'ok' ? 'text-[#186A46]' : 'text-[#9B2C2C]'}`}>{mensaje.texto}</p>
+        <p className={`text-xs ${mensaje.tipo === 'ok' ? 'text-[#A9BC9C]' : 'text-[#E0917E]'}`}>{mensaje.texto}</p>
       ) : null}
     </div>
   )
