@@ -11,10 +11,17 @@ export type DocumentoDePartida = {
 }
 
 const RELIEVE_TARJETA =
-  'shadow-[0_1px_2px_rgba(11,42,74,0.04),0_8px_24px_-14px_rgba(11,42,74,0.18)]'
+  'shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]'
 
-const RELIEVE_BOTON =
-  'shadow-[0_1px_2px_rgba(11,42,74,0.10),0_10px_20px_-12px_rgba(29,78,216,0.55)]'
+/** Botón dorado con relieve fuerte: brillo arriba, escalón abajo que se
+ * aplana al hacer clic — igual al de Estructuración, para que combinen. */
+const BOTON_DORADO =
+  'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#2E0E1A] border border-[#7A5A2E]/60 ' +
+  'shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_4px_0_#7A5A2E,0_12px_20px_-6px_rgba(20,5,10,0.55)] ' +
+  'hover:brightness-105 hover:-translate-y-0.5 ' +
+  'active:translate-y-[3px] active:shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_1px_0_#7A5A2E,0_4px_10px_-4px_rgba(20,5,10,0.5)] ' +
+  'disabled:translate-y-0 disabled:hover:translate-y-0 disabled:brightness-90 disabled:shadow-none ' +
+  'transition-all duration-150'
 
 /**
  * El botón que arranca la estructuración automática (Motor 1).
@@ -107,32 +114,32 @@ export function MotorEstructuracion({
   const yaHayContenido = pasosEscritos > 0
 
   return (
-    <div className={`rounded-2xl border border-[#E4EAF3] bg-white p-5 ${RELIEVE_TARJETA}`}>
-      <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">
+    <div className={`rounded-2xl border border-[#6E4A50] bg-[#4C2032] p-5 ${RELIEVE_TARJETA}`}>
+      <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-[#F3E7DC]/50">
         <Play className="h-3.5 w-3.5" />
         Estructuración automática
       </div>
 
-      <h2 className="mt-1 text-[16px] font-extrabold leading-tight text-[#0B2A4A]">
+      <h2 className="mt-1 text-[16px] font-extrabold leading-tight text-[#F3E7DC]">
         {yaHayContenido
           ? 'Completar el proyecto con un documento nuevo'
           : 'Arrancar la estructuración de este proyecto'}
       </h2>
 
-      <p className="mt-2 text-[13px] leading-relaxed text-[#5B6B84]">
+      <p className="mt-2 text-[13px] leading-relaxed text-[#F3E7DC]/70">
         {yaHayContenido
           ? 'Vuelve a pasar la información por el motor. Lo que ya está escrito no se borra: el documento nuevo sirve para completar lo que quedó en blanco o débil.'
           : 'El motor lee el documento del cliente y escribe el contenido de cada paso. Tarda un par de minutos y no hay que hacer nada más mientras tanto.'}
       </p>
 
       {documentos.length === 0 ? (
-        <div className="mt-4 flex items-start gap-3 rounded-xl border border-[#FDE6C8] bg-[#FFFBF3] px-4 py-3">
-          <FileWarning className="mt-0.5 h-4 w-4 shrink-0 text-[#8A5307]" />
+        <div className="mt-4 flex items-start gap-3 rounded-xl border border-[#C99A3D]/40 bg-[#C99A3D]/12 px-4 py-3">
+          <FileWarning className="mt-0.5 h-4 w-4 shrink-0 text-[#E0B868]" />
           <div>
-            <p className="text-[13px] font-bold text-[#8A5307]">
+            <p className="text-[13px] font-bold text-[#E0B868]">
               El cliente todavía no ha subido ningún documento que sirva
             </p>
-            <p className="mt-0.5 text-[12.5px] text-[#5B6B84]">
+            <p className="mt-0.5 text-[12.5px] text-[#F3E7DC]/70">
               La estructuración necesita al menos un PDF, un Word o una imagen. El cliente los
               sube desde «Lo que me piden».
             </p>
@@ -141,14 +148,14 @@ export function MotorEstructuracion({
       ) : (
         <div className="mt-4 flex flex-wrap items-end gap-3">
           <label className="min-w-0 flex-1">
-            <span className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-[#5B6B84]">
+            <span className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-[#F3E7DC]/70">
               Documento de partida
             </span>
             <select
               value={rutaElegida}
               onChange={(e) => setRutaElegida(e.target.value)}
               disabled={corriendo}
-              className="w-full rounded-xl border border-[#E4EAF3] bg-[#F8FAFD] px-3 py-2.5 text-[13.5px] font-semibold text-[#0B2A4A] outline-none transition focus:border-[#1D4ED8] disabled:opacity-60"
+              className="w-full rounded-xl border border-[#6E4A50] bg-[#3B1727] px-3 py-2.5 text-[13.5px] font-semibold text-[#F3E7DC] outline-none transition focus:border-[#B08D57] disabled:opacity-60"
             >
               {documentos.map((d) => (
                 <option key={d.ruta} value={d.ruta}>
@@ -162,7 +169,7 @@ export function MotorEstructuracion({
             type="button"
             onClick={arrancar}
             disabled={corriendo}
-            className={`inline-flex items-center gap-2 rounded-xl bg-[#1D4ED8] px-5 py-2.5 text-[13.5px] font-extrabold text-white transition-transform hover:-translate-y-px disabled:translate-y-0 disabled:opacity-70 ${RELIEVE_BOTON}`}
+            className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13.5px] font-extrabold disabled:opacity-70 ${BOTON_DORADO}`}
           >
             {corriendo ? (
               <>
@@ -184,25 +191,25 @@ export function MotorEstructuracion({
       )}
 
       {corriendo ? (
-        <div className="mt-4 rounded-xl border border-[#CFE0FB] bg-[#EFF6FF] px-4 py-3">
-          <p className="text-[13px] font-bold text-[#1D4ED8]">
+        <div className="mt-4 rounded-xl border border-[#B08D57]/35 bg-[#B08D57]/15 px-4 py-3">
+          <p className="text-[13px] font-bold text-[#B08D57]">
             Escribiendo el proyecto… {pasosEscritos} de {totalPasos} pasos van escritos
           </p>
-          <p className="mt-0.5 text-[12.5px] text-[#5B6B84]">
+          <p className="mt-0.5 text-[12.5px] text-[#F3E7DC]/70">
             No cierres esta pantalla. El avance de aquí arriba se actualiza solo.
           </p>
         </div>
       ) : null}
 
       {resultado ? (
-        <div className="mt-4 flex items-start gap-3 rounded-xl border border-[#BFE7D2] bg-[#F1FBF6] px-4 py-3">
-          <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#186A46]" />
+        <div className="mt-4 flex items-start gap-3 rounded-xl border border-[#7A8B6F]/40 bg-[#7A8B6F]/12 px-4 py-3">
+          <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#7A8B6F]" />
           <div>
-            <p className="text-[13px] font-bold text-[#186A46]">
+            <p className="text-[13px] font-bold text-[#7A8B6F]">
               Listo. El motor trabajó {resultado.pasos}{' '}
               {resultado.pasos === 1 ? 'paso' : 'pasos'}.
             </p>
-            <p className="mt-0.5 text-[12.5px] text-[#5B6B84]">
+            <p className="mt-0.5 text-[12.5px] text-[#F3E7DC]/70">
               {resultado.listoParaEncaje
                 ? 'El proyecto quedó completo, así que la búsqueda de convocatorias arrancó sola.'
                 : 'Revisa abajo lo que quedó escrito y corrige lo que haga falta.'}
@@ -212,11 +219,11 @@ export function MotorEstructuracion({
       ) : null}
 
       {error ? (
-        <div className="mt-4 flex items-start gap-3 rounded-xl border border-[#F5C2C2] bg-[#FDF3F3] px-4 py-3">
-          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-[#B42318]" />
+        <div className="mt-4 flex items-start gap-3 rounded-xl border border-[#C0604A]/40 bg-[#C0604A]/12 px-4 py-3">
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-[#E0917E]" />
           <div>
-            <p className="text-[13px] font-bold text-[#B42318]">{error}</p>
-            <p className="mt-0.5 text-[12.5px] text-[#5B6B84]">
+            <p className="text-[13px] font-bold text-[#E0917E]">{error}</p>
+            <p className="mt-0.5 text-[12.5px] text-[#F3E7DC]/70">
               Si alcanzó a escribir algo, ya quedó guardado abajo.
             </p>
           </div>
