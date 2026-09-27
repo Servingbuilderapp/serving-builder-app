@@ -69,7 +69,7 @@ export function DynamicForm({ schema, initialValues = {}, onSubmit, isLoading }:
                 placeholder={placeholder || (language === 'en' ? 'E.g., Write your request or paste information here...' : 'Ej. Escribe tu solicitud o pega información aquí...')}
                 required={field.required}
                 rows={4}
-                className="w-full bg-white border border-color-base-content/10 rounded-xl px-4 py-3 text-color-base-content placeholder-color-base-content/30 focus:outline-none focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all resize-none shadow-sm"
+                className="w-full bg-color-base-200 border border-color-base-content/10 rounded-xl px-4 py-3 text-color-base-content placeholder-color-base-content/30 focus:outline-none focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all resize-none shadow-sm"
               />
             ) : field.type === 'select' ? (
               <div className="relative">
@@ -77,7 +77,7 @@ export function DynamicForm({ schema, initialValues = {}, onSubmit, isLoading }:
                   value={values[fieldName] || ''}
                   onChange={(e) => handleChange(fieldName, e.target.value)}
                   required={field.required}
-                  className="w-full bg-white border border-color-base-content/10 rounded-xl px-4 py-3 text-color-base-content focus:outline-none focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all appearance-none"
+                  className="w-full bg-color-base-200 border border-color-base-content/10 rounded-xl px-4 py-3 text-color-base-content focus:outline-none focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all appearance-none"
                 >
                   <option value="" disabled className="bg-white">{placeholder || (language === 'en' ? 'Select an option' : 'Selecciona una opción')}</option>
                   {(language === 'en' ? field.options_en : field.options_es)?.map((opt, i) => (
@@ -99,7 +99,7 @@ export function DynamicForm({ schema, initialValues = {}, onSubmit, isLoading }:
                   values[fieldName] === 'true' ? "bg-color-primary" : "bg-white/10"
                 )}>
                   <div className={cn(
-                    "absolute left-1 top-1 w-4 h-4 rounded-full bg-white transition-transform duration-200",
+                    "absolute left-1 top-1 w-4 h-4 rounded-full bg-[#F3E7DC] transition-transform duration-200",
                     values[fieldName] === 'true' ? "translate-x-5" : "translate-x-0"
                   )} />
                 </div>
@@ -111,7 +111,7 @@ export function DynamicForm({ schema, initialValues = {}, onSubmit, isLoading }:
                 onChange={(e) => handleChange(fieldName, e.target.value)}
                 placeholder={placeholder || (language === 'en' ? 'E.g., Example text...' : 'Ej. Texto de ejemplo...')}
                 required={field.required}
-                className="w-full bg-white border border-color-base-content/10 rounded-xl px-4 py-3 text-color-base-content placeholder-color-base-content/30 focus:outline-none focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all shadow-sm"
+                className="w-full bg-color-base-200 border border-color-base-content/10 rounded-xl px-4 py-3 text-color-base-content placeholder-color-base-content/30 focus:outline-none focus:border-color-primary/50 focus:ring-1 focus:ring-color-primary/50 transition-all shadow-sm"
               />
             )}
           </div>
