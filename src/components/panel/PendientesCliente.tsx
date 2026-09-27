@@ -52,11 +52,16 @@ export type DatosPendientes = {
 /* Estilo del panel (mismo lenguaje que Avance de mi proyecto)                */
 /* ========================================================================== */
 
-const SOMBRA_TARJETA =
-  'shadow-[0_1px_2px_rgba(11,42,74,0.06),0_8px_24px_-14px_rgba(11,42,74,0.20)]'
+const RELIEVE_TARJETA =
+  'shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]'
 
-const RELIEVE_BOTON =
-  'shadow-[0_1px_0_rgba(255,255,255,0.35)_inset,0_2px_4px_rgba(11,42,74,0.18),0_8px_18px_-10px_rgba(29,78,216,0.55)]'
+const BOTON_DORADO =
+  'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#2E0E1A] border border-[#7A5A2E]/60 ' +
+  'shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_4px_0_#7A5A2E,0_12px_20px_-6px_rgba(20,5,10,0.55)] ' +
+  'hover:brightness-105 hover:-translate-y-0.5 ' +
+  'active:translate-y-[3px] active:shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_1px_0_#7A5A2E,0_4px_10px_-4px_rgba(20,5,10,0.5)] ' +
+  'disabled:translate-y-0 disabled:hover:translate-y-0 disabled:brightness-90 disabled:shadow-none ' +
+  'transition-all duration-150'
 
 const BUCKET = 'documentos-proyectos'
 
@@ -68,7 +73,7 @@ function Tarjeta({
   className?: string
 }) {
   return (
-    <div className={`rounded-2xl border border-[#E4EAF3] bg-white ${SOMBRA_TARJETA} ${className}`}>
+    <div className={`rounded-2xl border border-[#6E4A50] bg-[#4C2032] ${RELIEVE_TARJETA} ${className}`}>
       {children}
     </div>
   )
@@ -86,18 +91,18 @@ function TituloBloque({
   contador?: string
 }) {
   return (
-    <div className="flex items-start justify-between gap-3 border-b border-[#EEF2F8] px-5 py-4">
+    <div className="flex items-start justify-between gap-3 border-b border-[#6E4A50] px-5 py-4">
       <div className="flex items-start gap-3">
-        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#EFF6FF] text-[#1D4ED8]">
+        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#3B1727] text-[#C9A46B]">
           <Icono className="h-4 w-4" />
         </span>
         <div>
-          <h2 className="text-[15px] font-extrabold tracking-tight text-[#0B2A4A]">{titulo}</h2>
-          <p className="mt-0.5 text-[12.5px] leading-relaxed text-[#5B6B84]">{descripcion}</p>
+          <h2 className="text-[15px] font-extrabold tracking-tight text-[#F3E7DC]">{titulo}</h2>
+          <p className="mt-0.5 text-[12.5px] leading-relaxed text-[#F3E7DC]/70">{descripcion}</p>
         </div>
       </div>
       {contador ? (
-        <span className="shrink-0 rounded-full bg-[#F1F5F9] px-2.5 py-1 text-[11px] font-bold text-[#5B6B84]">
+        <span className="shrink-0 rounded-full bg-[#3B1727] border border-[#6E4A50] px-2.5 py-1 text-[11px] font-bold text-[#C9A46B]">
           {contador}
         </span>
       ) : null}
@@ -157,10 +162,10 @@ function BloquePreguntas({ preguntasIniciales }: { preguntasIniciales: PreguntaP
           descripcion="Cuando al equipo le falte un dato tuyo, la pregunta aparece aquí."
         />
         <div className="flex items-center gap-3 px-5 py-6">
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E8F6F0] text-[#186A46]">
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#7A8B6F]/15 text-[#A9BC9C]">
             <Check className="h-4 w-4" />
           </span>
-          <p className="text-[13.5px] font-semibold text-[#186A46]">
+          <p className="text-[13.5px] font-semibold text-[#A9BC9C]">
             {respondidas > 0
               ? 'Listo. Respondiste todo lo que estaba pendiente.'
               : 'No hay preguntas pendientes por ahora.'}
@@ -181,17 +186,17 @@ function BloquePreguntas({ preguntasIniciales }: { preguntasIniciales: PreguntaP
 
       <div className="space-y-4 px-5 py-5">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-full bg-[#F1F5F9] px-2.5 py-1 text-[11px] font-bold text-[#5B6B84]">
+          <span className="rounded-full bg-[#3B1727] border border-[#6E4A50] px-2.5 py-1 text-[11px] font-bold text-[#C9A46B]">
             {actual.nombrePaso}
           </span>
           {actual.critico ? (
-            <span className="inline-flex items-center gap-1 rounded-full bg-[#FEF3C7] px-2.5 py-1 text-[11px] font-bold text-[#8A5307]">
+            <span className="inline-flex items-center gap-1 rounded-full bg-[#C99A3D]/15 px-2.5 py-1 text-[11px] font-bold text-[#E0B868]">
               <AlertTriangle className="h-3 w-3" /> Importante
             </span>
           ) : null}
         </div>
 
-        <p className="text-[14.5px] font-semibold leading-relaxed text-[#0B2A4A]">
+        <p className="text-[14.5px] font-semibold leading-relaxed text-[#F3E7DC]">
           {actual.pregunta}
         </p>
 
@@ -200,17 +205,17 @@ function BloquePreguntas({ preguntasIniciales }: { preguntasIniciales: PreguntaP
           onChange={(e) => setTexto(e.target.value)}
           rows={5}
           placeholder="Escribe aquí tu respuesta…"
-          className="w-full rounded-xl border border-[#DCE4F0] bg-[#FBFDFF] px-3.5 py-3 text-[13.5px] leading-relaxed text-[#0F172A] outline-none transition-colors placeholder:text-[#A3B0C2] focus:border-[#1D4ED8] focus:bg-white"
+          className="w-full rounded-xl border border-[#6E4A50] bg-[#3B1727] px-3.5 py-3 text-[13.5px] leading-relaxed text-[#F3E7DC] outline-none transition-colors placeholder:text-[#F3E7DC]/40 focus:border-[#C9A46B] focus:bg-[#3B1727]"
         />
 
-        {error ? <p className="text-[12.5px] font-semibold text-[#B42318]">{error}</p> : null}
+        {error ? <p className="text-[12.5px] font-semibold text-[#E0917E]">{error}</p> : null}
 
         <div className="flex flex-wrap items-center gap-3">
           <button
             type="button"
             onClick={enviar}
             disabled={enviando || !texto.trim()}
-            className={`inline-flex items-center gap-2 rounded-xl bg-[#1D4ED8] px-4 py-2.5 text-[13px] font-bold text-white transition-transform ${RELIEVE_BOTON} hover:-translate-y-px disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0`}
+            className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-[13px] font-extrabold disabled:opacity-60 ${BOTON_DORADO}`}
           >
             {enviando ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
             {enviando ? 'Enviando…' : 'Enviar respuesta'}
@@ -225,7 +230,7 @@ function BloquePreguntas({ preguntasIniciales }: { preguntasIniciales: PreguntaP
                 setIndice(indice + 1)
               }}
               disabled={enviando}
-              className="text-[12.5px] font-semibold text-[#5B6B84] underline underline-offset-2 hover:text-[#1D4ED8] disabled:opacity-50"
+              className="text-[12.5px] font-semibold text-[#F3E7DC]/70 underline underline-offset-2 hover:text-[#C9A46B] disabled:opacity-50"
             >
               Responder esta después
             </button>
@@ -358,31 +363,31 @@ function BloqueDocumentos({
       <div className="space-y-5 px-5 py-5">
         {documentosPedidos.length > 0 ? (
           <div>
-            <h3 className="text-[12px] font-bold uppercase tracking-[0.12em] text-[#94A3B8]">
+            <h3 className="text-[12px] font-bold uppercase tracking-[0.12em] text-[#F3E7DC]/50">
               Nos hace falta
             </h3>
             <ul className="mt-2.5 space-y-2">
               {documentosPedidos.map((doc) => (
                 <li
                   key={doc.id}
-                  className="rounded-xl border border-[#FDE6C8] bg-[#FFFBF3] px-3.5 py-3"
+                  className="rounded-xl border border-[#C99A3D]/40 bg-[#C99A3D]/10 px-3.5 py-3"
                 >
                   <div className="flex items-start gap-2.5">
-                    <FileText className="mt-0.5 h-4 w-4 shrink-0 text-[#8A5307]" />
+                    <FileText className="mt-0.5 h-4 w-4 shrink-0 text-[#E0B868]" />
                     <div className="min-w-0">
-                      <p className="text-[13.5px] font-semibold leading-snug text-[#0B2A4A]">
+                      <p className="text-[13.5px] font-semibold leading-snug text-[#F3E7DC]">
                         {doc.requisito}
                         {doc.obligatorio ? (
-                          <span className="ml-2 rounded-full bg-[#FEF3C7] px-2 py-0.5 text-[10.5px] font-bold text-[#8A5307]">
+                          <span className="ml-2 rounded-full bg-[#C99A3D]/15 px-2 py-0.5 text-[10.5px] font-bold text-[#E0B868]">
                             Obligatorio
                           </span>
                         ) : null}
                       </p>
                       {doc.nota ? (
-                        <p className="mt-1 text-[12.5px] leading-relaxed text-[#5B6B84]">{doc.nota}</p>
+                        <p className="mt-1 text-[12.5px] leading-relaxed text-[#F3E7DC]/70">{doc.nota}</p>
                       ) : null}
                       {doc.origen ? (
-                        <p className="mt-1 text-[11.5px] text-[#94A3B8]">Para: {doc.origen}</p>
+                        <p className="mt-1 text-[11.5px] text-[#F3E7DC]/50">Para: {doc.origen}</p>
                       ) : null}
                     </div>
                   </div>
@@ -391,25 +396,25 @@ function BloqueDocumentos({
             </ul>
           </div>
         ) : (
-          <p className="text-[13.5px] text-[#5B6B84]">
+          <p className="text-[13.5px] text-[#F3E7DC]/70">
             Ahora mismo no te estamos pidiendo ningún documento. Si aun así quieres enviarnos algo
             que ayude al proyecto, súbelo aquí abajo.
           </p>
         )}
 
         <div>
-          <h3 className="text-[12px] font-bold uppercase tracking-[0.12em] text-[#94A3B8]">
+          <h3 className="text-[12px] font-bold uppercase tracking-[0.12em] text-[#F3E7DC]/50">
             Lo que ya nos enviaste
           </h3>
 
           <ul className="mt-2.5 space-y-2">
             {archivoBase ? (
-              <li className="flex items-center gap-2.5 rounded-xl border border-[#D7EFE3] bg-[#F4FBF8] px-3.5 py-2.5">
-                <CheckCircle2 className="h-4 w-4 shrink-0 text-[#186A46]" />
-                <span className="min-w-0 flex-1 truncate text-[13px] font-semibold text-[#0B2A4A]">
+              <li className="flex items-center gap-2.5 rounded-xl border border-[#7A8B6F]/40 bg-[#7A8B6F]/10 px-3.5 py-2.5">
+                <CheckCircle2 className="h-4 w-4 shrink-0 text-[#A9BC9C]" />
+                <span className="min-w-0 flex-1 truncate text-[13px] font-semibold text-[#F3E7DC]">
                   {archivoBase.nombre}
                 </span>
-                <span className="shrink-0 text-[11px] font-semibold text-[#94A3B8]">
+                <span className="shrink-0 text-[11px] font-semibold text-[#F3E7DC]/50">
                   Documento del proyecto
                 </span>
                 {archivoBase.url ? (
@@ -417,7 +422,7 @@ function BloqueDocumentos({
                     href={archivoBase.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="shrink-0 text-[12px] font-bold text-[#1D4ED8] underline underline-offset-2"
+                    className="shrink-0 text-[12px] font-bold text-[#C9A46B] underline underline-offset-2"
                   >
                     Ver
                   </a>
@@ -426,7 +431,7 @@ function BloqueDocumentos({
             ) : null}
 
             {archivos.length === 0 && !archivoBase ? (
-              <li className="px-1 py-2 text-[13px] text-[#5B6B84]">
+              <li className="px-1 py-2 text-[13px] text-[#F3E7DC]/70">
                 Todavía no has subido ningún documento.
               </li>
             ) : null}
@@ -434,21 +439,21 @@ function BloqueDocumentos({
             {archivos.map((archivo) => (
               <li
                 key={archivo.ruta}
-                className="flex items-center gap-2.5 rounded-xl border border-[#E4EAF3] bg-[#FBFDFF] px-3.5 py-2.5"
+                className="flex items-center gap-2.5 rounded-xl border border-[#6E4A50] bg-[#3B1727] px-3.5 py-2.5"
               >
-                <FileText className="h-4 w-4 shrink-0 text-[#5B6B84]" />
-                <span className="min-w-0 flex-1 truncate text-[13px] font-semibold text-[#0B2A4A]">
+                <FileText className="h-4 w-4 shrink-0 text-[#F3E7DC]/70" />
+                <span className="min-w-0 flex-1 truncate text-[13px] font-semibold text-[#F3E7DC]">
                   {archivo.nombre}
                 </span>
                 {archivo.fecha ? (
-                  <span className="shrink-0 text-[11px] text-[#94A3B8]">{archivo.fecha}</span>
+                  <span className="shrink-0 text-[11px] text-[#F3E7DC]/50">{archivo.fecha}</span>
                 ) : null}
                 {archivo.url ? (
                   <a
                     href={archivo.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="shrink-0 text-[12px] font-bold text-[#1D4ED8] underline underline-offset-2"
+                    className="shrink-0 text-[12px] font-bold text-[#C9A46B] underline underline-offset-2"
                   >
                     Ver
                   </a>
@@ -460,7 +465,7 @@ function BloqueDocumentos({
 
         <div>
           <label
-            className={`flex cursor-pointer items-center justify-center gap-2.5 rounded-xl border-2 border-dashed border-[#BFD2F5] bg-[#F7FAFF] px-4 py-5 text-[13.5px] font-bold text-[#1D4ED8] transition-colors hover:bg-[#EFF6FF] ${
+            className={`flex cursor-pointer items-center justify-center gap-2.5 rounded-xl border-2 border-dashed border-[#B08D57]/40 bg-[#3B1727] px-4 py-5 text-[13.5px] font-bold text-[#C9A46B] transition-colors hover:bg-[#4C2032] ${
               subiendo ? 'pointer-events-none opacity-70' : ''
             }`}
           >
@@ -478,13 +483,13 @@ function BloqueDocumentos({
               accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.zip"
             />
           </label>
-          <p className="mt-2 text-[12px] text-[#94A3B8]">
+          <p className="mt-2 text-[12px] text-[#F3E7DC]/50">
             PDF, Word, Excel, PowerPoint, imágenes o un comprimido. Un archivo a la vez.
           </p>
-          {error ? <p className="mt-2 text-[12.5px] font-semibold text-[#B42318]">{error}</p> : null}
+          {error ? <p className="mt-2 text-[12.5px] font-semibold text-[#E0917E]">{error}</p> : null}
 
           {aviso ? (
-            <p className="mt-3 rounded-xl border border-[#BFE7D2] bg-[#F1FBF6] px-4 py-3 text-[12.5px] font-semibold text-[#186A46]">
+            <p className="mt-3 rounded-xl border border-[#7A8B6F]/40 bg-[#7A8B6F]/10 px-4 py-3 text-[12.5px] font-semibold text-[#A9BC9C]">
               {aviso}
             </p>
           ) : null}
@@ -502,10 +507,10 @@ export function PendientesCliente({ datos }: { datos: DatosPendientes }) {
   const total = datos.preguntas.length + datos.documentosPedidos.length
 
   return (
-    <div className="px-4 py-6 lg:px-6">
+    <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
       <header className="mb-5">
-        <h1 className="text-[19px] font-extrabold tracking-tight text-[#0B2A4A]">Lo que me piden</h1>
-        <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#5B6B84]">
+        <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">Lo que me piden</h1>
+        <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#F3E7DC]/70">
           {total > 0
             ? 'Aquí está todo lo que depende de ti para que el proyecto siga avanzando. Nada más.'
             : 'No hay nada pendiente de tu lado. El equipo sigue trabajando en tu proyecto.'}
@@ -529,10 +534,10 @@ export function PendientesCliente({ datos }: { datos: DatosPendientes }) {
 
 export function PendientesSinProyecto() {
   return (
-    <div className="px-4 py-10 lg:px-6">
-      <div className="mx-auto max-w-xl rounded-2xl border border-[#E4EAF3] bg-white p-8 text-center shadow-[0_1px_2px_rgba(11,42,74,0.06),0_8px_24px_-14px_rgba(11,42,74,0.20)]">
-        <h1 className="text-[17px] font-extrabold text-[#0B2A4A]">Todavía no hay proyecto</h1>
-        <p className="mx-auto mt-2 max-w-md text-[13.5px] leading-relaxed text-[#5B6B84]">
+    <div className="min-h-full bg-[#54142B] px-4 py-10 lg:px-6">
+      <div className="mx-auto max-w-xl rounded-2xl border border-[#6E4A50] bg-[#4C2032] p-8 text-center shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]">
+        <h1 className="text-[17px] font-extrabold text-[#F3E7DC]">Todavía no hay proyecto</h1>
+        <p className="mx-auto mt-2 max-w-md text-[13.5px] leading-relaxed text-[#F3E7DC]/70">
           Cuando contrates la estructuración, esta pantalla te va a mostrar las preguntas y los
           documentos que el equipo necesite de ti.
         </p>
