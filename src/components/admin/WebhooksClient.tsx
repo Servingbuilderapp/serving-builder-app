@@ -158,7 +158,7 @@ export function WebhooksClient({ logs: initialLogs, plans }: WebhooksClientProps
           <GlassCard className="p-6 border-primary/20 bg-primary/5">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-color-base-content flex items-center gap-2">
-                <Zap className="h-5 w-5 text-yellow-400" />
+                <Zap className="h-5 w-5 text-color-primary" />
                 {language === 'en' ? 'Payment Simulator' : 'Simulador de Pagos'}
               </h2>
               <button 
@@ -336,9 +336,9 @@ export function WebhooksClient({ logs: initialLogs, plans }: WebhooksClientProps
                 </div>
               </section>
 
-              <div className="p-4 rounded-xl bg-yellow-500/5 border border-yellow-500/10 flex items-start gap-3">
-                <HelpCircle className="h-5 w-5 text-yellow-400 shrink-0 mt-0.5" />
-                <p className="text-xs text-yellow-400/80 leading-relaxed">
+              <div className="p-4 rounded-xl bg-[#C99A3D]/10 border border-[#C99A3D]/25 flex items-start gap-3">
+                <HelpCircle className="h-5 w-5 text-[#E0B868] shrink-0 mt-0.5" />
+                <p className="text-xs text-[#E0B868]/85 leading-relaxed">
                   {language === 'en'
                     ? 'Important: Ensure the "plan" slug matches exactly with your database (basic, intermediary, professional).'
                     : 'Importante: Asegúrate de que el slug del "plan" coincida exactamente con tu base de datos (basic, intermediary, professional).'}

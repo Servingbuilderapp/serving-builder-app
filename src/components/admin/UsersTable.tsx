@@ -6,6 +6,7 @@ import { Search, User as UserIcon, Shield, ChevronLeft, ChevronRight, Eye, UserP
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { AddUserModal } from './AddUserModal'
+import { GlowButton } from '@/components/ui/GlowButton'
 
 interface UserRow {
   id: string
@@ -76,13 +77,13 @@ export function UsersTable({ initialUsers, plans }: UsersTableProps) {
           />
         </div>
 
-        <button 
+        <GlowButton
           onClick={() => setIsModalOpen(true)}
-          className="w-full md:w-auto flex items-center justify-center gap-2 bg-linear-to-r from-color-primary to-color-accent-pink hover:scale-105 text-color-base-content px-5 py-3 rounded-xl text-sm font-black transition-all shadow-[0_0_25px_rgba(249,115,22,0.4)] uppercase tracking-widest"
+          className="w-full md:w-auto uppercase tracking-widest"
         >
           <UserPlus className="h-4 w-4" />
           {language === 'en' ? 'Add User' : 'Agregar Usuario'}
-        </button>
+        </GlowButton>
       </div>
 
       <div className="bg-[#3B1727] border border-color-base-content/10 rounded-2xl overflow-hidden backdrop-blur-xl shadow-2xl">

@@ -154,9 +154,9 @@ export function RecentActivity() {
 
   const getColor = (type: string) => {
     switch (type) {
-      case 'user': return 'text-color-primary bg-color-primary/20 border-color-primary/30 shadow-[0_0_15px_rgba(249,115,22,0.1)]'
+      case 'user': return 'text-color-primary bg-color-primary/20 border-color-primary/30 shadow-[0_0_15px_rgba(176,141,87,0.15)]'
       case 'payment': return 'text-[#9BB18D] bg-[#7A8B6F]/20 border-[#7A8B6F]/30 shadow-[0_0_15px_rgba(122,139,111,0.15)]'
-      case 'execution': return 'text-color-accent-violet bg-color-accent-violet/20 border-color-accent-violet/30 shadow-[0_0_15px_rgba(139,92,246,0.1)]'
+      case 'execution': return 'text-color-accent-violet bg-color-accent-violet/20 border-color-accent-violet/30 shadow-[0_0_15px_rgba(201,164,107,0.15)]'
       default: return 'text-white/40 bg-color-base-100 border-white/10'
     }
   }
