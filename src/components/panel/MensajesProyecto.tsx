@@ -76,19 +76,19 @@ export function MensajesProyecto({ proyectoId, soyEquipo = false }: { proyectoId
   }
 
   return (
-    <div className="rounded-2xl border border-[#E4EAF3] bg-white shadow-[0_1px_2px_rgba(11,42,74,0.06),0_8px_24px_-14px_rgba(11,42,74,0.20)]">
-      <div className="flex items-center gap-2 border-b border-[#EEF2F8] px-5 py-3.5">
-        <MessageCircle className="h-4 w-4 text-[#1D4ED8]" />
-        <h3 className="text-[13.5px] font-extrabold text-[#0B2A4A]">
+    <div className="rounded-2xl border border-[#6E4A50] bg-[#4C2032] shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]">
+      <div className="flex items-center gap-2 border-b border-[#6E4A50] px-5 py-3.5">
+        <MessageCircle className="h-4 w-4 text-[#C9A46B]" />
+        <h3 className="text-[13.5px] font-extrabold text-[#F3E7DC]">
           {soyEquipo ? 'Mensajes con el cliente' : 'Habla con el equipo'}
         </h3>
       </div>
 
       <div className="max-h-80 min-h-[140px] space-y-3 overflow-y-auto px-5 py-4">
         {cargando ? (
-          <p className="text-[13px] text-[#94A3B8]">Cargando…</p>
+          <p className="text-[13px] text-[#F3E7DC]/50">Cargando…</p>
         ) : mensajes.length === 0 ? (
-          <p className="text-[13px] text-[#94A3B8]">
+          <p className="text-[13px] text-[#F3E7DC]/50">
             {soyEquipo
               ? 'Todavía no hay mensajes de este cliente.'
               : 'Escríbenos si tienes una pregunta sobre tu proyecto, en cualquier momento del proceso.'}
@@ -100,11 +100,13 @@ export function MensajesProyecto({ proyectoId, soyEquipo = false }: { proyectoId
               <div key={m.id} className={`flex ${esPropio ? 'justify-end' : 'justify-start'}`}>
                 <div
                   className={`max-w-[80%] rounded-2xl px-3.5 py-2 text-[13px] leading-relaxed ${
-                    esPropio ? 'bg-[#1D4ED8] text-white' : 'bg-[#F8FAFD] text-[#334155] border border-[#E4EAF3]'
+                    esPropio
+                      ? 'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#2E0E1A]'
+                      : 'bg-[#3B1727] text-[#F3E7DC]/85 border border-[#6E4A50]'
                   }`}
                 >
                   <p className="whitespace-pre-wrap">{m.mensaje}</p>
-                  <p className={`mt-1 text-[10.5px] ${esPropio ? 'text-white/60' : 'text-[#94A3B8]'}`}>
+                  <p className={`mt-1 text-[10.5px] ${esPropio ? 'text-[#2E0E1A]/60' : 'text-[#F3E7DC]/50'}`}>
                     {m.autor_tipo === 'equipo' ? 'Serving' : 'Cliente'} · {formatearHora(m.creado_en)}
                   </p>
                 </div>
@@ -115,7 +117,7 @@ export function MensajesProyecto({ proyectoId, soyEquipo = false }: { proyectoId
         <div ref={finRef} />
       </div>
 
-      <div className="flex items-center gap-2 border-t border-[#EEF2F8] px-4 py-3">
+      <div className="flex items-center gap-2 border-t border-[#6E4A50] px-4 py-3">
         <textarea
           value={texto}
           onChange={(e) => setTexto(e.target.value)}
@@ -127,13 +129,13 @@ export function MensajesProyecto({ proyectoId, soyEquipo = false }: { proyectoId
           }}
           placeholder="Escribe un mensaje…"
           rows={1}
-          className="h-10 flex-1 resize-none rounded-lg border border-[#E4EAF3] bg-[#F8FAFD] px-3 py-2 text-[13px] text-[#0B2A4A] outline-none focus:border-[#1D4ED8]"
+          className="h-10 flex-1 resize-none rounded-lg border border-[#6E4A50] bg-[#3B1727] px-3 py-2 text-[13px] text-[#F3E7DC] outline-none focus:border-[#B08D57]"
         />
         <button
           type="button"
           onClick={enviar}
           disabled={enviando || !texto.trim()}
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#1D4ED8] text-white disabled:opacity-40"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#2E0E1A] disabled:opacity-40"
         >
           <Send className="h-4 w-4" />
         </button>
