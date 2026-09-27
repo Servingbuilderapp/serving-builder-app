@@ -17,8 +17,18 @@ import { Building2, CalendarClock, Coins, ExternalLink } from 'lucide-react'
  * cliente esté a tiempo.
  */
 
-const SOMBRA_TARJETA =
-  'shadow-[0_1px_2px_rgba(11,42,74,0.06),0_8px_24px_-14px_rgba(11,42,74,0.20)]'
+const RELIEVE_TARJETA =
+  'shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]'
+
+/** Botón dorado con relieve fuerte: brillo arriba, escalón abajo que se
+ * aplana al hacer clic — igual al de Estructuración, para que combinen. */
+const BOTON_DORADO =
+  'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#2E0E1A] border border-[#7A5A2E]/60 ' +
+  'shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_4px_0_#7A5A2E,0_12px_20px_-6px_rgba(20,5,10,0.55)] ' +
+  'hover:brightness-105 hover:-translate-y-0.5 ' +
+  'active:translate-y-[3px] active:shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_1px_0_#7A5A2E,0_4px_10px_-4px_rgba(20,5,10,0.5)] ' +
+  'disabled:translate-y-0 disabled:hover:translate-y-0 disabled:brightness-90 disabled:shadow-none ' +
+  'transition-all duration-150'
 
 export type ConvocatoriaPendiente = {
   id: string
@@ -41,38 +51,38 @@ function TarjetaPendiente({
 }) {
   return (
     <label
-      className={`flex cursor-pointer items-start gap-3 rounded-2xl border bg-white px-5 py-4 transition-colors ${SOMBRA_TARJETA} ${
-        elegida ? 'border-[#1D4ED8]' : 'border-[#E4EAF3] hover:border-[#C7DBFB]'
+      className={`flex cursor-pointer items-start gap-3 rounded-2xl border bg-[#4C2032] px-5 py-4 transition-colors ${RELIEVE_TARJETA} ${
+        elegida ? 'border-[#C9A46B]' : 'border-[#6E4A50] hover:border-[#B08D57]/60'
       }`}
     >
       <input
         type="checkbox"
         checked={elegida}
         onChange={(e) => onCambiar(convocatoria.id, e.target.checked)}
-        className="mt-1 h-4 w-4 shrink-0 rounded border-[#C7DBFB] text-[#1D4ED8] focus:ring-[#1D4ED8]"
+        className="mt-1 h-4 w-4 shrink-0 rounded border-[#B08D57] bg-[#3B1727] text-[#C9A46B] focus:ring-[#C9A46B]"
       />
 
       <div className="min-w-0 flex-1">
-        <h3 className="text-[15px] font-extrabold leading-snug tracking-tight text-[#0B2A4A]">
+        <h3 className="text-[15px] font-extrabold leading-snug tracking-tight text-[#F3E7DC]">
           {convocatoria.nombre}
         </h3>
 
-        <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[12.5px] text-[#5B6B84]">
+        <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[12.5px] text-[#F3E7DC]/70">
           {convocatoria.entidad ? (
             <span className="inline-flex items-center gap-1.5">
-              <Building2 className="h-3.5 w-3.5 text-[#94A3B8]" />
+              <Building2 className="h-3.5 w-3.5 text-[#F3E7DC]/50" />
               {convocatoria.entidad}
             </span>
           ) : null}
           {convocatoria.fechaCierre ? (
             <span className="inline-flex items-center gap-1.5">
-              <CalendarClock className="h-3.5 w-3.5 text-[#94A3B8]" />
+              <CalendarClock className="h-3.5 w-3.5 text-[#F3E7DC]/50" />
               Cierra: {convocatoria.fechaCierre}
             </span>
           ) : null}
           {convocatoria.monto ? (
             <span className="inline-flex items-center gap-1.5">
-              <Coins className="h-3.5 w-3.5 text-[#94A3B8]" />
+              <Coins className="h-3.5 w-3.5 text-[#F3E7DC]/50" />
               {convocatoria.monto}
             </span>
           ) : null}
@@ -84,7 +94,7 @@ function TarjetaPendiente({
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            className="mt-3 inline-flex items-center gap-1.5 text-[12.5px] font-bold text-[#5B6B84] underline underline-offset-2 hover:text-[#1D4ED8]"
+            className="mt-3 inline-flex items-center gap-1.5 text-[12.5px] font-bold text-[#F3E7DC]/70 underline underline-offset-2 hover:text-[#C9A46B]"
           >
             Ver la convocatoria <ExternalLink className="h-3.5 w-3.5" />
           </a>
@@ -150,12 +160,12 @@ export function ElegirConvocatorias({
   }
 
   return (
-    <div className="px-4 py-6 lg:px-6">
+    <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
       <header className="mb-5">
-        <h1 className="text-[19px] font-extrabold tracking-tight text-[#0B2A4A]">
+        <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">
           Elige tus convocatorias
         </h1>
-        <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#5B6B84]">
+        <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#F3E7DC]/70">
           Encontramos estas oportunidades para tu proyecto. Marca una o varias — solo a esas les
           calculamos el encaje en detalle. Si no eliges en 3 días, el equipo elige por ti las que
           mejor encajan.
@@ -174,7 +184,7 @@ export function ElegirConvocatorias({
       </div>
 
       {error ? (
-        <p className="mt-4 rounded-xl border border-[#F6C9C4] bg-[#FDECEA] px-3.5 py-2.5 text-[13px] font-bold text-[#B42318]">
+        <p className="mt-4 rounded-xl border border-[#C0604A]/40 bg-[#C0604A]/12 px-3.5 py-2.5 text-[13px] font-bold text-[#E0917E]">
           {error}
         </p>
       ) : null}
@@ -184,7 +194,7 @@ export function ElegirConvocatorias({
           type="button"
           onClick={confirmar}
           disabled={enviando || elegidas.size === 0}
-          className="inline-flex items-center gap-2 rounded-xl bg-[#1D4ED8] px-5 py-2.5 text-[13.5px] font-bold text-white shadow-[0_8px_20px_-8px_rgba(29,78,216,0.55)] transition-colors hover:bg-[#1741B8] disabled:cursor-not-allowed disabled:bg-[#B9C7E8] disabled:shadow-none"
+          className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13.5px] font-extrabold disabled:opacity-70 ${BOTON_DORADO}`}
         >
           {enviando
             ? 'Guardando tu elección…'
