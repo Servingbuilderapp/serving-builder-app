@@ -45,7 +45,7 @@ const ICONOS: Record<string, React.ComponentType<{ className?: string }>> = {
 }
 
 const SOMBRA =
-  'shadow-[0_1px_2px_rgba(11,42,74,0.06),0_8px_24px_-14px_rgba(11,42,74,0.20)]'
+  'shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]'
 
 const ESTADOS: Record<string, string> = {
   pendiente_pago: 'Pendiente de pago',
@@ -57,7 +57,7 @@ const ESTADOS: Record<string, string> = {
 
 function Tarjeta({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`rounded-2xl border border-[#E4EAF3] bg-white ${SOMBRA} ${className}`}>
+    <div className={`rounded-2xl border border-[#6E4A50] bg-[#4C2032] ${SOMBRA} ${className}`}>
       {children}
     </div>
   )
@@ -66,8 +66,8 @@ function Tarjeta({ children, className = '' }: { children: React.ReactNode; clas
 function Dato({ etiqueta, valor }: { etiqueta: string; valor: string }) {
   return (
     <div>
-      <div className="text-[10px] font-bold uppercase tracking-wider text-[#94A3B8]">{etiqueta}</div>
-      <div className="mt-0.5 text-[13.5px] font-semibold text-[#0B2A4A]">{valor}</div>
+      <div className="text-[10px] font-bold uppercase tracking-wider text-[#F3E7DC]/50">{etiqueta}</div>
+      <div className="mt-0.5 text-[13.5px] font-semibold text-[#F3E7DC]">{valor}</div>
     </div>
   )
 }
@@ -77,7 +77,7 @@ export function FichaProyecto({ datos }: { datos: DatosFicha }) {
   const { proyectoId, porcentaje, areas } = datos
 
   return (
-    <div className="space-y-5 p-4 lg:p-6">
+    <div className="min-h-full space-y-5 bg-[#54142B] p-4 lg:p-6">
       {/* datos del proyecto ------------------------------------------------ */}
       <Tarjeta className="p-5 lg:p-6">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -87,19 +87,19 @@ export function FichaProyecto({ datos }: { datos: DatosFicha }) {
           <Dato etiqueta="Contratado el" valor={datos.creado} />
         </div>
 
-        <div className="mt-5 flex flex-col gap-3 border-t border-[#EEF2F8] pt-4 sm:flex-row sm:items-center">
-          <span className="inline-flex w-fit items-center rounded-full border border-[#DCE4F0] bg-[#F4F7FC] px-3 py-1 text-[12px] font-semibold text-[#0B2A4A]">
+        <div className="mt-5 flex flex-col gap-3 border-t border-[#6E4A50] pt-4 sm:flex-row sm:items-center">
+          <span className="inline-flex w-fit items-center rounded-full border border-[#B08D57]/35 bg-[#B08D57]/15 px-3 py-1 text-[12px] font-semibold text-[#C9A46B]">
             {datos.estado}
           </span>
 
           <div className="flex flex-1 items-center gap-3">
-            <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-[#EEF2F8]">
+            <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-[#3B1727]">
               <div
-                className="h-full rounded-full bg-[#1D4ED8] transition-all duration-500"
+                className="h-full rounded-full bg-[#C9A46B] transition-all duration-500"
                 style={{ width: `${porcentaje}%` }}
               />
             </div>
-            <span className="shrink-0 text-[12.5px] font-bold tabular-nums text-[#0B2A4A]">
+            <span className="shrink-0 text-[12.5px] font-bold tabular-nums text-[#F3E7DC]">
               {porcentaje}%
             </span>
           </div>
@@ -108,7 +108,7 @@ export function FichaProyecto({ datos }: { datos: DatosFicha }) {
 
       {/* áreas de trabajo --------------------------------------------------- */}
       <div>
-        <h2 className="mb-3 text-[13px] font-bold uppercase tracking-wider text-[#0B2A4A]">
+        <h2 className="mb-3 text-[13px] font-bold uppercase tracking-wider text-[#F3E7DC]/70">
           Áreas de trabajo
         </h2>
 
@@ -119,20 +119,20 @@ export function FichaProyecto({ datos }: { datos: DatosFicha }) {
 
             return (
               <Link key={area.ruta} href={`/admin/proyectos/${proyectoId}/${area.ruta}`}>
-                <Tarjeta className="h-full p-4 transition-shadow hover:shadow-[0_2px_4px_rgba(11,42,74,0.08),0_14px_30px_-16px_rgba(11,42,74,0.30)]">
+                <Tarjeta className="h-full p-4 transition-shadow hover:shadow-[0_2px_4px_rgba(20,5,10,0.35),0_14px_30px_-16px_rgba(20,5,10,0.65)]">
                   <div className="flex items-start gap-3">
                     <span
                       className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${
-                        vacia ? 'bg-[#F1F5FA] text-[#94A3B8]' : 'bg-[#EAF1FE] text-[#1D4ED8]'
+                        vacia ? 'bg-[#F3E7DC]/10 text-[#F3E7DC]/50' : 'bg-[#B08D57]/15 text-[#C9A46B]'
                       }`}
                     >
                       <Icono className="h-4 w-4" />
                     </span>
 
                     <div className="min-w-0">
-                      <div className="text-[13.5px] font-bold text-[#0B2A4A]">{area.nombre}</div>
+                      <div className="text-[13.5px] font-bold text-[#F3E7DC]">{area.nombre}</div>
                       <div
-                        className={`mt-0.5 text-[12px] ${vacia ? 'text-[#94A3B8]' : 'text-[#5B6B84]'}`}
+                        className={`mt-0.5 text-[12px] ${vacia ? 'text-[#F3E7DC]/50' : 'text-[#F3E7DC]/70'}`}
                       >
                         {vacia ? 'Todavía sin datos' : `${area.cantidad} ${area.unidad}`}
                       </div>
