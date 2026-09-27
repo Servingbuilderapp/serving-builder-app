@@ -34,9 +34,9 @@ interface Props {
 }
 
 const COLORES_SEMAFORO: Record<string, { bg: string; texto: string; borde: string; emoji: string }> = {
-  verde: { bg: 'bg-emerald-50', texto: 'text-emerald-700', borde: 'border-emerald-300', emoji: '🟢' },
-  amarillo: { bg: 'bg-amber-50', texto: 'text-amber-700', borde: 'border-amber-300', emoji: '🟡' },
-  rojo: { bg: 'bg-red-50', texto: 'text-red-700', borde: 'border-red-300', emoji: '🔴' },
+  verde: { bg: 'bg-[#7A8B6F]/15', texto: 'text-[#A9BC9C]', borde: 'border-[#7A8B6F]/40', emoji: '🟢' },
+  amarillo: { bg: 'bg-[#C99A3D]/15', texto: 'text-[#E0B868]', borde: 'border-[#C99A3D]/40', emoji: '🟡' },
+  rojo: { bg: 'bg-[#C0604A]/15', texto: 'text-[#E0917E]', borde: 'border-[#C0604A]/40', emoji: '🔴' },
 }
 
 function GaugePuntaje({ puntaje }: { puntaje: number }) {
@@ -66,7 +66,7 @@ function TarjetaConvocatoria({ convocatoria }: { convocatoria: Convocatoria }) {
   const estiloSemaforo = encaje?.semaforo ? COLORES_SEMAFORO[encaje.semaforo.toLowerCase()] : null
 
   return (
-    <div className="rounded-2xl border border-color-base-content/10 bg-white overflow-hidden">
+    <div className="rounded-2xl border border-color-base-content/10 bg-color-base-200 overflow-hidden">
       <div className="p-5 space-y-3">
         <div className="flex items-start justify-between gap-3">
           <div>
