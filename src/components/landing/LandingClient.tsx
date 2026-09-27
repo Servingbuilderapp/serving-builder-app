@@ -422,7 +422,7 @@ function VistaPreviaPanel() {
   const { t } = useTranslation()
   const barras = [72, 88, 54, 95, 63]
   return (
-    <div className="rounded-2xl bg-[#4C2032] border border-[#6E4A50] shadow-sm p-5">
+    <div className="rounded-2xl bg-[#4C2032] border border-[#B08D57]/35 shadow-sm p-5">
       <div className="flex items-center justify-between mb-5">
         <span className="text-[11px] font-bold uppercase tracking-wider text-[#F3E7DC]/70">
           {t('w.preview.titulo')}
@@ -485,7 +485,7 @@ export function LandingClient({ user }: LandingClientProps) {
     <div className="relative min-h-screen bg-[#54142B] text-[#F3E7DC] font-sans">
       <FondoDecorativo />
       {/* ================= HEADER ================= */}
-      <header className="sticky top-0 z-50 bg-[#54142B]/95 backdrop-blur border-b border-[#6E4A50]">
+      <header className="sticky top-0 z-50 bg-[#54142B]/95 backdrop-blur border-b border-[#B08D57]/35">
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8 h-[72px] flex items-center justify-between gap-6">
           <Link href="/" className="shrink-0">
             <Marca />
@@ -516,7 +516,7 @@ export function LandingClient({ user }: LandingClientProps) {
               <>
                 <a
                   href="/login"
-                  className={`h-10 px-5 inline-flex items-center rounded-lg border border-[#6E4A50] bg-[#3B1727] text-[#F3E7DC] text-[13px] font-semibold hover:bg-[#4C2032] ${RELIEVE_BOTON_SUAVE}`}
+                  className={`h-10 px-5 inline-flex items-center rounded-lg border border-[#B08D57]/35 bg-[#3B1727] text-[#F3E7DC] text-[13px] font-semibold hover:bg-[#4C2032] ${RELIEVE_BOTON_SUAVE}`}
                 >
                   {t('w.nav.login')}
                 </a>
@@ -534,14 +534,14 @@ export function LandingClient({ user }: LandingClientProps) {
             type="button"
             onClick={() => setMenuAbierto((v) => !v)}
             aria-label={t('w.nav.menu')}
-            className="lg:hidden h-10 w-10 inline-flex items-center justify-center rounded-lg border border-[#6E4A50] text-[#F3E7DC]"
+            className="lg:hidden h-10 w-10 inline-flex items-center justify-center rounded-lg border border-[#B08D57]/35 text-[#F3E7DC]"
           >
             {menuAbierto ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
 
         {menuAbierto ? (
-          <div className="lg:hidden border-t border-[#6E4A50] bg-[#54142B] px-5 py-4 space-y-1">
+          <div className="lg:hidden border-t border-[#B08D57]/35 bg-[#54142B] px-5 py-4 space-y-1">
             {NAV_LINKS.map((enlace) => (
               <a
                 key={enlace.href}
@@ -556,7 +556,7 @@ export function LandingClient({ user }: LandingClientProps) {
               <LanguageSwitcher className="self-start" />
               <a
                 href="/login"
-                className="h-11 inline-flex items-center justify-center rounded-lg border border-[#6E4A50] text-[#F3E7DC] text-sm font-semibold"
+                className="h-11 inline-flex items-center justify-center rounded-lg border border-[#B08D57]/35 text-[#F3E7DC] text-sm font-semibold"
               >
                 {t('w.nav.login')}
               </a>
@@ -632,7 +632,7 @@ export function LandingClient({ user }: LandingClientProps) {
                 </Link>
                 <a
                   href="#como-funciona"
-                  className={`h-12 px-6 inline-flex items-center rounded-lg border border-[#6E4A50] bg-[#3B1727] text-[#F3E7DC] text-sm font-semibold hover:bg-[#4C2032] ${RELIEVE_BOTON_SUAVE}`}
+                  className={`h-12 px-6 inline-flex items-center rounded-lg border border-[#B08D57]/35 bg-[#3B1727] text-[#F3E7DC] text-sm font-semibold hover:bg-[#4C2032] ${RELIEVE_BOTON_SUAVE}`}
                 >
                   {t('w.hero.cta_secundario')}
                 </a>
@@ -678,7 +678,7 @@ export function LandingClient({ user }: LandingClientProps) {
 
             {/* Columna derecha: diagnóstico */}
             <div className="lg:col-span-3">
-              <div className="rounded-2xl border border-[#6E4A50] bg-[#3B1727] p-6">
+              <div className="rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-6">
                 <h2 className="text-xl font-extrabold text-[#F3E7DC] leading-snug">
                   {t('w.hero.panel_titulo')}
                 </h2>
@@ -686,7 +686,7 @@ export function LandingClient({ user }: LandingClientProps) {
                   {t('w.hero.panel_texto')}
                 </p>
 
-                <div className="mt-5 rounded-xl bg-[#4C2032] border border-[#6E4A50] p-4 space-y-2.5">
+                <div className="mt-5 rounded-xl bg-[#4C2032] border border-[#B08D57]/35 p-4 space-y-2.5">
                   {[
                     { icono: Lightbulb, clave: 'w.hero.caso1' },
                     { icono: FileText, clave: 'w.hero.caso2' },
@@ -795,7 +795,7 @@ export function LandingClient({ user }: LandingClientProps) {
                   href={`https://wa.me/${TELEFONO_WHATSAPP}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`h-12 px-6 inline-flex items-center rounded-lg border border-[#6E4A50] bg-[#3B1727] text-[#F3E7DC] text-sm font-semibold hover:bg-[#4C2032] ${RELIEVE_BOTON_SUAVE}`}
+                  className={`h-12 px-6 inline-flex items-center rounded-lg border border-[#B08D57]/35 bg-[#3B1727] text-[#F3E7DC] text-sm font-semibold hover:bg-[#4C2032] ${RELIEVE_BOTON_SUAVE}`}
                 >
                   {t('w.diagnostico.boton_hablar')}
                 </a>
@@ -803,7 +803,7 @@ export function LandingClient({ user }: LandingClientProps) {
               <p className="mt-4 text-[12px] text-[#F3E7DC]/50">{t('w.diagnostico.nota')}</p>
             </div>
 
-            <div className="rounded-2xl border border-[#6E4A50] bg-[#3B1727] p-7">
+            <div className="rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-7">
               <h3 className="text-[15px] font-extrabold text-[#F3E7DC] mb-5">
                 {t('w.diagnostico.incluye_titulo')}
               </h3>
@@ -1094,7 +1094,7 @@ export function LandingClient({ user }: LandingClientProps) {
                 className={`rounded-2xl p-7 ${
                   plan.destacado
                     ? 'bg-[#4C2032] border-2 border-[#B08D57]'
-                    : 'bg-[#3B1727]/60 border border-[#6E4A50]'
+                    : 'bg-[#3B1727]/60 border border-[#B08D57]/35'
                 }`}
               >
                 <h3 className={`text-lg font-extrabold ${plan.destacado ? 'text-[#F3E7DC]' : 'text-[#F3E7DC]'}`}>
@@ -1109,7 +1109,7 @@ export function LandingClient({ user }: LandingClientProps) {
                 <div
                   className={`mt-3 inline-flex items-center gap-1.5 text-[11.5px] font-semibold px-2.5 py-1 rounded-full ${
                     plan.destacado
-                      ? 'bg-[#3B1727] text-[#B08D57] border border-[#6E4A50]'
+                      ? 'bg-[#3B1727] text-[#B08D57] border border-[#B08D57]/35'
                       : 'bg-[#B08D57]/10 text-[#F3E7DC] border border-[#B08D57]/20'
                   }`}
                 >
@@ -1156,7 +1156,7 @@ export function LandingClient({ user }: LandingClientProps) {
             {FAQ_CLAVES.map((id) => {
               const abierta = faqAbierta === id
               return (
-                <div key={id} className="rounded-xl border border-[#6E4A50] bg-[#3B1727] overflow-hidden">
+                <div key={id} className="rounded-xl border border-[#B08D57]/35 bg-[#3B1727] overflow-hidden">
                   <button
                     type="button"
                     onClick={() => setFaqAbierta(abierta ? null : id)}
