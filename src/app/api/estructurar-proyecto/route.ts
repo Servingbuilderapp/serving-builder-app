@@ -5,6 +5,7 @@ import mammoth from "mammoth";
 import { motorAutorizado, cabecerasInternas } from "@/lib/candadoMotores";
 import { correrEvaluadorEstructuracion } from "@/lib/motorEvaluadorEstructuracion";
 import { generarNotaConcepto } from "@/lib/motorNotaConcepto";
+import { agregarFondosEspecialesComoCandidatas } from "@/lib/bibliotecaConvocatorias";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -487,6 +488,21 @@ El campo "advertencia" solo aplica a pasos "completo" y va en null si no hay nin
           }
         } catch (e) {
           console.error("Error generando la Nota de Concepto:", e);
+        }
+      });
+
+      // Los 9 fondos especiales (curados a mano por el equipo, marcados con
+      // es_fondo_especial en la biblioteca) se ofrecen a este proyecto solos,
+      // sin esperar a que el Motor 2 los encuentre buscando. Quedan como
+      // candidata pendiente de elección, igual que cualquier otra: el Motor 3
+      // (encaje) solo corre si el cliente los elige en /api/elegir-convocatoria
+      // — la regla de "Parada 1" no cambia para estos.
+      after(async () => {
+        try {
+          const resultado = await agregarFondosEspecialesComoCandidatas(supabase, id_proyecto);
+          console.log(`[Fondos especiales] ${resultado.agregados} agregados como candidatas para ${id_proyecto}.`);
+        } catch (e) {
+          console.error("Error agregando los fondos especiales como candidatas:", e);
         }
       });
     }
