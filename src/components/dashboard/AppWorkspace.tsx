@@ -206,7 +206,7 @@ export function AppWorkspace({ appId, currentExecutionId, schema, profile }: App
       )}
 
       {/* The Petition Block */}
-      <div className="bg-white border border-color-base-content/10 rounded-3xl p-8 relative overflow-hidden group shadow-sm">
+      <div className="bg-color-base-200 border border-color-base-content/10 rounded-3xl p-8 relative overflow-hidden group shadow-sm">
         <div className="absolute top-0 right-0 p-4">
           <div className="px-2 py-1 rounded bg-color-base-100 border border-color-base-content/10 text-[10px] font-bold text-color-base-content/40 uppercase tracking-widest">
             {language === 'en' ? 'The Petition' : 'La Petición'}
@@ -271,14 +271,14 @@ export function AppWorkspace({ appId, currentExecutionId, schema, profile }: App
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => copyToClipboard('text')}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white border border-color-base-content/10 text-xs font-medium text-color-base-content/70 hover:bg-color-base-100 hover:text-color-base-content transition-all shadow-sm"
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-color-base-200 border border-color-base-content/10 text-xs font-medium text-color-base-content/70 hover:bg-color-base-100 hover:text-color-base-content transition-all shadow-sm"
                 >
                   <FileText className="h-3.5 w-3.5" />
                   {language === 'en' ? 'Text' : 'Texto'}
                 </button>
                 <button
                   onClick={() => copyToClipboard('markdown')}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white border border-color-base-content/10 text-xs font-medium text-color-base-content/70 hover:bg-color-base-100 hover:text-color-base-content transition-all shadow-sm"
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-color-base-200 border border-color-base-content/10 text-xs font-medium text-color-base-content/70 hover:bg-color-base-100 hover:text-color-base-content transition-all shadow-sm"
                 >
                   <Code className="h-3.5 w-3.5" />
                   {language === 'en' ? 'Markdown' : 'Markdown'}
@@ -294,7 +294,7 @@ export function AppWorkspace({ appId, currentExecutionId, schema, profile }: App
             </div>
 
             {/* Result Card with Glassmorphism */}
-            <div className="bg-white rounded-3xl shadow-sm border border-color-base-content/10 p-6 md:p-10 overflow-hidden relative group">
+            <div className="bg-color-base-200 rounded-3xl shadow-sm border border-color-base-content/10 p-6 md:p-10 overflow-hidden relative group">
               {/* Decorative accent */}
               <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-color-primary/50 via-color-accent-pink/50 to-color-primary/50" />
               
