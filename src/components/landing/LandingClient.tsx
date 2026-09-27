@@ -867,7 +867,7 @@ export function LandingClient({ user }: LandingClientProps) {
       </section>
 
       {/* ================= PROPUESTA DE VALOR ================= */}
-      <section id="como-funciona" className="bg-[#4C2032] py-16 lg:py-20 border-y border-[#6E4A50]">
+      <section id="como-funciona" className="bg-[#8C3654] py-16 lg:py-20 border-y-2 border-[#B08D57]/45">
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
           <TituloSeccion
             eyebrow={t('w.valor.eyebrow')}
@@ -1030,7 +1030,7 @@ export function LandingClient({ user }: LandingClientProps) {
 
       {/* ================= ENTIDADES (solo si hay autorización) ================= */}
       {ENTIDADES_ALIADAS.length > 0 ? (
-        <section className="bg-[#4C2032] border-y border-[#6E4A50] py-8">
+        <section className="bg-[#8C3654] border-y-2 border-[#B08D57]/45 py-8">
           <div className="max-w-[1400px] mx-auto px-5 lg:px-8 flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
             <span className="text-[12px] font-bold uppercase tracking-wider text-[#F3E7DC]/70">
               {t('w.aliados.titulo')}
