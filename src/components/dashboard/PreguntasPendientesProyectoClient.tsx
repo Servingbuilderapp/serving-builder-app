@@ -28,8 +28,8 @@ export function PreguntasPendientesProyectoClient({ preguntasIniciales }: Props)
 
   if (!preguntaActual) {
     return (
-      <div className="p-8 rounded-3xl border border-emerald-200 bg-emerald-50 text-center">
-        <p className="text-sm font-bold text-emerald-700">
+      <div className="p-8 rounded-3xl border border-[#7A8B6F]/40 bg-[#7A8B6F]/10 text-center">
+        <p className="text-sm font-bold text-[#A9BC9C]">
           ¡Ya respondiste todas las preguntas pendientes por ahora!
         </p>
       </div>
@@ -69,29 +69,29 @@ export function PreguntasPendientesProyectoClient({ preguntasIniciales }: Props)
   }
 
   return (
-    <div className="p-8 rounded-3xl border border-color-base-content/10 bg-color-base-content/5 space-y-5">
+    <div className="p-8 rounded-3xl border border-[#6E4A50] bg-[#4C2032] space-y-5">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-black text-color-base-content">
+        <h3 className="text-lg font-black text-[#F3E7DC]">
           Nos falta un poco de información
         </h3>
-        <span className="text-xs font-bold text-color-base-content/50">
+        <span className="text-xs font-bold text-[#F3E7DC]/50">
           {indiceActual + 1} de {preguntas.length}
         </span>
       </div>
 
       <div className="space-y-2">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-black uppercase tracking-wide text-color-primary">
+          <span className="text-xs font-black uppercase tracking-wide text-[#C9A46B]">
             {preguntaActual.nombrePaso}
           </span>
           {preguntaActual.critico && (
-            <span className="flex items-center gap-1 text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">
+            <span className="flex items-center gap-1 text-xs font-bold text-[#E0B868] bg-[#C99A3D]/15 px-2 py-0.5 rounded-full">
               <AlertTriangle className="w-3 h-3" />
               Punto clave
             </span>
           )}
         </div>
-        <p className="text-sm text-color-base-content">{preguntaActual.pregunta}</p>
+        <p className="text-sm text-[#F3E7DC]">{preguntaActual.pregunta}</p>
       </div>
 
       <textarea
@@ -100,15 +100,15 @@ export function PreguntasPendientesProyectoClient({ preguntasIniciales }: Props)
         placeholder="Escribe tu respuesta aquí..."
         rows={4}
         disabled={enviando}
-        className="w-full p-4 rounded-2xl border border-color-base-content/10 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-color-primary/30"
+        className="w-full p-4 rounded-2xl border border-[#6E4A50] bg-[#3B1727] text-[#F3E7DC] text-sm placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/30"
       />
 
-      {error && <p className="text-xs text-red-500 font-bold">{error}</p>}
+      {error && <p className="text-xs text-[#E0917E] font-bold">{error}</p>}
 
       <button
         onClick={handleEnviar}
         disabled={enviando || !respuestaTexto.trim()}
-        className="w-full py-3 rounded-2xl bg-gradient-magma text-white font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50"
+        className="w-full py-3 rounded-2xl bg-[#C9A46B] text-[#3B1727] font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50"
       >
         {enviando ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
         {enviando ? 'Enviando...' : 'Enviar respuesta'}
