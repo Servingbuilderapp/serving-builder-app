@@ -136,7 +136,7 @@ export function Header({ onToggleMobileSidebar, user, profile }: HeaderProps) {
           </button>
 
           {notificationsOpen && (
-            <div id="notifications-menu" className="absolute right-0 mt-2 w-80 rounded-2xl border border-color-base-content/10 bg-white shadow-[0_20px_50px_rgba(6,78,59,0.1)] p-2 animate-in fade-in slide-in-from-top-2 backdrop-blur-xl z-50">
+            <div id="notifications-menu" className="absolute right-0 mt-2 w-80 rounded-2xl border border-color-base-content/10 bg-color-base-200 shadow-[0_20px_50px_rgba(20,5,10,0.35)] p-2 animate-in fade-in slide-in-from-top-2 backdrop-blur-xl z-50">
               <div className="px-3 py-3 border-b border-color-base-content/10 flex items-center justify-between">
                 <h3 className="font-bold text-sm text-color-base-content tracking-tight">{language === 'en' ? 'Notifications' : 'Notificaciones'}</h3>
                 <span className="text-[10px] bg-color-primary/20 text-color-primary px-2 py-0.5 rounded-full uppercase font-black tracking-tighter ring-1 ring-color-primary/30">2 NEW</span>
@@ -199,7 +199,7 @@ export function Header({ onToggleMobileSidebar, user, profile }: HeaderProps) {
           </button>
 
           {dropdownOpen && (
-            <div id="user-menu" className="absolute right-0 mt-2 w-56 rounded-2xl border border-color-base-content/10 bg-white shadow-[0_20px_50px_rgba(6,78,59,0.1)] p-1.5 animate-in fade-in slide-in-from-top-2 backdrop-blur-xl">
+            <div id="user-menu" className="absolute right-0 mt-2 w-56 rounded-2xl border border-color-base-content/10 bg-color-base-200 shadow-[0_20px_50px_rgba(20,5,10,0.35)] p-1.5 animate-in fade-in slide-in-from-top-2 backdrop-blur-xl">
               <div className="px-3 py-3 border-b border-color-base-content/10 mb-1.5">
                 <p className="text-sm font-bold text-color-base-content truncate">{displayUserName}</p>
                 <p className="text-xs text-color-base-content/50 truncate mt-0.5">{user?.email}</p>
