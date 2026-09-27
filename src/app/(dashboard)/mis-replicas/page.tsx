@@ -10,10 +10,10 @@ export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 const SOMBRA_TARJETA =
-  'shadow-[0_1px_2px_rgba(11,42,74,0.06),0_8px_24px_-14px_rgba(11,42,74,0.20)]'
+  'shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]'
 
 const RELIEVE_BOTON =
-  'shadow-[0_1px_0_rgba(255,255,255,0.35)_inset,0_2px_4px_rgba(11,42,74,0.18),0_8px_18px_-10px_rgba(29,78,216,0.55)]'
+  'shadow-[0_1px_0_rgba(255,255,255,0.12)_inset,0_2px_4px_rgba(20,5,10,0.35),0_8px_18px_-10px_rgba(201,164,107,0.55)]'
 
 type SolicitudReplica = {
   id: string
@@ -28,12 +28,12 @@ type SolicitudReplica = {
 function etiquetaEstado(solicitud: SolicitudReplica): { texto: string; clase: string } {
   const estado = (solicitud.estado_actual || '').toLowerCase()
   if (estado === 'estructurando_ia') {
-    return { texto: 'Procesando tu documento', clase: 'bg-[#FEF3C7] text-[#8A5307]' }
+    return { texto: 'Procesando tu documento', clase: 'bg-[#C99A3D]/15 text-[#E0B868]' }
   }
   if (estado === 'en_revision_tecnica') {
-    return { texto: 'En revisión del equipo', clase: 'bg-[#EFF6FF] text-[#1D4ED8]' }
+    return { texto: 'En revisión del equipo', clase: 'bg-[#C9A46B]/15 text-[#C9A46B]' }
   }
-  return { texto: solicitud.estado_comercial || 'Recibida', clase: 'bg-[#F1F5F9] text-[#5B6B84]' }
+  return { texto: solicitud.estado_comercial || 'Recibida', clase: 'bg-[#F3E7DC]/10 text-[#F3E7DC]/60' }
 }
 
 export default async function MisReplicasPage() {
@@ -79,30 +79,30 @@ export default async function MisReplicasPage() {
   }
 
   return (
-    <div className="px-4 py-6 lg:px-6">
+    <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
       <header className="mb-5 flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="text-[19px] font-extrabold tracking-tight text-[#0B2A4A]">Mis réplicas</h1>
-          <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#5B6B84]">
+          <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">Mis réplicas</h1>
+          <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#F3E7DC]/60">
             Proyectos ya estructurados que nos enviaste para volver a presentar — en otra
             convocatoria, otro territorio u otra forma.
           </p>
         </div>
         <Link
           href="/mis-replicas/nueva"
-          className={`inline-flex items-center gap-2 rounded-xl bg-[#1D4ED8] px-4 py-2.5 text-[13px] font-bold text-white transition-transform ${RELIEVE_BOTON} hover:-translate-y-px`}
+          className={`inline-flex items-center gap-2 rounded-xl bg-[#C9A46B] px-4 py-2.5 text-[13px] font-bold text-[#3B1727] transition-transform ${RELIEVE_BOTON} hover:-translate-y-px`}
         >
           <Plus className="h-4 w-4" /> Solicitar una réplica
         </Link>
       </header>
 
       {lista.length === 0 ? (
-        <div className={`mx-auto max-w-xl rounded-2xl border border-[#E4EAF3] bg-white p-8 text-center ${SOMBRA_TARJETA}`}>
-          <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-[#EFF6FF] text-[#1D4ED8]">
+        <div className={`mx-auto max-w-xl rounded-2xl border border-[#6E4A50] bg-[#4C2032] p-8 text-center ${SOMBRA_TARJETA}`}>
+          <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-[#C9A46B]/15 text-[#C9A46B]">
             <Copy className="h-5 w-5" />
           </span>
-          <h2 className="mt-3 text-[15px] font-extrabold text-[#0B2A4A]">Todavía no has pedido ninguna</h2>
-          <p className="mx-auto mt-2 max-w-md text-[13.5px] leading-relaxed text-[#5B6B84]">
+          <h2 className="mt-3 text-[15px] font-extrabold text-[#F3E7DC]">Todavía no has pedido ninguna</h2>
+          <p className="mx-auto mt-2 max-w-md text-[13.5px] leading-relaxed text-[#F3E7DC]/60">
             Si ya tienes un proyecto estructurado y quieres volver a presentarlo — en otra
             convocatoria, otro territorio, otro presupuesto — súbelo aquí.
           </p>
@@ -113,20 +113,20 @@ export default async function MisReplicasPage() {
             const estado = etiquetaEstado(solicitud)
             const modalidad = PRECIOS_REPLICA[(solicitud.modalidad_replica_solicitada || 'no_presentado') as ModalidadReplica]
             return (
-              <div key={solicitud.id} className={`rounded-2xl border border-[#E4EAF3] bg-white p-5 ${SOMBRA_TARJETA}`}>
+              <div key={solicitud.id} className={`rounded-2xl border border-[#6E4A50] bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
                 <div className="flex items-start justify-between gap-3">
-                  <h2 className="text-[14.5px] font-extrabold leading-snug text-[#0B2A4A]">
+                  <h2 className="text-[14.5px] font-extrabold leading-snug text-[#F3E7DC]">
                     {solicitud.nombre_iniciativa || 'Proyecto sin nombre'}
                   </h2>
                   <span className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-bold ${estado.clase}`}>
                     {estado.texto}
                   </span>
                 </div>
-                <p className="mt-2 text-[12.5px] text-[#5B6B84]">{modalidad.nombre}</p>
+                <p className="mt-2 text-[12.5px] text-[#F3E7DC]/60">{modalidad.nombre}</p>
                 {typeof solicitud.progreso_estructuracion === 'number' && solicitud.progreso_estructuracion < 100 ? (
-                  <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-[#EEF2F8]">
+                  <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-[#3B1727]">
                     <div
-                      className="h-full rounded-full bg-[#1D4ED8]"
+                      className="h-full rounded-full bg-[#C9A46B]"
                       style={{ width: `${Math.max(4, solicitud.progreso_estructuracion)}%` }}
                     />
                   </div>
