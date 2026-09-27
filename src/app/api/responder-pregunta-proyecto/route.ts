@@ -25,12 +25,23 @@ const supabase = createClient(
 
 const UMBRAL_MINIMO_PORCENTAJE = 90;
 
+// Regla de extensión (26 sep 2026), misma cuenta que usa
+// estructurar-proyecto/route.ts para el documento completo: el proyecto
+// final debe salir entre 75 y 150 páginas en total (~500 palabras por
+// página), repartidas entre los ~42 pasos de la metodología. Este archivo
+// completa un paso a la vez, así que se le pide ese mismo nivel de
+// profundidad por paso para que no quede corto frente a los demás.
+const PALABRAS_MIN_PASO = Math.round((75 * 500) / 42);
+const PALABRAS_MAX_PASO = Math.round((150 * 500) / 42);
+
 const PROMPT_RESPUESTA = `
 Eres el MOTOR DE ESTRUCTURACIÓN del sistema de Arquitectura Digital de Proyectos, trabajando ahora en modo de COMPLETAR UN PASO ESPECÍFICO a partir de la respuesta que el cliente acaba de dar a una pregunta puntual.
 
 Recibirás: el nombre del paso a completar, la pregunta que se le hizo al cliente, y la respuesta que dio.
 
 Tu tarea es redactar el contenido completo y técnico de ESE paso específico, usando la respuesta del cliente como base. Redacta con el mismo nivel de calidad y profundidad que usarías si tuvieras el documento completo del proyecto.
+
+REGLA DE EXTENSIÓN: este paso, igual que todos los demás del proyecto, debe salir como documento profesional real, no como resumen — apunta a algo entre ${PALABRAS_MIN_PASO} y ${PALABRAS_MAX_PASO} palabras, con contexto, justificación e implicaciones. Puede quedar más corto SOLO si de verdad no hay más información real que desarrollar sin inventar — nunca alargues con relleno, repetición, ni datos que el cliente no dio.
 
 Si la respuesta del cliente sigue sin ser suficiente para completar el paso con solidez, igual redacta lo mejor posible con lo que tienes, pero agrega una advertencia breve explicando qué se debería reforzar más adelante.
 
