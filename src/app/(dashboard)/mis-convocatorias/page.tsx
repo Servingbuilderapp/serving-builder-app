@@ -8,4 +8,7 @@
  * copias se habían ido desincronizando. Para que eso no vuelva a pasar,
  * aquí solo se reexporta la versión completa y actualizada.
  */
-export { default, dynamic, revalidate } from './mis-convocatorias-page'
+export { default } from './mis-convocatorias-page'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
