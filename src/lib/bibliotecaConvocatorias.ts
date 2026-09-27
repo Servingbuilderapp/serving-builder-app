@@ -352,3 +352,99 @@ export async function leerBibliotecaParaPrompt(supabase: any, limite = 60): Prom
 
 ${filas}`
 }
+
+/**
+ * Fondos especiales — los 9 fondos curados a mano por el equipo (marcados con
+ * `es_fondo_especial = true` en la biblioteca, ver
+ * supabase_migration_fondos_especiales.sql), que no dependen de que el Motor 2
+ * los encuentre buscando.
+ *
+ * Esta función los ofrece automáticamente a CADA proyecto apenas termina su
+ * estructuración, exactamente igual que cualquier ficha que encuentre el
+ * Motor 2: quedan como candidata pendiente (`eleccion_cliente = null`). El
+ * cliente los ve en su lista para elegir, y el encaje (Motor 3) solo se
+ * calcula si el cliente los elige — la regla de "Parada 1" (26 sep 2026)
+ * aplica exactamente igual para estos que para cualquier otra convocatoria.
+ *
+ * Usa el lote 0, reservado para este grupo, para no chocar con la numeración
+ * de lotes semanales del Motor 2 (que empieza en 1).
+ */
+const LOTE_FONDOS_ESPECIALES = 0
+
+export async function agregarFondosEspecialesComoCandidatas(
+  supabase: any,
+  id_proyecto: string,
+): Promise<{ agregados: number }> {
+  const { data: fondos, error: errorFondos } = await supabase
+    .from('biblioteca_convocatorias')
+    .select(CAMPOS)
+    .eq('es_fondo_especial', true)
+
+  if (errorFondos) {
+    console.error('[Fondos especiales] No se pudo leer la biblioteca:', errorFondos)
+    return { agregados: 0 }
+  }
+
+  const listaFondos = (fondos || []) as FilaBiblioteca[]
+  if (listaFondos.length === 0) return { agregados: 0 }
+
+  const { data: yaCandidatas, error: errorYaCandidatas } = await supabase
+    .from('convocatorias_candidatas_proyecto')
+    .select('biblioteca_id')
+    .eq('id_proyecto', id_proyecto)
+    .in(
+      'biblioteca_id',
+      listaFondos.map((f) => f.id),
+    )
+
+  if (errorYaCandidatas) {
+    console.error('[Fondos especiales] No se pudo revisar candidatas existentes:', errorYaCandidatas)
+    return { agregados: 0 }
+  }
+
+  const idsYaAgregados = new Set(
+    ((yaCandidatas || []) as { biblioteca_id: string | null }[]).map((c) => c.biblioteca_id),
+  )
+
+  const faltantes = listaFondos.filter((f) => !idsYaAgregados.has(f.id))
+  if (faltantes.length === 0) return { agregados: 0 }
+
+  const ahora = new Date().toISOString()
+
+  const filasNuevas = faltantes.map((f) => ({
+    id_proyecto,
+    lote: LOTE_FONDOS_ESPECIALES,
+    seleccionada: true,
+    eleccion_cliente: null,
+    disponible_para_cliente_desde: ahora,
+    biblioteca_id: f.id,
+    nombre: f.nombre,
+    entidad: f.entidad,
+    tipo: f.tipo,
+    estado_convocatoria: f.estado_convocatoria,
+    fecha_cierre: f.fecha_cierre_texto || f.fecha_cierre,
+    monto: f.monto,
+    beneficiarios: f.beneficiarios,
+    territorio: f.territorio,
+    linea_tematica: f.linea_tematica,
+    arista_relacionada: null,
+    razon_relevancia:
+      'Fondo especial priorizado directamente por el equipo — no depende de la búsqueda del Motor 2.',
+    fuente_oficial: f.fuente_oficial,
+    terminos_referencia: f.terminos_referencia,
+    mecanismo_postulacion: f.mecanismo_postulacion,
+    alertas: f.alertas,
+    informacion_faltante: f.informacion_faltante,
+  }))
+
+  const { error: errorInsertar } = await supabase
+    .from('convocatorias_candidatas_proyecto')
+    .insert(filasNuevas)
+
+  if (errorInsertar) {
+    console.error('[Fondos especiales] No se pudieron agregar como candidatas:', errorInsertar)
+    return { agregados: 0 }
+  }
+
+  return { agregados: filasNuevas.length }
+}
