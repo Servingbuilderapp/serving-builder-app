@@ -137,7 +137,7 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
   return (
     <div className="w-full max-w-4xl mx-auto my-6 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Banner de Day Zero */}
-      <GlassCard className="p-8 border border-color-primary/30 bg-gradient-to-r from-slate-900 via-[#0B2A4A] to-slate-900 text-white shadow-2xl relative overflow-hidden">
+      <GlassCard className="p-8 border border-color-primary/30 bg-gradient-to-r from-[#2E0E1A] via-[#3B1727] to-[#2E0E1A] text-[#F3E7DC] shadow-2xl relative overflow-hidden">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
           <div>
             <span className="text-[10px] font-black uppercase tracking-[0.25em] text-color-primary bg-color-primary/20 px-3 py-1 rounded-full border border-color-primary/40">
@@ -146,21 +146,21 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
             <h2 className="text-2xl md:text-4xl font-black italic uppercase mt-2">
               Puerta de Enlace <span className="text-color-primary font-black">Day Zero</span>
             </h2>
-            <p className="text-xs md:text-sm text-slate-300 font-medium max-w-xl mt-1">
-              El plazo de <strong className="text-white">entrega en 5 días hábiles</strong> empieza a contar únicamente cuando completes los 3 entregables de aquí abajo.
+            <p className="text-xs md:text-sm text-[#F3E7DC]/70 font-medium max-w-xl mt-1">
+              El plazo de <strong className="text-[#F3E7DC]">entrega en 5 días hábiles</strong> empieza a contar únicamente cuando completes los 3 entregables de aquí abajo.
             </p>
           </div>
 
           {/* Progress Badge */}
-          <div className="flex flex-col items-center justify-center p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 min-w-[150px]">
-            <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">
+          <div className="flex flex-col items-center justify-center p-4 bg-[#3B1727] backdrop-blur-md rounded-2xl border border-color-primary/30 min-w-[150px]">
+            <span className="text-[10px] font-black text-[#F3E7DC]/70 uppercase tracking-widest">
               Entregables Day Zero
             </span>
             <span className="text-4xl font-black text-color-primary my-1">
               {totalReqsOk}/3
             </span>
             <span className={`text-[9px] font-extrabold uppercase px-2.5 py-0.5 rounded-full ${
-              canSubmit ? 'bg-emerald-500 text-white' : 'bg-amber-500/30 text-amber-300 border border-amber-500/40'
+              canSubmit ? 'bg-[#7A8B6F] text-[#F3E7DC]' : 'bg-[#C99A3D]/20 text-[#E0B868] border border-[#C99A3D]/40'
             }`}>
               {canSubmit ? 'LISTO PARA ACTIVAR 30 DÍAS' : 'REQUERIMIENTOS PENDIENTES'}
             </span>
@@ -169,11 +169,11 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
       </GlassCard>
 
       {/* REQUISITO 1: VIDEO PITCH (MÁX 3 MINUTOS) */}
-      <div className="bg-white rounded-3xl p-6 md:p-8 border border-color-base-300 shadow-md space-y-4">
+      <div className="bg-[#4C2032] rounded-3xl p-6 md:p-8 border border-color-base-300 shadow-md space-y-4">
         <div className="flex items-center justify-between border-b border-color-base-200 pb-3">
           <div className="flex items-center gap-3">
             <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs ${
-              req1VideoOk ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-600'
+              req1VideoOk ? 'bg-[#7A8B6F] text-[#F3E7DC]' : 'bg-[#3B1727] text-[#F3E7DC]/60'
             }`}>
               {req1VideoOk ? <CheckCircle2 className="h-5 w-5" /> : '1'}
             </div>
@@ -189,7 +189,7 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
           </div>
 
           <span className={`text-xs font-bold px-3 py-1 rounded-full ${
-            req1VideoOk ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'
+            req1VideoOk ? 'bg-[#7A8B6F]/15 text-[#A9BC9C]' : 'bg-[#3B1727] text-[#F3E7DC]/60'
           }`}>
             {req1VideoOk ? 'Completado' : 'Pendiente'}
           </span>
@@ -207,12 +207,12 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
                 placeholder="https://www.youtube.com/watch?v=... o https://www.loom.com/share/..."
                 value={videoUrl}
                 onChange={e => handleVideoUrlChange(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-color-base-300 bg-slate-50 focus:bg-white text-xs font-medium focus:ring-2 focus:ring-color-primary outline-none"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#6E4A50] bg-[#3B1727] text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 text-xs font-medium focus:ring-2 focus:ring-color-primary outline-none"
               />
             </div>
           </div>
           {videoUrl && !videoValid && (
-            <p className="text-[11px] text-amber-600 font-medium">
+            <p className="text-[11px] text-[#E0B868] font-medium">
               Por favor ingresa una URL válida de video (ej. https://loom.com/share/... o YouTube).
             </p>
           )}
@@ -220,11 +220,11 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
       </div>
 
       {/* REQUISITO 2: DOCUMENTO ACTUAL DEL PROYECTO */}
-      <div className="bg-white rounded-3xl p-6 md:p-8 border border-color-base-300 shadow-md space-y-4">
+      <div className="bg-[#4C2032] rounded-3xl p-6 md:p-8 border border-color-base-300 shadow-md space-y-4">
         <div className="flex items-center justify-between border-b border-color-base-200 pb-3">
           <div className="flex items-center gap-3">
             <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs ${
-              req2DocOk ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-600'
+              req2DocOk ? 'bg-[#7A8B6F] text-[#F3E7DC]' : 'bg-[#3B1727] text-[#F3E7DC]/60'
             }`}>
               {req2DocOk ? <CheckCircle2 className="h-5 w-5" /> : '2'}
             </div>
@@ -240,13 +240,13 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
           </div>
 
           <span className={`text-xs font-bold px-3 py-1 rounded-full ${
-            req2DocOk ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'
+            req2DocOk ? 'bg-[#7A8B6F]/15 text-[#A9BC9C]' : 'bg-[#3B1727] text-[#F3E7DC]/60'
           }`}>
             {req2DocOk ? 'Completado' : 'Pendiente'}
           </span>
         </div>
 
-        <div className="border-2 border-dashed border-color-base-300 rounded-2xl p-6 text-center bg-slate-50 hover:bg-slate-100/80 transition-colors cursor-pointer relative">
+        <div className="border-2 border-dashed border-color-base-300 rounded-2xl p-6 text-center bg-[#3B1727] hover:bg-[#3B1727]/70 transition-colors cursor-pointer relative">
           <input
             type="file"
             accept=".pdf,.doc,.docx,.ppt,.pptx"
@@ -255,7 +255,7 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
           />
           <Upload className="h-8 w-8 text-color-primary mx-auto mb-2" />
           {documentoFilename ? (
-            <div className="text-xs font-bold text-emerald-700 bg-emerald-50 inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-emerald-200">
+            <div className="text-xs font-bold text-[#A9BC9C] bg-[#7A8B6F]/15 inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-[#7A8B6F]/40">
               <CheckCircle2 className="h-4 w-4" />
               Archivo adjuntado: {documentoFilename}
             </div>
@@ -273,11 +273,11 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
       </div>
 
       {/* REQUISITO 3: FORMULARIO DE 22 PREGUNTAS */}
-      <div className="bg-white rounded-3xl p-6 md:p-8 border border-color-base-300 shadow-md space-y-6">
+      <div className="bg-[#4C2032] rounded-3xl p-6 md:p-8 border border-color-base-300 shadow-md space-y-6">
         <div className="flex items-center justify-between border-b border-color-base-200 pb-3">
           <div className="flex items-center gap-3">
             <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs ${
-              req3FormOk ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-600'
+              req3FormOk ? 'bg-[#7A8B6F] text-[#F3E7DC]' : 'bg-[#3B1727] text-[#F3E7DC]/60'
             }`}>
               {req3FormOk ? <CheckCircle2 className="h-5 w-5" /> : '3'}
             </div>
@@ -293,7 +293,7 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
           </div>
 
           <span className={`text-xs font-bold px-3 py-1 rounded-full ${
-            req3FormOk ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'
+            req3FormOk ? 'bg-[#7A8B6F]/15 text-[#A9BC9C]' : 'bg-[#3B1727] text-[#F3E7DC]/60'
           }`}>
             {req3FormOk ? 'Completado' : 'Incompleto'}
           </span>
@@ -302,8 +302,8 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
         {/* Formulario de 22 Preguntas */}
         <div className="space-y-6 max-h-[500px] overflow-y-auto pr-2">
           {PREGUNTAS_22.map(p => (
-            <div key={p.id} className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-              <label className="block text-xs font-bold text-slate-800">
+            <div key={p.id} className="p-4 rounded-2xl bg-[#3B1727] border border-color-base-300 space-y-2">
+              <label className="block text-xs font-bold text-color-base-content">
                 Pregunta {p.num} de 22: {p.text} *
               </label>
               <textarea
@@ -311,7 +311,7 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
                 placeholder="Escribe tu respuesta clara y sintética aquí..."
                 value={respuestas[p.id] || ''}
                 onChange={e => handleRespuestaChange(p.id, e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-xs font-medium focus:ring-2 focus:ring-color-primary outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#6E4A50] bg-[#2E0E1A] text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 text-xs font-medium focus:ring-2 focus:ring-color-primary outline-none"
               />
             </div>
           ))}
@@ -320,9 +320,9 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
 
       {/* Alerta si el sistema está bloqueado */}
       {!canSubmit && (
-        <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3">
-          <ShieldAlert className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
-          <p className="text-xs text-amber-900 font-medium">
+        <div className="p-4 rounded-2xl bg-[#C99A3D]/10 border border-[#C99A3D]/40 flex items-start gap-3">
+          <ShieldAlert className="h-5 w-5 text-[#E0B868] shrink-0 mt-0.5" />
+          <p className="text-xs text-[#F3E7DC]/90 font-medium">
             <strong>Atención:</strong> El sistema de estructuración de <strong>Arquitectura Digital</strong> no inicia la producción ni empieza a contar el plazo de 5 días hábiles hasta que los 3 entregables de arriba estén al 100% completados.
           </p>
         </div>
