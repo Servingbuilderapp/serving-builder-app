@@ -114,7 +114,7 @@ export function MotorEstructuracion({
   const yaHayContenido = pasosEscritos > 0
 
   return (
-    <div className={`rounded-2xl border border-[#6E4A50] bg-[#4C2032] p-5 ${RELIEVE_TARJETA}`}>
+    <div className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${RELIEVE_TARJETA}`}>
       <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-[#F3E7DC]/50">
         <Play className="h-3.5 w-3.5" />
         Estructuración automática
@@ -155,7 +155,7 @@ export function MotorEstructuracion({
               value={rutaElegida}
               onChange={(e) => setRutaElegida(e.target.value)}
               disabled={corriendo}
-              className="w-full rounded-xl border border-[#6E4A50] bg-[#3B1727] px-3 py-2.5 text-[13.5px] font-semibold text-[#F3E7DC] outline-none transition focus:border-[#B08D57] disabled:opacity-60"
+              className="w-full rounded-xl border border-[#B08D57]/35 bg-[#3B1727] px-3 py-2.5 text-[13.5px] font-semibold text-[#F3E7DC] outline-none transition focus:border-[#B08D57] disabled:opacity-60"
             >
               {documentos.map((d) => (
                 <option key={d.ruta} value={d.ruta}>
