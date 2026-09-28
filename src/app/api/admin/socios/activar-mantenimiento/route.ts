@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 
 const CORREO_ADMIN = 'servingbuilderapp@gmail.com'
 
@@ -34,9 +35,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Falta el socio' }, { status: 400 })
     }
 
-    const supabase = await createClient()
-
-    const { data: socio, error: errorLectura } = await supabase
+    // La tabla socios solo la puede tocar el servidor (RLS) — se usa la
+    // llave de servicio (supabaseAdmin), igual que en la creación del
+    // socio, en vez del cliente normal de la sesión del usuario.
+    const { data: socio, error: errorLectura } = await supabaseAdmin
       .from('socios')
       .select('mantenimiento_pagado_hasta')
       .eq('id', socioId)
@@ -50,7 +52,7 @@ export async function POST(req: Request) {
     const nuevaFecha = new Date(base)
     nuevaFecha.setDate(nuevaFecha.getDate() + 30)
 
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from('socios')
       .update({ mantenimiento_pagado_hasta: nuevaFecha.toISOString().slice(0, 10) })
       .eq('id', socioId)
@@ -59,7 +61,13 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true, mantenimientoPagadoHasta: nuevaFecha.toISOString().slice(0, 10) })
   } catch (error) {
-    const mensaje = error instanceof Error ? error.message : 'Error al activar el mantenimiento'
-    return NextResponse.json({ error: mensaje }, { status: 500 })
+    const detalle =
+      error && typeof error === 'object' && 'message' in error
+        ? String((error as { message?: unknown }).message)
+        : error instanceof Error
+        ? error.message
+        : 'Error al activar el mantenimiento'
+    console.error('[api/admin/socios/activar-mantenimiento] Error:', error)
+    return NextResponse.json({ error: detalle }, { status: 500 })
   }
 }
