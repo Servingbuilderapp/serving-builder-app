@@ -29,7 +29,7 @@ export function MarcarMembresiaPagadaButton({ membresiaId }: { membresiaId: stri
     <button
       onClick={handleClick}
       disabled={loading}
-      className="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 disabled:opacity-50"
+      className="px-3 py-1.5 rounded-lg bg-[#7A8B6F] text-[#1C2417] text-xs font-bold hover:bg-[#5F6E56] disabled:opacity-50"
     >
       {loading ? 'Guardando...' : 'Marcar como pagada'}
     </button>
