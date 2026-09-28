@@ -82,10 +82,10 @@ const BOTON_DORADO =
 const TINTA = 'text-[#F3E7DC]'
 const TINTA_SUAVE = 'text-[#F3E7DC]/70'
 const TINTA_TENUE = 'text-[#F3E7DC]/50'
-const BORDE = 'border-[#6E4A50]'
+const BORDE = 'border-[#B08D57]/35'
 
 const CAMPO =
-  'w-full rounded-lg border border-[#6E4A50] bg-[#3B1727] px-2.5 py-2 text-[13px] leading-snug text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/25'
+  'w-full rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-2.5 py-2 text-[13px] leading-snug text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/25'
 
 /** Los rubros del método. El nombre visible va en español corriente. */
 const RUBROS: { valor: string; nombre: string }[] = [
@@ -347,7 +347,7 @@ export function PresupuestoClient({
             <h1 className={`text-[19px] font-extrabold uppercase tracking-tight ${TINTA}`}>
               Presupuesto
             </h1>
-            <span className="rounded-full bg-[#3B1727] border border-[#6E4A50] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#C9A46B]">
+            <span className="rounded-full bg-[#3B1727] border border-[#B08D57]/35 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#C9A46B]">
               Interno
             </span>
           </div>
@@ -468,7 +468,7 @@ export function PresupuestoClient({
                     return (
                       <div
                         key={actividad.clave}
-                        className="rounded-xl border border-[#6E4A50] bg-[#3B1727] p-3"
+                        className="rounded-xl border border-[#B08D57]/35 bg-[#3B1727] p-3"
                       >
                         <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
                           <div className="flex min-w-0 flex-1 items-center gap-2">
@@ -491,7 +491,7 @@ export function PresupuestoClient({
                             return (
                               <div
                                 key={linea.claveLocal}
-                                className="rounded-lg border border-[#6E4A50] bg-[#4C2032] p-2.5"
+                                className="rounded-lg border border-[#B08D57]/35 bg-[#4C2032] p-2.5"
                               >
                                 <div className="grid gap-2 sm:grid-cols-12">
                                   <div className="sm:col-span-3">
@@ -646,7 +646,7 @@ export function PresupuestoClient({
                         <button
                           type="button"
                           onClick={() => agregarLinea(actividad)}
-                          className="mt-2 inline-flex items-center gap-1.5 rounded-xl border border-[#6E4A50] bg-[#3B1727] px-3 py-1.5 text-[12px] font-bold text-[#C9A46B] transition hover:-translate-y-px"
+                          className="mt-2 inline-flex items-center gap-1.5 rounded-xl border border-[#B08D57]/35 bg-[#3B1727] px-3 py-1.5 text-[12px] font-bold text-[#C9A46B] transition hover:-translate-y-px"
                         >
                           <Plus className="h-3.5 w-3.5" /> Agregar un gasto a esta actividad
                         </button>
@@ -693,7 +693,7 @@ export function PresupuestoClient({
                     {formatearPlata(cuentas.imprevistos, moneda)}
                   </dd>
                 </div>
-                <div className="flex items-baseline justify-between gap-2 border-t border-[#6E4A50] pt-1.5">
+                <div className="flex items-baseline justify-between gap-2 border-t border-[#B08D57]/35 pt-1.5">
                   <dt className={TINTA_SUAVE}>Total solicitado</dt>
                   <dd className={`font-extrabold ${TINTA}`}>
                     {formatearPlata(cuentas.solicitadoConImprevistos, moneda)}
@@ -707,7 +707,7 @@ export function PresupuestoClient({
                     {formatearPlata(cuentas.contrapartida, moneda)}
                   </dd>
                 </div>
-                <div className="flex items-baseline justify-between gap-2 border-t border-[#6E4A50] pt-1.5">
+                <div className="flex items-baseline justify-between gap-2 border-t border-[#B08D57]/35 pt-1.5">
                   <dt className={`font-semibold ${TINTA}`}>Costo total del proyecto</dt>
                   <dd className={`font-extrabold ${TINTA}`}>
                     {formatearPlata(cuentas.total, moneda)}

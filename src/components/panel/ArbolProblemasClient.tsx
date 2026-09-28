@@ -84,7 +84,7 @@ const BOTON_DORADO =
 const TINTA = 'text-[#F3E7DC]'
 const TINTA_SUAVE = 'text-[#F3E7DC]/70'
 const TINTA_TENUE = 'text-[#F3E7DC]/50'
-const BORDE = 'border-[#6E4A50]'
+const BORDE = 'border-[#B08D57]/35'
 const CAMPO = `w-full rounded-lg border ${BORDE} bg-[#3B1727] px-2.5 py-1.5 text-[12px] ${TINTA} placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/25`
 
 const COLOR_FILA: Record<
@@ -407,7 +407,7 @@ export function ArbolProblemasClient({
             <h1 className={`text-[19px] font-extrabold uppercase tracking-tight ${TINTA}`}>
               Árbol de problemas
             </h1>
-            <span className="rounded-full bg-[#3B1727] border border-[#6E4A50] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#C9A46B]">
+            <span className="rounded-full bg-[#3B1727] border border-[#B08D57]/35 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#C9A46B]">
               Interno
             </span>
           </div>
@@ -437,7 +437,7 @@ export function ArbolProblemasClient({
               <FilaDelArbol tipo="EFECTO_INDIRECTO" nodos={de('EFECTO_INDIRECTO')} onCambio={cambiarNodo} />
               <FilaDelArbol tipo="EFECTO_DIRECTO" nodos={de('EFECTO_DIRECTO')} onCambio={cambiarNodo} />
 
-              <div className="my-4 border-t border-dashed border-[#6E4A50]" />
+              <div className="my-4 border-t border-dashed border-[#B08D57]/35" />
 
               <FilaDelArbol tipo="CENTRAL" nodos={de('CENTRAL')} onCambio={cambiarNodo} />
 
@@ -461,12 +461,12 @@ export function ArbolProblemasClient({
                 />
               </div>
 
-              <div className="my-4 border-t border-dashed border-[#6E4A50]" />
+              <div className="my-4 border-t border-dashed border-[#B08D57]/35" />
 
               <FilaDelArbol tipo="CAUSA_DIRECTA" nodos={de('CAUSA_DIRECTA')} onCambio={cambiarNodo} />
               <FilaDelArbol tipo="CAUSA_INDIRECTA" nodos={de('CAUSA_INDIRECTA')} onCambio={cambiarNodo} />
 
-              <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-[#6E4A50] pt-4">
+              <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-[#B08D57]/35 pt-4">
                 <button
                   type="button"
                   onClick={alGuardarArbol}
@@ -552,7 +552,7 @@ export function ArbolProblemasClient({
                   type="checkbox"
                   checked={preguntaCritica}
                   onChange={(e) => setPreguntaCritica(e.target.checked)}
-                  className="h-3.5 w-3.5 rounded border-[#6E4A50] text-[#C9A46B] focus:ring-[#C9A46B]/30"
+                  className="h-3.5 w-3.5 rounded border-[#B08D57]/35 text-[#C9A46B] focus:ring-[#C9A46B]/30"
                 />
                 Sin esta respuesta no podemos avanzar
               </label>
@@ -561,7 +561,7 @@ export function ArbolProblemasClient({
                 type="button"
                 onClick={alEnviarPregunta}
                 disabled={enviandoPregunta || !textoPregunta.trim() || !pasoElegido}
-                className={`mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#6E4A50] bg-[#3B1727] px-4 py-2.5 text-[13px] font-bold text-[#C9A46B] ${RELIEVE_TARJETA} transition hover:-translate-y-px disabled:opacity-50 disabled:hover:translate-y-0`}
+                className={`mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#B08D57]/35 bg-[#3B1727] px-4 py-2.5 text-[13px] font-bold text-[#C9A46B] ${RELIEVE_TARJETA} transition hover:-translate-y-px disabled:opacity-50 disabled:hover:translate-y-0`}
               >
                 {enviandoPregunta ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -572,13 +572,13 @@ export function ArbolProblemasClient({
               </button>
 
               {abiertas.length > 0 ? (
-                <div className="mt-4 border-t border-[#6E4A50] pt-3">
+                <div className="mt-4 border-t border-[#B08D57]/35 pt-3">
                   <p className={`mb-2 text-[11px] font-bold uppercase tracking-wider ${TINTA_TENUE}`}>
                     Sin responder ({abiertas.length})
                   </p>
                   <ul className="space-y-2">
                     {abiertas.map((p) => (
-                      <li key={p.id} className="rounded-lg border border-[#6E4A50] bg-[#3B1727] p-2">
+                      <li key={p.id} className="rounded-lg border border-[#B08D57]/35 bg-[#3B1727] p-2">
                         <p className={`text-[12px] leading-snug ${TINTA}`}>{p.texto}</p>
                         <p className={`mt-1 text-[11px] ${TINTA_TENUE}`}>
                           {p.nombrePaso}
@@ -607,7 +607,7 @@ export function ArbolProblemasClient({
                 {PREGUNTAS_REVISION.map((p) => {
                   const valor = respuestas[String(p.n)] || ''
                   return (
-                    <li key={p.n} className="rounded-xl border border-[#6E4A50] bg-[#3B1727] p-2.5">
+                    <li key={p.n} className="rounded-xl border border-[#B08D57]/35 bg-[#3B1727] p-2.5">
                       <p className={`mb-2 text-[12.5px] leading-snug ${TINTA}`}>
                         <span className={`font-bold ${TINTA_TENUE}`}>{p.n}.</span> {p.texto}
                       </p>
@@ -627,7 +627,7 @@ export function ArbolProblemasClient({
                               }}
                               aria-pressed={activo}
                               className={`rounded-lg border px-2 py-1 text-[11.5px] font-semibold transition ${
-                                activo ? v.activo : `border-[#6E4A50] bg-[#3B1727] ${TINTA_SUAVE} hover:border-[#C9A46B]/40`
+                                activo ? v.activo : `border-[#B08D57]/35 bg-[#3B1727] ${TINTA_SUAVE} hover:border-[#C9A46B]/40`
                               }`}
                             >
                               {v.texto}
@@ -655,7 +655,7 @@ export function ArbolProblemasClient({
                 type="button"
                 onClick={alGuardarRevision}
                 disabled={guardandoRevision}
-                className={`mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#6E4A50] bg-[#3B1727] px-4 py-2.5 text-[13px] font-bold text-[#C9A46B] ${RELIEVE_TARJETA} transition hover:-translate-y-px disabled:opacity-60 disabled:hover:translate-y-0`}
+                className={`mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#B08D57]/35 bg-[#3B1727] px-4 py-2.5 text-[13px] font-bold text-[#C9A46B] ${RELIEVE_TARJETA} transition hover:-translate-y-px disabled:opacity-60 disabled:hover:translate-y-0`}
               >
                 {guardandoRevision ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                 {guardandoRevision ? 'Guardando…' : 'Guardar la revisión'}

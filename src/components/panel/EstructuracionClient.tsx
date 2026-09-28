@@ -190,7 +190,7 @@ export function EstructuracionClient({
   return (
     <div className="min-h-full bg-[#54142B] p-4 lg:p-6 space-y-5">
       {/* Encabezado */}
-      <div className={`rounded-2xl border border-[#6E4A50] bg-[#4C2032] p-5 ${RELIEVE_TARJETA}`}>
+      <div className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${RELIEVE_TARJETA}`}>
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="min-w-0">
             <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-[#F3E7DC]/50">
@@ -206,7 +206,7 @@ export function EstructuracionClient({
           </div>
 
           <div className="flex gap-3">
-            <div className="rounded-xl border border-[#6E4A50] bg-[#3B1727] px-4 py-2 text-center">
+            <div className="rounded-xl border border-[#B08D57]/35 bg-[#3B1727] px-4 py-2 text-center">
               <div className="text-[20px] font-black leading-none text-[#F3E7DC]">
                 {conContenido}
                 <span className="text-[13px] font-bold text-[#F3E7DC]/50">/{pasos.length}</span>
@@ -219,7 +219,7 @@ export function EstructuracionClient({
               className={`rounded-xl border px-4 py-2 text-center ${
                 porReforzar > 0
                   ? 'border-[#C99A3D]/40 bg-[#C99A3D]/12'
-                  : 'border-[#6E4A50] bg-[#3B1727]'
+                  : 'border-[#B08D57]/35 bg-[#3B1727]'
               }`}
             >
               <div
@@ -255,7 +255,7 @@ export function EstructuracionClient({
               className={`rounded-lg border px-3 py-1.5 text-[12.5px] font-semibold transition-colors ${
                 filtro === f.clave
                   ? 'border-[#B08D57] bg-[#B08D57]/15 text-[#B08D57]'
-                  : 'border-[#6E4A50] bg-[#4C2032] text-[#F3E7DC]/80 hover:bg-[#3B1727]'
+                  : 'border-[#B08D57]/35 bg-[#4C2032] text-[#F3E7DC]/80 hover:bg-[#3B1727]'
               }`}
             >
               {f.texto}
@@ -284,7 +284,7 @@ export function EstructuracionClient({
         return (
           <div
             key={etapa.nombre}
-            className={`overflow-hidden rounded-2xl border border-[#6E4A50] bg-[#4C2032] ${RELIEVE_TARJETA}`}
+            className={`overflow-hidden rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] ${RELIEVE_TARJETA}`}
           >
             <button
               type="button"
@@ -309,7 +309,7 @@ export function EstructuracionClient({
             </button>
 
             {abierta ? (
-              <ul className="border-t border-[#6E4A50]/50">
+              <ul className="border-t border-[#B08D57]/35">
                 {dentro.map((paso) => {
                   const tieneContenido = paso.contenido.trim().length > 0
                   const aviso = (paso.advertencia || '').trim()
@@ -328,7 +328,7 @@ export function EstructuracionClient({
                       >
                         <span
                           className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${
-                            tieneContenido ? 'bg-[#7A8B6F]' : 'border-2 border-[#6E4A50]'
+                            tieneContenido ? 'bg-[#7A8B6F]' : 'border-2 border-[#B08D57]/35'
                           }`}
                         >
                           {tieneContenido ? <Check className="h-3 w-3 text-white" /> : null}
@@ -373,7 +373,7 @@ export function EstructuracionClient({
                                 value={borrador}
                                 onChange={(e) => setBorrador(e.target.value)}
                                 rows={14}
-                                className="w-full rounded-xl border border-[#6E4A50] bg-[#4C2032] p-4 text-[13.5px] leading-relaxed text-[#F3E7DC] outline-none focus:border-[#B08D57] focus:ring-2 focus:ring-[#B08D57]/15"
+                                className="w-full rounded-xl border border-[#B08D57]/35 bg-[#4C2032] p-4 text-[13.5px] leading-relaxed text-[#F3E7DC] outline-none focus:border-[#B08D57] focus:ring-2 focus:ring-[#B08D57]/15"
                               />
 
                               {aviso ? (
@@ -382,7 +382,7 @@ export function EstructuracionClient({
                                     type="checkbox"
                                     checked={quitarAviso}
                                     onChange={(e) => setQuitarAviso(e.target.checked)}
-                                    className="h-4 w-4 rounded border-[#6E4A50]"
+                                    className="h-4 w-4 rounded border-[#B08D57]/35"
                                   />
                                   Ya lo reforcé: quitar el aviso de este paso
                                 </label>
@@ -412,7 +412,7 @@ export function EstructuracionClient({
                                   type="button"
                                   disabled={guardando}
                                   onClick={() => setEditando(null)}
-                                  className="inline-flex items-center gap-1.5 rounded-lg border border-[#6E4A50] bg-[#4C2032] px-4 py-2 text-[13px] font-semibold text-[#F3E7DC]/80 hover:bg-[#3B1727]"
+                                  className="inline-flex items-center gap-1.5 rounded-lg border border-[#B08D57]/35 bg-[#4C2032] px-4 py-2 text-[13px] font-semibold text-[#F3E7DC]/80 hover:bg-[#3B1727]"
                                 >
                                   <X className="h-4 w-4" />
                                   Cancelar
@@ -422,11 +422,11 @@ export function EstructuracionClient({
                           ) : (
                             <>
                               {tieneContenido ? (
-                                <div className="whitespace-pre-wrap rounded-xl border border-[#6E4A50]/60 bg-[#4C2032] p-4 text-[13.5px] leading-relaxed text-[#F3E7DC]/90">
+                                <div className="whitespace-pre-wrap rounded-xl border border-[#B08D57]/35 bg-[#4C2032] p-4 text-[13.5px] leading-relaxed text-[#F3E7DC]/90">
                                   {paso.contenido}
                                 </div>
                               ) : (
-                                <div className="rounded-xl border border-dashed border-[#6E4A50] bg-[#4C2032] p-4 text-[13px] text-[#F3E7DC]/50">
+                                <div className="rounded-xl border border-dashed border-[#B08D57]/35 bg-[#4C2032] p-4 text-[13px] text-[#F3E7DC]/50">
                                   Este paso todavía no tiene contenido. Puedes escribirlo a mano
                                   aquí, o esperar a que la estructuración automática lo complete.
                                 </div>
@@ -435,7 +435,7 @@ export function EstructuracionClient({
                               <button
                                 type="button"
                                 onClick={() => abrirEdicion(paso)}
-                                className="inline-flex items-center gap-1.5 rounded-lg border border-[#6E4A50] bg-[#4C2032] px-3.5 py-2 text-[13px] font-semibold text-[#B08D57] shadow-[0_1px_2px_rgba(11,42,74,0.06)] hover:bg-[#B08D57]/15"
+                                className="inline-flex items-center gap-1.5 rounded-lg border border-[#B08D57]/35 bg-[#4C2032] px-3.5 py-2 text-[13px] font-semibold text-[#B08D57] shadow-[0_1px_2px_rgba(11,42,74,0.06)] hover:bg-[#B08D57]/15"
                               >
                                 <Pencil className="h-3.5 w-3.5" />
                                 {tieneContenido ? 'Corregir este paso' : 'Escribir este paso'}
@@ -455,7 +455,7 @@ export function EstructuracionClient({
 
       {visibles.length === 0 ? (
         <div
-          className={`rounded-2xl border border-[#6E4A50] bg-[#4C2032] p-8 text-center text-[13.5px] text-[#F3E7DC]/70 ${RELIEVE_TARJETA}`}
+          className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-8 text-center text-[13.5px] text-[#F3E7DC]/70 ${RELIEVE_TARJETA}`}
         >
           No hay pasos que cumplan ese filtro.
         </div>

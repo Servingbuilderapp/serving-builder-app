@@ -52,7 +52,7 @@ function TarjetaPendiente({
   return (
     <label
       className={`flex cursor-pointer items-start gap-3 rounded-2xl border bg-[#4C2032] px-5 py-4 transition-colors ${RELIEVE_TARJETA} ${
-        elegida ? 'border-[#C9A46B]' : 'border-[#6E4A50] hover:border-[#B08D57]/60'
+        elegida ? 'border-[#C9A46B]' : 'border-[#B08D57]/35 hover:border-[#B08D57]/60'
       }`}
     >
       <input

@@ -72,7 +72,7 @@ function Tarjeta({
   className?: string
 }) {
   return (
-    <div className={`rounded-2xl border border-[#6E4A50] bg-[#4C2032] ${SOMBRA_TARJETA} ${className}`}>
+    <div className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] ${SOMBRA_TARJETA} ${className}`}>
       {children}
     </div>
   )
@@ -249,7 +249,7 @@ function fechaBonita(valor: string | null): string | null {
 
 function Vacio({ texto }: { texto: string }) {
   return (
-    <div className="rounded-xl border border-dashed border-[#6E4A50] bg-[#3B1727] px-4 py-6 text-center text-[12.5px] text-[#F3E7DC]/60">
+    <div className="rounded-xl border border-dashed border-[#B08D57]/35 bg-[#3B1727] px-4 py-6 text-center text-[12.5px] text-[#F3E7DC]/60">
       {texto}
     </div>
   )
@@ -518,7 +518,7 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
               {proximoPaso ? (
                 <Link
                   href="/mi-proyecto"
-                  className="mt-4 inline-flex items-center gap-2 rounded-lg border border-[#6E4A50] bg-[#3B1727] px-4 py-2 text-[12.5px] font-semibold text-[#F3E7DC] hover:border-[#B08D57] hover:text-[#B08D57] transition-colors"
+                  className="mt-4 inline-flex items-center gap-2 rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-4 py-2 text-[12.5px] font-semibold text-[#F3E7DC] hover:border-[#B08D57] hover:text-[#B08D57] transition-colors"
                 >
                   {proximoPaso.titulo} <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
@@ -579,7 +579,7 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
               {convocatoriasTop.length ? (
                 <div className="space-y-3">
                   {convocatoriasTop.map((c, i) => (
-                    <div key={`${c.nombre}-${i}`} className="rounded-xl border border-[#6E4A50] p-3">
+                    <div key={`${c.nombre}-${i}`} className="rounded-xl border border-[#B08D57]/35 p-3">
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
                           <div className="text-[13px] font-bold text-[#F3E7DC] leading-snug line-clamp-2">

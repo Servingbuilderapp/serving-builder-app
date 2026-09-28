@@ -14,7 +14,7 @@ const BOTON_DORADO =
   'transition-all duration-150'
 
 const CAMPO =
-  'w-full rounded-lg border border-[#6E4A50] bg-[#3B1727] px-3 py-2.5 text-[13px] text-[#F3E7DC] outline-none transition-colors placeholder:text-[#F3E7DC]/40 focus:border-[#B08D57]'
+  'w-full rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-3 py-2.5 text-[13px] text-[#F3E7DC] outline-none transition-colors placeholder:text-[#F3E7DC]/40 focus:border-[#B08D57]'
 
 export type VarianteReplica = {
   id: string
@@ -88,7 +88,7 @@ export function VariantesReplicaClient({
   }
 
   return (
-    <div className="mt-3 border-t border-[#6E4A50] pt-3">
+    <div className="mt-3 border-t border-[#B08D57]/35 pt-3">
       {variantes.length > 0 ? (
         <ul className="mb-2.5 space-y-1.5">
           {variantes.map((v) => (

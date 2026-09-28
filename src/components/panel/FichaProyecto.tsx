@@ -57,7 +57,7 @@ const ESTADOS: Record<string, string> = {
 
 function Tarjeta({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`rounded-2xl border border-[#6E4A50] bg-[#4C2032] ${SOMBRA} ${className}`}>
+    <div className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] ${SOMBRA} ${className}`}>
       {children}
     </div>
   )
@@ -87,7 +87,7 @@ export function FichaProyecto({ datos }: { datos: DatosFicha }) {
           <Dato etiqueta="Contratado el" valor={datos.creado} />
         </div>
 
-        <div className="mt-5 flex flex-col gap-3 border-t border-[#6E4A50] pt-4 sm:flex-row sm:items-center">
+        <div className="mt-5 flex flex-col gap-3 border-t border-[#B08D57]/35 pt-4 sm:flex-row sm:items-center">
           <span className="inline-flex w-fit items-center rounded-full border border-[#B08D57]/35 bg-[#B08D57]/15 px-3 py-1 text-[12px] font-semibold text-[#C9A46B]">
             {datos.estado}
           </span>

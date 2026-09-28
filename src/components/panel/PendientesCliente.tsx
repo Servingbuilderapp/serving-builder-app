@@ -73,7 +73,7 @@ function Tarjeta({
   className?: string
 }) {
   return (
-    <div className={`rounded-2xl border border-[#6E4A50] bg-[#4C2032] ${RELIEVE_TARJETA} ${className}`}>
+    <div className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] ${RELIEVE_TARJETA} ${className}`}>
       {children}
     </div>
   )
@@ -91,7 +91,7 @@ function TituloBloque({
   contador?: string
 }) {
   return (
-    <div className="flex items-start justify-between gap-3 border-b border-[#6E4A50] px-5 py-4">
+    <div className="flex items-start justify-between gap-3 border-b border-[#B08D57]/35 px-5 py-4">
       <div className="flex items-start gap-3">
         <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#3B1727] text-[#C9A46B]">
           <Icono className="h-4 w-4" />
@@ -102,7 +102,7 @@ function TituloBloque({
         </div>
       </div>
       {contador ? (
-        <span className="shrink-0 rounded-full bg-[#3B1727] border border-[#6E4A50] px-2.5 py-1 text-[11px] font-bold text-[#C9A46B]">
+        <span className="shrink-0 rounded-full bg-[#3B1727] border border-[#B08D57]/35 px-2.5 py-1 text-[11px] font-bold text-[#C9A46B]">
           {contador}
         </span>
       ) : null}
@@ -186,7 +186,7 @@ function BloquePreguntas({ preguntasIniciales }: { preguntasIniciales: PreguntaP
 
       <div className="space-y-4 px-5 py-5">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-full bg-[#3B1727] border border-[#6E4A50] px-2.5 py-1 text-[11px] font-bold text-[#C9A46B]">
+          <span className="rounded-full bg-[#3B1727] border border-[#B08D57]/35 px-2.5 py-1 text-[11px] font-bold text-[#C9A46B]">
             {actual.nombrePaso}
           </span>
           {actual.critico ? (
@@ -205,7 +205,7 @@ function BloquePreguntas({ preguntasIniciales }: { preguntasIniciales: PreguntaP
           onChange={(e) => setTexto(e.target.value)}
           rows={5}
           placeholder="Escribe aquí tu respuesta…"
-          className="w-full rounded-xl border border-[#6E4A50] bg-[#3B1727] px-3.5 py-3 text-[13.5px] leading-relaxed text-[#F3E7DC] outline-none transition-colors placeholder:text-[#F3E7DC]/40 focus:border-[#C9A46B] focus:bg-[#3B1727]"
+          className="w-full rounded-xl border border-[#B08D57]/35 bg-[#3B1727] px-3.5 py-3 text-[13.5px] leading-relaxed text-[#F3E7DC] outline-none transition-colors placeholder:text-[#F3E7DC]/40 focus:border-[#C9A46B] focus:bg-[#3B1727]"
         />
 
         {error ? <p className="text-[12.5px] font-semibold text-[#E0917E]">{error}</p> : null}
@@ -439,7 +439,7 @@ function BloqueDocumentos({
             {archivos.map((archivo) => (
               <li
                 key={archivo.ruta}
-                className="flex items-center gap-2.5 rounded-xl border border-[#6E4A50] bg-[#3B1727] px-3.5 py-2.5"
+                className="flex items-center gap-2.5 rounded-xl border border-[#B08D57]/35 bg-[#3B1727] px-3.5 py-2.5"
               >
                 <FileText className="h-4 w-4 shrink-0 text-[#F3E7DC]/70" />
                 <span className="min-w-0 flex-1 truncate text-[13px] font-semibold text-[#F3E7DC]">
@@ -535,7 +535,7 @@ export function PendientesCliente({ datos }: { datos: DatosPendientes }) {
 export function PendientesSinProyecto() {
   return (
     <div className="min-h-full bg-[#54142B] px-4 py-10 lg:px-6">
-      <div className="mx-auto max-w-xl rounded-2xl border border-[#6E4A50] bg-[#4C2032] p-8 text-center shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]">
+      <div className="mx-auto max-w-xl rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-8 text-center shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]">
         <h1 className="text-[17px] font-extrabold text-[#F3E7DC]">Todavía no hay proyecto</h1>
         <p className="mx-auto mt-2 max-w-md text-[13.5px] leading-relaxed text-[#F3E7DC]/70">
           Cuando contrates la estructuración, esta pantalla te va a mostrar las preguntas y los

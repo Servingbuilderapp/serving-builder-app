@@ -65,10 +65,10 @@ const BOTON_DORADO =
 const TINTA = 'text-[#F3E7DC]'
 const TINTA_SUAVE = 'text-[#F3E7DC]/70'
 const TINTA_TENUE = 'text-[#F3E7DC]/50'
-const BORDE = 'border-[#6E4A50]'
+const BORDE = 'border-[#B08D57]/35'
 
 const CAMPO =
-  'w-full rounded-lg border border-[#6E4A50] bg-[#3B1727] px-2.5 py-2 text-[13px] leading-snug text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/25'
+  'w-full rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-2.5 py-2 text-[13px] leading-snug text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/25'
 
 /** Un color por objetivo, para que cada bloque se distinga de un vistazo. */
 const COLORES = [
@@ -256,7 +256,7 @@ export function CronogramaClient({
           <h1 className={`text-[19px] font-extrabold uppercase tracking-tight ${TINTA}`}>
             Cronograma
           </h1>
-          <span className="rounded-full bg-[#3B1727] border border-[#6E4A50] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#C9A46B]">
+          <span className="rounded-full bg-[#3B1727] border border-[#B08D57]/35 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#C9A46B]">
             Interno
           </span>
         </div>
@@ -438,7 +438,7 @@ export function CronogramaClient({
               {lineas.map((linea) => (
                 <div
                   key={linea.clave}
-                  className="grid gap-2 rounded-xl border border-[#6E4A50] bg-[#3B1727] p-2.5 md:grid-cols-2"
+                  className="grid gap-2 rounded-xl border border-[#B08D57]/35 bg-[#3B1727] p-2.5 md:grid-cols-2"
                 >
                   <div className="flex items-start gap-2">
                     <span

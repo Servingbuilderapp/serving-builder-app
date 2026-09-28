@@ -32,12 +32,12 @@ const BUCKET = 'documentos-proyectos'
 
 function Tarjeta({ children }: { children: React.ReactNode }) {
   return (
-    <div className={`rounded-2xl border border-[#6E4A50] bg-[#4C2032] ${RELIEVE_TARJETA}`}>{children}</div>
+    <div className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] ${RELIEVE_TARJETA}`}>{children}</div>
   )
 }
 
 const CAMPO =
-  'w-full rounded-xl border border-[#6E4A50] bg-[#3B1727] px-3.5 py-3 text-[13.5px] leading-relaxed text-[#F3E7DC] outline-none transition-colors placeholder:text-[#F3E7DC]/40 focus:border-[#C9A46B] focus:bg-[#3B1727]'
+  'w-full rounded-xl border border-[#B08D57]/35 bg-[#3B1727] px-3.5 py-3 text-[13.5px] leading-relaxed text-[#F3E7DC] outline-none transition-colors placeholder:text-[#F3E7DC]/40 focus:border-[#C9A46B] focus:bg-[#3B1727]'
 
 const ETIQUETA = 'mb-1.5 block text-[12.5px] font-bold text-[#F3E7DC]/70'
 
@@ -98,7 +98,7 @@ function PasoDatos({
 
   return (
     <Tarjeta>
-      <div className="border-b border-[#6E4A50] px-5 py-4">
+      <div className="border-b border-[#B08D57]/35 px-5 py-4">
         <h2 className="text-[15px] font-extrabold tracking-tight text-[#F3E7DC]">
           Cuéntanos de tu proyecto
         </h2>
@@ -153,7 +153,7 @@ function PasoDatos({
                   className={`rounded-xl border px-4 py-3.5 text-left transition-colors ${
                     elegida
                       ? 'border-[#C9A46B] bg-[#3B1727]'
-                      : 'border-[#6E4A50] bg-[#3B1727] hover:bg-[#4C2032]'
+                      : 'border-[#B08D57]/35 bg-[#3B1727] hover:bg-[#4C2032]'
                   }`}
                 >
                   <p className="text-[13.5px] font-bold text-[#F3E7DC]">
@@ -290,7 +290,7 @@ function PasoDocumentos({
 
   return (
     <Tarjeta>
-      <div className="border-b border-[#6E4A50] px-5 py-4">
+      <div className="border-b border-[#B08D57]/35 px-5 py-4">
         <h2 className="text-[15px] font-extrabold tracking-tight text-[#F3E7DC]">
           Sube tu proyecto
         </h2>
@@ -339,7 +339,7 @@ function PasoDocumentos({
               </div>
             ) : (
               <label
-                className={`flex cursor-pointer items-center justify-center gap-2.5 rounded-xl border-2 border-dashed border-[#6E4A50] bg-[#3B1727] px-4 py-4 text-[13px] font-bold text-[#F3E7DC]/70 transition-colors hover:bg-[#4C2032] ${
+                className={`flex cursor-pointer items-center justify-center gap-2.5 rounded-xl border-2 border-dashed border-[#B08D57]/35 bg-[#3B1727] px-4 py-4 text-[13px] font-bold text-[#F3E7DC]/70 transition-colors hover:bg-[#4C2032] ${
                   subiendoFeedback ? 'pointer-events-none opacity-70' : ''
                 }`}
               >

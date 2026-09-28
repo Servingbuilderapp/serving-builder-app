@@ -20,8 +20,8 @@ function descargar(nombreArchivo: string, contenido: string) {
 function VistaDocumento({ titulo, contenido, onCerrar }: { titulo: string; contenido: string; onCerrar: () => void }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-      <div className="flex max-h-[85vh] w-full max-w-3xl flex-col rounded-2xl border border-[#6E4A50] bg-[#4C2032] shadow-2xl">
-        <div className="flex items-center justify-between border-b border-[#6E4A50] px-5 py-3.5">
+      <div className="flex max-h-[85vh] w-full max-w-3xl flex-col rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] shadow-2xl">
+        <div className="flex items-center justify-between border-b border-[#B08D57]/35 px-5 py-3.5">
           <h3 className="text-[14px] font-extrabold text-[#F3E7DC]">{titulo}</h3>
           <button type="button" onClick={onCerrar} className="rounded-lg p-1.5 hover:bg-[#3B1727]">
             <X className="h-4.5 w-4.5 text-[#F3E7DC]/70" />
@@ -51,7 +51,7 @@ function TarjetaEntregable({
   const [viendo, setViendo] = React.useState(false)
 
   return (
-    <div className={`flex items-start gap-3.5 rounded-2xl border border-[#6E4A50] bg-[#4C2032] p-4 ${RELIEVE_TARJETA}`}>
+    <div className={`flex items-start gap-3.5 rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-4 ${RELIEVE_TARJETA}`}>
       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#B08D57]/15 text-[#C9A46B]">
         <Icono className="h-5 w-5" />
       </span>

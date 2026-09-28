@@ -49,7 +49,7 @@ const BOTON_DORADO =
 const TINTA = 'text-[#F3E7DC]'
 const TINTA_SUAVE = 'text-[#F3E7DC]/70'
 const TINTA_TENUE = 'text-[#F3E7DC]/50'
-const BORDE = 'border-[#6E4A50]'
+const BORDE = 'border-[#B08D57]/35'
 
 const CUANTAS_ACTIVIDADES = 6
 const ACTIVIDADES_FIJAS = ['Administrar el proyecto', 'Supervisar el proyecto']
@@ -57,7 +57,7 @@ const ACTIVIDADES_FIJAS = ['Administrar el proyecto', 'Supervisar el proyecto']
 const PRIMERA_FIJA = CUANTAS_ACTIVIDADES - ACTIVIDADES_FIJAS.length
 
 const CAMPO =
-  'w-full rounded-lg border border-[#6E4A50] bg-[#3B1727] px-2.5 py-2 text-[13px] leading-snug text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/25'
+  'w-full rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-2.5 py-2 text-[13px] leading-snug text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/25'
 
 function Tarjeta({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return <div className={`rounded-2xl border ${BORDE} bg-[#4C2032] ${RELIEVE_TARJETA} ${className}`}>{children}</div>
@@ -228,7 +228,7 @@ export function CadenaValorClient({
           <h1 className={`text-[19px] font-extrabold uppercase tracking-tight ${TINTA}`}>
             Cadena de valor
           </h1>
-          <span className="rounded-full bg-[#3B1727] border border-[#6E4A50] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#C9A46B]">
+          <span className="rounded-full bg-[#3B1727] border border-[#B08D57]/35 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#C9A46B]">
             Interno
           </span>
         </div>
@@ -263,7 +263,7 @@ export function CadenaValorClient({
           {datos.map((fila) => (
             <Tarjeta key={fila.objetivoId} className="p-4 sm:p-5">
               <div className="mb-3 flex items-start gap-3">
-                <span className="mt-0.5 flex h-7 w-7 flex-none items-center justify-center rounded-full bg-[#3B1727] border border-[#6E4A50] text-[12px] font-bold text-[#C9A46B]">
+                <span className="mt-0.5 flex h-7 w-7 flex-none items-center justify-center rounded-full bg-[#3B1727] border border-[#B08D57]/35 text-[12px] font-bold text-[#C9A46B]">
                   {fila.numero}
                 </span>
                 <div className="min-w-0">
@@ -328,14 +328,14 @@ export function CadenaValorClient({
                       type="checkbox"
                       checked={fila.rutaCritica}
                       onChange={(e) => cambiar(fila.objetivoId, { rutaCritica: e.target.checked })}
-                      className="h-4 w-4 rounded border-[#6E4A50] text-[#C9A46B] focus:ring-[#C9A46B]/25"
+                      className="h-4 w-4 rounded border-[#B08D57]/35 text-[#C9A46B] focus:ring-[#C9A46B]/25"
                     />
                     <span className={`text-[12px] font-semibold ${TINTA_SUAVE}`}>Ruta crítica</span>
                   </label>
                 </div>
               </div>
 
-              <div className="mt-4 rounded-xl border border-[#6E4A50] bg-[#3B1727] p-3">
+              <div className="mt-4 rounded-xl border border-[#B08D57]/35 bg-[#3B1727] p-3">
                 <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
                   <span className={`text-[11px] font-bold uppercase tracking-wider ${TINTA}`}>
                     Seis actividades · todas en infinitivo

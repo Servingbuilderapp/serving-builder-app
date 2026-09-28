@@ -50,7 +50,7 @@ export function PestanasProyecto({
   const base = `/admin/proyectos/${proyectoId}`
 
   return (
-    <div className="border-b border-[#6E4A50] bg-[#4C2032]">
+    <div className="border-b border-[#B08D57]/35 bg-[#4C2032]">
       <div className="px-4 pt-4 lg:px-6">
         <Link
           href="/admin/proyectos"

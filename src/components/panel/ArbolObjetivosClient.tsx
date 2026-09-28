@@ -51,7 +51,7 @@ const BOTON_DORADO =
 const TINTA = 'text-[#F3E7DC]'
 const TINTA_SUAVE = 'text-[#F3E7DC]/70'
 const TINTA_TENUE = 'text-[#F3E7DC]/50'
-const BORDE = 'border-[#6E4A50]'
+const BORDE = 'border-[#B08D57]/35'
 
 const TITULO_BLOQUE: Record<string, { titulo: string; se_convierte_en: string; ayuda: string }> = {
   EFECTO_INDIRECTO: {
@@ -225,7 +225,7 @@ export function ArbolObjetivosClient({
           <h1 className={`text-[19px] font-extrabold uppercase tracking-tight ${TINTA}`}>
             Árbol de objetivos
           </h1>
-          <span className="rounded-full bg-[#3B1727] border border-[#6E4A50] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#C9A46B]">
+          <span className="rounded-full bg-[#3B1727] border border-[#B08D57]/35 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#C9A46B]">
             Interno
           </span>
         </div>
@@ -299,7 +299,7 @@ export function ArbolObjetivosClient({
                     {delBloque.map((par) => (
                       <div
                         key={par.problemaId}
-                        className="grid gap-2.5 rounded-xl border border-[#6E4A50] bg-[#3B1727] p-3 md:grid-cols-2"
+                        className="grid gap-2.5 rounded-xl border border-[#B08D57]/35 bg-[#3B1727] p-3 md:grid-cols-2"
                       >
                         <div>
                           <span
@@ -341,7 +341,7 @@ export function ArbolObjetivosClient({
               )
             })}
 
-            <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-[#6E4A50] pt-4">
+            <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-[#B08D57]/35 pt-4">
               <button
                 type="button"
                 onClick={alGuardar}
