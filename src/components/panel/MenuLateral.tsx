@@ -19,6 +19,7 @@ import {
   GraduationCap,
   Building2,
   X,
+  LifeBuoy,
 } from 'lucide-react'
 
 type Item = {
@@ -71,6 +72,7 @@ const SECCIONES_EQUIPO: Seccion[] = [
       { nombre: 'Convocatorias', href: '/admin/convocatorias', icono: Radar },
       { nombre: 'Centinela Digital', href: '/admin/centinela', icono: Satellite },
       { nombre: 'Membresías', href: '/admin/membresias', icono: Wallet },
+      { nombre: 'Soporte', href: '/admin/soporte', icono: LifeBuoy },
       { nombre: 'Academia', href: '/admin/academia', icono: GraduationCap },
       { nombre: 'Marca blanca', href: '/admin/marca-blanca', icono: Building2 },
       { nombre: 'Administración', href: '/admin', icono: Settings },
