@@ -82,8 +82,8 @@ const COLOR_SEMAFORO: Record<string, string> = {
   critico: 'bg-[#C0604A]/20 text-[#E0917E] border-[#C0604A]/40',
   corriendo: 'bg-[#C99A3D]/20 text-[#E0B868] border-[#C99A3D]/40',
   holgado: 'bg-[#7A8B6F]/20 text-[#9BB18D] border-[#7A8B6F]/40',
-  cerrada: 'bg-[#6E4A50]/30 text-[#F3E7DC]/55 border-[#B08D57]/35/50',
-  sin_fecha: 'bg-[#6E4A50]/30 text-[#F3E7DC]/55 border-[#B08D57]/35/50',
+  cerrada: 'bg-[#6E4A50]/30 text-[#F3E7DC]/55 border-[#B08D57]/35',
+  sin_fecha: 'bg-[#6E4A50]/30 text-[#F3E7DC]/55 border-[#B08D57]/35',
 }
 
 export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarga, correoEquipo }: Props) {
@@ -287,7 +287,7 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
                     className={`text-[11px] font-bold px-2.5 py-1 rounded-full border inline-flex items-center gap-1 ${
                       documentos > 0
                         ? 'bg-[#7A8B6F]/20 text-[#9BB18D] border-[#7A8B6F]/40'
-                        : 'bg-[#6E4A50]/30 text-[#F3E7DC]/55 border-[#B08D57]/35/50'
+                        : 'bg-[#6E4A50]/30 text-[#F3E7DC]/55 border-[#B08D57]/35'
                     }`}
                   >
                     {documentos > 0 ? <Check className="h-3 w-3" /> : <FileText className="h-3 w-3" />}

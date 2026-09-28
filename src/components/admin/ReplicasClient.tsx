@@ -467,7 +467,7 @@ export function ReplicasClient({
       ) : (
         replicas.map((r) => (
           <div key={r.id} className={`overflow-hidden rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] ${SOMBRA}`}>
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#B08D57]/35/40 px-5 py-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#B08D57]/35 px-5 py-4">
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-[15px] font-bold capitalize text-[#F3E7DC]">{r.tipo}</span>

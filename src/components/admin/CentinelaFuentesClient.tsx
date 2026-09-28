@@ -257,7 +257,7 @@ export function CentinelaFuentesClient({ fuentes, errorCarga }: Props) {
 
                 <span
                   className={`px-2.5 py-1 rounded-lg border text-xs font-medium shrink-0 ${
-                    COLOR_ESTADO[f.estado] || 'bg-[#6E4A50]/30 text-[#F3E7DC]/55 border-[#B08D57]/35/50'
+                    COLOR_ESTADO[f.estado] || 'bg-[#6E4A50]/30 text-[#F3E7DC]/55 border-[#B08D57]/35'
                   }`}
                 >
                   {NOMBRE_ESTADO[f.estado] || f.estado}

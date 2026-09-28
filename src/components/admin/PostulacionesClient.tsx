@@ -143,7 +143,7 @@ export function PostulacionesClient({
       </header>
 
       {/* preparar una nueva ---------------------------------------------- */}
-      <div className={`rounded-2xl border border-[#6E4A50] bg-[#3B1727] p-5 ${SOMBRA}`}>
+      <div className={`rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 ${SOMBRA}`}>
         <h2 className="text-[13px] font-bold uppercase tracking-wider text-[#F3E7DC]">
           Preparar una postulación
         </h2>
@@ -157,7 +157,7 @@ export function PostulacionesClient({
           <select
             value={convocatoriaId}
             onChange={(e) => setConvocatoriaId(e.target.value)}
-            className="h-11 flex-1 rounded-lg border border-[#6E4A50] bg-[#3B1727] px-3 text-[13.5px] text-[#F3E7DC] outline-none focus:border-[#B08D57]"
+            className="h-11 flex-1 rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-3 text-[13.5px] text-[#F3E7DC] outline-none focus:border-[#B08D57]"
           >
             <option value="">Escoge una convocatoria de la biblioteca…</option>
             {convocatorias.map((c) => (
@@ -198,7 +198,7 @@ export function PostulacionesClient({
 
       {/* listado ---------------------------------------------------------- */}
       {postulaciones.length === 0 ? (
-        <div className={`rounded-2xl border border-dashed border-[#6E4A50] bg-[#4C2032] p-10 text-center ${SOMBRA}`}>
+        <div className={`rounded-2xl border border-dashed border-[#B08D57]/35 bg-[#4C2032] p-10 text-center ${SOMBRA}`}>
           <FileText className="mx-auto h-6 w-6 text-[#F3E7DC]/50" />
           <p className="mt-3 text-[13.5px] text-[#F3E7DC]/65">
             Este proyecto todavía no tiene ninguna postulación preparada.
@@ -212,7 +212,7 @@ export function PostulacionesClient({
           const cumplidos = p.requisitos.filter((r) => r.cumplido).length
 
           return (
-            <div key={p.id} className={`overflow-hidden rounded-2xl border border-[#6E4A50] bg-[#3B1727] ${SOMBRA}`}>
+            <div key={p.id} className={`overflow-hidden rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] ${SOMBRA}`}>
               <button
                 type="button"
                 onClick={() => setAbierta(desplegada ? null : p.id)}
@@ -251,7 +251,7 @@ export function PostulacionesClient({
               </button>
 
               {desplegada ? (
-                <div className="space-y-5 border-t border-[#6E4A50]/40 px-5 py-5">
+                <div className="space-y-5 border-t border-[#B08D57]/35 px-5 py-5">
                   {/* puntaje por criterio */}
                   <div className="space-y-2">
                     {CRITERIOS.map((c) => {
@@ -345,7 +345,7 @@ export function PostulacionesClient({
                                 )
                               }
                               className={`mt-0.5 flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full transition-colors ${
-                                r.cumplido ? 'bg-[#7A8B6F]' : 'border-2 border-[#6E4A50] hover:border-[#B08D57]'
+                                r.cumplido ? 'bg-[#7A8B6F]' : 'border-2 border-[#B08D57]/35 hover:border-[#B08D57]'
                               }`}
                             >
                               {r.cumplido ? (
@@ -378,7 +378,7 @@ export function PostulacionesClient({
                   ) : null}
 
                   {p.validacion_final && p.validacion_final.length > 0 ? (
-                    <div className="rounded-xl border border-[#6E4A50] bg-[#4C2032] px-4 py-3.5">
+                    <div className="rounded-xl border border-[#B08D57]/35 bg-[#4C2032] px-4 py-3.5">
                       <h3 className="flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-wider text-[#F3E7DC]">
                         <ShieldCheck className="h-3.5 w-3.5 text-[#B08D57]" />
                         Validación final — {p.validacion_final.length} punto(s) por revisar
@@ -403,7 +403,7 @@ export function PostulacionesClient({
                   ) : null}
 
                   {p.nota_concepto_ajustada ? (
-                    <details className="rounded-xl border border-[#6E4A50] bg-[#4C2032] p-4">
+                    <details className="rounded-xl border border-[#B08D57]/35 bg-[#4C2032] p-4">
                       <summary className="cursor-pointer text-[12.5px] font-semibold text-[#B08D57]">
                         Ver la Nota de Concepto ajustada a esta convocatoria
                       </summary>
@@ -414,7 +414,7 @@ export function PostulacionesClient({
                   ) : null}
 
                   {p.estado === 'Lista para radicar' ? (
-                    <div className="rounded-xl border border-[#6E4A50] bg-[#4C2032] px-4 py-3">
+                    <div className="rounded-xl border border-[#B08D57]/35 bg-[#4C2032] px-4 py-3">
                       <h3 className="text-[12px] font-bold uppercase tracking-wider text-[#F3E7DC]">
                         ¿Quién la va a radicar?
                       </h3>
@@ -431,7 +431,7 @@ export function PostulacionesClient({
                           type="button"
                           disabled={trabajando !== null}
                           onClick={() => llamar({ accion: 'elegir_quien_radica', postulacionId: p.id, quienRadica: 'cliente' }, `quien-${p.id}`)}
-                          className={`h-8 rounded-lg border px-3 text-[12px] font-semibold ${p.quien_radica === 'cliente' ? 'border-[#B08D57] bg-[#B08D57]/20 text-[#B08D57]' : 'border-[#6E4A50] text-[#F3E7DC]/70'}`}
+                          className={`h-8 rounded-lg border px-3 text-[12px] font-semibold ${p.quien_radica === 'cliente' ? 'border-[#B08D57] bg-[#B08D57]/20 text-[#B08D57]' : 'border-[#B08D57]/35 text-[#F3E7DC]/70'}`}
                         >
                           La radica el cliente
                         </button>
@@ -439,7 +439,7 @@ export function PostulacionesClient({
                           type="button"
                           disabled={trabajando !== null}
                           onClick={() => llamar({ accion: 'elegir_quien_radica', postulacionId: p.id, quienRadica: 'equipo' }, `quien-${p.id}`)}
-                          className={`h-8 rounded-lg border px-3 text-[12px] font-semibold ${p.quien_radica === 'equipo' ? 'border-[#B08D57] bg-[#B08D57]/20 text-[#B08D57]' : 'border-[#6E4A50] text-[#F3E7DC]/70'}`}
+                          className={`h-8 rounded-lg border px-3 text-[12px] font-semibold ${p.quien_radica === 'equipo' ? 'border-[#B08D57] bg-[#B08D57]/20 text-[#B08D57]' : 'border-[#B08D57]/35 text-[#F3E7DC]/70'}`}
                         >
                           La radica el equipo
                         </button>
@@ -448,7 +448,7 @@ export function PostulacionesClient({
                   ) : null}
 
                   {p.carta_intencion ? (
-                    <details className="rounded-xl border border-[#6E4A50] bg-[#4C2032] p-4">
+                    <details className="rounded-xl border border-[#B08D57]/35 bg-[#4C2032] p-4">
                       <summary className="cursor-pointer text-[12.5px] font-semibold text-[#B08D57]">
                         Ver la carta de intención
                       </summary>
@@ -458,7 +458,7 @@ export function PostulacionesClient({
                     </details>
                   ) : null}
 
-                  <div className="flex flex-wrap gap-3 border-t border-[#6E4A50]/40 pt-4">
+                  <div className="flex flex-wrap gap-3 border-t border-[#B08D57]/35 pt-4">
                     {p.biblioteca_id ? (
                       <button
                         type="button"
@@ -469,7 +469,7 @@ export function PostulacionesClient({
                             `reevaluar-${p.id}`
                           )
                         }
-                        className="inline-flex h-10 items-center gap-2 rounded-lg border border-[#6E4A50] bg-[#3B1727] px-4 text-[13px] font-semibold text-[#B08D57] disabled:opacity-45"
+                        className="inline-flex h-10 items-center gap-2 rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-4 text-[13px] font-semibold text-[#B08D57] disabled:opacity-45"
                       >
                         <Sparkles className="h-4 w-4" />
                         {trabajando === `reevaluar-${p.id}` ? 'Evaluando…' : 'Volver a evaluar'}
