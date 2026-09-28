@@ -815,7 +815,7 @@ export function LandingClient({ user }: LandingClientProps) {
                   </div>
                 ))}
               </div>
-              <div className="mt-6 pt-5 border-t border-[#6E4A50]">
+              <div className="mt-6 pt-5 border-t border-[#B08D57]/35">
                 <p className="text-[12px] text-[#F3E7DC]/70 leading-relaxed">
                   {t('w.diagnostico.no_incluye')}
                 </p>
@@ -880,9 +880,9 @@ export function LandingClient({ user }: LandingClientProps) {
               <Aparece key={claveTitulo} delay={i * 110}>
               <div
                 className={`relative overflow-hidden rounded-2xl border p-7 ${
-                  ['bg-gradient-to-br from-[#4C2032] to-[#3B1727] border-[#6E4A50]',
-                   'bg-gradient-to-br from-[#4C2032] to-[#3B1727] border-[#6E4A50]',
-                   'bg-gradient-to-br from-[#4C2032] to-[#3B1727] border-[#6E4A50]'][i]
+                  ['bg-gradient-to-br from-[#4C2032] to-[#3B1727] border-[#B08D57]/35',
+                   'bg-gradient-to-br from-[#4C2032] to-[#3B1727] border-[#B08D57]/35',
+                   'bg-gradient-to-br from-[#4C2032] to-[#3B1727] border-[#B08D57]/35'][i]
                 } ${RELIEVE_TARJETA}`}
               >
                 <span
@@ -972,7 +972,7 @@ export function LandingClient({ user }: LandingClientProps) {
                     {t(escalon.clavePrecio)}
                   </div>
 
-                  <div className="my-4 h-12 w-12 rounded-xl bg-[#3B1727]/90 border border-[#6E4A50] flex items-center justify-center mx-auto">
+                  <div className="my-4 h-12 w-12 rounded-xl bg-[#3B1727]/90 border border-[#B08D57]/35 flex items-center justify-center mx-auto">
                     <Icono className={`h-5 w-5 ${escalon.color}`} />
                   </div>
 
@@ -1264,7 +1264,7 @@ export function LandingClient({ user }: LandingClientProps) {
           </div>
         </div>
 
-        <div className="border-t border-[#6E4A50]">
+        <div className="border-t border-[#B08D57]/35">
           <div className="max-w-[1400px] mx-auto px-5 lg:px-8 py-5 text-[12px] text-white/40">
             © {new Date().getFullYear()} {t('w.footer.copyright')}
           </div>
