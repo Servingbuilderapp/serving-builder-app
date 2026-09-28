@@ -76,7 +76,18 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true, socio: data })
   } catch (error) {
-    const mensaje = error instanceof Error ? error.message : 'Error al crear el socio'
-    return NextResponse.json({ error: mensaje }, { status: 500 })
+    // Antes esto se perdía: los errores que vienen de Supabase (tabla
+    // "socios") no son instancias de Error de JavaScript, son objetos
+    // planos con .message, .details, .hint y .code — por eso el mensaje
+    // real nunca llegaba a esta respuesta. Ahora sí se muestra el motivo
+    // de verdad, para poder diagnosticar sin adivinar.
+    const detalle =
+      error && typeof error === 'object' && 'message' in error
+        ? String((error as { message?: unknown }).message)
+        : error instanceof Error
+        ? error.message
+        : 'Error al crear el socio'
+    console.error('[api/admin/socios] Error al crear socio:', error)
+    return NextResponse.json({ error: detalle }, { status: 500 })
   }
 }
