@@ -8,8 +8,13 @@ import React, { useState } from 'react'
  * es el trato entre Serving y el socio, no algo que le importe a este
  * cliente (él ya pagó al socio por su lado, a su manera).
  *
- * Los dos paquetes SÍ se explican en lo que hacen (días, cuántas
- * convocatorias), porque eso sí define cómo se va a trabajar su proyecto.
+ * Los planes se muestran por ahora como "Plan 1", "Plan 2", "Plan 3" —
+ * sin nombre comercial ni descripción de días/convocatorias — porque
+ * todavía no está decidido qué va a incluir cada uno ni el precio
+ * (Gonzalo, 28 sep 2026: está por definir con cada socio antes de fijar
+ * nada). Antes eran "Estándar" (45 días, una convocatoria) y "Premium"
+ * (90 días, varias en paralelo) — esa definición queda guardada por si
+ * se retoma, pero hoy no se le muestra al cliente.
  */
 export function FormularioIngresoSocio({
   slug,
@@ -33,7 +38,7 @@ export function FormularioIngresoSocio({
   const [correoCliente, setCorreoCliente] = useState('')
   const [whatsapp, setWhatsapp] = useState('')
   const [nombreIniciativa, setNombreIniciativa] = useState('')
-  const [paquete, setPaquete] = useState<'estandar' | 'premium' | ''>('')
+  const [paquete, setPaquete] = useState<'plan1' | 'plan2' | 'plan3' | ''>('')
   const [aceptaTerminos, setAceptaTerminos] = useState(false)
   const [enviando, setEnviando] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -87,7 +92,7 @@ export function FormularioIngresoSocio({
               <div className="text-[#0F172A]/60">Ya tenías una cuenta — entra con tu clave de siempre.</div>
             )}
           </div>
-          <a
+          
             href="/login"
             className="inline-block px-5 py-2.5 rounded-full bg-color-primary text-white text-sm font-bold hover:brightness-110"
           >
@@ -148,28 +153,32 @@ export function FormularioIngresoSocio({
 
           <button
             type="button"
-            onClick={() => setPaquete('estandar')}
+            onClick={() => setPaquete('plan1')}
             className={`w-full text-left rounded-xl border p-4 transition-colors ${
-              paquete === 'estandar' ? 'border-color-primary bg-color-primary/5' : 'border-[#0F172A]/15'
+              paquete === 'plan1' ? 'border-color-primary bg-color-primary/5' : 'border-[#0F172A]/15'
             }`}
           >
-            <div className="font-bold text-sm text-[#0F172A]">Estándar</div>
-            <div className="text-xs text-[#0F172A]/60 mt-1">
-              45 días buscando y postulando a una convocatoria que encaje con tu proyecto.
-            </div>
+            <div className="font-bold text-sm text-[#0F172A]">Plan 1</div>
           </button>
 
           <button
             type="button"
-            onClick={() => setPaquete('premium')}
+            onClick={() => setPaquete('plan2')}
             className={`w-full text-left rounded-xl border p-4 transition-colors ${
-              paquete === 'premium' ? 'border-color-primary bg-color-primary/5' : 'border-[#0F172A]/15'
+              paquete === 'plan2' ? 'border-color-primary bg-color-primary/5' : 'border-[#0F172A]/15'
             }`}
           >
-            <div className="font-bold text-sm text-[#0F172A]">Premium</div>
-            <div className="text-xs text-[#0F172A]/60 mt-1">
-              90 días, buscando y postulando a varias convocatorias en paralelo.
-            </div>
+            <div className="font-bold text-sm text-[#0F172A]">Plan 2</div>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setPaquete('plan3')}
+            className={`w-full text-left rounded-xl border p-4 transition-colors ${
+              paquete === 'plan3' ? 'border-color-primary bg-color-primary/5' : 'border-[#0F172A]/15'
+            }`}
+          >
+            <div className="font-bold text-sm text-[#0F172A]">Plan 3</div>
           </button>
         </div>
 
