@@ -207,7 +207,7 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
                 placeholder="https://www.youtube.com/watch?v=... o https://www.loom.com/share/..."
                 value={videoUrl}
                 onChange={e => handleVideoUrlChange(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#6E4A50] bg-[#3B1727] text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 text-xs font-medium focus:ring-2 focus:ring-color-primary outline-none"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#B08D57]/35 bg-[#3B1727] text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 text-xs font-medium focus:ring-2 focus:ring-color-primary outline-none"
               />
             </div>
           </div>
@@ -311,7 +311,7 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
                 placeholder="Escribe tu respuesta clara y sintética aquí..."
                 value={respuestas[p.id] || ''}
                 onChange={e => handleRespuestaChange(p.id, e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#6E4A50] bg-[#2E0E1A] text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 text-xs font-medium focus:ring-2 focus:ring-color-primary outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#B08D57]/35 bg-[#2E0E1A] text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 text-xs font-medium focus:ring-2 focus:ring-color-primary outline-none"
               />
             </div>
           ))}
