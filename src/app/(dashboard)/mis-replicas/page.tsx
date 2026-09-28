@@ -97,7 +97,7 @@ export default async function MisReplicasPage() {
       </header>
 
       {lista.length === 0 ? (
-        <div className={`mx-auto max-w-xl rounded-2xl border border-[#6E4A50] bg-[#4C2032] p-8 text-center ${SOMBRA_TARJETA}`}>
+        <div className={`mx-auto max-w-xl rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-8 text-center ${SOMBRA_TARJETA}`}>
           <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-[#C9A46B]/15 text-[#C9A46B]">
             <Copy className="h-5 w-5" />
           </span>
@@ -113,7 +113,7 @@ export default async function MisReplicasPage() {
             const estado = etiquetaEstado(solicitud)
             const modalidad = PRECIOS_REPLICA[(solicitud.modalidad_replica_solicitada || 'no_presentado') as ModalidadReplica]
             return (
-              <div key={solicitud.id} className={`rounded-2xl border border-[#6E4A50] bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
+              <div key={solicitud.id} className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
                 <div className="flex items-start justify-between gap-3">
                   <h2 className="text-[14.5px] font-extrabold leading-snug text-[#F3E7DC]">
                     {solicitud.nombre_iniciativa || 'Proyecto sin nombre'}
