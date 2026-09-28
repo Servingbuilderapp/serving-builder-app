@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { createClient as createAdminClient } from '@supabase/supabase-js'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 
 /**
  * Crea un proyecto que entra por el enlace propio de un socio de marca
@@ -43,11 +43,6 @@ export async function POST(req: Request) {
     if (paquete !== 'estandar' && paquete !== 'premium') {
       return NextResponse.json({ error: 'Elige un paquete' }, { status: 400 })
     }
-
-    const supabaseAdmin = createAdminClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SECRET_KEY!
-    )
 
     const { data: socio } = await supabaseAdmin
       .from('socios')
