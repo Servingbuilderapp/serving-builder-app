@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 
 const CORREO_ADMIN = 'servingbuilderapp@gmail.com'
 
@@ -43,19 +44,21 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Falta el nombre del socio' }, { status: 400 })
     }
 
-    const supabase = await createClient()
-
+    // La tabla socios solo la puede tocar el servidor (RLS), igual que en
+    // /admin/marca-blanca al listarlos — por eso aquí también se usa la
+    // llave de servicio (supabaseAdmin) para leer y escribir, en vez del
+    // cliente normal de la sesión del usuario.
     const slugBase = generarSlugBase(nombre) || 'socio'
     let slug = slugBase
     let intento = 1
     while (true) {
-      const { data: existente } = await supabase.from('socios').select('id').eq('slug', slug).maybeSingle()
+      const { data: existente } = await supabaseAdmin.from('socios').select('id').eq('slug', slug).maybeSingle()
       if (!existente) break
       intento += 1
       slug = `${slugBase}-${intento}`
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('socios')
       .insert({
         nombre: String(nombre).trim(),
