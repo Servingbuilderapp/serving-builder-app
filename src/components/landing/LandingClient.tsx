@@ -97,6 +97,7 @@ const NAV_LINKS = [
   { href: '#servicios', clave: 'w.nav.servicios' },
   { href: '#membresias', clave: 'w.nav.membresias' },
   { href: '#recursos', clave: 'w.nav.recursos' },
+  { href: '#trabaja-con-nosotros', clave: 'w.nav.trabaja' },
 ]
 
 const RUTA_PROYECTO = [
@@ -289,6 +290,51 @@ const ESCALERA: Escalon[] = [
     fondo: 'bg-[#4C2032]',
     borde: 'border-[#B08D57]/35',
     boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
+  },
+]
+
+type CaminoTrabajo = {
+  claveTitulo: string
+  claveDescriptor: string
+  claveResumen: string
+  clavesItems: string[]
+  claveBoton: string
+  icono: React.ElementType
+}
+
+/**
+ * Las formas de vincularse a Arquitectura Digital fuera de ser cliente.
+ * Franquicia queda por fuera por ahora (decisión del 27 sep 2026: todavía no
+ * es viable ofrecerla) — se deja la definición en el proyecto para el día que
+ * se retome, pero no se muestra en el website.
+ * Ninguna muestra cifras de dinero exacto (regla del proyecto: los precios no
+ * van en el website público) salvo el porcentaje de comisión de referidor y
+ * comercial, que es justamente el gancho para atraer a esa persona.
+ */
+const CAMINOS_TRABAJO: CaminoTrabajo[] = [
+  {
+    claveTitulo: 'w.trabaja.marcablanca.titulo',
+    claveDescriptor: 'w.trabaja.marcablanca.descriptor',
+    claveResumen: 'w.trabaja.marcablanca.resumen',
+    clavesItems: ['w.trabaja.marcablanca.i1', 'w.trabaja.marcablanca.i2', 'w.trabaja.marcablanca.i3'],
+    claveBoton: 'w.trabaja.marcablanca.boton',
+    icono: Briefcase,
+  },
+  {
+    claveTitulo: 'w.trabaja.referidor.titulo',
+    claveDescriptor: 'w.trabaja.referidor.descriptor',
+    claveResumen: 'w.trabaja.referidor.resumen',
+    clavesItems: ['w.trabaja.referidor.i1', 'w.trabaja.referidor.i2'],
+    claveBoton: 'w.trabaja.referidor.boton',
+    icono: Users,
+  },
+  {
+    claveTitulo: 'w.trabaja.comercial.titulo',
+    claveDescriptor: 'w.trabaja.comercial.descriptor',
+    claveResumen: 'w.trabaja.comercial.resumen',
+    clavesItems: ['w.trabaja.comercial.i1', 'w.trabaja.comercial.i2'],
+    claveBoton: 'w.trabaja.comercial.boton',
+    icono: TrendingUp,
   },
 ]
 
@@ -1182,6 +1228,65 @@ export function LandingClient({ user }: LandingClientProps) {
               )
             })}
           </div>
+        </div>
+      </section>
+
+      {/* ================= TRABAJA CON NOSOTROS ================= */}
+      <section id="trabaja-con-nosotros" className="bg-[#8C3654] border-y-2 border-[#B08D57]/45 py-16 lg:py-20">
+        <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
+          <TituloSeccion
+            eyebrow={t('w.trabaja.eyebrow')}
+            titulo={t('w.trabaja.titulo')}
+            subtitulo={t('w.trabaja.subtitulo')}
+          />
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
+            {CAMINOS_TRABAJO.map((camino) => {
+              const Icono = camino.icono
+              return (
+                <Aparece key={camino.claveTitulo} className="flex">
+                  <div className={`w-full rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 flex flex-col ${RELIEVE_TARJETA}`}>
+                    <div className="h-12 w-12 rounded-xl bg-[#3B1727]/90 border border-[#B08D57]/35 flex items-center justify-center mb-4">
+                      <Icono className="h-5 w-5 text-[#B08D57]" />
+                    </div>
+
+                    <h3 className="text-[17px] font-extrabold text-[#F3E7DC] leading-snug">
+                      {t(camino.claveTitulo)}
+                    </h3>
+                    <div className="text-[12.5px] font-bold text-[#B08D57] mt-1 mb-3">
+                      {t(camino.claveDescriptor)}
+                    </div>
+
+                    <p className="text-[12.5px] text-[#F3E7DC]/70 leading-relaxed mb-4 min-h-[80px]">
+                      {t(camino.claveResumen)}
+                    </p>
+
+                    <ul className="space-y-1.5 mb-5 flex-1">
+                      {camino.clavesItems.map((clave) => (
+                        <li key={clave} className="flex items-start gap-1.5 text-[11.5px] text-[#F3E7DC]/85 leading-snug">
+                          <Check className="h-3 w-3 text-[#B08D57] shrink-0 mt-0.5" />
+                          <span>{t(clave)}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <a
+                      href={`https://wa.me/${TELEFONO_WHATSAPP}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`min-h-9 px-3 py-2 rounded-lg text-[12px] font-semibold inline-flex items-center justify-center text-center leading-tight bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25 ${RELIEVE_BOTON}`}
+                    >
+                      {t(camino.claveBoton)}
+                    </a>
+                  </div>
+                </Aparece>
+              )
+            })}
+          </div>
+
+          <p className="mt-6 text-center text-[12px] text-[#F3E7DC]/70 max-w-3xl mx-auto">
+            {t('w.trabaja.nota_legal')}
+          </p>
         </div>
       </section>
 
