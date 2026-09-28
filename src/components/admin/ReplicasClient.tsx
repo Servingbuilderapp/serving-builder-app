@@ -90,7 +90,7 @@ function Columna({
   puntos: Punto[]
 }) {
   return (
-    <div className="rounded-xl border border-[#6E4A50] bg-[#4C2032] p-4">
+    <div className="rounded-xl border border-[#B08D57]/35 bg-[#4C2032] p-4">
       <div className="flex items-center gap-2">
         <Icono className="h-4 w-4 shrink-0" style={{ color }} />
         <h4 className="text-[12px] font-bold uppercase tracking-wider text-[#F3E7DC]">{titulo}</h4>
@@ -116,7 +116,7 @@ function Columna({
 /** Cómo se le cobra al cliente — mismos datos que ve en /contratar, en modo lectura. */
 function InfoDeCobro() {
   return (
-    <div className="mt-3 rounded-lg border border-[#6E4A50] bg-[#3B1727] p-3.5 text-[12.5px] leading-relaxed text-[#F3E7DC]/65">
+    <div className="mt-3 rounded-lg border border-[#B08D57]/35 bg-[#3B1727] p-3.5 text-[12.5px] leading-relaxed text-[#F3E7DC]/65">
       <p className="font-semibold text-[#F3E7DC]">Cómo cobrarle</p>
       <p className="mt-1">
         Cliente en Colombia: transferencia a {COBRO_COLOMBIA.cuenta?.banco}, cuenta{' '}
@@ -156,7 +156,7 @@ function Cotizacion({
 
   if (!replica.modalidad_cobro) {
     return (
-      <div className="mx-5 mb-5 rounded-xl border border-dashed border-[#6E4A50] bg-[#4C2032] p-4">
+      <div className="mx-5 mb-5 rounded-xl border border-dashed border-[#B08D57]/35 bg-[#4C2032] p-4">
         <div className="flex items-center gap-2">
           <Banknote className="h-4 w-4 text-[#E0B868]" />
           <h4 className="text-[12px] font-bold uppercase tracking-wider text-[#F3E7DC]">
@@ -175,7 +175,7 @@ function Cotizacion({
               className={`rounded-lg border p-3 text-left transition ${
                 modalidadElegida === p.id
                   ? 'border-[#B08D57] bg-[#B08D57]/15'
-                  : 'border-[#6E4A50] bg-[#3B1727] hover:border-[#B08D57]'
+                  : 'border-[#B08D57]/35 bg-[#3B1727] hover:border-[#B08D57]'
               }`}
             >
               <p className="text-[12.5px] font-semibold text-[#F3E7DC]">{p.nombre}</p>
@@ -202,7 +202,7 @@ function Cotizacion({
 
   if (yaCubiertaPor) {
     return (
-      <div className="mx-5 mb-5 rounded-xl border border-[#6E4A50] bg-[#4C2032] p-4">
+      <div className="mx-5 mb-5 rounded-xl border border-[#B08D57]/35 bg-[#4C2032] p-4">
         <div className="flex items-center gap-2">
           <Banknote className="h-4 w-4 text-[#9BB18D]" />
           <h4 className="text-[12px] font-bold uppercase tracking-wider text-[#F3E7DC]">
@@ -219,7 +219,7 @@ function Cotizacion({
   }
 
   return (
-    <div className="mx-5 mb-5 rounded-xl border border-[#6E4A50] bg-[#4C2032] p-4">
+    <div className="mx-5 mb-5 rounded-xl border border-[#B08D57]/35 bg-[#4C2032] p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <Banknote className="h-4 w-4 text-[#B08D57]" />
@@ -244,7 +244,7 @@ function Cotizacion({
             type="button"
             disabled={trabajando}
             onClick={() => onCambiarEstadoPago('Cotizado')}
-            className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-[#6E4A50] bg-[#3B1727] px-3.5 text-[12.5px] font-semibold text-[#F3E7DC] disabled:opacity-45"
+            className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-3.5 text-[12.5px] font-semibold text-[#F3E7DC] disabled:opacity-45"
           >
             Marcar como cotizado
           </button>
@@ -333,7 +333,7 @@ export function ReplicasClient({
       </header>
 
       {/* preparar --------------------------------------------------------- */}
-      <div className={`rounded-2xl border border-[#6E4A50] bg-[#3B1727] p-5 ${SOMBRA}`}>
+      <div className={`rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 ${SOMBRA}`}>
         <h2 className="text-[13px] font-bold uppercase tracking-wider text-[#F3E7DC]">
           Preparar una réplica
         </h2>
@@ -353,7 +353,7 @@ export function ReplicasClient({
               setValorCampoDestino('')
               setNotaAdicional('')
             }}
-            className="h-11 rounded-lg border border-[#6E4A50] bg-[#3B1727] px-3 text-[13.5px] text-[#F3E7DC] outline-none focus:border-[#B08D57] sm:col-span-2"
+            className="h-11 rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-3 text-[13.5px] text-[#F3E7DC] outline-none focus:border-[#B08D57] sm:col-span-2"
           >
             <option value="">Tipo de réplica…</option>
             {tipos.map((t) => (
@@ -373,7 +373,7 @@ export function ReplicasClient({
                 value={valorCampoDestino}
                 onChange={(e) => setValorCampoDestino(e.target.value)}
                 placeholder={campoDestino.ejemplo}
-                className="h-11 w-full rounded-lg border border-[#6E4A50] bg-[#3B1727] px-3 text-[13.5px] text-[#F3E7DC] outline-none placeholder:text-[#F3E7DC]/35 focus:border-[#B08D57]"
+                className="h-11 w-full rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-3 text-[13.5px] text-[#F3E7DC] outline-none placeholder:text-[#F3E7DC]/35 focus:border-[#B08D57]"
               />
 
               <label className="mb-1 mt-3 block text-[12px] font-semibold text-[#F3E7DC]/65">
@@ -384,7 +384,7 @@ export function ReplicasClient({
                 onChange={(e) => setNotaAdicional(e.target.value)}
                 rows={2}
                 placeholder="Algo más que el equipo deba saber sobre esta réplica"
-                className="w-full rounded-lg border border-[#6E4A50] bg-[#3B1727] px-3 py-2.5 text-[13.5px] text-[#F3E7DC] outline-none placeholder:text-[#F3E7DC]/35 focus:border-[#B08D57]"
+                className="w-full rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-3 py-2.5 text-[13.5px] text-[#F3E7DC] outline-none placeholder:text-[#F3E7DC]/35 focus:border-[#B08D57]"
               />
 
               {destinoCompuesto ? (
@@ -398,7 +398,7 @@ export function ReplicasClient({
           <select
             value={convocatoriaId}
             onChange={(e) => setConvocatoriaId(e.target.value)}
-            className="h-11 rounded-lg border border-[#6E4A50] bg-[#3B1727] px-3 text-[13.5px] text-[#F3E7DC] outline-none focus:border-[#B08D57] sm:col-span-2"
+            className="h-11 rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-3 text-[13.5px] text-[#F3E7DC] outline-none focus:border-[#B08D57] sm:col-span-2"
           >
             <option value="">Convocatoria de destino (opcional)</option>
             {convocatorias.map((c) => (
@@ -412,7 +412,7 @@ export function ReplicasClient({
           <select
             value={modalidadCobro}
             onChange={(e) => setModalidadCobro(e.target.value as ModalidadReplica | '')}
-            className="h-11 rounded-lg border border-[#6E4A50] bg-[#3B1727] px-3 text-[13.5px] text-[#F3E7DC] outline-none focus:border-[#B08D57] sm:col-span-2"
+            className="h-11 rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-3 text-[13.5px] text-[#F3E7DC] outline-none focus:border-[#B08D57] sm:col-span-2"
           >
             <option value="">Modalidad de cobro (se puede fijar después)…</option>
             {Object.values(PRECIOS_REPLICA).map((p) => (
@@ -458,7 +458,7 @@ export function ReplicasClient({
 
       {/* listado ---------------------------------------------------------- */}
       {replicas.length === 0 ? (
-        <div className={`rounded-2xl border border-dashed border-[#6E4A50] bg-[#4C2032] p-10 text-center ${SOMBRA}`}>
+        <div className={`rounded-2xl border border-dashed border-[#B08D57]/35 bg-[#4C2032] p-10 text-center ${SOMBRA}`}>
           <Copy className="mx-auto h-6 w-6 text-[#F3E7DC]/50" />
           <p className="mt-3 text-[13.5px] text-[#F3E7DC]/65">
             Este proyecto todavía no tiene réplicas pensadas.
@@ -466,8 +466,8 @@ export function ReplicasClient({
         </div>
       ) : (
         replicas.map((r) => (
-          <div key={r.id} className={`overflow-hidden rounded-2xl border border-[#6E4A50] bg-[#3B1727] ${SOMBRA}`}>
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#6E4A50]/40 px-5 py-4">
+          <div key={r.id} className={`overflow-hidden rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] ${SOMBRA}`}>
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#B08D57]/35/40 px-5 py-4">
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-[15px] font-bold capitalize text-[#F3E7DC]">{r.tipo}</span>
@@ -497,7 +497,7 @@ export function ReplicasClient({
               ) : r.proyecto_replica_id ? (
                 <Link
                   href={`/admin/proyectos/${r.proyecto_replica_id}/arbol`}
-                  className="inline-flex h-10 shrink-0 items-center gap-2 rounded-lg border border-[#6E4A50] bg-[#3B1727] px-4 text-[13px] font-semibold text-[#B08D57]"
+                  className="inline-flex h-10 shrink-0 items-center gap-2 rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-4 text-[13px] font-semibold text-[#B08D57]"
                 >
                   Abrir el proyecto réplica <ArrowRight className="h-4 w-4" />
                 </Link>

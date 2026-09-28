@@ -71,7 +71,7 @@ const RELIEVE_TARJETA =
 const TINTA = 'text-[#F3E7DC]'
 const TINTA_SUAVE = 'text-[#F3E7DC]/70'
 const TINTA_TENUE = 'text-[#F3E7DC]/50'
-const BORDE = 'border-[#6E4A50]'
+const BORDE = 'border-[#B08D57]/35'
 
 const SEMAFOROS: Record<string, { fondo: string; texto: string; borde: string; nombre: string }> = {
   verde: {
@@ -118,7 +118,7 @@ const ESTADOS_POSTULACION: Record<EstadoPostulacion, EstiloPostulacion> = {
   Preparando: {
     fondo: 'bg-[#3B1727]',
     texto: 'text-[#C9A46B]',
-    borde: 'border-[#6E4A50]',
+    borde: 'border-[#B08D57]/35',
     titulo: 'Se está preparando la postulación',
     Icono: Clock,
   },
