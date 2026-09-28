@@ -1,5 +1,5 @@
 import React from 'react'
-import { createClient as createAdminClient } from '@supabase/supabase-js'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 import { FormularioIngresoSocio } from '@/components/marca-blanca/FormularioIngresoSocio'
 
 export const dynamic = 'force-dynamic'
@@ -16,11 +16,6 @@ export const dynamic = 'force-dynamic'
  */
 export default async function PortalSocioPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-
-  const supabaseAdmin = createAdminClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SECRET_KEY!
-  )
 
   const { data: socio } = await supabaseAdmin
     .from('socios')
