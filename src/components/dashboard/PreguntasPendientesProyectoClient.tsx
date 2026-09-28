@@ -69,7 +69,7 @@ export function PreguntasPendientesProyectoClient({ preguntasIniciales }: Props)
   }
 
   return (
-    <div className="p-8 rounded-3xl border border-[#6E4A50] bg-[#4C2032] space-y-5">
+    <div className="p-8 rounded-3xl border border-[#B08D57]/35 bg-[#4C2032] space-y-5">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-black text-[#F3E7DC]">
           Nos falta un poco de información
@@ -100,7 +100,7 @@ export function PreguntasPendientesProyectoClient({ preguntasIniciales }: Props)
         placeholder="Escribe tu respuesta aquí..."
         rows={4}
         disabled={enviando}
-        className="w-full p-4 rounded-2xl border border-[#6E4A50] bg-[#3B1727] text-[#F3E7DC] text-sm placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/30"
+        className="w-full p-4 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] text-[#F3E7DC] text-sm placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/30"
       />
 
       {error && <p className="text-xs text-[#E0917E] font-bold">{error}</p>}
