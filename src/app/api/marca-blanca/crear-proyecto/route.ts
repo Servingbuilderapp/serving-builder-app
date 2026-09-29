@@ -77,4 +77,59 @@ export async function POST(req: Request) {
     )
 
     if (!yaExiste) {
-      passwordTemporal =
+      passwordTemporal = generarPasswordTemporal()
+      const { error: authError } = await supabaseAdmin.auth.admin.createUser({
+        email: correoCliente,
+        password: passwordTemporal,
+        email_confirm: true,
+        user_metadata: { first_name: String(nombreCliente).split(' ')[0] },
+      })
+      if (authError) {
+        console.error('No se pudo crear la cuenta de acceso (marca blanca):', authError)
+      } else {
+        esUsuarioNuevo = true
+      }
+    }
+
+    const forwardedFor = req.headers.get('x-forwarded-for')
+    const ip = forwardedFor ? forwardedFor.split(',')[0].trim() : 'desconocida'
+
+    const { data, error } = await supabaseAdmin
+      .from('proyectos_clientes_serving')
+      .insert({
+        nombre_cliente: nombreCliente,
+        correo_cliente: correoCliente,
+        telefono_whatsapp: whatsapp,
+        nombre_iniciativa: nombreIniciativa,
+        estado_actual: 'pagado',
+        estado_comercial: 'nuevo',
+        contrato_firmado: true,
+        firma_digital: { nombre: nombreCliente, aceptado: true, fecha: new Date().toISOString(), ip },
+        plan_pago: paquete === 'premium' ? 'premium_mb' : 'estandar_mb',
+        canal_origen: 'marca_blanca',
+        socio_id: socio.id,
+        fecha_limite_entrega: fechaLimite.toISOString(),
+        pasarela_pago: 'Ninguno',
+      })
+      .select('id')
+      .single()
+
+    if (error) throw error
+
+    return NextResponse.json({
+      success: true,
+      proyectoId: data.id,
+      esUsuarioNuevo,
+      passwordTemporal,
+    })
+  } catch (error) {
+    const detalle =
+      error && typeof error === 'object' && 'message' in error
+        ? String((error as { message?: unknown }).message)
+        : error instanceof Error
+        ? error.message
+        : 'Error al crear el proyecto'
+    console.error('[api/marca-blanca/crear-proyecto] Error:', error)
+    return NextResponse.json({ error: detalle }, { status: 500 })
+  }
+}
