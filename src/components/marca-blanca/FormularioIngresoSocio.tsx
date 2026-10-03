@@ -92,7 +92,7 @@ export function FormularioIngresoSocio({
               <div className="text-[#0F172A]/60">Ya tenías una cuenta — entra con tu clave de siempre.</div>
             )}
           </div>
-          
+          <a
             href="/login"
             className="inline-block px-5 py-2.5 rounded-full bg-color-primary text-white text-sm font-bold hover:brightness-110"
           >
