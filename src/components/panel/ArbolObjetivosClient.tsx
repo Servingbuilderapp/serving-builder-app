@@ -244,7 +244,7 @@ export function ArbolObjetivosClient({
           }`}
           role="status"
         >
-          {aviso.text}
+          {aviso.texto}
         </div>
       ) : null}
 
