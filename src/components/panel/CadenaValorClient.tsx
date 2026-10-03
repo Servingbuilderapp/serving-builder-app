@@ -254,7 +254,7 @@ export function CadenaValorClient({
           }`}
           role="status"
         >
-          {aviso.text}
+          {aviso.texto}
         </div>
       ) : null}
 
