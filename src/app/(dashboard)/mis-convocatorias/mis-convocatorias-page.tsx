@@ -32,6 +32,10 @@ type FilaConvocatoria = {
   fecha_cierre: string | null
   monto: string | null
   fuente_oficial: string | null
+  linea_tematica?: string | null
+  territorio?: string | null
+  beneficiarios?: string | null
+  razon_relevancia?: string | null
 }
 
 type FilaEncaje = {
@@ -105,7 +109,7 @@ export default async function MisConvocatoriasPage() {
   // abajo con su análisis de encaje.
   const { data: filasPendientes } = await supabase
     .from('convocatorias_candidatas_proyecto')
-    .select('id, nombre, entidad, tipo, fecha_cierre, monto, fuente_oficial')
+    .select('id, nombre, entidad, tipo, fecha_cierre, monto, fuente_oficial, linea_tematica, territorio, beneficiarios, razon_relevancia')
     .eq('id_proyecto', proyectoId)
     .eq('seleccionada', true)
     .is('eleccion_cliente', null)
@@ -122,6 +126,10 @@ export default async function MisConvocatoriasPage() {
     fechaCierre: c.fecha_cierre || null,
     monto: c.monto || null,
     fuenteOficial: c.fuente_oficial || null,
+    lineaTematica: c.linea_tematica || null,
+    territorio: c.territorio || null,
+    beneficiarios: c.beneficiarios || null,
+    razon: c.razon_relevancia || null,
   }))
 
   const { data: filas } = await supabase

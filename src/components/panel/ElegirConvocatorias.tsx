@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Building2, CalendarClock, Coins, ExternalLink } from 'lucide-react'
+import { Building2, CalendarClock, Coins, ExternalLink, MapPin, Users } from 'lucide-react'
 
 /**
  * "Parada 1" (26 sep 2026) — el cliente elige cuáles convocatorias quiere
@@ -38,6 +38,46 @@ export type ConvocatoriaPendiente = {
   fechaCierre: string | null
   monto: string | null
   fuenteOficial: string | null
+  lineaTematica?: string | null
+  territorio?: string | null
+  beneficiarios?: string | null
+  razon?: string | null
+}
+
+/** Colores de la etiqueta de sector (sobre fondo vino). */
+const COLOR_SECTOR: Record<string, string> = {
+  salud: 'bg-[#2F8F83]/25 text-[#8FE0D4] border-[#2F8F83]/50',
+  educación: 'bg-[#3F6FC0]/25 text-[#A9C4F5] border-[#3F6FC0]/50',
+  'medio ambiente': 'bg-[#4C9A4C]/25 text-[#A8E0A8] border-[#4C9A4C]/50',
+  'artes y cultura': 'bg-[#B0508F]/25 text-[#F0B0DA] border-[#B0508F]/50',
+  'tecnología e innovación': 'bg-[#7A5AC8]/25 text-[#C9B8F5] border-[#7A5AC8]/50',
+  agricultura: 'bg-[#8FA83A]/25 text-[#D6E58A] border-[#8FA83A]/50',
+  'sector privado': 'bg-[#C98A3A]/25 text-[#F0CC8F] border-[#C98A3A]/50',
+  'derechos y comunidades': 'bg-[#C0604A]/25 text-[#F0A898] border-[#C0604A]/50',
+}
+const COLOR_NEUTRO = 'bg-[#F3E7DC]/10 text-[#F3E7DC]/80 border-[#F3E7DC]/25'
+
+function separarLinea(linea: string | null | undefined, tipo: string | null) {
+  const partes = String(linea || '')
+    .split('·')
+    .map((x) => x.trim())
+    .filter(Boolean)
+  return { sector: partes[0] || null, recurso: partes[1] || tipo || null }
+}
+
+function diasParaCierre(fecha: string | null): number | null {
+  if (!fecha || !/^\d{4}-\d{2}-\d{2}/.test(fecha)) return null
+  const cierre = new Date(fecha.slice(0, 10) + 'T23:59:59')
+  return Math.ceil((cierre.getTime() - Date.now()) / 86400000)
+}
+
+function Dato({ icono, texto }: { icono: React.ReactNode; texto: string }) {
+  return (
+    <div className="flex items-start gap-2 text-[12.5px] leading-snug text-[#F3E7DC]/75">
+      <span className="mt-0.5 shrink-0 text-[#C9A46B]">{icono}</span>
+      <span className="min-w-0">{texto}</span>
+    </div>
+  )
 }
 
 function TarjetaPendiente({
@@ -49,58 +89,81 @@ function TarjetaPendiente({
   elegida: boolean
   onCambiar: (id: string, valor: boolean) => void
 }) {
+  const { sector, recurso } = separarLinea(convocatoria.lineaTematica, convocatoria.tipo)
+  const dias = diasParaCierre(convocatoria.fechaCierre)
+  const pronto = dias !== null && dias >= 0 && dias <= 30
+  const colorSector = (sector && COLOR_SECTOR[sector.toLowerCase()]) || COLOR_NEUTRO
+
   return (
-    <label
-      className={`flex cursor-pointer items-start gap-3 rounded-2xl border bg-[#4C2032] px-5 py-4 transition-colors ${RELIEVE_TARJETA} ${
-        elegida ? 'border-[#C9A46B]' : 'border-[#B08D57]/35 hover:border-[#B08D57]/60'
+    <article
+      className={`flex flex-col rounded-2xl border bg-gradient-to-b from-[#5A2438] to-[#4C2032] p-5 transition-colors ${RELIEVE_TARJETA} ${
+        elegida ? 'border-[#C9A46B] ring-1 ring-[#C9A46B]/60' : 'border-[#B08D57]/35 hover:border-[#B08D57]/60'
       }`}
     >
-      <input
-        type="checkbox"
-        checked={elegida}
-        onChange={(e) => onCambiar(convocatoria.id, e.target.checked)}
-        className="mt-1 h-4 w-4 shrink-0 rounded border-[#B08D57] bg-[#3B1727] text-[#C9A46B] focus:ring-[#C9A46B]"
-      />
+      <div className="flex flex-wrap items-center gap-1.5">
+        {sector ? (
+          <span className={`rounded-full border px-2.5 py-0.5 text-[11px] font-bold ${colorSector}`}>
+            {sector}
+          </span>
+        ) : null}
+        {recurso ? (
+          <span className="rounded-full border border-[#C9A46B]/50 bg-[#C9A46B]/15 px-2.5 py-0.5 text-[11px] font-bold text-[#E8C777]">
+            {recurso}
+          </span>
+        ) : null}
+        {pronto ? (
+          <span className="rounded-full border border-[#E0917E]/50 bg-[#C0604A]/25 px-2.5 py-0.5 text-[11px] font-bold text-[#F0A898]">
+            Cierra pronto
+          </span>
+        ) : null}
+      </div>
 
-      <div className="min-w-0 flex-1">
-        <h3 className="text-[15px] font-extrabold leading-snug tracking-tight text-[#F3E7DC]">
-          {convocatoria.nombre}
-        </h3>
+      <h3 className="mt-3 text-[15.5px] font-extrabold leading-snug tracking-tight text-[#F3E7DC]">
+        {convocatoria.nombre}
+      </h3>
 
-        <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[12.5px] text-[#F3E7DC]/70">
-          {convocatoria.entidad ? (
-            <span className="inline-flex items-center gap-1.5">
-              <Building2 className="h-3.5 w-3.5 text-[#F3E7DC]/50" />
-              {convocatoria.entidad}
-            </span>
-          ) : null}
-          {convocatoria.fechaCierre ? (
-            <span className="inline-flex items-center gap-1.5">
-              <CalendarClock className="h-3.5 w-3.5 text-[#F3E7DC]/50" />
-              Cierra: {convocatoria.fechaCierre}
-            </span>
-          ) : null}
-          {convocatoria.monto ? (
-            <span className="inline-flex items-center gap-1.5">
-              <Coins className="h-3.5 w-3.5 text-[#F3E7DC]/50" />
-              {convocatoria.monto}
-            </span>
-          ) : null}
-        </div>
+      <div className="mt-3 space-y-2">
+        {convocatoria.entidad ? <Dato icono={<Building2 className="h-3.5 w-3.5" />} texto={convocatoria.entidad} /> : null}
+        <Dato
+          icono={<CalendarClock className="h-3.5 w-3.5" />}
+          texto={convocatoria.fechaCierre ? `Cierra: ${convocatoria.fechaCierre}` : 'Convocatoria abierta de forma permanente'}
+        />
+        {convocatoria.monto ? <Dato icono={<Coins className="h-3.5 w-3.5" />} texto={convocatoria.monto} /> : null}
+        {convocatoria.territorio ? <Dato icono={<MapPin className="h-3.5 w-3.5" />} texto={convocatoria.territorio} /> : null}
+        {convocatoria.beneficiarios ? <Dato icono={<Users className="h-3.5 w-3.5" />} texto={convocatoria.beneficiarios} /> : null}
+      </div>
 
+      {convocatoria.razon ? (
+        <p className="mt-3 rounded-xl border border-[#B08D57]/25 bg-[#3B1727]/60 px-3 py-2 text-[12.5px] leading-relaxed text-[#F3E7DC]/80">
+          <span className="font-bold text-[#E8C777]">Por qué te sirve: </span>
+          {convocatoria.razon}
+        </p>
+      ) : null}
+
+      <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-4">
         {convocatoria.fuenteOficial ? (
           <a
             href={convocatoria.fuenteOficial}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            className="mt-3 inline-flex items-center gap-1.5 text-[12.5px] font-bold text-[#F3E7DC]/70 underline underline-offset-2 hover:text-[#C9A46B]"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[#B08D57]/50 px-3 py-1.5 text-[12.5px] font-bold text-[#F3E7DC]/85 hover:border-[#C9A46B] hover:text-[#C9A46B]"
           >
-            Ver la convocatoria <ExternalLink className="h-3.5 w-3.5" />
+            Ver convocatoria oficial <ExternalLink className="h-3.5 w-3.5" />
           </a>
-        ) : null}
+        ) : (
+          <span />
+        )}
+        <label className="inline-flex cursor-pointer items-center gap-2 text-[13px] font-extrabold text-[#F3E7DC]">
+          <input
+            type="checkbox"
+            checked={elegida}
+            onChange={(e) => onCambiar(convocatoria.id, e.target.checked)}
+            className="h-5 w-5 accent-[#C9A46B] rounded border-[#B08D57] bg-[#3B1727] text-[#C9A46B] focus:ring-[#C9A46B]"
+          />
+          {elegida ? 'Elegida' : 'Elegir'}
+        </label>
       </div>
-    </label>
+    </article>
   )
 }
 
@@ -172,7 +235,7 @@ export function ElegirConvocatorias({
         </p>
       </header>
 
-      <div className="space-y-3">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {convocatorias.map((c) => (
           <TarjetaPendiente
             key={c.id}
