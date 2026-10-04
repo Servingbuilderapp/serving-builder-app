@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { urlGemini } from '@/lib/geminiEndpoint';
 import { createClient } from '@supabase/supabase-js';
 import { CONVOCATORIA_TRANSLATIONS } from '@/lib/convocatoriasTranslations';
 import { translateBrandsInObject } from '@/lib/brandProtector';
@@ -250,7 +251,7 @@ export async function POST(req: Request) {
     // 2. Si hay API Key de Gemini, llamar a Google AI Studio
     if (geminiApiKey) {
       try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${geminiApiKey}`;
+        const url = urlGemini('gemini-3.6-flash', geminiApiKey);
         
         const simplifiedConvs = convocatorias.map(c => ({
           id: c.id,

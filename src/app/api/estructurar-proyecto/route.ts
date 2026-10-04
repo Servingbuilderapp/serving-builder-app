@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { urlGemini } from "@/lib/geminiEndpoint";
 import { after } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import mammoth from "mammoth";
@@ -217,7 +218,7 @@ async function llamarGeminiConReintentos(
   for (const modelo of MODELOS_GEMINI) {
     try {
       const respuesta = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${apiKey}`,
+        urlGemini(modelo, apiKey),
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

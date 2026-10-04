@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { urlGemini } from '@/lib/geminiEndpoint';
 import { createClient } from '@supabase/supabase-js';
 
 // Cliente Supabase con Service Role
@@ -59,7 +60,7 @@ export async function POST(req: Request) {
     // 2. Si hay API Key de Gemini, llamar a Google AI Studio
     if (geminiApiKey) {
       try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${geminiApiKey}`;
+        const url = urlGemini('gemini-3.6-flash', geminiApiKey);
 
         const prompt = `Eres un agente de redacción experto de la consultora de proyectos Serving.
 Redacta una Carta de Intención (Letter of Intent - LOI) altamente persuasiva y estructurada para postular el siguiente proyecto a la convocatoria provista.

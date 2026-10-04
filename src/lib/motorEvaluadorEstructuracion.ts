@@ -27,6 +27,7 @@
  */
 
 import mammoth from 'mammoth'
+import { urlGemini } from '@/lib/geminiEndpoint'
 
 const BUCKET = 'documentos-proyectos'
 const UMBRAL_APROBACION = 90
@@ -91,7 +92,7 @@ async function llamarGeminiConReintentos(apiKey: string, body: any): Promise<{ o
   for (const modelo of MODELOS_GEMINI) {
     try {
       const respuesta = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${apiKey}`,
+        urlGemini(modelo, apiKey),
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
