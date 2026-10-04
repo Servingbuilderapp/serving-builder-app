@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { urlGemini } from '@/lib/geminiEndpoint';
+import { urlGemini, fetchGemini } from '@/lib/geminiEndpoint';
 import { createClient } from '@supabase/supabase-js';
 import { CONVOCATORIA_TRANSLATIONS } from '@/lib/convocatoriasTranslations';
 import { translateBrandsInObject } from '@/lib/brandProtector';
@@ -292,7 +292,7 @@ Lista de Convocatorias a Evaluar:
 ${JSON.stringify(simplifiedConvs)}
 `;
 
-        const response = await fetch(url, {
+        const response = await fetchGemini(url, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -12,7 +12,7 @@ export const MODELOS_GEMINI = [
   "gemini-2.5-flash",
 ];
 
-import { urlGemini } from '@/lib/geminiEndpoint'
+import { urlGemini, fetchGemini } from '@/lib/geminiEndpoint'
 
 /** Cuanto se le concede a un modelo antes de darlo por perdido. */
 const TOPE_POR_MODELO_MS = 80000;
@@ -27,8 +27,7 @@ export async function callGemini(prompt: string): Promise<string> {
 
   for (const modelo of MODELOS_GEMINI) {
     try {
-      const response = await fetch(
-        urlGemini(modelo, apiKey),
+      const response = await fetchGemini(urlGemini(modelo, apiKey),
         {
           method: 'POST',
           headers: {

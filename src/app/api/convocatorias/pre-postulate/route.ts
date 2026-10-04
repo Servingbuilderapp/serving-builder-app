@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { urlGemini } from '@/lib/geminiEndpoint';
+import { urlGemini, fetchGemini } from '@/lib/geminiEndpoint';
 import { createClient } from '@supabase/supabase-js';
 
 // Cliente Supabase con Service Role
@@ -81,7 +81,7 @@ Detalles de la Convocatoria:
 ${JSON.stringify(convocatoria)}
 `;
 
-        const response = await fetch(url, {
+        const response = await fetchGemini(url, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

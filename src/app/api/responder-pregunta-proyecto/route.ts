@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { urlGemini } from "@/lib/geminiEndpoint";
+import { urlGemini, fetchGemini } from "@/lib/geminiEndpoint";
 import { after } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
@@ -72,8 +72,7 @@ async function llamarGeminiConReintentos(
   let ultimoResultado: { ok: boolean; data: any } = { ok: false, data: null };
 
   for (let intento = 1; intento <= maxIntentos; intento++) {
-    const respuesta = await fetch(
-      urlGemini(MODELOS_GEMINI[Math.min(intento - 1, MODELOS_GEMINI.length - 1)], apiKey),
+    const respuesta = await fetchGemini(urlGemini(MODELOS_GEMINI[Math.min(intento - 1, MODELOS_GEMINI.length - 1)], apiKey),
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
