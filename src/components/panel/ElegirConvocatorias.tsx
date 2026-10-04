@@ -45,7 +45,7 @@ export type ConvocatoriaPendiente = {
 }
 
 /** Colores de la etiqueta de sector (sobre fondo vino). */
-const COLOR_SECTOR: Record<string, string> = {
+export const COLOR_SECTOR: Record<string, string> = {
   salud: 'bg-[#2F8F83]/25 text-[#8FE0D4] border-[#2F8F83]/50',
   educación: 'bg-[#3F6FC0]/25 text-[#A9C4F5] border-[#3F6FC0]/50',
   'medio ambiente': 'bg-[#4C9A4C]/25 text-[#A8E0A8] border-[#4C9A4C]/50',
@@ -55,9 +55,9 @@ const COLOR_SECTOR: Record<string, string> = {
   'sector privado': 'bg-[#C98A3A]/25 text-[#F0CC8F] border-[#C98A3A]/50',
   'derechos y comunidades': 'bg-[#C0604A]/25 text-[#F0A898] border-[#C0604A]/50',
 }
-const COLOR_NEUTRO = 'bg-[#F3E7DC]/10 text-[#F3E7DC]/80 border-[#F3E7DC]/25'
+export const COLOR_NEUTRO = 'bg-[#F3E7DC]/10 text-[#F3E7DC]/80 border-[#F3E7DC]/25'
 
-function separarLinea(linea: string | null | undefined, tipo: string | null) {
+export function separarLinea(linea: string | null | undefined, tipo: string | null) {
   const partes = String(linea || '')
     .split('·')
     .map((x) => x.trim())
@@ -65,13 +65,13 @@ function separarLinea(linea: string | null | undefined, tipo: string | null) {
   return { sector: partes[0] || null, recurso: partes[1] || tipo || null }
 }
 
-function diasParaCierre(fecha: string | null): number | null {
+export function diasParaCierre(fecha: string | null): number | null {
   if (!fecha || !/^\d{4}-\d{2}-\d{2}/.test(fecha)) return null
   const cierre = new Date(fecha.slice(0, 10) + 'T23:59:59')
   return Math.ceil((cierre.getTime() - Date.now()) / 86400000)
 }
 
-function Dato({ icono, texto }: { icono: React.ReactNode; texto: string }) {
+export function Dato({ icono, texto }: { icono: React.ReactNode; texto: string }) {
   return (
     <div className="flex items-start gap-2 text-[12.5px] leading-snug text-[#F3E7DC]/75">
       <span className="mt-0.5 shrink-0 text-[#C9A46B]">{icono}</span>

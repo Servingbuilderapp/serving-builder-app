@@ -9,10 +9,19 @@ import {
   Clock,
   Coins,
   ExternalLink,
+  MapPin,
   PartyPopper,
   Search,
+  Users,
   XCircle,
 } from 'lucide-react'
+import {
+  COLOR_NEUTRO,
+  COLOR_SECTOR,
+  Dato,
+  diasParaCierre,
+  separarLinea,
+} from '@/components/panel/ElegirConvocatorias'
 
 /* ========================================================================== */
 /* Tipos                                                                      */
@@ -56,6 +65,9 @@ export type ConvocatoriaCliente = {
   fechaCierre: string | null
   monto: string | null
   fuenteOficial: string | null
+  lineaTematica?: string | null
+  territorio?: string | null
+  beneficiarios?: string | null
   encaje: EncajeCliente | null
   /** null = todavía no arrancó ningún trámite de postulación para esta convocatoria. */
   postulacion: PostulacionCliente
@@ -233,6 +245,10 @@ function TarjetaConvocatoria({ convocatoria }: { convocatoria: ConvocatoriaClien
   const [abierta, setAbierta] = useState(false)
   const encaje = convocatoria.encaje
   const semaforo = estiloSemaforo(encaje?.semaforo || null)
+  const { sector, recurso } = separarLinea(convocatoria.lineaTematica, convocatoria.tipo)
+  const dias = diasParaCierre(convocatoria.fechaCierre)
+  const pronto = dias !== null && dias >= 0 && dias <= 30
+  const colorSector = (sector && COLOR_SECTOR[sector.toLowerCase()]) || COLOR_NEUTRO
   const hayDetalle = Boolean(
     encaje &&
       (encaje.resumen ||
@@ -248,29 +264,37 @@ function TarjetaConvocatoria({ convocatoria }: { convocatoria: ConvocatoriaClien
       <div className="px-5 py-4">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
-            <h3 className="text-[15px] font-extrabold leading-snug tracking-tight text-[#F3E7DC]">
+            <div className="flex flex-wrap items-center gap-1.5">
+              {sector ? (
+                <span className={`rounded-full border px-2.5 py-0.5 text-[11px] font-bold ${colorSector}`}>
+                  {sector}
+                </span>
+              ) : null}
+              {recurso ? (
+                <span className="rounded-full border border-[#C9A46B]/50 bg-[#C9A46B]/15 px-2.5 py-0.5 text-[11px] font-bold text-[#E8C777]">
+                  {recurso}
+                </span>
+              ) : null}
+              {pronto ? (
+                <span className="rounded-full border border-[#E0917E]/50 bg-[#C0604A]/25 px-2.5 py-0.5 text-[11px] font-bold text-[#F0A898]">
+                  Cierra pronto
+                </span>
+              ) : null}
+            </div>
+
+            <h3 className="mt-3 text-[15.5px] font-extrabold leading-snug tracking-tight text-[#F3E7DC]">
               {convocatoria.nombre}
             </h3>
 
-            <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[12.5px] text-[#F3E7DC]/70">
-              {convocatoria.entidad ? (
-                <span className="inline-flex items-center gap-1.5">
-                  <Building2 className="h-3.5 w-3.5 text-[#F3E7DC]/50" />
-                  {convocatoria.entidad}
-                </span>
-              ) : null}
-              {convocatoria.fechaCierre ? (
-                <span className="inline-flex items-center gap-1.5">
-                  <CalendarClock className="h-3.5 w-3.5 text-[#F3E7DC]/50" />
-                  Cierra: {convocatoria.fechaCierre}
-                </span>
-              ) : null}
-              {convocatoria.monto ? (
-                <span className="inline-flex items-center gap-1.5">
-                  <Coins className="h-3.5 w-3.5 text-[#F3E7DC]/50" />
-                  {convocatoria.monto}
-                </span>
-              ) : null}
+            <div className="mt-3 space-y-2">
+              {convocatoria.entidad ? <Dato icono={<Building2 className="h-3.5 w-3.5" />} texto={convocatoria.entidad} /> : null}
+              <Dato
+                icono={<CalendarClock className="h-3.5 w-3.5" />}
+                texto={convocatoria.fechaCierre ? `Cierra: ${convocatoria.fechaCierre}` : 'Convocatoria abierta de forma permanente'}
+              />
+              {convocatoria.monto ? <Dato icono={<Coins className="h-3.5 w-3.5" />} texto={convocatoria.monto} /> : null}
+              {convocatoria.territorio ? <Dato icono={<MapPin className="h-3.5 w-3.5" />} texto={convocatoria.territorio} /> : null}
+              {convocatoria.beneficiarios ? <Dato icono={<Users className="h-3.5 w-3.5" />} texto={convocatoria.beneficiarios} /> : null}
             </div>
           </div>
 
@@ -387,7 +411,7 @@ export function ConvocatoriasCliente({ convocatorias }: { convocatorias: Convoca
         </p>
       </header>
 
-      <div className="space-y-3">
+      <div className="grid items-start gap-4 md:grid-cols-2 xl:grid-cols-3">
         {convocatorias.map((c) => (
           <TarjetaConvocatoria key={c.id} convocatoria={c} />
         ))}

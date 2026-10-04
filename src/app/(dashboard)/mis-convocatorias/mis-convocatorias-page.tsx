@@ -134,7 +134,7 @@ export default async function MisConvocatoriasPage() {
 
   const { data: filas } = await supabase
     .from('convocatorias_candidatas_proyecto')
-    .select('id, nombre, entidad, tipo, fecha_cierre, monto, fuente_oficial')
+    .select('id, nombre, entidad, tipo, fecha_cierre, monto, fuente_oficial, linea_tematica, territorio, beneficiarios')
     .eq('id_proyecto', proyectoId)
     .eq('seleccionada', true)
     .eq('eleccion_cliente', 'elegida')
@@ -193,6 +193,9 @@ export default async function MisConvocatoriasPage() {
       fechaCierre: c.fecha_cierre || null,
       monto: c.monto || null,
       fuenteOficial: c.fuente_oficial || null,
+      lineaTematica: c.linea_tematica || null,
+      territorio: c.territorio || null,
+      beneficiarios: c.beneficiarios || null,
       encaje: e
         ? {
             resumen: e.resumen_convocatoria || null,
