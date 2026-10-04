@@ -14,7 +14,10 @@
 export function urlGemini(modelo: string, apiKeyAIStudio: string): string {
   const llaveVertex = process.env.GEMINI_VERTEX_KEY
   if (llaveVertex) {
-    return `https://aiplatform.googleapis.com/v1/publishers/google/models/${modelo}:generateContent?key=${llaveVertex}`
+    // Las llaves atadas a una cuenta de servicio (empiezan con "AQ.") exigen la
+    // direccion larga: con proyecto y ubicacion.
+    const proyecto = process.env.GEMINI_VERTEX_PROJECT || 'gen-lang-client-0157169840'
+    return `https://aiplatform.googleapis.com/v1/projects/${proyecto}/locations/global/publishers/google/models/${modelo}:generateContent?key=${llaveVertex}`
   }
   return `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${apiKeyAIStudio}`
 }
