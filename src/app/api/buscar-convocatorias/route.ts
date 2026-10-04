@@ -382,6 +382,25 @@ EL MAPA DE LA FINANCIACIÓN (obligatorio en cada ficha, seleccionada o descartad
     resultado.descartadas = [...(Array.isArray(resultado.descartadas) ? resultado.descartadas : []), ...excedentes];
   }
 
+  // Candado de fechas: una convocatoria cuya fecha de cierre ya pasó no se le
+  // muestra al cliente. No se pierde: pasa a descartadas (y a la biblioteca).
+  // Solo se descarta cuando la fecha viene clara (AAAA-MM-DD); si no hay fecha
+  // o viene en texto libre, se deja pasar como antes.
+  if (Array.isArray(resultado.seleccionadas)) {
+    const hoyISO = new Date().toISOString().slice(0, 10);
+    const vigentes: any[] = [];
+    const vencidas: any[] = [];
+    for (const c of resultado.seleccionadas) {
+      const f = typeof c?.fecha_cierre === "string" ? c.fecha_cierre.trim().slice(0, 10) : "";
+      if (/^\d{4}-\d{2}-\d{2}$/.test(f) && f < hoyISO) vencidas.push(c);
+      else vigentes.push(c);
+    }
+    if (vencidas.length > 0) {
+      resultado.seleccionadas = vigentes;
+      resultado.descartadas = [...(Array.isArray(resultado.descartadas) ? resultado.descartadas : []), ...vencidas];
+    }
+  }
+
   // TODO lo encontrado —lo elegido y lo descartado— pasa a la biblioteca.
   // Una convocatoria descartada hoy por este proyecto puede servir mañana
   // para otro cliente, y así no se vuelve a buscar desde cero.
