@@ -36,6 +36,7 @@ export async function callGemini(prompt: string): Promise<string> {
           body: JSON.stringify({
             contents: [
               {
+                role: 'user',
                 parts: [
                   {
                     text: prompt,

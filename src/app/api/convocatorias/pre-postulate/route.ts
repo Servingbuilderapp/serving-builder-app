@@ -87,7 +87,7 @@ ${JSON.stringify(convocatoria)}
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            contents: [{ parts: [{ text: prompt }] }]
+            contents: [{ role: 'user', parts: [{ text: prompt }] }]
           })
         });
 
