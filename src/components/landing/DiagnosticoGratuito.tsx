@@ -9,6 +9,7 @@ import { GlowButton } from '@/components/ui/GlowButton'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { RuedaDiagnostico } from '@/components/diagnostico/RuedaDiagnostico'
 import type { DiagnosticoResultadoV2 } from '@/app/api/diagnostico-v2/route'
+import { descargarComoWord, guardarComoPdf } from '@/lib/descargarDocumento'
 
 const initialForm = {
   nombreEmpresa: '',
@@ -66,8 +67,8 @@ export function DiagnosticoGratuito() {
       if (!res.ok) throw new Error(data.error || 'Error al generar el diagnóstico')
       setResultado(data)
       setStep(4)
-    } catch (err: any) {
-      setError(err.message || 'Hubo un problema. Intenta de nuevo.')
+    } catch (err: unknown) {
+      setError((err instanceof Error && err.message) || 'Hubo un problema. Intenta de nuevo.')
     } finally {
       setLoading(false)
     }
@@ -81,13 +82,19 @@ export function DiagnosticoGratuito() {
 
   const descargarNotaConcepto = () => {
     if (!resultado) return
-    const blob = new Blob([resultado.notaConceptoMarkdown], { type: 'text/markdown' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `Nota-Concepto-${formData.nombreProyecto || 'proyecto'}.md`
-    a.click()
-    URL.revokeObjectURL(url)
+    descargarComoWord(
+      `Nota-Concepto-${formData.nombreProyecto || 'proyecto'}`,
+      `Nota de Concepto: ${formData.nombreProyecto || 'proyecto'}`,
+      resultado.notaConceptoMarkdown,
+    )
+  }
+
+  const pdfNotaConcepto = () => {
+    if (!resultado) return
+    guardarComoPdf(
+      `Nota de Concepto: ${formData.nombreProyecto || 'proyecto'}`,
+      resultado.notaConceptoMarkdown,
+    )
   }
 
   return (
@@ -368,7 +375,7 @@ export function DiagnosticoGratuito() {
               </div>
             </div>
 
-            <div className="p-6 rounded-3xl bg-white border border-color-base-200 space-y-4">
+            <div className="p-6 rounded-3xl bg-[#3B1727] border border-color-base-300 space-y-4">
               <div className="flex items-center justify-between">
                 <h5 className="text-sm font-black text-color-base-content">Tu Nota Concepto (borrador para pitch deck)</h5>
                 <button onClick={() => setVerNotaConcepto(!verNotaConcepto)} className="text-xs font-bold text-color-primary flex items-center gap-1">
@@ -380,9 +387,14 @@ export function DiagnosticoGratuito() {
                   {resultado.notaConceptoMarkdown}
                 </div>
               )}
-              <button onClick={descargarNotaConcepto} className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-color-primary hover:underline">
-                <Download className="h-4 w-4" /> Descargar Nota Concepto
-              </button>
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+                <button onClick={descargarNotaConcepto} className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-color-primary hover:underline">
+                  <Download className="h-4 w-4" /> Descargar en Word
+                </button>
+                <button onClick={pdfNotaConcepto} className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-color-primary hover:underline">
+                  <Download className="h-4 w-4" /> Guardar en PDF
+                </button>
+              </div>
             </div>
 
             <div className="bg-gradient-to-r from-slate-900 via-[#0B2A4A] to-slate-900 text-white p-8 rounded-3xl shadow-2xl relative overflow-hidden space-y-6">

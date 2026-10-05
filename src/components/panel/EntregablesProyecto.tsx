@@ -2,20 +2,9 @@
 
 import React from 'react'
 import { FileText, Download, Eye, X } from 'lucide-react'
+import { descargarComoWord, guardarComoPdf } from '@/lib/descargarDocumento'
 
 const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]'
-
-function descargar(nombreArchivo: string, contenido: string) {
-  const blob = new Blob([contenido], { type: 'text/markdown;charset=utf-8' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = nombreArchivo
-  document.body.appendChild(a)
-  a.click()
-  document.body.removeChild(a)
-  URL.revokeObjectURL(url)
-}
 
 function VistaDocumento({ titulo, contenido, onCerrar }: { titulo: string; contenido: string; onCerrar: () => void }) {
   return (
@@ -68,10 +57,17 @@ function TarjetaEntregable({
           </button>
           <button
             type="button"
-            onClick={() => descargar(nombreArchivo, contenido)}
+            onClick={() => descargarComoWord(nombreArchivo.replace(/\.md$/, ''), titulo, contenido)}
             className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] px-3 text-[12px] font-bold text-[#2E0E1A] hover:brightness-105"
           >
-            <Download className="h-3.5 w-3.5" /> Descargar
+            <Download className="h-3.5 w-3.5" /> Word
+          </button>
+          <button
+            type="button"
+            onClick={() => guardarComoPdf(titulo, contenido)}
+            className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] px-3 text-[12px] font-bold text-[#2E0E1A] hover:brightness-105"
+          >
+            <Download className="h-3.5 w-3.5" /> PDF
           </button>
         </div>
       </div>
