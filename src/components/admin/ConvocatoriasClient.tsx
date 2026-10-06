@@ -91,7 +91,7 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
   const [pais, setPais] = useState('')
   const [postulante, setPostulante] = useState('')
   const [financiador, setFinanciador] = useState('')
-  const [cuando, setCuando] = useState('abiertas')
+  const [cuando, setCuando] = useState('todas')
   const [soloConPliego, setSoloConPliego] = useState(false)
   const [abriendoFormulario, setAbriendoFormulario] = useState(false)
   const [documentoPara, setDocumentoPara] = useState<Convocatoria | null>(null)
