@@ -11,6 +11,7 @@ import {
   Settings,
   Lightbulb,
   Radar,
+  ClipboardList,
   Satellite,
   Target,
   Copy,
@@ -71,6 +72,7 @@ const SECCIONES_EQUIPO: Seccion[] = [
     titulo: 'Equipo Serving',
     items: [
       { nombre: 'Proyectos de clientes', href: '/admin/proyectos', icono: FolderKanban },
+      { nombre: 'Diagnósticos', href: '/admin/diagnosticos', icono: ClipboardList },
       { nombre: 'Convocatorias', href: '/admin/convocatorias', icono: Radar },
       { nombre: 'Centinela Digital', href: '/admin/centinela', icono: Satellite },
       { nombre: 'Membresías', href: '/admin/membresias', icono: Wallet },

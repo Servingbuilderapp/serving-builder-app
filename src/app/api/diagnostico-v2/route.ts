@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { randomBytes } from 'crypto'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 import { callGemini } from '@/lib/gemini'
 
 export const maxDuration = 60
@@ -60,6 +61,8 @@ export interface DiagnosticoResultadoV2 {
   pasosRecomendados: string[]
   notaConceptoMarkdown: string
   ejesRueda: EjeRueda[]
+  /** Código largo al azar del enlace personal del cliente (se agrega al guardar). */
+  codigoAcceso?: string
 }
 
 export async function POST(req: Request) {
@@ -134,13 +137,14 @@ Estrategia de escalabilidad: ${data.estrategiaEscalabilidad}`
       ]
     }
 
-    // Guardar el diagnóstico como cliente potencial
+    // Guardar el diagnóstico COMPLETO (resultado + lo que escribió el cliente) con un código
+    // al azar. Se guarda con la llave de servicio para no depender de permisos de lectura.
+    const codigoAcceso = randomBytes(18).toString('base64url')
     try {
-      const supabase = await createClient()
-      await supabase.from('diagnosticos').insert({
+      const filaBasica = {
         nombre: data.nombreRepresentante,
         empresa: data.nombreEmpresa,
-        email: data.email,
+        email: (data.email || '').trim().toLowerCase(),
         whatsapp: data.whatsapp,
         tipo_proyecto: data.nombreProyecto,
         estado_legal: data.documentoIdentidad,
@@ -149,8 +153,24 @@ Estrategia de escalabilidad: ${data.estrategiaEscalabilidad}`
         descripcion: data.descripcionGeneral,
         score_preparacion_convocatorias: resultado.scoreGeneral,
         plan_recomendado: resultado.scoreGeneral >= 70 ? 'completo' : 'esencial',
+      }
+      const { error: dbError } = await supabaseAdmin.from('diagnosticos').insert({
+        ...filaBasica,
+        codigo_acceso: codigoAcceso,
+        resultado_completo: resultado,
+        datos_formulario: data,
       })
+      if (dbError) {
+        // Si todavía no se corrió el SQL de columnas nuevas, no se pierde el cliente potencial:
+        // se guarda la fila de siempre y el resultado sale sin enlace personal.
+        console.error('No se pudo guardar el resultado completo:', dbError)
+        const { error: errorBasico } = await supabaseAdmin.from('diagnosticos').insert(filaBasica)
+        if (errorBasico) throw errorBasico
+      } else {
+        resultado.codigoAcceso = codigoAcceso
+      }
     } catch (dbError) {
+      // Si no se pudo guardar, el cliente igual ve su resultado, pero sin enlace personal.
       console.error('No se pudo guardar el diagnóstico:', dbError)
     }
 
