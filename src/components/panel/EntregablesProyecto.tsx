@@ -24,7 +24,7 @@ function VistaDocumento({ titulo, contenido, onCerrar }: { titulo: string; conte
   )
 }
 
-function TarjetaEntregable({
+export function TarjetaEntregable({
   icono: Icono,
   titulo,
   descripcion,
