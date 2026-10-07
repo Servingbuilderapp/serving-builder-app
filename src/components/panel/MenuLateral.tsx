@@ -17,6 +17,7 @@ import {
   Target,
   Copy,
   Wallet,
+  Crown,
   CheckSquare,
   GraduationCap,
   Building2,
@@ -64,6 +65,7 @@ const SECCIONES_CLIENTE: Seccion[] = [
       { nombre: 'Mis réplicas', href: '/mis-replicas', icono: Copy },
       { nombre: 'App de Ideas', href: '/ideas', icono: Lightbulb },
       { nombre: 'Academia', href: '/academia', icono: GraduationCap },
+      { nombre: 'Mi membresía', href: '/mi-membresia', icono: Crown },
     ],
   },
 ]

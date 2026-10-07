@@ -94,3 +94,25 @@ export function aPesos(usd: number): number {
 export function formatoUSD(valor: number): string {
   return '$' + valor.toLocaleString('en-US') + ' USD'
 }
+
+/**
+ * BENEFICIOS CON CUPO MENSUAL — lo que el cliente "gasta" cada mes.
+ * `limite: null` significa sin límite. `limite: 0` significa que ese nivel no lo incluye.
+ * Los números salen de la tabla final de membresías (9 sep 2026).
+ */
+export type ClaveBeneficio = 'nota_concepto' | 'tdr' | 'proyecto_minimo' | 'convocatorias'
+
+export const ETIQUETA_BENEFICIO: Record<ClaveBeneficio, string> = {
+  nota_concepto: 'Notas de concepto',
+  tdr: 'TDR con sugerencias',
+  proyecto_minimo: 'Proyectos mínimos viables',
+  convocatorias: 'Convocatorias del mes',
+}
+
+export const CLAVES_BENEFICIO = Object.keys(ETIQUETA_BENEFICIO) as ClaveBeneficio[]
+
+export const CUPOS_POR_NIVEL: Record<NivelMembresia['slug'], Record<ClaveBeneficio, number | null>> = {
+  explorador: { nota_concepto: 1, tdr: 0, proyecto_minimo: 0, convocatorias: 5 },
+  constructor: { nota_concepto: 1, tdr: 1, proyecto_minimo: 1, convocatorias: 10 },
+  arquitecto: { nota_concepto: 3, tdr: 3, proyecto_minimo: 3, convocatorias: null },
+}

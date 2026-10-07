@@ -2,7 +2,11 @@ import React from 'react'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { CreditCard } from 'lucide-react'
+import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { MarcarMembresiaPagadaButton } from '@/components/admin/MarcarMembresiaPagadaButton'
+import { RegistrarUsoMembresia } from '@/components/admin/RegistrarUsoMembresia'
+import { resumenDeUso, type ResumenUso } from '@/lib/membresiasUso'
+import { ETIQUETA_BENEFICIO } from '@/lib/membresias'
 
 export const dynamic = 'force-dynamic'
 
@@ -43,10 +47,25 @@ export default async function AdminMembresiasPage() {
 
   const { data: membresias } = await supabase
     .from('membresias_clientes')
-    .select('id, nombre_cliente, correo_cliente, telefono_whatsapp, pais, nivel, ciclo, monto_usd, monto_cop, estado, fecha_proximo_pago, created_at')
+    .select('id, nombre_cliente, correo_cliente, telefono_whatsapp, pais, nivel, ciclo, monto_usd, monto_cop, estado, fecha_inicio, fecha_proximo_pago, created_at')
     .order('created_at', { ascending: false })
 
   const lista = membresias || []
+
+  // Uso del mes de cada membresía activa (tabla con candado: se lee con llave de servicio).
+  const servicio = createAdminClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+  const usoPor = new Map<string, ResumenUso>()
+  await Promise.all(
+    lista
+      .filter((m) => m.estado === 'activa')
+      .map(async (m) => {
+        usoPor.set(m.id, await resumenDeUso(servicio, { id: m.id, nivel: m.nivel, fecha_inicio: m.fecha_inicio }))
+      })
+  )
+
   const totalActivas = lista.filter((m) => m.estado === 'activa').length
   const totalVencidas = lista.filter((m) => m.estado === 'vencida').length
   const totalPorVencer = lista.filter((m) => {
@@ -95,6 +114,7 @@ export default async function AdminMembresiasPage() {
                 <th className="px-6 py-4 text-xs font-bold text-color-base-content/40 uppercase tracking-widest">Monto</th>
                 <th className="px-6 py-4 text-xs font-bold text-color-base-content/40 uppercase tracking-widest">Estado</th>
                 <th className="px-6 py-4 text-xs font-bold text-color-base-content/40 uppercase tracking-widest">Próximo pago</th>
+                <th className="px-6 py-4 text-xs font-bold text-color-base-content/40 uppercase tracking-widest">Beneficios del mes</th>
                 <th className="px-6 py-4 text-xs font-bold text-color-base-content/40 uppercase tracking-widest text-right">Acción</th>
               </tr>
             </thead>
@@ -131,9 +151,25 @@ export default async function AdminMembresiasPage() {
                     <td className="px-6 py-4 text-xs text-color-base-content/60 whitespace-nowrap">
                       {m.fecha_proximo_pago ? new Date(m.fecha_proximo_pago).toLocaleDateString('es-CO') : '-'}
                     </td>
+                    <td className="px-6 py-4 text-xs text-color-base-content/70">
+                      {usoPor.get(m.id)
+                        ? usoPor.get(m.id)!.lineas
+                            .filter((l) => l.limite !== 0)
+                            .map((l) => (
+                              <div key={l.clave} className="whitespace-nowrap">
+                                {ETIQUETA_BENEFICIO[l.clave]}:{' '}
+                                <span className="font-bold text-color-base-content">
+                                  {l.limite === null ? `${l.usados} (sin límite)` : `${l.usados}/${l.limite}`}
+                                </span>
+                              </div>
+                            ))
+                        : '-'}
+                    </td>
                     <td className="px-6 py-4 text-right">
-                      {m.estado !== 'activa' && (
+                      {m.estado !== 'activa' ? (
                         <MarcarMembresiaPagadaButton membresiaId={m.id} />
+                      ) : (
+                        <RegistrarUsoMembresia membresiaId={m.id} />
                       )}
                     </td>
                   </tr>
@@ -141,7 +177,7 @@ export default async function AdminMembresiasPage() {
               })}
               {lista.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="px-6 py-10 text-center text-sm text-color-base-content/40 italic">
+                  <td colSpan={8} className="px-6 py-10 text-center text-sm text-color-base-content/40 italic">
                     <CreditCard className="h-5 w-5 mx-auto mb-2 opacity-40" />
                     Todavía no hay membresías registradas.
                   </td>
