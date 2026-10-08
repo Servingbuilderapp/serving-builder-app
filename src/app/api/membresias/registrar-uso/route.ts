@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { CLAVES_BENEFICIO, type ClaveBeneficio } from '@/lib/membresias'
+import { consumirBeneficio } from '@/lib/membresiasConsumo'
 
 /**
  * El equipo anota que un cliente gastó un beneficio de su membresía
@@ -24,14 +25,21 @@ export async function POST(req: Request) {
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     )
-    const { error } = await servicio.from('membresias_consumos').insert({
-      membresia_id: membresiaId,
-      beneficio,
-      cantidad: 1,
-      nota: typeof nota === 'string' ? nota.slice(0, 200) : null,
-    })
-    if (error) throw error
-    return NextResponse.json({ success: true })
+    const { data: m } = await servicio
+      .from('membresias_clientes')
+      .select('correo_cliente')
+      .eq('id', membresiaId)
+      .maybeSingle()
+    if (!m) return NextResponse.json({ error: 'Membresía no encontrada' }, { status: 404 })
+
+    const r = await consumirBeneficio(
+      servicio,
+      m.correo_cliente,
+      beneficio as ClaveBeneficio,
+      typeof nota === 'string' ? nota : null,
+    )
+    if (!r.ok) return NextResponse.json({ error: r.mensaje }, { status: 409 })
+    return NextResponse.json({ success: true, restante: r.restante })
   } catch (error: unknown) {
     console.error('Error registrando uso de membresía:', error)
     const mensaje = error instanceof Error ? error.message : 'Error al registrar el uso'
