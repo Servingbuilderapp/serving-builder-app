@@ -17,7 +17,11 @@ export function RegistrarUsoMembresia({ membresiaId }: { membresiaId: string }) 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ membresiaId, beneficio }),
       })
-      if (!res.ok) throw new Error('Error')
+      if (!res.ok) {
+        const datos = await res.json().catch(() => ({}))
+        alert(datos.error || 'Hubo un problema, intenta de nuevo.')
+        return
+      }
       router.refresh()
     } catch {
       alert('Hubo un problema, intenta de nuevo.')
