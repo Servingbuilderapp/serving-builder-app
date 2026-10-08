@@ -27,7 +27,7 @@ export function FormularioNotaMiembro({ sinCupo }: { sinCupo: boolean }) {
   const [respuestas, setRespuestas] = useState<Record<string, string>>({})
   const [cargando, setCargando] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [resultado, setResultado] = useState<{ documento: string; faltantes: string[] } | null>(null)
+  const [resultado, setResultado] = useState<{ documento: string; faltantes: string[]; prueba: boolean } | null>(null)
 
   const enviar = async () => {
     setCargando(true)
@@ -43,7 +43,7 @@ export function FormularioNotaMiembro({ sinCupo }: { sinCupo: boolean }) {
         setError(datos.error || 'No se pudo generar la nota. Intenta de nuevo.')
         return
       }
-      setResultado({ documento: datos.documento, faltantes: datos.faltantes || [] })
+      setResultado({ documento: datos.documento, faltantes: datos.faltantes || [], prueba: Boolean(datos.prueba) })
       router.refresh()
     } catch {
       setError('No se pudo generar la nota. Intenta de nuevo.')
@@ -56,7 +56,9 @@ export function FormularioNotaMiembro({ sinCupo }: { sinCupo: boolean }) {
     return (
       <div>
         <p className="mb-3 rounded-xl bg-[#7A8B6F]/20 px-3 py-2 text-[13px] text-[#9BB18D]">
-          Tu nota está lista y quedó guardada abajo, en &quot;Mis notas anteriores&quot;. Se descontó 1 de tu cupo.
+          {resultado.prueba
+            ? 'Nota de prueba lista. Como administrador, no se guardó ni se descontó cupo.'
+            : 'Tu nota está lista y quedó guardada abajo, en "Mis notas anteriores". Se descontó 1 de tu cupo.'}
         </p>
         {resultado.faltantes.length > 0 && (
           <p className="mb-3 rounded-xl bg-[#C99A3D]/15 px-3 py-2 text-[13px] text-[#E0B868]">

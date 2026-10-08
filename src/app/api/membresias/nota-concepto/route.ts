@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { consumirBeneficio } from '@/lib/membresiasConsumo'
+import { esEquipoServing } from '@/lib/guardiaEquipo'
 import { generarNotaDesdeRespuestas, type IdiomaNota, type RespuestasNota } from '@/lib/motorNotaConceptoMiembro'
 import { TEMAS_NOTA_CONCEPTO } from '@/lib/motorNotaConcepto'
 
@@ -46,13 +47,22 @@ export async function POST(req: Request) {
       process.env.SUPABASE_SERVICE_ROLE_KEY!,
     )
 
+    // El equipo de Serving prueba sin membresía: se genera la nota, sin cupo y sin guardar.
+    const esEquipo = await esEquipoServing()
+
     // 1) Se revisa el cupo ANTES de gastar IA.
-    const revision = await consumirBeneficio(servicio, user.email, 'nota_concepto', null, true)
-    if (!revision.ok) return NextResponse.json({ error: revision.mensaje }, { status: 409 })
+    if (!esEquipo) {
+      const revision = await consumirBeneficio(servicio, user.email, 'nota_concepto', null, true)
+      if (!revision.ok) return NextResponse.json({ error: revision.mensaje }, { status: 409 })
+    }
 
     // 2) Se genera la nota.
     const nota = await generarNotaDesdeRespuestas(nombreProyecto, respuestas, idioma)
     if (!nota.ok || !nota.documento) return NextResponse.json({ error: nota.mensaje }, { status: 422 })
+
+    if (esEquipo) {
+      return NextResponse.json({ success: true, documento: nota.documento, faltantes: nota.faltantes || [], restante: null, prueba: true })
+    }
 
     // 3) Recién ahora se descuenta, y se guarda la nota.
     const consumo = await consumirBeneficio(servicio, user.email, 'nota_concepto', `nota:${nombreProyecto}`)

@@ -5,6 +5,7 @@ import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { Target } from 'lucide-react'
 import { membresiaVigente } from '@/lib/membresiasConsumo'
 import { resumenDeUso } from '@/lib/membresiasUso'
+import { esEquipoServing } from '@/lib/guardiaEquipo'
 import { AbrirConvocatoriaMes } from '@/components/panel/AbrirConvocatoriaMes'
 
 export const dynamic = 'force-dynamic'
@@ -43,8 +44,10 @@ export default async function ConvocatoriasDelMesPage() {
   )
 
   const { vigente } = correo ? await membresiaVigente(servicio, correo) : { vigente: undefined }
+  // El equipo de Serving entra a todo y prueba sin membresía ni cupo.
+  const esEquipo = await esEquipoServing()
 
-  if (!vigente) {
+  if (!vigente && !esEquipo) {
     return (
       <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
         <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">Convocatorias del mes</h1>
@@ -61,19 +64,21 @@ export default async function ConvocatoriasDelMesPage() {
     )
   }
 
-  const uso = await resumenDeUso(servicio, vigente)
-  const linea = uso.lineas.find((l) => l.clave === 'convocatorias')
-  const limite = linea?.limite ?? 0
-  const restante = linea?.restante ?? null
+  const uso = vigente ? await resumenDeUso(servicio, vigente) : null
+  const linea = uso?.lineas.find((l) => l.clave === 'convocatorias')
+  const limite = esEquipo ? null : (linea?.limite ?? 0)
+  const restante = esEquipo ? null : (linea?.restante ?? null)
   const sinCupo = restante !== null && restante <= 0
 
-  const { data: abiertasMes } = await servicio
-    .from('membresias_consumos')
-    .select('nota')
-    .eq('membresia_id', vigente.id)
-    .eq('beneficio', 'convocatorias')
-    .gte('created_at', uso.desde.toISOString())
-    .lt('created_at', uso.hasta.toISOString())
+  const { data: abiertasMes } = vigente && uso
+    ? await servicio
+        .from('membresias_consumos')
+        .select('nota')
+        .eq('membresia_id', vigente.id)
+        .eq('beneficio', 'convocatorias')
+        .gte('created_at', uso.desde.toISOString())
+        .lt('created_at', uso.hasta.toISOString())
+    : { data: [] as { nota: string | null }[] }
   const abiertas = new Set(
     (abiertasMes || [])
       .map((f: { nota: string | null }) => f.nota || '')
@@ -95,11 +100,13 @@ export default async function ConvocatoriasDelMesPage() {
       <header className="mb-5">
         <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">Convocatorias del mes</h1>
         <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#F3E7DC]/60">
-          {limite === 0
-            ? 'Tu nivel no incluye abrir fichas de convocatorias.'
-            : restante === null
-              ? 'Tu nivel no tiene límite: abre todas las fichas que quieras.'
-              : `Este mes puedes abrir ${limite} fichas completas. Te quedan ${restante}. Se renuevan el ${uso.hasta.toLocaleDateString('es-CO', { day: 'numeric', month: 'long' })}.`}
+          {esEquipo
+            ? 'Vista de administrador: ves todas las fichas completas, sin membresía y sin gastar cupo.'
+            : limite === 0
+              ? 'Tu nivel no incluye abrir fichas de convocatorias.'
+              : restante === null
+                ? 'Tu nivel no tiene límite: abre todas las fichas que quieras.'
+                : `Este mes puedes abrir ${limite} fichas completas. Te quedan ${restante}. Se renuevan el ${uso?.hasta.toLocaleDateString('es-CO', { day: 'numeric', month: 'long' })}.`}
         </p>
       </header>
 
@@ -108,7 +115,7 @@ export default async function ConvocatoriasDelMesPage() {
       ) : (
         <div className="grid gap-4 lg:grid-cols-2">
           {lista.map((c) => {
-            const abierta = abiertas.has(c.id)
+            const abierta = esEquipo || abiertas.has(c.id)
             return (
               <article key={c.id} className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
                 <div className="flex items-start gap-3">

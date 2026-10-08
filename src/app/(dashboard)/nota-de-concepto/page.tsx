@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { membresiaVigente } from '@/lib/membresiasConsumo'
 import { resumenDeUso } from '@/lib/membresiasUso'
+import { esEquipoServing } from '@/lib/guardiaEquipo'
 import { FormularioNotaMiembro } from '@/components/panel/FormularioNotaMiembro'
 import { NotaConceptoTexto } from '@/components/panel/NotaConceptoTexto'
 
@@ -24,8 +25,10 @@ export default async function NotaDeConceptoPage() {
   )
 
   const { vigente } = correo ? await membresiaVigente(servicio, correo) : { vigente: undefined }
+  // El equipo de Serving entra a todo y prueba sin membresía ni cupo.
+  const esEquipo = await esEquipoServing()
 
-  if (!vigente) {
+  if (!vigente && !esEquipo) {
     return (
       <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
         <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">Nota de concepto</h1>
@@ -42,11 +45,11 @@ export default async function NotaDeConceptoPage() {
     )
   }
 
-  const uso = await resumenDeUso(servicio, vigente)
-  const linea = uso.lineas.find((l) => l.clave === 'nota_concepto')
-  const limite = linea?.limite ?? 0
-  const restante = linea?.restante ?? null
-  const sinCupo = limite === 0 || (restante !== null && restante <= 0)
+  const uso = vigente ? await resumenDeUso(servicio, vigente) : null
+  const linea = uso?.lineas.find((l) => l.clave === 'nota_concepto')
+  const limite = esEquipo ? null : (linea?.limite ?? 0)
+  const restante = esEquipo ? null : (linea?.restante ?? null)
+  const sinCupo = !esEquipo && (limite === 0 || (restante !== null && restante <= 0))
 
   const { data: anteriores } = await servicio
     .from('membresias_notas_concepto')
@@ -60,11 +63,13 @@ export default async function NotaDeConceptoPage() {
       <header className="mb-5">
         <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">Nota de concepto</h1>
         <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#F3E7DC]/60">
-          {limite === 0
-            ? 'Tu nivel no incluye notas de concepto.'
-            : restante === null
-              ? 'Tu nivel no tiene límite de notas.'
-              : `Este mes puedes generar ${limite}. Te quedan ${restante}. Se renuevan el ${uso.hasta.toLocaleDateString('es-CO', { day: 'numeric', month: 'long' })}.`}
+          {esEquipo
+            ? 'Vista de administrador: puedes generar notas para probar, sin membresía y sin gastar cupo. Estas pruebas no se guardan.'
+            : limite === 0
+              ? 'Tu nivel no incluye notas de concepto.'
+              : restante === null
+                ? 'Tu nivel no tiene límite de notas.'
+                : `Este mes puedes generar ${limite}. Te quedan ${restante}. Se renuevan el ${uso?.hasta.toLocaleDateString('es-CO', { day: 'numeric', month: 'long' })}.`}
         </p>
       </header>
 
