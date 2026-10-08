@@ -15,6 +15,12 @@ export async function POST(req: Request) {
 
     const supabase = await createClient()
 
+    // Solo el correo administrador puede confirmar un pago a mano.
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user || user.email?.toLowerCase() !== 'servingbuilderapp@gmail.com') {
+      return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
+    }
+
     const { data: membresia, error: errorLectura } = await supabase
       .from('membresias_clientes')
       .select('ciclo')
