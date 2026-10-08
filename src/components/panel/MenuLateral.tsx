@@ -67,6 +67,7 @@ const SECCIONES_CLIENTE: Seccion[] = [
       { nombre: 'Academia', href: '/academia', icono: GraduationCap },
       { nombre: 'Mi membresía', href: '/mi-membresia', icono: Crown },
       { nombre: 'Convocatorias del mes', href: '/convocatorias-del-mes', icono: Radar },
+      { nombre: 'Nota de concepto', href: '/nota-de-concepto', icono: ClipboardList },
     ],
   },
 ]

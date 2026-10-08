@@ -3,7 +3,7 @@ import { ETIQUETA_BENEFICIO, type ClaveBeneficio } from '@/lib/membresias'
 import { resumenDeUso } from '@/lib/membresiasUso'
 
 export type ResultadoConsumo =
-  | { ok: true; restante: number | null }
+  | { ok: true; restante: number | null; membresiaId: string }
   | { ok: false; motivo: 'sin_membresia' | 'vencida' | 'no_incluido' | 'sin_cupo' | 'error'; mensaje: string }
 
 type FilaMembresia = { id: string; nivel: string; estado: string; fecha_inicio: string | null; fecha_proximo_pago: string | null }
@@ -32,6 +32,8 @@ export async function consumirBeneficio(
   correo: string,
   beneficio: ClaveBeneficio,
   nota?: string | null,
+  /** true = solo revisa que haya cupo, sin descontar nada (para no gastar IA si no hay cupo). */
+  soloRevisar = false,
 ): Promise<ResultadoConsumo> {
   const { vigente, hayActivaVencida } = await membresiaVigente(servicio, correo)
   if (!vigente) {
@@ -49,6 +51,10 @@ export async function consumirBeneficio(
     return { ok: false, motivo: 'sin_cupo', mensaje: `Ya usaste todo el cupo de este mes en ${ETIQUETA_BENEFICIO[beneficio]}. Se renueva el ${resumen.hasta.toLocaleDateString('es-CO', { day: 'numeric', month: 'long' })}.` }
   }
 
+  if (soloRevisar) {
+    return { ok: true, restante: linea.restante, membresiaId: vigente.id }
+  }
+
   const { error } = await servicio.from('membresias_consumos').insert({
     membresia_id: vigente.id,
     beneficio,
@@ -57,5 +63,5 @@ export async function consumirBeneficio(
   })
   if (error) return { ok: false, motivo: 'error', mensaje: 'No se pudo registrar el uso. Intenta de nuevo.' }
 
-  return { ok: true, restante: linea.restante === null ? null : linea.restante - 1 }
+  return { ok: true, restante: linea.restante === null ? null : linea.restante - 1, membresiaId: vigente.id }
 }
