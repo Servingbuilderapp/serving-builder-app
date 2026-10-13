@@ -16,7 +16,6 @@ import {
   TrendingUp,
   Layers,
   Users,
-  ShieldCheck,
   GraduationCap,
   Briefcase,
   Rocket,
@@ -93,7 +92,6 @@ interface LandingClientProps {
 const NAV_LINKS = [
   { href: '#inicio', clave: 'w.nav.inicio' },
   { href: '#servicios', clave: 'w.nav.servicios' },
-  { href: '#membresias', clave: 'w.nav.membresias' },
   { href: '#que-hacemos', clave: 'w.nav.que_hacemos' },
   { href: '#como-funciona', clave: 'w.nav.como_funciona' },
   { href: '#recursos', clave: 'w.nav.recursos' },
@@ -781,25 +779,10 @@ export function LandingClient({ user }: LandingClientProps) {
                 ))}
               </div>
 
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Link
-                  href="/diagnostico"
-                  className={`h-12 px-6 inline-flex items-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-sm font-semibold hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/30 ${RELIEVE_BOTON}`}
-                >
-                  {t('w.hero.cta_principal')}
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <a
-                  href="#como-funciona"
-                  className={`h-12 px-6 inline-flex items-center rounded-lg border border-[#B08D57]/35 bg-[#3B1727] text-[#F3E7DC] text-sm font-semibold hover:bg-[#4C2032] ${RELIEVE_BOTON_SUAVE}`}
-                >
-                  {t('w.hero.cta_secundario')}
-                </a>
-              </div>
             </div>
 
-            {/* Columna centro: video */}
-            <div className="lg:col-span-5">
+            {/* Columna derecha: video */}
+            <div className="lg:col-span-8">
               <div className="relative rounded-2xl overflow-hidden p-[2px] bg-gradient-to-br from-[#C9A46B] via-[#B08D57] to-[#8A6636] shadow-[0_18px_50px_-18px_rgba(176,141,87,0.4)]">
               <div className="relative rounded-[14px] overflow-hidden bg-gradient-to-br from-[#3B1727] to-[#54142B] aspect-video">
                 {videoAbierto && VIDEO_ARCHIVO ? (
@@ -835,50 +818,6 @@ export function LandingClient({ user }: LandingClientProps) {
               </div>
             </div>
 
-            {/* Columna derecha: diagnóstico */}
-            <div className="lg:col-span-3">
-              <div className="rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-6">
-                <h2 className="text-xl font-extrabold text-[#F3E7DC] leading-snug">
-                  {t('w.hero.panel_titulo')}
-                </h2>
-                <p className="mt-2 text-[13px] text-[#F3E7DC]/70 leading-relaxed">
-                  {t('w.hero.panel_texto')}
-                </p>
-
-                <div className="mt-5 rounded-xl bg-[#4C2032] border border-[#B08D57]/35 p-4 space-y-2.5">
-                  {[
-                    { icono: Lightbulb, clave: 'w.hero.caso1' },
-                    { icono: FileText, clave: 'w.hero.caso2' },
-                  ].map(({ icono: Icono, clave }) => (
-                    <div key={clave} className="flex items-center gap-2.5">
-                      <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-[#4C2032] to-[#3B1727] ring-1 ring-[#B08D57]/20 flex items-center justify-center shrink-0">
-                        <Icono className="h-4 w-4 text-[#B08D57]" />
-                      </div>
-                      <span className="text-[13px] font-semibold text-[#F3E7DC] leading-snug">
-                        {t(clave)}
-                      </span>
-                    </div>
-                  ))}
-
-                  <Link
-                    href="/diagnostico"
-                    className={`mt-1 min-h-11 py-2 w-full inline-flex items-center justify-center gap-2 rounded-lg text-center leading-tight bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-[13px] font-semibold shadow-[#B08D57]/25 ${RELIEVE_BOTON}`}
-                  >
-                    {t('w.hero.panel_boton')}
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </div>
-
-                <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2">
-                  {['w.hero.sello1', 'w.hero.sello2', 'w.hero.sello3'].map((clave) => (
-                    <div key={clave} className="flex items-center gap-1.5 text-[11px] font-medium text-[#F3E7DC]/70">
-                      <ShieldCheck className="h-3.5 w-3.5 text-[#B08D57]" />
-                      {t(clave)}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -999,106 +938,6 @@ export function LandingClient({ user }: LandingClientProps) {
 
           <p className="mt-8 text-center text-[12px] text-[#F3E7DC]/50 max-w-3xl mx-auto">
             {t('w.escalera.nota_legal')}
-          </p>
-        </div>
-      </section>
-
-      {/* ================= MEMBRESÍAS ================= */}
-      <section id="membresias" className="relative overflow-hidden bg-gradient-to-br from-[#3B1727] via-[#2E0E1A] to-[#54142B] py-16 lg:py-20">
-        <div aria-hidden className="absolute -top-24 left-[10%] h-72 w-72 rounded-full bg-[#B08D57]/25 blur-3xl" />
-        <div aria-hidden className="absolute -bottom-28 right-[6%] h-80 w-80 rounded-full bg-[#C9A46B]/20 blur-3xl" />
-        <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center mb-12">
-            <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#B08D57] mb-3">
-              {t('w.membresias.eyebrow')}
-            </div>
-            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#F3E7DC]">
-              {t('w.membresias.titulo')}
-            </h2>
-            <p className="mt-4 text-base text-[#F3E7DC]/70 leading-relaxed">
-              {t('w.membresias.subtitulo')}
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {[
-              {
-                claveT: 'w.membresias.m1.titulo',
-                claveP: 'w.membresias.m1.precio',
-                claveD: 'w.membresias.m1.texto',
-                items: ['w.membresias.m1.i1', 'w.membresias.m1.i2', 'w.membresias.m1.i3', 'w.membresias.m1.i4', 'w.membresias.m1.i5', 'w.membresias.m1.i6', 'w.membresias.m1.i7', 'w.membresias.m1.i8'],
-                destacado: false,
-              },
-              {
-                claveT: 'w.membresias.m2.titulo',
-                claveP: 'w.membresias.m2.precio',
-                claveD: 'w.membresias.m2.texto',
-                items: ['w.membresias.m2.i1', 'w.membresias.m2.i2', 'w.membresias.m2.i3', 'w.membresias.m2.i4', 'w.membresias.m2.i5'],
-                destacado: true,
-              },
-              {
-                claveT: 'w.membresias.m3.titulo',
-                claveP: 'w.membresias.m3.precio',
-                claveD: 'w.membresias.m3.texto',
-                items: ['w.membresias.m3.i1', 'w.membresias.m3.i2', 'w.membresias.m3.i3', 'w.membresias.m3.i4', 'w.membresias.m3.i5', 'w.membresias.m3.i6', 'w.membresias.m3.i7'],
-                destacado: false,
-              },
-            ].map((plan) => (
-              <div
-                key={plan.claveT}
-                className={`rounded-2xl p-7 ${
-                  plan.destacado
-                    ? 'bg-[#4C2032] border-2 border-[#B08D57]'
-                    : 'bg-[#3B1727]/60 border border-[#B08D57]/35'
-                }`}
-              >
-                <h3 className={`text-lg font-extrabold ${plan.destacado ? 'text-[#F3E7DC]' : 'text-[#F3E7DC]'}`}>
-                  {t(plan.claveT)}
-                </h3>
-                <div className={`mt-1 text-[15px] font-bold ${plan.destacado ? 'text-[#B08D57]' : 'text-[#B08D57]'}`}>
-                  {t(plan.claveP)}
-                </div>
-                <p className={`mt-3 text-[13px] leading-relaxed ${plan.destacado ? 'text-[#F3E7DC]/70' : 'text-[#F3E7DC]/60'}`}>
-                  {t(plan.claveD)}
-                </p>
-                <div
-                  className={`mt-3 inline-flex items-center gap-1.5 text-[11.5px] font-semibold px-2.5 py-1 rounded-full ${
-                    plan.destacado
-                      ? 'bg-[#3B1727] text-[#B08D57] border border-[#B08D57]/35'
-                      : 'bg-[#B08D57]/10 text-[#F3E7DC] border border-[#B08D57]/20'
-                  }`}
-                >
-                  {t('w.membresias.anual')}
-                </div>
-                <ul className="mt-5 space-y-2">
-                  {plan.items.map((clave) => (
-                    <li
-                      key={clave}
-                      className={`flex items-start gap-2 text-[13px] leading-snug ${
-                        plan.destacado ? 'text-[#F3E7DC]/90' : 'text-[#F3E7DC]/80'
-                      }`}
-                    >
-                      <Check className={`h-3.5 w-3.5 shrink-0 mt-0.5 ${plan.destacado ? 'text-[#B08D57]' : 'text-[#B08D57]'}`} />
-                      <span>{t(clave)}</span>
-                    </li>
-                  ))}
-                </ul>
-                <a
-                  href="/signup"
-                  className={`mt-6 h-11 rounded-lg inline-flex w-full items-center justify-center text-[13px] font-semibold transition-colors ${
-                    plan.destacado
-                      ? `bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/35 ${RELIEVE_BOTON}`
-                      : `border border-[#B08D57]/40 text-[#F3E7DC] hover:bg-[#B08D57]/10 ${RELIEVE_BOTON_SUAVE}`
-                  }`}
-                >
-                  {t('w.membresias.boton')}
-                </a>
-              </div>
-            ))}
-          </div>
-
-          <p className="mt-8 text-center text-[12px] text-[#F3E7DC]/50 max-w-2xl mx-auto">
-            {t('w.membresias.nota')}
           </p>
         </div>
       </section>
