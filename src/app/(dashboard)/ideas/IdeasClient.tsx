@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Sparkles, Loader2, Lightbulb, ArrowRight, Download, ChevronDown, ChevronUp, Compass, Layers, HeartHandshake, Clock, Network, Users } from 'lucide-react'
+import { Sparkles, Loader2, Lightbulb, ArrowRight, Download, ChevronDown, ChevronUp, Compass, Layers, HeartHandshake, Clock, Network, Users, BookOpen } from 'lucide-react'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { GlowButton } from '@/components/ui/GlowButton'
 import {
@@ -11,6 +11,7 @@ import {
   NECESIDADES_HUMANAS,
   FORMAS_DE_SATISFACCION
 } from '@/lib/ideas/matrices-data'
+import { GUIAS } from '@/lib/ideas/guias-data'
 import type { IdeasResultado } from '@/app/api/ideas/generar/route'
 
 type Herramienta = 'reinvencion' | 'convergencia' | 'necesidades' | null
@@ -401,6 +402,31 @@ export default function IdeasClient() {
           </div>
           <ArrowRight className="h-4 w-4 text-color-base-content/40 shrink-0" />
         </Link>
+      </div>
+
+      {/* Guías de lectura */}
+      <div className="space-y-3 print:hidden">
+        <p className="text-xs font-black uppercase tracking-[0.2em] text-color-base-content/40 ml-1">
+          Guías — para leer y consultar cuando las necesites
+        </p>
+        {GUIAS.map((g) => (
+          <Link
+            key={g.slug}
+            href={`/ideas/guias/${g.slug}`}
+            className="flex items-center justify-between gap-4 rounded-2xl border border-color-base-content/10 bg-color-base-content/[0.02] px-5 py-4 hover:bg-color-base-content/5 hover:border-color-primary/40 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <div className="h-9 w-9 rounded-xl bg-color-primary/10 flex items-center justify-center text-color-primary shrink-0">
+                <BookOpen className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-sm font-black text-color-base-content">{g.titulo}</p>
+                <p className="text-[11px] text-color-base-content/40">{g.resumen}</p>
+              </div>
+            </div>
+            <ArrowRight className="h-4 w-4 text-color-base-content/40 shrink-0" />
+          </Link>
+        ))}
       </div>
 
       {/* Resultado */}
