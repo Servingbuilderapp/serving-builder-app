@@ -42,7 +42,7 @@ export default async function AdminDiagnosticosPage() {
         <p className="text-sm font-bold text-red-600">No se pudo cargar la lista: {error.message}</p>
       )}
 
-      <div className="overflow-x-auto rounded-2xl border border-color-base-200 bg-white">
+      <div className="overflow-x-auto rounded-2xl border border-color-base-200 bg-white text-[#2B1220]">
         <table className="w-full text-sm">
           <thead className="bg-color-base-200/60 text-left text-[11px] uppercase tracking-wider">
             <tr>
@@ -57,7 +57,7 @@ export default async function AdminDiagnosticosPage() {
           <tbody>
             {filas.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-6 text-center text-color-base-content/60">
+                <td colSpan={6} className="px-4 py-6 text-center text-[#2B1220]/60">
                   Todavía no hay diagnósticos.
                 </td>
               </tr>
@@ -69,11 +69,11 @@ export default async function AdminDiagnosticosPage() {
                 </td>
                 <td className="px-4 py-3">
                   <div className="font-bold">{f.nombre || '—'}</div>
-                  <div className="text-xs text-color-base-content/60">{f.empresa || ''}</div>
+                  <div className="text-xs text-[#2B1220]/60">{f.empresa || ''}</div>
                 </td>
                 <td className="px-4 py-3 text-xs">
                   <div>{f.email || '—'}</div>
-                  <div className="text-color-base-content/60">{f.whatsapp || ''}</div>
+                  <div className="text-[#2B1220]/60">{f.whatsapp || ''}</div>
                 </td>
                 <td className="px-4 py-3">{f.tipo_proyecto || '—'}</td>
                 <td className="px-4 py-3 font-black text-color-primary">
@@ -86,7 +86,7 @@ export default async function AdminDiagnosticosPage() {
                       Ver completo
                     </Link>
                   ) : (
-                    <span className="text-xs text-color-base-content/50">No guardado (anterior)</span>
+                    <span className="text-xs text-[#2B1220]/50">No guardado (anterior)</span>
                   )}
                 </td>
               </tr>
