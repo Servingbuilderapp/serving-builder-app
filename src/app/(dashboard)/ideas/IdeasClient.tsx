@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Sparkles, Loader2, Lightbulb, ArrowRight, Download, ChevronDown, ChevronUp, Compass, Layers, HeartHandshake, Clock, Network } from 'lucide-react'
+import { Sparkles, Loader2, Lightbulb, ArrowRight, Download, ChevronDown, ChevronUp, Compass, Layers, HeartHandshake, Clock, Network, Users } from 'lucide-react'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { GlowButton } from '@/components/ui/GlowButton'
 import {
@@ -379,6 +379,23 @@ export default function IdeasClient() {
               <p className="text-sm font-black text-color-base-content">Árbol de Problemas y Objetivos</p>
               <p className="text-[11px] text-color-base-content/40">
                 Ordena las causas y los efectos de lo que quieres transformar y conviértelos en la base de tu proyecto
+              </p>
+            </div>
+          </div>
+          <ArrowRight className="h-4 w-4 text-color-base-content/40 shrink-0" />
+        </Link>
+        <Link
+          href="/ideas/beneficiario-ideal"
+          className="flex items-center justify-between gap-4 rounded-2xl border border-color-base-content/10 bg-color-base-content/[0.02] px-5 py-4 hover:bg-color-base-content/5 hover:border-color-primary/40 transition-colors"
+        >
+          <div className="flex items-center gap-3">
+            <div className="h-9 w-9 rounded-xl bg-color-primary/10 flex items-center justify-center text-color-primary shrink-0">
+              <Users className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-sm font-black text-color-base-content">Beneficiario Ideal</p>
+              <p className="text-[11px] text-color-base-content/40">
+                Describe con precisión a quién ayuda tu proyecto, antes de armar tus árboles
               </p>
             </div>
           </div>
