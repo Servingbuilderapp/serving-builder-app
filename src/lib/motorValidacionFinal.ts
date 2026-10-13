@@ -2,7 +2,7 @@
  * Validación final.
  *
  * Pieza confirmada como pendiente el 9 de sep 2026 (pieza 20 del método,
- * "Verificador"): una revisión CUALITATIVA de todo el proyecto ya
+ * "Revisor final"): una revisión CUALITATIVA de todo el proyecto ya
  * estructurado, comparado contra lo que exige una convocatoria concreta,
  * justo antes de radicar.
  *
@@ -57,7 +57,7 @@ function interpretarJson(bruto: string): any | null {
 }
 
 function construirPrompt(proyecto: ProyectoBase, convocatoria: FichaConvocatoria): string {
-  return `Eres el VERIFICADOR CUALITATIVO final del sistema de Arquitectura Digital de Proyectos. Este es el último paso antes de radicar una postulación — ya existe un evaluador que puso un puntaje sobre 100; tu trabajo es otro y no llevas puntaje.
+  return `Eres el REVISOR CUALITATIVO final del sistema de Arquitectura Digital de Proyectos. Este es el último paso antes de radicar una postulación — ya existe un evaluador que puso un puntaje sobre 100; tu trabajo es otro y no llevas puntaje.
 
 Lee el proyecto YA ESTRUCTURADO de abajo y compáralo contra lo que exige esta convocatoria concreta. Busca únicamente dos cosas:
 1. VACÍOS: algo que la convocatoria pide explícitamente (en sus requisitos, línea temática, beneficiarios o términos de referencia) y que el proyecto no cubre en ningún lado.

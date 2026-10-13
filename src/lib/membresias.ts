@@ -10,9 +10,9 @@
  * `/contratar` (ver TASA_COP_POR_USD más abajo) — hay que actualizarla cada
  * cierto tiempo a mano, igual que allá.
  *
- * El precio anual, por ahora, es sencillamente 12 veces el mensual: el dueño
- * no ha dicho si el pago anual lleva algún descuento. El día que lo diga,
- * se cambia solo el campo `factorAnual` de cada nivel.
+ * El precio anual es 10 veces el mensual: pagando el año completo, el cliente
+ * recibe 2 meses gratis. Para cambiarlo, se cambia solo el campo
+ * `factorAnual` de cada nivel.
  */
 
 export const TASA_COP_POR_USD = 3244 // La misma tasa que usa /contratar. Actualizar periódicamente.
@@ -32,7 +32,7 @@ export const NIVELES_MEMBRESIA: NivelMembresia[] = [
     slug: 'explorador',
     nombre: 'Explorador',
     precioMensualUsd: 47,
-    factorAnual: 12,
+    factorAnual: 10,
     resumen: 'Para empezar a moverte: las herramientas, el mapa de fondos y una nota de concepto al mes.',
     incluye: [
       'Apps de Ideas',
@@ -48,7 +48,7 @@ export const NIVELES_MEMBRESIA: NivelMembresia[] = [
     slug: 'constructor',
     nombre: 'Constructor',
     precioMensualUsd: 97,
-    factorAnual: 12,
+    factorAnual: 10,
     resumen: 'Todo lo del Explorador, más ayuda real para estructurar tu primer proyecto mínimo viable.',
     incluye: [
       'Todo lo del Explorador',
@@ -63,7 +63,7 @@ export const NIVELES_MEMBRESIA: NivelMembresia[] = [
     slug: 'arquitecto',
     nombre: 'Arquitecto',
     precioMensualUsd: 197,
-    factorAnual: 12,
+    factorAnual: 10,
     resumen: 'El nivel completo: comunidad, acceso a expertos y acceso anticipado a lo nuevo de la plataforma.',
     incluye: [
       'Todo lo del Constructor',

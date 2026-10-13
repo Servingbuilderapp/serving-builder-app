@@ -63,6 +63,11 @@ function MembresiaContent() {
                 )}
               >
                 <div className="space-y-1">
+                  {n.slug === 'constructor' && (
+                    <span className="inline-block rounded-full bg-color-primary px-3 py-0.5 text-[11px] font-black uppercase tracking-wide text-white">
+                      Recomendado
+                    </span>
+                  )}
                   <h2 className="text-xl font-black text-color-base-content">{n.nombre}</h2>
                   <p className="text-color-base-content/60 text-sm">{n.resumen}</p>
                 </div>
@@ -71,7 +76,7 @@ function MembresiaContent() {
                     {formatoUSD(n.precioMensualUsd)}<span className="text-xs font-bold text-color-base-content/50 ml-1">/mes</span>
                   </div>
                   <p className="text-xs font-bold text-color-base-content/60 mt-0.5">
-                    o {formatoUSD(precioAnualUsd(n))}/año
+                    o {formatoUSD(precioAnualUsd(n))}/año · 2 meses gratis
                   </p>
                 </div>
                 <ul className="space-y-2 flex-1">
