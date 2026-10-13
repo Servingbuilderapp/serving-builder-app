@@ -33,15 +33,16 @@ export const NIVELES_MEMBRESIA: NivelMembresia[] = [
     nombre: 'Explorador',
     precioMensualUsd: 47,
     factorAnual: 10,
-    resumen: 'Para empezar a moverte: las herramientas, el mapa de fondos y una nota de concepto al mes.',
+    resumen: 'Para empezar a moverte con tu primer proyecto.',
     incluye: [
-      'Apps de Ideas',
-      'Lista de fondos y motores de búsqueda',
-      'Glosario de términos',
-      'Calendario de convocatorias inteligente',
-      'Metodología',
-      '1 nota de concepto a convocatorias al mes',
-      '5 convocatorias del mes',
+      'App de ideas',
+      'Lista de fondos',
+      'Motores de búsqueda',
+      'Calendario inteligente',
+      'Centinela Digital',
+      'Hago 1 proyecto mínimo viable al mes',
+      'Postulan por mí el proyecto',
+      'Si ganas, el 10 % es para Serving',
     ],
   },
   {
@@ -49,14 +50,13 @@ export const NIVELES_MEMBRESIA: NivelMembresia[] = [
     nombre: 'Constructor',
     precioMensualUsd: 97,
     factorAnual: 10,
-    resumen: 'Todo lo del Explorador, más ayuda real para estructurar tu primer proyecto mínimo viable.',
+    resumen: 'Para avanzar con dos proyectos y apoyo en grupo.',
     incluye: [
       'Todo lo del Explorador',
-      'Curso mínimo viable de convocatorias (offline, ~6 horas)',
-      '5 manuales de convocatorias especiales',
-      'Ayuda para estructurar 1 proyecto mínimo viable al mes',
-      '1 TDR con sugerencias al mes',
-      '10 convocatorias del mes',
+      'Hago 2 proyectos mínimos viables al mes',
+      'Postulan por mí los 2 proyectos',
+      '1 sesión grupal al mes',
+      'Si ganas, el 10 % es para Serving',
     ],
   },
   {
@@ -64,16 +64,15 @@ export const NIVELES_MEMBRESIA: NivelMembresia[] = [
     nombre: 'Arquitecto',
     precioMensualUsd: 197,
     factorAnual: 10,
-    resumen: 'El nivel completo: comunidad, acceso a expertos y acceso anticipado a lo nuevo de la plataforma.',
+    resumen: 'Para llevar tres proyectos con acompañamiento cercano.',
     incluye: [
       'Todo lo del Constructor',
-      'Todos los manuales, sin límite',
-      'Estructurar hasta 3 proyectos mínimos viables al mes',
-      '3 notas de concepto, 3 TDR',
-      'Todas las convocatorias del mes',
+      'Hago 3 proyectos mínimos viables al mes',
+      'Postulan por mí los 3 proyectos',
+      '2 sesiones grupales al mes',
       'Comunidad',
-      'Acceso a expertos: charlas, podcasts y contenido que edifica',
-      'Acceso anticipado a convocatorias y funciones nuevas',
+      'Acompañamiento 1 vez por semana',
+      'Si ganas, el 10 % es para Serving',
     ],
   },
 ]
@@ -98,7 +97,7 @@ export function formatoUSD(valor: number): string {
 /**
  * BENEFICIOS CON CUPO MENSUAL — lo que el cliente "gasta" cada mes.
  * `limite: null` significa sin límite. `limite: 0` significa que ese nivel no lo incluye.
- * Los números salen de la tabla final de membresías (9 sep 2026).
+ * Los números salen del Excel nuevo de membresías (12 oct 2026). Ya no hay notas de concepto ni TDR.
  */
 export type ClaveBeneficio = 'nota_concepto' | 'tdr' | 'proyecto_minimo' | 'convocatorias'
 
@@ -112,7 +111,7 @@ export const ETIQUETA_BENEFICIO: Record<ClaveBeneficio, string> = {
 export const CLAVES_BENEFICIO = Object.keys(ETIQUETA_BENEFICIO) as ClaveBeneficio[]
 
 export const CUPOS_POR_NIVEL: Record<NivelMembresia['slug'], Record<ClaveBeneficio, number | null>> = {
-  explorador: { nota_concepto: 1, tdr: 0, proyecto_minimo: 0, convocatorias: 5 },
-  constructor: { nota_concepto: 1, tdr: 1, proyecto_minimo: 1, convocatorias: 10 },
-  arquitecto: { nota_concepto: 3, tdr: 3, proyecto_minimo: 3, convocatorias: null },
+  explorador: { nota_concepto: 0, tdr: 0, proyecto_minimo: 1, convocatorias: null },
+  constructor: { nota_concepto: 0, tdr: 0, proyecto_minimo: 2, convocatorias: null },
+  arquitecto: { nota_concepto: 0, tdr: 0, proyecto_minimo: 3, convocatorias: null },
 }
