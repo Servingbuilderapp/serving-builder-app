@@ -92,10 +92,10 @@ interface LandingClientProps {
 
 const NAV_LINKS = [
   { href: '#inicio', clave: 'w.nav.inicio' },
-  { href: '#que-hacemos', clave: 'w.nav.que_hacemos' },
-  { href: '#como-funciona', clave: 'w.nav.como_funciona' },
   { href: '#servicios', clave: 'w.nav.servicios' },
   { href: '#membresias', clave: 'w.nav.membresias' },
+  { href: '#que-hacemos', clave: 'w.nav.que_hacemos' },
+  { href: '#como-funciona', clave: 'w.nav.como_funciona' },
   { href: '#recursos', clave: 'w.nav.recursos' },
   { href: '#trabaja-con-nosotros', clave: 'w.nav.trabaja' },
 ]
@@ -292,6 +292,119 @@ const ESCALERA: Escalon[] = [
     boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
 ]
+
+/**
+ * Fondo Emprender: servicio propio dentro del grupo "Lo hacen por mí". Antes
+ * solo aparecía como una línea suelta dentro de Estructuración profesional.
+ */
+const ESCALON_FONDO_EMPRENDER: Escalon = {
+  numero: 'fe',
+  claveTitulo: 'w.escalera.fondoemprender.titulo',
+  clavePrecio: 'w.escalera.fondoemprender.precio',
+  claveResumen: 'w.escalera.fondoemprender.resumen',
+  clavesItems: [
+    'w.escalera.fondoemprender.i1',
+    'w.escalera.fondoemprender.i2',
+    'w.escalera.fondoemprender.i3',
+    'w.escalera.fondoemprender.i4',
+  ],
+  claveBoton: 'w.escalera.fondoemprender.boton',
+  href: '/contratar?plan=fondo_emprender',
+  icono: Rocket,
+  color: 'text-[#B08D57]',
+  fondo: 'bg-[#4C2032]',
+  borde: 'border-[#B08D57]/35',
+  boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
+}
+
+const escalonPorNumero = (numero: string): Escalon => {
+  const encontrado = ESCALERA.find((e) => e.numero === numero)
+  if (!encontrado) throw new Error(`Escalón no encontrado: ${numero}`)
+  return encontrado
+}
+
+type GrupoPlanes = {
+  claveTitulo: string
+  claveSub: string
+  escalones: Escalon[]
+}
+
+/**
+ * "Nuestros planes" se organiza en tres grupos, según quién hace el trabajo.
+ * El Diagnóstico gratuito va arriba de los tres grupos. Aquí no se muestran
+ * números de escalón.
+ */
+const GRUPOS_PLANES: GrupoPlanes[] = [
+  {
+    claveTitulo: 'w.planes.g1.titulo',
+    claveSub: 'w.planes.g1.sub',
+    // Academia y las tres membresías (Explorador, Constructor, Arquitecto)
+    escalones: [escalonPorNumero('5'), escalonPorNumero('2'), escalonPorNumero('3'), escalonPorNumero('4')],
+  },
+  {
+    claveTitulo: 'w.planes.g2.titulo',
+    claveSub: 'w.planes.g2.sub',
+    escalones: [escalonPorNumero('6')],
+  },
+  {
+    claveTitulo: 'w.planes.g3.titulo',
+    claveSub: 'w.planes.g3.sub',
+    escalones: [escalonPorNumero('7'), ESCALON_FONDO_EMPRENDER, escalonPorNumero('8')],
+  },
+]
+
+/** Tarjeta de un servicio dentro de "Nuestros planes". */
+function TarjetaPlan({ escalon, delay, ancha = false }: { escalon: Escalon; delay: number; ancha?: boolean }) {
+  const { t } = useTranslation()
+  const Icono = escalon.icono
+  const claseBoton = `min-h-9 px-5 py-2 rounded-lg text-[12px] font-semibold inline-flex items-center justify-center text-center leading-tight ${RELIEVE_BOTON} ${escalon.boton}`
+
+  return (
+    <Aparece delay={delay} className="flex">
+      <div
+        className={`w-full rounded-2xl border ${escalon.borde} ${escalon.fondo} p-5 flex flex-col ${
+          ancha ? 'lg:flex-row lg:items-center lg:gap-10 lg:p-7' : ''
+        } ${RELIEVE_TARJETA}`}
+      >
+        <div className={ancha ? 'lg:w-1/3' : ''}>
+          <div className="flex items-start gap-3">
+            <div className="h-11 w-11 rounded-xl bg-[#3B1727]/90 border border-[#B08D57]/35 flex items-center justify-center shrink-0">
+              <Icono className={`h-5 w-5 ${escalon.color}`} />
+            </div>
+            <div>
+              <h4 className="text-[15px] font-extrabold text-[#F3E7DC] leading-snug">{t(escalon.claveTitulo)}</h4>
+              <div className={`text-[12.5px] font-bold leading-snug ${escalon.color} mt-0.5`}>{t(escalon.clavePrecio)}</div>
+            </div>
+          </div>
+          <p className="text-[12.5px] text-[#F3E7DC]/70 leading-snug mt-4">{t(escalon.claveResumen)}</p>
+        </div>
+
+        <ul
+          className={`space-y-1.5 my-5 flex-1 ${ancha ? 'lg:my-0 lg:grid lg:grid-cols-2 lg:gap-x-8 lg:space-y-0 lg:gap-y-2' : ''}`}
+        >
+          {escalon.clavesItems.map((clave) => (
+            <li key={clave} className="flex items-start gap-1.5 text-[11.5px] text-[#F3E7DC]/85 leading-snug">
+              <Check className="h-3 w-3 text-[#B08D57] shrink-0 mt-0.5" />
+              <span>{t(clave)}</span>
+            </li>
+          ))}
+        </ul>
+
+        <div className={ancha ? 'lg:shrink-0' : 'flex flex-col'}>
+          {escalon.externo ? (
+            <a href={escalon.href} target="_blank" rel="noopener noreferrer" className={claseBoton}>
+              {t(escalon.claveBoton)}
+            </a>
+          ) : (
+            <Link href={escalon.href} className={claseBoton}>
+              {t(escalon.claveBoton)}
+            </Link>
+          )}
+        </div>
+      </div>
+    </Aparece>
+  )
+}
 
 type CaminoTrabajo = {
   claveTitulo: string
@@ -770,51 +883,6 @@ export function LandingClient({ user }: LandingClientProps) {
         </div>
       </section>
 
-      {/* ================= FRANJA DEL PROBLEMA (banda de color) ================= */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-[#3B1727] via-[#2E0E1A] to-[#54142B]">
-        {/* destello diagonal que cruza la banda */}
-        <div
-          aria-hidden
-          className="absolute inset-y-0 -left-1/4 w-2/3 rotate-12 bg-gradient-to-r from-transparent via-white/10 to-transparent"
-        />
-        <div
-          aria-hidden
-          className="absolute -bottom-24 right-[8%] h-64 w-64 rounded-full bg-[#B08D57]/20 blur-3xl"
-        />
-        <div className="relative max-w-[1400px] mx-auto px-5 lg:px-8 py-12 lg:py-14">
-          <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
-            <div className="lg:col-span-6 flex items-start gap-4">
-              <div className="h-12 w-12 rounded-xl bg-white/12 ring-1 ring-white/25 backdrop-blur flex items-center justify-center shrink-0">
-                <Briefcase className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <div className="text-xl lg:text-2xl font-extrabold text-white leading-snug">
-                  {t('w.problema.titulo')}
-                </div>
-                <div className="text-lg lg:text-xl font-semibold text-[#E0B868] leading-snug mt-1">
-                  {t('w.problema.subtitulo')}
-                </div>
-              </div>
-            </div>
-            <div className="lg:col-span-6 grid sm:grid-cols-2 gap-5">
-              {CIFRAS_CONTEXTO.map((cifra) => (
-                <div
-                  key={cifra.claveTexto}
-                  className="rounded-2xl bg-white/8 ring-1 ring-white/15 backdrop-blur px-5 py-4"
-                >
-                  <div className="text-3xl font-extrabold bg-gradient-to-r from-white to-[#E0B868] bg-clip-text text-transparent">
-                    {cifra.valor}
-                  </div>
-                  <div className="text-[13px] text-white/70 leading-snug mt-1.5">
-                    {t(cifra.claveTexto)}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ================= DIAGNÓSTICO GRATUITO ================= */}
       <section className="py-16 lg:py-20">
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
@@ -866,6 +934,215 @@ export function LandingClient({ user }: LandingClientProps) {
                   {t('w.diagnostico.no_incluye')}
                 </p>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ================= NUESTROS PLANES ================= */}
+      <section id="servicios" className="py-16 lg:py-20">
+        <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
+          <TituloSeccion
+            eyebrow={t('w.planes.eyebrow')}
+            titulo={t('w.planes.titulo')}
+            subtitulo={t('w.planes.subtitulo')}
+          />
+
+          {/* Diagnóstico gratuito: va arriba de los tres grupos */}
+          <Aparece>
+            <div className={`mb-12 rounded-2xl border border-[#B08D57]/45 bg-gradient-to-r from-[#4C2032] to-[#3B1727] p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center gap-4 ${RELIEVE_TARJETA}`}>
+              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-[#C9A46B] to-[#B08D57] flex items-center justify-center shrink-0">
+                <Stethoscope className="h-5 w-5 text-[#3A1420]" />
+              </div>
+              <div className="flex-1">
+                <div className="text-[15px] font-extrabold text-[#F3E7DC]">{t('w.escalera.diagnostico.titulo')}</div>
+                <div className="text-[13px] text-[#F3E7DC]/70 leading-snug">{t('w.planes.diagnostico.texto')}</div>
+              </div>
+              <Link
+                href="/diagnostico"
+                className={`h-11 px-5 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-sm font-semibold hover:from-[#C9A46B] hover:to-[#8A6636] ${RELIEVE_BOTON}`}
+              >
+                {t('w.escalera.diagnostico.boton')}
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </Aparece>
+
+          <div className="space-y-14">
+            {GRUPOS_PLANES.map((grupo, g) => (
+              <div key={grupo.claveTitulo}>
+                <div className="mb-5 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-1 border-b border-[#B08D57]/35 pb-3">
+                  <h3 className="text-2xl font-extrabold text-[#F3E7DC] tracking-tight">{t(grupo.claveTitulo)}</h3>
+                  <p className="text-[13px] text-[#F3E7DC]/70 sm:text-right max-w-xl">{t(grupo.claveSub)}</p>
+                </div>
+                <div
+                  className={`grid gap-4 ${
+                    grupo.escalones.length >= 4
+                      ? 'sm:grid-cols-2 lg:grid-cols-4'
+                      : grupo.escalones.length === 1
+                        ? 'grid-cols-1'
+                        : 'sm:grid-cols-2 lg:grid-cols-3'
+                  }`}
+                >
+                  {grupo.escalones.map((escalon, i) => (
+                    <TarjetaPlan
+                      key={escalon.numero}
+                      escalon={escalon}
+                      delay={(g * 3 + i) * 70}
+                      ancha={grupo.escalones.length === 1}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <p className="mt-8 text-center text-[12px] text-[#F3E7DC]/50 max-w-3xl mx-auto">
+            {t('w.escalera.nota_legal')}
+          </p>
+        </div>
+      </section>
+
+      {/* ================= MEMBRESÍAS ================= */}
+      <section id="membresias" className="relative overflow-hidden bg-gradient-to-br from-[#3B1727] via-[#2E0E1A] to-[#54142B] py-16 lg:py-20">
+        <div aria-hidden className="absolute -top-24 left-[10%] h-72 w-72 rounded-full bg-[#B08D57]/25 blur-3xl" />
+        <div aria-hidden className="absolute -bottom-28 right-[6%] h-80 w-80 rounded-full bg-[#C9A46B]/20 blur-3xl" />
+        <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
+          <div className="max-w-3xl mx-auto text-center mb-12">
+            <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#B08D57] mb-3">
+              {t('w.membresias.eyebrow')}
+            </div>
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#F3E7DC]">
+              {t('w.membresias.titulo')}
+            </h2>
+            <p className="mt-4 text-base text-[#F3E7DC]/70 leading-relaxed">
+              {t('w.membresias.subtitulo')}
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {[
+              {
+                claveT: 'w.membresias.m1.titulo',
+                claveP: 'w.membresias.m1.precio',
+                claveD: 'w.membresias.m1.texto',
+                items: ['w.membresias.m1.i1', 'w.membresias.m1.i2', 'w.membresias.m1.i3', 'w.membresias.m1.i4', 'w.membresias.m1.i5', 'w.membresias.m1.i6'],
+                destacado: false,
+              },
+              {
+                claveT: 'w.membresias.m2.titulo',
+                claveP: 'w.membresias.m2.precio',
+                claveD: 'w.membresias.m2.texto',
+                items: ['w.membresias.m2.i1', 'w.membresias.m2.i2', 'w.membresias.m2.i3', 'w.membresias.m2.i4', 'w.membresias.m2.i5', 'w.membresias.m2.i6'],
+                destacado: true,
+              },
+              {
+                claveT: 'w.membresias.m3.titulo',
+                claveP: 'w.membresias.m3.precio',
+                claveD: 'w.membresias.m3.texto',
+                items: ['w.membresias.m3.i1', 'w.membresias.m3.i2', 'w.membresias.m3.i3', 'w.membresias.m3.i4', 'w.membresias.m3.i5', 'w.membresias.m3.i6', 'w.membresias.m3.i7', 'w.membresias.m3.i8'],
+                destacado: false,
+              },
+            ].map((plan) => (
+              <div
+                key={plan.claveT}
+                className={`rounded-2xl p-7 ${
+                  plan.destacado
+                    ? 'bg-[#4C2032] border-2 border-[#B08D57]'
+                    : 'bg-[#3B1727]/60 border border-[#B08D57]/35'
+                }`}
+              >
+                <h3 className={`text-lg font-extrabold ${plan.destacado ? 'text-[#F3E7DC]' : 'text-[#F3E7DC]'}`}>
+                  {t(plan.claveT)}
+                </h3>
+                <div className={`mt-1 text-[15px] font-bold ${plan.destacado ? 'text-[#B08D57]' : 'text-[#B08D57]'}`}>
+                  {t(plan.claveP)}
+                </div>
+                <p className={`mt-3 text-[13px] leading-relaxed ${plan.destacado ? 'text-[#F3E7DC]/70' : 'text-[#F3E7DC]/60'}`}>
+                  {t(plan.claveD)}
+                </p>
+                <div
+                  className={`mt-3 inline-flex items-center gap-1.5 text-[11.5px] font-semibold px-2.5 py-1 rounded-full ${
+                    plan.destacado
+                      ? 'bg-[#3B1727] text-[#B08D57] border border-[#B08D57]/35'
+                      : 'bg-[#B08D57]/10 text-[#F3E7DC] border border-[#B08D57]/20'
+                  }`}
+                >
+                  {t('w.membresias.anual')}
+                </div>
+                <ul className="mt-5 space-y-2">
+                  {plan.items.map((clave) => (
+                    <li
+                      key={clave}
+                      className={`flex items-start gap-2 text-[13px] leading-snug ${
+                        plan.destacado ? 'text-[#F3E7DC]/90' : 'text-[#F3E7DC]/80'
+                      }`}
+                    >
+                      <Check className={`h-3.5 w-3.5 shrink-0 mt-0.5 ${plan.destacado ? 'text-[#B08D57]' : 'text-[#B08D57]'}`} />
+                      <span>{t(clave)}</span>
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href="/signup"
+                  className={`mt-6 h-11 rounded-lg inline-flex w-full items-center justify-center text-[13px] font-semibold transition-colors ${
+                    plan.destacado
+                      ? `bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/35 ${RELIEVE_BOTON}`
+                      : `border border-[#B08D57]/40 text-[#F3E7DC] hover:bg-[#B08D57]/10 ${RELIEVE_BOTON_SUAVE}`
+                  }`}
+                >
+                  {t('w.membresias.boton')}
+                </a>
+              </div>
+            ))}
+          </div>
+
+          <p className="mt-8 text-center text-[12px] text-[#F3E7DC]/50 max-w-2xl mx-auto">
+            {t('w.membresias.nota')}
+          </p>
+        </div>
+      </section>
+
+      {/* ================= FRANJA DEL PROBLEMA (banda de color) ================= */}
+      <section className="relative overflow-hidden bg-gradient-to-r from-[#3B1727] via-[#2E0E1A] to-[#54142B]">
+        {/* destello diagonal que cruza la banda */}
+        <div
+          aria-hidden
+          className="absolute inset-y-0 -left-1/4 w-2/3 rotate-12 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+        />
+        <div
+          aria-hidden
+          className="absolute -bottom-24 right-[8%] h-64 w-64 rounded-full bg-[#B08D57]/20 blur-3xl"
+        />
+        <div className="relative max-w-[1400px] mx-auto px-5 lg:px-8 py-12 lg:py-14">
+          <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+            <div className="lg:col-span-6 flex items-start gap-4">
+              <div className="h-12 w-12 rounded-xl bg-white/12 ring-1 ring-white/25 backdrop-blur flex items-center justify-center shrink-0">
+                <Briefcase className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <div className="text-xl lg:text-2xl font-extrabold text-white leading-snug">
+                  {t('w.problema.titulo')}
+                </div>
+                <div className="text-lg lg:text-xl font-semibold text-[#E0B868] leading-snug mt-1">
+                  {t('w.problema.subtitulo')}
+                </div>
+              </div>
+            </div>
+            <div className="lg:col-span-6 grid sm:grid-cols-2 gap-5">
+              {CIFRAS_CONTEXTO.map((cifra) => (
+                <div
+                  key={cifra.claveTexto}
+                  className="rounded-2xl bg-white/8 ring-1 ring-white/15 backdrop-blur px-5 py-4"
+                >
+                  <div className="text-3xl font-extrabold bg-gradient-to-r from-white to-[#E0B868] bg-clip-text text-transparent">
+                    {cifra.valor}
+                  </div>
+                  <div className="text-[13px] text-white/70 leading-snug mt-1.5">
+                    {t(cifra.claveTexto)}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -989,91 +1266,6 @@ export function LandingClient({ user }: LandingClientProps) {
         </div>
       </section>
 
-      {/* ================= ESCALERA DE VALOR ================= */}
-      <section id="servicios" className="py-16 lg:py-20">
-        <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
-          <TituloSeccion
-            eyebrow={t('w.escalera.eyebrow')}
-            titulo={t('w.escalera.titulo')}
-            subtitulo={t('w.escalera.subtitulo')}
-          />
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4">
-            {ESCALERA.map((escalon) => {
-              const Icono = escalon.icono
-              return (
-                <Aparece key={escalon.numero} delay={Number(escalon.numero) * 70} className="flex">
-                <div
-                  className={`w-full rounded-2xl border ${escalon.borde} ${escalon.fondo} p-5 flex flex-col ${RELIEVE_TARJETA}`}
-                >
-                  <div
-                    className={`h-6 w-6 rounded-lg bg-[#3B1727]/90 ring-1 ring-[#6E4A50] flex items-center justify-center text-[11px] font-black mb-2 ${escalon.color}`}
-                  >
-                    {escalon.numero}
-                  </div>
-                  <h3 className="text-[15px] font-extrabold text-[#F3E7DC] leading-snug min-h-[38px]">
-                    {t(escalon.claveTitulo)}
-                  </h3>
-                  <div className={`text-[12.5px] font-bold leading-snug ${escalon.color} mt-1 min-h-[34px]`}>
-                    {t(escalon.clavePrecio)}
-                  </div>
-
-                  <div className="my-4 h-12 w-12 rounded-xl bg-[#3B1727]/90 border border-[#B08D57]/35 flex items-center justify-center mx-auto">
-                    <Icono className={`h-5 w-5 ${escalon.color}`} />
-                  </div>
-
-                  <p className="text-[12px] text-[#F3E7DC]/70 leading-snug text-center mb-4 min-h-[32px]">
-                    {t(escalon.claveResumen)}
-                  </p>
-
-                  <ul className="space-y-1.5 mb-5 flex-1">
-                    {escalon.clavesItems.map((clave) => (
-                      <li key={clave} className="flex items-start gap-1.5 text-[11.5px] text-[#F3E7DC]/85 leading-snug">
-                        <Check className="h-3 w-3 text-[#B08D57] shrink-0 mt-0.5" />
-                        <span>{t(clave)}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  {escalon.externo ? (
-                    <a
-                      href={escalon.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`min-h-9 px-3 py-2 rounded-lg text-[12px] font-semibold inline-flex items-center justify-center text-center leading-tight ${RELIEVE_BOTON} ${escalon.boton}`}
-                    >
-                      {t(escalon.claveBoton)}
-                    </a>
-                  ) : escalon.href.startsWith('#') ? (
-                    // Enlace a una sección de esta misma página: se usa <a> normal
-                    // en vez de <Link>, porque Link no hace scroll dentro de la
-                    // misma página cuando el destino es solo un "#ancla".
-                    <a
-                      href={escalon.href}
-                      className={`min-h-9 px-3 py-2 rounded-lg text-[12px] font-semibold inline-flex items-center justify-center text-center leading-tight ${RELIEVE_BOTON} ${escalon.boton}`}
-                    >
-                      {t(escalon.claveBoton)}
-                    </a>
-                  ) : (
-                    <Link
-                      href={escalon.href}
-                      className={`min-h-9 px-3 py-2 rounded-lg text-[12px] font-semibold inline-flex items-center justify-center text-center leading-tight ${RELIEVE_BOTON} ${escalon.boton}`}
-                    >
-                      {t(escalon.claveBoton)}
-                    </Link>
-                  )}
-                </div>
-                </Aparece>
-              )
-            })}
-          </div>
-
-          <p className="mt-6 text-center text-[12px] text-[#F3E7DC]/50 max-w-3xl mx-auto">
-            {t('w.escalera.nota_legal')}
-          </p>
-        </div>
-      </section>
-
       {/* ================= ENTIDADES (solo si hay autorización) ================= */}
       {ENTIDADES_ALIADAS.length > 0 ? (
         <section className="bg-[#8C3654] border-y-2 border-[#B08D57]/45 py-8">
@@ -1093,106 +1285,6 @@ export function LandingClient({ user }: LandingClientProps) {
           </div>
         </section>
       ) : null}
-
-      {/* ================= MEMBRESÍAS ================= */}
-      <section id="membresias" className="relative overflow-hidden bg-gradient-to-br from-[#3B1727] via-[#2E0E1A] to-[#54142B] py-16 lg:py-20">
-        <div aria-hidden className="absolute -top-24 left-[10%] h-72 w-72 rounded-full bg-[#B08D57]/25 blur-3xl" />
-        <div aria-hidden className="absolute -bottom-28 right-[6%] h-80 w-80 rounded-full bg-[#C9A46B]/20 blur-3xl" />
-        <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center mb-12">
-            <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#B08D57] mb-3">
-              {t('w.membresias.eyebrow')}
-            </div>
-            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#F3E7DC]">
-              {t('w.membresias.titulo')}
-            </h2>
-            <p className="mt-4 text-base text-[#F3E7DC]/70 leading-relaxed">
-              {t('w.membresias.subtitulo')}
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {[
-              {
-                claveT: 'w.membresias.m1.titulo',
-                claveP: 'w.membresias.m1.precio',
-                claveD: 'w.membresias.m1.texto',
-                items: ['w.membresias.m1.i1', 'w.membresias.m1.i2', 'w.membresias.m1.i3', 'w.membresias.m1.i4', 'w.membresias.m1.i5', 'w.membresias.m1.i6'],
-                destacado: false,
-              },
-              {
-                claveT: 'w.membresias.m2.titulo',
-                claveP: 'w.membresias.m2.precio',
-                claveD: 'w.membresias.m2.texto',
-                items: ['w.membresias.m2.i1', 'w.membresias.m2.i2', 'w.membresias.m2.i3', 'w.membresias.m2.i4', 'w.membresias.m2.i5', 'w.membresias.m2.i6'],
-                destacado: true,
-              },
-              {
-                claveT: 'w.membresias.m3.titulo',
-                claveP: 'w.membresias.m3.precio',
-                claveD: 'w.membresias.m3.texto',
-                items: ['w.membresias.m3.i1', 'w.membresias.m3.i2', 'w.membresias.m3.i3', 'w.membresias.m3.i4', 'w.membresias.m3.i5', 'w.membresias.m3.i6', 'w.membresias.m3.i7', 'w.membresias.m3.i8'],
-                destacado: false,
-              },
-            ].map((plan) => (
-              <div
-                key={plan.claveT}
-                className={`rounded-2xl p-7 ${
-                  plan.destacado
-                    ? 'bg-[#4C2032] border-2 border-[#B08D57]'
-                    : 'bg-[#3B1727]/60 border border-[#B08D57]/35'
-                }`}
-              >
-                <h3 className={`text-lg font-extrabold ${plan.destacado ? 'text-[#F3E7DC]' : 'text-[#F3E7DC]'}`}>
-                  {t(plan.claveT)}
-                </h3>
-                <div className={`mt-1 text-[15px] font-bold ${plan.destacado ? 'text-[#B08D57]' : 'text-[#B08D57]'}`}>
-                  {t(plan.claveP)}
-                </div>
-                <p className={`mt-3 text-[13px] leading-relaxed ${plan.destacado ? 'text-[#F3E7DC]/70' : 'text-[#F3E7DC]/60'}`}>
-                  {t(plan.claveD)}
-                </p>
-                <div
-                  className={`mt-3 inline-flex items-center gap-1.5 text-[11.5px] font-semibold px-2.5 py-1 rounded-full ${
-                    plan.destacado
-                      ? 'bg-[#3B1727] text-[#B08D57] border border-[#B08D57]/35'
-                      : 'bg-[#B08D57]/10 text-[#F3E7DC] border border-[#B08D57]/20'
-                  }`}
-                >
-                  {t('w.membresias.anual')}
-                </div>
-                <ul className="mt-5 space-y-2">
-                  {plan.items.map((clave) => (
-                    <li
-                      key={clave}
-                      className={`flex items-start gap-2 text-[13px] leading-snug ${
-                        plan.destacado ? 'text-[#F3E7DC]/90' : 'text-[#F3E7DC]/80'
-                      }`}
-                    >
-                      <Check className={`h-3.5 w-3.5 shrink-0 mt-0.5 ${plan.destacado ? 'text-[#B08D57]' : 'text-[#B08D57]'}`} />
-                      <span>{t(clave)}</span>
-                    </li>
-                  ))}
-                </ul>
-                <a
-                  href="/signup"
-                  className={`mt-6 h-11 rounded-lg inline-flex w-full items-center justify-center text-[13px] font-semibold transition-colors ${
-                    plan.destacado
-                      ? `bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/35 ${RELIEVE_BOTON}`
-                      : `border border-[#B08D57]/40 text-[#F3E7DC] hover:bg-[#B08D57]/10 ${RELIEVE_BOTON_SUAVE}`
-                  }`}
-                >
-                  {t('w.membresias.boton')}
-                </a>
-              </div>
-            ))}
-          </div>
-
-          <p className="mt-8 text-center text-[12px] text-[#F3E7DC]/50 max-w-2xl mx-auto">
-            {t('w.membresias.nota')}
-          </p>
-        </div>
-      </section>
 
       {/* ================= FAQ ================= */}
       <section id="recursos" className="py-16 lg:py-20">
