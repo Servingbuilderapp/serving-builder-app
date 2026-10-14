@@ -143,7 +143,7 @@ export async function listarBoletines(
   const token = await obtenerTokenAcceso()
 
   const consulta = encodeURIComponent(
-    `in:inbox newer_than:30d -from:${REMITENTE_ALERTAS} -from:me -category:social -category:promotions`,
+    `in:inbox newer_than:30d -from:${REMITENTE_ALERTAS} -from:me -from:vercel.com -from:github.com -from:supabase.com -from:supabase.io -from:accounts.google.com -from:no-reply@accounts.google.com -from:mail-noreply@google.com -category:social`,
   )
   const listado = await fetch(
     `https://gmail.googleapis.com/gmail/v1/users/me/messages?q=${consulta}&maxResults=200`,
