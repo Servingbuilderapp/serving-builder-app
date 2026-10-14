@@ -17,6 +17,10 @@
       "schedule": "0 12 * * *"
     },
     {
+      "path": "/api/centinela/leer-boletines",
+      "schedule": "15 12 * * *"
+    },
+    {
       "path": "/api/centinela/sembrar-desde-fuentes?lote=10",
       "schedule": "30 11 * * *"
     }
