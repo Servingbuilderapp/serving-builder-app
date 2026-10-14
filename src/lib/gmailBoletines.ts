@@ -138,6 +138,7 @@ function htmlATexto(html: string): { texto: string; enlaces: number } {
 export async function listarBoletines(
   yaProcesados: (ids: string[]) => Promise<Set<string>>,
   maxNuevos = 12,
+  saltar = 0,
 ): Promise<{ revisados: number; nuevos: CorreoBoletin[]; pendientes: number }> {
   const token = await obtenerTokenAcceso()
 
@@ -159,7 +160,7 @@ export async function listarBoletines(
 
   const vistos = await yaProcesados(ids)
   const porLeer = ids.filter((id) => !vistos.has(id))
-  const loteActual = porLeer.slice(0, maxNuevos)
+  const loteActual = porLeer.slice(saltar, saltar + maxNuevos)
 
   const nuevos: CorreoBoletin[] = []
   for (const id of loteActual) {
@@ -182,5 +183,5 @@ export async function listarBoletines(
     nuevos.push({ idMensaje: mensaje.id, asunto, remitente, fecha, texto, enlaces })
   }
 
-  return { revisados: ids.length, nuevos, pendientes: porLeer.length - loteActual.length }
+  return { revisados: ids.length, nuevos, pendientes: Math.max(0, porLeer.length - saltar - loteActual.length) }
 }

@@ -165,7 +165,12 @@ async function extraerConvocatorias(
   }
 }
 
-async function ejecutarLecturaDeBoletines() {
+/**
+ * Modo diagnóstico: /api/centinela/leer-boletines?diagnostico=1&pagina=0
+ * Lee los boletines de esa página (12 por página), muestra qué vio en cada
+ * uno y NO guarda nada ni los marca como leídos.
+ */
+async function ejecutarLecturaDeBoletines(diagnostico = false, pagina = 0) {
   const apiKeyGemini = process.env.GEMINI_API_KEY || process.env.GEMINI_KEY
   if (!apiKeyGemini) {
     return { status: 500, body: { error: 'Falta configurar GEMINI_API_KEY en el servidor' } }
@@ -173,6 +178,7 @@ async function ejecutarLecturaDeBoletines() {
 
   // Cuáles de estos correos ya se leyeron antes (misma tabla que usa leer-alertas).
   const yaProcesados = async (ids: string[]): Promise<Set<string>> => {
+    if (diagnostico) return new Set<string>()
     const vistos = new Set<string>()
     for (let i = 0; i < ids.length; i += 100) {
       const { data, error } = await supabase
@@ -190,11 +196,27 @@ async function ejecutarLecturaDeBoletines() {
 
   let lectura
   try {
-    lectura = await listarBoletines(yaProcesados, MAX_BOLETINES_POR_CORRIDA)
+    lectura = await listarBoletines(yaProcesados, MAX_BOLETINES_POR_CORRIDA, diagnostico ? pagina * MAX_BOLETINES_POR_CORRIDA : 0)
   } catch (err: unknown) {
     console.error('[Centinela Boletines] Error leyendo Gmail:', err)
     const detalle = err instanceof Error ? err.message : String(err)
     return { status: 500, body: { error: 'No se pudo leer la bandeja de Gmail', detalle } }
+  }
+
+  if (diagnostico) {
+    const detalle = []
+    for (const b of lectura.nuevos) {
+      const r = await extraerConvocatorias(apiKeyGemini, b)
+      detalle.push({
+        asunto: b.asunto.slice(0, 90),
+        de: b.remitente.slice(0, 60),
+        caracteres_de_texto: b.texto.length,
+        enlaces: b.enlaces,
+        convocatorias: r === null ? 'FALLO' : r.length,
+        muestra_del_texto: b.texto.slice(0, 160),
+      })
+    }
+    return { status: 200, body: { diagnostico: true, pagina, correos_en_bandeja: lectura.revisados, detalle } }
   }
 
   const encontradas: ConvocatoriaEncontrada[] = []
@@ -252,7 +274,11 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
   }
 
-  const resultado = await ejecutarLecturaDeBoletines()
+  const parametros = req.nextUrl.searchParams
+  const resultado = await ejecutarLecturaDeBoletines(
+    parametros.get('diagnostico') === '1',
+    Number(parametros.get('pagina') || 0) || 0,
+  )
   return NextResponse.json(resultado.body, { status: resultado.status })
 }
 
