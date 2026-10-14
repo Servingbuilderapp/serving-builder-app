@@ -170,7 +170,7 @@ async function extraerConvocatorias(
  * Lee los boletines de esa página (12 por página), muestra qué vio en cada
  * uno y NO guarda nada ni los marca como leídos.
  */
-async function ejecutarLecturaDeBoletines(diagnostico = false, pagina = 0) {
+async function leerUnLote(diagnostico = false, pagina = 0) {
   const apiKeyGemini = process.env.GEMINI_API_KEY || process.env.GEMINI_KEY
   if (!apiKeyGemini) {
     return { status: 500, body: { error: 'Falta configurar GEMINI_API_KEY en el servidor' } }
@@ -265,6 +265,51 @@ async function ejecutarLecturaDeBoletines(diagnostico = false, pagina = 0) {
       convocatorias_guardadas: convocatoriasGuardadas,
     },
   }
+}
+
+/**
+ * Lee lotes seguidos mientras quede tiempo. Cada lote son hasta 12 boletines;
+ * no se empieza un lote nuevo si ya pasaron 120 segundos (el límite total es
+ * de 300). Así una sola visita avanza todo lo que se pueda.
+ */
+async function ejecutarLecturaDeBoletines(diagnostico = false, pagina = 0) {
+  if (diagnostico) return leerUnLote(true, pagina)
+
+  const inicio = Date.now()
+  const total = {
+    ok: true,
+    lotes: 0,
+    boletines_leidos: 0,
+    boletines_con_fallo: 0,
+    boletines_pendientes: 0,
+    convocatorias_encontradas: 0,
+    convocatorias_guardadas: 0,
+  }
+
+  while (true) {
+    const r = await leerUnLote(false, 0)
+    if (r.status !== 200) return r
+
+    const b = r.body as {
+      boletines_leidos: number
+      boletines_con_fallo: number
+      boletines_pendientes: number
+      convocatorias_encontradas: number
+      convocatorias_guardadas: number
+    }
+    total.lotes++
+    total.boletines_leidos += b.boletines_leidos
+    total.boletines_con_fallo = b.boletines_con_fallo
+    total.boletines_pendientes = b.boletines_pendientes
+    total.convocatorias_encontradas += b.convocatorias_encontradas
+    total.convocatorias_guardadas += b.convocatorias_guardadas
+
+    const seguirLeyendo =
+      b.boletines_leidos > 0 && b.boletines_pendientes > 0 && Date.now() - inicio < 120000
+    if (!seguirLeyendo) break
+  }
+
+  return { status: 200, body: total }
 }
 
 // Disparo manual, útil para pruebas: visita /api/centinela/leer-boletines
