@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import { esEquipoServing as equipoServing } from '@/lib/guardiaEquipo'
 
 const CORREO_ADMIN = 'servingbuilderapp@gmail.com'
 
 async function esEquipoServing() {
+  if (await equipoServing()) return true
   const supabase = await createClient()
   const {
     data: { user },

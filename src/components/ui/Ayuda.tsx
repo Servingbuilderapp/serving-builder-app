@@ -6,10 +6,10 @@ import { useLanguage } from '@/context/LanguageContext'
 import { AYUDAS } from '@/lib/ayudas'
 
 /**
- * Ayuda emergente: al pasar el cursor (o tocar el "?") se explica qué es,
- * para quién sirve y qué se obtiene. Los textos viven en src/lib/ayudas.ts.
+ * Ayuda emergente, discreta: un «?» pequeño junto al título; al pasar el cursor
+ * (o tocarlo en el celular) aparece una nota breve con el texto de src/lib/ayudas.ts.
  *
- * modo 'icono'  : muestra un pequeño "?" junto al contenido (sirve en celular).
+ * modo 'icono'   : muestra el «?» junto al contenido (sirve en celular).
  * modo 'envolver': el propio contenido despierta la ayuda al pasar el cursor
  *                  (se usa en el menú, donde tocar ya significa navegar).
  */
@@ -23,7 +23,7 @@ export function Ayuda({
   clave: string
   children?: React.ReactNode
   modo?: 'icono' | 'envolver'
-  /** true: el "?" se dibuja para fondos claros; false: para fondos oscuros. */
+  /** true: el «?» se dibuja para fondos claros; false: para fondos oscuros. */
   claro?: boolean
   className?: string
 }) {
@@ -37,10 +37,10 @@ export function Ayuda({
     const el = ancla.current
     if (!el) return
     const r = el.getBoundingClientRect()
-    const ancho = 320
+    const ancho = 272
     const x = Math.min(Math.max(8, r.left + r.width / 2 - ancho / 2), window.innerWidth - ancho - 8)
     const abajo = window.innerHeight - r.bottom
-    const arriba = abajo < 420 && r.top > abajo
+    const arriba = abajo < 190 && r.top > abajo
     setPos({ x, y: arriba ? r.top - 8 : r.bottom + 8, arriba })
   }, [])
 
@@ -70,35 +70,27 @@ export function Ayuda({
   if (!ayuda) return <>{children}</>
   const texto = language === 'es' ? ayuda.es : ayuda.en
   const en = language !== 'es'
-  const etiquetas = en
-    ? { a: 'What it is', b: 'Who it is for', c: 'What you get' }
-    : { a: 'Qué es', b: 'Para quién sirve', c: 'Qué obtienes' }
 
-  const panel =
-    abierta
-      ? createPortal(
-          <div
-            role="tooltip"
-            style={{
-              position: 'fixed',
-              left: pos.x,
-              top: pos.y,
-              width: 320,
-              transform: pos.arriba ? 'translateY(-100%)' : undefined,
-              zIndex: 9999,
-            }}
-            className="pointer-events-none rounded-2xl border border-[#C9A46B]/60 bg-[#FBF5EE] p-4 text-left text-[13px] leading-relaxed text-[#3B1727] shadow-[0_2px_4px_rgba(20,5,10,0.25),0_18px_40px_-12px_rgba(20,5,10,0.55)]"
-          >
-            <p className="text-[11px] font-extrabold uppercase tracking-wider text-[#8A5A2B]">{etiquetas.a}</p>
-            <p className="mb-2">{texto.queEs}</p>
-            <p className="text-[11px] font-extrabold uppercase tracking-wider text-[#8A5A2B]">{etiquetas.b}</p>
-            <p className="mb-2">{texto.paraQuien}</p>
-            <p className="text-[11px] font-extrabold uppercase tracking-wider text-[#8A5A2B]">{etiquetas.c}</p>
-            <p>{texto.queObtienes}</p>
-          </div>,
-          document.body,
-        )
-      : null
+  const panel = abierta
+    ? createPortal(
+        <div
+          role="tooltip"
+          style={{
+            position: 'fixed',
+            left: pos.x,
+            top: pos.y,
+            width: 272,
+            transform: pos.arriba ? 'translateY(-100%)' : undefined,
+            zIndex: 9999,
+          }}
+          className="pointer-events-none rounded-xl border border-[#C9A46B]/45 bg-[#2E101D]/95 px-4 py-3 text-left text-[12.5px] font-normal normal-case leading-relaxed tracking-normal text-[#F3E7DC]/90 shadow-[0_14px_34px_-12px_rgba(0,0,0,0.65)] backdrop-blur-sm"
+        >
+          <span aria-hidden className="mb-2 block h-px w-8 bg-[#C9A46B]/70" />
+          {texto}
+        </div>,
+        document.body,
+      )
+    : null
 
   if (modo === 'envolver') {
     return (
@@ -132,10 +124,10 @@ export function Ayuda({
           if (abierta) cerrar()
           else abrir()
         }}
-        className={`inline-flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full border text-[13px] font-extrabold leading-none shadow-[0_1px_2px_rgba(20,5,10,0.3)] ${
+        className={`inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border text-[11px] font-semibold leading-none opacity-70 transition hover:opacity-100 ${
           claro
-            ? 'border-[#8A5A2B]/60 bg-[#F3E7DC] text-[#6B3A1F]'
-            : 'border-[#E0B868] bg-[#C9A46B] text-[#3B1727]'
+            ? 'border-[#8A5A2B]/50 text-[#6B3A1F]'
+            : 'border-[#C9A46B]/60 text-[#E0B868]'
         }`}
       >
         ?

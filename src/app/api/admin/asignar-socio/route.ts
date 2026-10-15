@@ -9,7 +9,7 @@ async function esEquipoServing() {
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) return false
-  if ((user.email || '').toLowerCase().trim() === CORREO_ADMIN) return true
+  if ((user.email || '').toLowerCase().trim() === CORREO_ADMIN || (user.email || '').toLowerCase().trim() === 'iagif1964@gmail.com') return true
   const { data: perfil } = await supabase.from('users').select('role').eq('id', user.id).maybeSingle<{ role: string | null }>()
   return perfil?.role === 'admin'
 }

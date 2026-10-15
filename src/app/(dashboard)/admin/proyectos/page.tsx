@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { esEquipoServing } from '@/lib/guardiaEquipo'
 import { Eye, Search } from 'lucide-react'
 import { MarcarPagadoButton } from '@/components/admin/MarcarPagadoButton'
 import { MarcarCanalButton } from '@/components/admin/MarcarCanalButton'
@@ -47,7 +48,7 @@ export default async function AdminProyectosPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user || user.email?.toLowerCase() !== 'servingbuilderapp@gmail.com') {
+  if (!user || !(await esEquipoServing())) {
     redirect('/dashboard')
   }
 

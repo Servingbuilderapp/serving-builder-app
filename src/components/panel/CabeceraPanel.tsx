@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Menu, Bell, HelpCircle, ChevronDown, LogOut, User as UserIcon, Settings } from 'lucide-react'
+import { Menu, Bell, HelpCircle, ChevronDown, LogOut, User as UserIcon, Settings, Globe } from 'lucide-react'
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 
 export type ProyectoResumen = {
@@ -74,7 +74,7 @@ export function CabeceraPanel({
         <Menu className="h-4 w-4" />
       </button>
 
-      <Link href="/dashboard" className="flex items-center gap-2.5 shrink-0">
+      <Link href="/" title="Ir al website" className="flex items-center gap-2.5 shrink-0">
         <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-[#C39F68] to-[#A8804B] flex items-center justify-center">
           <span className="text-[15px] font-black text-[#3A1420] leading-none">A</span>
         </div>
@@ -106,6 +106,14 @@ export function CabeceraPanel({
       </div>
 
       <div className="flex items-center gap-1.5 shrink-0">
+        <Link
+          href="/"
+          title="Volver al website sin cerrar sesión"
+          className="hidden sm:inline-flex h-9 items-center gap-1.5 rounded-lg border border-[rgba(176,141,87,0.3)] px-3 text-[12.5px] font-semibold text-[#E0C79A] hover:bg-[rgba(176,141,87,0.1)]"
+        >
+          <Globe className="h-4 w-4" />
+          Ir al website
+        </Link>
         <LanguageSwitcher className="hidden sm:block" />
 
         <button

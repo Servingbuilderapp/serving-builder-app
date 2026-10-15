@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { esEquipoServing } from '@/lib/guardiaEquipo'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { CrearSocioForm } from '@/components/admin/CrearSocioForm'
 import { AsignarSocioSelect } from '@/components/admin/AsignarSocioSelect'
@@ -38,7 +39,7 @@ export default async function AdminMarcaBlancaPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user || user.email?.toLowerCase() !== 'servingbuilderapp@gmail.com') {
+  if (!user || !(await esEquipoServing())) {
     redirect('/dashboard')
   }
 

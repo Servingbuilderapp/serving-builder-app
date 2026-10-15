@@ -1,3 +1,4 @@
+import { esEquipoServing } from '@/lib/guardiaEquipo'
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
@@ -17,7 +18,7 @@ export async function POST(req: Request) {
 
     // Solo el correo administrador puede confirmar un pago a mano.
     const { data: { user } } = await supabase.auth.getUser()
-    if (!user || user.email?.toLowerCase() !== 'servingbuilderapp@gmail.com') {
+    if (!user || !(await esEquipoServing())) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
     }
 
