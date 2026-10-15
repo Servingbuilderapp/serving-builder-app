@@ -1,6 +1,7 @@
 import React from 'react'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { ServiciosMembresiaClient } from '@/components/admin/ServiciosMembresiaClient'
+import { Ayuda } from '@/components/ui/Ayuda'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -27,7 +28,7 @@ export default async function ServiciosMembresiaPage() {
   return (
     <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
       <header className="mb-6">
-        <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">Servicios de membresía</h1>
+        <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]"><Ayuda clave="equipo.servicios_membresia" claro={false}>Servicios de membresía</Ayuda></h1>
         <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#F3E7DC]/60">
           Lo que los miembros piden: postulaciones, acompañamiento semanal, sesiones grupales y la comunidad.
         </p>

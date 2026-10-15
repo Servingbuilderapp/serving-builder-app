@@ -2,6 +2,7 @@ import React from 'react'
 import { Search } from 'lucide-react'
 import { contextoMiembro } from '@/lib/membresiasServicios'
 import { AvisoMiembros } from '@/components/panel/AvisoMiembros'
+import { Ayuda } from '@/components/ui/Ayuda'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -95,7 +96,7 @@ export default async function BuscarFondosPage({ searchParams }: { searchParams:
       <header className="mb-5">
         <h1 className="flex items-center gap-2 text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">
           <Search className="h-5 w-5 text-[#C9A46B]" />
-          Buscador de fondos
+          <Ayuda clave="panel.buscar_fondos" claro={false}>Buscador de fondos</Ayuda>
         </h1>
         <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#F3E7DC]/60">
           Busca entre todas las convocatorias de la biblioteca. Filtra por palabra, país, sector o tipo de financiador.

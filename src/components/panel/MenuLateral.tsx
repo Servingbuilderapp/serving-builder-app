@@ -32,6 +32,7 @@ import {
   HeartHandshake,
   Handshake,
 } from 'lucide-react'
+import { Ayuda } from '@/components/ui/Ayuda'
 
 type Item = {
   nombre: string
@@ -82,6 +83,40 @@ const SECCIONES_CLIENTE: Seccion[] = [
     ],
   },
 ]
+
+
+/** Clave de ayuda (src/lib/ayudas.ts) de cada entrada del menú, según su dirección. */
+const AYUDA_POR_RUTA: Record<string, string> = {
+  '/dashboard': 'panel.resumen',
+  '/mi-proyecto': 'panel.avance',
+  '/calificacion': 'panel.calificacion',
+  '/pendientes': 'panel.pendientes',
+  '/mis-documentos': 'panel.documentos',
+  '/mis-convocatorias': 'panel.mis_convocatorias',
+  '/mis-replicas': 'panel.mis_replicas',
+  '/ideas': 'panel.ideas',
+  '/academia': 'panel.academia',
+  '/mi-membresia': 'panel.mi_membresia',
+  '/convocatorias-del-mes': 'panel.convocatorias_mes',
+  '/calendario': 'panel.calendario',
+  '/buscar-fondos': 'panel.buscar_fondos',
+  '/mis-proyectos': 'panel.mis_proyectos',
+  '/sesiones': 'panel.sesiones',
+  '/comunidad': 'panel.comunidad',
+  '/acompanamiento': 'panel.acompanamiento',
+  '/admin/proyectos': 'equipo.proyectos',
+  '/admin/diagnosticos': 'equipo.diagnosticos',
+  '/admin/convocatorias': 'equipo.convocatorias',
+  '/admin/centinela': 'equipo.centinela',
+  '/admin/membresias': 'equipo.membresias',
+  '/admin/servicios-membresia': 'equipo.servicios_membresia',
+  '/admin/soporte': 'equipo.soporte',
+  '/admin/motores': 'equipo.motores',
+  '/admin/configuracion': 'equipo.configuracion',
+  '/admin/academia': 'equipo.academia',
+  '/admin/marca-blanca': 'equipo.marca_blanca',
+  '/admin': 'equipo.administracion',
+}
 
 /** Lo que solo ve el equipo de Serving. */
 const SECCIONES_EQUIPO: Seccion[] = [
@@ -197,9 +232,11 @@ export function MenuLateral({
                 return (
                   <li key={item.nombre}>
                     {disponible ? (
-                      <Link href={item.href as string} onClick={onCerrar} className={clases}>
-                        {interior}
-                      </Link>
+                      <Ayuda clave={AYUDA_POR_RUTA[item.href as string] || ''} modo="envolver">
+                        <Link href={item.href as string} onClick={onCerrar} className={clases}>
+                          {interior}
+                        </Link>
+                      </Ayuda>
                     ) : (
                       <div className={clases} title="En construcción">
                         {interior}

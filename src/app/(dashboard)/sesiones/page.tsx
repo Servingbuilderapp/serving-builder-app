@@ -4,6 +4,7 @@ import { contextoMiembro } from '@/lib/membresiasServicios'
 import { AvisoMiembros } from '@/components/panel/AvisoMiembros'
 import { ReservarSesion } from '@/components/panel/ServiciosMiembroClient'
 import { periodoMensual } from '@/lib/membresiasUso'
+import { Ayuda } from '@/components/ui/Ayuda'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -42,7 +43,7 @@ export default async function SesionesPage() {
       <header className="mb-5">
         <h1 className="flex items-center gap-2 text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">
           <CalendarClock className="h-5 w-5 text-[#C9A46B]" />
-          Sesiones grupales
+          <Ayuda clave="panel.sesiones" claro={false}>Sesiones grupales</Ayuda>
         </h1>
         <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#F3E7DC]/60">
           {ctx.esEquipo ? 'Vista de administrador.' : `Tu nivel incluye ${ctx.servicios.sesionesPorMes} ${ctx.servicios.sesionesPorMes === 1 ? 'sesión' : 'sesiones'} al mes. Este mes has reservado ${reservadasMes}.`}

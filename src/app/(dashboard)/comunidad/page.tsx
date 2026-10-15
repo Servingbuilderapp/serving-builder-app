@@ -3,6 +3,7 @@ import { Users } from 'lucide-react'
 import { contextoMiembro } from '@/lib/membresiasServicios'
 import { AvisoMiembros } from '@/components/panel/AvisoMiembros'
 import { PublicarComunidad } from '@/components/panel/ServiciosMiembroClient'
+import { Ayuda } from '@/components/ui/Ayuda'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -33,7 +34,7 @@ export default async function ComunidadPage() {
       <header className="mb-5">
         <h1 className="flex items-center gap-2 text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">
           <Users className="h-5 w-5 text-[#C9A46B]" />
-          Comunidad
+          <Ayuda clave="panel.comunidad" claro={false}>Comunidad</Ayuda>
         </h1>
         <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#F3E7DC]/60">
           El espacio de los miembros Arquitecto. Comparte preguntas, avances y aprendizajes.

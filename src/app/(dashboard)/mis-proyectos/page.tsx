@@ -6,6 +6,7 @@ import { contextoMiembro } from '@/lib/membresiasServicios'
 import { AvisoMiembros } from '@/components/panel/AvisoMiembros'
 import { NuevoProyectoMembresia } from '@/components/panel/NuevoProyectoMembresia'
 import { porcentajeProyecto, type RespuestasProyecto } from '@/lib/miProyectoPasos'
+import { Ayuda } from '@/components/ui/Ayuda'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -49,7 +50,7 @@ export default async function MisProyectosPage() {
       <header className="mb-5">
         <h1 className="flex items-center gap-2 text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">
           <FolderKanban className="h-5 w-5 text-[#C9A46B]" />
-          Mis proyectos
+          <Ayuda clave="panel.mis_proyectos" claro={false}>Mis proyectos</Ayuda>
         </h1>
         <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#F3E7DC]/60">
           {ctx.esEquipo

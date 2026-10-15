@@ -7,6 +7,13 @@ import { nivelPorSlug, NIVELES_MEMBRESIA, CUPOS_POR_NIVEL, SERVICIOS_POR_NIVEL }
 import { esEquipoServing } from '@/lib/guardiaEquipo'
 import { resumenDeUso } from '@/lib/membresiasUso'
 import { BeneficiosMes } from '@/components/panel/BeneficiosMes'
+import { Ayuda } from '@/components/ui/Ayuda'
+
+const CLAVE_AYUDA_NIVEL: Record<string, string> = {
+  explorador: 'w.escalera.membresia1.titulo',
+  constructor: 'w.escalera.membresia2.titulo',
+  arquitecto: 'w.escalera.membresia3.titulo',
+}
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -47,14 +54,14 @@ export default async function MiMembresiaPage() {
     const ETIQ_CUPO = (n: number | null) => (n === null ? 'Sin límite' : n === 0 ? 'No incluido' : `${n} al mes`)
     return (
       <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
-        <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">Mi membresía</h1>
+        <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]"><Ayuda clave="panel.mi_membresia" claro={false}>Mi membresía</Ayuda></h1>
         <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#F3E7DC]/60">
           Vista de administrador: así ve la membresía cada nivel. Tú entras a todas las pantallas sin pagar ni gastar cupo.
         </p>
         <div className="mt-5 grid gap-4 lg:grid-cols-3">
           {NIVELES_MEMBRESIA.map((n) => (
             <section key={n.slug} className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
-              <h2 className="text-[17px] font-extrabold text-[#F3E7DC]">{n.nombre}</h2>
+              <h2 className="text-[17px] font-extrabold text-[#F3E7DC]"><Ayuda clave={CLAVE_AYUDA_NIVEL[n.slug]} claro={false}>{n.nombre}</Ayuda></h2>
               <p className="mt-1 text-[13px] text-[#F3E7DC]/60">{n.resumen}</p>
               <ul className="mt-3 space-y-1 text-[13px] text-[#F3E7DC]/80">
                 {n.incluye.map((i) => <li key={i}>• {i}</li>)}
@@ -94,7 +101,7 @@ export default async function MiMembresiaPage() {
   if (!membresia || !nivel) {
     return (
       <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
-        <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">Mi membresía</h1>
+        <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]"><Ayuda clave="panel.mi_membresia" claro={false}>Mi membresía</Ayuda></h1>
         <div className={`mx-auto mt-6 max-w-xl rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-8 text-center ${SOMBRA_TARJETA}`}>
           <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-[#C9A46B]/15 text-[#C9A46B]">
             <Crown className="h-5 w-5" />
@@ -131,7 +138,7 @@ export default async function MiMembresiaPage() {
   return (
     <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
       <header className="mb-5">
-        <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">Mi membresía</h1>
+        <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]"><Ayuda clave="panel.mi_membresia" claro={false}>Mi membresía</Ayuda></h1>
         <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#F3E7DC]/60">
           Tu nivel, hasta cuándo está activo y cuánto te queda este mes de cada beneficio.
         </p>
@@ -146,7 +153,7 @@ export default async function MiMembresiaPage() {
               </span>
               <div>
                 <p className="text-[11px] font-bold uppercase tracking-widest text-[#F3E7DC]/45">Tu nivel</p>
-                <h2 className="text-[18px] font-extrabold text-[#F3E7DC]">{nivel.nombre}</h2>
+                <h2 className="text-[18px] font-extrabold text-[#F3E7DC]"><Ayuda clave={CLAVE_AYUDA_NIVEL[nivel.slug]} claro={false}>{nivel.nombre}</Ayuda></h2>
               </div>
             </div>
             <span className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-bold ${estadoClase}`}>{estadoTexto}</span>

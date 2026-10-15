@@ -3,6 +3,7 @@ import { HeartHandshake } from 'lucide-react'
 import { contextoMiembro } from '@/lib/membresiasServicios'
 import { AvisoMiembros } from '@/components/panel/AvisoMiembros'
 import { PedirAcompanamiento } from '@/components/panel/ServiciosMiembroClient'
+import { Ayuda } from '@/components/ui/Ayuda'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -41,7 +42,7 @@ export default async function AcompanamientoPage() {
       <header className="mb-5">
         <h1 className="flex items-center gap-2 text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">
           <HeartHandshake className="h-5 w-5 text-[#C9A46B]" />
-          Acompañamiento semanal
+          <Ayuda clave="panel.acompanamiento" claro={false}>Acompañamiento semanal</Ayuda>
         </h1>
         <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#F3E7DC]/60">
           Un encuentro por semana con el equipo de Serving. Cuéntanos el tema y te confirmamos la fecha.

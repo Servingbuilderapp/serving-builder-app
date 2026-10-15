@@ -30,6 +30,7 @@ import {
 } from 'lucide-react'
 import { useTranslation } from '@/hooks/useTranslation'
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
+import { Ayuda } from '@/components/ui/Ayuda'
 
 /* ============================================================================
    BLOQUE DE CONFIGURACIÓN
@@ -370,7 +371,7 @@ function TarjetaPlan({ escalon, delay, ancha = false }: { escalon: Escalon; dela
               <Icono className={`h-5 w-5 ${escalon.color}`} />
             </div>
             <div>
-              <h4 className="text-[15px] font-extrabold text-[#F3E7DC] leading-snug">{t(escalon.claveTitulo)}</h4>
+              <h4 className="text-[15px] font-extrabold text-[#F3E7DC] leading-snug"><Ayuda clave={escalon.claveTitulo} claro={false}>{t(escalon.claveTitulo)}</Ayuda></h4>
               <div className={`text-[12.5px] font-bold leading-snug ${escalon.color} mt-0.5`}>{t(escalon.clavePrecio)}</div>
             </div>
           </div>
@@ -911,7 +912,7 @@ export function LandingClient({ user }: LandingClientProps) {
             {GRUPOS_PLANES.map((grupo, g) => (
               <div key={grupo.claveTitulo}>
                 <div className="mb-5 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-1 border-b border-[#B08D57]/35 pb-3">
-                  <h3 className="text-2xl font-extrabold text-[#F3E7DC] tracking-tight">{t(grupo.claveTitulo)}</h3>
+                  <h3 className="text-2xl font-extrabold text-[#F3E7DC] tracking-tight"><Ayuda clave={grupo.claveTitulo} claro={false}>{t(grupo.claveTitulo)}</Ayuda></h3>
                   <p className="text-[13px] text-[#F3E7DC]/70 sm:text-right max-w-xl">{t(grupo.claveSub)}</p>
                 </div>
                 <div
@@ -1182,7 +1183,7 @@ export function LandingClient({ user }: LandingClientProps) {
                     </div>
 
                     <h3 className="text-[17px] font-extrabold text-[#F3E7DC] leading-snug">
-                      {t(camino.claveTitulo)}
+                      <Ayuda clave={camino.claveTitulo} claro={false}>{t(camino.claveTitulo)}</Ayuda>
                     </h3>
                     <div className="text-[12.5px] font-bold text-[#B08D57] mt-1 mb-3">
                       {t(camino.claveDescriptor)}

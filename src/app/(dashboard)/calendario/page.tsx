@@ -5,6 +5,7 @@ import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { CalendarDays } from 'lucide-react'
 import { membresiaVigente } from '@/lib/membresiasConsumo'
 import { esEquipoServing } from '@/lib/guardiaEquipo'
+import { Ayuda } from '@/components/ui/Ayuda'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -134,7 +135,7 @@ export default async function CalendarioPage() {
       <header className="mb-6">
         <h1 className="flex items-center gap-2 text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">
           <CalendarDays className="h-5 w-5 text-[#C9A46B]" />
-          Calendario de convocatorias
+          <Ayuda clave="panel.calendario" claro={false}>Calendario de convocatorias</Ayuda>
         </h1>
         <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#F3E7DC]/60">
           Los próximos 12 meses: qué cierra en cada uno, cuáles están abiertas todo el año y cuáles suelen abrir en ciertos meses.
