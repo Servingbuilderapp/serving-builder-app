@@ -656,7 +656,7 @@ export function LandingClient({ user }: LandingClientProps) {
                 href={enlace.href}
                 className="text-[13px] font-medium text-[#F3E7DC]/80 hover:text-[#B08D57] transition-colors"
               >
-                {t(enlace.clave)}
+                <Ayuda clave={enlace.clave} modo="envolver">{t(enlace.clave)}</Ayuda>
               </a>
             ))}
           </nav>
@@ -1065,7 +1065,7 @@ export function LandingClient({ user }: LandingClientProps) {
                 >
                   <Icono className="h-5 w-5 text-[#3A1420]" />
                 </div>
-                <h3 className="text-lg font-extrabold text-[#F3E7DC] mb-2">{t(claveTitulo)}</h3>
+                <h3 className="text-lg font-extrabold text-[#F3E7DC] mb-2"><Ayuda clave={claveTitulo} claro={false}>{t(claveTitulo)}</Ayuda></h3>
                 <p className="text-[14px] text-[#F3E7DC]/70 leading-relaxed">{t(claveTexto)}</p>
               </div>
               </Aparece>

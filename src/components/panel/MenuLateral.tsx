@@ -31,6 +31,7 @@ import {
   Users,
   HeartHandshake,
   Handshake,
+  Gift,
 } from 'lucide-react'
 import { Ayuda } from '@/components/ui/Ayuda'
 
@@ -110,6 +111,8 @@ const AYUDA_POR_RUTA: Record<string, string> = {
   '/admin/centinela': 'equipo.centinela',
   '/admin/membresias': 'equipo.membresias',
   '/admin/servicios-membresia': 'equipo.servicios_membresia',
+  '/admin/cortesias': 'equipo.cortesias',
+  '/cortesia': 'panel.mi_cortesia',
   '/admin/soporte': 'equipo.soporte',
   '/admin/motores': 'equipo.motores',
   '/admin/configuracion': 'equipo.configuracion',
@@ -129,6 +132,7 @@ const SECCIONES_EQUIPO: Seccion[] = [
       { nombre: 'Centinela Digital', href: '/admin/centinela', icono: Satellite },
       { nombre: 'Membresías', href: '/admin/membresias', icono: Wallet },
       { nombre: 'Servicios de membresía', href: '/admin/servicios-membresia', icono: Handshake },
+      { nombre: 'Cortesías', href: '/admin/cortesias', icono: Gift },
       { nombre: 'Soporte', href: '/admin/soporte', icono: LifeBuoy },
       { nombre: 'Motores de IA', href: '/admin/motores', icono: Cpu },
       { nombre: 'Configuración y control', href: '/admin/configuracion', icono: SlidersHorizontal },
@@ -165,6 +169,7 @@ export function MenuLateral({
   esEquipo = false,
   esSocio = false,
   esClienteMarcaBlanca = false,
+  tieneCortesia = false,
 }: {
   abiertoEnMovil: boolean
   onCerrar: () => void
@@ -174,6 +179,8 @@ export function MenuLateral({
   esSocio?: boolean
   /** true solo para un cliente final que entró por el enlace de un socio de marca blanca. */
   esClienteMarcaBlanca?: boolean
+  /** true cuando el cliente tiene una invitación de cortesía (proyecto sin costo de estructuración). */
+  tieneCortesia?: boolean
 }) {
   const ruta = usePathname()
 
@@ -183,12 +190,18 @@ export function MenuLateral({
       ? [...SECCIONES_CLIENTE, ...SECCIONES_EQUIPO]
       : SECCIONES_CLIENTE
 
-  const secciones = esClienteMarcaBlanca
+  let secciones = esClienteMarcaBlanca
     ? seccionesBase.map((seccion) => ({
         ...seccion,
         items: seccion.items.filter((item) => !NOMBRES_OCULTOS_MARCA_BLANCA.has(item.nombre)),
       }))
     : seccionesBase
+
+  if (tieneCortesia && !esSocio) {
+    secciones = secciones.map((seccion, i) =>
+      i === 0 ? { ...seccion, items: [{ nombre: 'Mi cortesía', href: '/cortesia', icono: Gift }, ...seccion.items] } : seccion,
+    )
+  }
 
   const contenido = (
     <div className="flex h-full flex-col bg-color-base-200 text-color-base-content border-r border-color-base-300/40 shadow-[2px_0_12px_-8px_rgba(0,0,0,0.5)]">

@@ -132,10 +132,10 @@ export function Ayuda({
           if (abierta) cerrar()
           else abrir()
         }}
-        className={`inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border text-[11px] font-extrabold leading-none shadow-[0_1px_2px_rgba(20,5,10,0.3)] ${
+        className={`inline-flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full border text-[13px] font-extrabold leading-none shadow-[0_1px_2px_rgba(20,5,10,0.3)] ${
           claro
             ? 'border-[#8A5A2B]/60 bg-[#F3E7DC] text-[#6B3A1F]'
-            : 'border-[#C9A46B]/70 bg-[#C9A46B]/20 text-[#E0B868]'
+            : 'border-[#E0B868] bg-[#C9A46B] text-[#3B1727]'
         }`}
       >
         ?

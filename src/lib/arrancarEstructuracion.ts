@@ -99,6 +99,29 @@ export async function arrancarEstructuracion(
       /* el plazo es informativo: no puede impedir que el proyecto arranque */
     }
 
+    // Cortesía: los días de búsqueda y postulación empiezan a contar el día en
+    // que el cliente sube su documento (una sola vez). Si la tabla no existe
+    // todavía, no pasa nada: el motor arranca igual.
+    try {
+      const { data: cortesia } = await servicio
+        .from('cortesias')
+        .select('id, dias, inicia_en')
+        .eq('proyecto_id', proyectoId)
+        .maybeSingle<{ id: string; dias: number; inicia_en: string | null }>()
+      if (cortesia && !cortesia.inicia_en) {
+        const ahora = new Date()
+        await servicio
+          .from('cortesias')
+          .update({
+            inicia_en: ahora.toISOString(),
+            vence_en: new Date(ahora.getTime() + cortesia.dias * 86400000).toISOString(),
+          })
+          .eq('id', cortesia.id)
+      }
+    } catch {
+      /* informativo */
+    }
+
     // El motor tarda minutos. Se dispara por detrás para que quien subió el
     // archivo no se quede esperando con la pantalla congelada.
     after(async () => {

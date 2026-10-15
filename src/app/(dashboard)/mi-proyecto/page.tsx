@@ -10,6 +10,7 @@ import { MensajesProyecto } from '@/components/panel/MensajesProyecto'
 import { EntregablesProyecto } from '@/components/panel/EntregablesProyecto'
 import Link from 'next/link'
 import { Inbox } from 'lucide-react'
+import { redirect } from 'next/navigation'
 import { MODALIDADES_ESTRUCTURACION } from '@/lib/estructuracionMapping'
 
 export const dynamic = 'force-dynamic'
@@ -44,6 +45,9 @@ export default async function MiProyectoPage() {
 
   const nombreProyecto = String(proyecto.nombre_iniciativa || 'Tu proyecto')
   const estado = String(proyecto.estado_actual || '').toLowerCase()
+
+  // Cortesía sin aceptar: primero se leen y aceptan las condiciones.
+  if (estado === 'cortesia_pendiente') redirect('/cortesia')
 
   // Mientras no esté confirmado el pago no hay estructuración que mostrar.
   // El pago quedó confirmado con cualquiera de estos nombres: la plataforma

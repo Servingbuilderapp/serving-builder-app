@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { esEquipoServing } from '@/lib/guardiaEquipo'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -28,7 +29,7 @@ export default async function AdminLayout({
       .eq('id', user.id)
       .single()
 
-    if (user.email !== 'servingbuilderapp@gmail.com' && userData?.role !== 'admin') {
+    if (user.email !== 'servingbuilderapp@gmail.com' && userData?.role !== 'admin' && !(await esEquipoServing())) {
       redirect('/')
     }
   }

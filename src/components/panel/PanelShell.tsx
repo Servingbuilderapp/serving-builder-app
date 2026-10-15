@@ -11,6 +11,7 @@ export function PanelShell({
   rolUsuario,
   numeroAlertas,
   esClienteMarcaBlanca = false,
+  tieneCortesia = false,
 }: {
   children: React.ReactNode
   proyecto: ProyectoResumen | null
@@ -19,6 +20,7 @@ export function PanelShell({
   numeroAlertas?: number
   /** true solo para un cliente final que entró por el enlace de un socio de marca blanca. */
   esClienteMarcaBlanca?: boolean
+  tieneCortesia?: boolean
 }) {
   const [menuMovil, setMenuMovil] = useState(false)
 
@@ -30,6 +32,7 @@ export function PanelShell({
         esEquipo={rolUsuario === 'Administrador'}
         esSocio={rolUsuario === 'Socio'}
         esClienteMarcaBlanca={esClienteMarcaBlanca}
+        tieneCortesia={tieneCortesia}
       />
 
       <div className="flex-1 flex flex-col min-w-0">

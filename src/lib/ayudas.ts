@@ -129,6 +129,114 @@ export const AYUDAS: Record<string, Ayuda> = {
   },
 
   // ───────────── WEBSITE: las tres formas de trabajar ─────────────
+  'w.nav.inicio': {
+    es: {
+      queEs: 'La portada de Arquitectura Digital.',
+      paraQuien: 'Quien llega por primera vez.',
+      queObtienes: 'Un resumen de lo que hacemos y el camino hacia la financiación de tu proyecto.',
+    },
+    en: {
+      queEs: 'The Arquitectura Digital home page.',
+      paraQuien: 'Anyone visiting for the first time.',
+      queObtienes: 'A summary of what we do and the path to funding your project.',
+    },
+  },
+  'w.nav.servicios': {
+    es: {
+      queEs: 'Nuestros planes y servicios, organizados según cuánto quieres hacer tú.',
+      paraQuien: 'Quien quiere comparar opciones antes de decidir.',
+      queObtienes: 'Diagnóstico gratuito, Academia, membresías, Mentoría, Estructuración, Réplicas y Fondo Emprender, cada uno explicado.',
+    },
+    en: {
+      queEs: 'Our plans and services, organized by how much you want to do yourself.',
+      paraQuien: 'Anyone who wants to compare options before deciding.',
+      queObtienes: 'Free diagnosis, Academy, memberships, Mentoring, Structuring, Replicas and Fondo Emprender, each explained.',
+    },
+  },
+  'w.nav.que_hacemos': {
+    es: {
+      queEs: 'El recorrido completo que acompañamos: desde la idea hasta la postulación.',
+      paraQuien: 'Quien quiere entender qué hace Serving por su proyecto.',
+      queObtienes: 'Una vista paso a paso del camino. Nuestro servicio llega hasta la postulación; la decisión final siempre es de quien convoca.',
+    },
+    en: {
+      queEs: 'The whole journey we support: from the idea to the application.',
+      paraQuien: 'Anyone who wants to understand what Serving does for their project.',
+      queObtienes: 'A step-by-step view of the path. Our service goes up to the application; the final decision always belongs to the funder.',
+    },
+  },
+  'w.nav.como_funciona': {
+    es: {
+      queEs: 'La forma de trabajar de Serving: rapidez, más oportunidades y más tiempo para postular.',
+      paraQuien: 'Quien quiere saber por qué este método funciona.',
+      queObtienes: 'Entiendes qué hace distinto el proceso y qué puedes esperar de él.',
+    },
+    en: {
+      queEs: 'How Serving works: speed, more opportunities and more time to apply.',
+      paraQuien: 'Anyone who wants to know why this method works.',
+      queObtienes: 'You understand what makes the process different and what to expect from it.',
+    },
+  },
+  'w.nav.recursos': {
+    es: {
+      queEs: 'Las preguntas frecuentes sobre el proceso, las convocatorias y los servicios.',
+      paraQuien: 'Quien tiene dudas antes de empezar.',
+      queObtienes: 'Respuestas claras a lo que más nos preguntan.',
+    },
+    en: {
+      queEs: 'Frequently asked questions about the process, funding calls and services.',
+      paraQuien: 'Anyone with doubts before starting.',
+      queObtienes: 'Clear answers to what people ask us most.',
+    },
+  },
+  'w.nav.trabaja': {
+    es: {
+      queEs: 'La sección para quienes quieren aliarse con Serving.',
+      paraQuien: 'Organizaciones con marca propia, personas que conocen proyectos y quienes prefieren vender.',
+      queObtienes: 'Las tres formas de construir con nosotros: marca blanca, referidor y comercial, cada una con sus condiciones.',
+    },
+    en: {
+      queEs: 'The section for those who want to partner with Serving.',
+      paraQuien: 'Organizations with their own brand, people who know projects and those who prefer to sell.',
+      queObtienes: 'The three ways to build with us: white label, referrer and sales agent, each with its own terms.',
+    },
+  },
+  'w.valor.rapidez.titulo': {
+    es: {
+      queEs: 'Tu proyecto queda formulado y listo para presentarse en mucho menos tiempo.',
+      paraQuien: 'Quien no quiere perder meses armando su proyecto.',
+      queObtienes: 'Un proceso estructurado, apoyado con herramientas digitales e inteligencia artificial.',
+    },
+    en: {
+      queEs: 'Your project is written up and ready to present in much less time.',
+      paraQuien: 'Anyone who does not want to lose months putting a project together.',
+      queObtienes: 'A structured process supported by digital tools and artificial intelligence.',
+    },
+  },
+  'w.valor.volumen.titulo': {
+    es: {
+      queEs: 'No dependes de una sola convocatoria: buscamos y analizamos oportunidades de forma continua.',
+      paraQuien: 'Quien no quiere apostarle todo a una sola puerta.',
+      queObtienes: 'Tu proyecto tiene varias oportunidades por dónde entrar.',
+    },
+    en: {
+      queEs: 'You do not depend on a single call: we search and analyze opportunities continuously.',
+      paraQuien: 'Anyone who does not want to bet everything on one door.',
+      queObtienes: 'Your project has several opportunities to enter through.',
+    },
+  },
+  'w.valor.personas.titulo': {
+    es: {
+      queEs: 'El acompañamiento no se agota en una sola presentación.',
+      paraQuien: 'Quien necesita tiempo real para postular con calma.',
+      queObtienes: 'Según la modalidad, entre tres y seis meses de búsqueda activa. En Fondo Emprender y en las réplicas el período es de un mes.',
+    },
+    en: {
+      queEs: 'The support does not end with a single submission.',
+      paraQuien: 'Anyone who needs real time to apply without rushing.',
+      queObtienes: 'Depending on the option, three to six months of active searching. For Fondo Emprender and replicas the period is one month.',
+    },
+  },
   'w.planes.g1.titulo': {
     es: {
       queEs: 'Tú construyes tu propio proyecto, con nuestras herramientas y nuestra formación.',
@@ -411,6 +519,30 @@ export const AYUDAS: Record<string, Ayuda> = {
   },
 
   // ───────────── PANEL DEL EQUIPO ─────────────
+  'panel.mi_cortesia': {
+    es: {
+      queEs: 'Tu invitación para estructurar tu proyecto con Serving sin pagar la estructuración.',
+      paraQuien: 'Personas invitadas por Serving o por una organización aliada.',
+      queObtienes: 'Lees y aceptas las condiciones, y ves cuántos días te quedan para que Serving busque convocatorias y postule tu proyecto. Solo se cobra una comisión si el proyecto gana.',
+    },
+    en: {
+      queEs: 'Your invitation to have Serving structure your project without paying for the structuring.',
+      paraQuien: 'People invited by Serving or by a partner organization.',
+      queObtienes: 'You read and accept the conditions and see how many days you have left for Serving to search for calls and apply with your project. A fee is charged only if the project wins.',
+    },
+  },
+  'equipo.cortesias': {
+    es: {
+      queEs: 'Las invitaciones a proyectos sin costo de estructuración, con comisión de éxito si ganan.',
+      paraQuien: 'Equipo de Serving.',
+      queObtienes: 'Invitas personas, ves quién aceptó, cuántos días les quedan y cuántas cortesías llevas por organización aliada (Coomeva, Parque Soft…).',
+    },
+    en: {
+      queEs: 'Invitations to projects with no structuring fee, with a success fee if they win.',
+      paraQuien: 'Serving team.',
+      queObtienes: 'You invite people, see who accepted, how many days they have left and how many courtesies you have per partner organization (Coomeva, Parque Soft…).',
+    },
+  },
   'equipo.proyectos': {
     es: {
       queEs: 'Todos los proyectos de clientes que Serving está estructurando.',

@@ -2,6 +2,7 @@ import React from 'react'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { PanelShell } from '@/components/panel/PanelShell'
+import { esEquipoServing } from '@/lib/guardiaEquipo'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -51,7 +52,7 @@ export default async function LayoutPanel({ children }: { children: React.ReactN
     correo.split('@')[0] ||
     'Usuario'
 
-  const esAdmin = perfil?.role === 'admin' || correo === 'servingbuilderapp@gmail.com'
+  const esAdmin = perfil?.role === 'admin' || correo === 'servingbuilderapp@gmail.com' || (await esEquipoServing())
   const esSocio = !esAdmin && perfil?.role === 'socio'
 
   // Un socio de marca blanca no tiene "proyecto activo" propio (administra
@@ -79,6 +80,7 @@ export default async function LayoutPanel({ children }: { children: React.ReactN
       nombreUsuario={nombreUsuario}
       rolUsuario={rolUsuario}
       esClienteMarcaBlanca={esClienteMarcaBlanca}
+      tieneCortesia={!esAdmin && !esSocio && proyecto?.canal_origen === 'cortesia'}
     >
       {children}
     </PanelShell>
