@@ -1,5 +1,5 @@
 import React from 'react'
-import { supabaseAdmin } from '@/lib/supabase/admin'
+import { leerSocioPortal, estadoPortal } from '@/lib/sociosGratis'
 import { FormularioIngresoSocio } from '@/components/marca-blanca/FormularioIngresoSocio'
 
 export const dynamic = 'force-dynamic'
@@ -17,22 +17,9 @@ export const dynamic = 'force-dynamic'
 export default async function PortalSocioPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
 
-  const { data: socio } = await supabaseAdmin
-    .from('socios')
-    .select('id, nombre, marca, activo, mantenimiento_pagado_hasta, logo_url, color_primario')
-    .eq('slug', slug)
-    .maybeSingle<{
-      id: string
-      nombre: string
-      marca: string | null
-      activo: boolean | null
-      mantenimiento_pagado_hasta: string | null
-      logo_url: string | null
-      color_primario: string | null
-    }>()
-
-  const hoy = new Date().toISOString().slice(0, 10)
-  const activo = !!socio && !!socio.activo && !!socio.mantenimiento_pagado_hasta && socio.mantenimiento_pagado_hasta >= hoy
+  const socio = await leerSocioPortal(slug)
+  const portal = socio ? await estadoPortal(socio) : null
+  const activo = !!portal?.abierto
 
   if (!socio || !activo) {
     return (
@@ -53,6 +40,7 @@ export default async function PortalSocioPage({ params }: { params: Promise<{ sl
       nombreSocio={socio.marca || socio.nombre}
       logoUrl={socio.logo_url}
       colorPrimario={socio.color_primario}
+      gratis={portal?.gratis === true}
     />
   )
 }

@@ -21,9 +21,10 @@ export const dynamic = 'force-dynamic'
  * la lógica interna de cómo trabaja el motor.
  */
 
-type Etapa = 'Pendiente de pago' | 'En estructuración' | 'Buscando convocatorias'
+type Etapa = 'Falta que acepte las condiciones' | 'Pendiente de pago' | 'En estructuración' | 'Buscando convocatorias'
 
 function calcularEtapa(estadoActual: string | null, listoParaEncaje: boolean | null): Etapa {
+  if (estadoActual === 'cortesia_pendiente') return 'Falta que acepte las condiciones'
   if (estadoActual !== 'pagado') return 'Pendiente de pago'
   if (listoParaEncaje) return 'Buscando convocatorias'
   return 'En estructuración'

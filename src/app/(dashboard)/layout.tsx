@@ -38,11 +38,11 @@ export default async function LayoutPanel({ children }: { children: React.ReactN
 
   const { data: proyecto } = await supabase
     .from('proyectos_clientes_serving')
-    .select('id, nombre_iniciativa, estado_actual, canal_origen')
+    .select('id, nombre_iniciativa, estado_actual, canal_origen, plan_pago')
     .eq('correo_cliente', correo)
     .order('created_at', { ascending: false })
     .limit(1)
-    .maybeSingle<{ id: string; nombre_iniciativa: string | null; estado_actual: string | null; canal_origen: string | null }>()
+    .maybeSingle<{ id: string; nombre_iniciativa: string | null; estado_actual: string | null; canal_origen: string | null; plan_pago: string | null }>()
 
   const nombrePartes = [perfil?.first_name, perfil?.last_name].filter(Boolean).join(' ').trim()
   const nombreUsuario =
@@ -80,7 +80,7 @@ export default async function LayoutPanel({ children }: { children: React.ReactN
       nombreUsuario={nombreUsuario}
       rolUsuario={rolUsuario}
       esClienteMarcaBlanca={esClienteMarcaBlanca}
-      tieneCortesia={!esAdmin && !esSocio && proyecto?.canal_origen === 'cortesia'}
+      tieneCortesia={!esAdmin && !esSocio && proyecto?.plan_pago === 'cortesia'}
     >
       {children}
     </PanelShell>

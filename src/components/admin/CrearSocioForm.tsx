@@ -17,6 +17,8 @@ export function CrearSocioForm() {
   const [contactoNombre, setContactoNombre] = useState('')
   const [contactoCorreo, setContactoCorreo] = useState('')
   const [mantenimientoMensualUsd, setMantenimientoMensualUsd] = useState('500')
+  const [modalidad, setModalidad] = useState<'uso' | 'cinco_gratis'>('uso')
+  const [cupoGratis, setCupoGratis] = useState('5')
   const [guardando, setGuardando] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [creado, setCreado] = useState<{ nombre: string; slug: string } | null>(null)
@@ -38,6 +40,8 @@ export function CrearSocioForm() {
           contactoNombre: contactoNombre || null,
           contactoCorreo: contactoCorreo || null,
           mantenimientoMensualUsd: Number(mantenimientoMensualUsd) || 500,
+          modalidad,
+          cupoGratis: Number(cupoGratis) || 5,
         }),
       })
       const data = await res.json()
@@ -108,6 +112,31 @@ export function CrearSocioForm() {
         placeholder="Correo de contacto (opcional)"
         className="w-full rounded-lg border border-color-base-content/15 px-3 py-2 text-sm"
       />
+      <div>
+        <label className="text-xs text-color-base-content/60 mb-1 block">Cómo empieza este socio</label>
+        <select
+          value={modalidad}
+          onChange={(e) => setModalidad(e.target.value as 'uso' | 'cinco_gratis')}
+          className="w-full rounded-lg border border-color-base-content/15 px-3 py-2 text-sm"
+        >
+          <option value="uso">Opción 1 — Uso (mantenimiento mensual)</option>
+          <option value="cinco_gratis">Opción 2 — Proyectos gratis (15 días, 15 % si ganan)</option>
+        </select>
+        {modalidad === 'cinco_gratis' ? (
+          <div className="mt-2">
+            <label className="text-xs text-color-base-content/60 mb-1 block">Cuántos proyectos gratis</label>
+            <input
+              type="number"
+              min={1}
+              max={50}
+              value={cupoGratis}
+              onChange={(e) => setCupoGratis(e.target.value)}
+              className="w-full rounded-lg border border-color-base-content/15 px-3 py-2 text-sm"
+            />
+            <p className="mt-1 text-[11px] text-color-base-content/50">Al terminarse, el enlace del socio pide el mantenimiento mensual (opción 1).</p>
+          </div>
+        ) : null}
+      </div>
       <div>
         <label className="text-xs text-color-base-content/60 mb-1 block">Mantenimiento mensual (USD)</label>
         <input

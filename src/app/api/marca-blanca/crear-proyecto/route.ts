@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import { leerSocioPortal, estadoPortal } from '@/lib/sociosGratis'
+import { COMISION_CORTESIA_POR_DEFECTO, DIAS_CORTESIA_POR_DEFECTO, ESTADO_PROYECTO_CORTESIA_PENDIENTE } from '@/lib/cortesias'
 
 /**
  * Crea un proyecto que entra por el enlace propio de un socio de marca
@@ -40,31 +42,31 @@ export async function POST(req: Request) {
     if (!slug || !nombreCliente || !correoCliente || !whatsapp || !nombreIniciativa) {
       return NextResponse.json({ error: 'Faltan datos obligatorios' }, { status: 400 })
     }
-    if (paquete !== 'estandar' && paquete !== 'premium') {
+    const esCortesia = paquete === 'cortesia'
+    if (!esCortesia && !['estandar', 'premium', 'plan1', 'plan2', 'plan3'].includes(paquete)) {
       return NextResponse.json({ error: 'Elige un paquete' }, { status: 400 })
     }
 
-    const { data: socio } = await supabaseAdmin
-      .from('socios')
-      .select('id, nombre, activo, mantenimiento_pagado_hasta')
-      .eq('slug', slug)
-      .maybeSingle<{ id: string; nombre: string; activo: boolean | null; mantenimiento_pagado_hasta: string | null }>()
-
+    const socio = await leerSocioPortal(slug)
     if (!socio) {
       return NextResponse.json({ error: 'Este enlace no existe' }, { status: 404 })
     }
 
-    const hoy = new Date().toISOString().slice(0, 10)
-    const mantenimientoAlDia = !!socio.mantenimiento_pagado_hasta && socio.mantenimiento_pagado_hasta >= hoy
-
-    if (!socio.activo || !mantenimientoAlDia) {
+    const portal = await estadoPortal(socio)
+    if (!portal.abierto) {
       return NextResponse.json(
         { error: 'Este portal no está activo en este momento. Contacta a quien te compartió este enlace.' },
         { status: 403 }
       )
     }
+    // Solo se puede pedir cortesía si el socio todavía tiene proyectos gratis.
+    if (esCortesia && !portal.gratis) {
+      return NextResponse.json({ error: 'Elige un paquete' }, { status: 400 })
+    }
+    // Si el socio ofrece proyectos gratis, ese es el camino mientras queden.
+    const comoCortesia = portal.gratis
 
-    const diasVentana = paquete === 'premium' ? 90 : 45
+    const diasVentana = paquete === 'premium' || paquete === 'plan3' ? 90 : 45
     const fechaLimite = new Date()
     fechaLimite.setDate(fechaLimite.getDate() + diasVentana)
 
@@ -101,11 +103,11 @@ export async function POST(req: Request) {
         correo_cliente: correoCliente,
         telefono_whatsapp: whatsapp,
         nombre_iniciativa: nombreIniciativa,
-        estado_actual: 'pagado',
+        estado_actual: comoCortesia ? ESTADO_PROYECTO_CORTESIA_PENDIENTE : 'pagado',
         estado_comercial: 'nuevo',
-        contrato_firmado: true,
-        firma_digital: { nombre: nombreCliente, aceptado: true, fecha: new Date().toISOString(), ip },
-        plan_pago: paquete === 'premium' ? 'premium_mb' : 'estandar_mb',
+        contrato_firmado: !comoCortesia,
+        firma_digital: comoCortesia ? null : { nombre: nombreCliente, aceptado: true, fecha: new Date().toISOString(), ip },
+        plan_pago: comoCortesia ? 'cortesia' : paquete === 'premium' || paquete === 'plan3' ? 'premium_mb' : 'estandar_mb',
         canal_origen: 'marca_blanca',
         socio_id: socio.id,
         fecha_limite_entrega: fechaLimite.toISOString(),
@@ -115,6 +117,22 @@ export async function POST(req: Request) {
       .single()
 
     if (error) throw error
+
+    if (comoCortesia) {
+      const { error: errCort } = await supabaseAdmin.from('cortesias').insert({
+        proyecto_id: String(data.id),
+        correo: String(correoCliente).trim().toLowerCase(),
+        nombre: nombreCliente,
+        whatsapp,
+        iniciativa: nombreIniciativa,
+        origen: socio.marca || socio.nombre,
+        socio_id: socio.id,
+        comision_pct: COMISION_CORTESIA_POR_DEFECTO,
+        dias: DIAS_CORTESIA_POR_DEFECTO,
+        estado: 'invitada',
+      })
+      if (errCort) throw errCort
+    }
 
     return NextResponse.json({
       success: true,

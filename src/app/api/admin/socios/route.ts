@@ -41,7 +41,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
     }
 
-    const { nombre, marca, contactoNombre, contactoCorreo, contactoTelefono, mantenimientoMensualUsd } = await req.json()
+    const { nombre, marca, contactoNombre, contactoCorreo, contactoTelefono, mantenimientoMensualUsd, modalidad, cupoGratis } = await req.json()
     if (!nombre || !String(nombre).trim()) {
       return NextResponse.json({ error: 'Falta el nombre del socio' }, { status: 400 })
     }
@@ -60,9 +60,10 @@ export async function POST(req: Request) {
       slug = `${slugBase}-${intento}`
     }
 
-    const { data, error } = await supabaseAdmin
-      .from('socios')
-      .insert({
+    const esGratis = modalidad === 'cinco_gratis'
+    const cupo = esGratis ? Math.min(50, Math.max(1, Number(cupoGratis) || 5)) : 0
+
+    const filaSocio = {
         nombre: String(nombre).trim(),
         marca: marca || null,
         contacto_nombre: contactoNombre || null,
@@ -70,9 +71,19 @@ export async function POST(req: Request) {
         contacto_telefono: contactoTelefono || null,
         slug,
         mantenimiento_mensual_usd: mantenimientoMensualUsd || 500,
-      })
+      }
+
+    let { data, error } = await supabaseAdmin
+      .from('socios')
+      .insert({ ...filaSocio, modalidad: esGratis ? 'cinco_gratis' : 'uso', cupo_gratis: cupo })
       .select('id, nombre, slug')
       .single()
+
+    // Si el SQL de marca blanca gratis todavía no se corrió, se crea el socio sin esos dos campos.
+    if (error && /modalidad|cupo_gratis/i.test(error.message || '')) {
+      if (esGratis) throw new Error('Falta correr en Supabase el archivo supabase_migration_marca_blanca_gratis.sql')
+      ;({ data, error } = await supabaseAdmin.from('socios').insert(filaSocio).select('id, nombre, slug').single())
+    }
 
     if (error) throw error
 

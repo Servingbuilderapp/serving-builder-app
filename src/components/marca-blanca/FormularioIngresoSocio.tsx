@@ -21,11 +21,14 @@ export function FormularioIngresoSocio({
   nombreSocio,
   logoUrl,
   colorPrimario,
+  gratis = false,
 }: {
   slug: string
   nombreSocio: string
   logoUrl?: string | null
   colorPrimario?: string | null
+  /** true cuando el socio ofrece sus proyectos gratis (cortesía: 15 días, 15 % de éxito). */
+  gratis?: boolean
 }) {
   // El color del socio pisa el color de Serving solo dentro de esta
   // pantalla, usando la misma variable que ya usan las clases
@@ -45,8 +48,8 @@ export function FormularioIngresoSocio({
   const [resultado, setResultado] = useState<{ correoCliente: string; passwordTemporal: string | null } | null>(null)
 
   const handleEnviar = async () => {
-    if (!nombreCliente.trim() || !correoCliente.trim() || !whatsapp.trim() || !nombreIniciativa.trim() || !paquete) {
-      setError('Completa todos los campos y elige un paquete')
+    if (!nombreCliente.trim() || !correoCliente.trim() || !whatsapp.trim() || !nombreIniciativa.trim() || (!gratis && !paquete)) {
+      setError(gratis ? 'Completa todos los campos' : 'Completa todos los campos y elige un paquete')
       return
     }
     if (!aceptaTerminos) {
@@ -59,7 +62,7 @@ export function FormularioIngresoSocio({
       const res = await fetch('/api/marca-blanca/crear-proyecto', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ slug, nombreCliente, correoCliente, whatsapp, nombreIniciativa, paquete }),
+        body: JSON.stringify({ slug, nombreCliente, correoCliente, whatsapp, nombreIniciativa, paquete: gratis ? 'cortesia' : paquete }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data?.error || 'No se pudo crear el proyecto')
@@ -78,7 +81,9 @@ export function FormularioIngresoSocio({
         <div className="max-w-md w-full rounded-2xl border border-[#0F172A]/10 bg-white p-8 text-center space-y-4">
           <h1 className="text-lg font-bold text-[#0F172A]">¡Listo! Tu proyecto quedó registrado</h1>
           <p className="text-sm text-[#0F172A]/70">
-            Ya puedes entrar con tu cuenta para seguir el avance y subir la información de tu idea.
+            {gratis
+              ? 'Entra con tu cuenta, lee y acepta las condiciones y sube la información de tu idea.'
+              : 'Ya puedes entrar con tu cuenta para seguir el avance y subir la información de tu idea.'}
           </p>
           <div className="rounded-xl bg-[#0F172A]/5 p-4 text-left text-sm space-y-1">
             <div>
@@ -148,6 +153,14 @@ export function FormularioIngresoSocio({
           />
         </div>
 
+        {gratis ? (
+          <div className="rounded-xl border border-color-primary/30 bg-color-primary/5 p-4 text-sm text-[#0F172A]/80 space-y-1">
+            <div className="font-bold text-[#0F172A]">Tu proyecto, sin costo de estructuración</div>
+            <p>Estructuramos tu proyecto sin cobrarte. Tienes 15 días, desde que subas tu documento, para que busquemos convocatorias y postulemos. Solo si tu proyecto gana, se cobra el 15 % del valor desembolsado.</p>
+          </div>
+        ) : null}
+
+        {!gratis ? (
         <div className="space-y-2">
           <div className="text-xs font-black uppercase tracking-wider text-[#0F172A]/50">Elige tu plan</div>
 
@@ -181,6 +194,7 @@ export function FormularioIngresoSocio({
             <div className="font-bold text-sm text-[#0F172A]">Plan 3</div>
           </button>
         </div>
+        ) : null}
 
         <label className="flex items-start gap-2 text-xs text-[#0F172A]/60">
           <input

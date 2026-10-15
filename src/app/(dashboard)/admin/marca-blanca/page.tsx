@@ -27,9 +27,10 @@ export const dynamic = 'force-dynamic'
  * para eso está /admin/proyectos.
  */
 
-type Etapa = 'Pendiente de pago' | 'En estructuración' | 'Buscando convocatorias'
+type Etapa = 'Falta que acepte las condiciones' | 'Pendiente de pago' | 'En estructuración' | 'Buscando convocatorias'
 
 function calcularEtapa(estadoActual: string | null, listoParaEncaje: boolean | null): Etapa {
+  if (estadoActual === 'cortesia_pendiente') return 'Falta que acepte las condiciones'
   if (estadoActual !== 'pagado') return 'Pendiente de pago'
   if (listoParaEncaje) return 'Buscando convocatorias'
   return 'En estructuración'
@@ -54,12 +55,39 @@ export default async function AdminMarcaBlancaPage() {
   // Los socios se leen con la llave de servicio (no con la del usuario que
   // entró) porque la tabla socios solo la puede tocar el servidor — igual
   // que el resto de tablas sensibles del proyecto.
-  const { data: socios } = await supabaseAdmin
+  type FilaSocio = {
+    id: string
+    nombre: string
+    activo: boolean | null
+    slug: string | null
+    mantenimiento_pagado_hasta: string | null
+    mantenimiento_mensual_usd: number | null
+    modalidad?: string | null
+    cupo_gratis?: number | null
+  }
+  let socios: FilaSocio[] | null = null
+  const primera = await supabaseAdmin
     .from('socios')
-    .select('id, nombre, activo, slug, mantenimiento_pagado_hasta, mantenimiento_mensual_usd')
+    .select('id, nombre, activo, slug, mantenimiento_pagado_hasta, mantenimiento_mensual_usd, modalidad, cupo_gratis')
     .order('nombre', { ascending: true })
+  socios = (primera.data as FilaSocio[] | null) || null
+  if (!socios) {
+    // Si el SQL de marca blanca gratis todavía no se corrió, se lee lo de siempre.
+    const basica = await supabaseAdmin
+      .from('socios')
+      .select('id, nombre, activo, slug, mantenimiento_pagado_hasta, mantenimiento_mensual_usd')
+      .order('nombre', { ascending: true })
+    socios = (basica.data as FilaSocio[] | null) || null
+  }
 
-  const listaSocios = socios || []
+  const listaSocios: FilaSocio[] = socios || []
+
+  // Cuántos proyectos gratis ha usado cada socio.
+  const usadosPorSocio = new Map<string, number>()
+  const { data: filasGratis } = await supabaseAdmin.from('cortesias').select('socio_id').not('socio_id', 'is', null)
+  for (const f of (filasGratis || []) as { socio_id: string }[]) {
+    usadosPorSocio.set(f.socio_id, (usadosPorSocio.get(f.socio_id) || 0) + 1)
+  }
 
   const ahora = new Date()
   const hoyTexto = ahora.toISOString().slice(0, 10)
@@ -86,6 +114,9 @@ export default async function AdminMarcaBlancaPage() {
           <div className="space-y-2">
             {listaSocios.map((s) => {
               const mantenimientoAlDia = !!s.mantenimiento_pagado_hasta && s.mantenimiento_pagado_hasta >= hoyTexto
+              const esGratis = s.modalidad === 'cinco_gratis' && (s.cupo_gratis || 0) > 0
+              const usados = usadosPorSocio.get(s.id) || 0
+              const gratisRestantes = esGratis ? Math.max(0, (s.cupo_gratis || 0) - usados) : 0
               const enlace = s.slug ? `${baseUrl}/mb/${s.slug}` : null
 
               return (
@@ -105,6 +136,13 @@ export default async function AdminMarcaBlancaPage() {
                     )}
                   </div>
 
+                  {esGratis ? (
+                    <span className="px-2 py-1 rounded-full text-xs font-bold whitespace-nowrap bg-color-primary/10 text-color-primary">
+                      Opción 2 — proyectos gratis: {usados} de {s.cupo_gratis}
+                    </span>
+                  ) : null}
+
+                  {gratisRestantes > 0 ? null : (
                   <span
                     className={`px-2 py-1 rounded-full text-xs font-bold whitespace-nowrap ${
                       mantenimientoAlDia
@@ -116,6 +154,7 @@ export default async function AdminMarcaBlancaPage() {
                       ? `Mantenimiento al día hasta ${s.mantenimiento_pagado_hasta}`
                       : 'Mantenimiento vencido — su enlace no funciona'}
                   </span>
+                  )}
 
                   <span className="text-xs text-color-base-content/50 whitespace-nowrap">
                     US${s.mantenimiento_mensual_usd || 500}/mes
