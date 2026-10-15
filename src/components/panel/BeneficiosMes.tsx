@@ -6,7 +6,7 @@ import type { LineaBeneficio } from '@/lib/membresiasUso'
 export function BeneficiosMes({ lineas }: { lineas: LineaBeneficio[] }) {
   return (
     <div className="space-y-4">
-      {lineas.map((l) => {
+      {lineas.filter((l) => l.limite !== 0).map((l) => {
         const noIncluido = l.limite === 0
         const ilimitado = l.limite === null
         const pct = ilimitado || noIncluido ? 0 : Math.min(100, Math.round((l.usados / (l.limite as number)) * 100))

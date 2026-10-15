@@ -20,6 +20,8 @@ type Ficha = {
   entidad: string | null
   fecha_cierre: string | null
   fecha_cierre_texto: string | null
+  fecha_apertura: string | null
+  abierta_todo_el_anio: boolean | null
   monto: string | null
   linea_tematica: string | null
   territorio: string | null
@@ -31,6 +33,30 @@ type Ficha = {
 function fechaCorta(f: string | null, texto: string | null) {
   if (f) return new Date(f + 'T12:00:00').toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' })
   return texto || 'Sin fecha'
+}
+
+type Estado = 'proximas_abrir' | 'todo_anio' | 'por_cerrar' | 'abiertas'
+
+const GRUPOS: { clave: Estado; titulo: string; ayuda: string }[] = [
+  { clave: 'por_cerrar', titulo: 'Próximas a cerrar', ayuda: 'Cierran en los próximos 30 días.' },
+  { clave: 'abiertas', titulo: 'Abiertas ahora', ayuda: 'Puedes postular hoy.' },
+  { clave: 'todo_anio', titulo: 'Abiertas todo el año', ayuda: 'Postulas cuando quieras.' },
+  { clave: 'proximas_abrir', titulo: 'Próximas a abrir', ayuda: 'Todavía no abren; ve preparando tu proyecto.' },
+]
+
+function estadoDe(c: Ficha, hoy: string, en30: string): Estado {
+  if (c.fecha_apertura && c.fecha_apertura > hoy) return 'proximas_abrir'
+  if (c.abierta_todo_el_anio) return 'todo_anio'
+  if (c.fecha_cierre && c.fecha_cierre <= en30) return 'por_cerrar'
+  return 'abiertas'
+}
+
+function lineaFecha(c: Ficha) {
+  if (c.fecha_apertura && c.fecha_apertura > new Date().toISOString().slice(0, 10)) {
+    return `Abre: ${fechaCorta(c.fecha_apertura, null)}`
+  }
+  if (c.abierta_todo_el_anio && !c.fecha_cierre) return 'Abierta todo el año'
+  return `Cierra: ${fechaCorta(c.fecha_cierre, c.fecha_cierre_texto)}`
 }
 
 export default async function ConvocatoriasDelMesPage() {
@@ -87,12 +113,13 @@ export default async function ConvocatoriasDelMesPage() {
   )
 
   const hoy = new Date().toISOString().slice(0, 10)
+  const en30 = new Date(new Date().getTime() + 30 * 86400000).toISOString().slice(0, 10)
   const { data: fichas } = await servicio
     .from('biblioteca_convocatorias')
-    .select('id, nombre, entidad, fecha_cierre, fecha_cierre_texto, monto, linea_tematica, territorio, requisitos, mecanismo_postulacion, fuente_oficial')
+    .select('id, nombre, entidad, fecha_cierre, fecha_cierre_texto, fecha_apertura, abierta_todo_el_anio, monto, linea_tematica, territorio, requisitos, mecanismo_postulacion, fuente_oficial')
     .or(`fecha_cierre.is.null,fecha_cierre.gte.${hoy}`)
     .order('fecha_cierre', { ascending: true, nullsFirst: false })
-    .limit(60)
+    .limit(150)
   const lista = (fichas || []) as Ficha[]
 
   return (
@@ -113,41 +140,55 @@ export default async function ConvocatoriasDelMesPage() {
       {lista.length === 0 ? (
         <p className="text-[13.5px] text-[#F3E7DC]/60">Todavía no hay convocatorias abiertas en la biblioteca.</p>
       ) : (
-        <div className="grid gap-4 lg:grid-cols-2">
-          {lista.map((c) => {
-            const abierta = esEquipo || abiertas.has(c.id)
+        <div className="space-y-8">
+          {GRUPOS.map((g) => {
+            const items = lista.filter((c) => estadoDe(c, hoy, en30) === g.clave)
+            if (items.length === 0) return null
             return (
-              <article key={c.id} className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
-                <div className="flex items-start gap-3">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#C9A46B]/15 text-[#C9A46B]">
-                    <Target className="h-4 w-4" />
-                  </span>
-                  <div className="min-w-0">
-                    <h2 className="text-[14.5px] font-extrabold text-[#F3E7DC]">{c.nombre}</h2>
-                    <p className="text-[12.5px] text-[#F3E7DC]/55">{c.entidad || 'Entidad sin dato'}</p>
-                    <p className="mt-1 text-[12.5px] font-semibold text-[#E0B868]">Cierra: {fechaCorta(c.fecha_cierre, c.fecha_cierre_texto)}</p>
-                  </div>
-                </div>
+              <section key={g.clave}>
+                <h2 className="text-[15px] font-extrabold text-[#E0B868]">
+                  {g.titulo} <span className="text-[12.5px] font-semibold text-[#F3E7DC]/45">({items.length})</span>
+                </h2>
+                <p className="mb-3 text-[12.5px] text-[#F3E7DC]/55">{g.ayuda}</p>
+                <div className="grid items-start gap-4 lg:grid-cols-2">
+                  {items.map((c) => {
+                    const abierta = esEquipo || abiertas.has(c.id)
+                    return (
+                      <article key={c.id} className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
+                        <div className="flex items-start gap-3">
+                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#C9A46B]/15 text-[#C9A46B]">
+                            <Target className="h-4 w-4" />
+                          </span>
+                          <div className="min-w-0">
+                            <h3 className="text-[14.5px] font-extrabold text-[#F3E7DC]">{c.nombre}</h3>
+                            <p className="text-[12.5px] text-[#F3E7DC]/55">{c.entidad || 'Entidad sin dato'}</p>
+                            <p className="mt-1 text-[12.5px] font-semibold text-[#E0B868]">{lineaFecha(c)}</p>
+                          </div>
+                        </div>
 
-                {abierta ? (
-                  <dl className="mt-3 space-y-1.5 text-[13px] text-[#F3E7DC]/75">
-                    {c.monto && <div><dt className="inline font-bold text-[#F3E7DC]">Monto: </dt><dd className="inline">{c.monto}</dd></div>}
-                    {c.territorio && <div><dt className="inline font-bold text-[#F3E7DC]">Territorio: </dt><dd className="inline">{c.territorio}</dd></div>}
-                    {c.linea_tematica && <div><dt className="inline font-bold text-[#F3E7DC]">Línea temática: </dt><dd className="inline">{c.linea_tematica}</dd></div>}
-                    {c.requisitos && <div><dt className="inline font-bold text-[#F3E7DC]">Requisitos: </dt><dd className="inline">{c.requisitos}</dd></div>}
-                    {c.mecanismo_postulacion && <div><dt className="inline font-bold text-[#F3E7DC]">Cómo se postula: </dt><dd className="inline">{c.mecanismo_postulacion}</dd></div>}
-                    {c.fuente_oficial && (
-                      <div>
-                        <a href={c.fuente_oficial} target="_blank" rel="noopener noreferrer" className="font-bold text-[#C9A46B] underline">
-                          Ver la convocatoria oficial
-                        </a>
-                      </div>
-                    )}
-                  </dl>
-                ) : (
-                  limite !== 0 && <AbrirConvocatoriaMes convocatoriaId={c.id} sinCupo={sinCupo} />
-                )}
-              </article>
+                        {abierta ? (
+                          <dl className="mt-3 space-y-1.5 text-[13px] text-[#F3E7DC]/75">
+                            {c.monto && <div><dt className="inline font-bold text-[#F3E7DC]">Monto: </dt><dd className="inline">{c.monto}</dd></div>}
+                            {c.territorio && <div><dt className="inline font-bold text-[#F3E7DC]">Territorio: </dt><dd className="inline">{c.territorio}</dd></div>}
+                            {c.linea_tematica && <div><dt className="inline font-bold text-[#F3E7DC]">Línea temática: </dt><dd className="inline">{c.linea_tematica}</dd></div>}
+                            {c.requisitos && <div><dt className="inline font-bold text-[#F3E7DC]">Requisitos: </dt><dd className="inline">{c.requisitos}</dd></div>}
+                            {c.mecanismo_postulacion && <div><dt className="inline font-bold text-[#F3E7DC]">Cómo se postula: </dt><dd className="inline">{c.mecanismo_postulacion}</dd></div>}
+                            {c.fuente_oficial && (
+                              <div>
+                                <a href={c.fuente_oficial} target="_blank" rel="noopener noreferrer" className="font-bold text-[#C9A46B] underline">
+                                  Ver la convocatoria oficial
+                                </a>
+                              </div>
+                            )}
+                          </dl>
+                        ) : (
+                          limite !== 0 && <AbrirConvocatoriaMes convocatoriaId={c.id} sinCupo={sinCupo} />
+                        )}
+                      </article>
+                    )
+                  })}
+                </div>
+              </section>
             )
           })}
         </div>
