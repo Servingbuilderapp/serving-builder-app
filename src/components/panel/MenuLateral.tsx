@@ -26,6 +26,11 @@ import {
   Cpu,
   SlidersHorizontal,
   CalendarDays,
+  Search,
+  CalendarClock,
+  Users,
+  HeartHandshake,
+  Handshake,
 } from 'lucide-react'
 
 type Item = {
@@ -69,7 +74,11 @@ const SECCIONES_CLIENTE: Seccion[] = [
       { nombre: 'Mi membresía', href: '/mi-membresia', icono: Crown },
       { nombre: 'Convocatorias del mes', href: '/convocatorias-del-mes', icono: Radar },
       { nombre: 'Calendario', href: '/calendario', icono: CalendarDays },
-      { nombre: 'Nota de concepto', href: '/nota-de-concepto', icono: ClipboardList },
+      { nombre: 'Buscador de fondos', href: '/buscar-fondos', icono: Search },
+      { nombre: 'Mi proyecto mínimo viable', href: '/proyecto-minimo', icono: ClipboardList },
+      { nombre: 'Sesiones grupales', href: '/sesiones', icono: CalendarClock },
+      { nombre: 'Comunidad', href: '/comunidad', icono: Users },
+      { nombre: 'Acompañamiento', href: '/acompanamiento', icono: HeartHandshake },
     ],
   },
 ]
@@ -84,6 +93,7 @@ const SECCIONES_EQUIPO: Seccion[] = [
       { nombre: 'Convocatorias', href: '/admin/convocatorias', icono: Radar },
       { nombre: 'Centinela Digital', href: '/admin/centinela', icono: Satellite },
       { nombre: 'Membresías', href: '/admin/membresias', icono: Wallet },
+      { nombre: 'Servicios de membresía', href: '/admin/servicios-membresia', icono: Handshake },
       { nombre: 'Soporte', href: '/admin/soporte', icono: LifeBuoy },
       { nombre: 'Motores de IA', href: '/admin/motores', icono: Cpu },
       { nombre: 'Configuración y control', href: '/admin/configuracion', icono: SlidersHorizontal },

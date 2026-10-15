@@ -22,6 +22,8 @@ type Ficha = {
   fecha_cierre_texto: string | null
   fecha_apertura: string | null
   abierta_todo_el_anio: boolean | null
+  estado_convocatoria: string | null
+  tipo: string | null
   monto: string | null
   linea_tematica: string | null
   territorio: string | null
@@ -46,7 +48,7 @@ const GRUPOS: { clave: Estado; titulo: string; ayuda: string }[] = [
 
 function estadoDe(c: Ficha, hoy: string, en30: string): Estado {
   if (c.fecha_apertura && c.fecha_apertura > hoy) return 'proximas_abrir'
-  if (c.abierta_todo_el_anio) return 'todo_anio'
+  if (c.abierta_todo_el_anio || /todo el a/i.test(c.estado_convocatoria || '') || c.tipo === 'permanente') return 'todo_anio'
   if (c.fecha_cierre && c.fecha_cierre <= en30) return 'por_cerrar'
   return 'abiertas'
 }
@@ -55,7 +57,7 @@ function lineaFecha(c: Ficha) {
   if (c.fecha_apertura && c.fecha_apertura > new Date().toISOString().slice(0, 10)) {
     return `Abre: ${fechaCorta(c.fecha_apertura, null)}`
   }
-  if (c.abierta_todo_el_anio && !c.fecha_cierre) return 'Abierta todo el año'
+  if (!c.fecha_cierre && (c.abierta_todo_el_anio || /todo el a/i.test(c.estado_convocatoria || '') || c.tipo === 'permanente')) return 'Abierta todo el año'
   return `Cierra: ${fechaCorta(c.fecha_cierre, c.fecha_cierre_texto)}`
 }
 
@@ -116,7 +118,7 @@ export default async function ConvocatoriasDelMesPage() {
   const en30 = new Date(new Date().getTime() + 30 * 86400000).toISOString().slice(0, 10)
   const { data: fichas } = await servicio
     .from('biblioteca_convocatorias')
-    .select('id, nombre, entidad, fecha_cierre, fecha_cierre_texto, fecha_apertura, abierta_todo_el_anio, monto, linea_tematica, territorio, requisitos, mecanismo_postulacion, fuente_oficial')
+    .select('id, nombre, entidad, fecha_cierre, fecha_cierre_texto, fecha_apertura, abierta_todo_el_anio, estado_convocatoria, tipo, monto, linea_tematica, territorio, requisitos, mecanismo_postulacion, fuente_oficial')
     .or(`fecha_cierre.is.null,fecha_cierre.gte.${hoy}`)
     .order('fecha_cierre', { ascending: true, nullsFirst: false })
     .limit(150)

@@ -92,7 +92,7 @@ export default async function CalendarioPage() {
     servicio
       .from('biblioteca_convocatorias')
       .select(columnas)
-      .eq('abierta_todo_el_anio', true)
+      .or('abierta_todo_el_anio.eq.true,estado_convocatoria.ilike.%todo el a%,tipo.eq.permanente')
       .order('nombre', { ascending: true })
       .limit(200),
     servicio

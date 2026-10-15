@@ -115,3 +115,16 @@ export const CUPOS_POR_NIVEL: Record<NivelMembresia['slug'], Record<ClaveBenefic
   constructor: { nota_concepto: 0, tdr: 0, proyecto_minimo: 2, convocatorias: null },
   arquitecto: { nota_concepto: 0, tdr: 0, proyecto_minimo: 3, convocatorias: null },
 }
+
+/**
+ * SERVICIOS DE ACOMPAÑAMIENTO — lo que cada nivel puede usar además de los cupos.
+ * sesionesPorMes: cuántas sesiones grupales puede reservar al mes (0 = no incluido).
+ */
+export const SERVICIOS_POR_NIVEL: Record<
+  NivelMembresia['slug'],
+  { sesionesPorMes: number; comunidad: boolean; acompanamientoSemanal: boolean }
+> = {
+  explorador: { sesionesPorMes: 0, comunidad: false, acompanamientoSemanal: false },
+  constructor: { sesionesPorMes: 1, comunidad: false, acompanamientoSemanal: false },
+  arquitecto: { sesionesPorMes: 2, comunidad: true, acompanamientoSemanal: true },
+}
