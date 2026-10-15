@@ -18,9 +18,9 @@ export default async function ServiciosMembresiaPage() {
 
   const ids = (posts || []).map((p: { proyecto_id: string }) => p.proyecto_id)
   const { data: proys } = ids.length
-    ? await s.from('membresias_proyectos_minimos').select('id, nombre_proyecto').in('id', ids)
-    : { data: [] as { id: string; nombre_proyecto: string }[] }
-  const nombres = new Map((proys || []).map((p: { id: string; nombre_proyecto: string }) => [p.id, p.nombre_proyecto]))
+    ? await s.from('membresias_proyectos').select('id, nombre').in('id', ids)
+    : { data: [] as { id: string; nombre: string }[] }
+  const nombres = new Map((proys || []).map((p: { id: string; nombre: string }) => [p.id, p.nombre]))
   const conteo = new Map<string, number>()
   for (const i of ins || []) conteo.set(i.sesion_id, (conteo.get(i.sesion_id) || 0) + 1)
 
@@ -35,6 +35,7 @@ export default async function ServiciosMembresiaPage() {
       <ServiciosMembresiaClient
         postulaciones={(posts || []).map((p: { id: string; correo_cliente: string; proyecto_id: string; convocatoria_texto: string | null; comentario: string | null; estado: string; nota_equipo: string | null; created_at: string }) => ({
           id: p.id,
+          proyectoId: p.proyecto_id,
           correo: p.correo_cliente,
           proyecto: nombres.get(p.proyecto_id) || 'Proyecto',
           convocatoria: p.convocatoria_texto || '',

@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-export type PostulacionAdmin = { id: string; correo: string; proyecto: string; convocatoria: string; comentario: string | null; estado: string; nota_equipo: string | null; fecha: string }
+export type PostulacionAdmin = { id: string; proyectoId: string; correo: string; proyecto: string; convocatoria: string; comentario: string | null; estado: string; nota_equipo: string | null; fecha: string }
 export type SesionAdmin = { id: string; titulo: string; fecha_hora: string; inscritos: number }
 export type AcompAdmin = { id: string; correo: string; tema: string; estado: string; fecha_hora: string | null; enlace: string | null; nota_equipo: string | null }
 export type MensajeAdmin = { id: string; nombre: string; texto: string }
@@ -48,6 +48,7 @@ function FilaPostulacion({ p }: { p: PostulacionAdmin }) {
     <div className={TARJETA}>
       <p className="text-[13.5px] font-extrabold text-[#F3E7DC]">{p.proyecto}</p>
       <p className="text-[12.5px] text-[#F3E7DC]/60">{p.correo} · {p.fecha}</p>
+      <a href={`/admin/servicios-membresia/proyecto/${p.proyectoId}`} className="text-[12.5px] font-bold text-[#C9A46B] underline">Ver el proyecto completo</a>
       <p className="mt-1 text-[13px] text-[#E0B868]">Quiere postular a: {p.convocatoria || 'sin dato'}</p>
       {p.comentario && <p className="text-[12.5px] text-[#F3E7DC]/70">Comentario: {p.comentario}</p>}
       <div className="mt-2 grid gap-2 sm:grid-cols-3">

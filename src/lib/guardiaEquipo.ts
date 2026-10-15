@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 
-const CORREO_ADMIN = 'servingbuilderapp@gmail.com'
+// Correos que entran como equipo de Serving (la base de datos todavía no tiene la columna users.role).
+const CORREOS_ADMIN = ['servingbuilderapp@gmail.com', 'iagif1964@gmail.com']
 
 /**
  * Candado para las rutas de los motores.
@@ -18,7 +19,7 @@ export async function esEquipoServing(): Promise<boolean> {
     } = await supabase.auth.getUser()
 
     if (!user) return false
-    if ((user.email || '').toLowerCase().trim() === CORREO_ADMIN) return true
+    if (CORREOS_ADMIN.includes((user.email || '').toLowerCase().trim())) return true
 
     const { data: perfil } = await supabase
       .from('users')

@@ -3,7 +3,8 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { Crown } from 'lucide-react'
-import { nivelPorSlug } from '@/lib/membresias'
+import { nivelPorSlug, NIVELES_MEMBRESIA, CUPOS_POR_NIVEL, SERVICIOS_POR_NIVEL } from '@/lib/membresias'
+import { esEquipoServing } from '@/lib/guardiaEquipo'
 import { resumenDeUso } from '@/lib/membresiasUso'
 import { BeneficiosMes } from '@/components/panel/BeneficiosMes'
 
@@ -40,6 +41,55 @@ export default async function MiMembresiaPage() {
 
   const membresia = (filas || []).find((m) => m.estado === 'activa') || (filas || [])[0]
   const nivel = membresia ? nivelPorSlug(membresia.nivel) : undefined
+
+  // El equipo de Serving entra a ver cómo está la membresía por dentro, sin pagar.
+  if ((!membresia || !nivel) && (await esEquipoServing())) {
+    const ETIQ_CUPO = (n: number | null) => (n === null ? 'Sin límite' : n === 0 ? 'No incluido' : `${n} al mes`)
+    return (
+      <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
+        <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">Mi membresía</h1>
+        <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#F3E7DC]/60">
+          Vista de administrador: así ve la membresía cada nivel. Tú entras a todas las pantallas sin pagar ni gastar cupo.
+        </p>
+        <div className="mt-5 grid gap-4 lg:grid-cols-3">
+          {NIVELES_MEMBRESIA.map((n) => (
+            <section key={n.slug} className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
+              <h2 className="text-[17px] font-extrabold text-[#F3E7DC]">{n.nombre}</h2>
+              <p className="mt-1 text-[13px] text-[#F3E7DC]/60">{n.resumen}</p>
+              <ul className="mt-3 space-y-1 text-[13px] text-[#F3E7DC]/80">
+                {n.incluye.map((i) => <li key={i}>• {i}</li>)}
+              </ul>
+              <p className="mt-3 text-[12px] font-bold uppercase tracking-widest text-[#F3E7DC]/45">Cupos</p>
+              <ul className="mt-1 space-y-1 text-[13px] text-[#F3E7DC]/80">
+                <li>Proyectos al mes: {ETIQ_CUPO(CUPOS_POR_NIVEL[n.slug].proyecto_minimo)}</li>
+                <li>Convocatorias del mes: {ETIQ_CUPO(CUPOS_POR_NIVEL[n.slug].convocatorias)}</li>
+                <li>Sesiones grupales: {SERVICIOS_POR_NIVEL[n.slug].sesionesPorMes === 0 ? 'No incluido' : `${SERVICIOS_POR_NIVEL[n.slug].sesionesPorMes} al mes`}</li>
+                <li>Comunidad: {SERVICIOS_POR_NIVEL[n.slug].comunidad ? 'Incluida' : 'No incluida'}</li>
+                <li>Acompañamiento semanal: {SERVICIOS_POR_NIVEL[n.slug].acompanamientoSemanal ? 'Incluido' : 'No incluido'}</li>
+              </ul>
+            </section>
+          ))}
+        </div>
+        <section className={`mt-5 rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
+          <h2 className="text-[15px] font-extrabold text-[#F3E7DC]">Entrar a cada pantalla</h2>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {[
+              ['Buscador de fondos', '/buscar-fondos'],
+              ['Convocatorias del mes', '/convocatorias-del-mes'],
+              ['Calendario', '/calendario'],
+              ['Mis proyectos', '/mis-proyectos'],
+              ['Sesiones grupales', '/sesiones'],
+              ['Comunidad', '/comunidad'],
+              ['Acompañamiento', '/acompanamiento'],
+              ['App de Ideas', '/ideas'],
+            ].map(([texto, href]) => (
+              <Link key={href} href={href} className="rounded-xl bg-[#C9A46B] px-3 py-2 text-[13px] font-bold text-[#3B1727]">{texto}</Link>
+            ))}
+          </div>
+        </section>
+      </div>
+    )
+  }
 
   if (!membresia || !nivel) {
     return (

@@ -75,7 +75,7 @@ const SECCIONES_CLIENTE: Seccion[] = [
       { nombre: 'Convocatorias del mes', href: '/convocatorias-del-mes', icono: Radar },
       { nombre: 'Calendario', href: '/calendario', icono: CalendarDays },
       { nombre: 'Buscador de fondos', href: '/buscar-fondos', icono: Search },
-      { nombre: 'Mi proyecto mínimo viable', href: '/proyecto-minimo', icono: ClipboardList },
+      { nombre: 'Mis proyectos', href: '/mis-proyectos', icono: ClipboardList },
       { nombre: 'Sesiones grupales', href: '/sesiones', icono: CalendarClock },
       { nombre: 'Comunidad', href: '/comunidad', icono: Users },
       { nombre: 'Acompañamiento', href: '/acompanamiento', icono: HeartHandshake },

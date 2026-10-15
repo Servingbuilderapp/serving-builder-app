@@ -40,7 +40,7 @@ export const NIVELES_MEMBRESIA: NivelMembresia[] = [
       'Motores de búsqueda',
       'Calendario inteligente',
       'Centinela Digital',
-      'Hago 1 proyecto mínimo viable al mes',
+      'Estructuro 1 proyecto al mes',
       'Postulan por mí el proyecto',
       'Si ganas, el 10 % es para Serving',
     ],
@@ -53,7 +53,7 @@ export const NIVELES_MEMBRESIA: NivelMembresia[] = [
     resumen: 'Para avanzar con dos proyectos y apoyo en grupo.',
     incluye: [
       'Todo lo del Explorador',
-      'Hago 2 proyectos mínimos viables al mes',
+      'Estructuro 2 proyectos al mes',
       'Postulan por mí los 2 proyectos',
       '1 sesión grupal al mes',
       'Si ganas, el 10 % es para Serving',
@@ -67,7 +67,7 @@ export const NIVELES_MEMBRESIA: NivelMembresia[] = [
     resumen: 'Para llevar tres proyectos con acompañamiento cercano.',
     incluye: [
       'Todo lo del Constructor',
-      'Hago 3 proyectos mínimos viables al mes',
+      'Estructuro 3 proyectos al mes',
       'Postulan por mí los 3 proyectos',
       '2 sesiones grupales al mes',
       'Comunidad',
@@ -104,7 +104,7 @@ export type ClaveBeneficio = 'nota_concepto' | 'tdr' | 'proyecto_minimo' | 'conv
 export const ETIQUETA_BENEFICIO: Record<ClaveBeneficio, string> = {
   nota_concepto: 'Notas de concepto',
   tdr: 'TDR con sugerencias',
-  proyecto_minimo: 'Proyectos mínimos viables',
+  proyecto_minimo: 'Proyectos al mes',
   convocatorias: 'Convocatorias del mes',
 }
 

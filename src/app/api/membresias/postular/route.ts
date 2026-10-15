@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { contextoMiembro } from '@/lib/membresiasServicios'
 
-/** El miembro le pide a Serving que postule uno de sus proyectos mínimos viables. */
+/** El miembro le pide a Serving que postule uno de sus proyectos terminados. */
 export async function POST(req: Request) {
   try {
     const ctx = await contextoMiembro()
@@ -21,12 +21,15 @@ export async function POST(req: Request) {
     }
 
     const { data: proyecto } = await ctx.servicio
-      .from('membresias_proyectos_minimos')
-      .select('id')
+      .from('membresias_proyectos')
+      .select('id, estado')
       .eq('id', proyectoId)
       .ilike('correo_cliente', ctx.correo)
-      .maybeSingle()
+      .maybeSingle<{ id: string; estado: string }>()
     if (!proyecto) return NextResponse.json({ error: 'No encontramos ese proyecto.' }, { status: 404 })
+    if (proyecto.estado !== 'terminado') {
+      return NextResponse.json({ error: 'Primero termina tu proyecto: todos los pasos deben estar completos.' }, { status: 400 })
+    }
 
     let textoConvocatoria = convocatoriaTexto
     if (convocatoriaId && !textoConvocatoria) {
