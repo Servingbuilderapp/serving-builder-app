@@ -439,7 +439,7 @@ export function EmpezarClient({ user }: EmpezarClientProps) {
             Serving Proyectos Estratégicos S.A.S.
           </p>
           <p className="text-[12.5px] text-[#5B6B84]">
-            servingproyectosgi@gmail.com · 312 333 5966
+            contacto@portalarquitecturadigital.com · 312 333 5966
           </p>
           <div className="mt-2 flex gap-4 text-[12px] text-[#5B6B84]">
             <Link href="/" className="hover:text-[#4F46E5]">
