@@ -67,7 +67,7 @@ const CIFRAS_CONTEXTO = [
 
 const TELEFONO = '312 333 5966'
 const TELEFONO_WHATSAPP = '573123335966'
-const CORREO = 'servingproyectosgi@gmail.com'
+const CORREO = 'contacto@portalarquitecturadigital.com'
 
 /* ========================================================================== */
 
