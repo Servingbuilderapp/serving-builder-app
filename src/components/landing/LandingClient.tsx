@@ -823,6 +823,73 @@ export function LandingClient({ user }: LandingClientProps) {
         </div>
       </section>
 
+      {/* ================= NUESTRA VENTAJA: rapidez, tiempo y volumen ================= */}
+      <section id="ventaja" className="bg-[#8C3654] py-16 lg:py-20 border-y-2 border-[#B08D57]/45">
+        <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
+          <TituloSeccion
+            eyebrow={t('w.ventaja.eyebrow')}
+            titulo={t('w.ventaja.titulo')}
+            subtitulo={t('w.ventaja.subtitulo')}
+          />
+          <div className="grid gap-5 md:grid-cols-3">
+            {[
+              { icono: Rocket, clave: 'rapidez' },
+              { icono: Clock, clave: 'tiempo' },
+              { icono: Layers, clave: 'volumen' },
+            ].map(({ icono: Icono, clave }, i) => (
+              <Aparece key={clave} delay={i * 90}>
+                <div className={`h-full rounded-2xl border border-[#B08D57]/45 bg-gradient-to-b from-[#4C2032] to-[#3B1727] p-7 ${RELIEVE_TARJETA}`}>
+                  <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-[#C9A46B] to-[#B08D57] flex items-center justify-center mb-4">
+                    <Icono className="h-6 w-6 text-[#3A1420]" />
+                  </div>
+                  <h3 className="text-xl font-extrabold text-[#F3E7DC]">
+                    {t(`w.ventaja.${clave}.titulo`)}
+                  </h3>
+                  <p className="mt-2 text-[14px] text-[#F3E7DC]/75 leading-relaxed">
+                    {t(`w.ventaja.${clave}.texto`)}
+                  </p>
+                </div>
+              </Aparece>
+            ))}
+          </div>
+
+          <div className="mt-16">
+            <TituloSeccion
+              eyebrow={t('w.ventaja.mas.eyebrow')}
+              titulo={t('w.ventaja.mas.titulo')}
+            />
+          </div>
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { icono: Search, clave: 'centinela' },
+              { icono: Target, clave: 'encaje' },
+              { icono: Crown, clave: 'membresia' },
+              { icono: FileText, clave: 'listo' },
+            ].map(({ icono: Icono, clave }, i) => (
+              <Aparece key={clave} delay={i * 90}>
+                <div className={`h-full rounded-2xl border border-[#B08D57]/45 bg-gradient-to-b from-[#4C2032] to-[#3B1727] p-6 ${RELIEVE_TARJETA}`}>
+                  <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-[#C9A46B] to-[#B08D57] flex items-center justify-center mb-4">
+                    <Icono className="h-5 w-5 text-[#3A1420]" />
+                  </div>
+                  <h3 className="text-lg font-extrabold text-[#F3E7DC]">
+                    {t(`w.ventaja.${clave}.titulo`)}
+                  </h3>
+                  <p className="mt-2 text-[14px] text-[#F3E7DC]/75 leading-relaxed">
+                    {t(`w.ventaja.${clave}.texto`)}
+                  </p>
+                </div>
+              </Aparece>
+            ))}
+          </div>
+
+          <Aparece className="mt-12">
+            <p className="text-center text-xl md:text-2xl font-extrabold text-[#F3E7DC] max-w-3xl mx-auto leading-snug">
+              {t('w.ventaja.cierre')}
+            </p>
+          </Aparece>
+        </div>
+      </section>
+
       {/* ================= DIAGNÓSTICO GRATUITO ================= */}
       <section className="py-16 lg:py-20">
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
