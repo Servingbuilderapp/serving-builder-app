@@ -48,6 +48,8 @@ const SOMBRA =
   'shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]'
 
 const ESTADOS: Record<string, string> = {
+  pendiente_aval: 'En revisión',
+  aval_rechazado: 'Solicitud no aprobada',
   pendiente_pago: 'Pendiente de pago',
   pagado: 'Listo para iniciar',
   estructurando_ia: 'En estructuración',

@@ -14,6 +14,8 @@ export type ProyectoResumen = {
 }
 
 const ETIQUETAS_ESTADO: Record<string, { texto: string; clases: string }> = {
+  pendiente_aval: { texto: 'En revisión', clases: 'bg-[rgba(201,154,61,0.16)] text-[#E0B868] border-[rgba(201,154,61,0.35)]' },
+  aval_rechazado: { texto: 'Solicitud no aprobada', clases: 'bg-[rgba(201,154,61,0.16)] text-[#E0B868] border-[rgba(201,154,61,0.35)]' },
   pendiente_pago: { texto: 'Pendiente de pago', clases: 'bg-[rgba(201,154,61,0.16)] text-[#E0B868] border-[rgba(201,154,61,0.35)]' },
   pagado: { texto: 'Listo para iniciar', clases: 'bg-[rgba(176,141,87,0.16)] text-[#E0C79A] border-[rgba(176,141,87,0.35)]' },
   estructurando_ia: { texto: 'En estructuración', clases: 'bg-[rgba(122,139,111,0.18)] text-[#A9C29A] border-[rgba(122,139,111,0.35)]' },

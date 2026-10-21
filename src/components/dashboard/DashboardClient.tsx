@@ -3,6 +3,7 @@
 import React from 'react'
 import { SaludoCliente } from '@/components/dashboard/SaludoCliente'
 import { useTranslation } from '@/hooks/useTranslation'
+import { PLAN_EMPRENDEDOR, LINK_BOLD_EMPRENDEDOR } from '@/lib/planEmprendedor'
 
 interface DashboardClientProps {
   proyecto: any
@@ -35,7 +36,45 @@ export function DashboardClient({ proyecto, nombreMostrar, subirDocumento, otros
         </div>
       )}
 
-      {proyecto && proyecto.estado_actual === 'pendiente_pago' && (
+      {proyecto && proyecto.estado_actual === 'pendiente_aval' && (
+        <div className="p-8 rounded-3xl border border-amber-300 bg-amber-50 text-center space-y-3">
+          <h3 className="text-lg font-black text-amber-800">Tu solicitud está en revisión</h3>
+          <p className="text-amber-700 text-sm max-w-md mx-auto">
+            Serving está revisando que el plan Estructuración Emprendedor sea el adecuado para <strong>{proyecto.nombre_iniciativa}</strong>.
+            Cuando te aprueben, aquí aparece el botón de pago. No tienes que pagar nada todavía.
+          </p>
+        </div>
+      )}
+
+      {proyecto && proyecto.estado_actual === 'aval_rechazado' && (
+        <div className="p-8 rounded-3xl border border-amber-300 bg-amber-50 text-center space-y-3">
+          <h3 className="text-lg font-black text-amber-800">Tu solicitud no fue aprobada para este plan</h3>
+          <p className="text-amber-700 text-sm max-w-md mx-auto">
+            Este plan es solo para quien no tiene recursos para estructurar su proyecto. Escríbenos por WhatsApp y te
+            contamos qué otra modalidad te corresponde.
+          </p>
+        </div>
+      )}
+
+      {proyecto && proyecto.estado_actual === 'pendiente_pago' && proyecto.plan_pago === PLAN_EMPRENDEDOR && (
+        <div className="p-8 rounded-3xl border border-emerald-300 bg-emerald-50 text-center space-y-3">
+          <h3 className="text-lg font-black text-emerald-800">Tu solicitud fue aprobada</h3>
+          <p className="text-emerald-700 text-sm max-w-md mx-auto">
+            Ya puedes pagar tu plan Estructuración Emprendedor de <strong>{proyecto.nombre_iniciativa}</strong>.
+            Valor: $5.000.000 + IVA ($5.950.000 en total).
+          </p>
+          <a
+            href={LINK_BOLD_EMPRENDEDOR}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block px-6 py-3 rounded-xl bg-emerald-700 text-white text-sm font-bold shadow-md hover:opacity-90"
+          >
+            Pagar con Bold
+          </a>
+        </div>
+      )}
+
+      {proyecto && proyecto.estado_actual === 'pendiente_pago' && proyecto.plan_pago !== PLAN_EMPRENDEDOR && (
         <div className="p-8 rounded-3xl border border-amber-300 bg-amber-50 text-center space-y-3">
           <h3 className="text-lg font-black text-amber-800">{t('dashboard.pendiente_pago_titulo')}</h3>
           <p className="text-amber-700 text-sm max-w-md mx-auto">

@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { esEquipoServing } from '@/lib/guardiaEquipo'
 import { Eye, Search } from 'lucide-react'
 import { MarcarPagadoButton } from '@/components/admin/MarcarPagadoButton'
+import { AvalEmprendedorButtons } from '@/components/admin/AvalEmprendedorButtons'
 import { MarcarCanalButton } from '@/components/admin/MarcarCanalButton'
 
 export const dynamic = 'force-dynamic'
@@ -175,7 +176,10 @@ export default async function AdminProyectosPage() {
                           </button>
                         </Link>
                         <div className="flex flex-wrap justify-end gap-1.5">
-                          {p.estado_actual !== 'pagado' && (
+                          {p.estado_actual === 'pendiente_aval' && (
+                            <AvalEmprendedorButtons proyectoId={p.id} />
+                          )}
+                          {p.estado_actual !== 'pagado' && p.estado_actual !== 'pendiente_aval' && p.estado_actual !== 'aval_rechazado' && (
                             <MarcarPagadoButton proyectoId={p.id} />
                           )}
                           <MarcarCanalButton

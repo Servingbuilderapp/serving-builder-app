@@ -19,6 +19,15 @@ import { useTranslation } from '@/hooks/useTranslation'
 import { BotonPagoBold } from '@/components/pagos/BotonPagoBold'
 import { AcompanamientoPostGane } from '@/components/estructuracion/AcompanamientoPostGane'
 
+import {
+  PLAN_EMPRENDEDOR,
+  NOMBRE_PLAN_EMPRENDEDOR,
+  MONTO_EMPRENDEDOR_COP,
+  COMISION_EMPRENDEDOR_PCT,
+  INCLUYE_EMPRENDEDOR,
+  DECLARACION_EMPRENDEDOR,
+} from '@/lib/planEmprendedor'
+
 const TASA_COP_POR_USD = 3244 // Actualizar periódicamente según la TRM del día
 
 /**
@@ -53,6 +62,12 @@ const PLANES: Record<
       '6 meses adicionales de cortesía si no se gana nada',
       'Atención prioritaria',
     ],
+  },
+  [PLAN_EMPRENDEDOR]: {
+    nombre: NOMBRE_PLAN_EMPRENDEDOR,
+    montoCop: MONTO_EMPRENDEDOR_COP,
+    resumen: 'Para emprendedores y MiPymes que no tienen los recursos para estructurar su proyecto.',
+    incluye: INCLUYE_EMPRENDEDOR,
   },
 }
 
@@ -267,6 +282,7 @@ function ContratarContent() {
   const montoFondoEmprender = Number(searchParams.get('monto')) || 30000000
   const esFondoEmprender = planSlug === 'fondo_emprender'
   const debeElegirPlan = !planSlug
+  const esEmprendedor = planSlug === PLAN_EMPRENDEDOR
 
   const plan = esFondoEmprender
     ? {
@@ -300,6 +316,7 @@ function ContratarContent() {
     correoCliente: '',
     whatsapp: '',
     aceptaTerminos: false,
+    declaracionBajosRecursos: false,
   })
 
   const handleFirmar = async (e: React.FormEvent) => {
@@ -321,6 +338,7 @@ function ContratarContent() {
           montoUsd,
           pais,
           verticalDiagnostico,
+          declaracionBajosRecursos: formData.declaracionBajosRecursos,
         }),
       })
       const data = await res.json()
@@ -398,6 +416,32 @@ function ContratarContent() {
               )
             })}
           </div>
+
+          <GlassCard className="p-7 flex flex-col md:flex-row md:items-center gap-5 justify-between ring-2 ring-color-accent-pink/30">
+            <div className="space-y-2">
+              <h3 className="text-xl font-black text-color-base-content">{NOMBRE_PLAN_EMPRENDEDOR}</h3>
+              <p className="text-sm font-bold text-color-base-content">
+                Solo para emprendedores, MiPymes y empresas sin empleados que no tienen los recursos para estructurar su proyecto.
+              </p>
+              <p className="text-color-base-content/60 text-sm">
+                Serving revisa tu solicitud antes de habilitar el pago. Dura un mes.
+              </p>
+              <div className="text-xl font-black text-color-primary">
+                {formatCOP(MONTO_EMPRENDEDOR_COP)}
+                <span className="text-xs font-bold text-color-base-content/50 ml-2">+ IVA</span>
+              </div>
+              <p className="text-xs font-bold text-color-base-content/60">
+                {desglosarPrecio(MONTO_EMPRENDEDOR_COP).totalConEtiqueta} · comisión de éxito del {COMISION_EMPRENDEDOR_PCT} %
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setPlanSlug(PLAN_EMPRENDEDOR)}
+              className="shrink-0 px-6 py-3 rounded-xl bg-color-primary text-white text-sm font-bold shadow-md hover:opacity-90 transition-opacity"
+            >
+              Solicitar este plan
+            </button>
+          </GlassCard>
 
           <GlassCard className="p-6 flex flex-col md:flex-row md:items-center gap-4 justify-between">
             <div>
@@ -515,6 +559,27 @@ function ContratarContent() {
                 </div>
               </div>
 
+              {esEmprendedor && (
+                <div className="p-5 rounded-2xl bg-amber-50 border border-amber-300 space-y-3">
+                  <h4 className="text-xs font-black uppercase tracking-widest text-amber-800">
+                    Este plan es solo para quien no tiene recursos
+                  </h4>
+                  <p className="text-xs text-amber-800">
+                    Si tu empresa sí cuenta con recursos, te corresponde Estructuración Estratégica o Estructuración Élite.
+                    Serving revisa cada solicitud antes de habilitar el pago.
+                  </p>
+                  <label className="flex items-start gap-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={formData.declaracionBajosRecursos}
+                      onChange={(e) => setFormData({ ...formData, declaracionBajosRecursos: e.target.checked })}
+                      className="mt-1"
+                    />
+                    <span className="text-xs font-bold text-color-base-content">{DECLARACION_EMPRENDEDOR}</span>
+                  </label>
+                </div>
+              )}
+
               <div className="p-5 rounded-2xl bg-color-base-content/5 border border-color-base-content/10 space-y-3">
                 <h4 className="text-xs font-black uppercase tracking-widest text-color-base-content">
                   {t('contratar.titulo_contrato')}
@@ -553,7 +618,7 @@ function ContratarContent() {
 
               <GlowButton
                 type="submit"
-                disabled={!formData.aceptaTerminos || !pais || loading}
+                disabled={!formData.aceptaTerminos || !pais || loading || (esEmprendedor && !formData.declaracionBajosRecursos)}
                 className="w-full py-4 text-sm font-black uppercase tracking-widest"
               >
                 {loading ? <Loader2 className="h-5 w-5 animate-spin mx-auto" /> : t('contratar.boton_firmar')}
@@ -561,7 +626,31 @@ function ContratarContent() {
             </form>
           )}
 
-          {step === 2 && (
+          {step === 2 && esEmprendedor && (
+            <div className="space-y-6 text-center">
+              <CheckCircle2 className="h-14 w-14 text-emerald-500 mx-auto" />
+              <h2 className="text-xl font-black text-color-base-content">Recibimos tu solicitud</h2>
+              <p className="text-sm text-color-base-content/70 max-w-md mx-auto">
+                Serving va a revisar que este plan sea el adecuado para ti. Cuando te aprueben, te avisamos
+                por WhatsApp y por correo, y ahí se habilita el pago. Todavía no tienes que pagar nada.
+              </p>
+              {passwordTemporal && (
+                <div className="text-left p-5 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-2">
+                  <p className="text-xs font-black uppercase tracking-widest text-emerald-700">
+                    {t('contratar.acceso_titulo')}
+                  </p>
+                  <p className="text-sm text-color-base-content">
+                    {t('contratar.acceso_correo')} <strong>{formData.correoCliente}</strong>
+                  </p>
+                  <p className="text-sm text-color-base-content">
+                    {t('contratar.acceso_password')} <strong className="font-mono">{passwordTemporal}</strong>
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {step === 2 && !esEmprendedor && (
             <div className="space-y-6 text-center">
               <CheckCircle2 className="h-14 w-14 text-emerald-500 mx-auto" />
               <h2 className="text-xl font-black text-color-base-content">{t('contratar.titulo_exito')}</h2>

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
+import { PLAN_EMPRENDEDOR, MONTO_EMPRENDEDOR_COP, ESTADO_PENDIENTE_AVAL } from '@/lib/planEmprendedor'
 
 function generarPasswordTemporal() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789'
@@ -30,6 +31,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Faltan datos obligatorios' }, { status: 400 })
     }
 
+    // Plan Emprendedor: es avalado. Se exige la declaración y el proyecto queda
+    // en 'pendiente_aval' hasta que Serving lo apruebe. El monto lo fija el
+    // servidor, no lo que mande el navegador.
+    const esEmprendedor = planPago === PLAN_EMPRENDEDOR
+    if (esEmprendedor && body.declaracionBajosRecursos !== true) {
+      return NextResponse.json({ error: 'Debes aceptar la declaración para solicitar este plan' }, { status: 400 })
+    }
+
     const forwardedFor = req.headers.get('x-forwarded-for')
     const ip = forwardedFor ? forwardedFor.split(',')[0].trim() : 'desconocida'
 
@@ -38,6 +47,7 @@ export async function POST(req: Request) {
       aceptado: true,
       fecha: new Date().toISOString(),
       ip,
+      ...(esEmprendedor ? { declaracion_bajos_recursos: true } : {}),
     }
 
     // Cliente con permisos de administrador, solo para crear la cuenta de acceso
@@ -81,9 +91,9 @@ export async function POST(req: Request) {
         nombre_iniciativa: nombreIniciativa || nombreCliente,
         vertical_asignada: verticalDiagnostico || 'sin_clasificar',
         plan_pago: planPago,
-        monto_solicitado_cop: montoCop || null,
+        monto_solicitado_cop: esEmprendedor ? MONTO_EMPRENDEDOR_COP : montoCop || null,
         monto_solicitado_usd: montoUsd || null,
-        estado_actual: 'pendiente_pago',
+        estado_actual: esEmprendedor ? ESTADO_PENDIENTE_AVAL : 'pendiente_pago',
         estado_comercial: 'nuevo',
         contrato_firmado: true,
         firma_digital: firmaDigital,
