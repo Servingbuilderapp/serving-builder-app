@@ -44,7 +44,7 @@ export async function POST(req: Request) {
       const iniciativa = String(cuerpo.iniciativa || '').trim().slice(0, 200)
       const origen = String(cuerpo.origen || '').trim().slice(0, 80)
       const nota = String(cuerpo.nota || '').trim().slice(0, 500)
-      const dias = numero(cuerpo.dias, DIAS_CORTESIA_POR_DEFECTO, 1, 120)
+      const dias = numero(cuerpo.dias, DIAS_CORTESIA_POR_DEFECTO, 1, 366)
       const comision = numero(cuerpo.comisionPct, COMISION_CORTESIA_POR_DEFECTO, 1, 50)
       const iniciarYa = cuerpo.iniciarYa === true
 
