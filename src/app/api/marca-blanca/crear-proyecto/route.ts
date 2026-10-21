@@ -109,6 +109,7 @@ export async function POST(req: Request) {
         firma_digital: comoCortesia ? null : { nombre: nombreCliente, aceptado: true, fecha: new Date().toISOString(), ip },
         plan_pago: comoCortesia ? 'cortesia' : paquete === 'premium' || paquete === 'plan3' ? 'premium_mb' : 'estandar_mb',
         canal_origen: 'marca_blanca',
+        vertical_asignada: 'General',
         socio_id: socio.id,
         fecha_limite_entrega: fechaLimite.toISOString(),
         pasarela_pago: 'Ninguno',
