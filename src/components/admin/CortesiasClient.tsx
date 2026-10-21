@@ -86,7 +86,7 @@ export function CortesiasClient({
         <div><label className={etiqueta}>WhatsApp</label><input value={f.whatsapp} onChange={(e) => setF({ ...f, whatsapp: e.target.value })} className={campo} /></div>
         <div><label className={etiqueta}>Nombre del proyecto (opcional)</label><input value={f.iniciativa} onChange={(e) => setF({ ...f, iniciativa: e.target.value })} className={campo} /></div>
         <div><label className={etiqueta}>De dónde viene (Coomeva, Parque Soft…)</label><input value={f.origen} onChange={(e) => setF({ ...f, origen: e.target.value })} className={campo} /></div>
-        <div><label className={etiqueta}>Días</label><input type="number" min={1} max={120} value={f.dias} onChange={(e) => setF({ ...f, dias: e.target.value })} className={campo} /></div>
+        <div><label className={etiqueta}>Días</label><input type="number" min={1} max={366} value={f.dias} onChange={(e) => setF({ ...f, dias: e.target.value })} className={campo} /></div>
         <div><label className={etiqueta}>Comisión de éxito (%)</label><input type="number" min={1} max={50} value={f.comisionPct} onChange={(e) => setF({ ...f, comisionPct: e.target.value })} className={campo} /></div>
         <label className="flex items-end gap-2 pb-2 text-[13px] text-[#F3E7DC]/85">
           <input type="checkbox" checked={f.iniciarYa} onChange={(e) => setF({ ...f, iniciarYa: e.target.checked })} className="h-4 w-4 accent-[#C9A46B]" />
