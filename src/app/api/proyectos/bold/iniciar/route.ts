@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { armarBotonBold } from '@/lib/bold'
 import { desglosarPrecio } from '@/lib/mediosDePago'
+import { PLAN_EMPRENDEDOR } from '@/lib/planEmprendedor'
 
 /**
  * Arma los datos firmados que necesita el botón de Bold para cobrar el
@@ -28,7 +29,7 @@ export async function POST(req: Request) {
     )
     const { data: proyecto, error } = await supabaseAdmin
       .from('proyectos_clientes_serving')
-      .select('id, nombre_iniciativa, estado_actual, monto_solicitado_cop, pasarela_pago')
+      .select('id, nombre_iniciativa, estado_actual, monto_solicitado_cop, pasarela_pago, plan_pago')
       .eq('id', proyectoId)
       .single()
 
@@ -48,7 +49,8 @@ export async function POST(req: Request) {
     const precio = desglosarPrecio(proyecto.monto_solicitado_cop)
     // El cliente puede elegir pagar todo de una vez (pagoCompleto) o en dos
     // partes (por defecto: la mitad al firmar, la otra mitad la cobra el equipo).
-    const pagaTodo = pagoCompleto === true
+    // El plan Emprendedor siempre se paga completo (un solo pago, con IVA).
+    const pagaTodo = pagoCompleto === true || proyecto.plan_pago === PLAN_EMPRENDEDOR
     const montoACobrar = pagaTodo || precio.anticipoConIva === 0 ? precio.total : precio.anticipoConIva
     if (!montoACobrar) {
       return NextResponse.json(

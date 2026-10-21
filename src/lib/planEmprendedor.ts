@@ -9,7 +9,7 @@
  *   dejarla pagar. Mientras tanto el proyecto queda en 'pendiente_aval'.
  * - Duración: un mes. Al terminar el plan se cierra.
  * - Comisión de éxito: 10 %.
- * - Cobro: link fijo de Bold por el valor con IVA.
+ * - Cobro: botón integrado de Bold (monto firmado en el servidor), un solo pago de $5.950.000.
  */
 
 export const PLAN_EMPRENDEDOR = 'emprendedor'
@@ -20,9 +20,6 @@ export const MESES_EMPRENDEDOR = 1
 
 /** Estado del proyecto mientras Serving revisa si la persona entra en este plan. */
 export const ESTADO_PENDIENTE_AVAL = 'pendiente_aval'
-
-/** Link fijo de Bold por $5.950.000 (5.000.000 + IVA). */
-export const LINK_BOLD_EMPRENDEDOR = 'https://checkout.bold.co/payment/LNK_JDBFBG18YQ'
 
 export const INCLUYE_EMPRENDEDOR = [
   'Un mes de acompañamiento, no más',

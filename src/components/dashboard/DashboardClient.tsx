@@ -3,7 +3,8 @@
 import React from 'react'
 import { SaludoCliente } from '@/components/dashboard/SaludoCliente'
 import { useTranslation } from '@/hooks/useTranslation'
-import { PLAN_EMPRENDEDOR, LINK_BOLD_EMPRENDEDOR } from '@/lib/planEmprendedor'
+import { PLAN_EMPRENDEDOR } from '@/lib/planEmprendedor'
+import { BotonPagoBold } from '@/components/pagos/BotonPagoBold'
 
 interface DashboardClientProps {
   proyecto: any
@@ -63,14 +64,13 @@ export function DashboardClient({ proyecto, nombreMostrar, subirDocumento, otros
             Ya puedes pagar tu plan Estructuración Emprendedor de <strong>{proyecto.nombre_iniciativa}</strong>.
             Valor: $5.000.000 + IVA ($5.950.000 en total).
           </p>
-          <a
-            href={LINK_BOLD_EMPRENDEDOR}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block px-6 py-3 rounded-xl bg-emerald-700 text-white text-sm font-bold shadow-md hover:opacity-90"
-          >
-            Pagar con Bold
-          </a>
+          <div className="max-w-sm mx-auto">
+            <BotonPagoBold
+              endpoint="/api/proyectos/bold/iniciar"
+              campoId="proyectoId"
+              id={proyecto.id}
+            />
+          </div>
         </div>
       )}
 
