@@ -23,6 +23,7 @@ export function DashboardClient({ proyecto, nombreMostrar, subirDocumento, otros
     <div className="w-full max-w-4xl mx-auto p-6 md:p-8 space-y-8 pb-12">
       <div>
         <SaludoCliente nombreMostrar={nombreMostrar} />
+        <p className="mt-2 text-sm text-color-base-content/60">{t('dashboard.ventaja_frase')}</p>
       </div>
 
       {!proyecto && (

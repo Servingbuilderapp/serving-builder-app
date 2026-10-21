@@ -148,11 +148,11 @@ export function ResultadoDiagnosticoVista({
             </div>
 
             {mostrarCierre && (
-            <div className="bg-gradient-to-r from-slate-900 via-[#0B2A4A] to-slate-900 text-white p-8 rounded-3xl shadow-2xl relative overflow-hidden space-y-6">
+            <div className="bg-gradient-to-r from-[#3B1727] via-[#2E0E1A] to-[#54142B] border border-[#B08D57]/45 text-white p-8 rounded-3xl shadow-2xl relative overflow-hidden space-y-6">
               <div className="relative z-10 max-w-2xl space-y-3">
-                <h4 className="text-2xl md:text-3xl font-black italic uppercase tracking-tight">¿Listo para estructurar tu proyecto?</h4>
-                <p className="text-xs md:text-sm text-slate-300 font-medium leading-relaxed">
-                  Con tu diagnóstico en mano, elige tu plan de estructuración y empezamos a trabajar en tu formulación técnica y búsqueda de convocatorias.
+                <h4 className="text-2xl md:text-3xl font-black italic uppercase tracking-tight">¿Listo para llevar tu ventaja más lejos?</h4>
+                <p className="text-xs md:text-sm text-[#F3E7DC]/75 font-medium leading-relaxed">
+                  Con tu diagnóstico en mano ya tienes una ventaja: elige tu plan de estructuración y empezamos a trabajar en tu formulación técnica y búsqueda de convocatorias.
                 </p>
               </div>
               <div className="relative z-10 flex flex-wrap items-center gap-4">

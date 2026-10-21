@@ -79,7 +79,7 @@ export default async function ConvocatoriasDelMesPage() {
   if (!vigente && !esEquipo) {
     return (
       <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
-        <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]"><Ayuda clave="panel.convocatorias_mes" claro={false}>Convocatorias del mes</Ayuda></h1>
+        <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]"><Ayuda clave="panel.convocatorias_mes" claro={false}>Ventajas del mes</Ayuda></h1>
         <div className={`mx-auto mt-6 max-w-xl rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-8 text-center ${SOMBRA_TARJETA}`}>
           <h2 className="text-[15px] font-extrabold text-[#F3E7DC]">Esta sección es para miembros</h2>
           <p className="mx-auto mt-2 max-w-md text-[13.5px] leading-relaxed text-[#F3E7DC]/60">
@@ -128,7 +128,7 @@ export default async function ConvocatoriasDelMesPage() {
   return (
     <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
       <header className="mb-5">
-        <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]"><Ayuda clave="panel.convocatorias_mes" claro={false}>Convocatorias del mes</Ayuda></h1>
+        <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]"><Ayuda clave="panel.convocatorias_mes" claro={false}>Ventajas del mes</Ayuda></h1>
         <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#F3E7DC]/60">
           {esEquipo
             ? 'Vista de administrador: ves todas las fichas completas, sin membresía y sin gastar cupo.'

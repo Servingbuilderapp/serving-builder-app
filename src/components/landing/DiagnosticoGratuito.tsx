@@ -101,7 +101,7 @@ export function DiagnosticoGratuito() {
             Diagnóstico de <span className="text-gradient-magma">Viabilidad & Fondos</span>
           </h2>
           <p className="text-color-base-content/70 max-w-2xl mx-auto text-sm md:text-base font-medium">
-            Nuestra IA analiza tu proyecto y te muestra los sectores y mecanismos de financiamiento con mayor afinidad, más una nota concepto lista para usar.
+            Tu primera ventaja, sin costo: nuestra IA analiza tu proyecto y te muestra los sectores y mecanismos de financiamiento con mayor afinidad, más una nota concepto lista para usar.
           </p>
         </div>
 

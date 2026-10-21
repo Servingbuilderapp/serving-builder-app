@@ -69,7 +69,7 @@ export default async function MiMembresiaPage() {
               <p className="mt-3 text-[12px] font-bold uppercase tracking-widest text-[#F3E7DC]/45">Cupos</p>
               <ul className="mt-1 space-y-1 text-[13px] text-[#F3E7DC]/80">
                 <li>Proyectos al mes: {ETIQ_CUPO(CUPOS_POR_NIVEL[n.slug].proyecto_minimo)}</li>
-                <li>Convocatorias del mes: {ETIQ_CUPO(CUPOS_POR_NIVEL[n.slug].convocatorias)}</li>
+                <li>Ventajas del mes (convocatorias):{ETIQ_CUPO(CUPOS_POR_NIVEL[n.slug].convocatorias)}</li>
                 <li>Sesiones grupales: {SERVICIOS_POR_NIVEL[n.slug].sesionesPorMes === 0 ? 'No incluido' : `${SERVICIOS_POR_NIVEL[n.slug].sesionesPorMes} al mes`}</li>
                 <li>Comunidad: {SERVICIOS_POR_NIVEL[n.slug].comunidad ? 'Incluida' : 'No incluida'}</li>
                 <li>Acompañamiento semanal: {SERVICIOS_POR_NIVEL[n.slug].acompanamientoSemanal ? 'Incluido' : 'No incluido'}</li>
@@ -82,7 +82,7 @@ export default async function MiMembresiaPage() {
           <div className="mt-3 flex flex-wrap gap-2">
             {[
               ['Buscador de fondos', '/buscar-fondos'],
-              ['Convocatorias del mes', '/convocatorias-del-mes'],
+              ['Ventajas del mes', '/convocatorias-del-mes'],
               ['Calendario', '/calendario'],
               ['Mis proyectos', '/mis-proyectos'],
               ['Sesiones grupales', '/sesiones'],

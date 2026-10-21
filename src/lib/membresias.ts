@@ -105,7 +105,7 @@ export const ETIQUETA_BENEFICIO: Record<ClaveBeneficio, string> = {
   nota_concepto: 'Notas de concepto',
   tdr: 'TDR con sugerencias',
   proyecto_minimo: 'Proyectos al mes',
-  convocatorias: 'Convocatorias del mes',
+  convocatorias: 'Ventajas del mes (convocatorias)',
 }
 
 export const CLAVES_BENEFICIO = Object.keys(ETIQUETA_BENEFICIO) as ClaveBeneficio[]
