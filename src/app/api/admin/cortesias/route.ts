@@ -79,6 +79,7 @@ export async function POST(req: Request) {
           contrato_firmado: false,
           plan_pago: 'cortesia',
           canal_origen: 'cortesia',
+          vertical_asignada: 'General',
           pasarela_pago: 'Ninguno',
         })
         .select('id')
