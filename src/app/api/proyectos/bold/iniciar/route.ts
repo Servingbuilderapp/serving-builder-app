@@ -17,7 +17,7 @@ import { desglosarPrecio } from '@/lib/mediosDePago'
  */
 export async function POST(req: Request) {
   try {
-    const { proyectoId } = await req.json()
+    const { proyectoId, pagoCompleto } = await req.json()
     if (!proyectoId) {
       return NextResponse.json({ error: 'Falta el id del proyecto' }, { status: 400 })
     }
@@ -46,7 +46,10 @@ export async function POST(req: Request) {
     }
 
     const precio = desglosarPrecio(proyecto.monto_solicitado_cop)
-    const montoACobrar = precio.anticipoConIva > 0 ? precio.anticipoConIva : precio.total
+    // El cliente puede elegir pagar todo de una vez (pagoCompleto) o en dos
+    // partes (por defecto: la mitad al firmar, la otra mitad la cobra el equipo).
+    const pagaTodo = pagoCompleto === true
+    const montoACobrar = pagaTodo || precio.anticipoConIva === 0 ? precio.total : precio.anticipoConIva
     if (!montoACobrar) {
       return NextResponse.json(
         { error: 'Este proyecto no tiene costo de estructuración (solo comisión de éxito)' },
@@ -59,7 +62,7 @@ export async function POST(req: Request) {
       orderId: proyecto.id,
       amount: montoACobrar,
       currency: 'COP',
-      description: `Anticipo — ${(proyecto.nombre_iniciativa || 'Estructuración').slice(0, 90)}`,
+      description: `${pagaTodo ? 'Pago total' : 'Anticipo'} — ${(proyecto.nombre_iniciativa || 'Estructuración').slice(0, 90)}`,
       redirectionUrl: `${origin}/contratar?pago=en_proceso`,
     })
 

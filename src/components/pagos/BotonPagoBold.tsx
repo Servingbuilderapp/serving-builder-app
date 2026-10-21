@@ -46,12 +46,16 @@ export function BotonPagoBold({
   campoId,
   id,
   texto = 'Pagar con tarjeta, PSE o Nequi',
+  extra,
 }: {
   endpoint: string
   campoId: string
   id: string
   texto?: string
+  /** Datos adicionales para la ruta (por ejemplo { pagoCompleto: true }). */
+  extra?: Record<string, unknown>
 }) {
+  const extraTexto = JSON.stringify(extra || {})
   const [error, setError] = useState('')
   const [cargando, setCargando] = useState(true)
   const [listo, setListo] = useState(false)
@@ -67,7 +71,7 @@ export function BotonPagoBold({
         const res = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ [campoId]: id }),
+          body: JSON.stringify({ [campoId]: id, ...JSON.parse(extraTexto) }),
         })
         const datos: DatosBoton & { error?: string } = await res.json()
         if (!res.ok) throw new Error(datos.error || 'No se pudo preparar el pago con Bold')
@@ -106,7 +110,7 @@ export function BotonPagoBold({
     return () => {
       cancelado = true
     }
-  }, [endpoint, campoId, id])
+  }, [endpoint, campoId, id, extraTexto])
 
   return (
     <div>

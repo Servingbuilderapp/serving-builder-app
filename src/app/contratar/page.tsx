@@ -17,6 +17,7 @@ import { PayPalButtons } from '@paypal/react-paypal-js'
 import { cn } from '@/lib/utils'
 import { useTranslation } from '@/hooks/useTranslation'
 import { BotonPagoBold } from '@/components/pagos/BotonPagoBold'
+import { AcompanamientoPostGane } from '@/components/estructuracion/AcompanamientoPostGane'
 
 const TASA_COP_POR_USD = 3244 // Actualizar periódicamente según la TRM del día
 
@@ -285,6 +286,8 @@ function ContratarContent() {
   const [error, setError] = useState('')
   const [verticalDiagnostico, setVerticalDiagnostico] = useState<string | null>(null)
   const [contratoLeido, setContratoLeido] = useState(false)
+  // Cómo prefiere pagar el cliente en Colombia: en dos partes o todo de una vez.
+  const [formaPago, setFormaPago] = useState<'dos_cuotas' | 'una_vez'>('dos_cuotas')
 
   React.useEffect(() => {
     const guardado = sessionStorage.getItem('diagnostico_vertical_principal')
@@ -419,6 +422,8 @@ function ContratarContent() {
               Ver condiciones
             </button>
           </GlassCard>
+
+          <AcompanamientoPostGane />
         </div>
       </div>
     )
@@ -602,13 +607,42 @@ function ContratarContent() {
                         )
                       }
                       return (
-                        <div className="mt-2 space-y-1">
-                          <p className="text-sm font-bold text-color-base-content">
-                            {t('contratar.anticipo_label')} {precio.anticipoConIvaTexto}
-                          </p>
-                          <p className="text-sm text-color-base-content/70">
-                            {t('contratar.saldo_label')} {precio.saldoConIvaTexto}
-                          </p>
+                        <div className="mt-2 space-y-2">
+                          <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label={t('contratar.forma_pago_titulo')}>
+                            {([
+                              { valor: 'dos_cuotas', clave: 'contratar.forma_pago_dos' },
+                              { valor: 'una_vez', clave: 'contratar.forma_pago_una' },
+                            ] as const).map((op) => (
+                              <button
+                                key={op.valor}
+                                type="button"
+                                role="radio"
+                                aria-checked={formaPago === op.valor}
+                                onClick={() => setFormaPago(op.valor)}
+                                className={`rounded-xl border px-3 py-2 text-xs font-bold transition-colors ${
+                                  formaPago === op.valor
+                                    ? 'border-color-primary bg-color-primary/10 text-color-primary'
+                                    : 'border-color-base-content/15 text-color-base-content/70 hover:border-color-primary/40'
+                                }`}
+                              >
+                                {t(op.clave)}
+                              </button>
+                            ))}
+                          </div>
+                          {formaPago === 'una_vez' ? (
+                            <p className="text-sm font-bold text-color-base-content">
+                              {t('contratar.forma_pago_total')} {precio.totalTexto}
+                            </p>
+                          ) : (
+                            <>
+                              <p className="text-sm font-bold text-color-base-content">
+                                {t('contratar.anticipo_label')} {precio.anticipoConIvaTexto}
+                              </p>
+                              <p className="text-sm text-color-base-content/70">
+                                {t('contratar.saldo_label')} {precio.saldoConIvaTexto}
+                              </p>
+                            </>
+                          )}
                           <p className="text-xs text-color-base-content/60 pt-1">
                             {precio.baseConSufijo} · {precio.totalConEtiqueta}
                           </p>
@@ -626,6 +660,7 @@ function ContratarContent() {
                         endpoint="/api/proyectos/bold/iniciar"
                         campoId="proyectoId"
                         id={proyectoId}
+                        extra={{ pagoCompleto: formaPago === 'una_vez' }}
                       />
                     </div>
                   )}
