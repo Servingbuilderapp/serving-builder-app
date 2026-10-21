@@ -1,6 +1,8 @@
 import React from 'react'
 import Link from 'next/link'
+import { headers } from 'next/headers'
 import { redirect, notFound } from 'next/navigation'
+import { EnlaceClienteAdmin } from '@/components/diagnostico/EnlaceClienteAdmin'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { esEquipoServing } from '@/lib/guardiaEquipo'
 import { ResultadoDiagnosticoVista } from '@/components/diagnostico/ResultadoDiagnosticoVista'
@@ -22,7 +24,9 @@ export default async function AdminDiagnosticoDetallePage({
 
   const resultado = data.resultado_completo as DiagnosticoResultadoV2 | null
   const f = (data.datos_formulario || {}) as Record<string, string>
-  const origen = process.env.NEXT_PUBLIC_SITE_URL || ''
+  const cabeceras = await headers()
+  const host = cabeceras.get('x-forwarded-host') || cabeceras.get('host') || ''
+  const origen = (process.env.NEXT_PUBLIC_SITE_URL || (host ? `https://${host}` : '')).replace(/\/$/, '')
   const enlace = data.codigo_acceso ? `${origen}/diagnostico/resultado/${data.codigo_acceso}` : ''
 
   const campos: [string, string | undefined][] = [
@@ -49,6 +53,14 @@ export default async function AdminDiagnosticoDetallePage({
       <Link href="/admin/diagnosticos" className="text-xs font-black uppercase tracking-widest text-color-primary hover:underline">
         ← Volver a diagnósticos
       </Link>
+
+      {enlace ? (
+        <EnlaceClienteAdmin enlace={enlace} correo={String(data.email || '')} />
+      ) : (
+        <p className="rounded-2xl border border-amber-300 bg-amber-50 text-amber-900 text-xs p-4">
+          Este diagnóstico no tiene enlace del cliente (es anterior a la función de enlace personal).
+        </p>
+      )}
 
       <section className="rounded-2xl border border-color-base-200 bg-white text-[#2B1220] p-6 space-y-3">
         <h2 className="text-sm font-black uppercase tracking-wider">Quién lo hizo y qué escribió</h2>
