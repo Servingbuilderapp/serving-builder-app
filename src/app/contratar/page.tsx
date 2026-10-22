@@ -26,6 +26,7 @@ import {
   COMISION_EMPRENDEDOR_PCT,
   INCLUYE_EMPRENDEDOR,
   DECLARACION_EMPRENDEDOR,
+  ANEXO_EMPRENDEDOR,
 } from '@/lib/planEmprendedor'
 
 const TASA_COP_POR_USD = 3244 // Actualizar periódicamente según la TRM del día
@@ -593,7 +594,7 @@ function ContratarContent() {
                   }}
                   className="text-xs text-color-base-content/70 max-h-56 overflow-y-auto leading-relaxed pr-2 whitespace-pre-line border border-color-base-content/10 rounded-xl p-3 bg-white"
                 >
-                  {TEXTO_CONTRATO}
+                  {esEmprendedor ? TEXTO_CONTRATO + '\n\n' + ANEXO_EMPRENDEDOR : TEXTO_CONTRATO}
                 </div>
                 {!contratoLeido && (
                   <p className="text-[10px] text-amber-600 font-bold">
