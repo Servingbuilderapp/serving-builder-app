@@ -224,7 +224,11 @@ function PasoDocumentos({
     setError('')
     try {
       const supabase = createClient()
-      const ruta = `${proyectoId}/${Date.now()}-${archivo.name}`
+      const nombreSeguro = archivo.name
+        .normalize('NFD')
+        .replace(/[̀-ͯ]/g, '')
+        .replace(/[^a-zA-Z0-9._-]+/g, '_')
+      const ruta = `${proyectoId}/${Date.now()}-${nombreSeguro}`
       const { error: errorSubida } = await supabase.storage.from(BUCKET).upload(ruta, archivo)
       if (errorSubida) throw errorSubida
 
@@ -259,7 +263,11 @@ function PasoDocumentos({
     setError('')
     try {
       const supabase = createClient()
-      const ruta = `${proyectoId}/retroalimentacion-${Date.now()}-${archivo.name}`
+      const nombreSeguro = archivo.name
+        .normalize('NFD')
+        .replace(/[̀-ͯ]/g, '')
+        .replace(/[^a-zA-Z0-9._-]+/g, '_')
+      const ruta = `${proyectoId}/retroalimentacion-${Date.now()}-${nombreSeguro}`
       const { error: errorSubida } = await supabase.storage.from(BUCKET).upload(ruta, archivo)
       if (errorSubida) throw errorSubida
 
