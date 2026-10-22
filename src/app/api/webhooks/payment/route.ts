@@ -1,3 +1,4 @@
+import { SITIO_PUBLICO } from '@/lib/sitio'
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { sendWelcomeEmail } from '@/lib/email';
@@ -95,7 +96,7 @@ export async function POST(req: NextRequest) {
         firstName: customer.first_name || '',
         planName: plan.name_es,
         password: isNewUser ? generatedPassword : undefined,
-        loginUrl: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+        loginUrl: SITIO_PUBLICO
       });
       emailSent = emailResult.success;
     }

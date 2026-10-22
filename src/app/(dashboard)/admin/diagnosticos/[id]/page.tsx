@@ -1,3 +1,4 @@
+import { SITIO_PUBLICO } from '@/lib/sitio'
 import React from 'react'
 import Link from 'next/link'
 import { headers } from 'next/headers'
@@ -26,7 +27,7 @@ export default async function AdminDiagnosticoDetallePage({
   const f = (data.datos_formulario || {}) as Record<string, string>
   const cabeceras = await headers()
   const host = cabeceras.get('x-forwarded-host') || cabeceras.get('host') || ''
-  const origen = (process.env.NEXT_PUBLIC_SITE_URL || (host ? `https://${host}` : '')).replace(/\/$/, '')
+  const origen = SITIO_PUBLICO
   const enlace = data.codigo_acceso ? `${origen}/diagnostico/resultado/${data.codigo_acceso}` : ''
 
   const campos: [string, string | undefined][] = [

@@ -1,3 +1,4 @@
+import { SITIO_PUBLICO } from '@/lib/sitio'
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { supabaseAdmin as adminClient } from '@/lib/supabase/admin'
@@ -68,7 +69,7 @@ export async function POST(req: Request) {
         firstName,
         planName,
         password,
-        loginUrl: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+        loginUrl: SITIO_PUBLICO
       });
       emailSent = emailResult.success;
     }

@@ -1,3 +1,4 @@
+import { SITIO_PUBLICO } from '@/lib/sitio'
 import React from 'react'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
@@ -92,7 +93,7 @@ export default async function AdminMarcaBlancaPage() {
   const ahora = new Date()
   const hoyTexto = ahora.toISOString().slice(0, 10)
   const lista = proyectos || []
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || ''
+  const baseUrl = SITIO_PUBLICO
 
   return (
     <div className="w-full max-w-6xl mx-auto p-6 md:p-8 space-y-6">

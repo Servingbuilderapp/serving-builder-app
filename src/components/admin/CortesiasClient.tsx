@@ -1,5 +1,6 @@
 'use client'
 
+import { SITIO_PUBLICO } from '@/lib/sitio'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { diasRestantes, type Cortesia } from '@/lib/cortesias'
@@ -62,7 +63,7 @@ export function CortesiasClient({
     }
   }
 
-  const enlace = typeof window !== 'undefined' ? window.location.origin + '/login' : '/login'
+  const enlace = SITIO_PUBLICO + '/login'
   const textoWhatsapp = entrega
     ? `Hola ${entrega.nombre.split(' ')[0]}, te invitamos a estructurar tu proyecto con Serving sin costo. Entra aquí: ${enlace}\nCorreo: ${entrega.correo}\n${entrega.password ? 'Clave temporal: ' + entrega.password : 'Entra con la clave que ya tienes (si no la recuerdas, usa "Olvidé mi contraseña").'}\nAl entrar lee y acepta las condiciones.`
     : ''
