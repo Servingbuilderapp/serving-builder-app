@@ -316,7 +316,12 @@ function BloqueDocumentos({
     setAviso('')
     try {
       const supabase = createClient()
-      const ruta = `${proyectoId}/${Date.now()}-${archivo.name}`
+      // El almacenamiento rechaza tildes, ñ y símbolos raros en el nombre ("Invalid key").
+      const nombreSeguro = archivo.name
+        .normalize('NFD')
+        .replace(/[̀-ͯ]/g, '')
+        .replace(/[^a-zA-Z0-9._-]+/g, '_')
+      const ruta = `${proyectoId}/${Date.now()}-${nombreSeguro}`
       const { error: errorSubida } = await supabase.storage.from(BUCKET).upload(ruta, archivo)
       if (errorSubida) throw errorSubida
       await listar()
