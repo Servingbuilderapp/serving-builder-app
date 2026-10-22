@@ -13,6 +13,12 @@ export async function POST(req: NextRequest) {
     const correo = (user?.email || '').toLowerCase().trim()
     if (!correo) return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 })
 
+    // Sin la autorización de datos personales (habeas data) no se acepta la cortesía.
+    const cuerpo = await req.json().catch(() => ({}))
+    if (cuerpo?.autorizaDatos !== true) {
+      return NextResponse.json({ error: 'Debes autorizar el tratamiento de tus datos personales.' }, { status: 400 })
+    }
+
     const { data: cort } = await supabaseAdmin
       .from('cortesias')
       .select('id, proyecto_id, nombre, acepto_en, comision_pct, dias, inicia_en')
@@ -36,7 +42,7 @@ export async function POST(req: NextRequest) {
       .update({
         estado_actual: 'pagado',
         contrato_firmado: true,
-        firma_digital: { nombre: cort.nombre, aceptado: true, fecha: ahora, ip, tipo: 'cortesia', comision_pct: cort.comision_pct },
+        firma_digital: { nombre: cort.nombre, aceptado: true, fecha: ahora, ip, tipo: 'cortesia', comision_pct: cort.comision_pct, autoriza_datos_personales: true },
       })
       .eq('id', cort.proyecto_id)
 
