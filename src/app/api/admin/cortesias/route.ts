@@ -113,6 +113,28 @@ export async function POST(req: Request) {
     const id = String(cuerpo?.id || '')
     if (!id) return NextResponse.json({ error: 'Falta la cortesía.' }, { status: 400 })
 
+    // Genera una clave temporal nueva para quien todavía no ha aceptado su
+    // cortesía (por si el equipo perdió el mensaje de la invitación). Si la
+    // persona ya aceptó, no se toca su clave.
+    if (accion === 'nueva_clave') {
+      const { data: c } = await supabaseAdmin
+        .from('cortesias')
+        .select('correo, nombre, acepto_en')
+        .eq('id', id)
+        .maybeSingle<{ correo: string; nombre: string | null; acepto_en: string | null }>()
+      if (!c) return NextResponse.json({ error: 'No encontramos esa cortesía.' }, { status: 404 })
+      if (c.acepto_en) {
+        return NextResponse.json({ error: 'Esta persona ya aceptó su cortesía; si olvidó la clave, usa “Olvidé mi contraseña”.' }, { status: 409 })
+      }
+      const { data: lista } = await supabaseAdmin.auth.admin.listUsers({ page: 1, perPage: 1000 })
+      const usuario = lista?.users?.find((u) => (u.email || '').toLowerCase() === c.correo.toLowerCase())
+      if (!usuario) return NextResponse.json({ error: 'No encontramos la cuenta de esta persona.' }, { status: 404 })
+      const nueva = clave()
+      const { error: errClave } = await supabaseAdmin.auth.admin.updateUserById(usuario.id, { password: nueva })
+      if (errClave) return NextResponse.json({ error: 'No se pudo cambiar la clave: ' + errClave.message }, { status: 500 })
+      return NextResponse.json({ success: true, password: nueva, correo: c.correo, nombre: c.nombre || '' })
+    }
+
     const { data: cort } = await supabaseAdmin
       .from('cortesias')
       .select('id, dias, vence_en')

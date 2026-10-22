@@ -103,9 +103,9 @@ export function CortesiasClient({
 
       {entrega && (
         <div className={`rounded-2xl border border-[#C9A46B]/50 bg-[#3B1727] p-4 ${SOMBRA}`}>
-          <p className="text-[14px] font-extrabold text-[#E0B868]">Invitación creada. Copia este mensaje y mándalo por WhatsApp:</p>
+          <p className="text-[14px] font-extrabold text-[#E0B868]">Copia este mensaje y mándalo por WhatsApp:</p>
           <pre className="mt-2 whitespace-pre-wrap rounded-xl bg-black/25 p-3 text-[13px] text-[#F3E7DC]">{textoWhatsapp}</pre>
-          <p className="mt-2 text-[12px] text-[#F3E7DC]/55">La clave solo se muestra ahora. Si se pierde, la persona usa “Olvidé mi contraseña”.</p>
+          <p className="mt-2 text-[12px] text-[#F3E7DC]/55">La clave solo se muestra ahora. Si se pierde, usa el botón “Ver mensaje (clave nueva)” de la lista.</p>
         </div>
       )}
 
@@ -137,6 +137,24 @@ export function CortesiasClient({
                     </select>
                   </td>
                   <td className="p-3 space-x-1 whitespace-nowrap">
+                    {!c.acepto_en && (
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          try {
+                            const d = await llamar({ accion: 'nueva_clave', id: c.id })
+                            setMensaje('')
+                            setEntrega({ correo: d.correo, nombre: d.nombre || c.nombre || '', password: d.password })
+                            window.scrollTo({ top: 0, behavior: 'smooth' })
+                          } catch (err) {
+                            setMensaje(err instanceof Error ? err.message : 'No se pudo generar la clave.')
+                          }
+                        }}
+                        className="rounded-lg border border-[#C9A46B]/60 px-2.5 py-1 text-[12px] font-bold text-[#E0B868]"
+                      >
+                        Ver mensaje (clave nueva)
+                      </button>
+                    )}
                     {!c.inicia_en && <button type="button" onClick={() => accion({ accion: 'iniciar', id: c.id })} className="rounded-lg bg-[#C9A46B] px-2.5 py-1 text-[12px] font-bold text-[#3B1727]">Contar desde hoy</button>}
                     <button type="button" onClick={() => accion({ accion: 'extender', id: c.id, dias: 7 })} className="rounded-lg border border-[#C9A46B]/60 px-2.5 py-1 text-[12px] font-bold text-[#E0B868]">+7 días</button>
                   </td>
