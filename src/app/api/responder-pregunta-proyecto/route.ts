@@ -130,7 +130,7 @@ export async function POST(req: NextRequest) {
 
     const { data: preguntaRow, error: errorPregunta } = await supabase
       .from("preguntas_pendientes_proyecto")
-      .select("id, id_proyecto, id_paso, pregunta, respondida")
+      .select("id, id_proyecto, id_paso, pregunta, respondida, es_supuesto")
       .eq("id", id_pregunta)
       .single();
 
@@ -141,7 +141,15 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (preguntaRow.respondida) {
+    // Una pregunta ya respondida no se vuelve a procesar, salvo que su respuesta
+    // haya sido un supuesto del sistema y el cliente venga a corregirla.
+    const clienteCorrigeSupuesto =
+      preguntaRow.respondida === true &&
+      preguntaRow.es_supuesto === true &&
+      !comoSupuesto &&
+      !sinRespuesta;
+
+    if (preguntaRow.respondida && !clienteCorrigeSupuesto) {
       return NextResponse.json({ ok: true, ya_estaba_respondida: true });
     }
 

@@ -6,21 +6,24 @@ import { buildEmailTemplate, sendEmail } from "@/lib/email";
 /**
  * El reloj de las 24 horas para las preguntas pendientes del Motor 1.
  *
- * Cuando el Motor 1 le deja preguntas al cliente, el proyecto se queda
- * esperando. Esta ruta (la llama una vez al día el reloj de Vercel) hace dos
- * cosas con las preguntas que llevan más de 24 horas sin respuesta:
+ * Regla única (decidida el 22 oct 2026): el cliente tiene 24 horas, contadas
+ * desde que se le avisa, para responder. Pasado ese plazo el proyecto SIGUE,
+ * sin importar si la pregunta es "Importante" o no.
  *
- *   - NO críticas (sin la marca "Importante") que traen sugerencia: se aplica
- *     la sugerencia como "supuesto por confirmar" y el proyecto sigue. Si con
- *     eso ya no queda nada crítico pendiente, arranca la búsqueda de
- *     convocatorias (lo hace la ruta responder-pregunta-proyecto).
- *   - Críticas ("Importante"): el proyecto espera. Se le manda al cliente UN
- *     recordatorio por correo (queda anotado para no repetirlo).
+ *   1. Primera pasada: a cada pregunta sin responder que aún no tiene aviso se
+ *      le anota la hora del aviso (columna recordatorio_enviado_en) y se le
+ *      manda UN correo al cliente por proyecto. Ese es el inicio del plazo.
+ *      La hora se anota aunque el correo falle, para que el plazo nunca quede
+ *      abierto para siempre.
+ *   2. Pasadas 24 horas del aviso: si la pregunta trae sugerencia, se aplica
+ *      como "supuesto por confirmar"; si no, el paso se redacta con lo que ya
+ *      hay y queda "por reforzar" (sin inventar nada). Si con eso el proyecto
+ *      queda completo, arranca la búsqueda de convocatorias (lo hace
+ *      responder-pregunta-proyecto).
  *
- * Las NO críticas sin sugerencia (datos que solo el cliente conoce) también
- * siguen: el paso se redacta con lo que ya hay y queda "por reforzar", sin
- * inventar nada, para que el proyecto no quede parado para siempre.
+ * El cliente puede corregir después cualquier supuesto desde "Lo que me piden".
  *
+ * Conviene que corra cada hora para que el plazo sea de 24 horas y no más.
  * Protegida igual que los demás relojes.
  */
 
@@ -31,7 +34,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-const HORAS_DE_ESPERA = 24;
+const HORAS_DE_PLAZO = 24;
 
 export async function GET(req: NextRequest) {
   try {
@@ -39,34 +42,84 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
-    const limite = new Date(Date.now() - HORAS_DE_ESPERA * 60 * 60 * 1000).toISOString();
+    const ahora = new Date();
+    const limite = new Date(ahora.getTime() - HORAS_DE_PLAZO * 60 * 60 * 1000).toISOString();
+    const origen = req.nextUrl.origin;
 
-    const { data: vencidas, error } = await supabase
+    const { data: sinResponder, error } = await supabase
       .from("preguntas_pendientes_proyecto")
-      .select("id, id_proyecto, critico, sugerencia, recordatorio_enviado_en")
-      .eq("respondida", false)
-      .lte("creado_en", limite);
+      .select("id, id_proyecto, sugerencia, recordatorio_enviado_en")
+      .eq("respondida", false);
 
     if (error) {
-      console.error("Error consultando preguntas vencidas:", JSON.stringify(error));
+      console.error("Error consultando preguntas pendientes:", JSON.stringify(error));
       return NextResponse.json({ error: "No se pudo consultar las preguntas pendientes" }, { status: 500 });
     }
 
-    const lista = vencidas || [];
-    const origen = req.nextUrl.origin;
+    const lista = sinResponder || [];
 
-    // --- 1. No críticas con sugerencia: seguir con el supuesto ---------------
+    // --- 1. Avisar y arrancar el plazo ---------------------------------------
+    const proyectosSinAviso = Array.from(
+      new Set(lista.filter((p) => !p.recordatorio_enviado_en).map((p) => String(p.id_proyecto)))
+    );
+    const avisados: string[] = [];
+
+    for (const idProyecto of proyectosSinAviso) {
+      // Primero se anota la hora: así el plazo corre aunque el correo falle.
+      await supabase
+        .from("preguntas_pendientes_proyecto")
+        .update({ recordatorio_enviado_en: ahora.toISOString() })
+        .eq("id_proyecto", idProyecto)
+        .eq("respondida", false)
+        .is("recordatorio_enviado_en", null);
+
+      const { data: proyecto } = await supabase
+        .from("proyectos_clientes_serving")
+        .select("nombre_iniciativa, correo_cliente")
+        .eq("id", idProyecto)
+        .maybeSingle();
+
+      if (!proyecto?.correo_cliente) continue;
+
+      const html = buildEmailTemplate({
+        title: "Tu proyecto necesita unas respuestas tuyas",
+        greeting: "Hola,",
+        bodyLines: [
+          `Para completar <strong>${proyecto.nombre_iniciativa || "tu proyecto"}</strong> necesitamos que respondas unas preguntas.`,
+          `Tienes ${HORAS_DE_PLAZO} horas. Pasado ese plazo seguimos con tu proyecto sin esa información: lo que falte quedará marcado como "por reforzar" y podrás completarlo cuando quieras.`,
+          "Responder toma pocos minutos: entra a \"Lo que me piden\".",
+        ],
+        ctaText: "Responder ahora",
+        ctaUrl: `${origen}/pendientes`,
+      });
+
+      const envio = await sendEmail({
+        to: proyecto.correo_cliente,
+        subject: "Tu proyecto necesita unas respuestas tuyas (plazo: 24 horas)",
+        html,
+      });
+
+      if (!envio.success) {
+        console.error(`No se pudo enviar el aviso del proyecto ${idProyecto}:`, envio.message);
+        continue;
+      }
+      avisados.push(idProyecto);
+    }
+
+    // --- 2. Pasadas 24 horas del aviso: el proyecto sigue --------------------
+    const vencidas = lista.filter(
+      (p) => p.recordatorio_enviado_en && String(p.recordatorio_enviado_en) <= limite
+    );
+
     const porProyecto = new Map<string, { id: string; sugerencia: string }[]>();
-    // sugerencia vacía = no hay sugerencia: el paso se redacta con lo que ya hay y queda "por reforzar".
-    for (const p of lista) {
-      if (p.critico === true) continue;
+    for (const p of vencidas) {
       const sugerencia = typeof p.sugerencia === "string" ? p.sugerencia.trim() : "";
       const clave = String(p.id_proyecto);
       porProyecto.set(clave, [...(porProyecto.get(clave) || []), { id: String(p.id), sugerencia }]);
     }
 
-    // Cada proyecto va en orden (una pregunta tras otra, para que Motor 2 arranque
-    // una sola vez); los proyectos distintos corren en paralelo.
+    // Cada proyecto va en orden (una pregunta tras otra, para que el Motor 2
+    // arranque una sola vez); los proyectos distintos corren en paralelo.
     after(async () => {
       await Promise.all(
         Array.from(porProyecto.values()).map(async (preguntas) => {
@@ -89,57 +142,11 @@ export async function GET(req: NextRequest) {
       );
     });
 
-    // --- 2. Críticas: un recordatorio por correo ----------------------------
-    const criticasSinAviso = lista.filter((p) => p.critico === true && !p.recordatorio_enviado_en);
-    const proyectosARecordar = Array.from(new Set(criticasSinAviso.map((p) => String(p.id_proyecto))));
-    const recordados: string[] = [];
-
-    for (const idProyecto of proyectosARecordar) {
-      const { data: proyecto } = await supabase
-        .from("proyectos_clientes_serving")
-        .select("nombre_iniciativa, correo_cliente")
-        .eq("id", idProyecto)
-        .maybeSingle();
-
-      if (!proyecto?.correo_cliente) continue;
-
-      const html = buildEmailTemplate({
-        title: "Tu proyecto está esperando una respuesta tuya",
-        greeting: "Hola,",
-        bodyLines: [
-          `Para seguir avanzando con <strong>${proyecto.nombre_iniciativa || "tu proyecto"}</strong> necesitamos que respondas unas preguntas importantes.`,
-          "Mientras no las respondas, el proyecto no puede pasar a la búsqueda de convocatorias.",
-        ],
-        ctaText: "Responder ahora",
-        ctaUrl: `${origen}/pendientes`,
-      });
-
-      const envio = await sendEmail({
-        to: proyecto.correo_cliente,
-        subject: "Tu proyecto está esperando una respuesta tuya",
-        html,
-      });
-
-      if (!envio.success) {
-        console.error(`No se pudo enviar el recordatorio del proyecto ${idProyecto}:`, envio.message);
-        continue;
-      }
-
-      await supabase
-        .from("preguntas_pendientes_proyecto")
-        .update({ recordatorio_enviado_en: new Date().toISOString() })
-        .eq("id_proyecto", idProyecto)
-        .eq("respondida", false)
-        .eq("critico", true);
-
-      recordados.push(idProyecto);
-    }
-
     return NextResponse.json({
       ok: true,
-      preguntas_vencidas: lista.length,
-      proyectos_con_supuesto: porProyecto.size,
-      proyectos_recordados: recordados,
+      preguntas_sin_responder: lista.length,
+      proyectos_avisados: avisados,
+      proyectos_que_siguen_sin_cliente: porProyecto.size,
     });
   } catch (err: unknown) {
     console.error("Error en revisar-preguntas-vencidas:", err);

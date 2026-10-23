@@ -23,6 +23,17 @@ export type PreguntaPendiente = {
   pregunta: string
   critico: boolean
   sugerencia: string | null
+  /** Hasta cuándo puede responder antes de que el sistema siga sin su dato. */
+  venceEn: string | null
+}
+
+/** Pregunta que el sistema respondió por el cliente porque no contestó a tiempo. */
+export type PreguntaSupuesta = {
+  id: string
+  nombrePaso: string
+  pregunta: string
+  /** Lo que el sistema supuso; null si no había base y el paso quedó "por reforzar". */
+  supuesto: string | null
 }
 
 export type DocumentoPedido = {
@@ -44,6 +55,7 @@ export type DatosPendientes = {
   proyectoId: string
   nombreProyecto: string
   preguntas: PreguntaPendiente[]
+  supuestos: PreguntaSupuesta[]
   documentosPedidos: DocumentoPedido[]
   archivoBase: { nombre: string; url: string | null } | null
   archivosSubidos: ArchivoSubido[]
@@ -200,6 +212,20 @@ function BloquePreguntas({ preguntasIniciales }: { preguntasIniciales: PreguntaP
         <p className="text-[14.5px] font-semibold leading-relaxed text-[#F3E7DC]">
           {actual.pregunta}
         </p>
+
+        {actual.venceEn ? (
+          <p className="text-[12.5px] leading-relaxed text-[#E0B868]">
+            Responde antes del{' '}
+            {new Date(actual.venceEn).toLocaleString('es-CO', {
+              day: 'numeric',
+              month: 'long',
+              hour: 'numeric',
+              minute: '2-digit',
+            })}
+            . Pasado ese plazo seguimos con tu proyecto sin este dato y ese paso queda &quot;por reforzar&quot;.
+            Podrás completarlo después.
+          </p>
+        ) : null}
 
         {actual.sugerencia ? (
           <div className="rounded-xl border border-[#B08D57]/35 bg-[#3B1727] px-3.5 py-3">
@@ -526,6 +552,121 @@ function BloqueDocumentos({
 }
 
 /* ========================================================================== */
+/* Respuestas que puso el sistema                                             */
+/* ========================================================================== */
+
+function BloqueSupuestos({ supuestosIniciales }: { supuestosIniciales: PreguntaSupuesta[] }) {
+  const [supuestos, setSupuestos] = useState<PreguntaSupuesta[]>(supuestosIniciales)
+  const [abierta, setAbierta] = useState<string | null>(null)
+  const [texto, setTexto] = useState('')
+  const [enviando, setEnviando] = useState(false)
+  const [error, setError] = useState('')
+
+  if (supuestos.length === 0) return null
+
+  const enviar = async (id: string) => {
+    if (!texto.trim()) return
+    setEnviando(true)
+    setError('')
+    try {
+      const res = await fetch('/api/responder-pregunta-proyecto', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id_pregunta: id, respuesta: texto }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(data?.error || 'No se pudo enviar tu respuesta.')
+      setSupuestos((lista) => lista.filter((x) => x.id !== id))
+      setAbierta(null)
+      setTexto('')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'No se pudo enviar tu respuesta.')
+    } finally {
+      setEnviando(false)
+    }
+  }
+
+  return (
+    <Tarjeta className="mt-4">
+      <TituloBloque
+        icono={AlertTriangle}
+        titulo="Seguimos sin tu respuesta"
+        descripcion="No alcanzaste a responder en el plazo, así que el proyecto siguió. Puedes completar estos puntos cuando quieras para que el proyecto quede más sólido."
+        contador={`${supuestos.length}`}
+      />
+      <ul className="divide-y divide-[#3B1727]">
+        {supuestos.map((s) => (
+          <li key={s.id} className="space-y-3 px-5 py-4">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="rounded-full bg-[#3B1727] border border-[#B08D57]/35 px-2.5 py-1 text-[11px] font-bold text-[#C9A46B]">
+                {s.nombrePaso}
+              </span>
+              <span className="rounded-full bg-[#C99A3D]/15 px-2.5 py-1 text-[11px] font-bold text-[#E0B868]">
+                {s.supuesto ? 'Supuesto por confirmar' : 'Por reforzar'}
+              </span>
+            </div>
+            <p className="text-[13.5px] font-semibold leading-relaxed text-[#F3E7DC]">{s.pregunta}</p>
+            <p className="text-[12.5px] leading-relaxed text-[#F3E7DC]/70">
+              {s.supuesto
+                ? `Mientras no nos confirmes, usamos esto como cierto: «${s.supuesto}»`
+                : 'No teníamos este dato. Escribimos esta parte con lo que había en tu proyecto y la dejamos pendiente de reforzar.'}
+            </p>
+
+            {abierta === s.id ? (
+              <div className="space-y-3">
+                <textarea
+                  value={texto}
+                  onChange={(e) => setTexto(e.target.value)}
+                  rows={4}
+                  placeholder="Escribe aquí tu respuesta…"
+                  className="w-full rounded-xl border border-[#B08D57]/35 bg-[#3B1727] px-3.5 py-3 text-[13.5px] leading-relaxed text-[#F3E7DC] outline-none placeholder:text-[#F3E7DC]/40 focus:border-[#C9A46B]"
+                />
+                {error ? <p className="text-[12.5px] font-semibold text-[#E0917E]">{error}</p> : null}
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => enviar(s.id)}
+                    disabled={enviando || !texto.trim()}
+                    className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-[13px] font-extrabold disabled:opacity-60 ${BOTON_DORADO}`}
+                  >
+                    {enviando ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
+                    {enviando ? 'Enviando…' : 'Enviar respuesta'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAbierta(null)
+                      setTexto('')
+                      setError('')
+                    }}
+                    disabled={enviando}
+                    className="text-[12.5px] font-semibold text-[#F3E7DC]/70 underline underline-offset-2 hover:text-[#C9A46B]"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => {
+                  setAbierta(s.id)
+                  setTexto(s.supuesto || '')
+                  setError('')
+                }}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-[#C9A46B]/60 px-3 py-1.5 text-[12.5px] font-bold text-[#C9A46B] hover:bg-[#C9A46B]/10"
+              >
+                {s.supuesto ? 'Corregir o confirmar' : 'Completar ahora'}
+              </button>
+            )}
+          </li>
+        ))}
+      </ul>
+    </Tarjeta>
+  )
+}
+
+/* ========================================================================== */
 /* Pantalla                                                                   */
 /* ========================================================================== */
 
@@ -552,6 +693,8 @@ export function PendientesCliente({ datos }: { datos: DatosPendientes }) {
           archivosIniciales={datos.archivosSubidos}
         />
       </div>
+
+      <BloqueSupuestos supuestosIniciales={datos.supuestos} />
     </div>
   )
 }

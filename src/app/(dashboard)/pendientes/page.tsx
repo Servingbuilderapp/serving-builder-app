@@ -6,6 +6,7 @@ import {
   type ArchivoSubido,
   type DocumentoPedido,
   type PreguntaPendiente,
+  type PreguntaSupuesta,
 } from '@/components/panel/PendientesCliente'
 
 const BUCKET = 'documentos-proyectos'
@@ -30,6 +31,7 @@ type FilaPregunta = {
   pregunta: string
   critico: boolean | null
   sugerencia: string | null
+  recordatorio_enviado_en: string | null
 }
 
 type FilaRequisito = {
@@ -73,7 +75,7 @@ export default async function PendientesPage() {
 
   const { data: filasPreguntas } = await supabase
     .from('preguntas_pendientes_proyecto')
-    .select('id, id_paso, pregunta, critico, sugerencia')
+    .select('id, id_paso, pregunta, critico, sugerencia, recordatorio_enviado_en')
     .eq('id_proyecto', proyectoId)
     .eq('respondida', false)
     .order('critico', { ascending: false })
@@ -93,7 +95,34 @@ export default async function PendientesPage() {
       pregunta: String(p.pregunta || ''),
       critico: Boolean(p.critico),
       sugerencia: p.sugerencia ? String(p.sugerencia) : null,
+      venceEn: p.recordatorio_enviado_en
+        ? new Date(new Date(p.recordatorio_enviado_en).getTime() + 24 * 60 * 60 * 1000).toISOString()
+        : null,
     }))
+  }
+
+  /* --- respuestas que puso el sistema porque no se respondió a tiempo ----- */
+
+  const { data: filasSupuestos } = await supabase
+    .from('preguntas_pendientes_proyecto')
+    .select('id, id_paso, pregunta, respuesta')
+    .eq('id_proyecto', proyectoId)
+    .eq('respondida', true)
+    .eq('es_supuesto', true)
+
+  let supuestos: PreguntaSupuesta[] = []
+  if ((filasSupuestos || []).length > 0) {
+    const { data: pasosSup } = await supabase.from('pasos_estructuracion').select('id, nombre_paso')
+    const mapaSup = new Map((pasosSup || []).map((p) => [p.id, p.nombre_paso as string]))
+    supuestos = (filasSupuestos || []).map((f) => {
+      const resp = String(f.respuesta || '')
+      return {
+        id: String(f.id),
+        nombrePaso: mapaSup.get(f.id_paso) || 'Tu proyecto',
+        pregunta: String(f.pregunta || ''),
+        supuesto: resp === '(sin respuesta del cliente)' ? null : resp,
+      }
+    })
   }
 
   /* --- documentos que el equipo está esperando --------------------------- */
@@ -177,6 +206,7 @@ export default async function PendientesPage() {
         proyectoId,
         nombreProyecto: String(proyecto.nombre_iniciativa || 'Tu proyecto'),
         preguntas,
+        supuestos,
         documentosPedidos,
         archivosSubidos,
         archivoBase: proyecto.archivo_proyecto_nombre
