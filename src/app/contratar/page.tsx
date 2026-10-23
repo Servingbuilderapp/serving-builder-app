@@ -402,7 +402,7 @@ function ContratarContent() {
               )}
 
               <div className="p-5 rounded-2xl bg-color-base-content/5 border border-color-base-content/10 space-y-3">
-                <h4 className="text-xs font-black uppercase tracking-widest text-color-base-content">
+                <h4 className="text-xs font-black uppercase tracking-widest text-[#1f1f1f]">
                   {t('contratar.titulo_contrato')}
                 </h4>
                 <div
@@ -412,7 +412,7 @@ function ContratarContent() {
                       setContratoLeido(true)
                     }
                   }}
-                  className="text-xs text-color-base-content/70 max-h-56 overflow-y-auto leading-relaxed pr-2 whitespace-pre-line border border-color-base-content/10 rounded-xl p-3 bg-white"
+                  className="text-xs text-[#1f1f1f] max-h-56 overflow-y-auto leading-relaxed pr-2 whitespace-pre-line border border-color-base-content/10 rounded-xl p-3 bg-white"
                 >
                   {esEmprendedor ? TEXTO_CONTRATO + '\n\n' + ANEXO_EMPRENDEDOR : TEXTO_CONTRATO}
                 </div>
@@ -429,7 +429,7 @@ function ContratarContent() {
                     onChange={(e) => setFormData({ ...formData, aceptaTerminos: e.target.checked })}
                     className="mt-1"
                   />
-                  <span className="text-xs font-bold text-color-base-content">
+                  <span className="text-xs font-bold text-[#1f1f1f]">
                     {t('contratar.checkbox_acepto')}
                   </span>
                 </label>
