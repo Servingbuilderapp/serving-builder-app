@@ -50,7 +50,7 @@ export function buildEmailTemplate(options: {
           <tr>
             <td align="center" style="padding: 40px 40px 20px 40px;">
               <div style="display: inline-block; background: linear-gradient(135deg, #7c3aed, #6d28d9, #ec4899); border-radius: 12px; padding: 10px 24px;">
-                <span style="color: #ffffff; font-weight: 900; font-size: 14px; letter-spacing: 1px; text-transform: uppercase;">✦ SERVING FACTORY</span>
+                <span style="color: #ffffff; font-weight: 900; font-size: 14px; letter-spacing: 1px; text-transform: uppercase;">✦ ARQUITECTURA DIGITAL DE PROYECTOS</span>
               </div>
             </td>
           </tr>
@@ -82,10 +82,10 @@ export function buildEmailTemplate(options: {
             <td style="padding: 0 40px 40px 40px;">
               <div style="border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 30px;">
                 <p style="color: rgba(255, 255, 255, 0.3); font-size: 12px; margin: 0; line-height: 1.5;">
-                  ${footerText || 'Este email fue enviado automáticamente por el sistema. Si tienes alguna duda, contacta al administrador.'}
+                  ${footerText || 'Este email fue enviado automáticamente por el sistema. Si tienes alguna duda, escríbenos a contacto@portalarquitecturadigital.com.'}
                 </p>
                 <p style="color: rgba(255, 255, 255, 0.2); font-size: 10px; margin: 10px 0 0 0; font-weight: bold; text-transform: uppercase; letter-spacing: 2px;">
-                  © 2026 SERVING FACTORY
+                  © 2026 ARQUITECTURA DIGITAL DE PROYECTOS
                 </p>
               </div>
             </td>
@@ -147,7 +147,7 @@ export async function sendWelcomeEmail(options: {
   ]
 
   const html = buildEmailTemplate({
-    title: '¡Bienvenido a SERVING FACTORY!',
+    title: '¡Bienvenido a Arquitectura Digital de Proyectos!',
     greeting: `Hola ${firstName},`,
     bodyLines,
     ctaText: 'Acceder al Portal',
@@ -156,7 +156,7 @@ export async function sendWelcomeEmail(options: {
 
   return sendEmail({
     to,
-    subject: '¡Bienvenido a SERVING FACTORY! Tu acceso está listo',
+    subject: '¡Bienvenido a Arquitectura Digital de Proyectos! Tu acceso está listo',
     html
   })
 }
