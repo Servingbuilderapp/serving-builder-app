@@ -9,6 +9,7 @@ import {
   Coins,
   Copy,
   FileText,
+  Gauge,
   LayoutGrid,
   ListTree,
   Send,
@@ -35,6 +36,7 @@ export const PESTANAS = [
   { clave: 'cronograma', nombre: 'Cronograma', icono: CalendarRange },
   { clave: 'postulaciones', nombre: 'Postulaciones', icono: Send },
   { clave: 'replicas', nombre: 'Réplicas', icono: Copy },
+  { clave: 'resumen', nombre: 'Resumen', icono: Gauge },
 ] as const
 
 export function PestanasProyecto({
@@ -69,7 +71,13 @@ export function PestanasProyecto({
 
       <nav className="mt-3 flex gap-1 overflow-x-auto px-2 lg:px-4">
         {PESTANAS.map((pestana) => {
-          const destino = pestana.clave ? `${base}/${pestana.clave}` : base
+          // "Resumen" usa la pantalla del resumen general, pero apuntando a ESTE proyecto.
+          const destino =
+            pestana.clave === 'resumen'
+              ? `/dashboard?proyecto=${proyectoId}`
+              : pestana.clave
+                ? `${base}/${pestana.clave}`
+                : base
           const activa = pestana.clave
             ? ruta === destino || ruta.startsWith(`${destino}/`)
             : ruta === base

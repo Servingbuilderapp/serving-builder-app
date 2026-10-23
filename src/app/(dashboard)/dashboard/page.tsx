@@ -1,6 +1,7 @@
 import React from 'react'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { esEquipoServing } from '@/lib/guardiaEquipo'
 import { ResumenProyecto, type DatosResumen, type EstadoSemaforo, type EstadoEtapa } from '@/components/panel/ResumenProyecto'
 
 export const dynamic = 'force-dynamic'
@@ -58,7 +59,11 @@ function hace(desde: Date | null): string {
 
 /* ========================================================================== */
 
-export default async function PaginaResumen() {
+export default async function PaginaResumen({
+  searchParams,
+}: {
+  searchParams: Promise<{ proyecto?: string }>
+}) {
   const supabase = await createClient()
   const {
     data: { user },
@@ -66,13 +71,20 @@ export default async function PaginaResumen() {
 
   if (!user) redirect('/login')
 
-  const { data: proyecto } = await supabase
-    .from('proyectos_clientes_serving')
-    .select('*')
-    .eq('correo_cliente', user.email)
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .maybeSingle()
+  // El equipo de Serving puede abrir el resumen de CUALQUIER proyecto de cliente
+  // (desde la pestaña "Resumen" de /admin/proyectos/[id]). Sin eso, el resumen
+  // siempre mostraba el proyecto atado al correo del propio administrador.
+  const { proyecto: proyectoPedido } = await searchParams
+  const verComoEquipo = Boolean(proyectoPedido) && (await esEquipoServing())
+
+  const consultaProyecto = supabase.from('proyectos_clientes_serving').select('*')
+  const { data: proyecto } = verComoEquipo
+    ? await consultaProyecto.eq('id', proyectoPedido as string).maybeSingle()
+    : await consultaProyecto
+        .eq('correo_cliente', user.email)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
 
   const vacio: DatosResumen = {
     proyecto: null,
