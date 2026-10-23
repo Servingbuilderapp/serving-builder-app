@@ -22,6 +22,7 @@ export type PreguntaPendiente = {
   nombrePaso: string
   pregunta: string
   critico: boolean
+  sugerencia: string | null
 }
 
 export type DocumentoPedido = {
@@ -199,6 +200,26 @@ function BloquePreguntas({ preguntasIniciales }: { preguntasIniciales: PreguntaP
         <p className="text-[14.5px] font-semibold leading-relaxed text-[#F3E7DC]">
           {actual.pregunta}
         </p>
+
+        {actual.sugerencia ? (
+          <div className="rounded-xl border border-[#B08D57]/35 bg-[#3B1727] px-3.5 py-3">
+            <p className="text-[11px] font-bold uppercase tracking-wide text-[#C9A46B]">
+              Respuesta sugerida
+            </p>
+            <p className="mt-1.5 text-[13.5px] leading-relaxed text-[#F3E7DC]">{actual.sugerencia}</p>
+            <p className="mt-1.5 text-[12px] leading-relaxed text-[#F3E7DC]/60">
+              Armada con tu diagnóstico y tu documento. Revísala: si no es correcta, corrígela.
+            </p>
+            <button
+              type="button"
+              onClick={() => setTexto(actual.sugerencia || '')}
+              disabled={enviando}
+              className="mt-2.5 inline-flex items-center gap-1.5 rounded-lg border border-[#C9A46B]/60 px-3 py-1.5 text-[12.5px] font-bold text-[#C9A46B] hover:bg-[#C9A46B]/10 disabled:opacity-50"
+            >
+              <Check className="h-3.5 w-3.5" /> Usar esta sugerencia
+            </button>
+          </div>
+        ) : null}
 
         <textarea
           value={texto}

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { urlGemini, fetchGemini } from "@/lib/geminiEndpoint";
 import { after } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { esLlamadaInterna } from "@/lib/candadoMotores";
 
 // El motor puede tardar minutos: sin esto Vercel lo corta antes de terminar.
 export const maxDuration = 300;
@@ -104,7 +105,10 @@ async function llamarGeminiConReintentos(
 
 export async function POST(req: NextRequest) {
   try {
-    const { id_pregunta, respuesta } = await req.json();
+    const { id_pregunta, respuesta, es_supuesto } = await req.json();
+    // Supuesto: el cliente no respondió a tiempo y el reloj aplicó la sugerencia.
+    // Solo lo puede pedir la propia plataforma (llave interna), nunca un cliente.
+    const comoSupuesto = es_supuesto === true && esLlamadaInterna(req);
 
     if (!id_pregunta || !respuesta || !respuesta.trim()) {
       return NextResponse.json(
@@ -174,7 +178,9 @@ export async function POST(req: NextRequest) {
       id_proyecto: preguntaRow.id_proyecto,
       id_paso: preguntaRow.id_paso,
       contenido: resultado.contenido,
-      advertencia: resultado.advertencia || null,
+      advertencia: comoSupuesto
+        ? "Supuesto por confirmar: el cliente no respondió a tiempo y se usó la sugerencia armada con su diagnóstico y documento."
+        : resultado.advertencia || null,
     });
 
     await supabase.from("avance_estructuracion_proyecto").upsert({
@@ -188,6 +194,7 @@ export async function POST(req: NextRequest) {
       .from("preguntas_pendientes_proyecto")
       .update({
         respuesta,
+        es_supuesto: comoSupuesto,
         respondida: true,
         respondido_en: new Date().toISOString(),
       })

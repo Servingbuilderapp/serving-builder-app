@@ -347,11 +347,12 @@ Responde ÚNICAMENTE con un JSON válido, sin texto antes ni después, con este 
   "pasos": [
     { "id_paso": 1, "estado": "completo", "contenido": "texto desarrollado del paso...", "advertencia": null },
     { "id_paso": 2, "estado": "completo", "contenido": "texto desarrollado...", "advertencia": "Esta parte quedó débil porque..." },
-    { "id_paso": 3, "estado": "incompleto", "pregunta": "pregunta clara y específica...", "critico": true }
+    { "id_paso": 3, "estado": "incompleto", "pregunta": "pregunta clara y específica...", "critico": true, "sugerencia": "respuesta sugerida o null" }
   ]
 }
 
 El campo "advertencia" solo aplica a pasos "completo" y va en null si no hay ninguna advertencia. El campo "critico" solo aplica a pasos "incompleto" (true o false).
+El campo "sugerencia" solo aplica a pasos "incompleto": es una respuesta que el cliente podría aceptar con un clic, redactada en primera persona como si la diera el cliente, armada ÚNICAMENTE con lo que dice el documento o el diagnóstico (máximo 80 palabras). Si el dato solo lo puede saber el cliente (nombres de personas o entidades, NIT, montos, fechas, cifras, ubicación exacta del territorio), pon "sugerencia": null. Nunca inventes un dato para llenar la sugerencia.
 `;
 
     const partesUsuario: any[] = [];
@@ -428,6 +429,10 @@ El campo "advertencia" solo aplica a pasos "completo" y va en null si no hay nin
             id_paso: paso.id_paso,
             pregunta: paso.pregunta,
             critico: paso.critico === true,
+            sugerencia:
+              typeof paso.sugerencia === "string" && paso.sugerencia.trim()
+                ? paso.sugerencia.trim()
+                : null,
           });
         }
       }

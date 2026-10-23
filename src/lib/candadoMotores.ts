@@ -47,7 +47,7 @@ export function cabecerasInternas(): Record<string, string> {
   return firma ? { [CABECERA_INTERNA]: firma } : {}
 }
 
-function esLlamadaInterna(request: NextRequest): boolean {
+export function esLlamadaInterna(request: NextRequest): boolean {
   const firma = firmaInterna()
   if (!firma) return false
   return request.headers.get(CABECERA_INTERNA) === firma

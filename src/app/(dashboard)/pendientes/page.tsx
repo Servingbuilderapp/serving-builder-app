@@ -29,6 +29,7 @@ type FilaPregunta = {
   id_paso: number
   pregunta: string
   critico: boolean | null
+  sugerencia: string | null
 }
 
 type FilaRequisito = {
@@ -72,7 +73,7 @@ export default async function PendientesPage() {
 
   const { data: filasPreguntas } = await supabase
     .from('preguntas_pendientes_proyecto')
-    .select('id, id_paso, pregunta, critico')
+    .select('id, id_paso, pregunta, critico, sugerencia')
     .eq('id_proyecto', proyectoId)
     .eq('respondida', false)
     .order('critico', { ascending: false })
@@ -91,6 +92,7 @@ export default async function PendientesPage() {
       nombrePaso: mapaPasos.get(p.id_paso) || 'Tu proyecto',
       pregunta: String(p.pregunta || ''),
       critico: Boolean(p.critico),
+      sugerencia: p.sugerencia ? String(p.sugerencia) : null,
     }))
   }
 
