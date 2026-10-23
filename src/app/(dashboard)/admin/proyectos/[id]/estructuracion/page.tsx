@@ -1,4 +1,5 @@
 import React from 'react'
+import { GenerarSugerenciasButton } from '@/components/admin/GenerarSugerenciasButton'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as crearClienteDeServicio } from '@supabase/supabase-js'
@@ -153,12 +154,15 @@ export default async function PaginaEstructuracionInterna({
   })
 
   return (
-    <EstructuracionClient
-      proyectoId={String(proyecto.id)}
-      nombreProyecto={proyecto.nombre_iniciativa || 'Proyecto sin nombre'}
-      nombreCliente={proyecto.nombre_cliente || proyecto.correo_cliente || ''}
-      pasosIniciales={pasos}
-      documentos={documentos}
-    />
+    <>
+      <GenerarSugerenciasButton proyectoId={String(proyecto.id)} />
+      <EstructuracionClient
+        proyectoId={String(proyecto.id)}
+        nombreProyecto={proyecto.nombre_iniciativa || 'Proyecto sin nombre'}
+        nombreCliente={proyecto.nombre_cliente || proyecto.correo_cliente || ''}
+        pasosIniciales={pasos}
+        documentos={documentos}
+      />
+    </>
   )
 }
