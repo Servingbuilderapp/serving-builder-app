@@ -307,7 +307,11 @@ function ContratarContent() {
             <p className="text-color-base-content/60 text-sm">
               {plan.montoCop === 0
                 ? 'Sin costo de estructuración · solo comisión de éxito si el proyecto es aprobado'
-                : `${desglosarPrecio(plan.montoCop).baseConSufijo} · ${desglosarPrecio(plan.montoCop).totalConEtiqueta} · aprox. $${montoUsd.toLocaleString('en-US')} USD`}
+                : pais === 'internacional'
+                  ? `$${montoUsd.toLocaleString('en-US')} USD · pago único`
+                  : pais === 'colombia'
+                    ? `${desglosarPrecio(plan.montoCop).baseConSufijo} · ${desglosarPrecio(plan.montoCop).totalConEtiqueta}`
+                    : `${desglosarPrecio(plan.montoCop).baseConSufijo} · ${desglosarPrecio(plan.montoCop).totalConEtiqueta} · Otros países: $${montoUsd.toLocaleString('en-US')} USD`}
             </p>
           </div>
 
@@ -653,7 +657,7 @@ function ContratarContent() {
               ) : (
                 <div className="text-left p-6 rounded-2xl bg-color-base-content/5 border border-color-base-content/10 space-y-4">
                   <p className="text-sm font-bold text-color-base-content">
-                    {t('contratar.pago_usd_prefijo')} ${montoUsd.toLocaleString('en-US')} USD {t('contratar.pago_usd_sufijo')}
+                    {t('contratar.pago_usd_prefijo')} ${montoUsd.toLocaleString('en-US')} USD
                   </p>
                   {proyectoId && (
                     <BotonPagoBold
