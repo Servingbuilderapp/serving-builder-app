@@ -176,6 +176,8 @@ function ContratarContent() {
 
   const mensajeWhatsapp = 'Hola, firme el contrato para el plan ' + plan.nombre + ' (proyecto ' + proyectoId + '). Aqui esta mi comprobante de pago.'
   const mensajeWhatsappUrl = 'https://wa.me/573123335966?text=' + encodeURIComponent(mensajeWhatsapp)
+  const mensajeGlobal66 = 'Hola, firmé el contrato para el plan ' + plan.nombre + ' (proyecto ' + proyectoId + '). Quiero pagar por Global66.'
+  const mensajeGlobal66Url = 'https://wa.me/573123335966?text=' + encodeURIComponent(mensajeGlobal66)
 
   if (debeElegirPlan) {
     return (
@@ -664,7 +666,22 @@ function ContratarContent() {
                 </div>
               )}
 
-              
+              <div className="text-left p-5 rounded-2xl bg-color-base-content/5 border border-color-base-content/10 space-y-2">
+                <p className="text-sm font-bold text-[#1f1f1f]">¿Prefieres pagar por Global66?</p>
+                <p className="text-sm text-[#1f1f1f]/80 leading-relaxed">
+                  Si no puedes o no quieres pagar con Bold, también puedes pagar por Global66 desde
+                  cualquiera de los países habilitados. Escríbenos por WhatsApp y te enviamos los datos para hacerlo.
+                </p>
+                <a
+                  href={mensajeGlobal66Url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-color-primary hover:underline"
+                >
+                  Pagar por Global66 (WhatsApp)
+                </a>
+              </div>
+
                 <a href={mensajeWhatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
