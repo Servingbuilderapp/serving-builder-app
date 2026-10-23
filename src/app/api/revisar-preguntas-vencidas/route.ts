@@ -17,7 +17,9 @@ import { buildEmailTemplate, sendEmail } from "@/lib/email";
  *   - Críticas ("Importante"): el proyecto espera. Se le manda al cliente UN
  *     recordatorio por correo (queda anotado para no repetirlo).
  *
- * Las preguntas sin sugerencia (datos que solo el cliente conoce) no se tocan.
+ * Las NO críticas sin sugerencia (datos que solo el cliente conoce) también
+ * siguen: el paso se redacta con lo que ya hay y queda "por reforzar", sin
+ * inventar nada, para que el proyecto no quede parado para siempre.
  *
  * Protegida igual que los demás relojes.
  */
@@ -55,10 +57,10 @@ export async function GET(req: NextRequest) {
 
     // --- 1. No críticas con sugerencia: seguir con el supuesto ---------------
     const porProyecto = new Map<string, { id: string; sugerencia: string }[]>();
+    // sugerencia vacía = no hay sugerencia: el paso se redacta con lo que ya hay y queda "por reforzar".
     for (const p of lista) {
       if (p.critico === true) continue;
       const sugerencia = typeof p.sugerencia === "string" ? p.sugerencia.trim() : "";
-      if (!sugerencia) continue;
       const clave = String(p.id_proyecto);
       porProyecto.set(clave, [...(porProyecto.get(clave) || []), { id: String(p.id), sugerencia }]);
     }
@@ -73,7 +75,11 @@ export async function GET(req: NextRequest) {
               await fetch(`${origen}/api/responder-pregunta-proyecto`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json", ...cabecerasInternas() },
-                body: JSON.stringify({ id_pregunta: q.id, respuesta: q.sugerencia, es_supuesto: true }),
+                body: JSON.stringify(
+                  q.sugerencia
+                    ? { id_pregunta: q.id, respuesta: q.sugerencia, es_supuesto: true }
+                    : { id_pregunta: q.id, sin_respuesta: true, es_supuesto: true }
+                ),
               });
             } catch (e) {
               console.error(`Error aplicando el supuesto de la pregunta ${q.id}:`, e);

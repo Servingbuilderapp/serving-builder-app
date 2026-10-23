@@ -105,12 +105,15 @@ async function llamarGeminiConReintentos(
 
 export async function POST(req: NextRequest) {
   try {
-    const { id_pregunta, respuesta, es_supuesto } = await req.json();
+    const { id_pregunta, respuesta, es_supuesto, sin_respuesta } = await req.json();
     // Supuesto: el cliente no respondió a tiempo y el reloj aplicó la sugerencia.
     // Solo lo puede pedir la propia plataforma (llave interna), nunca un cliente.
-    const comoSupuesto = es_supuesto === true && esLlamadaInterna(req);
+    const llamadaInterna = esLlamadaInterna(req);
+    const comoSupuesto = es_supuesto === true && llamadaInterna;
+    // Sin respuesta ni sugerencia: el paso se redacta solo con lo que ya hay y queda "por reforzar".
+    const sinRespuesta = sin_respuesta === true && llamadaInterna;
 
-    if (!id_pregunta || !respuesta || !respuesta.trim()) {
+    if (!id_pregunta || (!sinRespuesta && (!respuesta || !respuesta.trim()))) {
       return NextResponse.json(
         { error: "Falta id_pregunta o respuesta" },
         { status: 400 }
@@ -150,7 +153,19 @@ export async function POST(req: NextRequest) {
 
     const nombrePaso = pasoRow?.nombre_paso || `paso ${preguntaRow.id_paso}`;
 
-    const textoParaGemini = `Paso a completar: ${nombrePaso}\n\nPregunta que se le hizo al cliente: ${preguntaRow.pregunta}\n\nRespuesta del cliente: ${respuesta}`;
+    let textoParaGemini = `Paso a completar: ${nombrePaso}\n\nPregunta que se le hizo al cliente: ${preguntaRow.pregunta}\n\nRespuesta del cliente: ${respuesta}`;
+
+    if (sinRespuesta) {
+      const { data: previo } = await supabase
+        .from("contenido_pasos_proyecto")
+        .select("id_paso, contenido")
+        .eq("id_proyecto", preguntaRow.id_proyecto);
+      const contexto = (previo || [])
+        .map((c) => String(c.contenido || "").slice(0, 1500))
+        .join("\n\n")
+        .slice(0, 50000);
+      textoParaGemini = `Paso a completar: ${nombrePaso}\n\nPregunta que se le hizo al cliente: ${preguntaRow.pregunta}\n\nEl cliente NO respondió. Redacta este paso usando ÚNICAMENTE lo que ya se sabe del proyecto (abajo). No inventes ningún dato, cifra, nombre ni fuente. Si no hay base suficiente, escribe una versión breve y deja claro qué falta, y pon una advertencia.\n\nLO QUE YA SE SABE DEL PROYECTO:\n${contexto || "(nada todavía)"}`;
+    }
 
     const cuerpoSolicitud = {
       systemInstruction: { parts: [{ text: PROMPT_RESPUESTA }] },
@@ -178,9 +193,11 @@ export async function POST(req: NextRequest) {
       id_proyecto: preguntaRow.id_proyecto,
       id_paso: preguntaRow.id_paso,
       contenido: resultado.contenido,
-      advertencia: comoSupuesto
-        ? "Supuesto por confirmar: el cliente no respondió a tiempo y se usó la sugerencia armada con su diagnóstico y documento."
-        : resultado.advertencia || null,
+      advertencia: sinRespuesta
+        ? "Por reforzar: el cliente no respondió a tiempo y este paso se redactó solo con lo que ya había en el proyecto. Falta que el cliente aporte este dato."
+        : comoSupuesto
+          ? "Supuesto por confirmar: el cliente no respondió a tiempo y se usó la sugerencia armada con su diagnóstico y documento."
+          : resultado.advertencia || null,
     });
 
     await supabase.from("avance_estructuracion_proyecto").upsert({
@@ -193,8 +210,8 @@ export async function POST(req: NextRequest) {
     await supabase
       .from("preguntas_pendientes_proyecto")
       .update({
-        respuesta,
-        es_supuesto: comoSupuesto,
+        respuesta: sinRespuesta ? "(sin respuesta del cliente)" : respuesta,
+        es_supuesto: comoSupuesto || sinRespuesta,
         respondida: true,
         respondido_en: new Date().toISOString(),
       })
