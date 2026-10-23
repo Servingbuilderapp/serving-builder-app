@@ -116,7 +116,10 @@ function ContratarContent() {
   const montoUsd = COBRO_EXTERIOR.precioUsdFijo[planSlug] ?? Math.round(plan.montoCop / TASA_COP_POR_USD)
 
   const [step, setStep] = useState<1 | 2>(1)
-  const [pais, setPais] = useState<'colombia' | 'internacional' | null>(null)
+  // Fondo Emprender solo aplica en Colombia: arranca ya con Colombia elegido.
+  const [pais, setPais] = useState<'colombia' | 'internacional' | null>(
+    searchParams.get('plan') === 'fondo_emprender' ? 'colombia' : null
+  )
   const [loading, setLoading] = useState(false)
   const [proyectoId, setProyectoId] = useState<string | null>(null)
   const [passwordTemporal, setPasswordTemporal] = useState<string | null>(null)
@@ -283,7 +286,7 @@ function ContratarContent() {
             </div>
             <button
               type="button"
-              onClick={() => setPlanSlug('fondo_emprender')}
+              onClick={() => { setPlanSlug('fondo_emprender'); setPais('colombia') }}
               className="shrink-0 px-6 py-3 rounded-xl border border-color-base-300 text-sm font-bold text-color-base-content hover:bg-color-base-200 transition-colors"
             >
               Ver condiciones
@@ -368,7 +371,12 @@ function ContratarContent() {
                 <label className="block text-xs font-bold uppercase tracking-wider text-color-base-content/70 mb-2">
                   {t('contratar.pregunta_pais')}
                 </label>
-                <div className="grid grid-cols-2 gap-3">
+                {esFondoEmprender && (
+                  <p className="text-xs text-color-base-content/70 mb-2">
+                    El Fondo Emprender aplica solo para Colombia.
+                  </p>
+                )}
+                <div className={esFondoEmprender ? 'grid grid-cols-1 gap-3' : 'grid grid-cols-2 gap-3'}>
                   <button
                     type="button"
                     onClick={() => setPais('colombia')}
@@ -376,13 +384,13 @@ function ContratarContent() {
                   >
                     {t('contratar.pais_colombia')}
                   </button>
-                  <button
+                  {!esFondoEmprender && <button
                     type="button"
                     onClick={() => setPais('internacional')}
                     className={`p-4 rounded-xl border text-sm font-bold transition-all ${pais === 'internacional' ? 'border-color-primary bg-color-primary/10' : 'border-color-base-300'}`}
                   >
                     {t('contratar.pais_internacional')}
-                  </button>
+                  </button>}
                 </div>
               </div>
 
