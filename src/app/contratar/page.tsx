@@ -7,7 +7,6 @@ import { useSearchParams } from 'next/navigation'
 import { GlowButton } from '@/components/ui/GlowButton'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { CheckCircle2, ShieldCheck, Loader2 } from 'lucide-react'
-import { PayPalButtons } from '@paypal/react-paypal-js'
 import { cn } from '@/lib/utils'
 import { useTranslation } from '@/hooks/useTranslation'
 import { BotonPagoBold } from '@/components/pagos/BotonPagoBold'
@@ -114,7 +113,7 @@ function ContratarContent() {
         incluye: [] as string[],
       }
     : (PLANES[planSlug] || PLANES.esencial)
-  const montoUsd = Math.round(plan.montoCop / TASA_COP_POR_USD)
+  const montoUsd = COBRO_EXTERIOR.precioUsdFijo[planSlug] ?? Math.round(plan.montoCop / TASA_COP_POR_USD)
 
   const [step, setStep] = useState<1 | 2>(1)
   const [pais, setPais] = useState<'colombia' | 'internacional' | null>(null)
@@ -613,7 +612,7 @@ function ContratarContent() {
                     {t('contratar.transferencia_nota')}
                   </p>
                 </div>
-              ) : pais === 'colombia' || !COBRO_EXTERIOR.paypal ? (
+              ) : pais === 'colombia' ? (
                 <div className="text-left p-6 rounded-2xl bg-color-base-content/5 border border-color-base-content/10 space-y-2">
                   <p className="text-sm font-bold text-color-base-content">{t('contratar.factura_titulo')}</p>
                   <p className="text-sm text-color-base-content/70 leading-relaxed">{t('contratar.factura_texto')}</p>
@@ -654,25 +653,14 @@ function ContratarContent() {
                   <p className="text-sm font-bold text-color-base-content">
                     {t('contratar.pago_usd_prefijo')} ${montoUsd.toLocaleString('en-US')} USD {t('contratar.pago_usd_sufijo')}
                   </p>
-                  <PayPalButtons
-                    style={{ layout: 'vertical' }}
-                    createOrder={(_data, actions) =>
-                      actions.order.create({
-                        intent: 'CAPTURE',
-                        purchase_units: [
-                          {
-                            amount: { currency_code: 'USD', value: montoUsd.toString() },
-                            description: plan.nombre + ' - Arquitectura Digital',
-                          },
-                        ],
-                      })
-                    }
-                    onApprove={async (_data, actions) => {
-                      if (!actions.order) return
-                      await actions.order.capture()
-                      alert(t('contratar.paypal_alert'))
-                    }}
-                  />
+                  {proyectoId && (
+                    <BotonPagoBold
+                      endpoint="/api/proyectos/bold/iniciar"
+                      campoId="proyectoId"
+                      id={proyectoId}
+                      texto="Pagar con tarjeta"
+                    />
+                  )}
                 </div>
               )}
 

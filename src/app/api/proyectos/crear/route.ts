@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { PLAN_EMPRENDEDOR, MONTO_EMPRENDEDOR_COP, ESTADO_PENDIENTE_AVAL } from '@/lib/planEmprendedor'
+import { COBRO_EXTERIOR } from '@/lib/mediosDePago'
 
 function generarPasswordTemporal() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789'
@@ -92,12 +93,13 @@ export async function POST(req: Request) {
         vertical_asignada: verticalDiagnostico || 'sin_clasificar',
         plan_pago: planPago,
         monto_solicitado_cop: esEmprendedor ? MONTO_EMPRENDEDOR_COP : montoCop || null,
-        monto_solicitado_usd: montoUsd || null,
+        // Para las dos modalidades normales el precio en USD lo fija el servidor.
+        monto_solicitado_usd: COBRO_EXTERIOR.precioUsdFijo[planPago] ?? montoUsd ?? null,
         estado_actual: esEmprendedor ? ESTADO_PENDIENTE_AVAL : 'pendiente_pago',
         estado_comercial: 'nuevo',
         contrato_firmado: true,
         firma_digital: firmaDigital,
-        pasarela_pago: pais === 'colombia' ? 'Manual' : 'PayPal',
+        pasarela_pago: pais === 'colombia' ? 'Manual' : 'Bold USD',
       })
       .select('id')
       .single()

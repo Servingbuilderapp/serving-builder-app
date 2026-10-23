@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { armarBotonBold } from '@/lib/bold'
-import { desglosarPrecio } from '@/lib/mediosDePago'
+import { COBRO_EXTERIOR, desglosarPrecio } from '@/lib/mediosDePago'
 import { PLAN_EMPRENDEDOR } from '@/lib/planEmprendedor'
 
 /**
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     )
     const { data: proyecto, error } = await supabaseAdmin
       .from('proyectos_clientes_serving')
-      .select('id, nombre_iniciativa, estado_actual, monto_solicitado_cop, pasarela_pago, plan_pago')
+      .select('id, nombre_iniciativa, estado_actual, monto_solicitado_cop, monto_solicitado_usd, pasarela_pago, plan_pago')
       .eq('id', proyectoId)
       .single()
 
@@ -39,9 +39,26 @@ export async function POST(req: Request) {
     if (proyecto.estado_actual !== 'pendiente_pago') {
       return NextResponse.json({ error: 'Este proyecto ya no está pendiente de pago' }, { status: 409 })
     }
+    // Cliente de otro país: se cobra TODO de una vez, en dólares, sin IVA.
+    if (proyecto.pasarela_pago === 'Bold USD') {
+      const montoUsd = COBRO_EXTERIOR.precioUsdFijo[proyecto.plan_pago] ?? proyecto.monto_solicitado_usd
+      if (!montoUsd) {
+        return NextResponse.json({ error: 'Este proyecto no tiene precio en dólares' }, { status: 400 })
+      }
+      const origenUsd = new URL(req.url).origin
+      const botonUsd = armarBotonBold({
+        orderId: proyecto.id,
+        amount: Math.round(Number(montoUsd)),
+        currency: 'USD',
+        description: `Pago total — ${(proyecto.nombre_iniciativa || 'Estructuración').slice(0, 90)}`,
+        redirectionUrl: `${origenUsd}/contratar?pago=en_proceso`,
+      })
+      await supabaseAdmin.from('proyectos_clientes_serving').update({ bold_order_id: botonUsd.orderId }).eq('id', proyecto.id)
+      return NextResponse.json(botonUsd)
+    }
     if (proyecto.pasarela_pago !== 'Manual' || !proyecto.monto_solicitado_cop) {
       return NextResponse.json(
-        { error: 'El botón de Bold solo aplica a pagos en pesos colombianos' },
+        { error: 'Este proyecto no tiene un cobro automático disponible' },
         { status: 400 }
       )
     }

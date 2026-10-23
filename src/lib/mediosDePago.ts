@@ -71,11 +71,16 @@ export const COBRO_COLOMBIA: CobroColombia = {
 }
 
 /**
- * EXTERIOR — PayPal.
- * Poner en false lo apaga y deja el mismo mensaje de factura que Colombia.
+ * EXTERIOR — cobro en dólares con Bold (Link de pago / botón, tarjeta
+ * internacional; Bold liquida en pesos). Ya no se usa PayPal.
+ *
+ * PRECIO FIJO EN USD de la estructuración para clientes de otros países.
+ * Lo define el dueño (23 oct 2026); no depende del tipo de cambio.
+ * Las llaves son las mismas modalidades que se guardan en la base de datos.
  */
 export const COBRO_EXTERIOR = {
-  paypal: true,
+  paypal: false,
+  precioUsdFijo: { esencial: 3900, completo: 5500 } as Record<string, number>,
 }
 
 /**
