@@ -438,6 +438,36 @@ El campo "sugerencia" solo aplica a pasos "incompleto": es una respuesta que el 
       }
     }
 
+    // Revisión de pasos vacíos: ningún paso puede quedar sin contenido Y sin
+    // pregunta. Si la IA se saltó un paso, o lo marcó incompleto sin escribir la
+    // pregunta, aquí se crea la pregunta por ella para que el cliente sepa qué
+    // falta y el proyecto no se quede parado en silencio.
+    const { data: avanceActual } = await supabase
+      .from("avance_estructuracion_proyecto")
+      .select("paso_id")
+      .eq("proyecto_id", id_proyecto)
+      .eq("completado", true);
+    const { data: abiertas } = await supabase
+      .from("preguntas_pendientes_proyecto")
+      .select("id_paso")
+      .eq("id_proyecto", id_proyecto)
+      .eq("respondida", false);
+
+    const pasosCompletos = new Set((avanceActual || []).map((a) => Number(a.paso_id)));
+    const pasosConPregunta = new Set((abiertas || []).map((a) => Number(a.id_paso)));
+    const PASOS_CRITICOS = /problema central|[aá]rbol del problema|poblaci[oó]n|presupuesto|objetivo general|soluci[oó]n propuesta/i;
+
+    for (const p of pasos) {
+      if (pasosCompletos.has(Number(p.id)) || pasosConPregunta.has(Number(p.id))) continue;
+      await supabase.from("preguntas_pendientes_proyecto").insert({
+        id_proyecto,
+        id_paso: p.id,
+        pregunta: `Falta información para desarrollar el paso «${p.nombre_paso}». Cuéntanos con tus palabras lo que sepas sobre este tema; con eso lo completamos.`,
+        critico: PASOS_CRITICOS.test(String(p.nombre_paso || "")),
+        sugerencia: null,
+      });
+    }
+
     const { data: proyectoAntes } = await supabase
       .from("proyectos_clientes_serving")
       .select("listo_para_encaje")

@@ -23,6 +23,8 @@ export type PasoEstructuracion = {
   completado: boolean
   contenido: string
   advertencia: string | null
+  /** Pregunta sin responder de este paso: importante (bloquea) o normal. */
+  pendiente?: 'importante' | 'normal' | null
 }
 
 /**
@@ -344,6 +346,21 @@ export function EstructuracionClient({
                           <span className="flex shrink-0 items-center gap-1 rounded-full border border-[#C99A3D]/40 bg-[#C99A3D]/12 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#E0B868]">
                             <AlertTriangle className="h-3 w-3" />
                             por reforzar
+                          </span>
+                        ) : null}
+                        {!tieneContenido && paso.pendiente === 'importante' ? (
+                          <span className="shrink-0 rounded-full border border-[#C0604A]/50 bg-[#C0604A]/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#E0917E]">
+                            espera al cliente · importante
+                          </span>
+                        ) : null}
+                        {!tieneContenido && paso.pendiente === 'normal' ? (
+                          <span className="shrink-0 rounded-full border border-[#B08D57]/50 bg-[#B08D57]/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#C9A46B]">
+                            espera al cliente
+                          </span>
+                        ) : null}
+                        {!tieneContenido && !paso.pendiente ? (
+                          <span className="shrink-0 rounded-full border border-[#F3E7DC]/30 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#F3E7DC]/60">
+                            vacío · sin pregunta
                           </span>
                         ) : null}
                         <span className="ml-auto shrink-0 text-[#F3E7DC]/50">

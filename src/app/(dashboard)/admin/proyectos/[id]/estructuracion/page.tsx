@@ -113,7 +113,7 @@ export default async function PaginaEstructuracionInterna({
 
   const documentos = await documentosDelProyecto(String(proyecto.id))
 
-  const [pasosRes, contenidoRes, avanceRes] = await Promise.all([
+  const [pasosRes, contenidoRes, avanceRes, preguntasRes] = await Promise.all([
     supabase
       .from('pasos_estructuracion')
       .select('id, orden_secuencia, nombre_paso')
@@ -126,7 +126,19 @@ export default async function PaginaEstructuracionInterna({
       .from('avance_estructuracion_proyecto')
       .select('paso_id, completado')
       .eq('proyecto_id', proyecto.id),
+    supabase
+      .from('preguntas_pendientes_proyecto')
+      .select('id_paso, critico')
+      .eq('id_proyecto', proyecto.id)
+      .eq('respondida', false),
   ])
+
+  const mapaPendientes = new Map<number, 'importante' | 'normal'>()
+  for (const q of preguntasRes.data || []) {
+    const id = Number(q.id_paso)
+    if (q.critico === true) mapaPendientes.set(id, 'importante')
+    else if (!mapaPendientes.has(id)) mapaPendientes.set(id, 'normal')
+  }
 
   const mapaContenido = new Map(
     (contenidoRes.data || []).map((c) => [
@@ -150,6 +162,7 @@ export default async function PaginaEstructuracionInterna({
       completado: Boolean(mapaAvance.get(Number(p.id))),
       contenido: guardado?.contenido || '',
       advertencia: guardado?.advertencia || null,
+      pendiente: mapaPendientes.get(Number(p.id)) ?? null,
     }
   })
 
