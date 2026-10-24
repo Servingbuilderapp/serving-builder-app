@@ -32,6 +32,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Faltan datos obligatorios' }, { status: 400 })
     }
 
+    // Sin la autorización de datos personales (habeas data) no se firma nada.
+    if (body.autorizaDatos !== true) {
+      return NextResponse.json({ error: 'Debes autorizar el tratamiento de tus datos personales.' }, { status: 400 })
+    }
+
     // Plan Emprendedor: es avalado. Se exige la declaración y el proyecto queda
     // en 'pendiente_aval' hasta que Serving lo apruebe. El monto lo fija el
     // servidor, no lo que mande el navegador.
@@ -48,6 +53,7 @@ export async function POST(req: Request) {
       aceptado: true,
       fecha: new Date().toISOString(),
       ip,
+      autoriza_datos_personales: true,
       ...(esEmprendedor ? { declaracion_bajos_recursos: true } : {}),
     }
 

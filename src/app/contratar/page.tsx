@@ -141,12 +141,13 @@ function ContratarContent() {
     correoCliente: '',
     whatsapp: '',
     aceptaTerminos: false,
+    autorizaDatos: false,
     declaracionBajosRecursos: false,
   })
 
   const handleFirmar = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!formData.aceptaTerminos || !pais) return
+    if (!formData.aceptaTerminos || !formData.autorizaDatos || !pais) return
     setLoading(true)
     setError('')
     try {
@@ -164,6 +165,7 @@ function ContratarContent() {
           pais,
           verticalDiagnostico,
           declaracionBajosRecursos: formData.declaracionBajosRecursos,
+          autorizaDatos: formData.autorizaDatos,
         }),
       })
       const data = await res.json()
@@ -448,13 +450,25 @@ function ContratarContent() {
                     {t('contratar.checkbox_acepto')}
                   </span>
                 </label>
+                <label className={cn("flex items-start gap-3", contratoLeido ? "cursor-pointer" : "cursor-not-allowed opacity-50")}>
+                  <input
+                    type="checkbox"
+                    disabled={!contratoLeido}
+                    checked={formData.autorizaDatos}
+                    onChange={(e) => setFormData({ ...formData, autorizaDatos: e.target.checked })}
+                    className="mt-1"
+                  />
+                  <span className="text-xs font-bold text-[#1f1f1f]">
+                    Autorizo el tratamiento de mis datos personales (habeas data) para estructurar mi proyecto y buscar convocatorias.
+                  </span>
+                </label>
               </div>
 
               {error && <p className="text-xs text-red-500 font-bold">{error}</p>}
 
               <GlowButton
                 type="submit"
-                disabled={!formData.aceptaTerminos || !pais || loading || (esEmprendedor && !formData.declaracionBajosRecursos)}
+                disabled={!formData.aceptaTerminos || !formData.autorizaDatos || !pais || loading || (esEmprendedor && !formData.declaracionBajosRecursos)}
                 className="w-full py-4 text-sm font-black uppercase tracking-widest"
               >
                 {loading ? <Loader2 className="h-5 w-5 animate-spin mx-auto" /> : t('contratar.boton_firmar')}
