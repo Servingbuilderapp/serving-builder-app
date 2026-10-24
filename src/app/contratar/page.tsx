@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils'
 import { useTranslation } from '@/hooks/useTranslation'
 import { BotonPagoBold } from '@/components/pagos/BotonPagoBold'
 import { AcompanamientoPostGane } from '@/components/estructuracion/AcompanamientoPostGane'
+import { SubirDocumentoAlFirmar } from '@/components/estructuracion/SubirDocumentoAlFirmar'
 
 import {
   PLAN_EMPRENDEDOR,
@@ -469,6 +470,14 @@ function ContratarContent() {
                 Serving va a revisar que este plan sea el adecuado para ti. Cuando te aprueben, te avisamos
                 por WhatsApp y por correo, y ahí se habilita el pago. Todavía no tienes que pagar nada.
               </p>
+              {proyectoId && (
+                <SubirDocumentoAlFirmar
+                  proyectoId={proyectoId}
+                  correo={formData.correoCliente}
+                  passwordTemporal={passwordTemporal}
+                  cuandoArranca="Tu documento queda guardado y el programa arranca solo cuando se apruebe tu solicitud y se confirme el pago."
+                />
+              )}
               {passwordTemporal && (
                 <div className="text-left p-5 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-2">
                   <p className="text-xs font-black uppercase tracking-widest text-emerald-700">
@@ -489,6 +498,14 @@ function ContratarContent() {
             <div className="space-y-6 text-center">
               <CheckCircle2 className="h-14 w-14 text-emerald-500 mx-auto" />
               <h2 className="text-xl font-black text-color-base-content">{t('contratar.titulo_exito')}</h2>
+              {proyectoId && (
+                <SubirDocumentoAlFirmar
+                  proyectoId={proyectoId}
+                  correo={formData.correoCliente}
+                  passwordTemporal={passwordTemporal}
+                  cuandoArranca="Tu documento queda guardado y el programa arranca solo apenas se confirme tu pago."
+                />
+              )}
               {passwordTemporal && (
                 <div className="text-left p-5 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-2">
                   <p className="text-xs font-black uppercase tracking-widest text-emerald-700">

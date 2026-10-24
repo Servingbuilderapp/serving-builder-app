@@ -148,6 +148,19 @@ export function ResultadoDiagnosticoVista({
             </div>
 
             {mostrarCierre && (
+            <div className="p-6 rounded-3xl bg-[#3B1727] border border-[#B08D57]/45 space-y-3">
+              <h5 className="text-sm font-black text-color-base-content">Para arrancar sin demoras, ten a la mano estas 7 cosas</h5>
+              <p className="text-xs text-color-base-content/75 leading-relaxed">
+                1. El problema central · 2. Sus causas y consecuencias (árbol del problema) · 3. A quién le pasa (población) ·
+                4. A cuántos llegarás (población objetivo) · 5. Tu objetivo general · 6. Tu solución · 7. El presupuesto aproximado.
+              </p>
+              <p className="text-xs font-bold text-color-base-content/85">
+                Si alguna no la tienes, no pasa nada: al subir tu documento te proponemos una respuesta para cada una y tú solo la confirmas.
+              </p>
+            </div>
+            )}
+
+            {mostrarCierre && (
             <div className="bg-gradient-to-r from-[#3B1727] via-[#2E0E1A] to-[#54142B] border border-[#B08D57]/45 text-white p-8 rounded-3xl shadow-2xl relative overflow-hidden space-y-6">
               <div className="relative z-10 max-w-2xl space-y-3">
                 <h4 className="text-2xl md:text-3xl font-black italic uppercase tracking-tight">¿Listo para llevar tu ventaja más lejos?</h4>
