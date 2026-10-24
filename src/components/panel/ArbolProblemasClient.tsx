@@ -415,6 +415,11 @@ export function ArbolProblemasClient({
             {nombreProyecto}
             {nombreCliente ? ` · ${nombreCliente}` : ''} · esta pantalla no la ve el cliente
           </p>
+          <p className="mt-3 rounded-xl border border-[#B08D57]/35 bg-[#B08D57]/10 px-4 py-2.5 text-[12.5px] text-[#F3E7DC]/85">
+            Pantalla manual opcional, para revisar o corregir un caso especial. El árbol hecho por
+            la IA está en la pestaña <strong>Estructuración</strong>. Que esta pantalla esté vacía no
+            significa que falte trabajo.
+          </p>
         </header>
 
         {aviso ? (
