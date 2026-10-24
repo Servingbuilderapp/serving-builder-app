@@ -55,6 +55,8 @@ export default async function LayoutPanel({ children }: { children: React.ReactN
   const esAdmin = perfil?.role === 'admin' || correo === 'servingbuilderapp@gmail.com' || (await esEquipoServing())
   const esSocio = !esAdmin && perfil?.role === 'socio'
 
+  // El administrador tampoco: el proyecto atado a su correo es uno de prueba y
+  // confundía (salía arriba aunque estuviera viendo el de un cliente).
   // Un socio de marca blanca no tiene "proyecto activo" propio (administra
   // varios, no es dueño de uno) — nunca se le muestra el proyecto de otra
   // persona en la cabecera.
@@ -69,7 +71,7 @@ export default async function LayoutPanel({ children }: { children: React.ReactN
   return (
     <PanelShell
       proyecto={
-        !esSocio && proyecto
+        !esSocio && !esAdmin && proyecto
           ? {
               id: String(proyecto.id),
               nombre: String(proyecto.nombre_iniciativa || 'Proyecto sin nombre'),

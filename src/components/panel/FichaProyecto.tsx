@@ -115,7 +115,7 @@ export function FichaProyecto({ datos }: { datos: DatosFicha }) {
         </h2>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {areas.map((area) => {
+          {areas.filter((area) => area.cantidad > 0).map((area) => {
             const Icono = ICONOS[area.ruta] || ListTree
             const vacia = area.cantidad === 0
 
@@ -145,6 +145,18 @@ export function FichaProyecto({ datos }: { datos: DatosFicha }) {
             )
           })}
         </div>
+
+        {/* Las áreas sin datos no ocupan tarjeta: van en una sola línea. */}
+        {areas.some((area) => area.cantidad === 0) && (
+          <p className="mt-4 text-[12.5px] text-[#F3E7DC]/60">
+            {areas.every((area) => area.cantidad === 0)
+              ? 'Todavía no hay nada trabajado en este proyecto. Empieza por el árbol de problemas.'
+              : `Aún sin empezar: ${areas
+                  .filter((area) => area.cantidad === 0)
+                  .map((area) => area.nombre.toLowerCase())
+                  .join(', ')}.`}
+          </p>
+        )}
       </div>
     </div>
   )
