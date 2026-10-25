@@ -36,6 +36,14 @@ export type PreguntaSupuesta = {
   supuesto: string | null
 }
 
+/** Paso que quedó escrito pero débil: la IA dejó una nota de qué falta. */
+export type PasoDebil = {
+  idPaso: number
+  nombrePaso: string
+  contenido: string
+  advertencia: string
+}
+
 export type DocumentoPedido = {
   id: string
   requisito: string
@@ -56,6 +64,7 @@ export type DatosPendientes = {
   nombreProyecto: string
   preguntas: PreguntaPendiente[]
   supuestos: PreguntaSupuesta[]
+  pasosDebiles: PasoDebil[]
   documentosPedidos: DocumentoPedido[]
   archivoBase: { nombre: string; url: string | null } | null
   archivosSubidos: ArchivoSubido[]
@@ -679,14 +688,194 @@ function BloqueSupuestos({ supuestosIniciales }: { supuestosIniciales: PreguntaS
 }
 
 /* ========================================================================== */
+/* Pasos escritos pero débiles                                                */
+/* ========================================================================== */
+
+/** Quita los rótulos técnicos del aviso para que el cliente lea solo lo que falta. */
+function limpiarAviso(aviso: string): string {
+  return aviso
+    .replace(/^\s*(por reforzar|supuesto por confirmar)\s*:\s*/i, '')
+    .trim()
+    .replace(/^./, (c) => c.toUpperCase())
+}
+
+function BloquePasosDebiles({ pasosIniciales }: { pasosIniciales: PasoDebil[] }) {
+  const [pasos, setPasos] = useState(pasosIniciales)
+  const [abierto, setAbierto] = useState<number | null>(null)
+  const [texto, setTexto] = useState('')
+  const [enviando, setEnviando] = useState(false)
+  const [error, setError] = useState('')
+  const [hechos, setHechos] = useState<string[]>([])
+
+  if (pasos.length === 0 && hechos.length === 0) return null
+
+  const enviar = async (paso: PasoDebil, accion: 'confirmar' | 'guardar') => {
+    setError('')
+    if (accion === 'guardar' && !texto.trim()) {
+      setError('El texto no puede quedar vacío.')
+      return
+    }
+    setEnviando(true)
+    try {
+      const res = await fetch('/api/reforzar-paso', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pasoId: paso.idPaso,
+          accion,
+          contenido: accion === 'guardar' ? texto.trim() : undefined,
+        }),
+      })
+      const datos = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        setError(datos?.error || 'No se pudo guardar. Intenta de nuevo.')
+        return
+      }
+      setPasos((actuales) => actuales.filter((p) => p.idPaso !== paso.idPaso))
+      setHechos((actuales) => [
+        ...actuales,
+        accion === 'confirmar'
+          ? `“${paso.nombrePaso}” quedó confirmado tal como está.`
+          : `“${paso.nombrePaso}” quedó actualizado con lo que escribiste.`,
+      ])
+      setAbierto(null)
+      setTexto('')
+    } catch {
+      setError('No se pudo guardar. Revisa la conexión e intenta de nuevo.')
+    } finally {
+      setEnviando(false)
+    }
+  }
+
+  return (
+    <Tarjeta className="mt-4">
+      <TituloBloque
+        icono={AlertTriangle}
+        titulo="Pasos que escribimos con poca información"
+        descripcion="Estos pasos ya tienen texto, pero quedaron flojos porque faltó un dato. Puedes confirmarlos como están o agregar lo que falta."
+        contador={pasos.length > 0 ? String(pasos.length) : undefined}
+      />
+
+      {hechos.length > 0 ? (
+        <ul className="space-y-1 border-b border-[#B08D57]/35 px-5 py-3">
+          {hechos.map((h) => (
+            <li key={h} className="flex items-start gap-2 text-[12.5px] text-[#9BB18D]">
+              <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+              {h}
+            </li>
+          ))}
+        </ul>
+      ) : null}
+
+      <ul>
+        {pasos.map((p) => {
+          const editando = abierto === p.idPaso
+          return (
+            <li key={p.idPaso} className="border-b border-[#3B1727] px-5 py-4 last:border-b-0">
+              <p className="text-[14px] font-extrabold text-[#F3E7DC]">{p.nombrePaso}</p>
+
+              <div className="mt-2 rounded-xl border-l-4 border-[#C99A3D] bg-[#C99A3D]/12 px-3.5 py-3">
+                <p className="text-[11px] font-bold uppercase tracking-wide text-[#E0B868]">
+                  Qué falta
+                </p>
+                <p className="mt-1 text-[13px] leading-relaxed text-[#F3E7DC]">
+                  Escribimos este paso con lo que nos diste. Para que quede sólido, hay que reforzar
+                  esto:
+                </p>
+                <p className="mt-1 text-[13px] font-semibold leading-relaxed text-[#F3E7DC]">
+                  {limpiarAviso(p.advertencia)}
+                </p>
+              </div>
+
+              {editando ? (
+                <div className="mt-3 space-y-2.5">
+                  <p className="text-[12.5px] leading-relaxed text-[#F3E7DC]/80">
+                    Este es el texto actual. Agrega el dato que falta (o corrige lo que no sea
+                    correcto) y guarda.
+                  </p>
+                  <textarea
+                    value={texto}
+                    onChange={(e) => setTexto(e.target.value)}
+                    rows={10}
+                    className="w-full rounded-xl border border-[#B08D57]/35 bg-[#3B1727] px-3.5 py-3 text-[13.5px] leading-relaxed text-[#F3E7DC] outline-none transition-colors focus:border-[#C9A46B]"
+                  />
+                  {error ? <p className="text-[12.5px] font-semibold text-[#E0917E]">{error}</p> : null}
+                  <div className="flex flex-wrap items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => enviar(p, 'guardar')}
+                      disabled={enviando || !texto.trim()}
+                      className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-[13px] font-extrabold disabled:opacity-60 ${BOTON_DORADO}`}
+                    >
+                      {enviando ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
+                      {enviando ? 'Guardando…' : 'Guardar mi versión'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAbierto(null)
+                        setTexto('')
+                        setError('')
+                      }}
+                      disabled={enviando}
+                      className="text-[12.5px] font-semibold text-[#F3E7DC]/70 underline underline-offset-2 hover:text-[#C9A46B]"
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="mt-3 flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => enviar(p, 'confirmar')}
+                    disabled={enviando}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-[#C9A46B]/60 px-3 py-1.5 text-[12.5px] font-bold text-[#C9A46B] hover:bg-[#C9A46B]/10 disabled:opacity-50"
+                  >
+                    <Check className="h-3.5 w-3.5" /> Así está bien — confirmar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAbierto(p.idPaso)
+                      setTexto(p.contenido)
+                      setError('')
+                    }}
+                    disabled={enviando}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-[#F3E7DC]/30 px-3 py-1.5 text-[12.5px] font-bold text-[#F3E7DC]/85 hover:bg-[#F3E7DC]/10 disabled:opacity-50"
+                  >
+                    Quiero agregar el dato
+                  </button>
+                </div>
+              )}
+              {!editando && error && abierto === null ? (
+                <p className="mt-2 text-[12.5px] font-semibold text-[#E0917E]">{error}</p>
+              ) : null}
+            </li>
+          )
+        })}
+      </ul>
+    </Tarjeta>
+  )
+}
+
+/* ========================================================================== */
 /* Pantalla                                                                   */
 /* ========================================================================== */
 
-export function PendientesCliente({ datos }: { datos: DatosPendientes }) {
-  const total = datos.preguntas.length + datos.documentosPedidos.length
+export function PendientesCliente({
+  datos,
+  soloVista = false,
+}: {
+  datos: DatosPendientes
+  /** El equipo mira la pantalla de un cliente: se ve igual, pero nada se puede enviar. */
+  soloVista?: boolean
+}) {
+  const total = datos.preguntas.length + datos.documentosPedidos.length + datos.pasosDebiles.length
 
   return (
     <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
+      <fieldset disabled={soloVista} className="m-0 min-w-0 border-0 p-0">
       <header className="mb-5">
         <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">Lo que me piden</h1>
         <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#F3E7DC]/70">
@@ -706,7 +895,10 @@ export function PendientesCliente({ datos }: { datos: DatosPendientes }) {
         />
       </div>
 
+      <BloquePasosDebiles pasosIniciales={datos.pasosDebiles} />
+
       <BloqueSupuestos supuestosIniciales={datos.supuestos} />
+      </fieldset>
     </div>
   )
 }

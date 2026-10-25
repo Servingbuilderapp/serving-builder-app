@@ -32,6 +32,7 @@ import {
   HeartHandshake,
   Handshake,
   Gift,
+  Eye,
 } from 'lucide-react'
 import { Ayuda } from '@/components/ui/Ayuda'
 
@@ -127,6 +128,7 @@ const SECCIONES_EQUIPO: Seccion[] = [
     titulo: 'Equipo Serving',
     items: [
       { nombre: 'Proyectos de clientes', href: '/admin/proyectos', icono: FolderKanban },
+      { nombre: 'Ver lo que ve el cliente', href: '/admin/ver-como-cliente', icono: Eye },
       { nombre: 'Diagnósticos', href: '/admin/diagnosticos', icono: ClipboardList },
       { nombre: 'Convocatorias', href: '/admin/convocatorias', icono: Radar },
       { nombre: 'Centinela Digital', href: '/admin/centinela', icono: Satellite },
