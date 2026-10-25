@@ -88,9 +88,19 @@ export function MotorEstructuracion({
       const datos = await respuesta.json().catch(() => ({}))
 
       if (!respuesta.ok) {
+        // Se agrega el motivo real que devolvió Google, para no tener que buscarlo en los registros.
+        const motivo = datos?.detalle?.error
+          ? [datos.detalle.error.code, datos.detalle.error.status, datos.detalle.error.message]
+              .filter(Boolean)
+              .join(' · ')
+              .slice(0, 300)
+          : typeof datos?.detalle === 'string'
+            ? datos.detalle.slice(0, 300)
+            : ''
         throw new Error(
-          datos?.error ||
-            'La estructuración no pudo terminar. Vuelve a intentarlo en un momento.',
+          (datos?.error ||
+            'La estructuración no pudo terminar. Vuelve a intentarlo en un momento.') +
+            (motivo ? ` — Motivo: ${motivo}` : ''),
         )
       }
 
