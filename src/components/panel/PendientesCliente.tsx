@@ -137,15 +137,16 @@ function BloquePreguntas({ preguntasIniciales }: { preguntasIniciales: PreguntaP
 
   const actual = preguntas[indice]
 
-  const enviar = async () => {
-    if (!actual || !texto.trim()) return
+  const enviar = async (textoDirecto?: string) => {
+    const respuestaFinal = (textoDirecto ?? texto).trim()
+    if (!actual || !respuestaFinal) return
     setEnviando(true)
     setError('')
     try {
       const res = await fetch('/api/responder-pregunta-proyecto', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id_pregunta: actual.id, respuesta: texto }),
+        body: JSON.stringify({ id_pregunta: actual.id, respuesta: respuestaFinal }),
       })
       const data = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(data?.error || 'No se pudo enviar tu respuesta.')
@@ -233,17 +234,28 @@ function BloquePreguntas({ preguntasIniciales }: { preguntasIniciales: PreguntaP
               Respuesta sugerida
             </p>
             <p className="mt-1.5 text-[13.5px] leading-relaxed text-[#F3E7DC]">{actual.sugerencia}</p>
-            <p className="mt-1.5 text-[12px] leading-relaxed text-[#F3E7DC]/60">
-              Armada con tu diagnóstico y tu documento. Revísala: si no es correcta, corrígela.
+            <p className="mt-1.5 text-[12.5px] leading-relaxed text-[#F3E7DC]/80">
+              Esto es una <strong>sugerencia nuestra</strong>, armada con tu diagnóstico y tu documento. Tú decides:
+              si es correcta, apruébala; si no, edítala y envía tu propia respuesta.
             </p>
-            <button
-              type="button"
-              onClick={() => setTexto(actual.sugerencia || '')}
-              disabled={enviando}
-              className="mt-2.5 inline-flex items-center gap-1.5 rounded-lg border border-[#C9A46B]/60 px-3 py-1.5 text-[12.5px] font-bold text-[#C9A46B] hover:bg-[#C9A46B]/10 disabled:opacity-50"
-            >
-              <Check className="h-3.5 w-3.5" /> Usar esta sugerencia
-            </button>
+            <div className="mt-2.5 flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => enviar(actual.sugerencia || '')}
+                disabled={enviando}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-[#C9A46B]/60 px-3 py-1.5 text-[12.5px] font-bold text-[#C9A46B] hover:bg-[#C9A46B]/10 disabled:opacity-50"
+              >
+                <Check className="h-3.5 w-3.5" /> Sí, es correcta — enviarla
+              </button>
+              <button
+                type="button"
+                onClick={() => setTexto(actual.sugerencia || '')}
+                disabled={enviando}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-[#F3E7DC]/30 px-3 py-1.5 text-[12.5px] font-bold text-[#F3E7DC]/85 hover:bg-[#F3E7DC]/10 disabled:opacity-50"
+              >
+                Quiero editarla
+              </button>
+            </div>
           </div>
         ) : null}
 
@@ -260,7 +272,7 @@ function BloquePreguntas({ preguntasIniciales }: { preguntasIniciales: PreguntaP
         <div className="flex flex-wrap items-center gap-3">
           <button
             type="button"
-            onClick={enviar}
+            onClick={() => enviar()}
             disabled={enviando || !texto.trim()}
             className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-[13px] font-extrabold disabled:opacity-60 ${BOTON_DORADO}`}
           >
