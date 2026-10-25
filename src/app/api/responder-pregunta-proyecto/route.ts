@@ -3,6 +3,7 @@ import { urlGemini, fetchGemini } from "@/lib/geminiEndpoint";
 import { after } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { esLlamadaInterna } from "@/lib/candadoMotores";
+import { lanzarBusquedaConvocatorias } from "@/lib/lanzarBusquedaConvocatorias";
 
 // El motor puede tardar minutos: sin esto Vercel lo corta antes de terminar.
 export const maxDuration = 300;
@@ -258,11 +259,9 @@ export async function POST(req: NextRequest) {
       const idProyecto = preguntaRow.id_proyecto;
       after(async () => {
         try {
-          await fetch(`${origen}/api/buscar-convocatorias`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id_proyecto: idProyecto }),
-          });
+          // Antes esta llamada iba SIN la llave interna y el Motor 2 la
+          // rechazaba (401): la búsqueda nunca arrancaba por este camino.
+          await lanzarBusquedaConvocatorias(supabase, idProyecto, origen);
         } catch (e) {
           console.error("Error disparando Motor 2 desde responder-pregunta-proyecto:", e);
         }

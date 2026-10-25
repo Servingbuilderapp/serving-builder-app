@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { motorAutorizado, cabecerasInternas } from "@/lib/candadoMotores";
 import { arrancarEstructuracion } from "@/lib/arrancarEstructuracion";
 import { correrEvaluadorEstructuracion } from "@/lib/motorEvaluadorEstructuracion";
+import { lanzarBusquedaConvocatorias } from "@/lib/lanzarBusquedaConvocatorias";
 
 /**
  * La red de seguridad de TODA la cadena de motores.
@@ -18,11 +19,15 @@ import { correrEvaluadorEstructuracion } from "@/lib/motorEvaluadorEstructuracio
  *   B. Motor 1 escribió a medias y se cayó antes de dejar la pregunta de los
  *      pasos que quedaron en blanco → se crea esa pregunta (sin gastar IA).
  *   C. El proyecto quedó listo pero el evaluador nunca terminó → se reintenta;
- *      si tras 3 intentos sigue sin poder, el proyecto sigue sin evaluar.
+ *      si tras 3 intentos sigue sin poder, se da por evaluado y la búsqueda
+ *      de convocatorias arranca igual (nadie se queda esperando).
  *   D. Se dio la orden de buscar convocatorias pero no apareció ninguna ni
  *      quedó registrado el lote → se vuelve a lanzar el Motor 2.
  *   E. El cliente eligió convocatorias y el Motor 3 no dejó su análisis →
  *      se vuelve a lanzar el Motor 3 para esas.
+ *   F. El proyecto ya fue evaluado pero nunca se ordenó buscar convocatorias
+ *      (por ejemplo, quedó esperando el "sí" del cliente o los 3 días de
+ *      antes) → se ordena ya. Nadie espera a nadie.
  *
  * REGLA ANTI-DUPLICADOS (C, D y E): el reloj nunca actúa la primera vez que ve
  * algo raro. Lo anota ("lo vi") y solo actúa si 30 minutos después SIGUE igual.
@@ -111,6 +116,7 @@ export async function GET(req: NextRequest) {
       c_evaluador_saltado: [] as string[],
       d_motor2_relanzado: [] as string[],
       e_motor3_relanzado: [] as string[],
+      f_busqueda_lanzada: [] as string[],
       sin_salida: [] as string[],
     };
 
@@ -292,6 +298,14 @@ export async function GET(req: NextRequest) {
         } else {
           console.error(`El evaluador no pudo con ${id} tras ${MAX_INTENTOS_EVALUADOR} intentos: se da por evaluado.`);
           informe.c_evaluador_saltado.push(id);
+          // Y la búsqueda de convocatorias arranca de una vez, sin esperar nada.
+          after(async () => {
+            try {
+              await lanzarBusquedaConvocatorias(supabase, id, origen);
+            } catch (e) {
+              console.error(`Error lanzando la búsqueda de ${id} tras saltar el evaluador:`, e);
+            }
+          });
         }
       }
     } catch (e) {
@@ -423,6 +437,38 @@ export async function GET(req: NextRequest) {
       }
     } catch (e) {
       console.error("Red de seguridad, punto E:", e);
+    }
+
+    /* ====================================================================== */
+    /* F. Evaluado, pero la búsqueda de convocatorias nunca se ordenó         */
+    /* ====================================================================== */
+    // Cubre proyectos que quedaron esperando "el sí del cliente" o los 3 días
+    // de antes: ya no se espera a nadie. El reclamo es atómico, así que si el
+    // evaluador está lanzando la búsqueda en este mismo instante, solo uno gana.
+
+    try {
+      const { data: candidatosF } = await supabase
+        .from("proyectos_clientes_serving")
+        .select("id")
+        .eq("estado_actual", "pagado")
+        .not("evaluacion_aprobada", "is", null)
+        .or("busqueda_convocatorias_iniciada.is.null,busqueda_convocatorias_iniciada.eq.false")
+        .is("fecha_ultimo_lote_convocatorias", null)
+        .limit(TOPE_POR_PUNTO);
+
+      for (const p of candidatosF || []) {
+        const id = String(p.id);
+        informe.f_busqueda_lanzada.push(id);
+        after(async () => {
+          try {
+            await lanzarBusquedaConvocatorias(supabase, id, origen);
+          } catch (e) {
+            console.error(`Error lanzando la búsqueda de ${id}:`, e);
+          }
+        });
+      }
+    } catch (e) {
+      console.error("Red de seguridad, punto F:", e);
     }
 
     return NextResponse.json({

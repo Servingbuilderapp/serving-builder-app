@@ -25,14 +25,6 @@ export type CalificacionFinalDatos = {
   aprobadoEnISO: string | null
 }
 
-const DIAS_DE_PLAZO = 3
-
-function diasRestantes(aprobadoEnISO: string | null): number {
-  if (!aprobadoEnISO) return DIAS_DE_PLAZO
-  const limite = new Date(aprobadoEnISO).getTime() + DIAS_DE_PLAZO * 24 * 60 * 60 * 1000
-  const restante = Math.ceil((limite - Date.now()) / (24 * 60 * 60 * 1000))
-  return Math.max(restante, 0)
-}
 
 export function CalificacionFinal({ datos }: { datos: CalificacionFinalDatos }) {
   const router = useRouter()
@@ -64,7 +56,6 @@ export function CalificacionFinal({ datos }: { datos: CalificacionFinalDatos }) 
 
   const hallazgosCriticos = datos.hallazgos.filter((h) => h.critico)
   const hallazgosNormales = datos.hallazgos.filter((h) => !h.critico)
-  const faltan = diasRestantes(datos.aprobadoEnISO)
 
   return (
     <div className="min-h-screen bg-color-base-100 py-10 px-4 md:px-8">
@@ -104,10 +95,9 @@ export function CalificacionFinal({ datos }: { datos: CalificacionFinalDatos }) 
                   Tu proyecto quedó aprobado. Si estás de acuerdo con el resultado, dale a
                   &ldquo;Sí, busquemos convocatorias&rdquo; y arrancamos ya mismo.
                 </p>
-                <Aviso tipo="info" titulo="Tienes 3 días para revisarlo">
-                  {faltan > 0
-                    ? `Si no nos dices nada, en ${faltan} día${faltan === 1 ? '' : 's'} empezamos a buscar convocatorias automáticamente.`
-                    : 'Ya se cumplió el plazo de 3 días — la búsqueda va a empezar automáticamente en cualquier momento.'}
+                <Aviso tipo="info" titulo="La búsqueda arranca sola">
+                  No tienes que esperar ni aprobar nada: la búsqueda de convocatorias empieza
+                  automáticamente en pocos minutos.
                 </Aviso>
                 <GlowButton onClick={aprobar} disabled={trabajando} className="w-full sm:w-auto">
                   <Sparkles className="h-4 w-4" />
@@ -123,9 +113,9 @@ export function CalificacionFinal({ datos }: { datos: CalificacionFinalDatos }) 
           </GlassCard>
         ) : (
           <Aviso tipo="alerta" titulo="Todavía con observaciones">
-            El evaluador encontró puntos por confirmar antes de dar por lista la estructuración.
-            Ya te los dejamos preguntando en &ldquo;Lo que me piden&rdquo; para que los resuelvas
-            cuando puedas — apenas los contestes, el motor vuelve a evaluar tu proyecto.
+            El evaluador encontró puntos por confirmar. Ya te los dejamos preguntando en
+            &ldquo;Lo que me piden&rdquo; para que los resuelvas cuando puedas. Mientras tanto la
+            búsqueda de convocatorias sigue su camino con lo que ya tenemos, sin inventar nada.
           </Aviso>
         )}
 

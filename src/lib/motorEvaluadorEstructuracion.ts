@@ -28,6 +28,7 @@
 
 import mammoth from 'mammoth'
 import { urlGemini, fetchGemini } from '@/lib/geminiEndpoint'
+import { lanzarBusquedaConvocatorias } from '@/lib/lanzarBusquedaConvocatorias'
 
 const BUCKET = 'documentos-proyectos'
 const UMBRAL_APROBACION = 90
@@ -238,7 +239,7 @@ export async function correrEvaluadorEstructuracion(
   proyectoId: string,
   // Ya no se usa para llamar al Motor 2 desde aquí (ver más abajo), pero se
   // deja el parámetro para no romper a quien ya llama a esta función.
-  _origen: string,
+  origen: string,
 ): Promise<ResultadoCorridaEvaluador> {
   const apiKeyGemini = process.env.GEMINI_API_KEY || process.env.GEMINI_KEY
   if (!apiKeyGemini) return { ok: false, mensaje: 'Falta configurar GEMINI_API_KEY.' }
@@ -344,12 +345,14 @@ export async function correrEvaluadorEstructuracion(
     })
     .eq('id', proyectoId)
 
-  // Aquí ya NO se dispara el Motor 2 de una vez. El proyecto queda esperando
-  // a que el cliente diga "sí, busquemos convocatorias" en su panel — tiene 3
-  // días para revisar el resultado del evaluador y decidir. Si no contesta en
-  // ese plazo, el reloj de /api/revisar-aprobaciones-vencidas lo arranca solo,
-  // para que nadie se quede esperando para siempre. Ver cabecerasInternas()
-  // y motorAutorizado(), que son los que firman esa llamada automática.
+  // Decisión del dueño (25 oct 2026): nadie espera a nadie. Termina el
+  // evaluador y el Motor 2 arranca SOLO, sin plazo de 3 días y sin que el
+  // cliente tenga que aprobar nada. Si el evaluador encontró puntos por
+  // aclarar, ya quedaron como preguntas en "Lo que me piden" y corren por su
+  // propio reloj de 24 horas; eso no frena la búsqueda. El motor trabaja solo
+  // con lo que ya está escrito y nunca inventa. Si el Motor 2 se cae, el reloj
+  // de seguridad lo vuelve a lanzar.
+  await lanzarBusquedaConvocatorias(supabase, proyectoId, origen)
 
   return {
     ok: true,
@@ -357,6 +360,6 @@ export async function correrEvaluadorEstructuracion(
     puntaje,
     mensaje: aprobado
       ? `Evaluación ${puntaje}/100: aprobado, el Motor 2 arranca solo.`
-      : `Evaluación ${puntaje}/100: quedaron ${hallazgos.filter((h) => h.critico).length} punto(s) por aclarar con el cliente.`,
+      : `Evaluación ${puntaje}/100: quedaron ${hallazgos.filter((h) => h.critico).length} punto(s) por aclarar con el cliente; la búsqueda de convocatorias arranca igual.`,
   }
 }
