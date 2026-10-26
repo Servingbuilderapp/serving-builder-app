@@ -164,7 +164,19 @@ export async function GET(req: NextRequest) {
         .eq("id", id);
 
       const resultado = await arrancarEstructuracion(id, origen);
-      if (resultado.arrancado) informe.a_motor1_reanudados.push(id);
+      if (resultado.arrancado) {
+        informe.a_motor1_reanudados.push(id);
+      } else if (resultado.motivo === "sin-documento") {
+        // Si el cliente todavía no sube nada, no hay motor que se haya caído:
+        // ese intento no cuenta, para no gastar los 6 antes de que llegue el archivo.
+        await supabase
+          .from("proyectos_clientes_serving")
+          .update({
+            motor1_intentos: proyecto.motor1_intentos || 0,
+            motor1_ultimo_intento: proyecto.motor1_ultimo_intento ?? null,
+          })
+          .eq("id", id);
+      }
     }
 
     /* ====================================================================== */

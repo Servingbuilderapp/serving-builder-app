@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createClient as createServicio } from '@supabase/supabase-js'
 import { esEquipoServing } from '@/lib/guardiaEquipo'
 import { arrancarEstructuracion } from '@/lib/arrancarEstructuracion'
 
@@ -39,6 +40,22 @@ export async function POST(request: NextRequest) {
 
   if (!proyecto || (!esDueno && !(await esEquipoServing()))) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
+  }
+
+  // Una subida nueva del cliente es una oportunidad nueva: se devuelven los
+  // intentos del reloj de seguridad para que pueda volver a ayudar si el motor
+  // se cae después de esta subida.
+  try {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const llave = process.env.SUPABASE_SERVICE_ROLE_KEY
+    if (url && llave) {
+      await createServicio(url, llave)
+        .from('proyectos_clientes_serving')
+        .update({ motor1_intentos: 0, motor1_ultimo_intento: null })
+        .eq('id', proyecto.id)
+    }
+  } catch {
+    /* informativo: no puede impedir el arranque */
   }
 
   const resultado = await arrancarEstructuracion(String(proyecto.id), request.nextUrl.origin)
