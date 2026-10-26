@@ -260,7 +260,12 @@ export default async function PaginaResumen({
   }
 
   /* ---------- progreso general ---------- */
-  const componentes = [porcentajeEstructuracion, hayConvocatorias ? 100 : 0, encajeActual ?? 0]
+  const componentes = [
+    porcentajeEstructuracion,
+    hayConvocatorias ? 100 : 0,
+    haySeleccion ? 100 : 0,
+    encajeActual ?? 0,
+  ]
   const progresoGeneral = Math.round(componentes.reduce((a, b) => a + b, 0) / componentes.length)
 
   /* ---------- próximo paso y recomendación ---------- */

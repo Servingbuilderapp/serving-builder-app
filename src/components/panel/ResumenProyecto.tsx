@@ -337,9 +337,16 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
             Etapa actual
           </div>
           <div className="text-[15px] font-extrabold text-[#F3E7DC] leading-snug">
-            {pasoActual ? 'Estructuración' : 'Sin iniciar'}
+            {pasoActual && datos.pasos.completados === 0
+              ? 'Sin iniciar'
+              : pasoActual
+                ? 'Estructuración'
+                : (ruta.find((e) => e.nombre !== 'Mi proyecto' && e.estado !== 'completado')?.nombre ??
+                  'Postulación')}
           </div>
-          {pasoActual ? (
+          {pasoActual && datos.pasos.completados === 0 ? (
+            <div className="text-[12px] text-[#F3E7DC]/60 mt-1">Aún no comienza la estructuración</div>
+          ) : pasoActual ? (
             <>
               <div className="text-[12px] text-[#F3E7DC]/60 mt-1">Trabajando ahora en</div>
               <div className="text-[12.5px] font-semibold text-[#F3E7DC] mt-1 line-clamp-2">
@@ -347,7 +354,7 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
               </div>
             </>
           ) : (
-            <div className="text-[12px] text-[#F3E7DC]/60 mt-1">Aún no comienza la estructuración</div>
+            <div className="text-[12px] text-[#F3E7DC]/60 mt-1">La estructuración ya está completa</div>
           )}
         </Tarjeta>
 

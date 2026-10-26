@@ -408,6 +408,14 @@ function BloqueDocumentos({
           setAviso(
             'Recibido. Ya empezamos a trabajar tu proyecto: en un rato vas a ver el avance en «Avance de mi proyecto».',
           )
+        } else if (datos?.motivo === 'sin-documento') {
+          setAviso(
+            'Tu archivo quedó guardado, pero no podemos leerlo para arrancar. Para arrancar sube tu proyecto en PDF, Word (.doc o .docx) o imagen (.jpg o .png). Si lo tienes en Excel, PowerPoint o ZIP, guárdalo como PDF y súbelo de nuevo.',
+          )
+        } else {
+          setAviso(
+            'Tu archivo quedó guardado, pero el arranque no se pudo activar. Intenta subirlo de nuevo en un momento o escríbenos.',
+          )
         }
       } catch {
         /* si no se pudo avisar, el archivo ya quedó guardado igual */
