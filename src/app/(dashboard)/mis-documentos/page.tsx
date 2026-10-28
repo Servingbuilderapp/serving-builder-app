@@ -1,6 +1,7 @@
 import React from 'react'
-import { createClient } from '@/lib/supabase/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import { resolverProyectoVisto } from '@/lib/proyectoVisto'
+import { BannerProyectoVisto } from '@/components/panel/BannerProyectoVisto'
 import { MisDocumentosClient, type EtapaDocumentos } from '@/components/panel/MisDocumentosClient'
 import {
   diagnosticoAMarkdown,
@@ -20,12 +21,25 @@ const slug = (t: string) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,
  * ordenado por etapa: del diagnóstico a la postulación. Lee solo lo del propio cliente:
  * el proyecto se busca con SU sesión y de ahí se toma todo lo demás.
  */
-export default async function MisDocumentosPage() {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  const correo = (user?.email || '').trim()
+export default async function MisDocumentosPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ proyecto?: string }>
+}) {
+  const params = searchParams ? await searchParams : undefined
+  const vista = await resolverProyectoVisto(params?.proyecto)
+  // Si el equipo abrió el proyecto de un cliente, se lee con la llave de servicio
+  // y con el correo de ESE cliente (solo lectura).
+  const supabase = vista.db
+  let correo = ''
+  if (vista.vistaEquipo) {
+    correo = (vista.correoCliente || '').trim()
+  } else {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    correo = (user?.email || '').trim()
+  }
 
   const etapas: EtapaDocumentos[] = []
 
@@ -62,7 +76,13 @@ export default async function MisDocumentosPage() {
     ],
   })
 
-  const { data: proyecto } = correo
+  const { data: proyecto } = vista.vistaEquipo
+    ? await supabase
+        .from('proyectos_clientes_serving')
+        .select('id, nombre_iniciativa, dossier_markdown')
+        .eq('id', vista.proyectoId as string)
+        .maybeSingle()
+    : correo
     ? await supabase
         .from('proyectos_clientes_serving')
         .select('id, nombre_iniciativa, dossier_markdown')
@@ -223,5 +243,10 @@ export default async function MisDocumentosPage() {
   }
   etapas.push({ etapa: '5. Réplicas', documentos: docsReplica })
 
-  return <MisDocumentosClient etapas={etapas} />
+  return (
+    <>
+      <BannerProyectoVisto vista={vista} />
+      <MisDocumentosClient etapas={etapas} />
+    </>
+  )
 }

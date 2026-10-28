@@ -9,6 +9,7 @@ import {
   BadgeCheck,
   CalendarRange,
   ClipboardList,
+  FolderOpen,
   Coins,
   Copy,
   FileText,
@@ -45,6 +46,7 @@ export const PESTANAS = [
   { clave: 'calificacion', nombre: 'Calificación', icono: BadgeCheck },
   { clave: 'convocatorias', nombre: 'Convocatorias y encaje', icono: Radar },
   { clave: 'pendientes', nombre: 'Lo que me piden', icono: ClipboardList },
+  { clave: 'documentos', nombre: 'Documentos', icono: FolderOpen },
 ] as const
 
 /**
@@ -58,6 +60,7 @@ const PANTALLAS_DEL_CLIENTE: Record<string, string> = {
   calificacion: '/calificacion',
   convocatorias: '/mis-convocatorias',
   pendientes: '/pendientes',
+  documentos: '/mis-documentos',
 }
 
 export function PestanasProyecto({

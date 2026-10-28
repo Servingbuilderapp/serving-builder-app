@@ -21,11 +21,18 @@ export type ProyectoVisto = {
   proyectoId: string | null
   nombreProyecto: string | null
   nombreCliente: string | null
+  /** Correo del dueño del proyecto (sirve para pantallas que buscan por correo). */
+  correoCliente: string | null
   /** true cuando el equipo está mirando el proyecto de un cliente. */
   vistaEquipo: boolean
 }
 
-type FilaProyecto = { id: string | number; nombre_iniciativa: string | null; nombre_cliente: string | null }
+type FilaProyecto = {
+  id: string | number
+  nombre_iniciativa: string | null
+  nombre_cliente: string | null
+  correo_cliente: string | null
+}
 
 export async function resolverProyectoVisto(proyectoParam?: string | null): Promise<ProyectoVisto> {
   const supabase = await createClient()
@@ -34,7 +41,7 @@ export async function resolverProyectoVisto(proyectoParam?: string | null): Prom
   if (idPedido && (await esEquipoServing())) {
     const { data } = await supabaseAdmin
       .from('proyectos_clientes_serving')
-      .select('id, nombre_iniciativa, nombre_cliente')
+      .select('id, nombre_iniciativa, nombre_cliente, correo_cliente')
       .eq('id', idPedido)
       .maybeSingle<FilaProyecto>()
     if (data?.id) {
@@ -43,6 +50,7 @@ export async function resolverProyectoVisto(proyectoParam?: string | null): Prom
         proyectoId: String(data.id),
         nombreProyecto: data.nombre_iniciativa,
         nombreCliente: data.nombre_cliente,
+        correoCliente: data.correo_cliente,
         vistaEquipo: true,
       }
     }
@@ -55,7 +63,7 @@ export async function resolverProyectoVisto(proyectoParam?: string | null): Prom
 
   const { data } = await supabase
     .from('proyectos_clientes_serving')
-    .select('id, nombre_iniciativa, nombre_cliente')
+    .select('id, nombre_iniciativa, nombre_cliente, correo_cliente')
     .eq('correo_cliente', correo)
     .order('created_at', { ascending: false })
     .limit(1)
@@ -66,6 +74,7 @@ export async function resolverProyectoVisto(proyectoParam?: string | null): Prom
     proyectoId: data?.id ? String(data.id) : null,
     nombreProyecto: data?.nombre_iniciativa || null,
     nombreCliente: data?.nombre_cliente || null,
+    correoCliente: data?.correo_cliente || null,
     vistaEquipo: false,
   }
 }

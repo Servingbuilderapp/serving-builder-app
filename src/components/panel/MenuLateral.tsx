@@ -32,7 +32,6 @@ import {
   HeartHandshake,
   Handshake,
   Gift,
-  Eye,
 } from 'lucide-react'
 import { Ayuda } from '@/components/ui/Ayuda'
 
@@ -128,11 +127,10 @@ const SECCIONES_EQUIPO: Seccion[] = [
     titulo: 'Equipo Serving',
     items: [
       { nombre: 'Proyectos de clientes', href: '/admin/proyectos', icono: FolderKanban },
-      { nombre: 'Ver lo que ve el cliente', href: '/admin/ver-como-cliente', icono: Eye },
       { nombre: 'Diagnósticos', href: '/admin/diagnosticos', icono: ClipboardList },
       { nombre: 'Convocatorias', href: '/admin/convocatorias', icono: Radar },
       { nombre: 'Centinela Digital', href: '/admin/centinela', icono: Satellite },
-      { nombre: 'Membresías', href: '/admin/membresias', icono: Wallet },
+      { nombre: 'Miembros y membresías', href: '/admin/membresias', icono: Wallet },
       { nombre: 'Servicios de membresía', href: '/admin/servicios-membresia', icono: Handshake },
       { nombre: 'Cortesías', href: '/admin/cortesias', icono: Gift },
       { nombre: 'Soporte', href: '/admin/soporte', icono: LifeBuoy },
@@ -189,7 +187,7 @@ export function MenuLateral({
   const seccionesBase = esSocio
     ? SECCIONES_SOCIO
     : esEquipo
-      ? [...SECCIONES_CLIENTE, ...SECCIONES_EQUIPO]
+      ? SECCIONES_EQUIPO
       : SECCIONES_CLIENTE
 
   let secciones = esClienteMarcaBlanca
