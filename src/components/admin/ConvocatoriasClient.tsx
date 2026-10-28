@@ -3,7 +3,7 @@
 import React, { useMemo, useState } from 'react'
 import {
   Search, Plus, FileText, Upload, Link2, X, AlertTriangle,
-  CalendarClock, Globe2, Building2, Check, ClipboardCheck,
+  CalendarClock, Globe2, Building2, Check, ClipboardCheck, FileUp,
 } from 'lucide-react'
 import { MESES, PERIODICIDADES, TIPOS_POSTULANTE, semaforoCierre } from '@/lib/radiografiaPliego'
 
@@ -106,6 +106,7 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
   const [abriendoFormulario, setAbriendoFormulario] = useState(false)
   const [documentoPara, setDocumentoPara] = useState<Convocatoria | null>(null)
   const [condicionesPara, setCondicionesPara] = useState<Convocatoria | null>(null)
+  const [subiendoBoletin, setSubiendoBoletin] = useState(false)
 
   const filtradas = useMemo(() => {
     const busqueda = texto.trim().toLowerCase()
@@ -163,6 +164,7 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
             {convocatorias.length} fichas · {conPliego} con los términos de referencia guardados
           </p>
         </div>
+        <div className="flex flex-wrap gap-3">
         <button
           type="button"
           onClick={() => setAbriendoFormulario(true)}
@@ -171,6 +173,15 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
           <Plus className="h-4 w-4" />
           Cargar una a mano
         </button>
+        <button
+          type="button"
+          onClick={() => setSubiendoBoletin(true)}
+          className="shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-color-primary/40 text-color-primary font-bold text-sm hover:bg-color-primary/10 transition-all"
+        >
+          <FileUp className="h-4 w-4" />
+          Subir un boletín
+        </button>
+        </div>
       </div>
 
       {conPliego < convocatorias.length && (
@@ -408,6 +419,8 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
           onCerrar={() => setDocumentoPara(null)}
         />
       )}
+
+      {subiendoBoletin && <SubirBoletin onCerrar={() => setSubiendoBoletin(false)} />}
 
       {condicionesPara && (
         <CompletarCondiciones
@@ -721,6 +734,119 @@ function Bloque({ titulo, children }: { titulo: string; children: React.ReactNod
     <div className="space-y-4 p-5 rounded-2xl bg-color-base-100 border border-color-base-300">
       <h3 className="text-xs font-black uppercase tracking-widest text-color-primary">{titulo}</h3>
       {children}
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------------ */
+/* Subir un boletín (PDF, CSV o texto) para llenar la biblioteca             */
+/* ------------------------------------------------------------------------ */
+
+function SubirBoletin({ onCerrar }: { onCerrar: () => void }) {
+  const [trabajando, setTrabajando] = useState(false)
+  const [progreso, setProgreso] = useState<string | null>(null)
+  const [resultado, setResultado] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+
+  const campo = 'w-full px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm'
+  const etiqueta = 'block text-[11px] font-black uppercase tracking-wider text-color-base-content/70 mb-1'
+
+  const enviar = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formulario = e.currentTarget
+    const archivo = (formulario.elements.namedItem('archivo') as HTMLInputElement).files?.[0]
+    const texto = (formulario.elements.namedItem('texto') as HTMLTextAreaElement).value.trim()
+    if (!archivo && !texto) {
+      setError('Sube un archivo o pega el texto del boletín.')
+      return
+    }
+
+    setTrabajando(true)
+    setError(null)
+    setResultado(null)
+
+    let leidas = 0
+    let guardadas = 0
+    try {
+      let parte = 0
+      let total = 1
+      while (parte < total) {
+        setProgreso(total > 1 ? `Leyendo la parte ${parte + 1} de ${total}…` : 'Leyendo el documento…')
+        const datos = new FormData()
+        if (archivo) datos.append('archivo', archivo)
+        if (texto) datos.append('texto', texto)
+        datos.append('parte', String(parte))
+
+        const res = await fetch('/api/centinela/subir-boletin', { method: 'POST', body: datos })
+        const json = await res.json()
+        if (!res.ok) throw new Error(json?.error || 'No se pudo leer el documento')
+
+        leidas += json.leidas || 0
+        guardadas += json.guardadas || 0
+        total = json.total_partes || 1
+        parte += 1
+      }
+      setResultado(
+        leidas === 0
+          ? 'No encontré convocatorias en ese documento.'
+          : `Listo: leí ${leidas} convocatorias y guardé ${guardadas}. Las que ya existían se completaron, no se duplicaron. Recarga la página para verlas.`,
+      )
+    } catch (err) {
+      setError(
+        `${(err as Error).message}${leidas > 0 ? ` (antes de fallar ya se habían guardado ${guardadas} convocatorias)` : ''}`,
+      )
+    } finally {
+      setTrabajando(false)
+      setProgreso(null)
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/40 overflow-y-auto p-4">
+      <form onSubmit={enviar} className="max-w-xl mx-auto my-8 bg-[#3B1727] rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h2 className="text-lg font-black text-color-base-content">Subir un boletín</h2>
+            <p className="text-sm text-color-base-content/60 mt-1">PDF, CSV o texto copiado</p>
+          </div>
+          <button type="button" onClick={onCerrar} className="p-2 rounded-lg hover:bg-color-base-200">
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        <p className="text-xs text-color-base-content/60 leading-relaxed">
+          La plataforma lee el documento y saca las convocatorias que menciona, sin inventar lo que no diga.
+          Las que ya están en la biblioteca se completan, no se duplican. Si tienes un Excel, guárdalo como CSV.
+          El archivo puede pesar hasta 4 MB.
+        </p>
+
+        <div>
+          <label className={etiqueta}>Archivo (PDF, CSV o TXT)</label>
+          <input type="file" name="archivo" accept=".pdf,.csv,.txt,.md" className={campo} />
+        </div>
+
+        <div>
+          <label className={etiqueta}>O pega el texto aquí</label>
+          <textarea name="texto" rows={6} className={campo} placeholder="Pega aquí el contenido del boletín o la lista" />
+        </div>
+
+        {progreso && <p className="text-xs font-bold text-color-primary">{progreso}</p>}
+        {error && <p className="text-xs font-bold text-red-500">{error}</p>}
+        {resultado && <p className="text-xs font-bold text-color-primary">{resultado}</p>}
+
+        <div className="flex justify-end gap-3">
+          <button type="button" onClick={onCerrar} className="px-4 py-2.5 rounded-xl text-sm font-bold hover:bg-color-base-200">
+            Cerrar
+          </button>
+          <button
+            type="submit"
+            disabled={trabajando}
+            className="px-5 py-2.5 rounded-xl bg-color-primary text-white text-sm font-bold hover:brightness-110 disabled:opacity-50"
+          >
+            {trabajando ? 'Leyendo…' : 'Leer y guardar'}
+          </button>
+        </div>
+      </form>
     </div>
   )
 }
