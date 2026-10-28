@@ -1,5 +1,6 @@
 import React from 'react'
-import { createClient } from '@/lib/supabase/server'
+import { resolverProyectoVisto, type ProyectoVisto } from '@/lib/proyectoVisto'
+import { BannerProyectoVisto } from '@/components/panel/BannerProyectoVisto'
 import {
   ConvocatoriasCliente,
   ConvocatoriasEnBusqueda,
@@ -81,26 +82,39 @@ function aLista(valor: unknown): string[] {
   return []
 }
 
-export default async function MisConvocatoriasPage() {
-  const supabase = await createClient()
+export default async function MisConvocatoriasPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ proyecto?: string }>
+}) {
+  const params = searchParams ? await searchParams : undefined
+  const vista = await resolverProyectoVisto(params?.proyecto)
+  const contenido = await contenidoConvocatorias(vista)
+  return (
+    <>
+      <BannerProyectoVisto vista={vista} />
+      {contenido}
+    </>
+  )
+}
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+/** Lo que ve el equipo cuando el cliente todavía no ha elegido: solo lectura, sin botones. */
+function AvisoPorElegir({ cantidad }: { cantidad: number }) {
+  return (
+    <div className="mb-4 rounded-xl border border-[#B08D57]/40 bg-[#4C2032] p-4 text-sm text-[#F3E7DC]">
+      El cliente tiene <strong>{cantidad}</strong> convocatorias encontradas por elegir. Solo él puede elegirlas.
+    </div>
+  )
+}
 
-  const correo = user?.email || ''
+async function contenidoConvocatorias(vista: ProyectoVisto) {
+  // Si el equipo abrió el proyecto de un cliente, las consultas van con la llave
+  // de servicio (solo lectura) para ver lo mismo que ve el cliente.
+  const supabase = vista.db
 
-  const { data: proyecto } = await supabase
-    .from('proyectos_clientes_serving')
-    .select('id')
-    .eq('correo_cliente', correo)
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .maybeSingle()
+  if (!vista.proyectoId) return <ConvocatoriasSinProyecto />
 
-  if (!proyecto?.id) return <ConvocatoriasSinProyecto />
-
-  const proyectoId = String(proyecto.id)
+  const proyectoId = vista.proyectoId
 
   // "Parada 1" (26 sep 2026): lo que el Motor 2 encuentra ya no pasa directo
   // al encaje. Primero se le muestra al cliente para que elija cuál o cuáles
@@ -145,7 +159,11 @@ export default async function MisConvocatoriasPage() {
 
   if (candidatas.length === 0) {
     if (pendientes.length > 0) {
-      return <ElegirConvocatorias proyectoId={proyectoId} convocatorias={pendientes} />
+      return vista.vistaEquipo ? (
+        <AvisoPorElegir cantidad={pendientes.length} />
+      ) : (
+        <ElegirConvocatorias proyectoId={proyectoId} convocatorias={pendientes} />
+      )
     }
     return <ConvocatoriasEnBusqueda />
   }
@@ -215,7 +233,11 @@ export default async function MisConvocatoriasPage() {
   if (pendientes.length > 0) {
     return (
       <div className="px-4 pt-6 lg:px-6">
-        <ElegirConvocatorias proyectoId={proyectoId} convocatorias={pendientes} />
+        {vista.vistaEquipo ? (
+          <AvisoPorElegir cantidad={pendientes.length} />
+        ) : (
+          <ElegirConvocatorias proyectoId={proyectoId} convocatorias={pendientes} />
+        )}
         <div className="-mx-4 lg:-mx-6">
           <ConvocatoriasCliente convocatorias={convocatorias} />
         </div>
