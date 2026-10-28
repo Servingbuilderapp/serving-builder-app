@@ -27,6 +27,10 @@
     {
       "path": "/api/centinela/sembrar-desde-fuentes?lote=10",
       "schedule": "30 11 * * *"
+    },
+    {
+      "path": "/api/centinela/leer-enlaces?lote=5",
+      "schedule": "45 11 * * *"
     }
   ]
 }
