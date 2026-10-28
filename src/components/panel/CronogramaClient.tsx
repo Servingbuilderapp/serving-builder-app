@@ -2,10 +2,10 @@
 
 import React from 'react'
 import Link from 'next/link'
+import { EstructuraEnBlanco } from './EstructuraEnBlanco'
 import {
   AlertTriangle,
   ArrowLeft,
-  ArrowRight,
   Check,
   Loader2,
   Minus,
@@ -218,21 +218,16 @@ export function CronogramaClient({
 
   if (lineas.length === 0) {
     return (
-      <div className="min-h-full bg-[#54142B] mx-auto max-w-2xl px-4 py-16">
-        <Tarjeta className="p-8 text-center">
-          <h1 className={`text-xl font-extrabold ${TINTA}`}>Todavía no hay actividades</h1>
-          <p className={`mt-3 text-[14px] leading-relaxed ${TINTA_SUAVE}`}>
-            El cronograma ubica en el tiempo las actividades de la cadena de valor. Primero hay que
-            escribirlas allá.
-          </p>
-          <Link
-            href={`/admin/proyectos/${proyectoId}/cadena-valor`}
-            className={`mt-5 inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-[13px] font-extrabold ${BOTON_DORADO}`}
-          >
-            Ir a la cadena de valor <ArrowRight className="h-4 w-4" />
-          </Link>
-        </Tarjeta>
-      </div>
+      <EstructuraEnBlanco
+        titulo='Cronograma'
+        aviso='Todavía sin llenar. Ubica en el tiempo las actividades de la cadena de valor, apenas esté lista; aquí ves cómo va a quedar.'
+        bloques={[
+          { titulo: 'Actividades', texto: 'Las que salen de la cadena de valor.' },
+          { titulo: 'Meses del proyecto', texto: 'En qué meses se hace cada una.' },
+          { titulo: 'Hitos', texto: 'Las entregas importantes en el tiempo.' },
+        ]}
+        enlace={{ href: `/admin/proyectos/${proyectoId}/cadena-valor`, texto: 'Ir a la cadena de valor' }}
+      />
     )
   }
 

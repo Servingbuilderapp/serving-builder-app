@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
+import { EstructuraEnBlanco } from './EstructuraEnBlanco'
 import { AlertTriangle, ArrowLeft, ArrowRight, Check, Loader2, Minus, Save, Sparkles } from 'lucide-react'
 import { arrancaConInfinitivo } from '@/lib/espejoObjetivos'
 import { guardarCadenaValor } from '@/app/(dashboard)/admin/proyectos/[id]/cadena-valor/actions'
@@ -197,21 +198,16 @@ export function CadenaValorClient({
 
   if (datos.length === 0) {
     return (
-      <div className="min-h-full bg-[#54142B] mx-auto max-w-2xl px-4 py-16">
-        <Tarjeta className="p-8 text-center">
-          <h1 className={`text-xl font-extrabold ${TINTA}`}>Todavía no hay objetivos específicos</h1>
-          <p className={`mt-3 text-[14px] leading-relaxed ${TINTA_SUAVE}`}>
-            La cadena de valor se arma sobre los objetivos específicos: cada uno aporta un producto
-            con su meta. Primero hay que escribir el árbol de objetivos.
-          </p>
-          <Link
-            href={`/admin/proyectos/${proyectoId}/objetivos`}
-            className={`mt-5 inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-[13px] font-extrabold ${BOTON_DORADO}`}
-          >
-            Ir al árbol de objetivos <ArrowRight className="h-4 w-4" />
-          </Link>
-        </Tarjeta>
-      </div>
+      <EstructuraEnBlanco
+        titulo='Cadena de valor'
+        aviso='Todavía sin llenar. Se arma sobre los objetivos específicos, apenas el árbol de objetivos esté listo; aquí ves cómo va a quedar.'
+        bloques={[
+          { titulo: 'Objetivo específico', texto: 'Cada uno aporta un producto.' },
+          { titulo: 'Producto y su meta', texto: 'Lo que se entrega y cuánto.' },
+          { titulo: 'Actividades', texto: 'Lo que hay que hacer para lograrlo.' },
+        ]}
+        enlace={{ href: `/admin/proyectos/${proyectoId}/objetivos`, texto: 'Ir al árbol de objetivos' }}
+      />
     )
   }
 

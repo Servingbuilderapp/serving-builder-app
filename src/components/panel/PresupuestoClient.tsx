@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
+import { EstructuraEnBlanco } from './EstructuraEnBlanco'
 import {
   AlertTriangle,
   ArrowLeft,
@@ -308,23 +309,16 @@ export function PresupuestoClient({
 
   if (actividades.length === 0) {
     return (
-      <div className="min-h-full bg-[#54142B] px-4 py-16">
-        <div className="mx-auto max-w-2xl">
-          <Tarjeta className="p-8 text-center">
-            <h1 className={`text-xl font-extrabold ${TINTA}`}>Todavía no hay cadena de valor</h1>
-            <p className={`mt-3 text-[14px] leading-relaxed ${TINTA_SUAVE}`}>
-              El presupuesto se arma sobre las actividades: cada gasto tiene que colgar de una. Primero
-              hay que llenar la cadena de valor.
-            </p>
-            <Link
-              href={`/admin/proyectos/${proyectoId}/cadena-valor`}
-              className={`mt-5 inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-[13px] font-extrabold ${BOTON_DORADO}`}
-            >
-              Ir a la cadena de valor <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Tarjeta>
-        </div>
-      </div>
+      <EstructuraEnBlanco
+        titulo='Presupuesto'
+        aviso='Todavía sin llenar. Se arma sobre las actividades, apenas la cadena de valor esté lista; aquí ves cómo va a quedar.'
+        bloques={[
+          { titulo: 'Actividad', texto: 'Cada gasto cuelga de una actividad.' },
+          { titulo: 'Rubro y cantidad', texto: 'En qué se gasta y cuánto de cada cosa.' },
+          { titulo: 'Valor total', texto: 'Lo que cuesta, por actividad y en general.' },
+        ]}
+        enlace={{ href: `/admin/proyectos/${proyectoId}/cadena-valor`, texto: 'Ir a la cadena de valor' }}
+      />
     )
   }
 

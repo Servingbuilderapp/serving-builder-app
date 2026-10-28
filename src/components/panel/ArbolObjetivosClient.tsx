@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
+import { EstructuraEnBlanco } from './EstructuraEnBlanco'
 import { ArrowLeft, ArrowRight, Check, Loader2, Minus, Save, Sparkles } from 'lucide-react'
 import {
   arrancaConInfinitivo,
@@ -195,20 +196,16 @@ export function ArbolObjetivosClient({
 
   if (pares.length === 0) {
     return (
-      <div className="min-h-full bg-[#54142B] mx-auto max-w-2xl px-4 py-16">
-        <Tarjeta className="p-8 text-center">
-          <h1 className={`text-xl font-extrabold ${TINTA}`}>Todavía no hay árbol de problemas</h1>
-          <p className={`mt-3 text-[14px] leading-relaxed ${TINTA_SUAVE}`}>
-            El árbol de objetivos es el reflejo del de problemas, así que primero hay que armar ese.
-          </p>
-          <Link
-            href={`/admin/proyectos/${proyectoId}/arbol`}
-            className={`mt-5 inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-[13px] font-extrabold ${BOTON_DORADO}`}
-          >
-            Ir al árbol de problemas <ArrowRight className="h-4 w-4" />
-          </Link>
-        </Tarjeta>
-      </div>
+      <EstructuraEnBlanco
+        titulo='Árbol de objetivos'
+        aviso='Todavía sin llenar. Se arma como el espejo del árbol de problemas, apenas ese esté listo; aquí ves cómo va a quedar.'
+        bloques={[
+          { titulo: 'Fines', texto: 'El reflejo en positivo de los efectos del problema.' },
+          { titulo: 'Objetivo general', texto: 'El reflejo en positivo del problema central.' },
+          { titulo: 'Objetivos específicos', texto: 'El reflejo en positivo de cada causa.' },
+        ]}
+        enlace={{ href: `/admin/proyectos/${proyectoId}/arbol`, texto: 'Ir al árbol de problemas' }}
+      />
     )
   }
 
