@@ -2,6 +2,8 @@ import React from 'react'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { esEquipoServing } from '@/lib/guardiaEquipo'
+import { resolverProyectoVisto } from '@/lib/proyectoVisto'
+import { BannerProyectoVisto } from '@/components/panel/BannerProyectoVisto'
 import { ResumenProyecto, type DatosResumen, type EstadoSemaforo, type EstadoEtapa } from '@/components/panel/ResumenProyecto'
 
 export const dynamic = 'force-dynamic'
@@ -76,6 +78,9 @@ export default async function PaginaResumen({
   // siempre mostraba el proyecto atado al correo del propio administrador.
   const { proyecto: proyectoPedido } = await searchParams
   const verComoEquipo = Boolean(proyectoPedido) && (await esEquipoServing())
+
+  // Franja de arriba: nombre del proyecto y siguiente paso.
+  const vista = await resolverProyectoVisto(verComoEquipo ? proyectoPedido : undefined)
 
   const consultaProyecto = supabase.from('proyectos_clientes_serving').select('*')
   const { data: proyecto } = verComoEquipo
@@ -377,5 +382,10 @@ export default async function PaginaResumen({
     pendientes,
   }
 
-  return <ResumenProyecto datos={datos} />
+  return (
+    <>
+      <BannerProyectoVisto vista={vista} />
+      <ResumenProyecto datos={datos} />
+    </>
+  )
 }
