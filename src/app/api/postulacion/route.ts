@@ -108,6 +108,35 @@ export async function POST(req: Request) {
       return NextResponse.json(resultado, { status: resultado.ok ? 200 : 400 })
     }
 
+    // Resultado de la convocatoria: adjudicada (con el monto ganado) o rechazada.
+    if (accion === 'registrar_resultado') {
+      const resultadoNuevo = cuerpo?.resultado
+      if (!cuerpo?.postulacionId || !['Adjudicada', 'Rechazada'].includes(resultadoNuevo)) {
+        return NextResponse.json({ error: 'Faltan postulacionId y resultado (Adjudicada o Rechazada)' }, { status: 400 })
+      }
+      const monto = Number(cuerpo?.montoAdjudicadoCop)
+      if (resultadoNuevo === 'Adjudicada' && (!Number.isFinite(monto) || monto <= 0)) {
+        return NextResponse.json({ error: 'Escribe el monto adjudicado (en pesos, mayor que cero).' }, { status: 400 })
+      }
+      const { error: errorResultado } = await supabase
+        .from('postulaciones')
+        .update({
+          estado: resultadoNuevo,
+          monto_adjudicado_cop: resultadoNuevo === 'Adjudicada' ? Math.round(monto) : null,
+        })
+        .eq('id', cuerpo.postulacionId)
+      if (errorResultado) {
+        return NextResponse.json(
+          { ok: false, error: `No se pudo guardar el resultado: ${errorResultado.message}` },
+          { status: 400 },
+        )
+      }
+      return NextResponse.json({
+        ok: true,
+        mensaje: resultadoNuevo === 'Adjudicada' ? 'Resultado guardado: adjudicada.' : 'Resultado guardado: rechazada.',
+      })
+    }
+
     if (accion === 'radicar') {
       if (!cuerpo?.postulacionId) {
         return NextResponse.json({ error: 'Falta postulacionId' }, { status: 400 })

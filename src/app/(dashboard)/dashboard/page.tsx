@@ -5,6 +5,7 @@ import { esEquipoServing } from '@/lib/guardiaEquipo'
 import { resolverProyectoVisto } from '@/lib/proyectoVisto'
 import { BannerProyectoVisto } from '@/components/panel/BannerProyectoVisto'
 import { SieteCosasClave } from '@/components/panel/SieteCosasClave'
+import { TarjetaGanado } from '@/components/panel/TarjetaGanado'
 import { ResumenProyecto, type DatosResumen, type EstadoSemaforo, type EstadoEtapa } from '@/components/panel/ResumenProyecto'
 
 export const dynamic = 'force-dynamic'
@@ -386,6 +387,7 @@ export default async function PaginaResumen({
   return (
     <>
       <BannerProyectoVisto vista={vista} />
+      <TarjetaGanado vista={vista} />
       <SieteCosasClave vista={vista} />
       <ResumenProyecto datos={datos} />
     </>

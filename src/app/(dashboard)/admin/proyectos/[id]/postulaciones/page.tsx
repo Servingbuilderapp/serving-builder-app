@@ -1,6 +1,7 @@
 import React from 'react'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { esEquipoServing } from '@/lib/guardiaEquipo'
 import {
   PostulacionesClient,
   type Postulacion,
@@ -9,8 +10,6 @@ import {
 } from '@/components/admin/PostulacionesClient'
 
 export const dynamic = 'force-dynamic'
-
-const CORREO_ADMIN = 'servingbuilderapp@gmail.com'
 
 /** Motor 4 — pantalla interna del equipo para preparar y radicar postulaciones. */
 export default async function PostulacionesPage({
@@ -25,7 +24,7 @@ export default async function PostulacionesPage({
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user || user.email?.toLowerCase() !== CORREO_ADMIN) redirect('/dashboard')
+  if (!user || !(await esEquipoServing())) redirect('/dashboard')
 
   const { data: proyecto } = await supabase
     .from('proyectos_clientes_serving')
@@ -57,8 +56,18 @@ export default async function PostulacionesPage({
 
   const filas = (requisitos || []) as FilaRequisito[]
 
+  // Montos ganados: se leen aparte para que la pantalla funcione aunque la columna todavía no exista.
+  const { data: montos } = await supabase
+    .from('postulaciones')
+    .select('id, monto_adjudicado_cop')
+    .eq('proyecto_id', id)
+  const montoPor = new Map<string, number | null>(
+    ((montos || []) as { id: string; monto_adjudicado_cop: number | null }[]).map((m) => [m.id, m.monto_adjudicado_cop]),
+  )
+
   const conRequisitos: Postulacion[] = (postulaciones || []).map((p) => ({
     ...(p as unknown as Omit<Postulacion, 'requisitos'>),
+    monto_adjudicado_cop: montoPor.get(p.id) ?? null,
     requisitos: filas.filter((r) => r.postulacion_id === p.id),
   }))
 

@@ -47,6 +47,8 @@ export type Postulacion = {
   requisitos: Requisito[]
   validacion_final: HallazgoValidacion[] | null
   nota_concepto_ajustada: string | null
+  /** Dinero que ganó el cliente con esta convocatoria (solo si quedó Adjudicada). */
+  monto_adjudicado_cop?: number | null
 }
 
 export type ConvocatoriaOpcion = {
@@ -54,6 +56,58 @@ export type ConvocatoriaOpcion = {
   nombre: string
   entidad: string | null
   fecha_cierre: string | null
+}
+
+/* -------------------------------------------------------------------------- */
+
+/** El equipo registra cómo terminó la convocatoria: adjudicada (con el monto ganado) o rechazada. */
+function ResultadoPostulacion({
+  estado,
+  monto,
+  ocupado,
+  onGuardar,
+}: {
+  estado: string
+  monto: number | null
+  ocupado: boolean
+  onGuardar: (resultado: 'Adjudicada' | 'Rechazada', montoAdjudicadoCop: number | null) => void
+}) {
+  const [resultado, setResultado] = useState<'Adjudicada' | 'Rechazada'>('Adjudicada')
+  const [valor, setValor] = useState(monto ? String(monto) : '')
+
+  return (
+    <div className="flex w-full flex-wrap items-center gap-2 rounded-lg border border-[#B08D57]/30 bg-[#3B1727] p-3">
+      <span className="text-[12px] font-bold uppercase tracking-wider text-[#B08D57]">
+        {estado === 'Adjudicada' ? 'Corregir el monto ganado' : 'Resultado de la convocatoria'}
+      </span>
+      <select
+        value={resultado}
+        onChange={(e) => setResultado(e.target.value as 'Adjudicada' | 'Rechazada')}
+        className="h-9 rounded-lg border border-[#B08D57]/30 bg-[#54142B] px-2 text-[13px] text-[#F3E7DC]"
+      >
+        <option value="Adjudicada">Adjudicada (ganó)</option>
+        <option value="Rechazada">Rechazada</option>
+      </select>
+      {resultado === 'Adjudicada' ? (
+        <input
+          type="number"
+          min={0}
+          value={valor}
+          onChange={(e) => setValor(e.target.value)}
+          placeholder="Monto ganado en pesos"
+          className="h-9 w-52 rounded-lg border border-[#B08D57]/30 bg-[#54142B] px-3 text-[13px] text-[#F3E7DC]"
+        />
+      ) : null}
+      <button
+        type="button"
+        disabled={ocupado}
+        onClick={() => onGuardar(resultado, resultado === 'Adjudicada' ? Number(valor) : null)}
+        className="inline-flex h-9 items-center rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-4 text-[13px] font-bold text-[#3A1420] disabled:opacity-50"
+      >
+        Guardar resultado
+      </button>
+    </div>
+  )
 }
 
 /* -------------------------------------------------------------------------- */
@@ -491,6 +545,20 @@ export function PostulacionesClient({
                         <Send className="h-4 w-4" />
                         {trabajando === `radicar-${p.id}` ? 'Registrando…' : 'Registrar radicación'}
                       </button>
+                    ) : null}
+
+                    {p.estado === 'Radicada' || p.estado === 'Adjudicada' ? (
+                      <ResultadoPostulacion
+                        estado={p.estado}
+                        monto={p.monto_adjudicado_cop ?? null}
+                        ocupado={trabajando !== null}
+                        onGuardar={(resultado, montoAdjudicadoCop) =>
+                          llamar(
+                            { accion: 'registrar_resultado', postulacionId: p.id, resultado, montoAdjudicadoCop },
+                            `resultado-${p.id}`,
+                          )
+                        }
+                      />
                     ) : null}
                   </div>
                 </div>
