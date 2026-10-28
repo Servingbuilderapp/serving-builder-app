@@ -4,6 +4,7 @@ import { ExternalLink } from 'lucide-react'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { resolverProyectoVisto } from '@/lib/proyectoVisto'
 import { BannerProyectoVisto } from '@/components/panel/BannerProyectoVisto'
+import { BotonElegirCoincidencia } from '@/components/panel/BotonElegirCoincidencia'
 import {
   palabrasDelProyecto,
   puntuarConvocatoria,
@@ -67,6 +68,8 @@ export default async function CoincidenciasPage({
     )
   }
 
+  const proyectoId: string = vista.proyectoId
+
   /* ---- lo que sabemos del proyecto: su nombre, su documento y lo que contó en el diagnóstico ---- */
   const { data: proyecto } = await vista.db
     .from('proyectos_clientes_serving')
@@ -119,6 +122,16 @@ export default async function CoincidenciasPage({
   }
   const biblioteca = ((consulta.data || []) as unknown as ConvocatoriaParaPuntaje[]).filter((c) => c.nombre)
 
+  // Las que este proyecto ya eligió, para no ofrecerlas otra vez.
+  const { data: yaElegidas } = await supabaseAdmin
+    .from('convocatorias_candidatas_proyecto')
+    .select('biblioteca_id')
+    .eq('id_proyecto', vista.proyectoId)
+    .eq('eleccion_cliente', 'elegida')
+  const idsElegidos = new Set(
+    ((yaElegidas || []) as { biblioteca_id: string | null }[]).map((f) => String(f.biblioteca_id)).filter((v) => v !== 'null'),
+  )
+
   const claves = palabrasDelProyecto(textoProyecto, biblioteca)
   const puntuadas = biblioteca
     .map((c) => ({ c, resultado: puntuarConvocatoria(c, claves, perfil) }))
@@ -137,7 +150,7 @@ export default async function CoincidenciasPage({
         <h1 className="text-xl font-extrabold">Coincidencias</h1>
         <p className="mt-1 text-sm text-[#F3E7DC]/70">
           Las convocatorias abiertas, ordenadas por qué tanto encajan con tu proyecto. Es un puntaje rápido para
-          decidir cuáles mirar primero: el análisis completo se hace cuando eliges una.
+          decidir cuáles mirar primero. Cuando eliges una, hacemos el análisis completo de encaje.
         </p>
 
         <div className="mt-4 flex flex-wrap gap-2">
@@ -192,6 +205,13 @@ export default async function CoincidenciasPage({
                           <li key={r}>• {r}</li>
                         ))}
                       </ul>
+                      {vista.vistaEquipo ? null : (
+                        <BotonElegirCoincidencia
+                          proyectoId={proyectoId}
+                          bibliotecaId={String(c.id)}
+                          yaElegida={idsElegidos.has(String(c.id))}
+                        />
+                      )}
                       {enlace ? (
                         <a
                           href={enlace}
