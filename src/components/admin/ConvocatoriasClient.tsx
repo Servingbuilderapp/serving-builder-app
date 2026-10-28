@@ -553,6 +553,51 @@ function FormularioFicha({ correoEquipo, onCerrar }: { correoEquipo: string; onC
           </div>
         </Bloque>
 
+        <Bloque titulo="5b · Otras condiciones para postular">
+          <div className="grid md:grid-cols-3 gap-4">
+            <div>
+              <label className={etiqueta}>¿Exige consorcio o alianza?</label>
+              <select name="consorcio_obligatorio" className={campo} defaultValue="">
+                <option value="">No se sabe</option>
+                <option value="true">Sí, es obligatorio</option>
+                <option value="false">No</option>
+              </select>
+            </div>
+            <div>
+              <label className={etiqueta}>Financiación máxima (% del costo)</label>
+              <input name="financiacion_maxima_pct" inputMode="numeric" placeholder="Ej.: 100" className={campo} />
+            </div>
+            <div>
+              <label className={etiqueta}>Idioma de la postulación</label>
+              <input name="idiomas" placeholder="Español, inglés" className={campo} />
+            </div>
+          </div>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <label className={etiqueta}>Madurez que exige el proyecto</label>
+              <input name="madurez_financiable" placeholder="Idea, prototipo, piloto, escalamiento…" className={campo} />
+            </div>
+            <div>
+              <label className={etiqueta}>Tipo de instrumento</label>
+              <input name="instrumento" placeholder="Subvención, crédito, premio, beca…" className={campo} />
+            </div>
+          </div>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div>
+              <label className={etiqueta}>Edición o versión</label>
+              <input name="edicion" placeholder="2026, 3.ª convocatoria…" className={campo} />
+            </div>
+            <div>
+              <label className={etiqueta}>Territorios prioritarios</label>
+              <input name="territorios_prioritarios" placeholder="Departamentos o zonas con prioridad" className={campo} />
+            </div>
+            <div>
+              <label className={etiqueta}>Información verificada el</label>
+              <input type="date" name="verificada_en" className={campo} />
+            </div>
+          </div>
+        </Bloque>
+
         <Bloque titulo="6 · Los hitos">
           <div className="grid md:grid-cols-3 gap-4">
             <div>

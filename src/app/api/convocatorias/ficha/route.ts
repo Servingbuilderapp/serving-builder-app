@@ -67,6 +67,16 @@ function armarFicha(c: Record<string, unknown>) {
     requisitos_habilitantes: texto('requisitos_habilitantes'),
     enlace_aplicacion: texto('enlace_aplicacion'),
 
+    // condiciones que deciden si se puede postular (27 oct 2026)
+    consorcio_obligatorio: booleano('consorcio_obligatorio'),
+    financiacion_maxima_pct: numero('financiacion_maxima_pct'),
+    madurez_financiable: texto('madurez_financiable'),
+    idiomas: texto('idiomas'),
+    edicion: texto('edicion'),
+    instrumento: texto('instrumento'),
+    territorios_prioritarios: texto('territorios_prioritarios'),
+    verificada_en: texto('verificada_en'),
+
     // calendario predictivo
     abierta_todo_el_anio: c.abierta_todo_el_anio === true || c.abierta_todo_el_anio === 'true',
     mes_apertura_tipico: numero('mes_apertura_tipico'),
