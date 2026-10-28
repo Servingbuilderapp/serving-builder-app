@@ -386,7 +386,7 @@ export default async function PaginaResumen({
   return (
     <>
       <BannerProyectoVisto vista={vista} />
-      <SieteCosasClave />
+      <SieteCosasClave vista={vista} />
       <ResumenProyecto datos={datos} />
     </>
   )
