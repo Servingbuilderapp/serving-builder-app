@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { ShieldAlert, MessageCircle } from 'lucide-react'
 import { EstadoQuejaSelect } from '@/components/admin/EstadoQuejaSelect'
+import { esEquipoServing } from '@/lib/guardiaEquipo'
 
 export const dynamic = 'force-dynamic'
 
@@ -10,7 +11,7 @@ export default async function AdminSoportePage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user || user.email?.toLowerCase() !== 'servingbuilderapp@gmail.com') {
+  if (!user || !(await esEquipoServing())) {
     redirect('/dashboard')
   }
 

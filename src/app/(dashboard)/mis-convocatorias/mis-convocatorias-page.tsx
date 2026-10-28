@@ -1,6 +1,7 @@
 import React from 'react'
 import { resolverProyectoVisto, type ProyectoVisto } from '@/lib/proyectoVisto'
 import { BannerProyectoVisto } from '@/components/panel/BannerProyectoVisto'
+import { veredictoElegibilidad, type CondicionesConvocatoria } from '@/lib/elegibilidad'
 import {
   ConvocatoriasCliente,
   ConvocatoriasEnBusqueda,
@@ -37,6 +38,7 @@ type FilaConvocatoria = {
   territorio?: string | null
   beneficiarios?: string | null
   razon_relevancia?: string | null
+  biblioteca_id?: string | null
 }
 
 type FilaEncaje = {
@@ -148,7 +150,7 @@ async function contenidoConvocatorias(vista: ProyectoVisto) {
 
   const { data: filas } = await supabase
     .from('convocatorias_candidatas_proyecto')
-    .select('id, nombre, entidad, tipo, fecha_cierre, monto, fuente_oficial, linea_tematica, territorio, beneficiarios')
+    .select('id, nombre, entidad, tipo, fecha_cierre, monto, fuente_oficial, linea_tematica, territorio, beneficiarios, biblioteca_id')
     .eq('id_proyecto', proyectoId)
     .eq('seleccionada', true)
     .eq('eleccion_cliente', 'elegida')
@@ -191,6 +193,30 @@ async function contenidoConvocatorias(vista: ProyectoVisto) {
     ])
   )
 
+  // Veredicto de elegibilidad: las condiciones salen de la biblioteca de convocatorias
+  // y se comparan con el perfil del proyecto. Si algo no se puede leer (por ejemplo
+  // porque todavía no existen las columnas nuevas), simplemente no se muestra.
+  const idsBiblioteca = candidatas.map((c) => c.biblioteca_id).filter((v): v is string => Boolean(v))
+  const condicionesPor = new Map<string, CondicionesConvocatoria>()
+  if (idsBiblioteca.length > 0) {
+    const { data: filasBib } = await supabase
+      .from('biblioteca_convocatorias')
+      .select(
+        'id, tipo_postulante, monto_maximo, moneda, contrapartida_exigida, contrapartida_detalle, consorcio_obligatorio, requisitos_habilitantes, madurez_financiable, verificada_en',
+      )
+      .in('id', idsBiblioteca)
+    ;((filasBib || []) as (CondicionesConvocatoria & { id: string })[]).forEach((f) => condicionesPor.set(String(f.id), f))
+  }
+  const { data: perfilFila } = await supabase
+    .from('proyectos_clientes_serving')
+    .select('monto_solicitado_cop, respuestas_fase1_json')
+    .eq('id', proyectoId)
+    .maybeSingle()
+  const perfil = {
+    tipoSolicitante: String((perfilFila?.respuestas_fase1_json as Record<string, unknown> | null)?.q4_tipo_solicitante || '') || null,
+    montoSolicitadoCop: Number(perfilFila?.monto_solicitado_cop || 0) || null,
+  }
+
   const convocatorias: ConvocatoriaCliente[] = candidatas.map((c) => {
     const e = mapaEncajes.get(String(c.id))
     const p = mapaPostulaciones.get(normalizarNombre(c.nombre))
@@ -214,6 +240,10 @@ async function contenidoConvocatorias(vista: ProyectoVisto) {
       lineaTematica: c.linea_tematica || null,
       territorio: c.territorio || null,
       beneficiarios: c.beneficiarios || null,
+      elegibilidad:
+        c.biblioteca_id && condicionesPor.has(String(c.biblioteca_id))
+          ? veredictoElegibilidad(condicionesPor.get(String(c.biblioteca_id))!, perfil)
+          : null,
       encaje: e
         ? {
             resumen: e.resumen_convocatoria || null,

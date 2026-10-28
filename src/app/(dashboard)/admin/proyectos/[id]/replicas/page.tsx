@@ -2,6 +2,7 @@ import React from 'react'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { TIPOS_REPLICA } from '@/lib/motorReplica'
+import { esEquipoServing } from '@/lib/guardiaEquipo'
 import {
   ReplicasClient,
   type Replica,
@@ -9,8 +10,6 @@ import {
 } from '@/components/admin/ReplicasClient'
 
 export const dynamic = 'force-dynamic'
-
-const CORREO_ADMIN = 'servingbuilderapp@gmail.com'
 
 /** Pantalla interna del equipo para pensar y crear réplicas de un proyecto. */
 export default async function ReplicasPage({ params }: { params: Promise<{ id: string }> }) {
@@ -21,7 +20,7 @@ export default async function ReplicasPage({ params }: { params: Promise<{ id: s
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user || user.email?.toLowerCase() !== CORREO_ADMIN) redirect('/dashboard')
+  if (!user || !(await esEquipoServing())) redirect('/dashboard')
 
   const { data: proyecto } = await supabase
     .from('proyectos_clientes_serving')

@@ -2,10 +2,9 @@ import React from 'react'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { MensajesProyecto } from '@/components/panel/MensajesProyecto'
+import { esEquipoServing } from '@/lib/guardiaEquipo'
 
 export const dynamic = 'force-dynamic'
-
-const CORREO_ADMIN = 'servingbuilderapp@gmail.com'
 
 /** Pantalla interna del equipo para hablar con el cliente de un proyecto. */
 export default async function MensajesProyectoAdminPage({
@@ -20,7 +19,7 @@ export default async function MensajesProyectoAdminPage({
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user || user.email?.toLowerCase() !== CORREO_ADMIN) redirect('/dashboard')
+  if (!user || !(await esEquipoServing())) redirect('/dashboard')
 
   const { data: proyecto } = await supabase
     .from('proyectos_clientes_serving')

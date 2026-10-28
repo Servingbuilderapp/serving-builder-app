@@ -22,6 +22,7 @@ import {
   diasParaCierre,
   separarLinea,
 } from '@/components/panel/ElegirConvocatorias'
+import type { VeredictoElegibilidad } from '@/lib/elegibilidad'
 
 /* ========================================================================== */
 /* Tipos                                                                      */
@@ -68,6 +69,8 @@ export type ConvocatoriaCliente = {
   lineaTematica?: string | null
   territorio?: string | null
   beneficiarios?: string | null
+  /** ¿Puede postular? null = no hay datos de la biblioteca para decirlo. */
+  elegibilidad?: VeredictoElegibilidad | null
   encaje: EncajeCliente | null
   /** null = todavía no arrancó ningún trámite de postulación para esta convocatoria. */
   postulacion: PostulacionCliente
@@ -344,6 +347,30 @@ function TarjetaConvocatoria({ convocatoria }: { convocatoria: ConvocatoriaClien
             </a>
           ) : null}
         </div>
+
+        {convocatoria.elegibilidad ? (
+          <div className="mt-3 rounded-lg border border-[#B08D57]/30 bg-[#3B1727] px-3 py-2.5">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-[11px] font-black uppercase tracking-wider text-[#B08D57]">¿Puedes postular?</span>
+              <span
+                className={`rounded-full border px-2.5 py-0.5 text-[12px] font-bold ${
+                  convocatoria.elegibilidad.estado === 'elegible'
+                    ? 'border-[#C9A46B] text-[#C9A46B]'
+                    : convocatoria.elegibilidad.estado === 'falta'
+                      ? 'border-[#E0917E] text-[#E0917E]'
+                      : 'border-[#B08D57]/60 text-[#F3E7DC]/80'
+                }`}
+              >
+                {convocatoria.elegibilidad.etiqueta}
+              </span>
+            </div>
+            <ul className="mt-1.5 space-y-0.5 text-[12.5px] leading-snug text-[#F3E7DC]/70">
+              {convocatoria.elegibilidad.razones.map((r) => (
+                <li key={r}>• {r}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
 
         <p className="mt-3 text-[12.5px] leading-snug text-[#F3E7DC]/65">
           <strong className="text-[#F3E7DC]/85">¿Dónde se postula?</strong>{' '}

@@ -8,6 +8,7 @@ import { MarcarMembresiaPagadaButton } from '@/components/admin/MarcarMembresiaP
 import { RegistrarUsoMembresia } from '@/components/admin/RegistrarUsoMembresia'
 import { resumenDeUso, type ResumenUso } from '@/lib/membresiasUso'
 import { ETIQUETA_BENEFICIO } from '@/lib/membresias'
+import { esEquipoServing } from '@/lib/guardiaEquipo'
 
 export const dynamic = 'force-dynamic'
 
@@ -42,7 +43,7 @@ export default async function AdminMembresiasPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user || user.email?.toLowerCase() !== 'servingbuilderapp@gmail.com') {
+  if (!user || !(await esEquipoServing())) {
     redirect('/dashboard')
   }
 

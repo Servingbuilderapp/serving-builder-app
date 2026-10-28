@@ -45,7 +45,30 @@ function diasDesde(fecha: string | null): number | null {
   return Math.max(0, Math.floor(ms / (1000 * 60 * 60 * 24)))
 }
 
-export default async function AdminProyectosPage() {
+/**
+ * Proyectos de prueba: los que están a nombre de las cuentas del propio equipo
+ * (por ejemplo "Ganadería", que se inventó para probar la plataforma). Se
+ * ocultan de la lista normal; hay un enlace para mostrarlos cuando se necesiten.
+ */
+const CORREOS_DEL_EQUIPO = ['servingbuilderapp@gmail.com', 'iagif1964@gmail.com']
+
+function normalizarCorreo(correo: string | null | undefined): string {
+  const [usuario = '', dominio = ''] = String(correo || '').toLowerCase().trim().split('@')
+  // En Gmail los puntos no cuentan: serving.builder.app es la misma cuenta que servingbuilderapp.
+  return `${dominio === 'gmail.com' ? usuario.replace(/\./g, '') : usuario}@${dominio}`
+}
+
+function esProyectoDePrueba(correo: string | null | undefined): boolean {
+  return CORREOS_DEL_EQUIPO.map(normalizarCorreo).includes(normalizarCorreo(correo))
+}
+
+export default async function AdminProyectosPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ pruebas?: string }>
+}) {
+  const params = searchParams ? await searchParams : undefined
+  const mostrarPruebas = params?.pruebas === '1'
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -58,7 +81,11 @@ export default async function AdminProyectosPage() {
     .select('id, nombre_cliente, correo_cliente, telefono_whatsapp, nombre_iniciativa, plan_pago, monto_solicitado_cop, monto_solicitado_usd, estado_actual, pasarela_pago, canal_origen, created_at')
     .order('created_at', { ascending: false })
 
-  const listaProyectos = proyectos || []
+  const todosLosProyectos = proyectos || []
+  const totalPruebas = todosLosProyectos.filter((p) => esProyectoDePrueba(p.correo_cliente)).length
+  const listaProyectos = mostrarPruebas
+    ? todosLosProyectos
+    : todosLosProyectos.filter((p) => !esProyectoDePrueba(p.correo_cliente))
   const totalProyectos = listaProyectos.length
   const totalPagados = listaProyectos.filter((p) => ['pagado', 'pago_aprobado'].includes(p.estado_actual || '')).length
   const totalEstancados = listaProyectos.filter((p) => {
@@ -75,6 +102,19 @@ export default async function AdminProyectosPage() {
         <p className="text-color-base-content/60 text-sm mt-2 max-w-3xl">
           En qué paso va cada cliente, si ya pagó, y quién lleva demasiado tiempo estancado en el mismo paso.
         </p>
+        {totalPruebas > 0 ? (
+          <p className="text-xs text-color-base-content/50">
+            {mostrarPruebas
+              ? `Estás viendo también ${totalPruebas} proyectos de prueba (a nombre del equipo). `
+              : `${totalPruebas} proyectos de prueba (a nombre del equipo) están ocultos. `}
+            <Link
+              href={mostrarPruebas ? '/admin/proyectos' : '/admin/proyectos?pruebas=1'}
+              className="font-bold text-[#B08D57] hover:underline"
+            >
+              {mostrarPruebas ? 'Ocultarlos' : 'Mostrarlos'}
+            </Link>
+          </p>
+        ) : null}
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
