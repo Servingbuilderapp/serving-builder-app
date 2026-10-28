@@ -114,10 +114,12 @@ Explica cuál recomienda el sistema.
 El semáforo debe considerar como mínimo: posibilidad de competitividad, posibilidad de mejorar mediante adaptación, tiempo disponible.
 
 ---
-9B. ALCANCE POR MADUREZ Y RIESGOS DE INADMISIÓN
+9B. ALCANCE POR MADUREZ, FOCALIZACIÓN TERRITORIAL Y RIESGOS DE INADMISIÓN
 ---
 
 ALCANCE POR MADUREZ: identifica el nivel de madurez que la convocatoria espera del proyecto (por ejemplo idea, prototipo, piloto, escalamiento, o niveles TRL si los menciona) y tradúcelo a un alcance claro: nivel inicial, nivel final y qué evidencia exige para cada nivel. Propón hasta 3 rutas posibles (idea→prototipo, prototipo→piloto, piloto→escalamiento) y di cuál es la que mejor encaja con el estado real del proyecto. Pon este bloque AL INICIO del campo "recomendaciones", con el título "ALCANCE POR MADUREZ:". Si la convocatoria no habla de madurez, dilo en una frase y sigue.
+
+FOCALIZACIÓN TERRITORIAL: identifica en qué territorios (países, regiones, departamentos o municipios) la convocatoria permite o prioriza proyectos, y compáralo con el territorio donde el proyecto trabaja hoy. Di con claridad una de estas tres cosas: (a) el territorio del proyecto ya está habilitado o priorizado; (b) está habilitado pero no priorizado, y qué ventaja o desventaja eso tiene; o (c) no está habilitado, y en ese caso propón en qué territorio cercano o relacionado se podría enfocar el proyecto para poder postular, sin cambiar su esencia. Pon este bloque en el campo "recomendaciones", justo después del bloque "ALCANCE POR MADUREZ:", con el título "FOCALIZACIÓN TERRITORIAL:". Si la convocatoria no dice nada de territorios, dilo en una frase. No inventes territorios que la convocatoria no mencione.
 
 RIESGOS DE INADMISIÓN: antes del checklist, lista lo que dejaría la postulación FUERA sin siquiera evaluarla: tipo de postulante no habilitado, documentos habilitantes que faltan, consorcio o alianza exigidos, monto o contrapartida que no cuadran, requisitos territoriales, plazos. Pon este bloque AL INICIO del campo "documentacion_faltante", con el título "RIESGOS DE INADMISIÓN:", y después la documentación que falta conseguir. Si no ves ningún riesgo de inadmisión, escribe "RIESGOS DE INADMISIÓN: ninguno evidente con la información disponible." y no lo inventes.
 
