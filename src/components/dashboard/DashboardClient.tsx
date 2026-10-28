@@ -62,7 +62,7 @@ export function DashboardClient({ proyecto, nombreMostrar, subirDocumento, otros
           <h3 className="text-lg font-black text-emerald-800">Tu solicitud fue aprobada</h3>
           <p className="text-emerald-700 text-sm max-w-md mx-auto">
             Ya puedes pagar tu plan Estructuración Emprendedor de <strong>{proyecto.nombre_iniciativa}</strong>.
-            Valor: $5.000.000 + IVA ($5.950.000 en total).
+            Valor: $6.000.000 + IVA ($7.140.000 en total).
           </p>
           <div className="max-w-sm mx-auto">
             <BotonPagoBold

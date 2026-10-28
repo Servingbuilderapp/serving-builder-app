@@ -71,18 +71,16 @@ const PLANES: Record<
  * debajo de cierto monto no se hace la estructuración completa.
  *
  * Los escalones (todos + IVA):
- *   hasta $60.000.000             -> $2.000.000
- *   de $60.000.001 a $70.000.000  ->  $3.500.000
- *   de $70.000.001 a $150.000.000 ->  $7.000.000
+ *   hasta $73.000.000             ->  $3.500.000
+ *   de $73.000.001 a $150.000.000 ->  $7.000.000
  *   más de $150.000.000           -> $10.000.000
  *
- * Cambio del 10 de septiembre de 2026: el primer escalón dejó de ser
- * gratuito (antes CERO); ahora cobra $2.000.000 + IVA igual que los demás.
+ * Cambio del 27 de octubre de 2026: se eliminó el escalón de $2.000.000.
+ * Todo proyecto de hasta $73.000.000 paga $3.500.000 + IVA.
  */
 export const ESCALONES_FONDO_EMPRENDER = [
-  { hasta: 60000000, valor: 2000000, etiqueta: 'Hasta $60.000.000', precio: '$2.000.000 + IVA' },
-  { hasta: 70000000, valor: 3500000, etiqueta: 'De $60.000.001 a $70.000.000', precio: '$3.500.000 + IVA' },
-  { hasta: 150000000, valor: 7000000, etiqueta: 'De $70.000.001 a $150.000.000', precio: '$7.000.000 + IVA' },
+  { hasta: 73000000, valor: 3500000, etiqueta: 'Hasta $73.000.000', precio: '$3.500.000 + IVA' },
+  { hasta: 150000000, valor: 7000000, etiqueta: 'De $73.000.001 a $150.000.000', precio: '$7.000.000 + IVA' },
   { hasta: Infinity, valor: 10000000, etiqueta: 'Más de $150.000.000', precio: '$10.000.000 + IVA' },
 ]
 

@@ -154,10 +154,8 @@ de Éxito general) únicamente para este tipo de proyecto:
    acompañamiento para proyectos de Fondo Emprender tiene un valor fijo
    según el rango de financiación solicitada, así:
 
-   - Hasta $60.000.000 COP: sin costo de estructuración (solo aplica la
-     comisión de éxito del numeral 2)
-   - De $60.000.001 a $70.000.000 COP: $2.000.000 COP + IVA
-   - De $70.000.001 a $150.000.000 COP: $7.000.000 COP + IVA
+   - Hasta $73.000.000 COP: $3.500.000 COP + IVA
+   - De $73.000.001 a $150.000.000 COP: $7.000.000 COP + IVA
    - Más de $150.000.000 COP: $10.000.000 COP + IVA
 
 2. Comisión de éxito: en caso de que el proyecto sea aprobado y reciba
