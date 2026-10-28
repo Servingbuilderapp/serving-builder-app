@@ -45,6 +45,7 @@ export const PESTANAS = [
   { clave: 'avance', nombre: 'Avance', icono: Activity },
   { clave: 'calificacion', nombre: 'Calificación', icono: BadgeCheck },
   { clave: 'convocatorias', nombre: 'Convocatorias y encaje', icono: Radar },
+  { clave: 'coincidencias', nombre: 'Coincidencias', icono: Radar },
   { clave: 'pendientes', nombre: 'Lo que me piden', icono: ClipboardList },
   { clave: 'documentos', nombre: 'Documentos', icono: FolderOpen },
 ] as const
@@ -59,6 +60,7 @@ const PANTALLAS_DEL_CLIENTE: Record<string, string> = {
   avance: '/mi-proyecto',
   calificacion: '/calificacion',
   convocatorias: '/mis-convocatorias',
+  coincidencias: '/coincidencias',
   pendientes: '/pendientes',
   documentos: '/mis-documentos',
 }
