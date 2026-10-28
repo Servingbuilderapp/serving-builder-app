@@ -70,7 +70,7 @@ const SECCIONES_CLIENTE: Seccion[] = [
       { nombre: 'Lo que me piden', href: '/pendientes', icono: Inbox },
       { nombre: 'Mis documentos', href: '/mis-documentos', icono: FolderOpen },
       { nombre: 'Mis convocatorias', href: '/mis-convocatorias', icono: Target },
-      { nombre: 'Coincidencias', href: '/coincidencias', icono: Search },
+      { nombre: 'A tu medida', href: '/a-tu-medida', icono: Search },
       { nombre: 'Mis réplicas', href: '/mis-replicas', icono: Copy },
       { nombre: 'App de Ideas', href: '/ideas', icono: Lightbulb },
       { nombre: 'Academia', href: '/academia', icono: GraduationCap },

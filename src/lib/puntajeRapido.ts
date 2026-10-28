@@ -132,13 +132,13 @@ export function puntuarConvocatoria(
   const tema = Math.min(1, parecido * 2.2) * 60
   if (coinciden.length > 0) {
     razones.push(
-      `Coincide en: ${coinciden
+      `Tu proyecto y esta convocatoria hablan de: ${coinciden
         .slice(0, 4)
         .map((k) => k.palabra)
         .join(', ')}.`,
     )
   } else {
-    razones.push('No encontramos temas en común con tu proyecto.')
+    razones.push('No vemos temas en común con tu proyecto.')
   }
 
   /* ---- elegibilidad (25) ---- */

@@ -138,17 +138,17 @@ export function veredictoElegibilidad(conv: CondicionesConvocatoria, perfil: Per
 
   /* ---- Veredicto ---- */
   if (faltas.length > 0) {
-    return { estado: 'falta', etiqueta: 'Falta algo', razones: [...faltas, ...pruebas, ...notas] }
+    return { estado: 'falta', etiqueta: 'Ajusta algo antes de postular', razones: [...faltas, ...pruebas, ...notas] }
   }
   if (pruebas.length > 0) {
-    return { estado: 'con_evidencia', etiqueta: 'Elegible con evidencia', razones: [...pruebas, ...notas] }
+    return { estado: 'con_evidencia', etiqueta: 'Puedes postular, con soportes', razones: [...pruebas, ...notas] }
   }
   if (comprobadoAlgo) {
-    return { estado: 'elegible', etiqueta: 'Elegible', razones: ['Cumple lo que pudimos comprobar.', ...notas] }
+    return { estado: 'elegible', etiqueta: 'Puedes postular', razones: ['Cumple lo que pudimos comprobar.', ...notas] }
   }
   return {
     estado: 'por_confirmar',
-    etiqueta: 'Por confirmar',
+    etiqueta: 'Falta confirmar',
     razones: [
       notas.length > 0 ? notas[0] : 'Todavía no tenemos datos suficientes de esta convocatoria para decirte si puedes postular.',
       ...notas.slice(1),
