@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
         correo_cliente: String(proyecto.correo_cliente).toLowerCase().trim(),
         estado: 'pendiente_pago',
         precio_usd: precio.usd,
-        precio_cop: precio.cop,
+        precio_cop: precio.copTotal,
         tasa_usd_cop: precio.tasa,
       })
       .select('id')

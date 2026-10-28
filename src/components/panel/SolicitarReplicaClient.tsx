@@ -12,6 +12,7 @@ import {
   Upload,
 } from 'lucide-react'
 import { PRECIOS_REPLICA, precioReplicaConEquivalencia, type ModalidadReplica } from '@/lib/precioReplicas'
+import { textoPrecioAbanico } from '@/lib/abanico'
 
 /* ========================================================================== */
 /* Estilo del panel (mismo lenguaje que el resto de pantallas del cliente)    */
@@ -144,6 +145,7 @@ function PasoDatos({
           <p className="mt-1 text-[14px] font-bold text-[#F3E7DC]">{PRECIOS_REPLICA.abanico.nombre}</p>
           <p className="mt-1 text-[12.5px] leading-relaxed text-[#F3E7DC]/75">{PRECIOS_REPLICA.abanico.descripcion}</p>
           <p className="mt-2 text-[13px] font-bold text-[#C9A46B]">{precioReplicaConEquivalencia('abanico')}</p>
+          <p className="mt-1 text-[12px] font-bold text-[#C9A46B]/90">{textoPrecioAbanico()}</p>
         </div>
 
         {necesitaRetroalimentacion ? (

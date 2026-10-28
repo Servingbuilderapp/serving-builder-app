@@ -6,7 +6,7 @@ import { BannerProyectoVisto } from '@/components/panel/BannerProyectoVisto'
 import { ComprarAbanico } from '@/components/panel/ComprarAbanico'
 import { ElegirAbanico, type ConvocatoriaDelAbanico } from '@/components/panel/ElegirAbanico'
 import { PRECIOS_REPLICA, precioReplicaConEquivalencia } from '@/lib/precioReplicas'
-import { TOTAL_ABANICO } from '@/lib/abanico'
+import { TOTAL_ABANICO, textoPrecioAbanico } from '@/lib/abanico'
 
 export const dynamic = 'force-dynamic'
 
@@ -67,6 +67,7 @@ export default async function MiAbanicoPage({
         <p className="text-base font-extrabold text-[#C9A46B]">{PRECIOS_REPLICA.abanico.nombre}</p>
         <p className="mt-2 text-[#F3E7DC]/85">{PRECIOS_REPLICA.abanico.descripcion}</p>
         <p className="mt-3 text-lg font-extrabold text-[#C9A46B]">{precioReplicaConEquivalencia('abanico')}</p>
+        <p className="mt-1 text-xs font-bold text-[#C9A46B]">{textoPrecioAbanico()}</p>
         <p className="mt-1 text-xs text-[#F3E7DC]/60">
           Pagas una sola vez. Después todo es automático: armamos tu abanico y te avisamos por correo para que escojas.
         </p>

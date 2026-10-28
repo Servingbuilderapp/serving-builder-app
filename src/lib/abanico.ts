@@ -1,5 +1,5 @@
 import { PRECIOS_REPLICA } from '@/lib/precioReplicas'
-import { TASAS_DE_CAMBIO, convertirUsdACop } from '@/lib/conversionMoneda'
+import { TASAS_DE_CAMBIO, convertirUsdACop, formatoCOP, formatoUSD } from '@/lib/conversionMoneda'
 
 /**
  * ABANICO — datos comunes a todas las piezas (cobro, preparación y elección).
@@ -17,25 +17,45 @@ export const LOTE_ABANICO = 3
 
 export type EstadoAbanico = 'pendiente_pago' | 'pagado' | 'preparando' | 'listo' | 'confirmado' | 'sin_opciones'
 
+/** IVA que se suma a los clientes en Colombia. Clientes de otro país no lo pagan. */
+export const IVA_COLOMBIA = 0.19
+
 /**
- * Cuánto se cobra. Los precios de la plataforma están en dólares. Clientes de otro país
- * pagan en dólares (Bold USD); en Colombia se cobra en pesos, al cambio de hoy.
+ * Cuánto se cobra. Los precios de la plataforma están en dólares (US$ 2.800).
+ *  - Cliente en Colombia: se cobra en pesos, al cambio de hoy, MÁS el IVA del 19 %.
+ *  - Cliente de otro país: se cobra en dólares (Bold USD), sin IVA.
  */
 export function precioAbanico(pasarela: string | null | undefined): {
   moneda: 'COP' | 'USD'
+  /** Lo que se le cobra de verdad al cliente, en su moneda. */
   monto: number
   usd: number
-  cop: number
+  copBase: number
+  iva: number
+  copTotal: number
   tasa: number
 } {
   const usd = PRECIOS_REPLICA.abanico.precioUSD
-  const cop = convertirUsdACop(usd)
+  const copBase = convertirUsdACop(usd)
+  const iva = Math.round(copBase * IVA_COLOMBIA)
+  const copTotal = copBase + iva
   const enDolares = pasarela === 'Bold USD'
   return {
     moneda: enDolares ? 'USD' : 'COP',
-    monto: enDolares ? usd : cop,
+    monto: enDolares ? usd : copTotal,
     usd,
-    cop,
+    copBase,
+    iva,
+    copTotal,
     tasa: TASAS_DE_CAMBIO.USD_COP.valor,
   }
+}
+
+/** El precio explicado en una frase, para mostrar en pantalla. */
+export function textoPrecioAbanico(): string {
+  const p = precioAbanico('Manual')
+  return (
+    `Colombia: ${formatoCOP(p.copBase)} + IVA del 19 % = ${formatoCOP(p.copTotal)}. ` +
+    `Otros países: ${formatoUSD(p.usd)}, sin IVA.`
+  )
 }
