@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { CreditCard } from 'lucide-react'
@@ -165,7 +166,13 @@ export default async function AdminMembresiasPage() {
                             ))
                         : '-'}
                     </td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-6 py-4 text-right space-y-2">
+                      <Link
+                        href={`/admin/membresias/${m.id}`}
+                        className="block text-xs font-bold text-[#B08D57] hover:underline whitespace-nowrap"
+                      >
+                        Ver actividad
+                      </Link>
                       {m.estado !== 'activa' ? (
                         <MarcarMembresiaPagadaButton membresiaId={m.id} />
                       ) : (
