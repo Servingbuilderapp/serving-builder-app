@@ -27,7 +27,7 @@ export function FormularioIngresoSocio({
   nombreSocio: string
   logoUrl?: string | null
   colorPrimario?: string | null
-  /** true cuando el socio ofrece sus proyectos gratis (cortesía: 15 días, 15 % de éxito). */
+  /** Ya no se usa: marca blanca quedó sin proyectos gratis ni porcentajes. */
   gratis?: boolean
 }) {
   // El color del socio pisa el color de Serving solo dentro de esta
@@ -152,13 +152,6 @@ export function FormularioIngresoSocio({
             className="w-full rounded-lg border border-[#0F172A]/15 px-3 py-2 text-sm"
           />
         </div>
-
-        {gratis ? (
-          <div className="rounded-xl border border-color-primary/30 bg-color-primary/5 p-4 text-sm text-[#0F172A]/80 space-y-1">
-            <div className="font-bold text-[#0F172A]">Tu proyecto, sin costo de estructuración</div>
-            <p>Estructuramos tu proyecto sin cobrarte. Tienes 15 días, desde que subas tu documento, para que busquemos convocatorias y postulemos. Solo si tu proyecto gana, se cobra el 15 % del valor desembolsado.</p>
-          </div>
-        ) : null}
 
         {!gratis ? (
         <div className="space-y-2">

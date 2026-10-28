@@ -50,12 +50,8 @@ export async function estadoPortal(socio: SocioPortal): Promise<{
   gratis: boolean
   restantes: number
 }> {
-  const hoy = new Date().toISOString().slice(0, 10)
-  const conMantenimiento = !!socio.mantenimiento_pagado_hasta && socio.mantenimiento_pagado_hasta >= hoy
-  let restantes = 0
-  if (socio.modalidad === 'cinco_gratis' && socio.cupo_gratis > 0) {
-    restantes = Math.max(0, socio.cupo_gratis - (await gratisUsados(socio.id)))
-  }
-  const gratis = restantes > 0
-  return { abierto: !!socio.activo && (gratis || conMantenimiento), gratis, restantes }
+  // Marca blanca queda en una sola modalidad, sin precios ni cupos fijos: lo que
+  // se acuerde con cada socio se maneja fuera de la plataforma. El portal del
+  // socio se abre mientras el socio esté activo (27 oct 2026).
+  return { abierto: !!socio.activo, gratis: false, restantes: 0 }
 }

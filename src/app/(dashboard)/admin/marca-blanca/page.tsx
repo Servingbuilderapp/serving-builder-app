@@ -8,7 +8,7 @@ import { supabaseAdmin } from '@/lib/supabase/admin'
 import { CrearSocioForm } from '@/components/admin/CrearSocioForm'
 import { AsignarSocioSelect } from '@/components/admin/AsignarSocioSelect'
 import { CrearUsuarioSocioForm } from '@/components/admin/CrearUsuarioSocioForm'
-import { ActivarMantenimientoButton } from '@/components/admin/ActivarMantenimientoButton'
+import { ActivarPortalSocioButton } from '@/components/admin/ActivarPortalSocioButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -83,15 +83,7 @@ export default async function AdminMarcaBlancaPage() {
 
   const listaSocios: FilaSocio[] = socios || []
 
-  // Cuántos proyectos gratis ha usado cada socio.
-  const usadosPorSocio = new Map<string, number>()
-  const { data: filasGratis } = await supabaseAdmin.from('cortesias').select('socio_id').not('socio_id', 'is', null)
-  for (const f of (filasGratis || []) as { socio_id: string }[]) {
-    usadosPorSocio.set(f.socio_id, (usadosPorSocio.get(f.socio_id) || 0) + 1)
-  }
-
   const ahora = new Date()
-  const hoyTexto = ahora.toISOString().slice(0, 10)
   const lista = proyectos || []
   const baseUrl = SITIO_PUBLICO
 
@@ -114,10 +106,6 @@ export default async function AdminMarcaBlancaPage() {
         {listaSocios.length > 0 ? (
           <div className="space-y-2">
             {listaSocios.map((s) => {
-              const mantenimientoAlDia = !!s.mantenimiento_pagado_hasta && s.mantenimiento_pagado_hasta >= hoyTexto
-              const esGratis = s.modalidad === 'cinco_gratis' && (s.cupo_gratis || 0) > 0
-              const usados = usadosPorSocio.get(s.id) || 0
-              const gratisRestantes = esGratis ? Math.max(0, (s.cupo_gratis || 0) - usados) : 0
               const enlace = s.slug ? `${baseUrl}/mb/${s.slug}` : null
 
               return (
@@ -137,31 +125,15 @@ export default async function AdminMarcaBlancaPage() {
                     )}
                   </div>
 
-                  {esGratis ? (
-                    <span className="px-2 py-1 rounded-full text-xs font-bold whitespace-nowrap bg-color-primary/10 text-color-primary">
-                      Opción 2 — proyectos gratis: {usados} de {s.cupo_gratis}
-                    </span>
-                  ) : null}
-
-                  {gratisRestantes > 0 ? null : (
                   <span
                     className={`px-2 py-1 rounded-full text-xs font-bold whitespace-nowrap ${
-                      mantenimientoAlDia
-                        ? 'bg-color-primary/10 text-color-primary'
-                        : 'bg-red-500/15 text-red-600'
+                      s.activo ? 'bg-color-primary/10 text-color-primary' : 'bg-red-500/15 text-red-600'
                     }`}
                   >
-                    {mantenimientoAlDia
-                      ? `Mantenimiento al día hasta ${s.mantenimiento_pagado_hasta}`
-                      : 'Mantenimiento vencido — su enlace no funciona'}
-                  </span>
-                  )}
-
-                  <span className="text-xs text-color-base-content/50 whitespace-nowrap">
-                    US${s.mantenimiento_mensual_usd || 500}/mes
+                    {s.activo ? 'Portal abierto' : 'Portal apagado — su enlace no funciona'}
                   </span>
 
-                  <ActivarMantenimientoButton socioId={s.id} />
+                  <ActivarPortalSocioButton socioId={s.id} activo={!!s.activo} />
                 </div>
               )
             })}
