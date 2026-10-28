@@ -3,7 +3,7 @@
 import React, { useMemo, useState } from 'react'
 import {
   Search, Plus, FileText, Upload, Link2, X, AlertTriangle,
-  CalendarClock, Globe2, Building2, Check,
+  CalendarClock, Globe2, Building2, Check, ClipboardCheck,
 } from 'lucide-react'
 import { MESES, PERIODICIDADES, TIPOS_POSTULANTE, semaforoCierre } from '@/lib/radiografiaPliego'
 
@@ -48,6 +48,16 @@ type Convocatoria = {
   territorio: string | null
   origen_ficha: string | null
   actualizado_en: string | null
+  // Condiciones para postular (opcionales: pueden no venir si la base aún no tiene las columnas)
+  contrapartida_detalle?: string | null
+  consorcio_obligatorio?: boolean | null
+  financiacion_maxima_pct?: number | null
+  madurez_financiable?: string | null
+  idiomas?: string | null
+  edicion?: string | null
+  instrumento?: string | null
+  territorios_prioritarios?: string | null
+  verificada_en?: string | null
 }
 
 type Props = {
@@ -95,6 +105,7 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
   const [soloConPliego, setSoloConPliego] = useState(false)
   const [abriendoFormulario, setAbriendoFormulario] = useState(false)
   const [documentoPara, setDocumentoPara] = useState<Convocatoria | null>(null)
+  const [condicionesPara, setCondicionesPara] = useState<Convocatoria | null>(null)
 
   const filtradas = useMemo(() => {
     const busqueda = texto.trim().toLowerCase()
@@ -339,6 +350,15 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
                   {documentos > 0 ? 'Agregar documento' : 'Guardar los términos de referencia'}
                 </button>
 
+                <button
+                  type="button"
+                  onClick={() => setCondicionesPara(c)}
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-color-primary/30 text-color-primary text-xs font-bold hover:bg-color-primary/10"
+                >
+                  <ClipboardCheck className="h-3.5 w-3.5" />
+                  Completar condiciones
+                </button>
+
                 {c.enlace_aplicacion && (
                   <a
                     href={c.enlace_aplicacion}
@@ -386,6 +406,13 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
         <SubirDocumento
           convocatoria={documentoPara}
           onCerrar={() => setDocumentoPara(null)}
+        />
+      )}
+
+      {condicionesPara && (
+        <CompletarCondiciones
+          convocatoria={condicionesPara}
+          onCerrar={() => setCondicionesPara(null)}
         />
       )}
     </div>
@@ -694,6 +721,131 @@ function Bloque({ titulo, children }: { titulo: string; children: React.ReactNod
     <div className="space-y-4 p-5 rounded-2xl bg-color-base-100 border border-color-base-300">
       <h3 className="text-xs font-black uppercase tracking-widest text-color-primary">{titulo}</h3>
       {children}
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------------ */
+/* Completar las condiciones para postular de una convocatoria que ya existe */
+/* ------------------------------------------------------------------------ */
+
+function CompletarCondiciones({ convocatoria, onCerrar }: { convocatoria: Convocatoria; onCerrar: () => void }) {
+  const [guardando, setGuardando] = useState(false)
+  const [mensaje, setMensaje] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+
+  const campo = 'w-full px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm'
+  const etiqueta = 'block text-[11px] font-black uppercase tracking-wider text-color-base-content/70 mb-1'
+
+  const enviar = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setGuardando(true)
+    setError(null)
+    setMensaje(null)
+    try {
+      const datos = Object.fromEntries(new FormData(e.currentTarget).entries())
+      const res = await fetch('/api/convocatorias/ficha', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...datos, id: convocatoria.id }),
+      })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json?.error || 'No se pudo guardar')
+      setMensaje('Listo: las condiciones quedaron guardadas. Recarga la página para verlas.')
+    } catch (err) {
+      setError((err as Error).message)
+    } finally {
+      setGuardando(false)
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/40 overflow-y-auto p-4">
+      <form onSubmit={enviar} className="max-w-xl mx-auto my-8 bg-[#3B1727] rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl">
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0">
+            <h2 className="text-lg font-black text-color-base-content">Condiciones para postular</h2>
+            <p className="text-sm text-color-base-content/60 mt-1 truncate">{convocatoria.nombre}</p>
+          </div>
+          <button type="button" onClick={onCerrar} className="p-2 rounded-lg hover:bg-color-base-200">
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        <p className="text-xs text-color-base-content/60 leading-relaxed">
+          Llena solo lo que sepas. Lo que dejes en blanco no borra lo que ya estaba. Con estos datos, el
+          cliente ve si puede postular a esta convocatoria.
+        </p>
+
+        <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <label className={etiqueta}>¿Exige consorcio o alianza?</label>
+            <select
+              name="consorcio_obligatorio"
+              className={campo}
+              defaultValue={convocatoria.consorcio_obligatorio === true ? 'true' : convocatoria.consorcio_obligatorio === false ? 'false' : ''}
+            >
+              <option value="">No se sabe</option>
+              <option value="true">Sí, es obligatorio</option>
+              <option value="false">No</option>
+            </select>
+          </div>
+          <div>
+            <label className={etiqueta}>Financiación máxima (% del costo)</label>
+            <input name="financiacion_maxima_pct" inputMode="numeric" defaultValue={convocatoria.financiacion_maxima_pct ?? ''} className={campo} />
+          </div>
+        </div>
+
+        <div>
+          <label className={etiqueta}>Detalle de la contrapartida</label>
+          <input name="contrapartida_detalle" defaultValue={convocatoria.contrapartida_detalle ?? ''} placeholder="Porcentaje, si acepta especie, qué cuenta" className={campo} />
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <label className={etiqueta}>Madurez que exige el proyecto</label>
+            <input name="madurez_financiable" defaultValue={convocatoria.madurez_financiable ?? ''} placeholder="Idea, prototipo, piloto…" className={campo} />
+          </div>
+          <div>
+            <label className={etiqueta}>Tipo de instrumento</label>
+            <input name="instrumento" defaultValue={convocatoria.instrumento ?? ''} placeholder="Subvención, crédito, premio…" className={campo} />
+          </div>
+          <div>
+            <label className={etiqueta}>Idioma de la postulación</label>
+            <input name="idiomas" defaultValue={convocatoria.idiomas ?? ''} placeholder="Español, inglés" className={campo} />
+          </div>
+          <div>
+            <label className={etiqueta}>Edición o versión</label>
+            <input name="edicion" defaultValue={convocatoria.edicion ?? ''} placeholder="2026, 3.ª convocatoria…" className={campo} />
+          </div>
+        </div>
+
+        <div>
+          <label className={etiqueta}>Territorios prioritarios</label>
+          <input name="territorios_prioritarios" defaultValue={convocatoria.territorios_prioritarios ?? ''} className={campo} />
+        </div>
+
+        <div>
+          <label className={etiqueta}>Información verificada el</label>
+          <input type="date" name="verificada_en" defaultValue={convocatoria.verificada_en ?? ''} className={campo} />
+        </div>
+
+        {error && <p className="text-xs font-bold text-red-500">{error}</p>}
+        {mensaje && <p className="text-xs font-bold text-color-primary">{mensaje}</p>}
+
+        <div className="flex justify-end gap-3">
+          <button type="button" onClick={onCerrar} className="px-4 py-2.5 rounded-xl text-sm font-bold hover:bg-color-base-200">
+            Cerrar
+          </button>
+          <button
+            type="submit"
+            disabled={guardando}
+            className="px-5 py-2.5 rounded-xl bg-color-primary text-white text-sm font-bold hover:brightness-110 disabled:opacity-50"
+          >
+            {guardando ? 'Guardando…' : 'Guardar condiciones'}
+          </button>
+        </div>
+      </form>
     </div>
   )
 }

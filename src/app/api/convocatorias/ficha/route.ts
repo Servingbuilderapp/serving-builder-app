@@ -156,6 +156,16 @@ export async function POST(req: Request) {
   }
 }
 
+/**
+ * Para completar una ficha que ya existe: solo se tocan los campos que de verdad
+ * llegaron. Sin esto, armarFicha() rellena valores por defecto (entidad vacía,
+ * "por clasificar", "por definir") y pisaba lo que la ficha ya tenía.
+ */
+function soloLoEnviado(cuerpo: Record<string, unknown>): Record<string, unknown> {
+  const completa = armarFicha(cuerpo)
+  return Object.fromEntries(Object.entries(completa).filter(([clave]) => clave in cuerpo))
+}
+
 export async function PATCH(req: Request) {
   try {
     if (!(await esEquipoServing())) {
@@ -170,7 +180,7 @@ export async function PATCH(req: Request) {
     const supabase = cliente()
     const { data, error } = await supabase
       .from('biblioteca_convocatorias')
-      .update({ ...armarFicha(cuerpo), actualizado_en: new Date().toISOString() })
+      .update({ ...soloLoEnviado(cuerpo), actualizado_en: new Date().toISOString() })
       .eq('id', String(cuerpo.id))
       .select('id, nombre')
       .single()
