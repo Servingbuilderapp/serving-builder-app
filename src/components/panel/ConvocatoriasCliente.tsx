@@ -344,6 +344,13 @@ function TarjetaConvocatoria({ convocatoria }: { convocatoria: ConvocatoriaClien
             </a>
           ) : null}
         </div>
+
+        <p className="mt-3 text-[12.5px] leading-snug text-[#F3E7DC]/65">
+          <strong className="text-[#F3E7DC]/85">¿Dónde se postula?</strong>{' '}
+          {convocatoria.fuenteOficial
+            ? 'Entra a la página oficial y busca la sección «Postular» o «Términos de referencia». Muchas convocatorias piden registrarse antes en la plataforma de la entidad, así que hazlo con tiempo.'
+            : 'Todavía no tenemos el enlace oficial de esta convocatoria. Escríbenos y te ayudamos a encontrar dónde se postula.'}
+        </p>
       </div>
 
       {abierta && encaje ? (

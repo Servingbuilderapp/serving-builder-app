@@ -103,6 +103,51 @@ export async function calcularSiguientePaso(vista: ProyectoVisto): Promise<Sigui
     }
   }
 
+  /* ---- alerta de cierre: convocatoria elegida que cierra en 7 días o menos ---- */
+  const hoyUtc = new Date()
+  const inicioHoy = Date.UTC(hoyUtc.getUTCFullYear(), hoyUtc.getUTCMonth(), hoyUtc.getUTCDate())
+  const { data: elegidasConCierre } = await db
+    .from('convocatorias_candidatas_proyecto')
+    .select('nombre, fecha_cierre')
+    .eq('id_proyecto', id)
+    .eq('seleccionada', true)
+    .eq('eleccion_cliente', 'elegida')
+    .not('fecha_cierre', 'is', null)
+  const { data: yaPostuladas } = await db
+    .from('postulaciones')
+    .select('convocatoria_nombre, estado')
+    .eq('proyecto_id', id)
+
+  const quitarTildes = (t: string) =>
+    t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim()
+  const terminadas = new Set(
+    ((yaPostuladas || []) as { convocatoria_nombre: string | null; estado: string | null }[])
+      .filter((p) => ['Radicada', 'Adjudicada', 'Rechazada', 'Descartada'].includes(String(p.estado)))
+      .map((p) => quitarTildes(String(p.convocatoria_nombre || ''))),
+  )
+
+  const porCerrar = ((elegidasConCierre || []) as { nombre: string | null; fecha_cierre: string }[])
+    .map((c) => {
+      const f = new Date(c.fecha_cierre)
+      const dias = Math.round((Date.UTC(f.getUTCFullYear(), f.getUTCMonth(), f.getUTCDate()) - inicioHoy) / 86400000)
+      return { nombre: String(c.nombre || 'una convocatoria'), dias }
+    })
+    .filter((c) => c.dias >= 0 && c.dias <= 7 && !terminadas.has(quitarTildes(c.nombre)))
+    .sort((a, b) => a.dias - b.dias)
+
+  if (porCerrar.length > 0) {
+    const primera = porCerrar[0]
+    const cuando = primera.dias === 0 ? 'hoy' : primera.dias === 1 ? 'mañana' : `en ${primera.dias} días`
+    return {
+      titulo: `Cierra ${cuando}: ${primera.nombre}`,
+      texto:
+        porCerrar.length > 1
+          ? `Y hay ${porCerrar.length - 1} más que cierran esta semana. Revisa qué te falta para postular, porque pasada la fecha ya no se puede.`
+          : 'Si vas a postular, hazlo antes de esa fecha. Revisa qué te falta, porque pasada la fecha ya no se puede.',
+      accion: { texto: 'Ver mis convocatorias', href: '/mis-convocatorias' },
+    }
+  }
+
   const porElegir = await contar(
     db
       .from('convocatorias_candidatas_proyecto')
