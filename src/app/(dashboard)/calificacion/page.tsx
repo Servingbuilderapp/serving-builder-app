@@ -1,5 +1,6 @@
 import React from 'react'
-import { createClient } from '@/lib/supabase/server'
+import { resolverProyectoVisto, type ProyectoVisto } from '@/lib/proyectoVisto'
+import { BannerProyectoVisto } from '@/components/panel/BannerProyectoVisto'
 import {
   CalificacionFinal,
   CalificacionFinalSinProyecto,
@@ -20,24 +21,36 @@ export const revalidate = 0
  * busquemos convocatorias" (tiene 3 días; si no dice nada, el reloj de
  * /api/revisar-aprobaciones-vencidas arranca la búsqueda solo).
  */
-export default async function CalificacionPage() {
-  const supabase = await createClient()
+export default async function CalificacionPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ proyecto?: string }>
+}) {
+  const params = searchParams ? await searchParams : undefined
+  const vista = await resolverProyectoVisto(params?.proyecto)
+  const contenido = await contenidoCalificacion(vista)
+  return (
+    <>
+      <BannerProyectoVisto vista={vista} />
+      {contenido}
+    </>
+  )
+}
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+async function contenidoCalificacion(vista: ProyectoVisto) {
+  // Si el equipo abrió el proyecto de un cliente, las consultas van con la llave
+  // de servicio (solo lectura) para ver lo mismo que ve el cliente.
+  const supabase = vista.db
 
-  const correo = user?.email || ''
-
-  const { data: proyecto } = await supabase
-    .from('proyectos_clientes_serving')
-    .select(
-      'id, nombre_iniciativa, evaluacion_aprobada, evaluacion_aprobada_en, busqueda_convocatorias_iniciada',
-    )
-    .eq('correo_cliente', correo)
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .maybeSingle()
+  const { data: proyecto } = vista.proyectoId
+    ? await supabase
+        .from('proyectos_clientes_serving')
+        .select(
+          'id, nombre_iniciativa, evaluacion_aprobada, evaluacion_aprobada_en, busqueda_convocatorias_iniciada',
+        )
+        .eq('id', vista.proyectoId)
+        .maybeSingle()
+    : { data: null }
 
   if (!proyecto) return <CalificacionFinalSinProyecto />
 
@@ -65,6 +78,7 @@ export default async function CalificacionPage() {
 
   return (
     <CalificacionFinal
+      soloLectura={vista.vistaEquipo}
       datos={{
         idProyecto: proyectoId,
         nombreProyecto,

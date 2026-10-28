@@ -4,14 +4,18 @@ import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
+  Activity,
   ArrowLeft,
+  BadgeCheck,
   CalendarRange,
+  ClipboardList,
   Coins,
   Copy,
   FileText,
   Gauge,
   LayoutGrid,
   ListTree,
+  Radar,
   Send,
   Target,
   Workflow,
@@ -37,7 +41,24 @@ export const PESTANAS = [
   { clave: 'postulaciones', nombre: 'Postulaciones', icono: Send },
   { clave: 'replicas', nombre: 'Réplicas', icono: Copy },
   { clave: 'resumen', nombre: 'Resumen', icono: Gauge },
+  { clave: 'avance', nombre: 'Avance', icono: Activity },
+  { clave: 'calificacion', nombre: 'Calificación', icono: BadgeCheck },
+  { clave: 'convocatorias', nombre: 'Convocatorias y encaje', icono: Radar },
+  { clave: 'pendientes', nombre: 'Lo que me piden', icono: ClipboardList },
 ] as const
+
+/**
+ * Pestañas que abren la pantalla del CLIENTE de este proyecto (solo lectura para
+ * el equipo): la dirección lleva ?proyecto=<id> para que muestre ese proyecto y
+ * no el que esté atado al correo de quien entra.
+ */
+const PANTALLAS_DEL_CLIENTE: Record<string, string> = {
+  resumen: '/dashboard',
+  avance: '/mi-proyecto',
+  calificacion: '/calificacion',
+  convocatorias: '/mis-convocatorias',
+  pendientes: '/pendientes',
+}
 
 export function PestanasProyecto({
   proyectoId,
@@ -71,11 +92,11 @@ export function PestanasProyecto({
 
       <nav className="mt-3 flex gap-1 overflow-x-auto px-2 lg:px-4">
         {PESTANAS.map((pestana) => {
-          // "Resumen" usa la pantalla del resumen general, pero apuntando a ESTE proyecto.
-          const destino =
-            pestana.clave === 'resumen'
-              ? `/dashboard?proyecto=${proyectoId}`
-              : pestana.clave
+          // Las pantallas del cliente apuntan a ESTE proyecto con ?proyecto=<id>.
+          const pantallaCliente = PANTALLAS_DEL_CLIENTE[pestana.clave]
+          const destino = pantallaCliente
+            ? `${pantallaCliente}?proyecto=${proyectoId}`
+            : pestana.clave
                 ? `${base}/${pestana.clave}`
                 : base
           const activa = pestana.clave

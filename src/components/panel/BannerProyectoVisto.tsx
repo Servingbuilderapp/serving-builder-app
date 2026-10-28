@@ -20,7 +20,7 @@ export function BannerProyectoVisto({ vista }: { vista: ProyectoVisto }) {
             Vista del equipo, solo lectura{vista.nombreCliente ? ` · cliente: ${vista.nombreCliente}` : ''}
           </span>
           <Link
-            href={`/dashboard/proyectos/${vista.proyectoId}`}
+            href={`/admin/proyectos/${vista.proyectoId}`}
             className="ml-auto text-xs font-bold text-[#B08D57] hover:underline"
           >
             Volver a la ficha

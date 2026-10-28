@@ -248,12 +248,6 @@ export default function ProyectoDetallePage() {
             {project.plan_pago && <p>• Plan: <span className="font-bold text-brand-blue glow-text-blue">{project.plan_pago}</span></p>}
             {project.archivo_proyecto_nombre && <p>• Archivo: <span className="font-bold text-gray-300">{project.archivo_proyecto_nombre}</span></p>}
           </div>
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs mt-2 font-medium">
-            <span className="font-black uppercase tracking-wider text-gray-500">Ver como el cliente:</span>
-            <a href={`/mis-convocatorias?proyecto=${project.id}`} className="font-bold text-[#B08D57] hover:underline">
-              Mis convocatorias
-            </a>
-          </div>
         </div>
         <div className="flex items-center gap-2">
           {project.estado_actual === 'Insumos_Recibidos' && (

@@ -1,5 +1,6 @@
 import React from 'react'
-import { createClient } from '@/lib/supabase/server'
+import { resolverProyectoVisto, type ProyectoVisto } from '@/lib/proyectoVisto'
+import { BannerProyectoVisto } from '@/components/panel/BannerProyectoVisto'
 import {
   AvanceProyecto,
   AvanceSinProyecto,
@@ -24,22 +25,34 @@ export const revalidate = 0
  * modalidades, como si nunca hubiera pagado. Aquí se lee su proyecto real de la
  * base de datos y se muestra en qué punto va.
  */
-export default async function MiProyectoPage() {
-  const supabase = await createClient()
+export default async function MiProyectoPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ proyecto?: string }>
+}) {
+  const params = searchParams ? await searchParams : undefined
+  const vista = await resolverProyectoVisto(params?.proyecto)
+  const contenido = await contenidoMiProyecto(vista)
+  return (
+    <>
+      <BannerProyectoVisto vista={vista} />
+      {contenido}
+    </>
+  )
+}
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+async function contenidoMiProyecto(vista: ProyectoVisto) {
+  // Si el equipo abrió el proyecto de un cliente, las consultas van con la llave
+  // de servicio (solo lectura) para ver lo mismo que ve el cliente.
+  const supabase = vista.db
 
-  const correo = user?.email || ''
-
-  const { data: proyecto } = await supabase
-    .from('proyectos_clientes_serving')
-    .select('id, nombre_iniciativa, estado_actual, plan_pago, dossier_markdown')
-    .eq('correo_cliente', correo)
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .maybeSingle()
+  const { data: proyecto } = vista.proyectoId
+    ? await supabase
+        .from('proyectos_clientes_serving')
+        .select('id, nombre_iniciativa, estado_actual, plan_pago, dossier_markdown')
+        .eq('id', vista.proyectoId)
+        .maybeSingle()
+    : { data: null }
 
   if (!proyecto) return <AvanceSinProyecto />
 
@@ -47,7 +60,7 @@ export default async function MiProyectoPage() {
   const estado = String(proyecto.estado_actual || '').toLowerCase()
 
   // Cortesía sin aceptar: primero se leen y aceptan las condiciones.
-  if (estado === 'cortesia_pendiente') redirect('/cortesia')
+  if (estado === 'cortesia_pendiente' && !vista.vistaEquipo) redirect('/cortesia')
 
   // Mientras no esté confirmado el pago no hay estructuración que mostrar.
   // El pago quedó confirmado con cualquiera de estos nombres: la plataforma

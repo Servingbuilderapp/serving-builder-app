@@ -26,7 +26,7 @@ export type CalificacionFinalDatos = {
 }
 
 
-export function CalificacionFinal({ datos }: { datos: CalificacionFinalDatos }) {
+export function CalificacionFinal({ datos, soloLectura = false }: { datos: CalificacionFinalDatos; soloLectura?: boolean }) {
   const router = useRouter()
   const [trabajando, setTrabajando] = useState(false)
   const [aviso, setAviso] = useState<{ tono: 'exito' | 'error'; texto: string } | null>(null)
@@ -99,10 +99,12 @@ export function CalificacionFinal({ datos }: { datos: CalificacionFinalDatos }) 
                   No tienes que esperar ni aprobar nada: la búsqueda de convocatorias empieza
                   automáticamente en pocos minutos.
                 </Aviso>
-                <GlowButton onClick={aprobar} disabled={trabajando} className="w-full sm:w-auto">
-                  <Sparkles className="h-4 w-4" />
-                  {trabajando ? 'Guardando…' : 'Sí, busquemos convocatorias'}
-                </GlowButton>
+                {soloLectura ? null : (
+                  <GlowButton onClick={aprobar} disabled={trabajando} className="w-full sm:w-auto">
+                    <Sparkles className="h-4 w-4" />
+                    {trabajando ? 'Guardando…' : 'Sí, busquemos convocatorias'}
+                  </GlowButton>
+                )}
                 {aviso ? (
                   <Aviso tipo={aviso.tono} titulo={aviso.tono === 'exito' ? 'Listo' : 'No se pudo'}>
                     {aviso.texto}
