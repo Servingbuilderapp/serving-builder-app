@@ -319,6 +319,55 @@ export async function POST(req: NextRequest) {
           .join("\n\n")
       : "";
 
+    // Segunda fuente de información (27 oct 2026): lo que el cliente respondió en el
+    // diagnóstico gratuito. Antes el motor solo leía el documento, y decía "no hay
+    // nada de territorio" aunque el diagnóstico sí lo tuviera. Solo se usan las
+    // respuestas del propio cliente (no el análisis que hizo la IA), y se dejan por
+    // fuera los datos personales (identificación, correo, teléfono).
+    let bloqueDiagnostico = "";
+    try {
+      const { data: proyectoFila } = await supabase
+        .from("proyectos_clientes_serving")
+        .select("correo_cliente")
+        .eq("id", id_proyecto)
+        .maybeSingle();
+      const correoCliente = String(proyectoFila?.correo_cliente || "").trim();
+
+      if (correoCliente) {
+        const { data: diagnostico } = await supabase
+          .from("diagnosticos")
+          .select("datos_formulario")
+          .ilike("email", correoCliente)
+          .not("datos_formulario", "is", null)
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+        const datosDiag = diagnostico?.datos_formulario;
+        if (datosDiag && typeof datosDiag === "object") {
+          const lineasDiag = Object.entries(datosDiag as Record<string, unknown>)
+            .filter(([clave, valor]) => {
+              if (/documento|identidad|correo|email|tel[eé]fono|whats|contrase|password/i.test(clave)) return false;
+              return (typeof valor === "string" && valor.trim().length > 0) || typeof valor === "number";
+            })
+            .map(([clave, valor]) => `- ${clave}: ${String(valor).trim().slice(0, 1500)}`);
+          const textoDiag = lineasDiag.join("\n").slice(0, 6000);
+
+          if (textoDiag) {
+            bloqueDiagnostico = `SEGUNDA FUENTE DE INFORMACIÓN: lo que el cliente respondió en su diagnóstico gratuito.
+Úsalo JUNTO con el documento, como si fuera parte del mismo proyecto. Si un dato (por ejemplo el territorio, la población o el monto) no aparece en el documento pero sí aquí, tómalo de aquí y NO le hagas una pregunta por algo que el diagnóstico ya responde. Si el documento y el diagnóstico se contradicen, prefiere el documento y dilo en la "advertencia" del paso. Aplican las mismas reglas: no inventes nada que no esté en una de las dos fuentes.
+
+${textoDiag}
+
+`;
+          }
+        }
+      }
+    } catch (errorDiagnostico) {
+      // Si el diagnóstico no se puede leer, el motor sigue con el documento solo, como antes.
+      console.error("No se pudo leer el diagnóstico del cliente:", errorDiagnostico);
+    }
+
     // Regla de extensión (26 sep 2026): el documento final debe salir SIEMPRE
     // como un proyecto profesional completo (entre 75 y 150 páginas en
     // total), sin importar si el cliente subió un documento de origen corto
@@ -337,7 +386,7 @@ REGLA DE EXTENSIÓN (obligatoria para todo paso que quede "completo"): este es u
 `;
 
     const instruccionFormato = `
-${hayContenidoPrevio ? `Este proyecto YA tiene contenido estructurado previamente. Aquí está lo que ya existe:\n\n${resumenContenidoPrevio}\n\nEl documento o texto nuevo que recibes a continuación es INFORMACIÓN COMPLEMENTARIA para completar lo que faltaba de ESE MISMO proyecto. Antes de usarlo, verifica que el contenido nuevo sea coherente con el proyecto ya existente (mismo tema, mismo problema, misma población). Si el contenido nuevo parece pertenecer a un proyecto completamente distinto y no tiene relación con lo ya estructurado, NO lo mezcles: en vez de eso, para el o los pasos afectados, responde con estado "incompleto" y una pregunta que diga textualmente: "La información recibida no parece corresponder a este proyecto. Por favor confirma o sube información relacionada con el mismo proyecto." No inventes conexión donde no la hay.\n\n` : ""}Analiza el documento y complétalo contra esta lista de ${pasos.length} pasos de estructuración:
+${bloqueDiagnostico}${hayContenidoPrevio ? `Este proyecto YA tiene contenido estructurado previamente. Aquí está lo que ya existe:\n\n${resumenContenidoPrevio}\n\nEl documento o texto nuevo que recibes a continuación es INFORMACIÓN COMPLEMENTARIA para completar lo que faltaba de ESE MISMO proyecto. Antes de usarlo, verifica que el contenido nuevo sea coherente con el proyecto ya existente (mismo tema, mismo problema, misma población). Si el contenido nuevo parece pertenecer a un proyecto completamente distinto y no tiene relación con lo ya estructurado, NO lo mezcles: en vez de eso, para el o los pasos afectados, responde con estado "incompleto" y una pregunta que diga textualmente: "La información recibida no parece corresponder a este proyecto. Por favor confirma o sube información relacionada con el mismo proyecto." No inventes conexión donde no la hay.\n\n` : ""}Analiza el documento y complétalo contra esta lista de ${pasos.length} pasos de estructuración:
 ${pasos.map((p) => `- id ${p.id}: ${p.nombre_paso}`).join("\n")}
 
 Para CADA paso, responde si hay información suficiente para desarrollarlo completo, o si falta información esencial.
