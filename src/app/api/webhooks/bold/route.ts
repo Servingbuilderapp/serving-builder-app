@@ -3,6 +3,7 @@ import { after } from 'next/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { verificarFirmaWebhookBold } from '@/lib/bold'
 import { arrancarEstructuracion } from '@/lib/arrancarEstructuracion'
+import { cabecerasInternas } from '@/lib/candadoMotores'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,8 +15,7 @@ export const dynamic = 'force-dynamic'
  *   2. proyectos_clientes_serving  (anticipo de Estructuración)
  *   3. membresias_clientes   (Explorador / Constructor)
  *
- * El día que se conecte Bold a Réplicas, este mismo archivo se extiende con
- * un cuarto bloque — no hace falta una ruta nueva por cada producto.
+ * 4. abanicos             (Armar mi abanico, el plan de Réplicas)
  *
  * IMPORTANTE: hay que registrar esta URL en el panel de Bold
  * (Integraciones → Webhooks): https://<tu-dominio>/api/webhooks/bold
@@ -62,12 +62,13 @@ export async function POST(req: Request) {
   // Idempotencia: si Bold reenvía el mismo aviso, no se procesa dos veces en
   // ninguna de las tres tablas.
   if (paymentId) {
-    const [academiaYa, proyectoYa, membresiaYa] = await Promise.all([
+    const [academiaYa, proyectoYa, membresiaYa, abanicoYa] = await Promise.all([
       supabaseAdmin.from('academia_compras').select('id').eq('bold_payment_id', paymentId).maybeSingle(),
       supabaseAdmin.from('proyectos_clientes_serving').select('id').eq('bold_payment_id', paymentId).maybeSingle(),
       supabaseAdmin.from('membresias_clientes').select('id').eq('bold_payment_id', paymentId).maybeSingle(),
+      supabaseAdmin.from('abanicos').select('id').eq('bold_payment_id', paymentId).maybeSingle(),
     ])
-    if (academiaYa.data || proyectoYa.data || membresiaYa.data) {
+    if (academiaYa.data || proyectoYa.data || membresiaYa.data || abanicoYa.data) {
       return NextResponse.json({ recibido: true, yaProcesado: true })
     }
   }
@@ -137,6 +138,37 @@ export async function POST(req: Request) {
           bold_payment_id: paymentId || null,
         })
         .eq('id', membresia.id)
+    }
+    return NextResponse.json({ recibido: true })
+  }
+
+  // 4) Abanico — apenas el pago queda aprobado, la plataforma arma sola las convocatorias
+  // (en segundo plano, por tandas) y al terminar le avisa al cliente para que escoja.
+  const { data: abanico } = await supabaseAdmin
+    .from('abanicos')
+    .select('id, estado')
+    .or(`id.eq.${referencia},bold_order_id.eq.${referencia}`)
+    .maybeSingle()
+
+  if (abanico) {
+    if (abanico.estado === 'pendiente_pago') {
+      await supabaseAdmin
+        .from('abanicos')
+        .update({ estado: 'pagado', pagado_en: new Date().toISOString(), bold_payment_id: paymentId || null })
+        .eq('id', abanico.id)
+
+      const origen = new URL(req.url).origin
+      after(async () => {
+        try {
+          await fetch(`${origen}/api/abanico/preparar`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...cabecerasInternas() },
+            body: JSON.stringify({ abanicoId: abanico.id }),
+          })
+        } catch (e) {
+          console.error('Error arrancando la preparación del abanico:', e)
+        }
+      })
     }
     return NextResponse.json({ recibido: true })
   }

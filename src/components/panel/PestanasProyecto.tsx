@@ -17,6 +17,7 @@ import {
   LayoutGrid,
   ListTree,
   Radar,
+  Fan,
   Send,
   Target,
   Workflow,
@@ -46,6 +47,7 @@ export const PESTANAS = [
   { clave: 'calificacion', nombre: 'Calificación', icono: BadgeCheck },
   { clave: 'convocatorias', nombre: 'Convocatorias y encaje', icono: Radar },
   { clave: 'amedida', nombre: 'A tu medida', icono: Radar },
+  { clave: 'abanico', nombre: 'Abanico', icono: Fan },
   { clave: 'pendientes', nombre: 'Lo que me piden', icono: ClipboardList },
   { clave: 'documentos', nombre: 'Documentos', icono: FolderOpen },
 ] as const
@@ -61,6 +63,7 @@ const PANTALLAS_DEL_CLIENTE: Record<string, string> = {
   calificacion: '/calificacion',
   convocatorias: '/mis-convocatorias',
   amedida: '/a-tu-medida',
+  abanico: '/mi-abanico',
   pendientes: '/pendientes',
   documentos: '/mis-documentos',
 }

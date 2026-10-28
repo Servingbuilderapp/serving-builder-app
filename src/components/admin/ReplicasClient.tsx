@@ -13,7 +13,8 @@ import {
   Shuffle,
   Sparkles,
 } from 'lucide-react'
-import { PRECIOS_REPLICA, type ModalidadReplica } from '@/lib/precioReplicas'
+import { PRECIOS_REPLICA, MODALIDADES_OFRECIDAS, type ModalidadReplica } from '@/lib/precioReplicas'
+import { PanelAbanico } from '@/components/admin/PanelAbanico'
 import { precioConEquivalenciaCOP } from '@/lib/conversionMoneda'
 import { COBRO_COLOMBIA, COBRO_EXTERIOR } from '@/lib/mediosDePago'
 import { CAMPO_DESTINO } from '@/lib/plantillasReplica'
@@ -167,7 +168,7 @@ function Cotizacion({
           Elegí en cuál de las dos modalidades entra esta réplica para saber cuánto cobrarle.
         </p>
         <div className="mt-3 grid gap-2 sm:grid-cols-2">
-          {(Object.values(PRECIOS_REPLICA)).map((p) => (
+          {(Object.values(PRECIOS_REPLICA).filter((p) => MODALIDADES_OFRECIDAS.includes(p.id))).map((p) => (
             <button
               key={p.id}
               type="button"
@@ -332,6 +333,8 @@ export function ReplicasClient({
         <p className="text-[13px] text-[#F3E7DC]/55">{nombreProyecto}</p>
       </header>
 
+      <PanelAbanico proyectoId={proyectoId} />
+
       {/* preparar --------------------------------------------------------- */}
       <div className={`rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 ${SOMBRA}`}>
         <h2 className="text-[13px] font-bold uppercase tracking-wider text-[#F3E7DC]">
@@ -415,7 +418,7 @@ export function ReplicasClient({
             className="h-11 rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-3 text-[13.5px] text-[#F3E7DC] outline-none focus:border-[#B08D57] sm:col-span-2"
           >
             <option value="">Modalidad de cobro (se puede fijar después)…</option>
-            {Object.values(PRECIOS_REPLICA).map((p) => (
+            {Object.values(PRECIOS_REPLICA).filter((p) => MODALIDADES_OFRECIDAS.includes(p.id)).map((p) => (
               <option key={p.id} value={p.id}>
                 {p.nombre} — {precioConEquivalenciaCOP(p.precioUSD)}
               </option>
@@ -541,11 +544,11 @@ export function ReplicasClient({
               yaCubiertaPor={
                 // "no_presentado" es un pago único por proyecto: si otra réplica de esta
                 // misma modalidad ya se cotizó o se pagó, esta va incluida, no se cobra aparte.
-                r.modalidad_cobro === 'no_presentado'
+                r.modalidad_cobro === 'no_presentado' || r.modalidad_cobro === 'abanico'
                   ? replicas.find(
                       (otra) =>
                         otra.id !== r.id &&
-                        otra.modalidad_cobro === 'no_presentado' &&
+                        otra.modalidad_cobro === r.modalidad_cobro &&
                         otra.estado_pago !== 'Sin cotizar'
                     ) || null
                   : null

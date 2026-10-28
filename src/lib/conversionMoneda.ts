@@ -35,8 +35,8 @@ export type TasaDeCambio = {
 
 export const TASAS_DE_CAMBIO: { USD_COP: TasaDeCambio } = {
   USD_COP: {
-    valor: 3126.08,
-    actualizada: '2026-09-07',
+    valor: 3120,
+    actualizada: '2026-10-28',
     fuente: 'TRM oficial de Colombia',
   },
 }

@@ -33,7 +33,17 @@
  *     actualizar la tasa de cambio.
  */
 
-export type ModalidadReplica = 'ya_presentado' | 'no_presentado'
+/**
+ * ABANICO (28 oct 2026) — decisión del dueño: queda UN SOLO plan, "Armar mi abanico".
+ * USD 2.800, pago único. Toma el proyecto ya estructurado por Serving (o, si llegó de
+ * afuera, lo revisa muy rápido) y lo adapta a 12 convocatorias: en cada una cambia
+ * lo que esa convocatoria pida — beneficiarios, territorio, proponente, monto, línea
+ * temática… — para que cada postulación sea la correcta y no una copia de la otra.
+ *
+ * Las modalidades 'ya_presentado' y 'no_presentado' ya no se ofrecen; siguen aquí solo
+ * para que las réplicas que ya se cotizaron o pagaron con ellas se sigan leyendo bien.
+ */
+export type ModalidadReplica = 'abanico' | 'ya_presentado' | 'no_presentado'
 
 export type PrecioReplica = {
   id: ModalidadReplica
@@ -43,7 +53,22 @@ export type PrecioReplica = {
   precioUSD: number
 }
 
+/** Lo único que se ofrece hoy. Las otras dos quedan solo para leer réplicas ya existentes. */
+export const MODALIDADES_OFRECIDAS: ModalidadReplica[] = ['abanico']
+
 export const PRECIOS_REPLICA: Record<ModalidadReplica, PrecioReplica> = {
+  abanico: {
+    id: 'abanico',
+    nombre: 'Armar mi abanico',
+    descripcionCorta: 'Tu proyecto, adaptado hasta a 12 convocatorias distintas.',
+    descripcion:
+      'Postulación a hasta 12 convocatorias. Tomamos tu proyecto ya estructurado (o, si llegó de ' +
+      'afuera, lo revisamos muy rápido) y lo adaptamos a las convocatorias que mejor le quedan. ' +
+      'En cada una cambiamos lo que esa convocatoria pida: beneficiarios, territorio, proponente, ' +
+      'monto, línea temática. Tú escoges a cuáles quieres entrar. Si hay menos de 12 que le ' +
+      'queden bien, son las que haya. Pago único.',
+    precioUSD: 2800,
+  },
   ya_presentado: {
     id: 'ya_presentado',
     nombre: 'Réplica de un proyecto ya presentado',

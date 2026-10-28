@@ -32,6 +32,7 @@ import {
   HeartHandshake,
   Handshake,
   Gift,
+  Fan,
 } from 'lucide-react'
 import { Ayuda } from '@/components/ui/Ayuda'
 
@@ -71,6 +72,7 @@ const SECCIONES_CLIENTE: Seccion[] = [
       { nombre: 'Mis documentos', href: '/mis-documentos', icono: FolderOpen },
       { nombre: 'Mis convocatorias', href: '/mis-convocatorias', icono: Target },
       { nombre: 'A tu medida', href: '/a-tu-medida', icono: Search },
+      { nombre: 'Mi abanico', href: '/mi-abanico', icono: Fan },
       { nombre: 'Mis réplicas', href: '/mis-replicas', icono: Copy },
       { nombre: 'App de Ideas', href: '/ideas', icono: Lightbulb },
       { nombre: 'Academia', href: '/academia', icono: GraduationCap },

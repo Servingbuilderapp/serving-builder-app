@@ -153,6 +153,13 @@ export default async function ATuMedidaPage({
           mirada rápida para decidir cuáles revisar primero. Cuando eliges una, hacemos el análisis completo.
         </p>
 
+        <p className="mt-3 text-xs text-[#F3E7DC]/70">
+          ¿Quieres postular a varias a la vez?{' '}
+          <Link href={vista.vistaEquipo ? `/mi-abanico?proyecto=${proyectoId}` : '/mi-abanico'} className="font-bold text-[#C9A46B] underline">
+            Arma tu abanico
+          </Link>
+        </p>
+
         <div className="mt-4 flex flex-wrap gap-2">
           {UMBRALES.map((u) => (
             <Link

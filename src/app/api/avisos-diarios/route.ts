@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse, after } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { motorAutorizado } from '@/lib/candadoMotores'
+import { motorAutorizado, cabecerasInternas } from '@/lib/candadoMotores'
 import { buildEmailTemplate, sendEmail } from '@/lib/email'
 import {
   palabrasDelProyecto,
@@ -57,6 +57,30 @@ export async function GET(req: NextRequest) {
     const origen = req.nextUrl.origin
     const hoy = new Date().toISOString().slice(0, 10)
     const hace24h = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+
+    /* ---- red de seguridad: abanicos que se quedaron a medias ---- */
+    // Si una pasada de preparación se cortó, aquí se retoma sola. La preparación no repite lo ya hecho.
+    if (!soloProbar) {
+      const hace30min = new Date(Date.now() - 30 * 60 * 1000).toISOString()
+      const { data: atascados } = await supabase
+        .from('abanicos')
+        .select('id')
+        .in('estado', ['pagado', 'preparando'])
+        .lt('pagado_en', hace30min)
+      for (const a of atascados || []) {
+        after(async () => {
+          try {
+            await fetch(`${origen}/api/abanico/preparar`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', ...cabecerasInternas() },
+              body: JSON.stringify({ abanicoId: a.id }),
+            })
+          } catch (e) {
+            console.error('[avisos-diarios] No se pudo retomar un abanico:', e)
+          }
+        })
+      }
+    }
 
     /* ---- la biblioteca abierta ---- */
     let consulta = await supabase

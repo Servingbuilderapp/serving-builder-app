@@ -76,7 +76,7 @@ export async function prepararReplica(
     tipo: TipoReplica
     destino?: string
     convocatoriaId?: string
-    modalidadCobro?: 'ya_presentado' | 'no_presentado'
+    modalidadCobro?: 'abanico' | 'ya_presentado' | 'no_presentado'
   },
 ): Promise<ResultadoReplica> {
   if (!TIPOS_REPLICA.includes(opciones.tipo)) {

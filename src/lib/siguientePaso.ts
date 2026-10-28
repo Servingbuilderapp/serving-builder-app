@@ -103,6 +103,29 @@ export async function calcularSiguientePaso(vista: ProyectoVisto): Promise<Sigui
     }
   }
 
+  /* ---- abanico: lo que el cliente compró y está en marcha ---- */
+  const { data: abanico } = await db
+    .from('abanicos')
+    .select('estado')
+    .eq('proyecto_id', id)
+    .order('creado_en', { ascending: false })
+    .limit(1)
+    .maybeSingle<{ estado: string }>()
+  if (abanico?.estado === 'listo') {
+    return {
+      titulo: 'Escoge las convocatorias de tu abanico',
+      texto: 'Ya adaptamos tu proyecto a las convocatorias que mejor le quedan. Te toca escoger a cuáles quieres entrar.',
+      accion: { texto: 'Escoger mis convocatorias', href: '/mi-abanico' },
+    }
+  }
+  if (abanico?.estado === 'pagado' || abanico?.estado === 'preparando') {
+    return {
+      titulo: 'Estamos armando tu abanico',
+      texto: 'Estamos adaptando tu proyecto a varias convocatorias. Te avisamos por correo cuando esté listo. No tienes que hacer nada.',
+      accion: null,
+    }
+  }
+
   /* ---- alerta de cierre: convocatoria elegida que cierra en 7 días o menos ---- */
   const hoyUtc = new Date()
   const inicioHoy = Date.UTC(hoyUtc.getUTCFullYear(), hoyUtc.getUTCMonth(), hoyUtc.getUTCDate())

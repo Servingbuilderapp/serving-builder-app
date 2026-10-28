@@ -55,7 +55,7 @@ function PasoDatos({
   const [nombreCliente, setNombreCliente] = useState('')
   const [telefonoWhatsapp, setTelefonoWhatsapp] = useState('')
   const [nombreIniciativa, setNombreIniciativa] = useState('')
-  const [modalidad, setModalidad] = useState<ModalidadReplica | ''>('')
+  const [modalidad] = useState<ModalidadReplica | ''>('abanico')
   const [retroalimentacionTexto, setRetroalimentacionTexto] = useState('')
   const [enviando, setEnviando] = useState(false)
   const [error, setError] = useState('')
@@ -139,32 +139,11 @@ function PasoDatos({
           />
         </div>
 
-        <div>
-          <label className={ETIQUETA}>¿Ya presentaste este proyecto a una convocatoria?</label>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {(['ya_presentado', 'no_presentado'] as ModalidadReplica[]).map((id) => {
-              const opcion = PRECIOS_REPLICA[id]
-              const elegida = modalidad === id
-              return (
-                <button
-                  key={id}
-                  type="button"
-                  onClick={() => setModalidad(id)}
-                  className={`rounded-xl border px-4 py-3.5 text-left transition-colors ${
-                    elegida
-                      ? 'border-[#C9A46B] bg-[#3B1727]'
-                      : 'border-[#B08D57]/35 bg-[#3B1727] hover:bg-[#4C2032]'
-                  }`}
-                >
-                  <p className="text-[13.5px] font-bold text-[#F3E7DC]">
-                    {id === 'ya_presentado' ? 'Sí, ya la presenté' : 'No, todavía no'}
-                  </p>
-                  <p className="mt-1 text-[12.5px] leading-relaxed text-[#F3E7DC]/70">{opcion.descripcionCorta}</p>
-                  <p className="mt-2 text-[12px] font-bold text-[#C9A46B]">{precioReplicaConEquivalencia(id)}</p>
-                </button>
-              )
-            })}
-          </div>
+        <div className="rounded-xl border border-[#C9A46B] bg-[#3B1727] px-4 py-3.5">
+          <p className="text-[11px] font-black uppercase tracking-wider text-[#B08D57]">Tu plan</p>
+          <p className="mt-1 text-[14px] font-bold text-[#F3E7DC]">{PRECIOS_REPLICA.abanico.nombre}</p>
+          <p className="mt-1 text-[12.5px] leading-relaxed text-[#F3E7DC]/75">{PRECIOS_REPLICA.abanico.descripcion}</p>
+          <p className="mt-2 text-[13px] font-bold text-[#C9A46B]">{precioReplicaConEquivalencia('abanico')}</p>
         </div>
 
         {necesitaRetroalimentacion ? (
@@ -374,14 +353,14 @@ function PasoDocumentos({
             </p>
             <p className="mt-1 text-[12.5px] leading-relaxed text-[#A9BC9C]">
               {arrancado
-                ? 'Ya empezamos a trabajar tu proyecto. Nuestro equipo revisa la solicitud y te contacta por WhatsApp.'
-                : 'Tu proyecto quedó guardado. Nuestro equipo lo revisa y te contacta por WhatsApp.'}
+                ? 'Ya empezamos a revisar tu proyecto. Cuando quieras, arma tu abanico: es automático.'
+                : 'Tu proyecto quedó guardado. Cuando quieras, arma tu abanico: es automático.'}
             </p>
             <Link
-              href="/mis-replicas"
+              href="/mi-abanico"
               className="mt-3 inline-flex items-center gap-1.5 text-[12.5px] font-bold text-[#C9A46B] underline underline-offset-2"
             >
-              Ver mis réplicas <ChevronRight className="h-3.5 w-3.5" />
+              Armar mi abanico <ChevronRight className="h-3.5 w-3.5" />
             </Link>
           </div>
         ) : null}
@@ -403,8 +382,8 @@ export function SolicitarReplicaClient() {
       <header className="mb-5">
         <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">Solicitar una réplica</h1>
         <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#F3E7DC]/70">
-          Súbenos tu proyecto ya estructurado y lo que necesites replicar — otro territorio, otra
-          convocatoria, otro presupuesto — y nuestro equipo se encarga del resto.
+          Súbenos tu proyecto. Lo revisamos muy rápido, lo adaptamos a las convocatorias que mejor le
+          quedan y tú escoges a cuáles entrar.
         </p>
       </header>
 
