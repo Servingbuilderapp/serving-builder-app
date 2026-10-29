@@ -66,6 +66,9 @@ export default async function MiAbanicoPage({
       <Caja>
         <p className="text-base font-extrabold text-[#C9A46B]">{PRECIOS_REPLICA.abanico.nombre}</p>
         <p className="mt-2 text-[#F3E7DC]/85">{PRECIOS_REPLICA.abanico.descripcion}</p>
+        <p className="mt-2 text-xs font-bold text-[#F3E7DC]/70">
+          Es un servicio aparte, con su propio precio: no está incluido en tu estructuración.
+        </p>
         <p className="mt-3 text-lg font-extrabold text-[#C9A46B]">{precioReplicaConEquivalencia('abanico')}</p>
         <p className="mt-1 text-xs font-bold text-[#C9A46B]">{textoPrecioAbanico()}</p>
         <p className="mt-1 text-xs text-[#F3E7DC]/60">

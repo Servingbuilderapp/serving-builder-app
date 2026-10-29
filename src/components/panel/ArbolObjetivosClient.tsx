@@ -3,6 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { EstructuraEnBlanco } from './EstructuraEnBlanco'
+import type { PasoDelMotor } from '@/lib/pasosDelMotor'
 import { ArrowLeft, ArrowRight, Check, Loader2, Minus, Save, Sparkles } from 'lucide-react'
 import {
   arrancaConInfinitivo,
@@ -34,6 +35,8 @@ export type ParEspejo = {
 }
 
 type Props = {
+  /** Lo que la estructuración por documento ya escribió para esta parte, si lo hay. */
+  pasosMotor?: PasoDelMotor[]
   proyectoId: string
   nombreProyecto: string
   nombreCliente: string
@@ -98,6 +101,7 @@ export function ArbolObjetivosClient({
   proyectoId,
   nombreProyecto,
   nombreCliente,
+  pasosMotor,
   pares,
 }: Props) {
   const [textos, setTextos] = React.useState<Record<string, string>>(() =>
@@ -197,8 +201,9 @@ export function ArbolObjetivosClient({
   if (pares.length === 0) {
     return (
       <EstructuraEnBlanco
+        pasos={pasosMotor}
         titulo='Árbol de objetivos'
-        aviso='Todavía sin llenar. Se arma como el espejo del árbol de problemas, apenas ese esté listo; aquí ves cómo va a quedar.'
+        aviso='Esta parte todavía no se ha generado: se arma sola cuando la estructuración llega a este punto. Aquí ves cómo va a quedar.'
         bloques={[
           { titulo: 'Fines', texto: 'El reflejo en positivo de los efectos del problema.' },
           { titulo: 'Objetivo general', texto: 'El reflejo en positivo del problema central.' },

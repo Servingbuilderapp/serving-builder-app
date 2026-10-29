@@ -15,7 +15,6 @@ import {
   FolderOpen,
   Satellite,
   Target,
-  Copy,
   Wallet,
   Crown,
   CheckSquare,
@@ -74,7 +73,6 @@ const SECCIONES_CLIENTE: Seccion[] = [
       { nombre: 'Mis convocatorias', href: '/mis-convocatorias', icono: Target },
       { nombre: 'A tu medida', href: '/a-tu-medida', icono: Search },
       { nombre: 'Mi abanico', href: '/mi-abanico', icono: Fan },
-      { nombre: 'Mis réplicas', href: '/mis-replicas', icono: Copy },
       { nombre: 'App de Ideas', href: '/ideas', icono: Lightbulb },
       { nombre: 'Academia', href: '/academia', icono: GraduationCap },
       { nombre: 'Mi membresía', href: '/mi-membresia', icono: Crown },
@@ -172,7 +170,7 @@ const SECCIONES_EQUIPO: Seccion[] = [
  * Academia son cosas de la marca propia de Serving, no del servicio que
  * contrató el socio. Réplicas tampoco entra en marca blanca.
  */
-const NOMBRES_OCULTOS_MARCA_BLANCA = new Set(['App de Ideas', 'Academia', 'Mis réplicas'])
+const NOMBRES_OCULTOS_MARCA_BLANCA = new Set(['App de Ideas', 'Academia', 'Mi abanico'])
 
 /**
  * Lo que ve un socio de marca blanca. A propósito es UNA sola entrada:

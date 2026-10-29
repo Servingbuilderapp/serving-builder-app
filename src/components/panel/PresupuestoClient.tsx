@@ -3,6 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { EstructuraEnBlanco } from './EstructuraEnBlanco'
+import type { PasoDelMotor } from '@/lib/pasosDelMotor'
 import {
   AlertTriangle,
   ArrowLeft,
@@ -61,6 +62,8 @@ export type ReglasVista = {
 }
 
 type Props = {
+  /** Lo que la estructuración por documento ya escribió para esta parte, si lo hay. */
+  pasosMotor?: PasoDelMotor[]
   proyectoId: string
   nombreProyecto: string
   nombreCliente: string
@@ -141,6 +144,7 @@ export function PresupuestoClient({
   proyectoId,
   nombreProyecto,
   nombreCliente,
+  pasosMotor,
   actividades,
   items,
   reglas: reglasIniciales,
@@ -310,8 +314,9 @@ export function PresupuestoClient({
   if (actividades.length === 0) {
     return (
       <EstructuraEnBlanco
+        pasos={pasosMotor}
         titulo='Presupuesto'
-        aviso='Todavía sin llenar. Se arma sobre las actividades, apenas la cadena de valor esté lista; aquí ves cómo va a quedar.'
+        aviso='Esta parte todavía no se ha generado: se arma sola cuando la estructuración llega a este punto. Aquí ves cómo va a quedar.'
         bloques={[
           { titulo: 'Actividad', texto: 'Cada gasto cuelga de una actividad.' },
           { titulo: 'Rubro y cantidad', texto: 'En qué se gasta y cuánto de cada cosa.' },

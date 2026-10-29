@@ -1,6 +1,7 @@
 import React from 'react'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { pasosDelMotor, PASOS_POR_AREA } from '@/lib/pasosDelMotor'
 import { CronogramaClient, type BarraVista } from '@/components/panel/CronogramaClient'
 
 export const dynamic = 'force-dynamic'
@@ -188,8 +189,11 @@ export default async function PaginaCronograma({
     })
   })
 
+  const pasosMotor = await pasosDelMotor(supabase, id, PASOS_POR_AREA['cronograma'])
+
   return (
     <CronogramaClient
+      pasosMotor={pasosMotor}
       proyectoId={proyecto.id}
       nombreProyecto={proyecto.nombre_iniciativa || 'Proyecto sin nombre'}
       nombreCliente={proyecto.nombre_cliente || proyecto.correo_cliente || ''}

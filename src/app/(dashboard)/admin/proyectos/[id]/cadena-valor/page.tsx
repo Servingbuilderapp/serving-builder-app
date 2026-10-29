@@ -1,6 +1,7 @@
 import React from 'react'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { pasosDelMotor, PASOS_POR_AREA } from '@/lib/pasosDelMotor'
 import { CadenaValorClient, type FilaCadena } from '@/components/panel/CadenaValorClient'
 
 export const dynamic = 'force-dynamic'
@@ -179,8 +180,11 @@ export default async function PaginaCadenaValor({
     }
   })
 
+  const pasosMotor = await pasosDelMotor(supabase, id, PASOS_POR_AREA['cadena-valor'])
+
   return (
     <CadenaValorClient
+      pasosMotor={pasosMotor}
       proyectoId={proyecto.id}
       nombreProyecto={proyecto.nombre_iniciativa || 'Proyecto sin nombre'}
       nombreCliente={proyecto.nombre_cliente || proyecto.correo_cliente || ''}

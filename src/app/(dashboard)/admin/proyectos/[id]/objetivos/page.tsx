@@ -1,6 +1,7 @@
 import React from 'react'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { pasosDelMotor, PASOS_POR_AREA } from '@/lib/pasosDelMotor'
 import { ArbolObjetivosClient, type ParEspejo } from '@/components/panel/ArbolObjetivosClient'
 import type { TipoObjetivo } from './actions'
 
@@ -119,8 +120,11 @@ export default async function PaginaArbolObjetivos({
     }
   }
 
+  const pasosMotor = await pasosDelMotor(supabase, id, PASOS_POR_AREA['objetivos'])
+
   return (
     <ArbolObjetivosClient
+      pasosMotor={pasosMotor}
       proyectoId={proyecto.id}
       nombreProyecto={proyecto.nombre_iniciativa || 'Proyecto sin nombre'}
       nombreCliente={proyecto.nombre_cliente || proyecto.correo_cliente || ''}

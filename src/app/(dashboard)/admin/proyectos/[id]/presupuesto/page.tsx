@@ -1,6 +1,7 @@
 import React from 'react'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { pasosDelMotor, PASOS_POR_AREA } from '@/lib/pasosDelMotor'
 import {
   PresupuestoClient,
   type ActividadOpcion,
@@ -221,8 +222,11 @@ export default async function PaginaPresupuesto({
     notas: reglasBD?.notas || '',
   }
 
+  const pasosMotor = await pasosDelMotor(supabase, id, PASOS_POR_AREA['presupuesto'])
+
   return (
     <PresupuestoClient
+      pasosMotor={pasosMotor}
       proyectoId={proyecto.id}
       nombreProyecto={proyecto.nombre_iniciativa || 'Proyecto sin nombre'}
       nombreCliente={proyecto.nombre_cliente || proyecto.correo_cliente || ''}

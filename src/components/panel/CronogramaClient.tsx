@@ -3,6 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { EstructuraEnBlanco } from './EstructuraEnBlanco'
+import type { PasoDelMotor } from '@/lib/pasosDelMotor'
 import {
   AlertTriangle,
   ArrowLeft,
@@ -41,6 +42,8 @@ export type BarraVista = {
 }
 
 type Props = {
+  /** Lo que la estructuración por documento ya escribió para esta parte, si lo hay. */
+  pasosMotor?: PasoDelMotor[]
   proyectoId: string
   nombreProyecto: string
   nombreCliente: string
@@ -102,6 +105,7 @@ export function CronogramaClient({
   proyectoId,
   nombreProyecto,
   nombreCliente,
+  pasosMotor,
   duracionTotalMeses,
   fechaInicio,
   notas,
@@ -219,8 +223,9 @@ export function CronogramaClient({
   if (lineas.length === 0) {
     return (
       <EstructuraEnBlanco
+        pasos={pasosMotor}
         titulo='Cronograma'
-        aviso='Todavía sin llenar. Ubica en el tiempo las actividades de la cadena de valor, apenas esté lista; aquí ves cómo va a quedar.'
+        aviso='Esta parte todavía no se ha generado: se arma sola cuando la estructuración llega a este punto. Aquí ves cómo va a quedar.'
         bloques={[
           { titulo: 'Actividades', texto: 'Las que salen de la cadena de valor.' },
           { titulo: 'Meses del proyecto', texto: 'En qué meses se hace cada una.' },

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { Crown } from 'lucide-react'
-import { nivelPorSlug, NIVELES_MEMBRESIA, CUPOS_POR_NIVEL, SERVICIOS_POR_NIVEL } from '@/lib/membresias'
+import { nivelPorSlug, NIVELES_MEMBRESIA, CUPOS_POR_NIVEL, SERVICIOS_POR_NIVEL, formatoUSD } from '@/lib/membresias'
 import { esEquipoServing } from '@/lib/guardiaEquipo'
 import { resumenDeUso } from '@/lib/membresiasUso'
 import { BeneficiosMes } from '@/components/panel/BeneficiosMes'
@@ -74,6 +74,10 @@ export default async function MiMembresiaPage() {
                 <li>Comunidad: {SERVICIOS_POR_NIVEL[n.slug].comunidad ? 'Incluida' : 'No incluida'}</li>
                 <li>Acompañamiento semanal: {SERVICIOS_POR_NIVEL[n.slug].acompanamientoSemanal ? 'Incluido' : 'No incluido'}</li>
               </ul>
+              <p className="mt-3 text-[15px] font-extrabold text-[#C9A46B]">{formatoUSD(n.precioMensualUsd)} al mes</p>
+              <Link href={`/membresia?nivel=${n.slug}`} className="mt-2 inline-flex rounded-xl bg-[#C9A46B] px-4 py-2 text-[13px] font-bold text-[#3B1727]">
+                Elegir y pagar
+              </Link>
             </section>
           ))}
         </div>
@@ -113,6 +117,19 @@ export default async function MiMembresiaPage() {
           <Link href="/membresia" className="mt-4 inline-flex rounded-xl bg-[#C9A46B] px-4 py-2.5 text-[13px] font-bold text-[#3B1727]">
             Ver las membresías
           </Link>
+        </div>
+
+        <div className="mx-auto mt-5 grid max-w-4xl gap-4 lg:grid-cols-3">
+          {NIVELES_MEMBRESIA.map((n) => (
+            <section key={n.slug} className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
+              <h2 className="text-[17px] font-extrabold text-[#F3E7DC]">{n.nombre}</h2>
+              <p className="mt-1 text-[13px] text-[#F3E7DC]/60">{n.resumen}</p>
+              <p className="mt-3 text-[18px] font-extrabold text-[#C9A46B]">{formatoUSD(n.precioMensualUsd)} <span className="text-[12px] font-semibold text-[#F3E7DC]/55">al mes</span></p>
+              <Link href={`/membresia?nivel=${n.slug}`} className="mt-3 inline-flex rounded-xl bg-[#C9A46B] px-4 py-2 text-[13px] font-bold text-[#3B1727]">
+                Elegir y pagar
+              </Link>
+            </section>
+          ))}
         </div>
       </div>
     )

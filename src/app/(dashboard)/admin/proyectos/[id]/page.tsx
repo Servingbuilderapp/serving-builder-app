@@ -2,6 +2,7 @@ import React from 'react'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { FichaProyecto, type AreaFicha } from '@/components/panel/FichaProyecto'
+import { pasosDelMotor, PASOS_POR_AREA } from '@/lib/pasosDelMotor'
 import { MODALIDADES_ESTRUCTURACION } from '@/lib/estructuracionMapping'
 
 export const dynamic = 'force-dynamic'
@@ -65,14 +66,13 @@ export default async function FichaProyectoPage({
   const proyectoId = String(proyecto.id)
   const cuenta = { count: 'exact' as const, head: true }
 
-  const [problemas, objetivos, presupuesto, cronograma, postulaciones, replicas, avance, objIds] =
+  const [problemas, objetivos, presupuesto, cronograma, postulaciones, avance, objIds] =
     await Promise.all([
       supabase.from('problemas_proyecto').select('id', cuenta).eq('proyecto_id', proyectoId),
       supabase.from('objetivos_proyecto').select('id', cuenta).eq('proyecto_id', proyectoId),
       supabase.from('presupuesto_items').select('id', cuenta).eq('proyecto_id', proyectoId),
       supabase.from('cronograma_actividades').select('id', cuenta).eq('proyecto_id', proyectoId),
       supabase.from('postulaciones').select('id', cuenta).eq('proyecto_id', proyectoId),
-      supabase.from('replicas').select('id', cuenta).eq('proyecto_origen_id', proyectoId),
       supabase.rpc('calcular_avance_estructuracion', { id_proyecto: proyectoId }),
       supabase.from('objetivos_proyecto').select('id').eq('proyecto_id', proyectoId),
     ])
@@ -93,8 +93,20 @@ export default async function FichaProyectoPage({
     { nombre: 'Presupuesto', ruta: 'presupuesto', cantidad: presupuesto.count ?? 0, unidad: 'ítems presupuestados' },
     { nombre: 'Cronograma', ruta: 'cronograma', cantidad: cronograma.count ?? 0, unidad: 'actividades programadas' },
     { nombre: 'Postulaciones', ruta: 'postulaciones', cantidad: postulaciones.count ?? 0, unidad: 'convocatorias en curso' },
-    { nombre: 'Réplicas', ruta: 'replicas', cantidad: replicas.count ?? 0, unidad: 'réplicas pensadas' },
   ]
+
+  // Un proyecto que entró con su propio documento se estructura en 42 pasos y no llena las tablas
+  // del formulario técnico. Si esas tablas están vacías, se cuenta lo que ya escribió la estructuración.
+  for (const area of areas) {
+    const pasosDeEsaParte = PASOS_POR_AREA[area.ruta]
+    if (area.cantidad === 0 && pasosDeEsaParte) {
+      const escritos = await pasosDelMotor(supabase, proyectoId, pasosDeEsaParte)
+      if (escritos.length > 0) {
+        area.cantidad = escritos.length
+        area.unidad = 'pasos escritos por la estructuración'
+      }
+    }
+  }
 
   const estado = String(proyecto.estado_actual || '')
 

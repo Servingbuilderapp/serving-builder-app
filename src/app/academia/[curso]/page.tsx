@@ -45,7 +45,23 @@ export default async function CursoAcademiaPage({
   }
 
   if (!yaComprado) {
-    return <VentaCursoClient curso={curso} />
+    // Antes de pagar se muestra de qué trata el curso: módulos y lecciones, SOLO los títulos.
+    // El contenido completo no sale del servidor hasta que la compra esté pagada.
+    const temario: { titulo: string; subtitulo?: string; lecciones: string[] }[] =
+      curso.slug === 'estructuracion'
+        ? academiaContenido.map((b) => ({
+            titulo: `Módulo ${b.numero} · ${b.titulo}`,
+            subtitulo: b.subtitulo,
+            lecciones: b.unidades.map((u) => `${u.numero} ${u.titulo}`.trim()),
+          }))
+        : curso.slug === 'formulacion'
+          ? academiaContenidoFormulacion.map((t) => ({
+              titulo: `Tema ${t.numero} · ${t.titulo}`,
+              subtitulo: t.subtitulo,
+              lecciones: t.partes.map((p) => `${p.letra}. ${p.titulo}`),
+            }))
+          : []
+    return <VentaCursoClient curso={curso} temario={temario} />
   }
 
   if (curso.slug === 'estructuracion') {

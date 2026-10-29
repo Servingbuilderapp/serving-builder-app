@@ -150,7 +150,7 @@ export function FichaProyecto({ datos }: { datos: DatosFicha }) {
         {areas.some((area) => area.cantidad === 0) && (
           <p className="mt-4 text-[12.5px] text-[#F3E7DC]/60">
             {areas.every((area) => area.cantidad === 0)
-              ? 'Todavía no hay nada trabajado en este proyecto. Empieza por el árbol de problemas.'
+              ? 'La estructuración de este proyecto todavía no ha escrito nada. Mira la pestaña Estructuración para ver en qué paso va y qué le falta.'
               : `Aún sin empezar: ${areas
                   .filter((area) => area.cantidad === 0)
                   .map((area) => area.nombre.toLowerCase())

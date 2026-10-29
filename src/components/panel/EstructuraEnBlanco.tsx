@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
+import type { PasoDelMotor } from '@/lib/pasosDelMotor'
 
 /**
  * Lo que se ve en una pestaña de la ficha cuando todavía no hay datos: la
@@ -13,18 +14,40 @@ export function EstructuraEnBlanco({
   aviso,
   bloques,
   enlace,
+  pasos,
 }: {
   titulo: string
   aviso: string
   bloques: { titulo: string; texto: string }[]
   enlace: { href: string; texto: string }
+  /** Lo que la estructuración por documento ya escribió para esta parte, si lo hay. */
+  pasos?: PasoDelMotor[]
 }) {
   return (
     <div className="min-h-full bg-[#54142B] mx-auto max-w-4xl px-4 py-10">
       <h1 className="text-xl font-extrabold text-[#F3E7DC]">{titulo}</h1>
-      <p className="mt-2 text-[14px] leading-relaxed text-[#F3E7DC]/70">{aviso}</p>
+      {pasos && pasos.length > 0 ? (
+        <>
+          <p className="mt-2 text-[14px] leading-relaxed text-[#F3E7DC]/70">
+            Este proyecto se estructura a partir del documento del cliente. Esto es lo que la estructuración ya escribió
+            para esta parte:
+          </p>
+          <div className="mt-5 space-y-4">
+            {pasos.map((p) => (
+              <div key={p.orden} className="rounded-xl border border-[#B08D57]/40 bg-[#3B1727] p-4">
+                <div className="text-[11px] font-black uppercase tracking-wider text-[#B08D57]">
+                  Paso {p.orden} · {p.nombre}
+                </div>
+                <p className="mt-2 whitespace-pre-wrap text-[13.5px] leading-relaxed text-[#F3E7DC]/85">{p.contenido}</p>
+              </div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <>
+          <p className="mt-2 text-[14px] leading-relaxed text-[#F3E7DC]/70">{aviso}</p>
 
-      <div className="mt-6 grid gap-3 md:grid-cols-3">
+          <div className="mt-6 grid gap-3 md:grid-cols-3">
         {bloques.map((b) => (
           <div
             key={b.titulo}
@@ -37,6 +60,8 @@ export function EstructuraEnBlanco({
           </div>
         ))}
       </div>
+        </>
+      )}
 
       <Link
         href={enlace.href}

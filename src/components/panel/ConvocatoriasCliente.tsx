@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import Link from 'next/link'
 import {
   Building2,
   CalendarClock,
@@ -31,6 +32,9 @@ import type { VeredictoElegibilidad } from '@/lib/elegibilidad'
 export type EncajeCliente = {
   resumen: string | null
   encajeActual: string | null
+  /** Cuánto encaja hoy y cuánto podría encajar tras los ajustes, en %. */
+  hoyPct?: number | null
+  potencialPct?: number | null
   encajePotencial: string | null
   semaforo: string | null
   puntaje: number | null
@@ -214,7 +218,7 @@ function Barra({ puntaje }: { puntaje: number }) {
     <div className="w-full">
       <div className="flex items-baseline justify-between">
         <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#F3E7DC]/50">
-          Encaje
+          Calificación general
         </span>
         <span className="text-[15px] font-extrabold" style={{ color }}>
           {puntaje}
@@ -243,6 +247,92 @@ function Parrafo({ titulo, texto }: { titulo: string; texto: string }) {
 /* ========================================================================== */
 /* Tarjeta de una convocatoria                                                */
 /* ========================================================================== */
+
+/* ========================================================================== */
+/* "Qué te toca ahora": lo que el cliente debe hacer, con sus botones          */
+/* ========================================================================== */
+
+function QueTeToca({ convocatoria }: { convocatoria: ConvocatoriaCliente }) {
+  const estado = convocatoria.postulacion?.estado
+  const dias = diasParaCierre(convocatoria.fechaCierre)
+  const enlace = convocatoria.fuenteOficial
+
+  // Si ya se resolvió (ganó, perdió o la descartó), no hay nada que pedirle.
+  if (estado === 'Adjudicada' || estado === 'Rechazada' || estado === 'Descartada') return null
+
+  const caja = 'mt-4 rounded-xl border border-[#C9A46B] bg-[#3B1727] p-4'
+  const titulo = 'text-[11px] font-black uppercase tracking-wider text-[#C9A46B]'
+  const botonPrincipal =
+    'inline-flex items-center gap-1.5 rounded-full bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-4 py-2 text-[12.5px] font-bold text-[#3A1420] hover:brightness-110'
+  const botonSecundario =
+    'inline-flex items-center gap-1.5 rounded-full border border-[#B08D57]/60 px-4 py-2 text-[12.5px] font-bold text-[#F3E7DC] hover:bg-[#4C2032]'
+
+  const frasePlazo =
+    dias === null
+      ? null
+      : dias < 0
+        ? 'Esta convocatoria ya cerró.'
+        : dias === 0
+          ? 'Cierra hoy.'
+          : dias <= 7
+            ? `Cierra en ${dias} ${dias === 1 ? 'día' : 'días'}: no lo dejes para el final.`
+            : `Te quedan ${dias} días para postular.`
+
+  if (estado === 'Radicada') {
+    return (
+      <div className={caja}>
+        <div className={titulo}>Qué te toca ahora</div>
+        <p className="mt-1 text-[13px] text-[#F3E7DC]/85">
+          Ya postulaste. Ahora toca esperar el resultado: te avisamos aquí apenas haya novedades. No tienes que hacer nada más.
+        </p>
+      </div>
+    )
+  }
+
+  if (estado === 'Lista para radicar') {
+    return (
+      <div className={caja}>
+        <div className={titulo}>Qué te toca ahora</div>
+        <p className="mt-1 text-[13px] text-[#F3E7DC]/85">
+          Tu postulación está lista. Solo falta presentarla en la página oficial de la convocatoria.
+          {frasePlazo ? ` ${frasePlazo}` : ''}
+        </p>
+        {enlace ? (
+          <div className="mt-3 flex flex-wrap gap-2">
+            <a href={enlace} target="_blank" rel="noreferrer" className={botonPrincipal}>
+              Ir a postular <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          </div>
+        ) : null}
+      </div>
+    )
+  }
+
+  // Todavía no se ha postulado: dos pasos claros, cada uno con su botón.
+  return (
+    <div className={caja}>
+      <div className={titulo}>Qué te toca ahora</div>
+      <ol className="mt-2 space-y-1.5 text-[13px] text-[#F3E7DC]/85">
+        <li>
+          <strong>1.</strong> Reúne y envíanos los documentos que pide esta convocatoria.
+        </li>
+        <li>
+          <strong>2.</strong> Preséntate en la página oficial. {frasePlazo || ''}
+        </li>
+      </ol>
+      <div className="mt-3 flex flex-wrap gap-2">
+        <Link href="/pendientes" className={botonPrincipal}>
+          Reunir mis documentos
+        </Link>
+        {enlace ? (
+          <a href={enlace} target="_blank" rel="noreferrer" className={botonSecundario}>
+            Ir a la página oficial <ExternalLink className="h-3.5 w-3.5" />
+          </a>
+        ) : null}
+      </div>
+    </div>
+  )
+}
 
 function TarjetaConvocatoria({ convocatoria }: { convocatoria: ConvocatoriaCliente }) {
   const [abierta, setAbierta] = useState(false)
@@ -316,9 +406,23 @@ function TarjetaConvocatoria({ convocatoria }: { convocatoria: ConvocatoriaClien
 
         <EstadoPostulacionBanner postulacion={convocatoria.postulacion} />
 
+        <QueTeToca convocatoria={convocatoria} />
+
         {typeof encaje?.puntaje === 'number' ? (
           <div className="mt-4 max-w-xs">
             <Barra puntaje={encaje.puntaje} />
+            {typeof encaje.hoyPct === 'number' ? (
+              <p className="mt-1.5 text-[12px] leading-snug text-[#F3E7DC]/65">
+                Hoy tu proyecto encaja al <strong>{encaje.hoyPct} %</strong>
+                {typeof encaje.potencialPct === 'number' ? (
+                  <>
+                    {' '}
+                    y, con los ajustes recomendados, podría llegar al <strong>{encaje.potencialPct} %</strong>
+                  </>
+                ) : null}
+                .
+              </p>
+            ) : null}
           </div>
         ) : null}
 

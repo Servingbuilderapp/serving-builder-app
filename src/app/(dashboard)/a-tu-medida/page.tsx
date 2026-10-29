@@ -154,9 +154,9 @@ export default async function ATuMedidaPage({
         </p>
 
         <p className="mt-3 text-xs text-[#F3E7DC]/70">
-          ¿Quieres postular a varias a la vez?{' '}
+          ¿Quieres postular a varias a la vez? El abanico es un servicio aparte, no está incluido en tu estructuración.{' '}
           <Link href={vista.vistaEquipo ? `/mi-abanico?proyecto=${proyectoId}` : '/mi-abanico'} className="font-bold text-[#C9A46B] underline">
-            Arma tu abanico
+            Conocer el abanico
           </Link>
         </p>
 

@@ -5,7 +5,6 @@ import { desglosarPrecio } from '@/lib/mediosDePago'
 import {
   Check,
   Sparkles,
-  MessageSquare,
   FileCheck2,
   Coins,
   Award,
@@ -17,7 +16,6 @@ import { GlowButton } from '@/components/ui/GlowButton'
 import { GlassCard } from '@/components/ui/GlassCard'
 import {
   clasificarRangoCapital,
-  generarUrlWhatsappBloque2,
   MODALIDADES_ESTRUCTURACION,
   PlanEstructuracionMapeado,
   RangoCapitalId
@@ -70,16 +68,6 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
   const currentPlanObj =
     MODALIDADES_ESTRUCTURACION.find((m) => m.id === selectedPlanId) ??
     MODALIDADES_ESTRUCTURACION[0]
-
-  const whatsappUrl = generarUrlWhatsappBloque2({
-    nombre: diagnosticoContext?.nombre || 'Cliente',
-    empresa: diagnosticoContext?.empresa || 'Proyecto',
-    email: diagnosticoContext?.email || 'contacto@proyecto.com',
-    whatsapp: diagnosticoContext?.whatsapp || '',
-    scorePreparacion: diagnosticoContext?.scoreGlobal || 85,
-    montoObjetivo: montoInput,
-    planMapeado: currentPlanObj
-  })
 
   const convertToPlanSeleccionado = (plan: PlanEstructuracionMapeado): PlanSeleccionado => ({
     id: plan.id,
@@ -268,27 +256,17 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
       <div className="bg-gradient-to-r from-[#2E0E1A] via-[#3B1727] to-[#2E0E1A] text-[#F3E7DC] p-8 rounded-3xl shadow-2xl border border-color-primary/30 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-2 max-w-2xl">
           <span className="inline-block text-[10px] font-black uppercase tracking-[0.2em] text-[#3A1420] bg-color-primary px-3 py-1 rounded-full">
-            Formalización
+            Contratar
           </span>
           <h4 className="text-2xl font-black italic uppercase">
-            Formalizar {currentPlanObj.nombre} ({desglosarPrecio(currentPlanObj.honorariosBase).baseConSufijo})
+            Contratar {currentPlanObj.nombre} ({desglosarPrecio(currentPlanObj.honorariosBase).baseConSufijo})
           </h4>
           <p className="text-xs text-[#F3E7DC]/70 font-medium leading-relaxed">
-            Contacta de inmediato a nuestro equipo técnico por WhatsApp con los datos consolidados de tu diagnóstico o procede directamente a la firma digital del contrato.
+            Firma el contrato digital y el pago es automático: no tienes que escribirle a nadie por WhatsApp para empezar.
           </p>
         </div>
 
         <div className="flex flex-col sm:flex-row items-stretch gap-3 shrink-0">
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-color-primary text-[#3A1420] font-black text-xs uppercase tracking-wider hover:brightness-110 shadow-lg shadow-color-primary/30 transition-all text-center"
-          >
-            <MessageSquare className="h-4 w-4" />
-            FORMALIZAR VÍA WHATSAPP
-          </a>
-
           <GlowButton
             onClick={() => onSelectPlan(convertToPlanSeleccionado(currentPlanObj))}
             className="py-3.5 px-6 text-xs font-black tracking-widest gap-2 bg-[#F3E7DC]/10 hover:bg-[#F3E7DC]/20 text-[#F3E7DC] border border-[#F3E7DC]/25"

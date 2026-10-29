@@ -13,7 +13,9 @@ function formatoCOP(valor: number): string {
   return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(valor)
 }
 
-export function VentaCursoClient({ curso }: { curso: Curso }) {
+type ModuloDelTemario = { titulo: string; subtitulo?: string; lecciones: string[] }
+
+export function VentaCursoClient({ curso, temario = [] }: { curso: Curso; temario?: ModuloDelTemario[] }) {
   const [pais, setPais] = useState<'colombia' | 'internacional' | null>(null)
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
@@ -88,6 +90,34 @@ export function VentaCursoClient({ curso }: { curso: Curso }) {
                   </li>
                 ))}
               </ul>
+
+              {temario.length > 0 ? (
+                <div>
+                  <p className="text-xs font-black uppercase tracking-widest text-color-base-content/60 mb-2">
+                    Qué vas a aprender
+                  </p>
+                  <div className="space-y-2">
+                    {temario.map((modulo) => (
+                      <details key={modulo.titulo} className="rounded-xl border border-color-base-content/10 bg-color-base-200/40 px-4 py-3">
+                        <summary className="cursor-pointer text-sm font-bold text-color-base-content">
+                          {modulo.titulo}
+                          <span className="ml-2 text-xs font-medium text-color-base-content/50">
+                            {modulo.lecciones.length} {modulo.lecciones.length === 1 ? 'lección' : 'lecciones'}
+                          </span>
+                        </summary>
+                        {modulo.subtitulo ? (
+                          <p className="mt-2 text-xs text-color-base-content/60">{modulo.subtitulo}</p>
+                        ) : null}
+                        <ul className="mt-2 space-y-1 text-xs text-color-base-content/75">
+                          {modulo.lecciones.map((leccion) => (
+                            <li key={leccion}>• {leccion}</li>
+                          ))}
+                        </ul>
+                      </details>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
 
               <div>
                 <p className="text-xs font-black uppercase tracking-widest text-color-base-content/60 mb-2">

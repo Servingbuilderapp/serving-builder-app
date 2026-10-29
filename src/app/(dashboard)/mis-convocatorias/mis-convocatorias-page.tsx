@@ -84,6 +84,14 @@ function aLista(valor: unknown): string[] {
   return []
 }
 
+/** Saca el primer porcentaje que aparezca en un texto ("78 % …" → 78). */
+function primerPorcentaje(texto: string | null | undefined): number | null {
+  const m = String(texto || '').match(/(\d{1,3})(?:[.,]\d+)?\s*%/)
+  if (!m) return null
+  const n = Number(m[1])
+  return n >= 0 && n <= 100 ? n : null
+}
+
 export default async function MisConvocatoriasPage({
   searchParams,
 }: {
@@ -240,10 +248,23 @@ async function contenidoConvocatorias(vista: ProyectoVisto) {
       lineaTematica: c.linea_tematica || null,
       territorio: c.territorio || null,
       beneficiarios: c.beneficiarios || null,
-      elegibilidad:
-        c.biblioteca_id && condicionesPor.has(String(c.biblioteca_id))
-          ? veredictoElegibilidad(condicionesPor.get(String(c.biblioteca_id))!, perfil)
-          : null,
+      elegibilidad: (() => {
+        const veredicto =
+          c.biblioteca_id && condicionesPor.has(String(c.biblioteca_id))
+            ? veredictoElegibilidad(condicionesPor.get(String(c.biblioteca_id))!, perfil)
+            : null
+        // Si no hay datos ordenados, se dice al menos a quién va dirigida según lo que sí sabemos.
+        if (veredicto && veredicto.estado === 'por_confirmar' && c.beneficiarios) {
+          return {
+            ...veredicto,
+            razones: [
+              `Está dirigida a: ${String(c.beneficiarios).trim()}. Confirma que tu proyecto encaja ahí.`,
+              'Abre «Ver el análisis» para ver qué te falta y qué requisitos pide.',
+            ],
+          }
+        }
+        return veredicto
+      })(),
       encaje: e
         ? {
             resumen: e.resumen_convocatoria || null,
@@ -251,6 +272,8 @@ async function contenidoConvocatorias(vista: ProyectoVisto) {
             encajePotencial: e.encaje_potencial || null,
             semaforo: e.semaforo || null,
             puntaje: typeof e.puntaje_general === 'number' ? e.puntaje_general : null,
+            hoyPct: primerPorcentaje(e.encaje_actual),
+            potencialPct: primerPorcentaje(e.encaje_potencial),
             recomendaciones: e.recomendaciones || null,
             checklist: aLista(e.checklist_preparacion),
             documentacionFaltante: e.documentacion_faltante || null,

@@ -176,6 +176,7 @@ export default async function PaginaResumen({
 
   /* ---------- documentos ---------- */
   let documentos: { completos: number; total: number } | null = null
+  let nombresDocumentosPendientes: string[] = []
   const checklist = encajeActivo?.checklist_preparacion
   if (Array.isArray(checklist) && checklist.length) {
     const listos = checklist.filter((d: unknown) => {
@@ -184,6 +185,17 @@ export default async function PaginaResumen({
       return estado.includes('complet') || estado.includes('listo') || item?.completo === true
     }).length
     documentos = { completos: listos, total: checklist.length }
+    nombresDocumentosPendientes = checklist
+      .filter((d: unknown) => {
+        const item = d as Record<string, unknown>
+        const estado = String(item?.estado || item?.status || '').toLowerCase()
+        return !(estado.includes('complet') || estado.includes('listo') || item?.completo === true)
+      })
+      .map((d: unknown) => {
+        const item = d as Record<string, unknown>
+        return String(item?.documento || item?.nombre || item?.item || item?.titulo || item?.requisito || '').trim()
+      })
+      .filter(Boolean)
   }
 
   /* ---------- semáforos ---------- */
@@ -250,6 +262,24 @@ export default async function PaginaResumen({
   ]
 
   /* ---------- rueda ---------- */
+  const ETIQUETAS_EJES: Record<string, string> = {
+    riesgo: 'Riesgo',
+    tiempo: 'Tiempo',
+    documentos: 'Documentos',
+    encaje: 'Encaje',
+    encaje_actual: 'Encaje de hoy',
+    encaje_potencial: 'Potencial de encaje',
+    competitividad: 'Competitividad',
+    presupuesto: 'Presupuesto',
+    requisitos: 'Requisitos',
+  }
+  const nombreLegible = (clave: string): string => {
+    const limpio = clave.trim()
+    const conocido = ETIQUETAS_EJES[limpio.toLowerCase()]
+    if (conocido) return conocido
+    const texto = limpio.replace(/_/g, ' ')
+    return texto.charAt(0).toUpperCase() + texto.slice(1)
+  }
   const ejesRueda: { nombre: string; puntaje: number }[] = []
   const detalle = encajeActivo?.puntaje_detalle
   if (Array.isArray(detalle)) {
@@ -257,12 +287,12 @@ export default async function PaginaResumen({
       const item = d as Record<string, unknown>
       const nombre = String(item?.dimension || item?.nombre || item?.eje || '')
       const puntaje = aNumero(item?.puntaje ?? item?.score ?? item?.valor)
-      if (nombre && puntaje !== null) ejesRueda.push({ nombre, puntaje: Math.min(10, puntaje) })
+      if (nombre && puntaje !== null) ejesRueda.push({ nombre: nombreLegible(nombre), puntaje: Math.min(10, puntaje) })
     }
   } else if (detalle && typeof detalle === 'object') {
     for (const [nombre, valor] of Object.entries(detalle as Record<string, unknown>)) {
       const puntaje = aNumero(valor)
-      if (puntaje !== null) ejesRueda.push({ nombre, puntaje: Math.min(10, puntaje) })
+      if (puntaje !== null) ejesRueda.push({ nombre: nombreLegible(nombre), puntaje: Math.min(10, puntaje) })
     }
   }
 
@@ -312,8 +342,10 @@ export default async function PaginaResumen({
   if (documentos && documentos.completos < documentos.total) {
     alertas.push({
       tipo: 'atencion',
-      titulo: `${documentos.total - documentos.completos} documentos pendientes`,
-      detalle: 'Revisa la lista de documentos requeridos',
+      titulo: `Faltan ${documentos.total - documentos.completos} documentos para postular`,
+      detalle: nombresDocumentosPendientes.length
+        ? `${nombresDocumentosPendientes.slice(0, 4).join(' · ')}${nombresDocumentosPendientes.length > 4 ? ` · y ${nombresDocumentosPendientes.length - 4} más` : ''}. Los subes en «Lo que me piden».`
+        : 'Son los que pide la convocatoria elegida. Los subes en «Lo que me piden».',
     })
   }
   const criticas = preguntas.filter((p) => p.critico)
@@ -352,6 +384,16 @@ export default async function PaginaResumen({
     texto: String(p.pregunta || ''),
     prioridad: p.critico ? ('alta' as const) : ('media' as const),
   }))
+  // Los documentos que pide la convocatoria elegida también son tareas pendientes.
+  if (documentos && documentos.completos < documentos.total) {
+    const faltan = documentos.total - documentos.completos
+    pendientes.unshift({
+      texto: `Reunir ${faltan} ${faltan === 1 ? 'documento' : 'documentos'} para postular${
+        activa?.nombre ? ` a ${String(activa.nombre)}` : ''
+      }${nombresDocumentosPendientes.length ? `: ${nombresDocumentosPendientes.slice(0, 3).join(', ')}${nombresDocumentosPendientes.length > 3 ? '…' : ''}` : ''}`,
+      prioridad: diasCierre !== null && diasCierre <= 10 ? ('alta' as const) : ('media' as const),
+    })
+  }
 
   const datos: DatosResumen = {
     proyecto: {

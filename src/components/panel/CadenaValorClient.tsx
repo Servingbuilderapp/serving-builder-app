@@ -3,6 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { EstructuraEnBlanco } from './EstructuraEnBlanco'
+import type { PasoDelMotor } from '@/lib/pasosDelMotor'
 import { AlertTriangle, ArrowLeft, ArrowRight, Check, Loader2, Minus, Save, Sparkles } from 'lucide-react'
 import { arrancaConInfinitivo } from '@/lib/espejoObjetivos'
 import { guardarCadenaValor } from '@/app/(dashboard)/admin/proyectos/[id]/cadena-valor/actions'
@@ -31,6 +32,8 @@ export type FilaCadena = {
 }
 
 type Props = {
+  /** Lo que la estructuración por documento ya escribió para esta parte, si lo hay. */
+  pasosMotor?: PasoDelMotor[]
   proyectoId: string
   nombreProyecto: string
   nombreCliente: string
@@ -92,6 +95,7 @@ export function CadenaValorClient({
   proyectoId,
   nombreProyecto,
   nombreCliente,
+  pasosMotor,
   objetivoGeneral,
   filas,
 }: Props) {
@@ -199,8 +203,9 @@ export function CadenaValorClient({
   if (datos.length === 0) {
     return (
       <EstructuraEnBlanco
+        pasos={pasosMotor}
         titulo='Cadena de valor'
-        aviso='Todavía sin llenar. Se arma sobre los objetivos específicos, apenas el árbol de objetivos esté listo; aquí ves cómo va a quedar.'
+        aviso='Esta parte todavía no se ha generado: se arma sola cuando la estructuración llega a este punto. Aquí ves cómo va a quedar.'
         bloques={[
           { titulo: 'Objetivo específico', texto: 'Cada uno aporta un producto.' },
           { titulo: 'Producto y su meta', texto: 'Lo que se entrega y cuánto.' },
