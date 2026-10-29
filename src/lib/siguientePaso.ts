@@ -15,6 +15,8 @@ export type SiguientePaso = {
   texto: string
   /** Solo cuando el cliente debe hacer algo. */
   accion: { texto: string; href: string } | null
+  /** Pista técnica de por qué se escogió este paso. Solo la ve el equipo. */
+  motivo?: string
 }
 
 type FilaProyecto = {
@@ -89,10 +91,19 @@ export async function calcularSiguientePaso(vista: ProyectoVisto): Promise<Sigui
   const nodosArbol = await contar(
     db.from('problemas_proyecto').select('id', { count: 'exact', head: true }).eq('proyecto_id', id),
   )
+  const pasosConAvance = await contar(
+    db.from('avance_estructuracion_proyecto').select('paso_id', { count: 'exact', head: true }).eq('proyecto_id', id),
+  )
+  const convocatoriasEncontradas = await contar(
+    db.from('convocatorias_candidatas_proyecto').select('id', { count: 'exact', head: true }).eq('id_proyecto', id),
+  )
+  const hayDossier = Boolean(String(proyecto.dossier_markdown || '').trim())
   const yaHayTrabajo =
     pasosEscritos > 0 ||
     nodosArbol > 0 ||
-    Boolean(String(proyecto.dossier_markdown || '').trim()) ||
+    pasosConAvance > 0 ||
+    convocatoriasEncontradas > 0 ||
+    hayDossier ||
     Boolean(proyecto.evaluacion_aprobada) ||
     Boolean(proyecto.busqueda_convocatorias_iniciada)
 
@@ -101,6 +112,7 @@ export async function calcularSiguientePaso(vista: ProyectoVisto): Promise<Sigui
       titulo: 'Sube el documento de tu proyecto',
       texto: 'Es lo que necesitamos para empezar a estructurarlo.',
       accion: { texto: 'Subir documento', href: '/pendientes' },
+      motivo: `sin trabajo previo: pasos=${pasosEscritos}, árbol=${nodosArbol}, avance=${pasosConAvance}, convocatorias=${convocatoriasEncontradas}, dossier=${hayDossier}, archivo=${Boolean(proyecto.archivo_proyecto_url)}`,
     }
   }
 

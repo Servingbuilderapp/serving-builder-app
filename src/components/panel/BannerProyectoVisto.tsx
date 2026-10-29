@@ -48,6 +48,9 @@ export async function BannerProyectoVisto({ vista }: { vista: ProyectoVisto }) {
             </div>
             <div className="text-sm font-extrabold">{paso.titulo}</div>
             <p className="text-xs text-[#F3E7DC]/75 mt-0.5">{paso.texto}</p>
+            {vista.vistaEquipo && paso.motivo ? (
+              <p className="mt-1 text-[10px] text-[#F3E7DC]/40">Pista para el equipo: {paso.motivo}</p>
+            ) : null}
           </div>
           {paso.accion ? (
             <Link
