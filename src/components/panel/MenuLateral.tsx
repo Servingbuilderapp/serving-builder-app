@@ -256,8 +256,8 @@ export function MenuLateral({
             </button>
             {verComoCliente ? (
               <p className="mt-1.5 px-1 text-[11px] leading-snug text-color-base-content/55">
-                Estás mirando el menú de un cliente. Los datos que ves son los de tu proyecto de prueba, no los de
-                ningún cliente.
+                Estás mirando el menú de un cliente, solo para mirar. Algunas pantallas salen vacías porque tu cuenta
+                no tiene proyecto propio. Para ver datos reales, usa la ficha del proyecto de un cliente.
               </p>
             ) : null}
           </div>
