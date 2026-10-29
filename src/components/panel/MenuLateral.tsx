@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useSyncExternalStore } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
@@ -33,6 +33,7 @@ import {
   Handshake,
   Gift,
   Fan,
+  Eye,
 } from 'lucide-react'
 import { Ayuda } from '@/components/ui/Ayuda'
 
@@ -124,6 +125,25 @@ const AYUDA_POR_RUTA: Record<string, string> = {
   '/admin': 'equipo.administracion',
 }
 
+const CLAVE_VISTA_CLIENTE = 'menu-ver-como-cliente'
+
+function suscribirVistaCliente(avisar: () => void) {
+  window.addEventListener('storage', avisar)
+  window.addEventListener(CLAVE_VISTA_CLIENTE, avisar)
+  return () => {
+    window.removeEventListener('storage', avisar)
+    window.removeEventListener(CLAVE_VISTA_CLIENTE, avisar)
+  }
+}
+
+function leerVistaCliente(): boolean {
+  try {
+    return window.localStorage.getItem(CLAVE_VISTA_CLIENTE) === '1'
+  } catch {
+    return false
+  }
+}
+
 /** Lo que solo ve el equipo de Serving. */
 const SECCIONES_EQUIPO: Seccion[] = [
   {
@@ -187,9 +207,22 @@ export function MenuLateral({
 }) {
   const ruta = usePathname()
 
+  // El equipo puede mirar el menú como lo ve un cliente (solo para mirar: no entra a la
+  // cuenta de nadie). Se recuerda en el navegador para que no se pierda al cambiar de pantalla.
+  const verComoCliente = useSyncExternalStore(suscribirVistaCliente, leerVistaCliente, () => false)
+  const alternarVistaCliente = () => {
+    try {
+      window.localStorage.setItem(CLAVE_VISTA_CLIENTE, leerVistaCliente() ? '0' : '1')
+    } catch {
+      /* si el navegador no deja guardar, simplemente no se recuerda */
+    }
+    window.dispatchEvent(new Event(CLAVE_VISTA_CLIENTE))
+  }
+  const puedeVerComoCliente = Boolean(esEquipo) && !esSocio
+
   const seccionesBase = esSocio
     ? SECCIONES_SOCIO
-    : esEquipo
+    : esEquipo && !verComoCliente
       ? SECCIONES_EQUIPO
       : SECCIONES_CLIENTE
 
@@ -209,6 +242,27 @@ export function MenuLateral({
   const contenido = (
     <div className="flex h-full flex-col bg-color-base-200 text-color-base-content border-r border-color-base-300/40 shadow-[2px_0_12px_-8px_rgba(0,0,0,0.5)]">
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5">
+        {puedeVerComoCliente ? (
+          <div>
+            <button
+              type="button"
+              onClick={alternarVistaCliente}
+              className="flex w-full items-center gap-2.5 rounded-lg border border-color-primary/40 px-3 py-2 text-left text-[13px] font-semibold text-color-primary hover:bg-color-primary/10 transition-colors"
+            >
+              <Eye className="h-4 w-4 shrink-0" />
+              <span className="truncate">
+                {verComoCliente ? 'Volver a mi menú de equipo' : 'Ver el menú como cliente'}
+              </span>
+            </button>
+            {verComoCliente ? (
+              <p className="mt-1.5 px-1 text-[11px] leading-snug text-color-base-content/55">
+                Estás mirando el menú de un cliente. Los datos que ves son los de tu proyecto de prueba, no los de
+                ningún cliente.
+              </p>
+            ) : null}
+          </div>
+        ) : null}
+
         {secciones.map((seccion, i) => (
           <div key={seccion.titulo || `seccion-${i}`}>
             {seccion.titulo ? (
