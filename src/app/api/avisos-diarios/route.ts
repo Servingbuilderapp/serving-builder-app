@@ -109,7 +109,15 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: `No se pudieron leer los proyectos: ${errorProyectos.message}` }, { status: 500 })
     }
 
-    const resultado: { proyecto: string; correo: string; cierres: number; nuevas: number; enviado: boolean | string }[] = []
+    const resultado: {
+      proyecto: string
+      correo: string
+      cierres: number
+      nuevas: number
+      enviado: boolean | string
+      cierres_detalle: string[]
+      nuevas_detalle: string[]
+    }[] = []
 
     for (const proyecto of proyectos || []) {
       const idProyecto = String(proyecto.id)
@@ -229,6 +237,8 @@ export async function GET(req: NextRequest) {
         cierres: porCerrar.length,
         nuevas: buenas.length,
         enviado,
+        cierres_detalle: porCerrar.map((c) => `${c.nombre} (cierra ${c.dias === 0 ? 'hoy' : c.dias === 1 ? 'mañana' : `en ${c.dias} días`})`),
+        nuevas_detalle: buenas.map((c) => `${c.nombre} (${c.puntaje} puntos)`),
       })
     }
 

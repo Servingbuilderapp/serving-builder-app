@@ -19,6 +19,7 @@ export type SiguientePaso = {
 
 type FilaProyecto = {
   estado_actual: string | null
+  dossier_markdown: string | null
   archivo_proyecto_url: string | null
   evaluacion_aprobada: boolean | null
   busqueda_convocatorias_iniciada: boolean | null
@@ -42,7 +43,7 @@ export async function calcularSiguientePaso(vista: ProyectoVisto): Promise<Sigui
 
   const { data: proyecto } = await db
     .from('proyectos_clientes_serving')
-    .select('estado_actual, archivo_proyecto_url, evaluacion_aprobada, busqueda_convocatorias_iniciada')
+    .select('estado_actual, dossier_markdown, archivo_proyecto_url, evaluacion_aprobada, busqueda_convocatorias_iniciada')
     .eq('id', id)
     .maybeSingle<FilaProyecto>()
   if (!proyecto) return null
@@ -80,7 +81,22 @@ export async function calcularSiguientePaso(vista: ProyectoVisto): Promise<Sigui
   }
 
   /* ---- lo que depende del cliente ---- */
-  if (!proyecto.archivo_proyecto_url) {
+  // Solo se pide el documento si de verdad no hay NADA trabajado. Un proyecto que ya se estructuró
+  // (por documento, por formulario o por otro camino) no debe volver a pedirlo.
+  const pasosEscritos = await contar(
+    db.from('contenido_pasos_proyecto').select('id_paso', { count: 'exact', head: true }).eq('id_proyecto', id),
+  )
+  const nodosArbol = await contar(
+    db.from('problemas_proyecto').select('id', { count: 'exact', head: true }).eq('proyecto_id', id),
+  )
+  const yaHayTrabajo =
+    pasosEscritos > 0 ||
+    nodosArbol > 0 ||
+    Boolean(String(proyecto.dossier_markdown || '').trim()) ||
+    Boolean(proyecto.evaluacion_aprobada) ||
+    Boolean(proyecto.busqueda_convocatorias_iniciada)
+
+  if (!proyecto.archivo_proyecto_url && !yaHayTrabajo) {
     return {
       titulo: 'Sube el documento de tu proyecto',
       texto: 'Es lo que necesitamos para empezar a estructurarlo.',
@@ -209,6 +225,32 @@ export async function calcularSiguientePaso(vista: ProyectoVisto): Promise<Sigui
   )
 
   if (elegidas > 0 && encajes > 0) {
+    // ¿Faltan documentos para postular? Se cuentan igual que en el Resumen.
+    const { data: filasEncaje } = await db
+      .from('encajes_convocatoria_proyecto')
+      .select('checklist_preparacion')
+      .eq('id_proyecto', id)
+    const pendientes: string[] = []
+    for (const fila of (filasEncaje || []) as { checklist_preparacion: unknown }[]) {
+      if (!Array.isArray(fila.checklist_preparacion)) continue
+      for (const d of fila.checklist_preparacion as unknown[]) {
+        const item = d as Record<string, unknown>
+        const estadoItem = String(item?.estado || item?.status || '').toLowerCase()
+        const listo = estadoItem.includes('complet') || estadoItem.includes('listo') || item?.completo === true
+        if (!listo) {
+          const nombre = String(item?.documento || item?.nombre || item?.item || item?.titulo || item?.requisito || '').trim()
+          if (nombre) pendientes.push(nombre)
+        }
+      }
+    }
+    if (pendientes.length > 0) {
+      const unicos = Array.from(new Set(pendientes))
+      return {
+        titulo: `Reúne ${unicos.length} ${unicos.length === 1 ? 'documento' : 'documentos'} para postular`,
+        texto: `Te faltan: ${unicos.slice(0, 3).join(', ')}${unicos.length > 3 ? ` y ${unicos.length - 3} más` : ''}. Súbelos y dejamos tu postulación lista.`,
+        accion: { texto: 'Reunir mis documentos', href: '/pendientes' },
+      }
+    }
     return {
       titulo: 'Revisa tu encaje',
       texto: 'Ya calculamos qué tanto encaja tu proyecto con las convocatorias que elegiste, y qué le falta a cada una.',
