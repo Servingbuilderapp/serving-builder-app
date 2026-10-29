@@ -283,7 +283,7 @@ const ESCALERA: Escalon[] = [
       'w.escalera.replicas.i4',
     ],
     claveBoton: 'w.escalera.replicas.boton',
-    href: '/mis-replicas',
+    href: '/mi-abanico',
     icono: RefreshCw,
     color: 'text-[#B08D57]',
     fondo: 'bg-[#4C2032]',
@@ -310,6 +310,31 @@ const ESCALON_FONDO_EMPRENDER: Escalon = {
   claveBoton: 'w.escalera.fondoemprender.boton',
   href: '/contratar?plan=fondo_emprender',
   icono: Rocket,
+  color: 'text-[#B08D57]',
+  fondo: 'bg-[#4C2032]',
+  borde: 'border-[#B08D57]/35',
+  boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
+}
+
+/**
+ * Estructuración Emprendedor ($6.000.000 + IVA): el plan para emprendedores y MiPymes sin
+ * recursos. Antes solo se veía dentro de la pantalla de contratar; ahora tiene su tarjeta
+ * en "Nuestros planes".
+ */
+const ESCALON_EMPRENDEDOR: Escalon = {
+  numero: 'emp',
+  claveTitulo: 'w.escalera.emprendedor.titulo',
+  clavePrecio: 'w.escalera.emprendedor.precio',
+  claveResumen: 'w.escalera.emprendedor.resumen',
+  clavesItems: [
+    'w.escalera.emprendedor.i1',
+    'w.escalera.emprendedor.i2',
+    'w.escalera.emprendedor.i3',
+    'w.escalera.emprendedor.i4',
+  ],
+  claveBoton: 'w.escalera.emprendedor.boton',
+  href: '/contratar?plan=emprendedor',
+  icono: Users,
   color: 'text-[#B08D57]',
   fondo: 'bg-[#4C2032]',
   borde: 'border-[#B08D57]/35',
@@ -348,7 +373,7 @@ const GRUPOS_PLANES: GrupoPlanes[] = [
   {
     claveTitulo: 'w.planes.g3.titulo',
     claveSub: 'w.planes.g3.sub',
-    escalones: [escalonPorNumero('7'), ESCALON_FONDO_EMPRENDER, escalonPorNumero('8')],
+    escalones: [escalonPorNumero('7'), ESCALON_EMPRENDEDOR, ESCALON_FONDO_EMPRENDER, escalonPorNumero('8')],
   },
 ]
 
