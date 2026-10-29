@@ -1,29 +1,37 @@
 import type { Metadata } from "next"
 import Script from "next/script"
-import { Outfit, Inter, Cormorant_Garamond } from "next/font/google"
+import localFont from "next/font/local"
 import "./globals.css"
 import { LanguageProvider } from "@/context/LanguageContext"
 import { ToastProvider } from "@/components/ui/ToastProvider"
 import { PayPalProvider } from "@/components/providers/PayPalProvider"
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton"
 
-const outfit = Outfit({
+// Las fuentes viven DENTRO del proyecto (src/app/fonts). Antes se descargaban de Google en cada
+// compilación y, a veces, esa descarga fallaba en Vercel y el despliegue quedaba en Error.
+// Son las mismas tres fuentes, en su versión variable (cubre todos los pesos que ya se usaban).
+const outfit = localFont({
   variable: "--font-outfit",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  src: "./fonts/outfit.woff2",
+  weight: "100 900",
+  display: "swap",
 })
 
-const inter = Inter({
+const inter = localFont({
   variable: "--font-inter",
-  subsets: ["latin"],
+  src: "./fonts/inter.woff2",
+  weight: "100 900",
+  display: "swap",
 })
 
 // Dirección 5 (9 sep 2026): serif de títulos, vino/dorado sobre fondo oscuro.
-const cormorant = Cormorant_Garamond({
+const cormorant = localFont({
   variable: "--font-cormorant",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
+  src: [
+    { path: "./fonts/cormorant-garamond.woff2", weight: "300 700", style: "normal" },
+    { path: "./fonts/cormorant-garamond-italic.woff2", weight: "300 700", style: "italic" },
+  ],
+  display: "swap",
 })
 
 export async function generateMetadata(): Promise<Metadata> {
