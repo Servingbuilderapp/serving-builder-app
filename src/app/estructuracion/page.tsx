@@ -1,11 +1,10 @@
-import React from 'react'
-import { EstructuracionPageClient } from '@/components/estructuracion/EstructuracionPageClient'
+import { redirect } from 'next/navigation'
 
-export const metadata = {
-  title: 'Estructuración Pagada de Proyectos & Contrato | Arquitectura Digital',
-  description: 'Contrata la estructuración técnica profesional de tu proyecto con garantía de acompañamiento extendido en convocatorias de financiación.'
-}
-
-export default function EstructuracionPage() {
-  return <EstructuracionPageClient />
+/**
+ * Esta pantalla era del primer recorrido (selector de planes, "Day Zero" y bloques).
+ * Hoy contratar y pagar se hace en /contratar, con pago automático. Se deja solo para que
+ * ningún enlace viejo muestre cosas que ya no corresponden: manda a Contratar.
+ */
+export default function EstructuracionRetirada() {
+  redirect('/contratar')
 }

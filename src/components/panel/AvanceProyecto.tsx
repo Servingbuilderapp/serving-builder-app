@@ -398,7 +398,7 @@ export function AvanceSinProyecto() {
           en qué punto va tu equipo, actualizado en vivo.
         </p>
         <Link
-          href="/estructuracion"
+          href="/contratar"
           className={`mt-6 inline-flex h-11 items-center gap-2 rounded-lg px-6 text-sm font-semibold ${BOTON_DORADO}`}
         >
           Ver las modalidades <ArrowRight className="h-4 w-4" />
