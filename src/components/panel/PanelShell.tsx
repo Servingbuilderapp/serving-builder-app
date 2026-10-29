@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { MenuLateral } from '@/components/panel/MenuLateral'
-import { CabeceraPanel, type ProyectoResumen } from '@/components/panel/CabeceraPanel'
+import { CabeceraPanel, type ProyectoResumen, type AvisoCampana } from '@/components/panel/CabeceraPanel'
 
 export function PanelShell({
   children,
@@ -10,6 +10,7 @@ export function PanelShell({
   nombreUsuario,
   rolUsuario,
   numeroAlertas,
+  aviso = null,
   esClienteMarcaBlanca = false,
   tieneCortesia = false,
 }: {
@@ -18,6 +19,8 @@ export function PanelShell({
   nombreUsuario: string
   rolUsuario: string
   numeroAlertas?: number
+  /** Lo que le toca al cliente ahora (campanita). */
+  aviso?: AvisoCampana | null
   /** true solo para un cliente final que entró por el enlace de un socio de marca blanca. */
   esClienteMarcaBlanca?: boolean
   tieneCortesia?: boolean
@@ -42,6 +45,7 @@ export function PanelShell({
           nombreUsuario={nombreUsuario}
           rolUsuario={rolUsuario}
           numeroAlertas={numeroAlertas}
+          aviso={aviso}
         />
         <main className="flex-1 overflow-y-auto">{children}</main>
       </div>

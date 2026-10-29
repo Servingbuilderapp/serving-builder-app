@@ -34,20 +34,31 @@ export function etiquetaEstado(estado?: string | null) {
   )
 }
 
+/** Lo que le toca al cliente ahora, para mostrarlo en la campanita. */
+export type AvisoCampana = {
+  titulo: string
+  texto: string
+  /** Solo cuando el cliente debe hacer algo. */
+  accion: { texto: string; href: string } | null
+}
+
 export function CabeceraPanel({
   onAbrirMenu,
   proyecto,
   nombreUsuario,
   rolUsuario,
   numeroAlertas = 0,
+  aviso = null,
 }: {
   onAbrirMenu: () => void
   proyecto: ProyectoResumen | null
   nombreUsuario: string
   rolUsuario: string
   numeroAlertas?: number
+  aviso?: AvisoCampana | null
 }) {
   const [menuPerfil, setMenuPerfil] = useState(false)
+  const [campanaAbierta, setCampanaAbierta] = useState(false)
   const router = useRouter()
 
   const cerrarSesion = async () => {
@@ -118,18 +129,46 @@ export function CabeceraPanel({
         </Link>
         <LanguageSwitcher className="hidden sm:block" />
 
-        <button
-          type="button"
-          aria-label="Notificaciones"
-          className="relative h-9 w-9 rounded-lg hover:bg-[rgba(176,141,87,0.1)] flex items-center justify-center text-[#CBAF9E]"
-        >
-          <Bell className="h-[18px] w-[18px]" />
-          {numeroAlertas > 0 ? (
-            <span className="absolute -top-0.5 -right-0.5 h-4 min-w-4 px-1 rounded-full bg-[#C0604A] text-white text-[10px] font-bold flex items-center justify-center">
-              {numeroAlertas > 9 ? '9+' : numeroAlertas}
-            </span>
+        <div className="relative">
+          <button
+            type="button"
+            aria-label="Notificaciones"
+            onClick={() => setCampanaAbierta((v) => !v)}
+            className="relative h-9 w-9 rounded-lg hover:bg-[rgba(176,141,87,0.1)] flex items-center justify-center text-[#CBAF9E]"
+          >
+            <Bell className="h-[18px] w-[18px]" />
+            {numeroAlertas > 0 ? (
+              <span className="absolute -top-0.5 -right-0.5 h-4 min-w-4 px-1 rounded-full bg-[#C0604A] text-white text-[10px] font-bold flex items-center justify-center">
+                {numeroAlertas > 9 ? '9+' : numeroAlertas}
+              </span>
+            ) : null}
+          </button>
+
+          {campanaAbierta ? (
+            <div className="absolute right-0 top-11 z-50 w-72 rounded-xl border border-[#B08D57]/50 bg-[#3B1727] p-4 text-[#F3E7DC] shadow-2xl">
+              {aviso ? (
+                <>
+                  <div className="text-[11px] font-black uppercase tracking-wider text-[#C9A46B]">
+                    {aviso.accion ? 'Te toca' : 'Siguiente paso'}
+                  </div>
+                  <div className="mt-1 text-sm font-extrabold">{aviso.titulo}</div>
+                  <p className="mt-1 text-xs leading-snug text-[#F3E7DC]/75">{aviso.texto}</p>
+                  {aviso.accion ? (
+                    <Link
+                      href={aviso.accion.href}
+                      onClick={() => setCampanaAbierta(false)}
+                      className="mt-3 inline-flex rounded-full bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-4 py-1.5 text-xs font-bold text-[#3A1420] hover:brightness-110"
+                    >
+                      {aviso.accion.texto}
+                    </Link>
+                  ) : null}
+                </>
+              ) : (
+                <p className="text-xs leading-snug text-[#F3E7DC]/75">Estás al día: no tienes nada pendiente por ahora.</p>
+              )}
+            </div>
           ) : null}
-        </button>
+        </div>
 
         <button
           type="button"

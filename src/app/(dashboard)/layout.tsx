@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { PanelShell } from '@/components/panel/PanelShell'
 import { esEquipoServing } from '@/lib/guardiaEquipo'
+import { calcularSiguientePaso } from '@/lib/siguientePaso'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -62,6 +63,23 @@ export default async function LayoutPanel({ children }: { children: React.ReactN
   // persona en la cabecera.
   const rolUsuario = esAdmin ? 'Administrador' : esSocio ? 'Socio' : 'Cliente'
 
+  // La campanita: lo que le toca al cliente ahora. Si falla, simplemente no se muestra.
+  let aviso: { titulo: string; texto: string; accion: { texto: string; href: string } | null } | null = null
+  if (!esAdmin && !esSocio && proyecto?.id) {
+    try {
+      aviso = await calcularSiguientePaso({
+        db: supabase,
+        proyectoId: String(proyecto.id),
+        nombreProyecto: proyecto.nombre_iniciativa,
+        nombreCliente: null,
+        correoCliente: correo,
+        vistaEquipo: false,
+      })
+    } catch {
+      aviso = null
+    }
+  }
+
   // Un cliente que entró por el enlace de un socio de marca blanca solo
   // recibe el camino de estructuración — sin App de Ideas, Réplicas ni
   // Academia (acuerdo del 13 sep 2026: esas son cosas de la marca propia
@@ -83,6 +101,8 @@ export default async function LayoutPanel({ children }: { children: React.ReactN
       rolUsuario={rolUsuario}
       esClienteMarcaBlanca={esClienteMarcaBlanca}
       tieneCortesia={!esAdmin && !esSocio && proyecto?.plan_pago === 'cortesia'}
+      aviso={aviso}
+      numeroAlertas={aviso?.accion ? 1 : 0}
     >
       {children}
     </PanelShell>
