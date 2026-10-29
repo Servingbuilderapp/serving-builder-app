@@ -35,6 +35,10 @@
     {
       "path": "/api/avisos-diarios",
       "schedule": "0 13 * * *"
+    },
+    {
+      "path": "/api/avisos-equipo",
+      "schedule": "10 13 * * *"
     }
   ]
 }

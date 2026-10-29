@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { esEquipoServing } from '@/lib/guardiaEquipo'
+import { ultimoMovimientoPorProyecto, diasSinMovimiento } from '@/lib/actividadProyectos'
 import { Eye, Search } from 'lucide-react'
 import { MarcarPagadoButton } from '@/components/admin/MarcarPagadoButton'
 import { AvalEmprendedorButtons } from '@/components/admin/AvalEmprendedorButtons'
@@ -37,12 +38,6 @@ function estadoInfo(estado: string | null): EstadoInfo {
     default:
       return { etiqueta: estado || 'Sin pago', clase: neutro }
   }
-}
-
-function diasDesde(fecha: string | null): number | null {
-  if (!fecha) return null
-  const ms = Date.now() - new Date(fecha).getTime()
-  return Math.max(0, Math.floor(ms / (1000 * 60 * 60 * 24)))
 }
 
 /**
@@ -88,8 +83,13 @@ export default async function AdminProyectosPage({
     : todosLosProyectos.filter((p) => !esProyectoDePrueba(p.correo_cliente))
   const totalProyectos = listaProyectos.length
   const totalPagados = listaProyectos.filter((p) => ['pagado', 'pago_aprobado'].includes(p.estado_actual || '')).length
+  // "Estancado" = lleva más de 5 días SIN MOVIMIENTO (no desde que se creó).
+  const ultimoMovimiento = await ultimoMovimientoPorProyecto(
+    supabase,
+    listaProyectos.map((p) => ({ id: String(p.id), created_at: p.created_at })),
+  )
   const totalEstancados = listaProyectos.filter((p) => {
-    const dias = diasDesde(p.created_at)
+    const dias = diasSinMovimiento(ultimoMovimiento.get(String(p.id)))
     return dias !== null && dias > 5 && p.estado_actual !== 'postulado'
   }).length
 
@@ -156,7 +156,7 @@ export default async function AdminProyectosPage({
                   : null
 
                 const estado = estadoInfo(p.estado_actual)
-                const dias = diasDesde(p.created_at)
+                const dias = diasSinMovimiento(ultimoMovimiento.get(String(p.id)))
                 const estancado = dias !== null && dias > 5 && p.estado_actual !== 'postulado'
                 const iniciales = (p.nombre_cliente || '??').split(' ').filter(Boolean).slice(0, 2).map((s: string) => s[0]).join('').toUpperCase()
 
@@ -202,7 +202,7 @@ export default async function AdminProyectosPage({
                     </td>
                     <td className="px-6 py-4">
                       <span className={`text-xs font-bold whitespace-nowrap ${estancado ? 'text-[#E0917E]' : 'text-color-base-content/40'}`}>
-                        {dias === null ? '-' : dias === 0 ? 'Hoy' : `hace ${dias} día${dias === 1 ? '' : 's'}`}
+                        {dias === null ? '-' : dias === 0 ? 'Hoy' : `sin movimiento hace ${dias} día${dias === 1 ? '' : 's'}`}
                       </span>
                       {estancado && (
                         <div className="text-[10px] text-[#E0917E] font-bold uppercase tracking-wide mt-0.5">Estancado</div>
