@@ -49,8 +49,9 @@ export async function POST(req: NextRequest) {
       .from('sugerencias_cambio')
       .select('id', { count: 'exact', head: true })
       .eq('id_proyecto', id_proyecto)
+      .eq('origen', 'diagnostico')
     if (errorLeer) {
-      return NextResponse.json({ error: 'Falta crear la tabla sugerencias_cambio en Supabase.', detalle: errorLeer.message }, { status: 500 })
+      return NextResponse.json({ error: 'Falta crear o actualizar la tabla sugerencias_cambio en Supabase (corre el SQL de la entrega).', detalle: errorLeer.message }, { status: 500 })
     }
     if ((yaHay || 0) > 0) return NextResponse.json({ ok: true, creadas: 0, mensaje: 'Ya estaban preparadas.' })
 
@@ -113,6 +114,7 @@ export async function POST(req: NextRequest) {
         hallazgo: 'Revisamos tu proyecto y por ahora no vemos cambios que sugerir.',
         propuesta: '',
         estado: 'descartada',
+        origen: 'diagnostico',
       })
       return NextResponse.json({ ok: true, creadas: 0 })
     }
@@ -124,6 +126,7 @@ export async function POST(req: NextRequest) {
       hallazgo: String(s.hallazgo),
       propuesta: String(s.propuesta),
       estado: 'pendiente',
+      origen: 'diagnostico',
     }))
     const { error } = await supabase.from('sugerencias_cambio').insert(filas)
     if (error) return NextResponse.json({ error: error.message }, { status: 500 })
