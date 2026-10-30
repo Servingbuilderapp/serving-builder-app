@@ -368,6 +368,30 @@ ${textoDiag}
       console.error("No se pudo leer el diagnóstico del cliente:", errorDiagnostico);
     }
 
+    // Cambios que el propio cliente aceptó o corrigió en «Sugerencias para fortalecer tu proyecto».
+    // Son decisiones suyas: tienen prioridad sobre el documento original cuando lo contradicen.
+    let bloqueAjustes = "";
+    try {
+      const { data: ajustes } = await supabase
+        .from("sugerencias_cambio")
+        .select("tema, texto_final")
+        .eq("id_proyecto", id_proyecto)
+        .in("estado", ["aceptada", "editada"])
+        .order("orden", { ascending: true });
+      const lineasAjustes = (ajustes || [])
+        .filter((a) => String(a.texto_final || "").trim())
+        .map((a) => `- ${a.tema}: ${String(a.texto_final).trim().slice(0, 1500)}`);
+      if (lineasAjustes.length > 0) {
+        bloqueAjustes = `AJUSTES QUE EL CLIENTE YA APROBÓ (tercera fuente, con prioridad sobre las otras dos si se contradicen; úsalos tal cual, sin inventar nada más):
+${lineasAjustes.join("\n").slice(0, 8000)}
+
+`;
+        bloqueDiagnostico += bloqueAjustes;
+      }
+    } catch {
+      // Si la tabla no existe todavía, el motor sigue como antes.
+    }
+
     // Regla de extensión (26 sep 2026): el documento final debe salir SIEMPRE
     // como un proyecto profesional completo (entre 75 y 150 páginas en
     // total), sin importar si el cliente subió un documento de origen corto

@@ -3,6 +3,8 @@ import { resolverProyectoVisto } from '@/lib/proyectoVisto'
 import { BannerProyectoVisto } from '@/components/panel/BannerProyectoVisto'
 import { PendientesCliente, PendientesSinProyecto } from '@/components/panel/PendientesCliente'
 import { cargarPendientesCliente } from '@/lib/cargarPendientesCliente'
+import { supabaseAdmin } from '@/lib/supabase/admin'
+import { SugerenciasCambio, type SugerenciaVista } from '@/components/panel/SugerenciasCambio'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -35,9 +37,25 @@ export default async function PendientesPage({
 
   const datos = await cargarPendientesCliente(vista.db, proyecto)
 
+  // Sugerencias de cambio ya redactadas (tabla con permisos cerrados: se lee con la llave de servicio, el proyecto ya está verificado).
+  let sugerencias: SugerenciaVista[] = []
+  try {
+    const { data: filas } = await supabaseAdmin
+      .from('sugerencias_cambio')
+      .select('id, tema, hallazgo, propuesta, estado, texto_final')
+      .eq('id_proyecto', String(proyecto.id))
+      .order('orden', { ascending: true })
+    sugerencias = (filas || []) as SugerenciaVista[]
+  } catch {
+    sugerencias = []
+  }
+
   return (
     <>
       <BannerProyectoVisto vista={vista} />
+      <div className="mb-6">
+        <SugerenciasCambio proyectoId={String(proyecto.id)} sugerencias={sugerencias} soloVista={vista.vistaEquipo} />
+      </div>
       <PendientesCliente datos={datos} />
     </>
   )

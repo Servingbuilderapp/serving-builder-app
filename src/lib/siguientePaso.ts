@@ -1,4 +1,5 @@
 import type { ProyectoVisto } from '@/lib/proyectoVisto'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 
 /**
  * "¿Qué hago ahora?" — el siguiente paso del cliente, calculado solo con lo que
@@ -138,6 +139,24 @@ export async function calcularSiguientePaso(vista: ProyectoVisto): Promise<Sigui
       accion: { texto: 'Ir a Lo que me piden', href: '/pendientes' },
       pideAlgo: true,
       clave: 'preguntas',
+    }
+  }
+
+  // Sugerencias de cambio ya redactadas esperando que el cliente las revise (tabla con permisos cerrados: se lee con la llave de servicio).
+  const sugerenciasPorRevisar = await contar(
+    supabaseAdmin
+      .from('sugerencias_cambio')
+      .select('id', { count: 'exact', head: true })
+      .eq('id_proyecto', id)
+      .eq('estado', 'pendiente'),
+  )
+  if (sugerenciasPorRevisar > 0) {
+    return {
+      titulo: sugerenciasPorRevisar === 1 ? 'Revisa 1 sugerencia para tu proyecto' : `Revisa ${sugerenciasPorRevisar} sugerencias para tu proyecto`,
+      texto: 'Ya redactamos los cambios que fortalecen tu proyecto. Úsalos tal cual, corrígelos o déjalos como están: solo toma unos minutos.',
+      accion: { texto: 'Revisar sugerencias', href: '/pendientes' },
+      pideAlgo: true,
+      clave: 'sugerencias',
     }
   }
 
