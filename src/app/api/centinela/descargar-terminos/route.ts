@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { motorAutorizado } from '@/lib/candadoMotores'
 import { extraerTexto } from '@/lib/extraerDocumento'
+import { esConvocatoriaNoDeseada } from '@/lib/bibliotecaConvocatorias'
 import { urlGemini, fetchGemini } from '@/lib/geminiEndpoint'
 
 /**
@@ -140,7 +141,7 @@ export async function GET(req: NextRequest) {
       .order('fecha_cierre', { ascending: true, nullsFirst: false })
       .limit(400)
     if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-    const abiertas = (fichas || []) as Ficha[]
+    const abiertas = ((fichas || []) as Ficha[]).filter((f) => !esConvocatoriaNoDeseada(f.nombre))
     if (abiertas.length === 0) return NextResponse.json({ ok: true, mensaje: 'No hay convocatorias abiertas con enlace oficial.' })
 
     const ids = abiertas.map((f) => f.id)

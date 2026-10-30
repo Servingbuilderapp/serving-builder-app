@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
 
   const { data: p } = await supabaseAdmin
     .from('proyectos_clientes_serving')
-    .select('id, nombre_iniciativa, nombre_cliente, correo_cliente, created_at, contrato_firmado, plan_pago, estado_actual')
+    .select('id, nombre_iniciativa, nombre_cliente, correo_cliente, created_at, contrato_firmado, firma_digital, plan_pago, estado_actual')
     .eq('id', id)
     .maybeSingle()
   if (!p) return NextResponse.json({ error: 'No existe ese proyecto' }, { status: 404 })
@@ -48,6 +48,16 @@ export async function GET(req: NextRequest) {
       .eq('proyecto_id', id)
       .order('creada_en', { ascending: true }),
   ])
+
+  // La firma se guarda como objeto (nombre, fecha, IP). Por si en algún proyecto viejo quedó como texto.
+  type Firma = { nombre?: string; fecha?: string; ip?: string; aceptado?: boolean }
+  let firma: Firma | null = null
+  const bruta = (p as { firma_digital?: unknown }).firma_digital
+  if (bruta && typeof bruta === 'object') firma = bruta as Firma
+  else if (typeof bruta === 'string') {
+    try { firma = JSON.parse(bruta) } catch { firma = null }
+  }
+  const aceptoContrato = !!p.contrato_firmado || !!firma?.aceptado
 
   const hechos = ((avance.data || []) as { completado: boolean | null; fecha_completado: string | null }[]).filter((a) => a.completado && a.fecha_completado)
   const fechas = hechos.map((a) => new Date(String(a.fecha_completado)).getTime()).filter((n) => !Number.isNaN(n))
@@ -92,7 +102,10 @@ export async function GET(req: NextRequest) {
 <table><tr><th>Proyecto</th><td>${esc(p.nombre_iniciativa)}</td></tr>
 <tr><th>Cliente</th><td>${esc(p.nombre_cliente)} (${esc(p.correo_cliente)})</td></tr>
 <tr><th>Proyecto creado en la plataforma</th><td>${fecha(p.created_at)}</td></tr>
-<tr><th>Contrato firmado electrónicamente</th><td>${p.contrato_firmado ? 'Sí' : 'No consta en el registro'}</td></tr>
+<tr><th>Contrato aceptado electrónicamente</th><td>${aceptoContrato ? 'Sí' : 'No consta en el registro'}</td></tr>
+${firma?.fecha ? `<tr><th>Fecha y hora de la aceptación</th><td>${esc(new Date(String(firma.fecha)).toLocaleString('es-CO', { dateStyle: 'long', timeStyle: 'short', timeZone: 'America/Bogota' }))}</td></tr>` : ''}
+${firma?.nombre ? `<tr><th>Aceptado por</th><td>${esc(firma.nombre)}</td></tr>` : ''}
+${firma?.ip ? `<tr><th>Dirección de internet (IP) desde donde se aceptó</th><td>${esc(firma.ip)}</td></tr>` : ''}
 <tr><th>Plan contratado</th><td>${esc(p.plan_pago || '—')}</td></tr></table>
 
 <h2>2. Estructuración del proyecto</h2>

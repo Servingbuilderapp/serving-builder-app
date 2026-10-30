@@ -18,12 +18,13 @@ export async function extraerTexto(bytes: Buffer, nombre: string): Promise<Extra
 
   try {
     if (minuscula.endsWith('.pdf')) {
-      const modulo = await import('pdf-parse')
-      const pdfParse = (modulo as unknown as { default: (b: Buffer) => Promise<{ text: string; numpages?: number }> }).default
-        || (modulo as unknown as (b: Buffer) => Promise<{ text: string; numpages?: number }>)
-      const salida = await pdfParse(bytes)
+      // Se usa "unpdf" porque funciona en los servidores de Vercel sin necesitar DOMMatrix
+      // (el lector anterior fallaba allá con "DOMMatrix is not defined").
+      const { getDocumentProxy, extractText } = await import('unpdf')
+      const pdf = await getDocumentProxy(new Uint8Array(bytes))
+      const salida = await extractText(pdf, { mergePages: true })
       const texto = (salida?.text || '').trim()
-      const paginas = salida?.numpages ?? null
+      const paginas = salida?.totalPages ?? null
 
       if (texto.length < 200) {
         return {

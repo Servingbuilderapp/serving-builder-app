@@ -183,6 +183,29 @@ function ambitoValido(valor: unknown): string {
 }
 
 /**
+ * Filtro de lo que NO queremos en la biblioteca: becas, premios y ofertas de empleo.
+ * Decisión del dueño (30 oct 2026): aquí solo entran convocatorias de financiación
+ * (subvenciones, cooperación internacional, fondos para proyectos).
+ * Mira el nombre y el tipo, no el texto largo, para no descartar por error una convocatoria
+ * buena que apenas menciona una beca en sus requisitos.
+ */
+const PATRONES_NO_DESEADOS: RegExp[] = [
+  /\bbecas?\b/, /\bbecarios?\b/, /\bscholarships?\b/, /\bfellowships?\b/, /\bbursar(y|ies)\b/,
+  /\bmaestrias?\b/, /\bmasters?\b/, /\bmasteres\b/, /\bdoctorados?\b/, /\bphd\b/,
+  /\bpremios?\b/, /\bprizes?\b/, /\bawards?\b/,
+  /\bempleos?\b/, /\bvacantes?\b/, /\bofertas? (laboral|de trabajo)/, /\bconvocatorias? (laboral|de trabajo)/,
+  /\bjobs?\b/, /\bcareers?\b/, /\brecruitment\b/, /\bhiring\b/, /\bpasantias?\b/, /\binternships?\b/,
+]
+
+export function esConvocatoriaNoDeseada(nombre: unknown, tipo?: unknown): boolean {
+  const t = `${nombre ?? ''} ${tipo ?? ''}`
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+  return PATRONES_NO_DESEADOS.some((r) => r.test(t))
+}
+
+/**
  * Guarda (o actualiza) las convocatorias en la biblioteca.
  * Devuelve un mapa clave -> id para poder enlazarlas con el proyecto.
  */
@@ -195,6 +218,7 @@ export async function guardarEnBiblioteca(
   const limpias = convocatorias
     .map((c) => ({ ...c, nombre: texto(c.nombre), entidad: texto(c.entidad) }))
     .filter((c) => c.nombre.length > 3)
+    .filter((c) => !esConvocatoriaNoDeseada(c.nombre, c.tipo))
 
   if (limpias.length === 0) return mapa
 
