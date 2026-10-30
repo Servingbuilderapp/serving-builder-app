@@ -3,6 +3,8 @@ import { createClient } from '@supabase/supabase-js'
 import { motorAutorizado } from '@/lib/candadoMotores'
 import { buildEmailTemplate, sendEmail } from '@/lib/email'
 import { ultimoMovimientoPorProyecto, diasSinMovimiento } from '@/lib/actividadProyectos'
+import { calcularSiguientePaso } from '@/lib/siguientePaso'
+import type { ProyectoVisto } from '@/lib/proyectoVisto'
 
 /**
  * AVISO DIARIO AL EQUIPO — un solo correo con los clientes que necesitan atención.
@@ -19,7 +21,9 @@ export const maxDuration = 120
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
 const CORREOS_DEL_EQUIPO = ['servingbuilderapp@gmail.com', 'iagif1964@gmail.com']
-const DESTINO = 'servingbuilderapp@gmail.com'
+const DESTINOS = ['servingbuilderapp@gmail.com', 'iagif1964@gmail.com']
+const DIAS_ESPERA_CLIENTE = 3
+const SIN_ARRANCAR = ['pendiente_pago', 'pendiente_aval', 'aval_rechazado', 'cortesia_pendiente']
 const DIAS_ESTANCADO = 5
 const DIAS_CIERRE = 7
 
@@ -90,7 +94,44 @@ export async function GET(req: NextRequest) {
       .filter((x) => !terminadas.has(`${x.c.id_proyecto}|${sinTildes(String(x.c.nombre || ''))}`))
       .sort((a, b) => a.dias - b.dias)
 
+    // Quién tiene la pelota en cada proyecto parado: el cliente (hay que escribirle) o la plataforma (hay que revisar).
+    const candidatos = proyectos
+      .filter((p) => !SIN_ARRANCAR.includes(String(p.estado_actual || '')) && p.estado_actual !== 'postulado')
+      .map((p) => ({ p, dias: diasSinMovimiento(movimiento.get(String(p.id))) }))
+      .filter((x) => x.dias !== null && x.dias >= DIAS_ESPERA_CLIENTE)
+      .sort((a, b) => (b.dias || 0) - (a.dias || 0))
+      .slice(0, 60)
+    const porEscribir: { p: (typeof proyectos)[number]; dias: number; pedido: string }[] = []
+    const porRevisar: { p: (typeof proyectos)[number]; dias: number }[] = []
+    for (let i = 0; i < candidatos.length; i += 5) {
+      const lote = candidatos.slice(i, i + 5)
+      const calculos = await Promise.all(
+        lote.map(async ({ p, dias }) => {
+          try {
+            const vista: ProyectoVisto = {
+              db: supabase as unknown as ProyectoVisto['db'],
+              proyectoId: String(p.id),
+              nombreProyecto: p.nombre_iniciativa,
+              nombreCliente: p.nombre_cliente,
+              correoCliente: p.correo_cliente,
+              vistaEquipo: false,
+            }
+            return { p, dias: dias || 0, paso: await calcularSiguientePaso(vista) }
+          } catch {
+            return { p, dias: dias || 0, paso: null }
+          }
+        }),
+      )
+      for (const c of calculos) {
+        if (!c.paso) continue
+        if (c.paso.pideAlgo) porEscribir.push({ p: c.p, dias: c.dias, pedido: c.paso.titulo })
+        else if (!c.paso.accion) porRevisar.push({ p: c.p, dias: c.dias })
+      }
+    }
+
     const resumen = {
+      por_escribir_whatsapp: porEscribir.map((x) => ({ proyecto: x.p.nombre_iniciativa, cliente: x.p.nombre_cliente, dias: x.dias, pedido: x.pedido })),
+      por_revisar_plataforma: porRevisar.map((x) => ({ proyecto: x.p.nombre_iniciativa, dias: x.dias })),
       estancados: estancados.map((x) => ({
         proyecto: x.p.nombre_iniciativa,
         cliente: x.p.nombre_cliente,
@@ -105,11 +146,24 @@ export async function GET(req: NextRequest) {
       })),
     }
 
-    if (estancados.length === 0 && cierres.length === 0) {
+    if (estancados.length === 0 && cierres.length === 0 && porEscribir.length === 0 && porRevisar.length === 0) {
       return NextResponse.json({ ok: true, modo: soloProbar ? 'prueba' : 'envío real', enviado: false, mensaje: 'Nada que avisar hoy.', ...resumen })
     }
 
     const lineas: string[] = []
+    if (porEscribir.length > 0) {
+      lineas.push(`<strong>Falta escribirles por WhatsApp (${porEscribir.length}):</strong> el cliente lleva ${DIAS_ESPERA_CLIENTE} días o más sin hacer lo que le toca.`)
+      for (const x of porEscribir.slice(0, 15)) {
+        lineas.push(`• ${escapar(String(x.p.nombre_iniciativa || 'Proyecto'))} (${escapar(String(x.p.nombre_cliente || ''))}) — ${escapar(x.pedido)}, ${x.dias} días`)
+      }
+      if (porEscribir.length > 15) lineas.push(`… y ${porEscribir.length - 15} más.`)
+    }
+    if (porRevisar.length > 0) {
+      lineas.push(`<strong>Falta revisar de nuestro lado (${porRevisar.length}):</strong> no esperan nada del cliente y llevan ${DIAS_ESPERA_CLIENTE} días o más quietos.`)
+      for (const x of porRevisar.slice(0, 10)) {
+        lineas.push(`• ${escapar(String(x.p.nombre_iniciativa || 'Proyecto'))} — ${x.dias} días`)
+      }
+    }
     if (cierres.length > 0) {
       lineas.push('<strong>Cierran pronto (sin radicar):</strong>')
       for (const x of cierres) {
@@ -130,18 +184,16 @@ export async function GET(req: NextRequest) {
 
     let enviado: boolean | string = 'simulado'
     if (!soloProbar) {
-      const envio = await sendEmail({
-        to: DESTINO,
-        subject: `Clientes que necesitan atención (${estancados.length + cierres.length})`,
-        html: buildEmailTemplate({
-          title: 'Clientes que necesitan atención',
-          greeting: 'Hola equipo,',
-          bodyLines: lineas,
-          ctaText: 'Abrir el seguimiento',
-          ctaUrl: `${origen}/admin/proyectos`,
-        }),
+      const asunto = `Hoy: ${porEscribir.length} por escribir, ${porRevisar.length} por revisar, ${cierres.length} cierres cerca`
+      const html = buildEmailTemplate({
+        title: 'Lo que falta hacer hoy',
+        greeting: 'Hola equipo,',
+        bodyLines: lineas,
+        ctaText: 'Abrir el tablero de Productividad',
+        ctaUrl: `${origen}/admin/productividad`,
       })
-      enviado = envio.success ? true : envio.message
+      const envios = await Promise.all(DESTINOS.map((to) => sendEmail({ to, subject: asunto, html })))
+      enviado = envios.every((e) => e.success) ? true : envios.map((e) => (e.success ? 'ok' : e.message)).join(' | ')
     }
     return NextResponse.json({ ok: true, modo: soloProbar ? 'prueba (no se envió nada)' : 'envío real', enviado, ...resumen })
   } catch (e) {
