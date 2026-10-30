@@ -285,13 +285,42 @@ Alertas: ${convocatoria.alertas}
 Información faltante: ${convocatoria.informacion_faltante}
 `;
 
+  // Texto oficial de los términos de referencia (lo descarga el Centinela o lo sube el equipo).
+  // Si existe, el encaje se hace contra las reglas reales y no contra un resumen.
+  let textoPliego = "";
+  try {
+    if (convocatoria.biblioteca_id) {
+      const { data: docsPliego } = await supabase
+        .from("convocatoria_documentos")
+        .select("nombre_archivo, texto, error_extraccion")
+        .eq("convocatoria_id", convocatoria.biblioteca_id)
+        .eq("clase", "terminos_referencia")
+        .order("creado_en", { ascending: false })
+        .limit(2);
+      textoPliego = (docsPliego || [])
+        .filter((d) => d.texto && !d.error_extraccion)
+        .map((d) => `--- ${d.nombre_archivo} ---\n${String(d.texto).slice(0, 50000)}`)
+        .join("\n\n")
+        .slice(0, 80000);
+    }
+  } catch (errorPliego) {
+    console.error("No se pudo leer el texto de los términos de referencia:", errorPliego);
+  }
+
   const instruccionUsuario = `
 PROYECTO MAESTRO:
 ${proyectoMaestroTexto}
 
 OPORTUNIDAD SELECCIONADA POR EL MOTOR DE BÚSQUEDA:
 ${convocatoriaTexto}
-`;
+${
+    textoPliego
+      ? `
+TEXTO OFICIAL DE LOS TÉRMINOS DE REFERENCIA (es la fuente principal: si contradice el resumen de arriba, manda este texto; cita sus reglas y no inventes requisitos que no estén aquí):
+${textoPliego}
+`
+      : ""
+  }`;
 
   const cuerpoSolicitud = {
     systemInstruction: { parts: [{ text: PROMPT_MOTOR_3 }] },

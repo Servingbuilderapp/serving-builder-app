@@ -51,6 +51,10 @@
     {
       "path": "/api/revisar-coherencia",
       "schedule": "30 15 * * *"
+    },
+    {
+      "path": "/api/centinela/descargar-terminos?lote=5",
+      "schedule": "15 11 * * *"
     }
   ]
 }
