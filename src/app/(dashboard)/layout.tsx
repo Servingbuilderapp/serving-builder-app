@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { PanelShell } from '@/components/panel/PanelShell'
 import { esEquipoServing } from '@/lib/guardiaEquipo'
 import { calcularSiguientePaso } from '@/lib/siguientePaso'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -80,6 +81,37 @@ export default async function LayoutPanel({ children }: { children: React.ReactN
     }
   }
 
+  // La campanita del equipo: cuántos clientes falta escribir y cuántos revisar (lo guarda el aviso diario).
+  let alertasEquipo = 0
+  if (esAdmin) {
+    try {
+      const { data: fila } = await supabaseAdmin.from('resumen_equipo').select('datos').eq('id', 'hoy').maybeSingle()
+      const datos = (fila?.datos || null) as { escribir?: { id: string }[]; revisar?: unknown[]; cierres?: number } | null
+      if (datos) {
+        const { data: marcas } = await supabaseAdmin.from('seguimientos_cliente').select('proyecto_id, ultimo_envio').eq('clave', 'wa_manual')
+        const ahora = new Date().getTime()
+        const escritos = new Set(
+          ((marcas || []) as { proyecto_id: string; ultimo_envio: string | null }[])
+            .filter((m) => m.ultimo_envio && ahora - new Date(m.ultimo_envio).getTime() < 3 * 86400000)
+            .map((m) => String(m.proyecto_id)),
+        )
+        const porEscribir = (datos.escribir || []).filter((x) => !escritos.has(String(x.id))).length
+        const porRevisar = (datos.revisar || []).length
+        const cierres = datos.cierres || 0
+        alertasEquipo = porEscribir + porRevisar + cierres
+        if (alertasEquipo > 0) {
+          aviso = {
+            titulo: `${porEscribir} por escribir, ${porRevisar} por revisar`,
+            texto: `Faltan ${porEscribir} clientes por contactar por WhatsApp, ${porRevisar} proyectos por revisar de nuestro lado y ${cierres} convocatorias cierran pronto.`,
+            accion: { texto: 'Abrir Productividad', href: '/admin/productividad' },
+          }
+        }
+      }
+    } catch {
+      aviso = null
+    }
+  }
+
   // Un cliente que entró por el enlace de un socio de marca blanca solo
   // recibe el camino de estructuración — sin App de Ideas, Réplicas ni
   // Academia (acuerdo del 13 sep 2026: esas son cosas de la marca propia
@@ -102,7 +134,7 @@ export default async function LayoutPanel({ children }: { children: React.ReactN
       esClienteMarcaBlanca={esClienteMarcaBlanca}
       tieneCortesia={!esAdmin && !esSocio && proyecto?.plan_pago === 'cortesia'}
       aviso={aviso}
-      numeroAlertas={aviso?.accion ? 1 : 0}
+      numeroAlertas={esAdmin ? alertasEquipo : aviso?.accion ? 1 : 0}
     >
       {children}
     </PanelShell>

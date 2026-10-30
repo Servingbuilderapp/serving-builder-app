@@ -7,6 +7,7 @@ import { ultimoMovimientoPorProyecto } from '@/lib/actividadProyectos'
 import { calcularSiguientePaso } from '@/lib/siguientePaso'
 import type { ProyectoVisto } from '@/lib/proyectoVisto'
 import { Eye } from 'lucide-react'
+import { BotonYaEscribi } from '@/components/panel/BotonYaEscribi'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -222,6 +223,21 @@ export default async function ProductividadPage() {
     }
   }
 
+  // Cuándo se le escribió por última vez a cada cliente (botón «Ya le escribí»). Si la tabla no existe, se ignora.
+  const escritoEn = new Map<string, number>()
+  try {
+    const { data: marcas } = await db
+      .from('seguimientos_cliente')
+      .select('proyecto_id, ultimo_envio')
+      .eq('clave', 'wa_manual')
+      .in('proyecto_id', filas.map((f) => String(f.proyecto.id)))
+    for (const m of (marcas || []) as { proyecto_id: string; ultimo_envio: string | null }[]) {
+      if (m.ultimo_envio) escritoEn.set(String(m.proyecto_id), new Date(m.ultimo_envio).getTime())
+    }
+  } catch {
+    /* sin la tabla, no se muestra la marca */
+  }
+
   const orden = { rojo: 0, amarillo: 1, verde: 2 }
   filas.sort((a, b) => orden[a.semaforo] - orden[b.semaforo] || b.dias - a.dias)
 
@@ -408,6 +424,15 @@ export default async function ProductividadPage() {
                               </a>
                             ) : null}
                           </div>
+                        ) : null}
+                        {f.razon?.quien === 'cliente' ? (
+                          escritoEn.has(String(p.id)) && ahora - (escritoEn.get(String(p.id)) || 0) < 3 * DIA_MS ? (
+                            <span className="text-[11px] font-bold text-[#E0B868]">
+                              Le escribiste hace {Math.max(0, Math.floor((ahora - (escritoEn.get(String(p.id)) || 0)) / DIA_MS))} d
+                            </span>
+                          ) : (
+                            <BotonYaEscribi proyectoId={String(p.id)} />
+                          )
                         ) : null}
                       </div>
                     </td>

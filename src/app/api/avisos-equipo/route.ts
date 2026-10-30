@@ -21,7 +21,7 @@ export const maxDuration = 120
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
 const CORREOS_DEL_EQUIPO = ['servingbuilderapp@gmail.com', 'iagif1964@gmail.com']
-const DESTINOS = ['servingbuilderapp@gmail.com', 'iagif1964@gmail.com']
+const DESTINOS = ['contacto@portalarquitecturadigital.com']
 const DIAS_ESPERA_CLIENTE = 3
 const SIN_ARRANCAR = ['pendiente_pago', 'pendiente_aval', 'aval_rechazado', 'cortesia_pendiente']
 const DIAS_ESTANCADO = 5
@@ -127,6 +127,32 @@ export async function GET(req: NextRequest) {
         if (c.paso.pideAlgo) porEscribir.push({ p: c.p, dias: c.dias, pedido: c.paso.titulo })
         else if (!c.paso.accion) porRevisar.push({ p: c.p, dias: c.dias })
       }
+    }
+
+    // Los que el equipo ya marcó como «Ya le escribí» (últimos 3 días) salen de la lista de pendientes.
+    const escritoReciente = new Set<string>()
+    try {
+      const { data: marcas } = await supabase.from('seguimientos_cliente').select('proyecto_id, ultimo_envio').eq('clave', 'wa_manual')
+      for (const m of (marcas || []) as { proyecto_id: string; ultimo_envio: string | null }[]) {
+        if (m.ultimo_envio && new Date().getTime() - new Date(m.ultimo_envio).getTime() < DIAS_ESPERA_CLIENTE * 86400000) escritoReciente.add(String(m.proyecto_id))
+      }
+    } catch {
+      /* sin la tabla, no se descuenta nada */
+    }
+    for (let i = porEscribir.length - 1; i >= 0; i--) if (escritoReciente.has(String(porEscribir[i].p.id))) porEscribir.splice(i, 1)
+
+    // Se guarda el resumen para la campanita del equipo en la plataforma.
+    if (!soloProbar) {
+      const { error: errorResumen } = await supabase.from('resumen_equipo').upsert({
+        id: 'hoy',
+        actualizado: new Date().toISOString(),
+        datos: {
+          escribir: porEscribir.map((x) => ({ id: String(x.p.id), nombre: x.p.nombre_iniciativa, cliente: x.p.nombre_cliente, dias: x.dias, pedido: x.pedido })),
+          revisar: porRevisar.map((x) => ({ id: String(x.p.id), nombre: x.p.nombre_iniciativa, dias: x.dias })),
+          cierres: cierres.length,
+        },
+      })
+      if (errorResumen) console.error('[avisos-equipo] No se pudo guardar el resumen de la campanita:', errorResumen.message)
     }
 
     const resumen = {
