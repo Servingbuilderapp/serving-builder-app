@@ -159,6 +159,7 @@ const SECCIONES_EQUIPO: Seccion[] = [
     items: [
       { nombre: 'Proyectos de clientes', href: '/admin/proyectos', icono: FolderKanban },
       { nombre: 'Productividad', href: '/admin/productividad', icono: BarChart3 },
+      { nombre: 'Ejemplo para presentar', href: '/admin/ejemplo', icono: Eye },
       { nombre: 'Diagnósticos', href: '/admin/diagnosticos', icono: ClipboardList },
       { nombre: 'Convocatorias', href: '/admin/convocatorias', icono: Radar },
       { nombre: 'Centinela Digital', href: '/admin/centinela', icono: Satellite },
