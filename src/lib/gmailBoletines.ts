@@ -23,7 +23,7 @@ type ParteGmail = {
   parts?: ParteGmail[]
 }
 
-async function obtenerTokenAcceso(): Promise<string> {
+export async function obtenerTokenAcceso(): Promise<string> {
   const clientId = process.env.GOOGLE_CLIENT_ID
   const clientSecret = process.env.GOOGLE_CLIENT_SECRET
   const refreshToken = process.env.GOOGLE_REFRESH_TOKEN
