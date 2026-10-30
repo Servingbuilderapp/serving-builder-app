@@ -10,6 +10,7 @@ import {
   CalendarRange,
   ClipboardList,
   FolderOpen,
+  FileCheck,
   Coins,
   FileText,
   Gauge,
@@ -48,6 +49,7 @@ export const PESTANAS = [
   { clave: 'abanico', nombre: 'Abanico', icono: Fan },
   { clave: 'pendientes', nombre: 'Lo que me piden', icono: ClipboardList },
   { clave: 'documentos', nombre: 'Documentos', icono: FolderOpen },
+  { clave: 'evidencia', nombre: 'Evidencia del servicio', icono: FileCheck },
 ] as const
 
 /**
@@ -109,6 +111,22 @@ export function PestanasProyecto({
             ? ruta === destino || ruta.startsWith(`${destino}/`)
             : ruta === base
           const Icono = pestana.icono
+
+          // La evidencia es una hoja imprimible: se abre en una pestaña nueva del navegador.
+          if (pestana.clave === 'evidencia') {
+            return (
+              <a
+                key={pestana.nombre}
+                href={`/api/admin/evidencia?proyecto=${proyectoId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex shrink-0 items-center gap-1.5 border-b-2 border-transparent px-3 py-2.5 text-[12.5px] font-semibold text-[#F3E7DC]/60 transition-colors hover:border-[#B08D57]/40 hover:text-[#F3E7DC]"
+              >
+                <Icono className="h-4 w-4 shrink-0" />
+                {pestana.nombre}
+              </a>
+            )
+          }
 
           return (
             <Link
