@@ -109,10 +109,34 @@ export default async function MisConvocatoriasPage({
 }
 
 /** Lo que ve el equipo cuando el cliente todavía no ha elegido: solo lectura, sin botones. */
-function AvisoPorElegir({ cantidad }: { cantidad: number }) {
+function AvisoPorElegir({ lista }: { lista: ConvocatoriaPendiente[] }) {
   return (
     <div className="mb-4 rounded-xl border border-[#B08D57]/40 bg-[#4C2032] p-4 text-sm text-[#F3E7DC]">
-      El cliente tiene <strong>{cantidad}</strong> convocatorias encontradas por elegir. Solo él puede elegirlas.
+      <p>
+        El cliente tiene <strong>{lista.length}</strong> convocatorias encontradas por elegir. Solo él puede elegirlas;
+        aquí las ves todas, en solo lectura.
+      </p>
+      <ul className="mt-3 space-y-2">
+        {lista.map((c) => (
+          <li key={c.id} className="rounded-lg border border-white/10 bg-black/10 p-3">
+            <div className="font-bold">{c.nombre}</div>
+            <div className="mt-0.5 text-xs text-[#F3E7DC]/70">
+              {[c.entidad, c.tipo, c.monto, c.fechaCierre ? `cierra ${c.fechaCierre}` : null].filter(Boolean).join(' · ')}
+            </div>
+            {c.razon ? <p className="mt-1 text-xs text-[#F3E7DC]/80">{c.razon}</p> : null}
+            {c.fuenteOficial ? (
+              <a
+                href={c.fuenteOficial}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-1 inline-block text-xs font-bold text-[#C9A46B] underline"
+              >
+                Ver fuente oficial
+              </a>
+            ) : null}
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }
@@ -170,7 +194,9 @@ async function contenidoConvocatorias(vista: ProyectoVisto) {
   if (candidatas.length === 0) {
     if (pendientes.length > 0) {
       return vista.vistaEquipo ? (
-        <AvisoPorElegir cantidad={pendientes.length} />
+        <div className="px-4 pt-6 lg:px-6">
+          <AvisoPorElegir lista={pendientes} />
+        </div>
       ) : (
         <ElegirConvocatorias proyectoId={proyectoId} convocatorias={pendientes} />
       )
@@ -287,7 +313,7 @@ async function contenidoConvocatorias(vista: ProyectoVisto) {
     return (
       <div className="px-4 pt-6 lg:px-6">
         {vista.vistaEquipo ? (
-          <AvisoPorElegir cantidad={pendientes.length} />
+          <AvisoPorElegir lista={pendientes} />
         ) : (
           <ElegirConvocatorias proyectoId={proyectoId} convocatorias={pendientes} />
         )}

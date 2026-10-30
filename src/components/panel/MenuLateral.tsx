@@ -4,6 +4,7 @@ import React, { useSyncExternalStore } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
+  BarChart3,
   Home,
   ListChecks,
   FolderKanban,
@@ -157,6 +158,7 @@ const SECCIONES_EQUIPO: Seccion[] = [
     titulo: 'Equipo Serving',
     items: [
       { nombre: 'Proyectos de clientes', href: '/admin/proyectos', icono: FolderKanban },
+      { nombre: 'Productividad', href: '/admin/productividad', icono: BarChart3 },
       { nombre: 'Diagnósticos', href: '/admin/diagnosticos', icono: ClipboardList },
       { nombre: 'Convocatorias', href: '/admin/convocatorias', icono: Radar },
       { nombre: 'Centinela Digital', href: '/admin/centinela', icono: Satellite },
