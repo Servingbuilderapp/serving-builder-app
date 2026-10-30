@@ -44,6 +44,8 @@ type Item = {
 
 type Seccion = {
   titulo?: string
+  /** Si es true, la sección se muestra cerrada (se abre sola si la pantalla actual está dentro). */
+  plegable?: boolean
   items: Item[]
 }
 
@@ -65,24 +67,31 @@ type Seccion = {
 const SECCIONES_CLIENTE: Seccion[] = [
   {
     items: [
-      { nombre: 'Resumen general', href: '/dashboard', icono: Home },
-      { nombre: 'Avance de mi proyecto', href: '/mi-proyecto', icono: ListChecks },
-      { nombre: 'Calificación final', href: '/calificacion', icono: CheckSquare },
+      { nombre: 'Inicio', href: '/dashboard', icono: Home },
+      { nombre: 'Mi proyecto', href: '/mi-proyecto', icono: ListChecks },
+      { nombre: 'Convocatorias para ti', href: '/mis-convocatorias', icono: Target },
       { nombre: 'Lo que me piden', href: '/pendientes', icono: Inbox },
       { nombre: 'Mis documentos', href: '/mis-documentos', icono: FolderOpen },
-      { nombre: 'Mis convocatorias', href: '/mis-convocatorias', icono: Target },
-      { nombre: 'A tu medida', href: '/a-tu-medida', icono: Search },
+    ],
+  },
+  {
+    // Grupo cerrado: lo que el cliente pagó o usa de vez en cuando. No estorba al "qué hago ahora".
+    titulo: 'Más',
+    plegable: true,
+    items: [
       { nombre: 'Mi abanico', href: '/mi-abanico', icono: Fan },
       { nombre: 'App de Ideas', href: '/ideas', icono: Lightbulb },
       { nombre: 'Academia', href: '/academia', icono: GraduationCap },
       { nombre: 'Mi membresía', href: '/mi-membresia', icono: Crown },
+      { nombre: 'Sesiones grupales', href: '/sesiones', icono: CalendarClock },
+      { nombre: 'Comunidad', href: '/comunidad', icono: Users },
+      { nombre: 'Acompañamiento', href: '/acompanamiento', icono: HeartHandshake },
+      { nombre: 'Calificación final', href: '/calificacion', icono: CheckSquare },
+      { nombre: 'A tu medida', href: '/a-tu-medida', icono: Search },
       { nombre: 'Ventajas del mes', href: '/convocatorias-del-mes', icono: Radar },
       { nombre: 'Calendario', href: '/calendario', icono: CalendarDays },
       { nombre: 'Buscador de fondos', href: '/buscar-fondos', icono: Search },
       { nombre: 'Mis proyectos', href: '/mis-proyectos', icono: ClipboardList },
-      { nombre: 'Sesiones grupales', href: '/sesiones', icono: CalendarClock },
-      { nombre: 'Comunidad', href: '/comunidad', icono: Users },
-      { nombre: 'Acompañamiento', href: '/acompanamiento', icono: HeartHandshake },
     ],
   },
 ]
@@ -262,12 +271,23 @@ export function MenuLateral({
         ) : null}
 
         {secciones.map((seccion, i) => (
-          <div key={seccion.titulo || `seccion-${i}`}>
+          <details
+            key={seccion.titulo || `seccion-${i}`}
+            open={!seccion.plegable || seccion.items.some((it) => it.href === ruta)}
+            className="group"
+          >
             {seccion.titulo ? (
-              <div className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-color-base-content/45">
+              <summary
+                className={`px-3 mb-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-color-base-content/45 ${
+                  seccion.plegable ? 'cursor-pointer select-none hover:text-color-base-content/70' : 'pointer-events-none list-none'
+                }`}
+              >
                 {seccion.titulo}
-              </div>
-            ) : null}
+                {seccion.plegable ? <span className="ml-1.5 normal-case tracking-normal">(ver más)</span> : null}
+              </summary>
+            ) : (
+              <summary className="hidden" />
+            )}
 
             <ul className="space-y-0.5">
               {seccion.items.map((item) => {
@@ -314,7 +334,7 @@ export function MenuLateral({
                 )
               })}
             </ul>
-          </div>
+          </details>
         ))}
       </nav>
 

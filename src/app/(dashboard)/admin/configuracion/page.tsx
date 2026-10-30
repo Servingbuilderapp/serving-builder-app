@@ -6,6 +6,7 @@ import { COBRO_COLOMBIA, COBRO_EXTERIOR, IVA, PAGO_EN_DOS_PARTES } from '@/lib/m
 import { ESCALA_EXITO_GENERAL, ESCALA_EXITO_FONDO_EMPRENDER } from '@/lib/comisionExito'
 import { MODALIDADES_ESTRUCTURACION, type PlanEstructuracionMapeado } from '@/lib/estructuracionMapping'
 import type { EscalonExito } from '@/lib/comisionExito'
+import { NOMBRE_PLAN_EMPRENDEDOR, MONTO_EMPRENDEDOR_COP, COMISION_EMPRENDEDOR_PCT } from '@/lib/planEmprendedor'
 
 export const dynamic = 'force-dynamic'
 
@@ -96,6 +97,31 @@ export default async function AdminConfiguracionPage() {
               </p>
             </div>
           ))}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-[#4C2032]/60 border border-white/10 rounded-xl p-4">
+            <span className="text-[10px] font-black text-color-base-content/45 uppercase tracking-widest">{NOMBRE_PLAN_EMPRENDEDOR}</span>
+            <p className="text-xl font-black text-color-base-content mt-1">
+              {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(MONTO_EMPRENDEDOR_COP)}
+              <span className="text-xs text-color-base-content/40 font-normal"> + IVA</span>
+            </p>
+            <p className="text-xs text-color-base-content/50 mt-1">Comisión de éxito: {COMISION_EMPRENDEDOR_PCT}%</p>
+          </div>
+          <div className="bg-[#4C2032]/60 border border-white/10 rounded-xl p-4 space-y-1.5">
+            <span className="text-[10px] font-black text-color-base-content/45 uppercase tracking-widest">Fondo Emprender — por monto solicitado</span>
+            {/* Mismos valores de ESCALONES_FONDO_EMPRENDER en src/app/contratar/page.tsx (decisión del 27 oct 2026). */}
+            {[
+              { etiqueta: 'Hasta $73.000.000', precio: '$3.500.000' },
+              { etiqueta: 'De $73.000.001 a $150.000.000', precio: '$7.000.000' },
+              { etiqueta: 'Más de $150.000.000', precio: '$10.000.000' },
+            ].map((e) => (
+              <div key={e.etiqueta} className="flex justify-between text-xs text-color-base-content/70 border-b border-white/5 pb-1">
+                <span>{e.etiqueta}</span>
+                <span className="font-bold text-color-primary">{e.precio} + IVA</span>
+              </div>
+            ))}
+          </div>
         </div>
 
         <p className="text-xs text-color-base-content/50">Tarifa de IVA vigente: {IVA.etiqueta}</p>
