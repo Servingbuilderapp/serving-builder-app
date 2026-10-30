@@ -177,14 +177,20 @@ export async function calcularSiguientePaso(vista: ProyectoVisto): Promise<Sigui
       .map((p) => quitarTildes(String(p.convocatoria_nombre || ''))),
   )
 
-  const porCerrar = ((elegidasConCierre || []) as { nombre: string | null; fecha_cierre: string }[])
+  const elegidasAbiertas = ((elegidasConCierre || []) as { nombre: string | null; fecha_cierre: string }[])
     .map((c) => {
       const f = new Date(c.fecha_cierre)
       const dias = Math.round((Date.UTC(f.getUTCFullYear(), f.getUTCMonth(), f.getUTCDate()) - inicioHoy) / 86400000)
-      return { nombre: String(c.nombre || 'una convocatoria'), dias }
+      return { nombre: String(c.nombre || 'una convocatoria'), dias, fecha: f }
     })
-    .filter((c) => c.dias >= 0 && c.dias <= 7 && !terminadas.has(quitarTildes(c.nombre)))
+    .filter((c) => c.dias >= 0 && !terminadas.has(quitarTildes(c.nombre)))
     .sort((a, b) => a.dias - b.dias)
+  const porCerrar = elegidasAbiertas.filter((c) => c.dias <= 7)
+
+  // Plazo real para reunir los documentos: la fecha de cierre más cercana de lo que el cliente quiere.
+  const plazoDocumentos = elegidasAbiertas[0]
+    ? `${elegidasAbiertas[0].dias === 0 ? 'Tienes hasta hoy' : elegidasAbiertas[0].dias === 1 ? 'Tienes 1 día' : `Tienes ${elegidasAbiertas[0].dias} días`} (cierra ${elegidasAbiertas[0].fecha.toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'UTC' })}). `
+    : ''
 
   if (porCerrar.length > 0) {
     const primera = porCerrar[0]
@@ -259,13 +265,13 @@ export async function calcularSiguientePaso(vista: ProyectoVisto): Promise<Sigui
       const unicos = Array.from(new Set(pendientes))
       return {
         titulo: `Reúne ${unicos.length} ${unicos.length === 1 ? 'documento' : 'documentos'} para postular`,
-        texto: `Te faltan: ${unicos.slice(0, 3).join(', ')}${unicos.length > 3 ? ` y ${unicos.length - 3} más` : ''}. Súbelos y dejamos tu postulación lista.`,
+        texto: `${plazoDocumentos}Te faltan: ${unicos.slice(0, 3).join(', ')}${unicos.length > 3 ? ` y ${unicos.length - 3} más` : ''}. Súbelos y dejamos tu postulación lista.`,
         accion: { texto: 'Reunir mis documentos', href: '/pendientes' },
       }
     }
     return {
-      titulo: 'Revisa tu encaje',
-      texto: 'Ya calculamos qué tanto encaja tu proyecto con las convocatorias que elegiste, y qué le falta a cada una.',
+      titulo: '¡Felicitaciones! Tus documentos están completos',
+      texto: 'Ya tienes todo lo que piden las convocatorias que elegiste. Nosotros dejamos lista tu postulación. Puedes ver cómo encaja tu proyecto con cada una.',
       accion: { texto: 'Ver mi encaje', href: '/mis-convocatorias' },
     }
   }

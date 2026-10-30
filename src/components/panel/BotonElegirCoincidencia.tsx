@@ -59,7 +59,7 @@ export function BotonElegirCoincidencia({
         disabled={estado === 'enviando'}
         className="rounded-full bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-4 py-1.5 text-xs font-bold text-[#3A1420] hover:brightness-110 disabled:opacity-50"
       >
-        {estado === 'enviando' ? 'Guardando…' : 'Elegir esta'}
+        {estado === 'enviando' ? 'Guardando…' : 'Quiero esta'}
       </button>
       {error ? <p className="mt-1 text-xs font-bold text-[#E0917E]">{error}</p> : null}
     </div>

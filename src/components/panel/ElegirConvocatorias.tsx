@@ -160,7 +160,7 @@ function TarjetaPendiente({
             onChange={(e) => onCambiar(convocatoria.id, e.target.checked)}
             className="h-5 w-5 accent-[#C9A46B] rounded border-[#B08D57] bg-[#3B1727] text-[#C9A46B] focus:ring-[#C9A46B]"
           />
-          {elegida ? 'Elegida' : 'Elegir'}
+          {elegida ? 'La quiero' : 'Quiero'}
         </label>
       </div>
     </article>
