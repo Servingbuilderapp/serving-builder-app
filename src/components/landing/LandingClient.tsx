@@ -31,6 +31,7 @@ import {
 import { useTranslation } from '@/hooks/useTranslation'
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 import { Ayuda } from '@/components/ui/Ayuda'
+import { CaminoFinanciacion } from '@/components/landing/CaminoFinanciacion'
 
 /* ============================================================================
    BLOQUE DE CONFIGURACIÓN
@@ -847,6 +848,9 @@ export function LandingClient({ user }: LandingClientProps) {
           </div>
         </div>
       </section>
+
+      {/* ================= TRES OFERTAS + ¿A DÓNDE DIRIGIRTE? (debajo del video) ================= */}
+      <CaminoFinanciacion />
 
       {/* ================= NUESTRA VENTAJA: rapidez, tiempo y volumen ================= */}
       <section id="ventaja" className="bg-[#8C3654] py-16 lg:py-20 border-y-2 border-[#B08D57]/45">

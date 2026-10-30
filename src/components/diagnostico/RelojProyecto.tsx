@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import { MessageSquare } from 'lucide-react'
 import { ETAPAS_RELOJ, etapaPorNivel } from '@/lib/relojProyecto'
 
@@ -96,7 +97,7 @@ export function RelojProyecto({
               <dd className="mt-1 text-[#F3E7DC]/90 font-semibold">{etapa.evidencia}</dd>
             </div>
             <div className="rounded-xl bg-black/20 border border-[#B08D57]/30 p-3">
-              <dt className="font-black uppercase tracking-wider text-[#C9A46B]">De dónde suele venir el dinero</dt>
+              <dt className="font-black uppercase tracking-wider text-[#C9A46B]">¿A dónde dirigirte? Las fuentes que mejor te encajan</dt>
               <dd className="mt-1 text-[#F3E7DC]/90 font-semibold">{etapa.fuentes.join(' · ')}</dd>
             </div>
           </dl>
@@ -106,6 +107,22 @@ export function RelojProyecto({
               Posibilidades con subvenciones y cooperación, según tu diagnóstico: {etapa.posibilidadesSubvencion}
             </p>
             <p className="text-sm text-[#F3E7DC]/90 leading-relaxed">{etapa.recomendacion}</p>
+            <div className="flex flex-wrap gap-2 pt-1">
+              {etapa.nivel === 1 ? (
+                <>
+                  <Link href="/membresia" className="inline-flex items-center px-4 py-2 rounded-xl border border-[#C9A46B] text-[#F3E7DC] font-black text-[11px] uppercase tracking-wider hover:bg-[#C9A46B]/15">
+                    Ver membresías
+                  </Link>
+                  <Link href="/academia" className="inline-flex items-center px-4 py-2 rounded-xl border border-[#C9A46B] text-[#F3E7DC] font-black text-[11px] uppercase tracking-wider hover:bg-[#C9A46B]/15">
+                    Conocer la Academia
+                  </Link>
+                </>
+              ) : (
+                <Link href="/contratar" className="inline-flex items-center px-4 py-2 rounded-xl border border-[#C9A46B] text-[#F3E7DC] font-black text-[11px] uppercase tracking-wider hover:bg-[#C9A46B]/15">
+                  Quiero estructurar mi proyecto
+                </Link>
+              )}
+            </div>
           </div>
 
           {etapa.ofrecerAnalistaFinanciera ? (
