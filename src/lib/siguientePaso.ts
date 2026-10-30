@@ -15,6 +15,10 @@ export type SiguientePaso = {
   texto: string
   /** Solo cuando el cliente debe hacer algo. */
   accion: { texto: string; href: string } | null
+  /** true solo cuando el cliente de verdad debe hacer algo para que el proyecto avance (no si solo hay un botón informativo). */
+  pideAlgo?: boolean
+  /** Identificador estable del tipo de paso; sirve para no repetir el mismo recordatorio por correo. */
+  clave?: string
   /** Pista técnica de por qué se escogió este paso. Solo la ve el equipo. */
   motivo?: string
 }
@@ -72,6 +76,8 @@ export async function calcularSiguientePaso(vista: ProyectoVisto): Promise<Sigui
       titulo: 'Lee y acepta las condiciones',
       texto: 'Con eso se activa tu invitación y empezamos con tu proyecto.',
       accion: { texto: 'Ver condiciones', href: '/cortesia' },
+      pideAlgo: true,
+      clave: 'cortesia',
     }
   }
   if (estado === 'pendiente_pago') {
@@ -112,6 +118,8 @@ export async function calcularSiguientePaso(vista: ProyectoVisto): Promise<Sigui
       titulo: 'Sube el documento de tu proyecto',
       texto: 'Es lo que necesitamos para empezar a estructurarlo.',
       accion: { texto: 'Subir documento', href: '/pendientes' },
+      pideAlgo: true,
+      clave: 'subir_documento',
       motivo: `sin trabajo previo: pasos=${pasosEscritos}, árbol=${nodosArbol}, avance=${pasosConAvance}, convocatorias=${convocatoriasEncontradas}, dossier=${hayDossier}, archivo=${Boolean(proyecto.archivo_proyecto_url)}`,
     }
   }
@@ -128,6 +136,8 @@ export async function calcularSiguientePaso(vista: ProyectoVisto): Promise<Sigui
       titulo: preguntasSinResponder === 1 ? 'Responde 1 pregunta' : `Responde ${preguntasSinResponder} preguntas`,
       texto: 'Con tus respuestas seguimos con tu proyecto. Si no las tienes, te sugerimos una respuesta y tú la confirmas.',
       accion: { texto: 'Ir a Lo que me piden', href: '/pendientes' },
+      pideAlgo: true,
+      clave: 'preguntas',
     }
   }
 
@@ -144,6 +154,8 @@ export async function calcularSiguientePaso(vista: ProyectoVisto): Promise<Sigui
       titulo: 'Escoge las convocatorias de tu abanico',
       texto: 'Ya adaptamos tu proyecto a las convocatorias que mejor le quedan. Te toca escoger a cuáles quieres entrar.',
       accion: { texto: 'Escoger mis convocatorias', href: '/mi-abanico' },
+      pideAlgo: true,
+      clave: 'abanico',
     }
   }
   if (abanico?.estado === 'pagado' || abanico?.estado === 'preparando') {
@@ -202,6 +214,8 @@ export async function calcularSiguientePaso(vista: ProyectoVisto): Promise<Sigui
           ? `Y hay ${porCerrar.length - 1} más que cierran esta semana. Revisa qué te falta para postular, porque pasada la fecha ya no se puede.`
           : 'Si vas a postular, hazlo antes de esa fecha. Revisa qué te falta, porque pasada la fecha ya no se puede.',
       accion: { texto: 'Ver mis convocatorias', href: '/mis-convocatorias' },
+      pideAlgo: true,
+      clave: 'cierre',
     }
   }
 
@@ -218,6 +232,8 @@ export async function calcularSiguientePaso(vista: ProyectoVisto): Promise<Sigui
       titulo: 'Elige las convocatorias que te interesan',
       texto: 'Ya encontramos oportunidades para tu proyecto. Escoge con cuáles seguimos.',
       accion: { texto: 'Ver convocatorias', href: '/mis-convocatorias' },
+      pideAlgo: true,
+      clave: 'elegir',
     }
   }
 
@@ -267,6 +283,8 @@ export async function calcularSiguientePaso(vista: ProyectoVisto): Promise<Sigui
         titulo: `Reúne ${unicos.length} ${unicos.length === 1 ? 'documento' : 'documentos'} para postular`,
         texto: `${plazoDocumentos}Te faltan: ${unicos.slice(0, 3).join(', ')}${unicos.length > 3 ? ` y ${unicos.length - 3} más` : ''}. Súbelos y dejamos tu postulación lista.`,
         accion: { texto: 'Reunir mis documentos', href: '/pendientes' },
+        pideAlgo: true,
+        clave: 'documentos',
       }
     }
     return {

@@ -39,6 +39,10 @@
     {
       "path": "/api/avisos-equipo",
       "schedule": "10 13 * * *"
+    },
+    {
+      "path": "/api/seguimiento-cliente",
+      "schedule": "30 13 * * *"
     }
   ]
 }
