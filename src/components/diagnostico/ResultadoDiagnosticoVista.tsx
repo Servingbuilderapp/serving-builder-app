@@ -3,6 +3,8 @@
 import React, { useState } from 'react'
 import { ChevronRight, Download, MessageSquare } from 'lucide-react'
 import { RuedaDiagnostico } from '@/components/diagnostico/RuedaDiagnostico'
+import { RelojProyecto } from '@/components/diagnostico/RelojProyecto'
+import { CRITERIOS_ADN } from '@/lib/relojProyecto'
 import type { DiagnosticoResultadoV2 } from '@/app/api/diagnostico-v2/route'
 import { descargarComoWord, guardarComoPdf } from '@/lib/descargarDocumento'
 
@@ -64,10 +66,20 @@ export function ResultadoDiagnosticoVista({
               </div>
             </div>
 
+            {resultado.nivelMadurez ? (
+              <RelojProyecto
+                nivel={resultado.nivelMadurez}
+                justificacion={resultado.justificacionNivel}
+                nombreProyecto={nombreProyecto}
+              />
+            ) : null}
+
             {resultado.ejesRueda && resultado.ejesRueda.length > 0 && (
               <div className="flex justify-center py-4">
                 <RuedaDiagnostico
-                  titulo="Tu Rueda de Diagnóstico"
+                  titulo={
+                    resultado.ejesRueda[0]?.label === CRITERIOS_ADN[0] ? 'El ADN de tu iniciativa' : 'Tu Rueda de Diagnóstico'
+                  }
                   ejes={resultado.ejesRueda}
                   size={340}
                 />

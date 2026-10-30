@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { randomBytes } from 'crypto'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { callGemini } from '@/lib/gemini'
+import { CRITERIOS_ADN } from '@/lib/relojProyecto'
 
 export const maxDuration = 60
 
@@ -32,6 +33,15 @@ export interface DiagnosticoInputV2 {
   resultadosEsperados: string
   modeloSostenibilidad: string
   estrategiaEscalabilidad: string
+
+  // ADN de la iniciativa (los 6 criterios de autoevaluación). Opcionales: los diagnósticos
+  // viejos no los traen. Los cuatro primeros los escoge el cliente; escala de recursos sale
+  // del presupuesto y el tiempo de ejecución.
+  tipoOrganizacion?: string
+  naturalezaIniciativa?: string
+  capacidadInstalada?: string
+  etapaMadurez?: string
+  alcance?: string
 }
 
 export interface SectorSugerido {
@@ -61,6 +71,10 @@ export interface DiagnosticoResultadoV2 {
   pasosRecomendados: string[]
   notaConceptoMarkdown: string
   ejesRueda: EjeRueda[]
+  /** Etapa de madurez (1 a 4) = la manecilla del Reloj del proyecto. Falta en diagnósticos viejos. */
+  nivelMadurez?: number
+  /** Por qué la IA puso esa etapa; sobre todo si es distinta a la que declaró el cliente. */
+  justificacionNivel?: string
   /** Código largo al azar del enlace personal del cliente (se agrega al guardar). */
   codigoAcceso?: string
 }
@@ -82,16 +96,19 @@ export async function POST(req: Request) {
   ],
   "mecanismosSugeridos": [
     { "nombre": "<ej: Capital Semilla / Fondo Emprender>", "porcentaje": <0-100>, "descripcion": "<1 frase de por qué>" }
-    // hasta 3 mecanismos: capital semilla, cooperación internacional, becas/premios, cofinanciación, crédito/inversión
+    // hasta 3 mecanismos, escogidos SOLO entre estas seis fuentes: cooperación internacional, convocatorias públicas, fundaciones, crowdfunding, banca de desarrollo, inversión privada
   ],
   "brechasCriticas": ["<brecha 1>", "<brecha 2>", "<brecha 3>"],
   "pasosRecomendados": ["<paso 1>", "<paso 2>", "<paso 3>"],
+  "nivelMadurez": <entero 1, 2, 3 o 4: 1 = idea inicial (evidencia baja), 2 = validación o plan piloto (evidencia media), 3 = escalamiento (evidencia medio-alta), 4 = consolidación (evidencia alta). Decídelo por la EVIDENCIA que describe el cliente, no solo por lo que él declaró>,
+  "justificacionNivel": "<1 o 2 frases simples de por qué esa etapa. Si es distinta a la que declaró el cliente, dilo con respeto y explica la evidencia>",
   "ejesRueda": [
-    { "label": "Claridad de la Idea", "score": <0-10>, "recomendacion": "<1 frase corta y clara de qué hacer para mejorar este eje>" },
-    { "label": "Viabilidad", "score": <0-10>, "recomendacion": "<1 frase>" },
-    { "label": "Innovación/Diferenciación", "score": <0-10>, "recomendacion": "<1 frase>" },
-    { "label": "Encaje con el Público", "score": <0-10>, "recomendacion": "<1 frase>" },
-    { "label": "Recursos y Capacidad", "score": <0-10>, "recomendacion": "<1 frase>" }
+    { "label": "Tipo de organización", "score": <0-10>, "recomendacion": "<empieza con lo que detectaste, ej: 'Detectamos: ONG.' y luego 1 frase sobre qué tan bien coincide este tipo de organización con las fuentes de dinero que le convienen>" },
+    { "label": "Naturaleza", "score": <0-10>, "recomendacion": "<empieza con lo que detectaste (impacto social, ambiental, retorno financiero, híbrido u otra) y 1 frase de si coincide con la fuente sugerida; si hay choque, señálalo>" },
+    { "label": "Capacidad", "score": <0-10>, "recomendacion": "<empieza con lo que detectaste; 1 frase sobre si podría cumplir los requisitos administrativos y de reporte, y si le conviene un aliado>" },
+    { "label": "Etapa de madurez", "score": <0-10, coherente con nivelMadurez: 1 → 2 a 3, 2 → 4 a 5, 3 → 6 a 8, 4 → 9 a 10>, "recomendacion": "<empieza con la etapa, ej: 'Etapa: validación.' y 1 frase de qué evidencia le falta para subir>" },
+    { "label": "Alcance", "score": <0-10>, "recomendacion": "<empieza con lo que detectaste (geografía y sector) y 1 frase de si está bien definido>" },
+    { "label": "Escala", "score": <0-10>, "recomendacion": "<empieza con monto y plazo, y 1 frase de si son realistas para su etapa>" }
   ],
   "notaConceptoMarkdown": "<una nota concepto profesional en formato markdown, de 1 a 5 páginas equivalentes de extensión, con secciones: Resumen Ejecutivo, Problema, Solución, Objetivos, Beneficiarios, Presupuesto Estimado, Resultados Esperados, Sostenibilidad y Escalabilidad — lista para usarse como base de un pitch deck. IMPORTANTE: escribe este campo AL FINAL, después de completar todos los demás campos del JSON>"
 }
@@ -110,7 +127,14 @@ Fases del proyecto: ${data.fasesProyecto}
 Tiempo estimado de ejecución: ${data.tiempoEjecucion}
 Resultados esperados: ${data.resultadosEsperados}
 Modelo de sostenibilidad: ${data.modeloSostenibilidad}
-Estrategia de escalabilidad: ${data.estrategiaEscalabilidad}`
+Estrategia de escalabilidad: ${data.estrategiaEscalabilidad}
+
+ADN DE LA INICIATIVA (lo que declaró el cliente; puede venir vacío):
+Tipo de organización: ${data.tipoOrganizacion || 'no indicó'}
+Naturaleza de la iniciativa: ${data.naturalezaIniciativa || 'no indicó'}
+Capacidad instalada (cumplir requisitos administrativos y de reporte): ${data.capacidadInstalada || 'no indicó'}
+Etapa de madurez declarada: ${data.etapaMadurez || 'no indicó'}
+Alcance (geografía y sector): ${data.alcance || 'no indicó'}`
 
     const respuestaIA = await callGemini(prompt)
 
@@ -128,13 +152,27 @@ Estrategia de escalabilidad: ${data.estrategiaEscalabilidad}`
     // de Diagnóstico nunca desaparezca en silencio.
     if (!resultado.ejesRueda || resultado.ejesRueda.length === 0) {
       const scorePromedio = (resultado.scoreGeneral || 50) / 10
-      resultado.ejesRueda = [
-        { label: 'Claridad de la Idea', score: scorePromedio, recomendacion: 'Vuelve a generar el diagnóstico para una recomendación más precisa en este eje.' },
-        { label: 'Viabilidad', score: scorePromedio, recomendacion: 'Vuelve a generar el diagnóstico para una recomendación más precisa en este eje.' },
-        { label: 'Innovación/Diferenciación', score: scorePromedio, recomendacion: 'Vuelve a generar el diagnóstico para una recomendación más precisa en este eje.' },
-        { label: 'Encaje con el Público', score: scorePromedio, recomendacion: 'Vuelve a generar el diagnóstico para una recomendación más precisa en este eje.' },
-        { label: 'Recursos y Capacidad', score: scorePromedio, recomendacion: 'Vuelve a generar el diagnóstico para una recomendación más precisa en este eje.' },
-      ]
+      resultado.ejesRueda = CRITERIOS_ADN.map((label) => ({
+        label,
+        score: scorePromedio,
+        recomendacion: 'Vuelve a generar el diagnóstico para una recomendación más precisa en este criterio.',
+      }))
+    }
+
+    // La etapa debe ser un número de 1 a 4. Si la IA no la devolvió bien, se toma la que declaró
+    // el cliente y, si tampoco, la 1 (la más prudente).
+    const nivelIA = Math.round(Number(resultado.nivelMadurez))
+    if (!(nivelIA >= 1 && nivelIA <= 4)) {
+      const declarada = String(data.etapaMadurez || '').toLowerCase()
+      resultado.nivelMadurez = declarada.includes('consolid')
+        ? 4
+        : declarada.includes('escal')
+          ? 3
+          : declarada.includes('valid') || declarada.includes('piloto')
+            ? 2
+            : 1
+    } else {
+      resultado.nivelMadurez = nivelIA
     }
 
     // Guardar el diagnóstico COMPLETO (resultado + lo que escribió el cliente) con un código

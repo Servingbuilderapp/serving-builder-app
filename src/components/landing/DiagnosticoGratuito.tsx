@@ -32,9 +32,88 @@ const initialForm = {
   resultadosEsperados: '',
   modeloSostenibilidad: '',
   estrategiaEscalabilidad: '',
+  // ADN de la iniciativa (los 6 criterios de autoevaluación)
+  tipoOrganizacion: '',
+  naturalezaIniciativa: '',
+  capacidadInstalada: '',
+  etapaMadurez: '',
+  alcance: '',
 }
 
 type FormData = typeof initialForm
+
+/**
+ * Opciones de ejemplo para el ADN de la iniciativa. Son un punto de partida, no una lista
+ * cerrada: siempre existe «Otro» para que la persona escriba lo suyo.
+ */
+const OPCIONES_TIPO_ORGANIZACION = ['ONG o fundación', 'Entidad pública', 'Empresa', 'Emprendimiento', 'Cooperativa o asociación', 'Persona natural', 'Institución educativa o de investigación']
+const OPCIONES_NATURALEZA = ['Impacto social', 'Impacto ambiental', 'Retorno financiero', 'Híbrido (impacto y retorno)']
+const OPCIONES_CAPACIDAD = [
+  'Alta: puedo cumplir los requisitos y reportes',
+  'Media: puedo cumplir con algo de apoyo',
+  'Baja: me costaría, pero puedo conseguir un aliado que lo cubra',
+  'Baja: me costaría y no tengo aliado',
+]
+const OPCIONES_ETAPA = [
+  'Idea inicial: apenas está naciendo',
+  'Validación: estoy probando con un plan piloto',
+  'Escalamiento: ya funciona y quiero crecer',
+  'Consolidación: está establecido y con evidencia sólida',
+]
+const OPCIONES_ALCANCE = ['Una comunidad', 'Un municipio', 'Regional o departamental', 'Nacional', 'Latinoamérica', 'Mundial']
+
+/** Lista de opciones + «Otro» con casilla para escribir. Guarda el texto final en el formulario. */
+function CampoOpcion({
+  etiqueta,
+  opciones,
+  valor,
+  onCambio,
+  ayuda,
+}: {
+  etiqueta: string
+  opciones: string[]
+  valor: string
+  onCambio: (v: string) => void
+  ayuda?: string
+}) {
+  const esOtro = valor !== '' && !opciones.includes(valor)
+  const [otro, setOtro] = useState(esOtro)
+  return (
+    <div>
+      <label className={labelClass}>{etiqueta}</label>
+      <select
+        value={otro ? '__otro__' : valor}
+        onChange={(e) => {
+          if (e.target.value === '__otro__') {
+            setOtro(true)
+            onCambio('')
+          } else {
+            setOtro(false)
+            onCambio(e.target.value)
+          }
+        }}
+        className={inputClass}
+      >
+        <option value="">Escoge una opción</option>
+        {opciones.map((o) => (
+          <option key={o} value={o}>
+            {o}
+          </option>
+        ))}
+        <option value="__otro__">Otro (lo escribo yo)</option>
+      </select>
+      {otro ? (
+        <input
+          value={valor}
+          onChange={(e) => onCambio(e.target.value)}
+          className={inputClass + ' mt-2'}
+          placeholder="Escríbelo con tus palabras"
+        />
+      ) : null}
+      {ayuda ? <p className="mt-1 text-[11px] text-color-base-content/60">{ayuda}</p> : null}
+    </div>
+  )
+}
 
 // El color del texto va explícito: sin él, el input heredaba el color claro del
 // tema oscuro y lo que el usuario escribía quedaba invisible sobre el fondo blanco.
@@ -233,6 +312,22 @@ export function DiagnosticoGratuito() {
               <Coins className="h-5 w-5 text-color-primary" />
               Requerimientos, Viabilidad y Sostenibilidad
             </h3>
+            <div className="rounded-2xl border border-color-primary/25 bg-color-primary/5 p-4 md:p-5 space-y-4">
+              <div>
+                <h4 className="text-sm font-black uppercase tracking-wider text-color-primary">El ADN de tu iniciativa</h4>
+                <p className="text-xs text-color-base-content/70 mt-1">
+                  Cuatro respuestas rápidas. Con ellas ubicamos tu proyecto en el reloj y te decimos qué camino de financiación
+                  te conviene. Las opciones son ejemplos: si la tuya no está, escoge «Otro» y escríbela.
+                </p>
+              </div>
+              <div className="grid md:grid-cols-2 gap-6">
+                <CampoOpcion etiqueta="Tipo de organización *" opciones={OPCIONES_TIPO_ORGANIZACION} valor={formData.tipoOrganizacion} onCambio={(v) => handleChange('tipoOrganizacion', v)} />
+                <CampoOpcion etiqueta="Naturaleza de tu iniciativa *" opciones={OPCIONES_NATURALEZA} valor={formData.naturalezaIniciativa} onCambio={(v) => handleChange('naturalezaIniciativa', v)} ayuda="¿Qué buscas lograr con ella?" />
+                <CampoOpcion etiqueta="Capacidad instalada" opciones={OPCIONES_CAPACIDAD} valor={formData.capacidadInstalada} onCambio={(v) => handleChange('capacidadInstalada', v)} ayuda="¿Podrías cumplir los requisitos administrativos y de reporte que piden los fondos?" />
+                <CampoOpcion etiqueta="Etapa de tu proyecto *" opciones={OPCIONES_ETAPA} valor={formData.etapaMadurez} onCambio={(v) => handleChange('etapaMadurez', v)} />
+                <CampoOpcion etiqueta="Alcance" opciones={OPCIONES_ALCANCE} valor={formData.alcance} onCambio={(v) => handleChange('alcance', v)} ayuda="¿Hasta dónde llega tu proyecto? Ya nos contaste la ubicación; aquí buscamos su cobertura." />
+              </div>
+            </div>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <label className={labelClass}>Presupuesto estimado o solicitado *</label>
@@ -271,7 +366,7 @@ export function DiagnosticoGratuito() {
             <div className="flex justify-between pt-4">
               <button type="button" onClick={() => setStep(2)} className="px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-color-base-content/60 hover:text-color-base-content transition-colors">Volver</button>
               <GlowButton
-                disabled={loading || !formData.presupuesto || !formData.tiempoEjecucion || !formData.resultadosEsperados}
+                disabled={loading || !formData.presupuesto || !formData.tiempoEjecucion || !formData.resultadosEsperados || !formData.tipoOrganizacion || !formData.naturalezaIniciativa || !formData.etapaMadurez}
                 onClick={handleSubmit}
                 className="px-8 py-3 text-xs font-black tracking-widest gap-2 bg-gradient-to-r from-color-primary to-teal-500"
               >
