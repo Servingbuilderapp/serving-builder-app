@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { marcarDiagnosticoHecho } from '@/components/landing/AccesoDiagnostico'
 import { ChevronRight, Download, MessageSquare } from 'lucide-react'
 import { RuedaDiagnostico } from '@/components/diagnostico/RuedaDiagnostico'
 import { RelojProyecto } from '@/components/diagnostico/RelojProyecto'
@@ -24,6 +25,11 @@ export function ResultadoDiagnosticoVista({
   mostrarCierre?: boolean
 }) {
   const [verNotaConcepto, setVerNotaConcepto] = useState(false)
+
+  // Al ver su resultado completo, el cliente queda habilitado para entrar a los planes del website.
+  useEffect(() => {
+    if (mostrarCierre) marcarDiagnosticoHecho()
+  }, [mostrarCierre])
 
   const whatsappLink = `https://wa.me/573123335966?text=${encodeURIComponent(
     `Hola Arquitectura Digital, acabo de realizar mi diagnóstico gratuito para "${nombreProyecto}". Obtuve ${resultado.scoreGeneral}% de viabilidad y quiero avanzar con la estructuración de mi proyecto.`,

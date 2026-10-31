@@ -1,9 +1,9 @@
 'use client'
 
 import React from 'react'
-import Link from 'next/link'
 import { ArrowRight, BookOpen, Briefcase, Crown, Check } from 'lucide-react'
 import { useTranslation } from '@/hooks/useTranslation'
+import { EnlaceConAcceso } from '@/components/landing/AccesoDiagnostico'
 
 /**
  * Bloque que va justo debajo del video de bienvenida (decisión del dueño, 29-30 oct 2026):
@@ -52,13 +52,16 @@ export function CaminoFinanciacion() {
                   </li>
                 ))}
               </ul>
-              <Link
-                href={href}
-                className={`mt-6 h-11 px-5 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-sm font-semibold ${RELIEVE_BOTON}`}
-              >
-                {t(`w.camino.${clave}.boton`)}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+              <div className="mt-6">
+                <EnlaceConAcceso
+                  href={href}
+                  avisoClase="text-[#5A3A2E]"
+                  className={`h-11 px-5 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-sm font-semibold ${RELIEVE_BOTON}`}
+                >
+                  {t(`w.camino.${clave}.boton`)}
+                  <ArrowRight className="h-4 w-4" />
+                </EnlaceConAcceso>
+              </div>
             </div>
           ))}
         </div>
