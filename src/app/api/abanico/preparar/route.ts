@@ -32,6 +32,36 @@ const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env
 
 const MAX_REINTENTOS = 2
 
+/**
+ * Evita convocatorias repetidas con el nombre escrito distinto
+ * ("IKI Medium Grants 2026 (IMG Call 2026)" y "IKI Medium Grants - Convocatoria 2026").
+ * Se comparan las palabras que importan: si casi todas las de la más corta están en la otra,
+ * son la misma convocatoria.
+ */
+const PALABRAS_VACIAS = new Set([
+  'de', 'del', 'la', 'el', 'las', 'los', 'y', 'e', 'en', 'para', 'con', 'por', 'a', 'al', 'un', 'una', 'o', 'u',
+  'the', 'of', 'for', 'and', 'to', 'in', 'call', 'calls', 'convocatoria', 'convocatorias', 'programa', 'proyectos', 'proyecto',
+])
+
+function huellaNombre(nombre: string | null | undefined): Set<string> {
+  const palabras = String(nombre || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .split(/\s+/)
+    .filter((p) => p.length > 1 && !PALABRAS_VACIAS.has(p))
+  return new Set(palabras)
+}
+
+function sonLaMisma(a: Set<string>, b: Set<string>): boolean {
+  const [corta, larga] = a.size <= b.size ? [a, b] : [b, a]
+  if (corta.size < 3) return false
+  let dentro = 0
+  for (const p of corta) if (larga.has(p)) dentro += 1
+  return dentro / corta.size >= 0.8
+}
+
 const COLUMNAS_BASE =
   'id, nombre, entidad, sector, objetivo, linea_tematica, territorio, paises_elegibles, tipo_postulante, monto_maximo, moneda, contrapartida_exigida, contrapartida_detalle, requisitos_habilitantes, fecha_cierre, fuente_oficial, enlace_aplicacion'
 const COLUMNAS_CON_CONDICIONES = `${COLUMNAS_BASE}, consorcio_obligatorio, madurez_financiable, verificada_en`
@@ -131,10 +161,11 @@ export async function POST(req: NextRequest) {
     }
 
     /* ---- las que ya están hechas ---- */
-    const { data: hechas } = await supabase.from('replicas').select('biblioteca_id').eq('abanico_id', abanico.id)
+    const { data: hechas } = await supabase.from('replicas').select('biblioteca_id, destino').eq('abanico_id', abanico.id)
     const yaHechas = new Set(
       ((hechas || []) as { biblioteca_id: string | null }[]).map((r) => String(r.biblioteca_id)).filter((v) => v !== 'null'),
     )
+    const huellasElegidas: Set<string>[] = ((hechas || []) as { destino: string | null }[]).map((r) => huellaNombre(r.destino))
     const cantidadHecha = (hechas || []).length
 
     if (cantidadHecha >= TOTAL_ABANICO) {
@@ -193,7 +224,15 @@ export async function POST(req: NextRequest) {
       .sort((a, b) => b.r.puntaje - a.r.puntaje)
 
     const porHacer = Math.min(LOTE_ABANICO, TOTAL_ABANICO - cantidadHecha)
-    const elegidas = candidatas.slice(0, porHacer)
+    const elegidas: typeof candidatas = []
+    for (const cand of candidatas) {
+      if (elegidas.length >= porHacer) break
+      const huella = huellaNombre(cand.c.nombre)
+      // Si se parece a una que ya está en el abanico (o a otra de esta tanda), se salta.
+      if (huellasElegidas.some((h) => sonLaMisma(h, huella))) continue
+      huellasElegidas.push(huella)
+      elegidas.push(cand)
+    }
 
     // No quedan más convocatorias que le queden bien: el abanico queda con las que ya hay.
     if (elegidas.length === 0) {
