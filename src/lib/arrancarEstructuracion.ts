@@ -31,7 +31,7 @@ export function sumarDiasHabiles(desde: Date, dias: number): Date {
 
 export type ResultadoArranque = {
   arrancado: boolean
-  motivo?: 'sin-documento' | 'sin-llaves' | 'error'
+  motivo?: 'sin-documento' | 'sin-llaves' | 'sin-contrato' | 'error'
   documento?: string
 }
 
@@ -61,6 +61,17 @@ export async function arrancarEstructuracion(
 
   try {
     const servicio = createClient(url, llave)
+
+    // Regla fija del dueño: NINGÚN proyecto arranca sin contrato aceptado
+    // (de pago, de cortesía o de marca blanca). Es la compuerta única: todos
+    // los caminos que arrancan la estructuración pasan por esta función.
+    const { data: contrato } = await servicio
+      .from('proyectos_clientes_serving')
+      .select('contrato_firmado, firma_digital')
+      .eq('id', proyectoId)
+      .maybeSingle<{ contrato_firmado: boolean | null; firma_digital: { aceptado?: boolean } | null }>()
+    const aceptoContrato = !!contrato?.contrato_firmado || !!contrato?.firma_digital?.aceptado
+    if (!aceptoContrato) return { arrancado: false, motivo: 'sin-contrato' }
 
     // El documento con el que se arranca es el último que subió el cliente y
     // que el motor pueda leer.

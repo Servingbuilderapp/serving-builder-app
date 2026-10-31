@@ -411,7 +411,7 @@ function ContratarContent() {
                       onChange={(e) => setFormData({ ...formData, declaracionBajosRecursos: e.target.checked })}
                       className="mt-1"
                     />
-                    <span className="text-xs font-bold text-color-base-content">{DECLARACION_EMPRENDEDOR}</span>
+                    <span className="text-xs font-bold text-amber-900">{DECLARACION_EMPRENDEDOR}</span>
                   </label>
                 </div>
               )}

@@ -114,12 +114,12 @@ export function ResultadoDiagnosticoVista({
               <h4 className="text-sm font-black uppercase tracking-wider text-color-base-content/80 mb-4">Mecanismos de Financiamiento Recomendados</h4>
               <div className="grid md:grid-cols-3 gap-4">
                 {resultado.mecanismosSugeridos.map((m, i) => (
-                  <div key={i} className="p-4 rounded-2xl bg-white/60 border border-color-base-200 space-y-2">
+                  <div key={i} className="p-4 rounded-2xl bg-[#F3E7DC] border border-[#B08D57]/50 space-y-2">
                     <div className="flex justify-between items-center">
-                      <span className="text-xs font-bold text-color-base-content">{m.nombre}</span>
-                      <span className="text-lg font-black text-color-primary">{m.porcentaje}%</span>
+                      <span className="text-xs font-bold text-[#3A1420]">{m.nombre}</span>
+                      <span className="text-lg font-black text-[#8C3654]">{m.porcentaje}%</span>
                     </div>
-                    <p className="text-[11px] text-color-base-content/70">{m.descripcion}</p>
+                    <p className="text-[11px] text-[#5A3A2E]">{m.descripcion}</p>
                   </div>
                 ))}
               </div>
