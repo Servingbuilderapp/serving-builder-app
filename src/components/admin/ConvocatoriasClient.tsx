@@ -881,29 +881,28 @@ function CargarLista({ onCerrar }: { onCerrar: () => void }) {
 
   const cargar = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!texto.trim()) {
-      setError('Pega al menos una línea con el nombre y el enlace.')
-      return
-    }
     setTrabajando(true)
     setError(null)
     setResultado(null)
     setAviso(null)
     try {
-      setProgreso('Guardando las convocatorias…')
-      const res = await fetch('/api/centinela/cargar-lista', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ texto }),
-      })
-      const json = await res.json()
-      if (!res.ok) throw new Error(json?.error || 'No se pudo guardar la lista')
+      // Con el cuadro vacío no se guarda nada nuevo: solo se siguen leyendo enlaces y bajando términos.
+      if (texto.trim()) {
+        setProgreso('Guardando las convocatorias…')
+        const res = await fetch('/api/centinela/cargar-lista', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ texto }),
+        })
+        const json = await res.json()
+        if (!res.ok) throw new Error(json?.error || 'No se pudo guardar la lista')
 
-      const partes = [`Listo: guardé ${json.guardadas} de ${json.lineas} líneas.`]
-      if (json.noGuardadas > 0) partes.push(`${json.noGuardadas} no se guardaron (becas, premios, empleos o repetidas).`)
-      if (json.sinEnlace?.length > 0) partes.push(`${json.sinEnlace.length} líneas no tenían enlace y se saltaron.`)
-      setResultado(partes.join(' '))
-      setTexto('')
+        const partes = [`Listo: guardé ${json.guardadas} de ${json.lineas} líneas.`]
+        if (json.noGuardadas > 0) partes.push(`${json.noGuardadas} no se guardaron (becas, premios, empleos o repetidas).`)
+        if (json.sinEnlace?.length > 0) partes.push(`${json.sinEnlace.length} líneas no tenían enlace y se saltaron.`)
+        setResultado(partes.join(' '))
+        setTexto('')
+      }
 
       // Ahora la plataforma lee cada enlace oficial y completa fechas, monto y requisitos.
       let leidas = 0
@@ -921,8 +920,25 @@ function CargarLista({ onCerrar }: { onCerrar: () => void }) {
           setAviso('Quedaron enlaces por leer. Vuelve a abrir este cargador y se siguen leyendo.')
         }
       }
+      // Después baja los términos de referencia de cada convocatoria, pasada tras pasada,
+      // hasta que no quede ninguna por intentar (no hay que esperar a la corrida automática).
+      let bajados = 0
+      for (let vuelta = 1; vuelta <= MAXIMO_VUELTAS_LECTURA; vuelta++) {
+        setProgreso(`Bajando los términos de referencia… (${bajados} revisadas; deja esta pantalla abierta)`)
+        const descarga = await fetch('/api/centinela/descargar-terminos?lote=8')
+        const datosDescarga = await descarga.json().catch(() => ({}))
+        if (!descarga.ok) {
+          setAviso(`La bajada de términos paró: ${datosDescarga?.error || 'error'}. Se puede repetir abriendo este cargador otra vez.`)
+          break
+        }
+        bajados += datosDescarga.revisadas || 0
+        if (!datosDescarga.revisadas) break
+        if (vuelta === MAXIMO_VUELTAS_LECTURA && datosDescarga.faltan_por_descargar > 0) {
+          setAviso(`Faltan ${datosDescarga.faltan_por_descargar} por bajar. Abre este cargador otra vez (con el cuadro vacío) y se siguen bajando.`)
+        }
+      }
       setProgreso(null)
-      setResultado((r) => `${r || ''} Enlaces leídos: ${leidas}. Recarga la página para ver las fichas.`)
+      setResultado((r) => `${r || ''} Enlaces leídos: ${leidas}. Términos revisados: ${bajados}. Recarga la página para ver las fichas.`)
     } catch (err) {
       setError((err as Error).message)
     } finally {
