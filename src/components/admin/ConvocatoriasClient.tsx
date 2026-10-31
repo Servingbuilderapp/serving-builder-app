@@ -107,6 +107,7 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
   const [documentoPara, setDocumentoPara] = useState<Convocatoria | null>(null)
   const [condicionesPara, setCondicionesPara] = useState<Convocatoria | null>(null)
   const [subiendoBoletin, setSubiendoBoletin] = useState(false)
+  const [cargandoLista, setCargandoLista] = useState(false)
 
   const filtradas = useMemo(() => {
     const busqueda = texto.trim().toLowerCase()
@@ -180,6 +181,14 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
         >
           <FileUp className="h-4 w-4" />
           Subir un boletín
+        </button>
+        <button
+          type="button"
+          onClick={() => setCargandoLista(true)}
+          className="shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-color-primary/40 text-color-primary font-bold text-sm hover:bg-color-primary/10 transition-all"
+        >
+          <ClipboardCheck className="h-4 w-4" />
+          Cargar lista (nombre y enlace)
         </button>
         </div>
       </div>
@@ -421,6 +430,7 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
       )}
 
       {subiendoBoletin && <SubirBoletin onCerrar={() => setSubiendoBoletin(false)} />}
+      {cargandoLista && <CargarLista onCerrar={() => setCargandoLista(false)} />}
 
       {condicionesPara && (
         <CompletarCondiciones
@@ -844,6 +854,126 @@ function SubirBoletin({ onCerrar }: { onCerrar: () => void }) {
             className="px-5 py-2.5 rounded-xl bg-color-primary text-white text-sm font-bold hover:brightness-110 disabled:opacity-50"
           >
             {trabajando ? 'Leyendo…' : 'Leer y guardar'}
+          </button>
+        </div>
+      </form>
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------------ */
+/* Cargador simple: varias líneas «nombre + enlace oficial»                  */
+/* ------------------------------------------------------------------------ */
+
+const LOTE_LECTURA_ENLACES = 8
+/** Tope de vueltas de lectura por vez (8 por vuelta): 15 vueltas ≈ 120 enlaces. */
+const MAXIMO_VUELTAS_LECTURA = 15
+
+function CargarLista({ onCerrar }: { onCerrar: () => void }) {
+  const [texto, setTexto] = useState('')
+  const [trabajando, setTrabajando] = useState(false)
+  const [progreso, setProgreso] = useState<string | null>(null)
+  const [resultado, setResultado] = useState<string | null>(null)
+  const [aviso, setAviso] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+
+  const campo = 'w-full px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm'
+
+  const cargar = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!texto.trim()) {
+      setError('Pega al menos una línea con el nombre y el enlace.')
+      return
+    }
+    setTrabajando(true)
+    setError(null)
+    setResultado(null)
+    setAviso(null)
+    try {
+      setProgreso('Guardando las convocatorias…')
+      const res = await fetch('/api/centinela/cargar-lista', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ texto }),
+      })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json?.error || 'No se pudo guardar la lista')
+
+      const partes = [`Listo: guardé ${json.guardadas} de ${json.lineas} líneas.`]
+      if (json.noGuardadas > 0) partes.push(`${json.noGuardadas} no se guardaron (becas, premios, empleos o repetidas).`)
+      if (json.sinEnlace?.length > 0) partes.push(`${json.sinEnlace.length} líneas no tenían enlace y se saltaron.`)
+      setResultado(partes.join(' '))
+      setTexto('')
+
+      // Ahora la plataforma lee cada enlace oficial y completa fechas, monto y requisitos.
+      let leidas = 0
+      for (let vuelta = 1; vuelta <= MAXIMO_VUELTAS_LECTURA; vuelta++) {
+        setProgreso(`Leyendo los enlaces para completar los datos… (${leidas} leídos)`)
+        const lectura = await fetch(`/api/centinela/leer-enlaces?lote=${LOTE_LECTURA_ENLACES}`)
+        const datos = await lectura.json().catch(() => ({}))
+        if (!lectura.ok) {
+          setAviso(`La lista quedó guardada, pero la lectura de enlaces paró: ${datos?.error || 'error'}. Se puede repetir después.`)
+          break
+        }
+        leidas += datos.revisadas || 0
+        if (!datos.revisadas) break
+        if (vuelta === MAXIMO_VUELTAS_LECTURA) {
+          setAviso('Quedaron enlaces por leer. Vuelve a abrir este cargador y se siguen leyendo.')
+        }
+      }
+      setProgreso(null)
+      setResultado((r) => `${r || ''} Enlaces leídos: ${leidas}. Recarga la página para ver las fichas.`)
+    } catch (err) {
+      setError((err as Error).message)
+    } finally {
+      setTrabajando(false)
+      setProgreso(null)
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/40 overflow-y-auto p-4">
+      <form onSubmit={cargar} className="max-w-xl mx-auto my-8 bg-[#3B1727] rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h2 className="text-lg font-black text-color-base-content">Cargar lista de convocatorias</h2>
+            <p className="text-sm text-color-base-content/60 mt-1">Una por línea: nombre y enlace oficial</p>
+          </div>
+          <button type="button" onClick={onCerrar} className="p-2 rounded-lg hover:bg-color-base-200">
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        <p className="text-xs text-color-base-content/60 leading-relaxed">
+          Pega una convocatoria por línea, con su nombre y su enlace oficial. Máximo 500 líneas por vez. Guardar es
+          gratis y no tiene límite diario. Después la plataforma lee cada enlace y completa las fechas, el monto y los
+          requisitos (esa lectura sí usa IA, por eso se hace de a ocho). Las repetidas no se duplican. Solo se guardan
+          convocatorias de financiación: becas, premios y empleos se descartan.
+        </p>
+
+        <textarea
+          value={texto}
+          onChange={(ev) => setTexto(ev.target.value)}
+          rows={10}
+          className={campo}
+          placeholder={'Convocatoria Innovación Verde, https://entidad.gov.co/innovacion\nFondo Mujeres Rurales, https://otraentidad.org/mujeres'}
+        />
+
+        {progreso && <p className="text-xs font-bold text-color-primary">{progreso}</p>}
+        {error && <p className="text-xs font-bold text-red-500">{error}</p>}
+        {resultado && <p className="text-xs font-bold text-color-primary">{resultado}</p>}
+        {aviso && <p className="text-xs font-bold text-[#E0B868]">{aviso}</p>}
+
+        <div className="flex justify-end gap-3">
+          <button type="button" onClick={onCerrar} className="px-4 py-2.5 rounded-xl text-sm font-bold hover:bg-color-base-200">
+            Cerrar
+          </button>
+          <button
+            type="submit"
+            disabled={trabajando}
+            className="px-5 py-2.5 rounded-xl bg-color-primary text-white text-sm font-bold hover:brightness-110 disabled:opacity-50"
+          >
+            {trabajando ? 'Trabajando…' : 'Subir'}
           </button>
         </div>
       </form>

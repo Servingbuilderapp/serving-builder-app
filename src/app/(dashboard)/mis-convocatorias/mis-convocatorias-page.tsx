@@ -39,6 +39,7 @@ type FilaConvocatoria = {
   beneficiarios?: string | null
   razon_relevancia?: string | null
   biblioteca_id?: string | null
+  eleccion_cliente?: string | null
 }
 
 type FilaEncaje = {
@@ -182,10 +183,10 @@ async function contenidoConvocatorias(vista: ProyectoVisto) {
 
   const { data: filas } = await supabase
     .from('convocatorias_candidatas_proyecto')
-    .select('id, nombre, entidad, tipo, fecha_cierre, monto, fuente_oficial, linea_tematica, territorio, beneficiarios, biblioteca_id')
+    .select('id, nombre, entidad, tipo, fecha_cierre, monto, fuente_oficial, linea_tematica, territorio, beneficiarios, biblioteca_id, eleccion_cliente')
     .eq('id_proyecto', proyectoId)
     .eq('seleccionada', true)
-    .eq('eleccion_cliente', 'elegida')
+    .in('eleccion_cliente', ['elegida', 'en_espera', 'permiso_pedido'])
     .order('lote', { ascending: false })
     .order('creado_en', { ascending: false })
 
@@ -306,6 +307,9 @@ async function contenidoConvocatorias(vista: ProyectoVisto) {
           }
         : null,
       postulacion,
+      bibliotecaId: c.biblioteca_id ? String(c.biblioteca_id) : null,
+      enEspera: c.eleccion_cliente === 'en_espera',
+      permisoPedido: c.eleccion_cliente === 'permiso_pedido',
     }
   })
 
@@ -318,11 +322,11 @@ async function contenidoConvocatorias(vista: ProyectoVisto) {
           <ElegirConvocatorias proyectoId={proyectoId} convocatorias={pendientes} />
         )}
         <div className="-mx-4 lg:-mx-6">
-          <ConvocatoriasCliente convocatorias={convocatorias} />
+          <ConvocatoriasCliente convocatorias={convocatorias} proyectoId={vista.vistaEquipo ? undefined : proyectoId} />
         </div>
       </div>
     )
   }
 
-  return <ConvocatoriasCliente convocatorias={convocatorias} />
+  return <ConvocatoriasCliente convocatorias={convocatorias} proyectoId={vista.vistaEquipo ? undefined : proyectoId} />
 }

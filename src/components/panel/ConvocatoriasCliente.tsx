@@ -24,6 +24,7 @@ import {
   separarLinea,
 } from '@/components/panel/ElegirConvocatorias'
 import type { VeredictoElegibilidad } from '@/lib/elegibilidad'
+import { BotonQuieroPostular } from '@/components/panel/BotonQuieroPostular'
 
 /* ========================================================================== */
 /* Tipos                                                                      */
@@ -78,6 +79,12 @@ export type ConvocatoriaCliente = {
   encaje: EncajeCliente | null
   /** null = todavía no arrancó ningún trámite de postulación para esta convocatoria. */
   postulacion: PostulacionCliente
+  /** Id en la biblioteca: lo necesita el botón «Quiero postular». */
+  bibliotecaId?: string | null
+  /** El cliente la dejó «en espera» (ni postula ni descarta todavía). */
+  enEspera?: boolean
+  /** El cliente ya usó su cupo semanal y pidió permiso para esta. */
+  permisoPedido?: boolean
 }
 
 /* ========================================================================== */
@@ -334,7 +341,7 @@ function QueTeToca({ convocatoria }: { convocatoria: ConvocatoriaCliente }) {
   )
 }
 
-function TarjetaConvocatoria({ convocatoria }: { convocatoria: ConvocatoriaCliente }) {
+function TarjetaConvocatoria({ convocatoria, proyectoId }: { convocatoria: ConvocatoriaCliente; proyectoId?: string }) {
   const [abierta, setAbierta] = useState(false)
   const encaje = convocatoria.encaje
   const semaforo = estiloSemaforo(encaje?.semaforo || null)
@@ -405,6 +412,10 @@ function TarjetaConvocatoria({ convocatoria }: { convocatoria: ConvocatoriaClien
         </div>
 
         <EstadoPostulacionBanner postulacion={convocatoria.postulacion} />
+
+        {!convocatoria.postulacion && convocatoria.encaje && convocatoria.bibliotecaId && proyectoId ? (
+          <BotonQuieroPostular proyectoId={proyectoId} bibliotecaId={convocatoria.bibliotecaId} candidataId={convocatoria.id} enEspera={convocatoria.enEspera} permisoPedido={convocatoria.permisoPedido} />
+        ) : null}
 
         <QueTeToca convocatoria={convocatoria} />
 
@@ -533,7 +544,8 @@ function TarjetaConvocatoria({ convocatoria }: { convocatoria: ConvocatoriaClien
 /* Pantalla                                                                   */
 /* ========================================================================== */
 
-export function ConvocatoriasCliente({ convocatorias }: { convocatorias: ConvocatoriaCliente[] }) {
+/** proyectoId solo se pasa cuando quien mira es el cliente (el equipo ve sin botones). */
+export function ConvocatoriasCliente({ convocatorias, proyectoId }: { convocatorias: ConvocatoriaCliente[]; proyectoId?: string }) {
   const conEncaje = convocatorias.filter((c) => typeof c.encaje?.puntaje === 'number').length
 
   return (
@@ -551,7 +563,7 @@ export function ConvocatoriasCliente({ convocatorias }: { convocatorias: Convoca
 
       <div className="grid items-start gap-4 md:grid-cols-2 xl:grid-cols-3">
         {convocatorias.map((c) => (
-          <TarjetaConvocatoria key={c.id} convocatoria={c} />
+          <TarjetaConvocatoria key={c.id} convocatoria={c} proyectoId={proyectoId} />
         ))}
       </div>
     </div>

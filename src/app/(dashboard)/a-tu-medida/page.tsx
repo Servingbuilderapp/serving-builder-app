@@ -27,10 +27,9 @@ const COLUMNAS_CON_CONDICIONES = `${COLUMNAS_BASE}, consorcio_obligatorio, madur
 const UMBRALES = [
   { valor: 80, etiqueta: 'Muy buenas · 80 % o más' },
   { valor: 60, etiqueta: 'Buenas · 60 % o más' },
-  { valor: 40, etiqueta: 'Ver más · 40 % o más' },
 ]
 
-const MAXIMO_EN_PANTALLA = 40
+const MAXIMO_EN_PANTALLA = 100
 
 function pesos(valor: number, moneda?: string | null): string {
   const codigo = (moneda || 'COP').toUpperCase()
@@ -54,7 +53,7 @@ export default async function ATuMedidaPage({
 }) {
   const params = searchParams ? await searchParams : undefined
   const vista = await resolverProyectoVisto(params?.proyecto)
-  const minimo = [40, 60, 80].includes(Number(params?.minimo)) ? Number(params?.minimo) : 60
+  const minimo = [60, 80].includes(Number(params?.minimo)) ? Number(params?.minimo) : 60
   const aProyecto = vista.vistaEquipo ? `&proyecto=${vista.proyectoId}` : ''
 
   if (!vista.proyectoId) {
@@ -137,9 +136,9 @@ export default async function ATuMedidaPage({
     .map((c) => ({ c, resultado: puntuarConvocatoria(c, claves, perfil) }))
     .sort((a, b) => b.resultado.puntaje - a.resultado.puntaje)
 
-  const conteo = { 80: 0, 60: 0, 40: 0 } as Record<number, number>
+  const conteo = { 80: 0, 60: 0 } as Record<number, number>
   for (const p of puntuadas) {
-    for (const u of [80, 60, 40]) if (p.resultado.puntaje >= u) conteo[u] += 1
+    for (const u of [80, 60]) if (p.resultado.puntaje >= u) conteo[u] += 1
   }
   const visibles = puntuadas.filter((p) => p.resultado.puntaje >= minimo).slice(0, MAXIMO_EN_PANTALLA)
 
@@ -182,7 +181,7 @@ export default async function ATuMedidaPage({
 
         {visibles.length === 0 ? (
           <div className="mt-6 rounded-xl border border-[#B08D57]/40 bg-[#4C2032] p-5 text-sm">
-            Todavía no hay convocatorias con ese nivel. Prueba con «Ver más» para ver más opciones.
+            Todavía no hay convocatorias con ese nivel de encaje. Cada día se suman más a la biblioteca; vuelve pronto.
           </div>
         ) : (
           <div className="mt-4 space-y-3">
