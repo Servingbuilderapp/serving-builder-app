@@ -53,10 +53,42 @@ export async function POST(req: NextRequest) {
     }
 
     const candidatas: string[] = []
+    let fallos = 0
     for (const replica of delAbanico.filter((r) => elegidasIds.includes(String(r.id)))) {
-      if (!replica.biblioteca_id) continue
+      if (!replica.biblioteca_id) {
+        fallos++
+        continue
+      }
       const resultado = await elegirConvocatoriaDeBiblioteca(supabase, String(abanico.proyecto_id), String(replica.biblioteca_id))
-      if (resultado.ok && resultado.idCandidata && !resultado.yaElegida) candidatas.push(resultado.idCandidata)
+      if (!resultado.ok) {
+        console.error('[abanico/confirmar] No se pudo guardar una convocatoria elegida:', resultado.error)
+        fallos++
+        continue
+      }
+      if (resultado.idCandidata && !resultado.yaElegida) candidatas.push(resultado.idCandidata)
+    }
+
+    // Si alguna no se pudo guardar, NO se confirma el abanico ni se le dice "Listo" al cliente:
+    // se le avisa para que pueda intentar de nuevo. Las que sí se guardaron siguen su análisis.
+    if (fallos > 0) {
+      const origenFallo = req.nextUrl.origin
+      for (const id_convocatoria of candidatas) {
+        after(async () => {
+          try {
+            await fetch(`${origenFallo}/api/analizar-encaje`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', ...cabecerasInternas() },
+              body: JSON.stringify({ id_convocatoria }),
+            })
+          } catch (e) {
+            console.error('[abanico/confirmar] Error disparando el análisis de encaje:', e)
+          }
+        })
+      }
+      return NextResponse.json(
+        { error: 'No pudimos guardar todas las convocatorias que escogiste. Tu abanico sigue sin confirmar: inténtalo de nuevo en unos minutos.' },
+        { status: 500 },
+      )
     }
 
     await supabase.from('replicas').update({ abanico_eleccion: 'elegida' }).in('id', elegidasIds)
