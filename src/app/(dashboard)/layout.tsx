@@ -5,6 +5,7 @@ import { PanelShell } from '@/components/panel/PanelShell'
 import { esEquipoServing } from '@/lib/guardiaEquipo'
 import { calcularSiguientePaso } from '@/lib/siguientePaso'
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import { PuertaCortesia } from '@/components/panel/PuertaCortesia'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -118,6 +119,24 @@ export default async function LayoutPanel({ children }: { children: React.ReactN
   // de Serving, el socio no las necesita ni las contrató).
   const esClienteMarcaBlanca = !esAdmin && !esSocio && proyecto?.canal_origen === 'marca_blanca'
 
+  // Puerta obligatoria: un cliente con cortesía que aún no aceptó el contrato
+  // solo ve la pantalla de aceptación, sin importar a qué sección entre.
+  let puerta: { nombre: string | null; comision_pct: number; dias: number } | null = null
+  if (!esAdmin && !esSocio && proyecto?.plan_pago === 'cortesia') {
+    try {
+      const { data: cort } = await supabaseAdmin
+        .from('cortesias')
+        .select('nombre, comision_pct, dias, acepto_en')
+        .ilike('correo', correo.toLowerCase().trim())
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle<{ nombre: string | null; comision_pct: number; dias: number; acepto_en: string | null }>()
+      if (cort && !cort.acepto_en) puerta = { nombre: cort.nombre, comision_pct: cort.comision_pct, dias: cort.dias }
+    } catch {
+      puerta = null
+    }
+  }
+
   return (
     <PanelShell
       proyecto={
@@ -136,7 +155,7 @@ export default async function LayoutPanel({ children }: { children: React.ReactN
       aviso={aviso}
       numeroAlertas={esAdmin ? alertasEquipo : aviso?.accion ? 1 : 0}
     >
-      {children}
+      {puerta ? <PuertaCortesia nombre={puerta.nombre} comisionPct={puerta.comision_pct} dias={puerta.dias} /> : children}
     </PanelShell>
   )
 }

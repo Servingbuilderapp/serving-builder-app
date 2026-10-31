@@ -6,7 +6,7 @@
  * sitio, para que lo vea igual el cliente (pantalla «Mi cortesía») y el equipo.
  */
 
-export const COMISION_CORTESIA_POR_DEFECTO = 15
+export const COMISION_CORTESIA_POR_DEFECTO = 10
 export const DIAS_CORTESIA_POR_DEFECTO = 15
 /** Cuántas cortesías se acuerdan por organización aliada (Coomeva, Parque Soft…). */
 export const CUPO_POR_ORIGEN = 5

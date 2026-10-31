@@ -28,7 +28,7 @@ export function CortesiasClient({
   const [enviando, setEnviando] = useState(false)
   const [mensaje, setMensaje] = useState('')
   const [entrega, setEntrega] = useState<{ correo: string; nombre: string; password: string | null } | null>(null)
-  const [f, setF] = useState({ nombre: '', correo: '', whatsapp: '', iniciativa: '', origen: '', dias: '15', comisionPct: '15', iniciarYa: false })
+  const [f, setF] = useState({ nombre: '', correo: '', whatsapp: '', iniciativa: '', origen: '', dias: '15', comisionPct: '10', iniciarYa: false })
 
   async function llamar(cuerpo: Record<string, unknown>) {
     const res = await fetch('/api/admin/cortesias', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(cuerpo) })
