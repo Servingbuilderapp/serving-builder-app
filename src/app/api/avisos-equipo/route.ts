@@ -4,6 +4,7 @@ import { motorAutorizado } from '@/lib/candadoMotores'
 import { buildEmailTemplate, sendEmail } from '@/lib/email'
 import { ultimoMovimientoPorProyecto, diasSinMovimiento } from '@/lib/actividadProyectos'
 import { calcularSiguientePaso } from '@/lib/siguientePaso'
+import { esConvocatoriaNoDeseada } from '@/lib/bibliotecaConvocatorias'
 import type { ProyectoVisto } from '@/lib/proyectoVisto'
 
 /**
@@ -94,6 +95,46 @@ export async function GET(req: NextRequest) {
       .filter((x) => !terminadas.has(`${x.c.id_proyecto}|${sinTildes(String(x.c.nombre || ''))}`))
       .sort((a, b) => a.dias - b.dias)
 
+    // Convocatorias abiertas a las que el Centinela ya agotó los intentos de bajar los términos de referencia.
+    // Primero van las que algún cliente ya eligió.
+    type FichaSinTdr = { id: string; nombre: string | null; fuente_oficial: string | null; enlace_aplicacion: string | null; fecha_cierre: string | null }
+    const sinTdr: { f: FichaSinTdr; elegida: boolean }[] = []
+    try {
+      const hoyIso = new Date().toISOString().slice(0, 10)
+      const { data: fichas } = await supabase
+        .from('biblioteca_convocatorias')
+        .select('id, nombre, fuente_oficial, enlace_aplicacion, fecha_cierre')
+        .or('fuente_oficial.not.is.null,enlace_aplicacion.not.is.null')
+        .or(`fecha_cierre.is.null,fecha_cierre.gte.${hoyIso}`)
+        .limit(400)
+      const abiertas = ((fichas || []) as FichaSinTdr[]).filter((f) => !esConvocatoriaNoDeseada(f.nombre))
+      const idsFichas = abiertas.map((f) => f.id)
+      if (idsFichas.length > 0) {
+        const { data: marcas } = await supabase
+          .from('seguimientos_cliente')
+          .select('proyecto_id, veces')
+          .eq('clave', 'tdr')
+          .in('proyecto_id', idsFichas.map((i) => `tdr:${i}`))
+        const agotadas = new Set(
+          ((marcas || []) as { proyecto_id: string; veces: number }[]).filter((m) => (m.veces || 0) >= 3).map((m) => m.proyecto_id.replace('tdr:', '')),
+        )
+        const { data: docs } = await supabase
+          .from('convocatoria_documentos')
+          .select('convocatoria_id')
+          .eq('clase', 'terminos_referencia')
+          .in('convocatoria_id', idsFichas)
+        const conPliego = new Set((docs || []).map((d) => String(d.convocatoria_id)))
+        const { data: todasElegidas } = await supabase.from('convocatorias_candidatas_proyecto').select('nombre').eq('eleccion_cliente', 'elegida')
+        const nombresElegidos = new Set(((todasElegidas || []) as { nombre: string | null }[]).map((x) => sinTildes(String(x.nombre || ''))))
+        for (const f of abiertas) {
+          if (agotadas.has(f.id) && !conPliego.has(f.id)) sinTdr.push({ f, elegida: nombresElegidos.has(sinTildes(String(f.nombre || ''))) })
+        }
+        sinTdr.sort((a, b) => Number(b.elegida) - Number(a.elegida))
+      }
+    } catch (e) {
+      console.error('[avisos-equipo] No se pudo armar el aviso de términos de referencia:', e)
+    }
+
     // Quién tiene la pelota en cada proyecto parado: el cliente (hay que escribirle) o la plataforma (hay que revisar).
     const candidatos = proyectos
       .filter((p) => !SIN_ARRANCAR.includes(String(p.estado_actual || '')) && p.estado_actual !== 'postulado')
@@ -165,6 +206,7 @@ export async function GET(req: NextRequest) {
         dias_sin_movimiento: x.dias,
         estado: x.p.estado_actual,
       })),
+      sin_terminos_de_referencia: sinTdr.map((x) => ({ convocatoria: x.f.nombre, elegida_por_cliente: x.elegida })),
       cierres: cierres.map((x) => ({
         proyecto: nombrePorId.get(String(x.c.id_proyecto))?.nombre_iniciativa,
         convocatoria: x.c.nombre,
@@ -172,7 +214,7 @@ export async function GET(req: NextRequest) {
       })),
     }
 
-    if (estancados.length === 0 && cierres.length === 0 && porEscribir.length === 0 && porRevisar.length === 0) {
+    if (estancados.length === 0 && cierres.length === 0 && porEscribir.length === 0 && porRevisar.length === 0 && sinTdr.length === 0) {
       return NextResponse.json({ ok: true, modo: soloProbar ? 'prueba' : 'envío real', enviado: false, mensaje: 'Nada que avisar hoy.', ...resumen })
     }
 
@@ -198,6 +240,19 @@ export async function GET(req: NextRequest) {
         lineas.push(`• ${escapar(String(proyecto?.nombre_iniciativa || 'Proyecto'))}: ${escapar(String(x.c.nombre || 'convocatoria'))} — cierra ${cuando}`)
       }
     }
+    if (sinTdr.length > 0) {
+      lineas.push(
+        `<strong>Convocatorias sin términos de referencia (${sinTdr.length}):</strong> el Centinela ya probó 3 veces y no los encontró. Para intervenir: abre el enlace oficial, baja el PDF y súbelo con el botón «Documento» de la biblioteca. Primero las que algún cliente ya eligió.`,
+      )
+      for (const x of sinTdr.slice(0, 15)) {
+        const enlace = x.f.fuente_oficial || x.f.enlace_aplicacion || ''
+        const cierre = x.f.fecha_cierre ? `, cierra ${escapar(String(x.f.fecha_cierre).slice(0, 10))}` : ''
+        lineas.push(
+          `• ${x.elegida ? '[ya elegida por un cliente] ' : ''}${escapar(String(x.f.nombre || 'Convocatoria'))}${cierre}${enlace ? ` — <a href="${escapar(enlace)}">enlace oficial</a>` : ''}`,
+        )
+      }
+      if (sinTdr.length > 15) lineas.push(`… y ${sinTdr.length - 15} más.`)
+    }
     if (estancados.length > 0) {
       lineas.push(`<strong>Sin movimiento hace más de ${DIAS_ESTANCADO} días:</strong>`)
       for (const x of estancados.slice(0, 15)) {
@@ -210,7 +265,7 @@ export async function GET(req: NextRequest) {
 
     let enviado: boolean | string = 'simulado'
     if (!soloProbar) {
-      const asunto = `Hoy: ${porEscribir.length} por escribir, ${porRevisar.length} por revisar, ${cierres.length} cierres cerca`
+      const asunto = `Hoy: ${porEscribir.length} por escribir, ${porRevisar.length} por revisar, ${cierres.length} cierres cerca, ${sinTdr.length} sin términos`
       const html = buildEmailTemplate({
         title: 'Lo que falta hacer hoy',
         greeting: 'Hola equipo,',
