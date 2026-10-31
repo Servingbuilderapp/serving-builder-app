@@ -8,15 +8,15 @@ async function test() {
     secure: true,
     auth: {
       user: 'resend',
-      pass: 're_TyuFcseT_9nsf7m67J8Uh4mEGSTF8d9MS'
+      pass: process.env.RESEND_API_KEY
     }
   });
 
   try {
     const info = await transport.sendMail({
-      from: '"ECOSERVING" <onboarding@resend.dev>',
+      from: '"Arquitectura Digital" <onboarding@resend.dev>',
       to: 'servingbuilderapp@gmail.com',
-      subject: 'Prueba de Sistema ECOSERVING',
+      subject: 'Prueba de Sistema Arquitectura Digital',
       text: 'El sistema de correos ha sido configurado correctamente y está funcional.'
     });
     console.log('Email enviado:', info.messageId);

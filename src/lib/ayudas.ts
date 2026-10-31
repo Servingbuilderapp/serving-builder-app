@@ -142,8 +142,16 @@ export const AYUDAS: Record<string, Ayuda> = {
     en: 'All your project documents gathered in one place, ready to review or download whenever you need them.',
   },
   'panel.mis_convocatorias': {
-    es: 'Las convocatorias que encajan con tu proyecto. Aquí decides a cuáles quieres postular y sigues el estado de cada una.',
-    en: 'The funding calls that fit your project. Here you decide which ones to apply to and follow the status of each.',
+    es: 'Las convocatorias que Centinela encontró para ti. Centinela es nuestro servicio de búsqueda: revisa fuentes todos los días y reúne las convocatorias de financiación que pueden servirle a tu proyecto. Aquí decides a cuáles quieres postular y sigues el estado de cada una.',
+    en: 'The funding calls that Centinela found for you. Centinela is our search service: it reviews sources every day and gathers the funding calls that could suit your project. Here you decide which ones to apply to and follow the status of each.',
+  },
+  'panel.mi_abanico': {
+    es: 'Un abanico es un lote de postulaciones: partes de tu proyecto ya estructurado y lo adaptamos a varias convocatorias a la vez, cambiando en cada una lo que pida (beneficiarios, territorio, quién postula). Tú escoges a cuáles quieres entrar.',
+    en: 'A fan is a batch of applications: starting from your structured project, we adapt it to several calls at once, changing in each one whatever it asks for (beneficiaries, territory, applicant). You choose which ones to enter.',
+  },
+  'panel.a_tu_medida': {
+    es: 'Las convocatorias abiertas que mejor le quedan a tu proyecto, de la que más a la que menos. Es una primera mirada rápida para decidir cuáles revisar primero; cuando eliges una, hacemos el análisis completo.',
+    en: 'The open calls that best fit your project, from most to least. It is a quick first look to decide which ones to review first; when you choose one, we run the full analysis.',
   },
   'panel.mis_replicas': {
     es: 'Para quien ya tiene un proyecto estructurado y quiere sacarle más provecho: pides una adaptación a otra convocatoria o territorio y sigues su avance.',
@@ -158,8 +166,8 @@ export const AYUDAS: Record<string, Ayuda> = {
     en: 'For those who want to learn the method and master it, with lessons, templates and examples to practice at their own pace.',
   },
   'panel.mi_membresia': {
-    es: 'Tu nivel de membresía y todo lo que te queda disponible este mes. Mientras estés al día con tus pagos, tus beneficios siguen activos.',
-    en: 'Your membership level and everything you have left this month. While your payments are up to date, your benefits stay active.',
+    es: 'Una membresía es una suscripción en la que tú llevas el timón: te damos el método, los recursos y las oportunidades, y tú construyes tu propio proyecto. Hay tres niveles: Explorador, Constructor y Arquitecto. Aquí ves el tuyo y todo lo que te queda disponible este mes; mientras estés al día con tus pagos, tus beneficios siguen activos.',
+    en: 'A membership is a subscription where you take the helm: we give you the method, the resources and the opportunities, and you build your own project. There are three levels: Explorer, Builder and Architect. Here you see yours and everything you have left this month; while your payments are up to date, your benefits stay active.',
   },
   'panel.convocatorias_mes': {
     es: 'Lo que hay disponible ahora, ordenado por urgencia: lo que cierra pronto, lo que está abierto, lo que abre todo el año y lo que está por abrir. Abre cada ficha para ver los detalles y el enlace oficial.',

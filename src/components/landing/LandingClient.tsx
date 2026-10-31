@@ -32,6 +32,7 @@ import { useTranslation } from '@/hooks/useTranslation'
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 import { Ayuda } from '@/components/ui/Ayuda'
 import { CaminoFinanciacion } from '@/components/landing/CaminoFinanciacion'
+import { FichasTips } from '@/components/landing/FichasTips'
 
 /* ============================================================================
    BLOQUE DE CONFIGURACIÓN
@@ -88,7 +89,6 @@ interface LandingClientProps {
   syncPlans?: unknown[]
   trialApps?: unknown[]
   arsenalCategories?: Record<string, unknown[]>
-  isEcoServing?: boolean
 }
 
 const NAV_LINKS = [
@@ -849,6 +849,65 @@ export function LandingClient({ user }: LandingClientProps) {
         </div>
       </section>
 
+      {/* ================= FICHAS DE TIPS (debajo del video, antes del diagnóstico) ================= */}
+      <FichasTips />
+
+      {/* ================= DIAGNÓSTICO GRATUITO ================= */}
+      <section className="py-16 lg:py-20">
+        <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-10 items-center">
+            <div>
+              <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#B08D57] mb-3">
+                {t('w.diagnostico.eyebrow')}
+              </div>
+              <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#F3E7DC] leading-tight">
+                {t('w.diagnostico.titulo')}
+              </h2>
+              <p className="mt-4 text-base text-[#F3E7DC]/70 leading-relaxed">
+                {t('w.diagnostico.subtitulo')}
+              </p>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <Link
+                  href="/diagnostico"
+                  className={`h-12 px-6 inline-flex items-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-sm font-semibold hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/30 ${RELIEVE_BOTON}`}
+                >
+                  {t('w.diagnostico.boton')}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <a
+                  href={`https://wa.me/${TELEFONO_WHATSAPP}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`h-12 px-6 inline-flex items-center rounded-lg border border-[#B08D57]/35 bg-[#3B1727] text-[#F3E7DC] text-sm font-semibold hover:bg-[#4C2032] ${RELIEVE_BOTON_SUAVE}`}
+                >
+                  {t('w.diagnostico.boton_hablar')}
+                </a>
+              </div>
+              <p className="mt-4 text-[12px] text-[#F3E7DC]/50">{t('w.diagnostico.nota')}</p>
+            </div>
+
+            <div className="rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-7">
+              <h3 className="text-[15px] font-extrabold text-[#F3E7DC] mb-5">
+                {t('w.diagnostico.incluye_titulo')}
+              </h3>
+              <div className="grid sm:grid-cols-2 gap-x-6 gap-y-3">
+                {DIAGNOSTICO_ENTREGA.map((clave) => (
+                  <div key={clave} className="flex items-start gap-2 text-[13px] text-[#F3E7DC]/85 leading-snug">
+                    <Check className="h-3.5 w-3.5 text-[#B08D57] shrink-0 mt-0.5" />
+                    <span>{t(clave)}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 pt-5 border-t border-[#B08D57]/35">
+                <p className="text-[12px] text-[#F3E7DC]/70 leading-relaxed">
+                  {t('w.diagnostico.no_incluye')}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ================= TRES OFERTAS + ¿A DÓNDE DIRIGIRTE? (debajo del video) ================= */}
       <CaminoFinanciacion />
 
@@ -916,62 +975,6 @@ export function LandingClient({ user }: LandingClientProps) {
               {t('w.ventaja.cierre')}
             </p>
           </Aparece>
-        </div>
-      </section>
-
-      {/* ================= DIAGNÓSTICO GRATUITO ================= */}
-      <section className="py-16 lg:py-20">
-        <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-10 items-center">
-            <div>
-              <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#B08D57] mb-3">
-                {t('w.diagnostico.eyebrow')}
-              </div>
-              <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#F3E7DC] leading-tight">
-                {t('w.diagnostico.titulo')}
-              </h2>
-              <p className="mt-4 text-base text-[#F3E7DC]/70 leading-relaxed">
-                {t('w.diagnostico.subtitulo')}
-              </p>
-              <div className="mt-7 flex flex-wrap gap-3">
-                <Link
-                  href="/diagnostico"
-                  className={`h-12 px-6 inline-flex items-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-sm font-semibold hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/30 ${RELIEVE_BOTON}`}
-                >
-                  {t('w.diagnostico.boton')}
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <a
-                  href={`https://wa.me/${TELEFONO_WHATSAPP}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`h-12 px-6 inline-flex items-center rounded-lg border border-[#B08D57]/35 bg-[#3B1727] text-[#F3E7DC] text-sm font-semibold hover:bg-[#4C2032] ${RELIEVE_BOTON_SUAVE}`}
-                >
-                  {t('w.diagnostico.boton_hablar')}
-                </a>
-              </div>
-              <p className="mt-4 text-[12px] text-[#F3E7DC]/50">{t('w.diagnostico.nota')}</p>
-            </div>
-
-            <div className="rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-7">
-              <h3 className="text-[15px] font-extrabold text-[#F3E7DC] mb-5">
-                {t('w.diagnostico.incluye_titulo')}
-              </h3>
-              <div className="grid sm:grid-cols-2 gap-x-6 gap-y-3">
-                {DIAGNOSTICO_ENTREGA.map((clave) => (
-                  <div key={clave} className="flex items-start gap-2 text-[13px] text-[#F3E7DC]/85 leading-snug">
-                    <Check className="h-3.5 w-3.5 text-[#B08D57] shrink-0 mt-0.5" />
-                    <span>{t(clave)}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-6 pt-5 border-t border-[#B08D57]/35">
-                <p className="text-[12px] text-[#F3E7DC]/70 leading-relaxed">
-                  {t('w.diagnostico.no_incluye')}
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 

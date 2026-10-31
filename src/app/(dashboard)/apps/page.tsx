@@ -12,8 +12,7 @@ export const revalidate = 0
 export default async function AppsPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  const isEcoServing = false
-  
+
   if (!user) {
     redirect('/login')
   }
@@ -45,15 +44,8 @@ export default async function AppsPage() {
 
   let apps = appsData || [];
 
-  // 3. Filtrar según el portal (Ocultar las que no corresponden)
-  apps = apps.filter(app => {
-    const isEcoApp = !!(app.name_es?.match(/^(I|II|III|IV|V|VI)\.\s/i));
-    if (isEcoServing) {
-      return isEcoApp;
-    } else {
-      return !isEcoApp;
-    }
-  });
+  // 3. Ocultar las apps antiguas cuyo nombre empieza con numeral romano ("I. ", "II. "...)
+  apps = apps.filter(app => !app.name_es?.match(/^(I|II|III|IV|V|VI)\.\s/i));
 
   // Para el Admin, siempre mostramos los motores de demo si hay pocos o ninguno en la DB
   if (user.email === ADMIN_EMAIL) {

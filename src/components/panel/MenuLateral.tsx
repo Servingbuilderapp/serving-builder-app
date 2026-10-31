@@ -107,6 +107,8 @@ const AYUDA_POR_RUTA: Record<string, string> = {
   '/mis-documentos': 'panel.documentos',
   '/mis-convocatorias': 'panel.mis_convocatorias',
   '/mis-replicas': 'panel.mis_replicas',
+  '/mi-abanico': 'panel.mi_abanico',
+  '/a-tu-medida': 'panel.a_tu_medida',
   '/ideas': 'panel.ideas',
   '/academia': 'panel.academia',
   '/mi-membresia': 'panel.mi_membresia',

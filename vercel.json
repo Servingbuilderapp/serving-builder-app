@@ -53,8 +53,16 @@
       "schedule": "30 15 * * *"
     },
     {
-      "path": "/api/centinela/descargar-terminos?lote=5",
+      "path": "/api/centinela/descargar-terminos?lote=8",
       "schedule": "15 11 * * *"
+    },
+    {
+      "path": "/api/centinela/descargar-terminos?lote=8",
+      "schedule": "15 16 * * *"
+    },
+    {
+      "path": "/api/centinela/descargar-terminos?lote=8",
+      "schedule": "15 21 * * *"
     },
     {
       "path": "/api/centinela/conciliar-fuentes",

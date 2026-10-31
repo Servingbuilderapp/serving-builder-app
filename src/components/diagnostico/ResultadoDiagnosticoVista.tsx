@@ -5,6 +5,7 @@ import { ChevronRight, Download, MessageSquare } from 'lucide-react'
 import { RuedaDiagnostico } from '@/components/diagnostico/RuedaDiagnostico'
 import { RelojProyecto } from '@/components/diagnostico/RelojProyecto'
 import { CRITERIOS_ADN } from '@/lib/relojProyecto'
+import { LAS_SIETE_COSAS_CLAVE } from '@/lib/sieteCosasClave'
 import type { DiagnosticoResultadoV2 } from '@/app/api/diagnostico-v2/route'
 import { descargarComoWord, guardarComoPdf } from '@/lib/descargarDocumento'
 
@@ -160,14 +161,30 @@ export function ResultadoDiagnosticoVista({
             </div>
 
             {mostrarCierre && (
-            <div className="p-6 rounded-3xl bg-[#3B1727] border border-[#B08D57]/45 space-y-3">
-              <h5 className="text-sm font-black text-color-base-content">Para arrancar sin demoras, ten a la mano estas 7 cosas</h5>
-              <p className="text-xs text-color-base-content/75 leading-relaxed">
-                1. El problema central · 2. Sus causas y consecuencias (árbol del problema) · 3. A quién le pasa (población) ·
-                4. A cuántos llegarás (población objetivo) · 5. Tu objetivo general · 6. Tu solución · 7. El presupuesto aproximado.
-              </p>
-              <p className="text-xs font-bold text-color-base-content/85">
-                Si alguna no la tienes, no pasa nada: al subir tu documento te proponemos una respuesta para cada una y tú solo la confirmas.
+            <div className="p-6 md:p-8 rounded-3xl bg-[#3B1727] border-2 border-[#B08D57]/70 space-y-5">
+              <div>
+                <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#C9A46B] mb-2">Lo que sigue</div>
+                <h5 className="text-xl md:text-2xl font-black text-[#F3E7DC]">Sube un documento con tu proyecto</h5>
+                <p className="mt-2 text-sm text-[#F3E7DC]/80 leading-relaxed">
+                  Después del diagnóstico, lo primero que haremos es leer un documento tuyo: una idea escrita, un borrador, notas, lo que tengas.
+                  Al elegir tu plan y firmar, es lo primero que verás. Para que el proyecto quede bien, procura que cuente con estos 7 elementos:
+                </p>
+              </div>
+              <ol className="grid gap-3 sm:grid-cols-2">
+                {LAS_SIETE_COSAS_CLAVE.map((cosa, i) => (
+                  <li key={cosa.titulo} className="flex items-start gap-3 rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-4">
+                    <span className="h-7 w-7 shrink-0 rounded-full bg-gradient-to-br from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-sm font-extrabold flex items-center justify-center">
+                      {i + 1}
+                    </span>
+                    <div>
+                      <div className="text-sm font-extrabold text-[#F3E7DC] leading-snug">{cosa.titulo}</div>
+                      <div className="mt-0.5 text-xs text-[#F3E7DC]/70 leading-snug">{cosa.ejemplo}</div>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+              <p className="text-sm font-bold text-[#F3E7DC]">
+                Si alguno no lo tienes, no pasa nada: al subir tu documento te proponemos una respuesta para cada uno y tú solo la confirmas.
               </p>
             </div>
             )}

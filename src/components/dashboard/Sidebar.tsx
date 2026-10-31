@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { cn } from '@/lib/utils'
 import { useTranslation } from '@/hooks/useTranslation'
 import { ChevronsLeft, ChevronsRight, X, Sparkles } from 'lucide-react'
@@ -24,12 +24,7 @@ interface SidebarProps {
 export function Sidebar({ collapsed, onToggleCollapse, mobileOpen, onCloseMobile, profile, user }: SidebarProps) {
   const { language } = useTranslation()
   const pathname = usePathname()
-  const [isEcoServing, setIsEcoServing] = useState(false)
 
-  useEffect(() => {
-    setIsEcoServing(false)
-  }, [])
-  
   const currentEmail = (profile?.email || user?.email || '').toLowerCase().trim()
   const currentRoleFromProfile = (profile?.role || '').toLowerCase().trim()
   const currentRoleFromMetadata = (user?.user_metadata?.role || '').toLowerCase().trim()
