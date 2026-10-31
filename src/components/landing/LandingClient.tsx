@@ -497,9 +497,8 @@ function Marca({ oscuro = false }: { oscuro?: boolean }) {
   const { t } = useTranslation()
   return (
     <div className="flex items-center gap-3">
-      <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#C9A46B] to-[#B08D57] flex items-center justify-center shrink-0">
-        <span className="text-lg font-black text-white leading-none">A</span>
-      </div>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/logo-serving.jpg" alt="Serving Proyectos Estratégicos" className="h-10 w-10 rounded-xl bg-white object-contain p-0.5 shrink-0" />
       <div className="leading-tight">
         <div className={`text-[15px] font-extrabold tracking-tight ${oscuro ? 'text-[#F3E7DC]' : 'text-[#F3E7DC]'}`}>
           {t('w.marca.nombre')}

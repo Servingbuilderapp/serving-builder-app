@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 import { prepararReplica } from '@/lib/motorReplica'
 import { motorAutorizado, cabecerasInternas } from '@/lib/candadoMotores'
 import { buildEmailTemplate, sendEmail } from '@/lib/email'
-import { LOTE_ABANICO, TOTAL_ABANICO } from '@/lib/abanico'
+import { LOTE_ABANICO, MINIMO_ENCAJE_ABANICO, TOTAL_ABANICO } from '@/lib/abanico'
 import {
   palabrasDelProyecto,
   puntuarConvocatoria,
@@ -221,6 +221,8 @@ export async function POST(req: NextRequest) {
       .map((c) => ({ c, r: puntuarConvocatoria(c, claves, perfil) }))
       // Las que hoy lo dejarían fuera no entran: no sirve postular donde no se puede.
       .filter((x) => x.r.elegibilidad.estado !== 'falta')
+      // Solo entran las que de verdad le encajan: por debajo del mínimo no se postula.
+      .filter((x) => x.r.puntaje >= MINIMO_ENCAJE_ABANICO)
       .sort((a, b) => b.r.puntaje - a.r.puntaje)
 
     const porHacer = Math.min(LOTE_ABANICO, TOTAL_ABANICO - cantidadHecha)

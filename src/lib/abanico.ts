@@ -12,6 +12,9 @@ import { TASAS_DE_CAMBIO, convertirUsdACop, formatoCOP, formatoUSD } from '@/lib
 /** Cuántas convocatorias se preparan, como máximo. Si salen menos, son las que hay. */
 export const TOTAL_ABANICO = 12
 
+/** Puntaje mínimo de encaje (de 100) para que una convocatoria entre al abanico. Por debajo no vale la pena postular. */
+export const MINIMO_ENCAJE_ABANICO = 60
+
 /** Cuántas convocatorias se preparan en cada pasada (cada una es una llamada a la IA). */
 export const LOTE_ABANICO = 3
 
