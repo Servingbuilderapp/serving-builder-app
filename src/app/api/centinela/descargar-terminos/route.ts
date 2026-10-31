@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { motorAutorizado } from '@/lib/candadoMotores'
+import { registrarCorrida } from '@/lib/registroCentinela'
 import { extraerTexto } from '@/lib/extraerDocumento'
 import { esConvocatoriaNoDeseada } from '@/lib/bibliotecaConvocatorias'
 import { urlGemini, fetchGemini } from '@/lib/geminiEndpoint'
@@ -238,9 +239,11 @@ export async function GET(req: NextRequest) {
       }
     }
 
+    await registrarCorrida('terminos', 200, { resultado })
     return NextResponse.json({ ok: true, revisadas: resultado.length, faltan_por_descargar: Math.max(0, faltan.length - resultado.length), resultado })
   } catch (e) {
     console.error('[Centinela descargar-terminos]', e)
+    await registrarCorrida('terminos', 500, { error: (e as Error).message })
     return NextResponse.json({ error: (e as Error).message }, { status: 500 })
   }
 }

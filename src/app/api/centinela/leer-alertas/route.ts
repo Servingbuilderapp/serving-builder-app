@@ -4,6 +4,7 @@ import { createClient } from '@supabase/supabase-js'
 import { listarCorreosDeAlertas } from '@/lib/gmailAlertas'
 import { guardarEnBiblioteca, type ConvocatoriaEncontrada } from '@/lib/bibliotecaConvocatorias'
 import { motorAutorizado } from '@/lib/candadoMotores'
+import { registrarCorrida } from '@/lib/registroCentinela'
 
 /**
  * CENTINELA — lectura de Alertas de Google por Gmail.
@@ -253,6 +254,7 @@ export async function GET(req: NextRequest) {
   }
 
   const resultado = await ejecutarLecturaDeAlertas()
+  await registrarCorrida('alertas', resultado.status, resultado.body as Record<string, unknown>)
   return NextResponse.json(resultado.body, { status: resultado.status })
 }
 
@@ -262,5 +264,6 @@ export async function POST(req: NextRequest) {
   }
 
   const resultado = await ejecutarLecturaDeAlertas()
+  await registrarCorrida('alertas', resultado.status, resultado.body as Record<string, unknown>)
   return NextResponse.json(resultado.body, { status: resultado.status })
 }

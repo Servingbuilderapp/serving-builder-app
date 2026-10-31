@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 import { urlGemini, fetchGemini } from '@/lib/geminiEndpoint'
 import { guardarEnBiblioteca, type ConvocatoriaEncontrada } from '@/lib/bibliotecaConvocatorias'
 import { motorAutorizado } from '@/lib/candadoMotores'
+import { registrarCorrida } from '@/lib/registroCentinela'
 
 /**
  * CENTINELA — llenar la biblioteca desde el catálogo de fuentes.
@@ -225,6 +226,7 @@ export async function GET(req: NextRequest) {
   const pedido = Number(req.nextUrl.searchParams.get('lote'))
   const lote = Number.isFinite(pedido) && pedido > 0 ? Math.min(Math.floor(pedido), 16) : 8
   const resultado = await ejecutar(lote)
+  await registrarCorrida('fuentes', resultado.status, resultado.body as Record<string, unknown>)
   return NextResponse.json(resultado.body, { status: resultado.status })
 }
 

@@ -66,6 +66,11 @@ export default async function AdminCentinelaPage() {
 
   return (
     <>
+      <div className="mb-4">
+        <a href="/admin/centinela/salud" className="inline-block rounded-lg border border-[#B08D57] bg-white px-4 py-2 text-sm font-bold text-[#3B1727] shadow-sm">
+          Ver salud del Centinela (qué leyó cada día)
+        </a>
+      </div>
       <div className="mb-6 rounded-2xl border border-[#B08D57]/40 bg-[#3B1727] p-5 text-[#F3E7DC]">
         <h2 className="text-sm font-black uppercase tracking-wider text-[#C9A46B]">Qué está llegando al buzón</h2>
         {informe ? (

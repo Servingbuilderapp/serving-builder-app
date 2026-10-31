@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { urlGemini, fetchGemini } from '@/lib/geminiEndpoint'
 import { motorAutorizado } from '@/lib/candadoMotores'
+import { registrarCorrida } from '@/lib/registroCentinela'
 import { TIPOS_POSTULANTE } from '@/lib/radiografiaPliego'
 
 /**
@@ -267,9 +268,11 @@ export async function GET(req: NextRequest) {
       }
     }
 
+    await registrarCorrida('enlaces', 200, { detalle: resumen })
     return NextResponse.json({ ok: true, revisadas: lista.length, detalle: resumen })
   } catch (e) {
     console.error('[Centinela leer-enlaces] Error:', e)
+    await registrarCorrida('enlaces', 500, { error: (e as Error).message })
     return NextResponse.json({ error: (e as Error).message }, { status: 500 })
   }
 }

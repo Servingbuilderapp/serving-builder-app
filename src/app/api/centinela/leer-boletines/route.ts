@@ -4,6 +4,7 @@ import { createClient } from '@supabase/supabase-js'
 import { listarBoletines, type CorreoBoletin } from '@/lib/gmailBoletines'
 import { guardarEnBiblioteca, type ConvocatoriaEncontrada } from '@/lib/bibliotecaConvocatorias'
 import { motorAutorizado } from '@/lib/candadoMotores'
+import { registrarCorrida } from '@/lib/registroCentinela'
 
 /**
  * CENTINELA — lectura de BOLETINES por Gmail.
@@ -324,6 +325,9 @@ export async function GET(req: NextRequest) {
     parametros.get('diagnostico') === '1',
     Number(parametros.get('pagina') || 0) || 0,
   )
+  if (parametros.get('diagnostico') !== '1') {
+    await registrarCorrida('boletines', resultado.status, resultado.body as Record<string, unknown>)
+  }
   return NextResponse.json(resultado.body, { status: resultado.status })
 }
 
