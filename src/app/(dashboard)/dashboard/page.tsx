@@ -6,6 +6,7 @@ import { resolverProyectoVisto } from '@/lib/proyectoVisto'
 import { BannerProyectoVisto } from '@/components/panel/BannerProyectoVisto'
 import { SieteCosasClave } from '@/components/panel/SieteCosasClave'
 import { TarjetaGanado } from '@/components/panel/TarjetaGanado'
+import { GuiaDelPanel } from '@/components/panel/GuiaDelPanel'
 import { ResumenProyecto, type DatosResumen, type EstadoSemaforo, type EstadoEtapa } from '@/components/panel/ResumenProyecto'
 
 export const dynamic = 'force-dynamic'
@@ -114,7 +115,12 @@ export default async function PaginaResumen({
   }
 
   if (!proyecto) {
-    return <ResumenProyecto datos={vacio} />
+    return (
+      <>
+        <GuiaDelPanel />
+        <ResumenProyecto datos={vacio} />
+      </>
+    )
   }
 
   /* ---------- consultas en paralelo ---------- */
@@ -429,6 +435,7 @@ export default async function PaginaResumen({
   return (
     <>
       <BannerProyectoVisto vista={vista} />
+      <GuiaDelPanel />
       <TarjetaGanado vista={vista} />
       <SieteCosasClave vista={vista} />
       <ResumenProyecto datos={datos} />
