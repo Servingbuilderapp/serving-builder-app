@@ -82,6 +82,8 @@ export function ContratoDigitalModal({ plan, onContratoFirmado, onBack }: Contra
 
         {/* Visor de Contrato Legible */}
         <div className="bg-[#3B1727] p-6 rounded-2xl border border-color-base-300 h-64 overflow-y-auto space-y-4 text-xs text-color-base-content/85 leading-relaxed font-sans shadow-inner">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo-serving.jpg" alt="Serving Proyectos Estratégicos" className="mx-auto h-20 w-20 rounded-xl bg-white object-contain p-1" />
           <h4 className="font-extrabold text-color-base-content text-sm uppercase">
             CONTRATO DE PRESTACIÓN DE SERVICIOS TÉCNICOS Y ESTRUCTURACIÓN DIGITAL DE PROYECTOS
           </h4>

@@ -88,9 +88,8 @@ export function CabeceraPanel({
       </button>
 
       <Link href="/" title="Ir al website" className="flex items-center gap-2.5 shrink-0">
-        <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-[#C39F68] to-[#A8804B] flex items-center justify-center">
-          <span className="text-[15px] font-black text-[#3A1420] leading-none">A</span>
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/logo-serving.jpg" alt="Serving Proyectos Estratégicos" className="h-11 w-11 rounded-xl bg-white object-contain p-0.5" />
         <div className="hidden sm:block leading-tight">
           <div className="text-[13px] font-extrabold tracking-tight text-[#F3E7DC] font-[family-name:var(--font-cormorant)]">
             ARQUITECTURA DIGITAL

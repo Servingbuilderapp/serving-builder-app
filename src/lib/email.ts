@@ -49,6 +49,7 @@ export function buildEmailTemplate(options: {
           <!-- Logo Section -->
           <tr>
             <td align="center" style="padding: 40px 40px 20px 40px;">
+              <img src="https://portalarquitecturadigital.com/logo-serving.jpg" alt="Serving Proyectos Estratégicos" width="110" style="display: block; margin: 0 auto 16px auto; border-radius: 14px; background-color: #ffffff;" />
               <div style="display: inline-block; background: linear-gradient(135deg, #7c3aed, #6d28d9, #ec4899); border-radius: 12px; padding: 10px 24px;">
                 <span style="color: #ffffff; font-weight: 900; font-size: 14px; letter-spacing: 1px; text-transform: uppercase;">✦ ARQUITECTURA DIGITAL DE PROYECTOS</span>
               </div>
