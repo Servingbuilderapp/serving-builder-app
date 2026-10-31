@@ -1,0 +1,72 @@
+{
+  "crons": [
+    {
+      "path": "/api/buscar-convocatorias",
+      "schedule": "0 13 * * 1"
+    },
+    {
+      "path": "/api/revisar-aprobaciones-vencidas",
+      "schedule": "0 13 * * *"
+    },
+    {
+      "path": "/api/revisar-eleccion-convocatorias-vencida",
+      "schedule": "0 14 * * *"
+    },
+    {
+      "path": "/api/reanudar-estructuracion",
+      "schedule": "0 15 * * *"
+    },
+    {
+      "path": "/api/centinela/leer-alertas",
+      "schedule": "0 12 * * *"
+    },
+    {
+      "path": "/api/centinela/leer-boletines",
+      "schedule": "15 12 * * *"
+    },
+    {
+      "path": "/api/centinela/sembrar-desde-fuentes?lote=10",
+      "schedule": "30 11 * * *"
+    },
+    {
+      "path": "/api/centinela/leer-enlaces?lote=10",
+      "schedule": "45 11 * * *"
+    },
+    {
+      "path": "/api/avisos-diarios",
+      "schedule": "0 13 * * *"
+    },
+    {
+      "path": "/api/avisos-equipo",
+      "schedule": "10 13 * * *"
+    },
+    {
+      "path": "/api/seguimiento-cliente",
+      "schedule": "30 13 * * *"
+    },
+    {
+      "path": "/api/seguimiento-diagnostico",
+      "schedule": "0 14 * * *"
+    },
+    {
+      "path": "/api/revisar-coherencia",
+      "schedule": "30 15 * * *"
+    },
+    {
+      "path": "/api/centinela/descargar-terminos?lote=8",
+      "schedule": "15 11 * * *"
+    },
+    {
+      "path": "/api/centinela/descargar-terminos?lote=8",
+      "schedule": "15 16 * * *"
+    },
+    {
+      "path": "/api/centinela/descargar-terminos?lote=8",
+      "schedule": "15 21 * * *"
+    },
+    {
+      "path": "/api/centinela/conciliar-fuentes",
+      "schedule": "30 12 * * *"
+    }
+  ]
+}
