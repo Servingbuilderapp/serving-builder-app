@@ -38,16 +38,22 @@ export function AceptarCortesia() {
           Autorización de datos personales y términos del servicio
         </p>
         <div
+          ref={(el) => {
+            // Si el texto cabe sin necesidad de bajar, no hay nada que desplazar: se habilita solo.
+            if (el && el.scrollHeight <= el.clientHeight + 4) setTextoLeido(true)
+          }}
           onScroll={(e) => {
             const el = e.currentTarget
-            if (el.scrollTop + el.clientHeight >= el.scrollHeight - 10) setTextoLeido(true)
+            if (el.scrollTop + el.clientHeight >= el.scrollHeight - 60) setTextoLeido(true)
           }}
-          className="max-h-56 overflow-y-auto whitespace-pre-line pr-2 text-[12px] leading-relaxed text-[#F3E7DC]/80"
+          className="max-h-56 overflow-y-scroll whitespace-pre-line pr-2 text-[12px] leading-relaxed text-[#F3E7DC]/80 [scrollbar-color:#C9A46B_#2a0f1c] [&::-webkit-scrollbar]:w-2.5 [&::-webkit-scrollbar-track]:rounded [&::-webkit-scrollbar-track]:bg-[#2a0f1c] [&::-webkit-scrollbar-thumb]:rounded [&::-webkit-scrollbar-thumb]:bg-[#C9A46B]"
         >
           {TEXTO_LEGAL_CORTESIA}
         </div>
         {!textoLeido && (
-          <p className="text-[11.5px] font-bold text-[#E0B868]">Baja hasta el final del texto para poder aceptar.</p>
+          <p className="text-[11.5px] font-bold text-[#E0B868]">
+            Pon el cursor sobre el texto y baja con la rueda del mouse (o arrastra la barra dorada) hasta el final. Así se activa la casilla de abajo.
+          </p>
         )}
       </div>
       <label className={`flex items-start gap-2.5 text-[13.5px] leading-relaxed text-[#F3E7DC] ${textoLeido ? '' : 'opacity-50'}`}>
@@ -68,6 +74,7 @@ export function AceptarCortesia() {
       <button
         type="button"
         disabled={!marcado || !autorizaDatos || enviando}
+        title={!autorizaDatos ? 'Primero baja el texto hasta el final y marca la casilla de autorización.' : undefined}
         onClick={aceptar}
         className="rounded-xl bg-[#C9A46B] px-5 py-2.5 text-[14px] font-bold text-[#3B1727] shadow-[0_1px_2px_rgba(20,5,10,0.4)] disabled:opacity-50"
       >
