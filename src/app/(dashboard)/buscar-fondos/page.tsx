@@ -3,6 +3,7 @@ import { Search } from 'lucide-react'
 import { contextoMiembro } from '@/lib/membresiasServicios'
 import { AvisoMiembros } from '@/components/panel/AvisoMiembros'
 import { Ayuda } from '@/components/ui/Ayuda'
+import FuentesDeFrente from '@/components/panel/FuentesDeFrente'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -102,6 +103,8 @@ export default async function BuscarFondosPage({ searchParams }: { searchParams:
           Busca entre todas las convocatorias de la biblioteca. Filtra por palabra, país, sector o tipo de financiador.
         </p>
       </header>
+
+      <FuentesDeFrente />
 
       <form method="get" className={`mb-6 grid gap-3 rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-4 sm:grid-cols-2 lg:grid-cols-5 ${SOMBRA_TARJETA}`}>
         <div className="sm:col-span-2 lg:col-span-5">
