@@ -2,7 +2,10 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { callGemini } from '@/lib/gemini'
 
-export const maxDuration = 60
+export const maxDuration = 120
+
+// Tope por modelo: con 3 modelos de respaldo, ninguno puede gastarse todo el tiempo de la ruta.
+const TOPE_POR_MODELO_IDEAS_MS = 35000
 
 export interface IdeasGenerarInput {
   // Descripción libre de lo que el usuario está pensando (obligatorio). Puede ser "no tengo idea todavía".
@@ -193,14 +196,18 @@ Responde ÚNICAMENTE con un JSON válido (sin texto adicional, sin markdown, sin
 LO QUE EL USUARIO CONTÓ SOBRE SÍ MISMO O SU IDEA:
 ${body.descripcionIdea}${contextoHerramientas}`
 
-    const respuestaIA = await callGemini(prompt)
-
-    let resultado: Partial<IdeasResultado>
-    try {
-      const jsonLimpio = respuestaIA.replace(/```json\n?|\n?```/g, '').trim()
-      resultado = JSON.parse(jsonLimpio)
-    } catch (parseError) {
-      console.error('No se pudo interpretar la respuesta de la IA:', respuestaIA)
+    // Si la IA devuelve algo ilegible (vacio, cortado), se le pide una vez mas antes de rendirse.
+    let resultado: Partial<IdeasResultado> | null = null
+    for (let intento = 1; intento <= 2 && !resultado; intento++) {
+      const respuestaIA = await callGemini(prompt, TOPE_POR_MODELO_IDEAS_MS)
+      try {
+        const jsonLimpio = respuestaIA.replace(/```json\n?|\n?```/g, '').trim()
+        resultado = JSON.parse(jsonLimpio)
+      } catch {
+        console.error(`No se pudo interpretar la respuesta de la IA (intento ${intento}):`, respuestaIA)
+      }
+    }
+    if (!resultado) {
       throw new Error('No se pudieron generar las ideas, intenta de nuevo')
     }
 

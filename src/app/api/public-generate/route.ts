@@ -3,6 +3,11 @@ import { buildPrompt } from '@/lib/prompts'
 import { callGemini } from '@/lib/gemini'
 import { createClient } from '@/lib/supabase/server'
 
+export const maxDuration = 120
+
+// Tope por modelo: deja tiempo para que los modelos de respaldo alcancen a probarse.
+const TOPE_POR_MODELO_MS = 35000
+
 export async function POST(req: Request) {
   try {
     const { appSlug, inputs } = await req.json()
@@ -34,7 +39,7 @@ export async function POST(req: Request) {
     }
 
     const fullPrompt = buildPrompt(promptTemplate, inputs)
-    const resultMarkdown = await callGemini(fullPrompt)
+    const resultMarkdown = await callGemini(fullPrompt, TOPE_POR_MODELO_MS)
 
     return NextResponse.json({ result: { markdown: resultMarkdown } })
   } catch (error: any) {
