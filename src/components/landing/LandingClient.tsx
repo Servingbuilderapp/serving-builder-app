@@ -1065,6 +1065,13 @@ export function LandingClient({ user }: LandingClientProps) {
             </div>
             <div className="relative lg:col-span-5">
               <VistaPreviaPanel />
+              <Link
+                href="/ejemplo-panel"
+                className={`mt-4 h-11 px-5 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-sm font-semibold hover:from-[#C9A46B] hover:to-[#8A6636] ${RELIEVE_BOTON}`}
+              >
+                {t('w.ejemplo.ver')}
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
           </div>
         </div>
