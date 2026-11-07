@@ -17,7 +17,7 @@ import { urlGemini, fetchGemini } from '@/lib/geminiEndpoint'
 /** Cuanto se le concede a un modelo antes de darlo por perdido. */
 const TOPE_POR_MODELO_MS = 80000;
 
-export async function callGemini(prompt: string): Promise<string> {
+export async function callGemini(prompt: string, topePorModeloMs: number = TOPE_POR_MODELO_MS): Promise<string> {
   const apiKey = process.env.GEMINI_API_KEY || process.env.GEMINI_KEY;
   if (!apiKey) {
     throw new Error('GEMINI_API_KEY is not defined');
@@ -45,7 +45,7 @@ export async function callGemini(prompt: string): Promise<string> {
               },
             ],
           }),
-          signal: AbortSignal.timeout(TOPE_POR_MODELO_MS),
+          signal: AbortSignal.timeout(topePorModeloMs),
         }
       );
 

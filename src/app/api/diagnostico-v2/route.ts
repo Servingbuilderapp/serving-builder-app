@@ -4,7 +4,10 @@ import { supabaseAdmin } from '@/lib/supabase/admin'
 import { callGemini } from '@/lib/gemini'
 import { CRITERIOS_ADN } from '@/lib/relojProyecto'
 
-export const maxDuration = 60
+// El diagnostico le da 30 s a cada modelo de Gemini (son 3 modelos), asi que necesita
+// mas de 60 s en total para que el paracaidas alcance a funcionar. Requiere Fluid Compute.
+export const maxDuration = 120
+const TOPE_POR_MODELO_DIAGNOSTICO_MS = 30000
 
 export interface DiagnosticoInputV2 {
   // Datos del solicitante
@@ -136,14 +139,20 @@ Capacidad instalada (cumplir requisitos administrativos y de reporte): ${data.ca
 Etapa de madurez declarada: ${data.etapaMadurez || 'no indicó'}
 Alcance (geografía y sector): ${data.alcance || 'no indicó'}`
 
-    const respuestaIA = await callGemini(prompt)
-
-    let resultado: DiagnosticoResultadoV2
-    try {
-      const jsonLimpio = respuestaIA.replace(/```json\n?|\n?```/g, '').trim()
-      resultado = JSON.parse(jsonLimpio)
-    } catch (parseError) {
-      console.error('No se pudo interpretar la respuesta de la IA:', respuestaIA)
+    // Si la IA devuelve algo que no se puede leer (vacio, cortado o con texto de mas),
+    // se le pide una vez mas antes de rendirse: casi siempre sale bien al segundo intento.
+    let resultado: DiagnosticoResultadoV2 | null = null
+    let ultimaRespuesta = ''
+    for (let intento = 1; intento <= 2 && !resultado; intento++) {
+      ultimaRespuesta = await callGemini(prompt, TOPE_POR_MODELO_DIAGNOSTICO_MS)
+      try {
+        const jsonLimpio = ultimaRespuesta.replace(/```json\n?|\n?```/g, '').trim()
+        resultado = JSON.parse(jsonLimpio)
+      } catch {
+        console.error(`No se pudo interpretar la respuesta de la IA (intento ${intento}):`, ultimaRespuesta)
+      }
+    }
+    if (!resultado) {
       throw new Error('La IA no devolvió un formato válido, intenta de nuevo')
     }
 
