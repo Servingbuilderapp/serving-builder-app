@@ -58,16 +58,6 @@ const VIDEO_PORTADA = '/video-portada.jpg'
  */
 const ENTIDADES_ALIADAS: { nombre: string; logo: string }[] = []
 
-/**
- * Cifras de la franja de contexto.
- * Cada cifra debe poder respaldarse con una fuente verificable.
- * Para ocultar una, basta con borrar su línea.
- */
-const CIFRAS_CONTEXTO = [
-  { valor: '6', claveTexto: 'w.cifras.etapas' },
-  { valor: '9', claveTexto: 'w.cifras.idiomas' },
-]
-
 const TELEFONO = '312 333 5966'
 const TELEFONO_WHATSAPP = '573123335966'
 const CORREO = 'contacto@portalarquitecturadigital.com'
@@ -664,6 +654,7 @@ export function LandingClient({ user }: LandingClientProps) {
   const [menuAbierto, setMenuAbierto] = useState(false)
   const [videoAbierto, setVideoAbierto] = useState(false)
   const [faqAbierta, setFaqAbierta] = useState<string | null>(null)
+  const [faqTodas, setFaqTodas] = useState(false)
 
   return (
     <ProveedorAcceso user={user}>
@@ -908,73 +899,6 @@ export function LandingClient({ user }: LandingClientProps) {
       {/* ================= TRES OFERTAS + ¿A DÓNDE DIRIGIRTE? (debajo del video) ================= */}
       <CaminoFinanciacion />
 
-      {/* ================= NUESTRA VENTAJA: rapidez, tiempo y volumen ================= */}
-      <section id="ventaja" className="bg-[#8C3654] py-16 lg:py-20 border-y-2 border-[#B08D57]/45">
-        <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
-          <TituloSeccion
-            eyebrow={t('w.ventaja.eyebrow')}
-            titulo={t('w.ventaja.titulo')}
-            subtitulo={t('w.ventaja.subtitulo')}
-          />
-          <div className="grid gap-5 md:grid-cols-3">
-            {[
-              { icono: Rocket, clave: 'rapidez' },
-              { icono: Clock, clave: 'tiempo' },
-              { icono: Layers, clave: 'volumen' },
-            ].map(({ icono: Icono, clave }, i) => (
-              <Aparece key={clave} delay={i * 90}>
-                <div className={`h-full rounded-2xl border border-[#B08D57]/45 bg-gradient-to-b from-[#4C2032] to-[#3B1727] p-7 ${RELIEVE_TARJETA}`}>
-                  <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-[#C9A46B] to-[#B08D57] flex items-center justify-center mb-4">
-                    <Icono className="h-6 w-6 text-[#3A1420]" />
-                  </div>
-                  <h3 className="text-xl font-extrabold text-[#F3E7DC]">
-                    {t(`w.ventaja.${clave}.titulo`)}
-                  </h3>
-                  <p className="mt-2 text-[14px] text-[#F3E7DC]/75 leading-relaxed">
-                    {t(`w.ventaja.${clave}.texto`)}
-                  </p>
-                </div>
-              </Aparece>
-            ))}
-          </div>
-
-          <div className="mt-16">
-            <TituloSeccion
-              eyebrow={t('w.ventaja.mas.eyebrow')}
-              titulo={t('w.ventaja.mas.titulo')}
-            />
-          </div>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              { icono: Search, clave: 'centinela' },
-              { icono: Target, clave: 'encaje' },
-              { icono: Crown, clave: 'membresia' },
-              { icono: FileText, clave: 'listo' },
-            ].map(({ icono: Icono, clave }, i) => (
-              <Aparece key={clave} delay={i * 90}>
-                <div className={`h-full rounded-2xl border border-[#B08D57]/45 bg-gradient-to-b from-[#4C2032] to-[#3B1727] p-6 ${RELIEVE_TARJETA}`}>
-                  <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-[#C9A46B] to-[#B08D57] flex items-center justify-center mb-4">
-                    <Icono className="h-5 w-5 text-[#3A1420]" />
-                  </div>
-                  <h3 className="text-lg font-extrabold text-[#F3E7DC]">
-                    {t(`w.ventaja.${clave}.titulo`)}
-                  </h3>
-                  <p className="mt-2 text-[14px] text-[#F3E7DC]/75 leading-relaxed">
-                    {t(`w.ventaja.${clave}.texto`)}
-                  </p>
-                </div>
-              </Aparece>
-            ))}
-          </div>
-
-          <Aparece className="mt-12">
-            <p className="text-center text-xl md:text-2xl font-extrabold text-[#F3E7DC] max-w-3xl mx-auto leading-snug">
-              {t('w.ventaja.cierre')}
-            </p>
-          </Aparece>
-        </div>
-      </section>
-
       {/* ================= NUESTROS PLANES ================= */}
       <section id="servicios" className="py-16 lg:py-20">
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
@@ -1039,51 +963,6 @@ export function LandingClient({ user }: LandingClientProps) {
         </div>
       </section>
 
-      {/* ================= FRANJA DEL PROBLEMA (banda de color) ================= */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-[#3B1727] via-[#2E0E1A] to-[#54142B]">
-        {/* destello diagonal que cruza la banda */}
-        <div
-          aria-hidden
-          className="absolute inset-y-0 -left-1/4 w-2/3 rotate-12 bg-gradient-to-r from-transparent via-white/10 to-transparent"
-        />
-        <div
-          aria-hidden
-          className="absolute -bottom-24 right-[8%] h-64 w-64 rounded-full bg-[#B08D57]/20 blur-3xl"
-        />
-        <div className="relative max-w-[1400px] mx-auto px-5 lg:px-8 py-12 lg:py-14">
-          <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
-            <div className="lg:col-span-6 flex items-start gap-4">
-              <div className="h-12 w-12 rounded-xl bg-white/12 ring-1 ring-white/25 backdrop-blur flex items-center justify-center shrink-0">
-                <Briefcase className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <div className="text-xl lg:text-2xl font-extrabold text-white leading-snug">
-                  {t('w.problema.titulo')}
-                </div>
-                <div className="text-lg lg:text-xl font-semibold text-[#E0B868] leading-snug mt-1">
-                  {t('w.problema.subtitulo')}
-                </div>
-              </div>
-            </div>
-            <div className="lg:col-span-6 grid sm:grid-cols-2 gap-5">
-              {CIFRAS_CONTEXTO.map((cifra) => (
-                <div
-                  key={cifra.claveTexto}
-                  className="rounded-2xl bg-white/8 ring-1 ring-white/15 backdrop-blur px-5 py-4"
-                >
-                  <div className="text-3xl font-extrabold bg-gradient-to-r from-white to-[#E0B868] bg-clip-text text-transparent">
-                    {cifra.valor}
-                  </div>
-                  <div className="text-[13px] text-white/70 leading-snug mt-1.5">
-                    {t(cifra.claveTexto)}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ================= QUÉ HACEMOS ================= */}
       <section id="que-hacemos" className="py-16 lg:py-20">
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
@@ -1122,19 +1001,8 @@ export function LandingClient({ user }: LandingClientProps) {
           <p className="mt-6 text-center text-[13px] text-[#F3E7DC]/70 max-w-2xl mx-auto">
             {t('w.que_hacemos.nota')}
           </p>
-        </div>
-      </section>
 
-      {/* ================= PROPUESTA DE VALOR ================= */}
-      <section id="como-funciona" className="bg-[#8C3654] py-16 lg:py-20 border-y-2 border-[#B08D57]/45">
-        <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
-          <TituloSeccion
-            eyebrow={t('w.valor.eyebrow')}
-            titulo={t('w.valor.titulo')}
-            subtitulo={t('w.valor.subtitulo')}
-          />
-
-          <div className="grid md:grid-cols-3 gap-6">
+          <div id="como-funciona" className="mt-14 grid md:grid-cols-3 gap-6 scroll-mt-24">
             {PROPUESTA_VALOR.map(({ icono: Icono, claveTitulo, claveTexto }, i) => (
               <Aparece key={claveTitulo} delay={i * 110}>
               <div
@@ -1227,7 +1095,7 @@ export function LandingClient({ user }: LandingClientProps) {
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
           <TituloSeccion eyebrow={t('w.faq.eyebrow')} titulo={t('w.faq.titulo')} />
           <div className="max-w-3xl mx-auto space-y-2">
-            {FAQ_CLAVES.map((id) => {
+            {(faqTodas ? FAQ_CLAVES : FAQ_CLAVES.slice(0, 6)).map((id) => {
               const abierta = faqAbierta === id
               return (
                 <div key={id} className="rounded-xl border border-[#B08D57]/35 bg-[#3B1727] overflow-hidden">
@@ -1255,6 +1123,17 @@ export function LandingClient({ user }: LandingClientProps) {
                 </div>
               )
             })}
+            {!faqTodas ? (
+              <div className="pt-3 text-center">
+                <button
+                  type="button"
+                  onClick={() => setFaqTodas(true)}
+                  className={`h-11 px-6 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-sm font-semibold ${RELIEVE_BOTON}`}
+                >
+                  {t('w.faq.ver_mas')}
+                </button>
+              </div>
+            ) : null}
           </div>
         </div>
       </section>
