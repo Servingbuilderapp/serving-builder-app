@@ -10,7 +10,10 @@ import {
   type HallazgoEntrada,
   type SugerenciaOportunidad,
 } from '@/lib/empresarial/oportunidades'
+import { AyudaFichaIA, SeccionIdeasIA } from '@/components/empresarial/IaOportunidades'
+import type { IdeaIA } from '@/lib/empresarial/iaOportunidades'
 import {
+  categoriaPorTexto,
   sugerirDesdeDescubrimiento,
   type DescubrimientoEntrada,
   type SugerenciaRutaB,
@@ -43,6 +46,7 @@ interface Props {
   oportunidadesIniciales: Oportunidad[]
   descubrimiento: DescubrimientoEntrada[]
   resumenHipotesis: Record<string, { total: number; validadas: number }>
+  ideasIAIniciales: IdeaIA[]
 }
 
 const CAMPOS_FICHA: { clave: keyof Oportunidad; etiqueta: string; ayuda: string; largo?: boolean }[] = [
@@ -64,7 +68,7 @@ const COLOR_GRAVEDAD: Record<string, string> = {
 const campoClase =
   'mt-1 w-full rounded-xl border border-[#B08D57]/40 bg-[#2E0E1A] px-4 py-3 text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]'
 
-export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportunidadesIniciales, descubrimiento, resumenHipotesis }: Props) {
+export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportunidadesIniciales, descubrimiento, resumenHipotesis, ideasIAIniciales }: Props) {
   const [oportunidades, setOportunidades] = useState<Oportunidad[]>(oportunidadesIniciales)
   const [error, aviso] = useState<string | null>(null)
   const [guardando, setGuardando] = useState<string | null>(null)
@@ -144,6 +148,24 @@ export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportuni
     setGuardando(null)
     if (e || !data) return aviso('No pudimos guardar la oportunidad. Intenta de nuevo.')
     setOportunidades((prev) => [data as Oportunidad, ...prev])
+  }
+
+  /** Guarda una oportunidad que viene de una idea de la IA. */
+  async function crearDesdeIdea(nombre: string, descripcion: string): Promise<boolean> {
+    const supabase = createClient()
+    const { data, error: e } = await supabase
+      .from('sfpe_oportunidades')
+      .insert({
+        proyecto_id: proyecto.id,
+        nombre,
+        descripcion,
+        categoria: categoriaPorTexto(`${nombre} ${descripcion}`, 'Innovación'),
+      })
+      .select(columnas)
+      .single()
+    if (e || !data) return false
+    setOportunidades((prev) => [data as Oportunidad, ...prev])
+    return true
   }
 
   async function agregarMia() {
@@ -307,6 +329,9 @@ export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportuni
           </section>
         )}
 
+        {/* IDEAS CON IA */}
+        <SeccionIdeasIA proyectoId={proyecto.id} ideasIniciales={ideasIAIniciales} onCrearOportunidad={crearDesdeIdea} />
+
         {/* MIS OPORTUNIDADES */}
         <section className="mt-12">
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -399,6 +424,11 @@ export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportuni
                         )}
                       </label>
                     ))}
+                    <AyudaFichaIA
+                      proyectoId={proyecto.id}
+                      oportunidad={o}
+                      onUsar={(campo, texto) => cambiar(o.id, campo, texto)}
+                    />
                     <button type="button" className={botonOro} disabled={guardando === o.id} onClick={() => guardarFicha(o)}>
                       {guardando === o.id ? 'Guardando…' : 'Guardar ficha'}
                     </button>

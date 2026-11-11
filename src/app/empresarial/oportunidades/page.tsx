@@ -83,6 +83,15 @@ export default async function OportunidadesPage({
     if (h.estado === 'validada') r.validadas += 1
   }
 
+  // Ideas que la IA ya propuso y que la persona todavía no convirtió ni descartó
+  const { data: ideasIA } = await supabase
+    .from('sfpe_ideas')
+    .select('id, titulo, descripcion')
+    .eq('proyecto_id', proyecto.id)
+    .eq('origen', 'ia')
+    .eq('estado', 'guardada')
+    .order('creada_en', { ascending: false })
+
   // Ruta B: lo que la persona contó en el descubrimiento
   const { data: descubrimiento } = await supabase
     .from('sfpe_descubrimiento')
@@ -98,6 +107,11 @@ export default async function OportunidadesPage({
       oportunidadesIniciales={oportunidades ?? []}
       descubrimiento={descubrimiento ?? []}
       resumenHipotesis={resumenHipotesis}
+      ideasIAIniciales={(ideasIA ?? []).map((i) => ({
+        id: i.id as string,
+        titulo: i.titulo as string,
+        descripcion: (i.descripcion as string | null) ?? '',
+      }))}
     />
   )
 }
