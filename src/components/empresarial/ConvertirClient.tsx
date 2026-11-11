@@ -152,10 +152,15 @@ export function ConvertirClient({ userId, proyecto, oportunidadesIniciales, hipo
                     <div className="mt-4 rounded-xl bg-[#2E0E1A] p-4 text-sm">
                       <p className="font-semibold">Esta oportunidad ya es un proyecto.</p>
                       {creados[o.id] && (
-                        <p className="mt-1 text-[#F3E7DC]/75">
-                          Quedó creado con estado “Formulación”. La formulación se construye en el siguiente paso de la
-                          plataforma.
-                        </p>
+                        <p className="mt-1 text-[#F3E7DC]/75">Quedó creado con estado “Formulación”.</p>
+                      )}
+                      {o.proyecto_derivado_id && (
+                        <Link
+                          href={`/empresarial/formulacion?proyecto=${o.proyecto_derivado_id}`}
+                          className={`mt-3 ${botonOro}`}
+                        >
+                          Formular este proyecto
+                        </Link>
                       )}
                     </div>
                   ) : estado === 'descartada' ? (
