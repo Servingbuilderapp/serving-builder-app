@@ -587,6 +587,11 @@ export function FormulacionClient({
             {guardando ? 'Guardando…' : 'Guardar formulación'}
           </button>
           {sucio && !guardando && <span className="text-sm text-[#C9A46B]">Tienes cambios sin guardar.</span>}
+          {guardada && !sucio && (
+            <Link href={`/empresarial/mercado?proyecto=${proyecto.id}`} className={botonSuave}>
+              Seguir con el estudio de mercado
+            </Link>
+          )}
         </div>
         {aviso && (
           <div
