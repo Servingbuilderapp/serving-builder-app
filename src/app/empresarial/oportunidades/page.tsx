@@ -71,6 +71,18 @@ export default async function OportunidadesPage({
     .eq('proyecto_id', proyecto.id)
     .order('creada_en', { ascending: false })
 
+  // Cuántas hipótesis tiene cada oportunidad y cuántas ya están validadas
+  const { data: hipotesis } = await supabase
+    .from('sfpe_hipotesis')
+    .select('oportunidad_id, estado')
+    .eq('proyecto_id', proyecto.id)
+  const resumenHipotesis: Record<string, { total: number; validadas: number }> = {}
+  for (const h of hipotesis ?? []) {
+    const r = (resumenHipotesis[h.oportunidad_id as string] ??= { total: 0, validadas: 0 })
+    r.total += 1
+    if (h.estado === 'validada') r.validadas += 1
+  }
+
   // Ruta B: lo que la persona contó en el descubrimiento
   const { data: descubrimiento } = await supabase
     .from('sfpe_descubrimiento')
@@ -85,6 +97,7 @@ export default async function OportunidadesPage({
       dimensiones={dimensiones ?? []}
       oportunidadesIniciales={oportunidades ?? []}
       descubrimiento={descubrimiento ?? []}
+      resumenHipotesis={resumenHipotesis}
     />
   )
 }

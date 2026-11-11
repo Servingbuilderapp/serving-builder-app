@@ -42,6 +42,7 @@ interface Props {
   dimensiones: { id: string; codigo: string; nombre: string }[]
   oportunidadesIniciales: Oportunidad[]
   descubrimiento: DescubrimientoEntrada[]
+  resumenHipotesis: Record<string, { total: number; validadas: number }>
 }
 
 const CAMPOS_FICHA: { clave: keyof Oportunidad; etiqueta: string; ayuda: string; largo?: boolean }[] = [
@@ -63,7 +64,7 @@ const COLOR_GRAVEDAD: Record<string, string> = {
 const campoClase =
   'mt-1 w-full rounded-xl border border-[#B08D57]/40 bg-[#2E0E1A] px-4 py-3 text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]'
 
-export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportunidadesIniciales, descubrimiento }: Props) {
+export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportunidadesIniciales, descubrimiento, resumenHipotesis }: Props) {
   const [oportunidades, setOportunidades] = useState<Oportunidad[]>(oportunidadesIniciales)
   const [error, aviso] = useState<string | null>(null)
   const [guardando, setGuardando] = useState<string | null>(null)
@@ -346,6 +347,11 @@ export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportuni
                         ? `Faltan ${faltantes(o)} dato${faltantes(o) === 1 ? '' : 's'} clave en la ficha. Ábrela para completarla.`
                         : 'Ficha con los datos clave. Ábrela para revisarla.'}
                     </p>
+                    <p className="mt-1 text-xs text-[#F3E7DC]/65">
+                      {resumenHipotesis[o.id]
+                        ? `Validación: ${resumenHipotesis[o.id].validadas} de ${resumenHipotesis[o.id].total} hipótesis validadas.`
+                        : 'Validación: todavía no has escrito hipótesis.'}
+                    </p>
                   </summary>
 
                   <div className="mt-5 space-y-4">
@@ -391,6 +397,12 @@ export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportuni
                     <button type="button" className={botonOro} disabled={guardando === o.id} onClick={() => guardarFicha(o)}>
                       {guardando === o.id ? 'Guardando…' : 'Guardar ficha'}
                     </button>
+                    <Link
+                      href={`/empresarial/oportunidades/validar?proyecto=${proyecto.id}&oportunidad=${o.id}`}
+                      className={`${botonSuave} ml-3`}
+                    >
+                      Validar esta oportunidad
+                    </Link>
                   </div>
                 </details>
               ))}
