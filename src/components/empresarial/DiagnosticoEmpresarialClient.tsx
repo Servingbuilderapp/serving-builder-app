@@ -391,7 +391,10 @@ export function DiagnosticoEmpresarialClient(props: Props) {
             <button type="button" className={botonSuave} onClick={() => setResultado(null)}>
               Revisar mis respuestas
             </button>
-            <Link href="/dashboard" className={botonOro}>
+            <Link href={`/empresarial/oportunidades?proyecto=${proyecto.id}`} className={botonOro}>
+              Ver mis oportunidades
+            </Link>
+            <Link href="/dashboard" className={botonSuave}>
               Ir a mi panel
             </Link>
           </div>
