@@ -71,12 +71,20 @@ export default async function OportunidadesPage({
     .eq('proyecto_id', proyecto.id)
     .order('creada_en', { ascending: false })
 
+  // Ruta B: lo que la persona contó en el descubrimiento
+  const { data: descubrimiento } = await supabase
+    .from('sfpe_descubrimiento')
+    .select('id, tipo, titulo, detalle, nivel')
+    .eq('proyecto_id', proyecto.id)
+    .order('creada_en', { ascending: true })
+
   return (
     <OportunidadesClient
       proyecto={{ id: proyecto.id, nombre: proyecto.nombre, perfil: proyecto.perfil_confirmado as string | null }}
       hallazgos={hallazgos ?? []}
       dimensiones={dimensiones ?? []}
       oportunidadesIniciales={oportunidades ?? []}
+      descubrimiento={descubrimiento ?? []}
     />
   )
 }

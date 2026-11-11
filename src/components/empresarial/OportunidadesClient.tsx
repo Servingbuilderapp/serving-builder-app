@@ -10,6 +10,11 @@ import {
   type HallazgoEntrada,
   type SugerenciaOportunidad,
 } from '@/lib/empresarial/oportunidades'
+import {
+  sugerirDesdeDescubrimiento,
+  type DescubrimientoEntrada,
+  type SugerenciaRutaB,
+} from '@/lib/empresarial/problemas'
 
 const RELIEVE_BOTON =
   'shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-200'
@@ -36,6 +41,7 @@ interface Props {
   hallazgos: HallazgoEntrada[]
   dimensiones: { id: string; codigo: string; nombre: string }[]
   oportunidadesIniciales: Oportunidad[]
+  descubrimiento: DescubrimientoEntrada[]
 }
 
 const CAMPOS_FICHA: { clave: keyof Oportunidad; etiqueta: string; ayuda: string; largo?: boolean }[] = [
@@ -57,7 +63,7 @@ const COLOR_GRAVEDAD: Record<string, string> = {
 const campoClase =
   'mt-1 w-full rounded-xl border border-[#B08D57]/40 bg-[#2E0E1A] px-4 py-3 text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]'
 
-export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportunidadesIniciales }: Props) {
+export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportunidadesIniciales, descubrimiento }: Props) {
   const [oportunidades, setOportunidades] = useState<Oportunidad[]>(oportunidadesIniciales)
   const [error, aviso] = useState<string | null>(null)
   const [guardando, setGuardando] = useState<string | null>(null)
@@ -71,6 +77,12 @@ export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportuni
     return sugerirDesdeHallazgos(hallazgos, dimensiones, convertidos)
   }, [hallazgos, dimensiones, oportunidades])
 
+  // Ruta B: sugeridas desde lo que la persona contó en el descubrimiento
+  const sugeridasB = useMemo(
+    () => sugerirDesdeDescubrimiento(descubrimiento, new Set(oportunidades.map((o) => o.nombre))),
+    [descubrimiento, oportunidades],
+  )
+
   const columnas =
     'id, hallazgo_id, nombre, descripcion, categoria, cliente_o_beneficiario, solucion_propuesta, valor_generado, sector, ubicacion, estado, puntaje_preliminar, creada_en'
 
@@ -83,6 +95,45 @@ export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportuni
       .insert({
         proyecto_id: proyecto.id,
         hallazgo_id: s.hallazgo_id,
+        nombre: s.nombre,
+        descripcion: s.descripcion,
+        categoria: s.categoria,
+      })
+      .select(columnas)
+      .single()
+    setGuardando(null)
+    if (e || !data) return aviso('No pudimos guardar la oportunidad. Intenta de nuevo.')
+    setOportunidades((prev) => [data as Oportunidad, ...prev])
+  }
+
+  async function convertirRutaB(s: SugerenciaRutaB) {
+    aviso(null)
+    setGuardando(s.clave)
+    const supabase = createClient()
+    let problemaId: string | null = null
+    if (s.problema) {
+      // Si nace de un problema observado, también queda guardado como problema por comprobar.
+      const { data: p, error: ep } = await supabase
+        .from('sfpe_problemas')
+        .insert({
+          proyecto_id: proyecto.id,
+          titulo: s.problema.titulo,
+          descripcion: s.problema.descripcion,
+          nivel_certeza: 'hipotesis',
+        })
+        .select('id')
+        .single()
+      if (ep || !p) {
+        setGuardando(null)
+        return aviso('No pudimos guardar el problema. Intenta de nuevo.')
+      }
+      problemaId = p.id as string
+    }
+    const { data, error: e } = await supabase
+      .from('sfpe_oportunidades')
+      .insert({
+        proyecto_id: proyecto.id,
+        problema_id: problemaId,
         nombre: s.nombre,
         descripcion: s.descripcion,
         categoria: s.categoria,
@@ -209,15 +260,66 @@ export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportuni
           )}
         </section>
 
+        {/* RUTA B: DESDE LO QUE ME CONTASTE */}
+        {descubrimiento.length > 0 && (
+          <section className="mt-12">
+            <h2 className="text-xl font-extrabold">Sugeridas desde lo que me contaste</h2>
+            <p className="mt-1 text-sm text-[#F3E7DC]/70">
+              Salen de tus conocimientos, capacidades, intereses y problemas que has visto. Son ideas para explorar, no
+              negocios probados.
+            </p>
+            {sugeridasB.length === 0 ? (
+              <p className={`mt-4 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 text-sm text-[#F3E7DC]/80 ${RELIEVE_TARJETA}`}>
+                Ya convertiste todas las sugerencias de esta ruta. Si agregas más cosas en tu descubrimiento, aparecerán aquí.
+              </p>
+            ) : (
+              <div className="mt-4 space-y-3">
+                {sugeridasB.map((s) => (
+                  <div key={s.clave} className={`rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 ${RELIEVE_TARJETA}`}>
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div className="font-bold">{s.nombre}</div>
+                      <div className="flex gap-2 text-xs font-semibold">
+                        <span className="rounded-full bg-[#2E0E1A] border border-[#B08D57]/40 px-3 py-1">
+                          {s.origen === 'problema' ? 'Nace de un problema' : 'Nace de lo que sabes y te gusta'}
+                        </span>
+                        <span className="rounded-full bg-[#2E0E1A] border border-[#B08D57]/40 px-3 py-1">{s.categoria}</span>
+                      </div>
+                    </div>
+                    <p className="mt-2 text-sm leading-relaxed text-[#F3E7DC]/85">{s.descripcion}</p>
+                    <ul className="mt-2 list-disc pl-5 text-xs text-[#F3E7DC]/65">
+                      {s.basadoEn.map((b) => (
+                        <li key={b}>{b}</li>
+                      ))}
+                    </ul>
+                    <button
+                      type="button"
+                      className={`${botonSuave} mt-4`}
+                      disabled={guardando === s.clave}
+                      onClick={() => convertirRutaB(s)}
+                    >
+                      {guardando === s.clave ? 'Guardando…' : 'Convertir en oportunidad'}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+
         {/* MIS OPORTUNIDADES */}
         <section className="mt-12">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2 className="text-xl font-extrabold">Mis oportunidades</h2>
-            {oportunidades.length > 0 && (
-              <Link href={`/empresarial/oportunidades/evaluar?proyecto=${proyecto.id}`} className={botonOro}>
-                Evaluar y comparar
+            <div className="flex flex-wrap gap-3">
+              <Link href={`/empresarial/oportunidades/problemas?proyecto=${proyecto.id}`} className={botonSuave}>
+                Mis problemas
               </Link>
-            )}
+              {oportunidades.length > 0 && (
+                <Link href={`/empresarial/oportunidades/evaluar?proyecto=${proyecto.id}`} className={botonOro}>
+                  Evaluar y comparar
+                </Link>
+              )}
+            </div>
           </div>
           {oportunidades.length === 0 ? (
             <p className={`mt-4 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 text-sm text-[#F3E7DC]/80 ${RELIEVE_TARJETA}`}>
