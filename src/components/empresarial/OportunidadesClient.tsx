@@ -211,7 +211,14 @@ export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportuni
 
         {/* MIS OPORTUNIDADES */}
         <section className="mt-12">
-          <h2 className="text-xl font-extrabold">Mis oportunidades</h2>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="text-xl font-extrabold">Mis oportunidades</h2>
+            {oportunidades.length > 0 && (
+              <Link href={`/empresarial/oportunidades/evaluar?proyecto=${proyecto.id}`} className={botonOro}>
+                Evaluar y comparar
+              </Link>
+            )}
+          </div>
           {oportunidades.length === 0 ? (
             <p className={`mt-4 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 text-sm text-[#F3E7DC]/80 ${RELIEVE_TARJETA}`}>
               Aún no tienes oportunidades guardadas. Convierte una sugerencia o agrega la tuya.
