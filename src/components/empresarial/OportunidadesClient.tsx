@@ -316,8 +316,13 @@ export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportuni
                 Mis problemas
               </Link>
               {oportunidades.length > 0 && (
-                <Link href={`/empresarial/oportunidades/evaluar?proyecto=${proyecto.id}`} className={botonOro}>
+                <Link href={`/empresarial/oportunidades/evaluar?proyecto=${proyecto.id}`} className={botonSuave}>
                   Evaluar y comparar
+                </Link>
+              )}
+              {oportunidades.length > 0 && (
+                <Link href={`/empresarial/oportunidades/convertir?proyecto=${proyecto.id}`} className={botonOro}>
+                  Pasar a proyecto
                 </Link>
               )}
             </div>
