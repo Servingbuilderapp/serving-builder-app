@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { ArrowLeft, ArrowRight, Printer, Users, RotateCcw } from 'lucide-react'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { GlowButton } from '@/components/ui/GlowButton'
+import { useRutaIdeas } from '@/lib/ideas/useRutaIdeas'
 
 /**
  * Hoja de trabajo: Beneficiario Ideal (versión propia de Serving).
@@ -65,6 +66,7 @@ const CAMPO =
   'w-full bg-color-base-content/5 border border-color-base-content/10 rounded-xl px-4 py-3 text-sm text-color-base-content focus:outline-none focus:border-color-primary/50 transition-all placeholder:text-color-base-content/30'
 
 export default function HojaBeneficiarioClient() {
+  const ruta = useRutaIdeas()
   const [hoja, setHoja] = useState<Hoja>(VACIA)
   const [listo, setListo] = useState(false)
 
@@ -117,7 +119,7 @@ export default function HojaBeneficiarioClient() {
     <div className="max-w-5xl mx-auto w-full space-y-8 py-12 px-6">
       <div className="space-y-4 print:hidden">
         <Link
-          href="/ideas"
+          href={ruta('/ideas')}
           className="inline-flex items-center gap-1.5 text-xs font-bold text-color-base-content/50 hover:text-color-primary transition-colors"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
@@ -318,7 +320,7 @@ export default function HojaBeneficiarioClient() {
             <Printer className="h-4 w-4" />
             Imprimir o guardar en PDF
           </GlowButton>
-          <Link href="/ideas/arbol-de-problemas">
+          <Link href={ruta('/ideas/arbol-de-problemas')}>
             <GlowButton variant="ghost" className="gap-2 text-xs">
               Seguir al Árbol de Problemas
               <ArrowRight className="h-4 w-4" />

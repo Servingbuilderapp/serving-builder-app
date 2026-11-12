@@ -89,7 +89,7 @@ export async function cargarCamino(proyectoId: string): Promise<DatosCamino | nu
       clave: 'ideas',
       titulo: 'App de Ideas (gratis)',
       ayuda: 'Tres herramientas para explorar y afinar tus ideas. Puedes usarlas cuando quieras.',
-      href: '/ideas',
+      href: `/empresarial/ideas?proyecto=${origenId}`,
       estado: 'por_hacer',
     },
     {
@@ -198,7 +198,7 @@ export function pasoActual(ruta: string): PasoCamino['clave'] | null {
   if (ruta.startsWith('/empresarial/documento')) return 'documento'
   if (ruta.startsWith('/empresarial/dofa')) return 'dofa'
   if (ruta.startsWith('/empresarial/ikigai')) return 'ikigai'
-  if (ruta.startsWith('/ideas')) return 'ideas'
+  if (ruta.startsWith('/empresarial/ideas') || ruta.startsWith('/ideas')) return 'ideas'
   if (ruta.startsWith('/empresarial/financiero')) return 'financiero'
   if (ruta.startsWith('/empresarial/tecnico')) return 'tecnico'
   if (ruta.startsWith('/empresarial/mercado/competencia')) return 'competencia'

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { ArrowLeft, ArrowRight, Printer, Lightbulb, Network, RotateCcw } from 'lucide-react'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { GlowButton } from '@/components/ui/GlowButton'
+import { useRutaIdeas } from '@/lib/ideas/useRutaIdeas'
 
 /**
  * Hoja de trabajo: Árbol de Problemas y Objetivos (versión propia de Serving).
@@ -60,6 +61,7 @@ const CAMPO =
   'w-full bg-color-base-content/5 border border-color-base-content/10 rounded-xl px-4 py-3 text-sm text-color-base-content focus:outline-none focus:border-color-primary/50 transition-all placeholder:text-color-base-content/30'
 
 export default function HojaArbolClient() {
+  const ruta = useRutaIdeas()
   const [hoja, setHoja] = useState<Hoja>(VACIA)
   const [parte, setParte] = useState<Parte>(0)
   const [listo, setListo] = useState(false)
@@ -107,7 +109,7 @@ export default function HojaArbolClient() {
       {/* Encabezado */}
       <div className="space-y-4 print:hidden">
         <Link
-          href="/ideas"
+          href={ruta('/ideas')}
           className="inline-flex items-center gap-1.5 text-xs font-bold text-color-base-content/50 hover:text-color-primary transition-colors"
         >
           <ArrowLeft className="h-3.5 w-3.5" />

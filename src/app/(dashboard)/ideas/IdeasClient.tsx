@@ -12,6 +12,7 @@ import {
   FORMAS_DE_SATISFACCION
 } from '@/lib/ideas/matrices-data'
 import { GUIAS } from '@/lib/ideas/guias-data'
+import { useRutaIdeas } from '@/lib/ideas/useRutaIdeas'
 import type { IdeasResultado } from '@/app/api/ideas/generar/route'
 
 type Herramienta = 'reinvencion' | 'convergencia' | 'necesidades' | null
@@ -19,6 +20,7 @@ type Herramienta = 'reinvencion' | 'convergencia' | 'necesidades' | null
 const MAX_TECNOLOGIAS = 2
 
 export default function IdeasClient() {
+  const ruta = useRutaIdeas()
   const [descripcionIdea, setDescripcionIdea] = useState('')
   const [sectorActual, setSectorActual] = useState('')
 
@@ -369,7 +371,7 @@ export default function IdeasClient() {
           Hojas de trabajo — se llenan aquí mismo, sin límite de uso
         </p>
         <Link
-          href="/ideas/arbol-de-problemas"
+          href={ruta('/ideas/arbol-de-problemas')}
           className="flex items-center justify-between gap-4 rounded-2xl border border-color-base-content/10 bg-color-base-content/[0.02] px-5 py-4 hover:bg-color-base-content/5 hover:border-color-primary/40 transition-colors"
         >
           <div className="flex items-center gap-3">
@@ -386,7 +388,7 @@ export default function IdeasClient() {
           <ArrowRight className="h-4 w-4 text-color-base-content/40 shrink-0" />
         </Link>
         <Link
-          href="/ideas/beneficiario-ideal"
+          href={ruta('/ideas/beneficiario-ideal')}
           className="flex items-center justify-between gap-4 rounded-2xl border border-color-base-content/10 bg-color-base-content/[0.02] px-5 py-4 hover:bg-color-base-content/5 hover:border-color-primary/40 transition-colors"
         >
           <div className="flex items-center gap-3">
@@ -412,7 +414,7 @@ export default function IdeasClient() {
         {GUIAS.map((g) => (
           <Link
             key={g.slug}
-            href={`/ideas/guias/${g.slug}`}
+            href={ruta(`/ideas/guias/${g.slug}`)}
             className="flex items-center justify-between gap-4 rounded-2xl border border-color-base-content/10 bg-color-base-content/[0.02] px-5 py-4 hover:bg-color-base-content/5 hover:border-color-primary/40 transition-colors"
           >
             <div className="flex items-center gap-3">

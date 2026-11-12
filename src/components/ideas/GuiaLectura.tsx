@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowRight, BookOpen, Printer } from 'lucide-react'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { GlowButton } from '@/components/ui/GlowButton'
 import type { Bloque, Guia } from '@/lib/ideas/guias-data'
+import { useRutaIdeas } from '@/lib/ideas/useRutaIdeas'
 
 /** Convierte **texto** en negrita. */
 function conNegrita(texto: string): React.ReactNode[] {
@@ -80,11 +81,12 @@ function BloqueVista({ bloque }: { bloque: Bloque }) {
 }
 
 export default function GuiaLectura({ guia }: { guia: Guia }) {
+  const ruta = useRutaIdeas()
   return (
     <div className="max-w-3xl mx-auto w-full space-y-8 py-12 px-6">
       <div className="space-y-4 print:hidden">
         <Link
-          href="/ideas"
+          href={ruta('/ideas')}
           className="inline-flex items-center gap-1.5 text-xs font-bold text-color-base-content/50 hover:text-color-primary transition-colors"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
@@ -136,7 +138,7 @@ export default function GuiaLectura({ guia }: { guia: Guia }) {
             </p>
             <div className="flex flex-wrap gap-3">
               {guia.enlaces.map((e) => (
-                <Link key={e.href} href={e.href}>
+                <Link key={e.href} href={ruta(e.href)}>
                   <GlowButton variant="ghost" className="gap-2 text-xs">
                     {e.nombre}
                     <ArrowRight className="h-4 w-4" />
