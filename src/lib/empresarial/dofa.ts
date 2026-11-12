@@ -33,7 +33,7 @@ export const GUIAS: GuiaCuadrante[] = [
     pista: 'Lo que tienes o sabes hacer bien, y que depende de ti.',
     preguntas: ['¿Qué sabes hacer mejor que otros?', '¿Qué recursos, equipos, contactos o permisos ya tienes?', '¿Qué dicen tus clientes que les gusta de ti?'],
     ejemplo: 'Receta propia con 10 años de práctica; local ya adecuado con permiso sanitario.',
-    color: '#7FB6A4',
+    color: '#3F8A76',
   },
   {
     clave: 'debilidad',
@@ -43,7 +43,7 @@ export const GUIAS: GuiaCuadrante[] = [
     pista: 'Lo que te falta o haces mal, y que también depende de ti.',
     preguntas: ['¿Qué te falta para atender bien a tus clientes?', '¿Qué te ha costado o te ha salido mal?', '¿De qué dependes demasiado (una persona, un cliente, un proveedor)?'],
     ejemplo: 'Una sola persona sabe hornear; no hay capital para comprar el segundo horno.',
-    color: '#E3A59B',
+    color: '#C4604F',
   },
   {
     clave: 'oportunidad',
@@ -53,7 +53,7 @@ export const GUIAS: GuiaCuadrante[] = [
     pista: 'Lo que pasa en el entorno y te puede favorecer. No depende de ti.',
     preguntas: ['¿Qué cambia en el mercado, la ley o la tecnología que te beneficia?', '¿Qué necesidad hoy nadie atiende bien?', '¿Qué ayudas, convocatorias o alianzas hay disponibles?'],
     ejemplo: 'Tres cafeterías nuevas en el barrio sin proveedor de pan fresco.',
-    color: '#8FA8D8',
+    color: '#4A6FB5',
   },
   {
     clave: 'amenaza',
@@ -63,7 +63,7 @@ export const GUIAS: GuiaCuadrante[] = [
     pista: 'Lo que pasa en el entorno y te puede hacer daño. No depende de ti.',
     preguntas: ['¿Qué hace la competencia que te puede quitar clientes?', '¿Qué puede subir de precio o escasear (insumos, arriendos)?', '¿Qué norma o cambio económico te puede afectar?'],
     ejemplo: 'Una cadena grande abrió a dos cuadras; el precio de la harina subió.',
-    color: '#C9A46B',
+    color: '#B08D57',
   },
 ]
 

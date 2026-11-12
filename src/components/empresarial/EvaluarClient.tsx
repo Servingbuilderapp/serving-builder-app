@@ -20,7 +20,7 @@ import {
 
 const RELIEVE_BOTON =
   'shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-200'
-const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(11,42,74,0.06),0_10px_28px_-14px_rgba(11,42,74,0.22)]'
+const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(84,20,43,0.06),0_10px_28px_-14px_rgba(84,20,43,0.22)]'
 
 interface Oportunidad {
   id: string
@@ -53,7 +53,7 @@ interface Props {
 }
 
 const campoClase =
-  'mt-1 w-full rounded-xl border border-[#B08D57]/40 bg-[#2E0E1A] px-4 py-3 text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]'
+  'mt-1 w-full rounded-xl border border-ca-oro/40 bg-ca-fondo px-4 py-3 text-ca-vino placeholder:text-ca-vino/65 focus:outline-none focus:ring-2 focus:ring-ca-oro-claro'
 
 const nombreDecision = (clave: string) => DECISIONES.find((d) => d.clave === clave)?.nombre ?? clave
 
@@ -67,8 +67,8 @@ export function EvaluarClient({ proyecto, oportunidadesIniciales, evaluacionesIn
   const [borradores, setBorradores] = useState<Record<string, Evaluacion>>({})
   const [formDecision, setFormDecision] = useState<Record<string, { decision: ClaveDecision | ''; motivo: string }>>({})
 
-  const botonOro = `h-12 px-6 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] font-extrabold disabled:opacity-50 disabled:cursor-not-allowed ${RELIEVE_BOTON}`
-  const tarjeta = `rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 ${RELIEVE_TARJETA}`
+  const botonOro = `h-12 px-6 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-ca-oro-claro to-ca-oro text-ca-vino-hondo font-extrabold disabled:opacity-50 disabled:cursor-not-allowed ${RELIEVE_BOTON}`
+  const tarjeta = `rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 ${RELIEVE_TARJETA}`
 
   const borradorDe = (id: string): Evaluacion =>
     borradores[id] ?? evaluaciones[id] ?? { calificaciones: {}, justificaciones: {} }
@@ -177,32 +177,32 @@ export function EvaluarClient({ proyecto, oportunidadesIniciales, evaluacionesIn
   const sinEvaluar = oportunidades.filter((o) => !evaluaciones[o.id])
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#2E0E1A] via-[#3B1727] to-[#54142B] text-[#F3E7DC]">
+    <main className="min-h-screen bg-gradient-to-b from-ca-tarjeta via-ca-fondo to-ca-suave text-ca-vino">
       <div className="max-w-[900px] mx-auto px-5 lg:px-8 py-10 lg:py-14">
         <Link
           href={`/empresarial/oportunidades?proyecto=${proyecto.id}`}
-          className="inline-flex items-center gap-2 text-sm text-[#F3E7DC]/70 hover:text-white"
+          className="inline-flex items-center gap-2 text-sm text-ca-vino/75 hover:text-ca-vino-hondo"
         >
           <ArrowLeft className="h-4 w-4" /> Volver a mis oportunidades
         </Link>
 
-        <div className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-[#C9A46B]">
+        <div className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-ca-oro-texto">
           Evaluar y comparar · {proyecto.nombre}
         </div>
         <h1 className="mt-3 text-3xl lg:text-4xl font-extrabold">¿Cuál conviene trabajar primero?</h1>
-        <p className="mt-3 text-[#F3E7DC]/80 leading-relaxed">
+        <p className="mt-3 text-ca-vino/80 leading-relaxed">
           Califica cada oportunidad en 9 aspectos, de 1 a 5. Te damos un puntaje sobre 100 para poder compararlas. El
           puntaje es una guía para ordenar: no prueba que haya clientes ni que vaya a funcionar. Eso se comprueba después.
         </p>
 
         {error && (
-          <div role="alert" className="mt-6 rounded-2xl border border-[#B3261E]/60 bg-[#B3261E]/15 p-4 text-sm">
+          <div role="alert" className="mt-6 rounded-2xl border border-ca-rojo/60 bg-ca-rojo/10 p-4 text-sm">
             {error}
           </div>
         )}
 
         {oportunidades.length === 0 && (
-          <p className={`mt-10 text-sm text-[#F3E7DC]/80 ${tarjeta}`}>
+          <p className={`mt-10 text-sm text-ca-vino/80 ${tarjeta}`}>
             Aún no tienes oportunidades para evaluar. Vuelve a la pantalla anterior, convierte una sugerencia o agrega la tuya.
           </p>
         )}
@@ -211,7 +211,7 @@ export function EvaluarClient({ proyecto, oportunidadesIniciales, evaluacionesIn
         {oportunidades.length > 0 && (
           <section className="mt-12">
             <h2 className="text-xl font-extrabold">1. Califica tus oportunidades</h2>
-            <p className="mt-1 text-sm text-[#F3E7DC]/70">Abre una, califica los 9 aspectos y guarda. Puedes volver a calificar cuando sepas más.</p>
+            <p className="mt-1 text-sm text-ca-vino/75">Abre una, califica los 9 aspectos y guarda. Puedes volver a calificar cuando sepas más.</p>
             <div className="mt-4 space-y-4">
               {oportunidades.map((o) => {
                 const b = borradorDe(o.id)
@@ -224,7 +224,7 @@ export function EvaluarClient({ proyecto, oportunidadesIniciales, evaluacionesIn
                     <summary className="cursor-pointer list-none">
                       <div className="flex flex-wrap items-start justify-between gap-3">
                         <div className="font-bold">{o.nombre}</div>
-                        <span className="rounded-full bg-[#2E0E1A] border border-[#B08D57]/40 px-3 py-1 text-xs font-semibold">
+                        <span className="rounded-full bg-ca-fondo border border-ca-oro/40 px-3 py-1 text-xs font-semibold">
                           {evaluaciones[o.id] ? `Última evaluación: ${o.puntaje_preliminar ?? '—'} / 100` : 'Sin evaluar'}
                         </span>
                       </div>
@@ -234,11 +234,11 @@ export function EvaluarClient({ proyecto, oportunidadesIniciales, evaluacionesIn
                       {CRITERIOS.map((k, i) => {
                         const v = b.calificaciones[k.clave]
                         return (
-                          <div key={k.clave} className="rounded-xl border border-[#B08D57]/25 bg-[#2E0E1A]/60 p-4">
+                          <div key={k.clave} className="rounded-xl border border-ca-oro/40 bg-ca-fondo/60 p-4">
                             <div className="font-semibold">
                               {i + 1}. {k.nombre}
                             </div>
-                            <div className="text-xs text-[#F3E7DC]/65">{k.pregunta}</div>
+                            <div className="text-xs text-ca-vino/75">{k.pregunta}</div>
                             <div className="mt-3 flex gap-2" role="group" aria-label={k.nombre}>
                               {[1, 2, 3, 4, 5].map((n) => (
                                 <button
@@ -248,15 +248,15 @@ export function EvaluarClient({ proyecto, oportunidadesIniciales, evaluacionesIn
                                   onClick={() => calificar(o.id, k.clave, n)}
                                   className={`h-11 w-11 rounded-xl font-extrabold border ${RELIEVE_BOTON} ${
                                     v === n
-                                      ? 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] border-[#C9A46B]'
-                                      : 'bg-[#3B1727] border-[#B08D57]/40 text-[#F3E7DC]'
+                                      ? 'bg-gradient-to-b from-ca-oro-claro to-ca-oro text-ca-vino-hondo border-ca-oro'
+                                      : 'bg-ca-tarjeta border-ca-oro/40 text-ca-vino'
                                   }`}
                                 >
                                   {n}
                                 </button>
                               ))}
                             </div>
-                            <p className="mt-2 text-xs text-[#F3E7DC]/75 min-h-[1rem]">
+                            <p className="mt-2 text-xs text-ca-vino/75 min-h-[1rem]">
                               {v ? `${v}: ${k.guia[v - 1]}` : '1 = muy bajo · 5 = muy alto. Elige un número.'}
                             </p>
                             <label className="mt-3 block text-xs font-semibold">
@@ -271,18 +271,18 @@ export function EvaluarClient({ proyecto, oportunidadesIniciales, evaluacionesIn
                         )
                       })}
 
-                      <div className="rounded-xl border border-[#C9A46B]/50 bg-[#2E0E1A] p-4">
+                      <div className="rounded-xl border border-ca-oro/50 bg-ca-fondo p-4">
                         {puntaje === null || banda === null ? (
                           <p className="text-sm">Llevas {hechos} de 9 aspectos. Faltan {9 - hechos} para ver el puntaje.</p>
                         ) : (
                           <>
-                            <div className="text-3xl font-extrabold text-[#C9A46B]">{puntaje} / 100</div>
+                            <div className="text-3xl font-extrabold text-ca-oro-texto">{puntaje} / 100</div>
                             <div className="mt-1 font-semibold">{banda.nombre}</div>
-                            <p className="text-sm text-[#F3E7DC]/80">{banda.texto}</p>
+                            <p className="text-sm text-ca-vino/80">{banda.texto}</p>
                           </>
                         )}
                         {avisos.map((a) => (
-                          <p key={a} className="mt-2 text-sm text-[#F3E7DC]/90">
+                          <p key={a} className="mt-2 text-sm text-ca-vino/90">
                             • {a}
                           </p>
                         ))}
@@ -308,13 +308,13 @@ export function EvaluarClient({ proyecto, oportunidadesIniciales, evaluacionesIn
         {oportunidades.length > 0 && (
           <section className="mt-14">
             <h2 className="text-xl font-extrabold">2. Compara y decide</h2>
-            <p className="mt-1 text-sm text-[#F3E7DC]/70">
+            <p className="mt-1 text-sm text-ca-vino/75">
               De mayor a menor puntaje. Ojo: una oportunidad puede ser muy atractiva y aun así no ser la primera, si hoy
               te faltan recursos o acceso a los clientes.
             </p>
 
             {evaluadas.length === 0 ? (
-              <p className={`mt-4 text-sm text-[#F3E7DC]/80 ${tarjeta}`}>
+              <p className={`mt-4 text-sm text-ca-vino/80 ${tarjeta}`}>
                 Cuando guardes la primera evaluación, aquí aparecerá la comparación.
               </p>
             ) : (
@@ -328,47 +328,47 @@ export function EvaluarClient({ proyecto, oportunidadesIniciales, evaluacionesIn
                     <div key={o.id} className={tarjeta}>
                       <div className="flex flex-wrap items-start justify-between gap-3">
                         <div>
-                          <div className="text-xs font-bold text-[#C9A46B]">Lugar {idx + 1}</div>
+                          <div className="text-xs font-bold text-ca-oro-texto">Lugar {idx + 1}</div>
                           <div className="font-bold">{o.nombre}</div>
                         </div>
                         <div className="text-right">
-                          <div className="text-2xl font-extrabold text-[#C9A46B]">{puntaje} / 100</div>
+                          <div className="text-2xl font-extrabold text-ca-oro-texto">{puntaje} / 100</div>
                           <div className="text-xs font-semibold">{banda.nombre}</div>
                         </div>
                       </div>
 
                       <dl className="mt-3 grid gap-2 text-sm sm:grid-cols-2">
                         <div>
-                          <dt className="text-xs text-[#F3E7DC]/60">Para quién</dt>
+                          <dt className="text-xs text-ca-vino/75">Para quién</dt>
                           <dd>{o.cliente_o_beneficiario || 'Sin completar en la ficha'}</dd>
                         </div>
                         <div>
-                          <dt className="text-xs text-[#F3E7DC]/60">Valor esperado</dt>
+                          <dt className="text-xs text-ca-vino/75">Valor esperado</dt>
                           <dd>{o.valor_generado || 'Sin completar en la ficha'}</dd>
                         </div>
                         <div>
-                          <dt className="text-xs text-[#F3E7DC]/60">Qué tan atractiva / qué tan posible</dt>
+                          <dt className="text-xs text-ca-vino/75">Qué tan atractiva / qué tan posible</dt>
                           <dd>
                             Atractivo {av.atractivo} · Viabilidad {av.viabilidad}
                           </dd>
                         </div>
                         <div>
-                          <dt className="text-xs text-[#F3E7DC]/60">Prioridad sugerida</dt>
+                          <dt className="text-xs text-ca-vino/75">Prioridad sugerida</dt>
                           <dd>{prioridadSugerida(ev.calificaciones as Calificaciones, puntaje)}</dd>
                         </div>
                       </dl>
 
                       <div className="mt-3 flex flex-wrap gap-2 text-xs font-semibold">
-                        <span className="rounded-full bg-[#2E0E1A] border border-[#B08D57]/40 px-3 py-1">{o.estado}</span>
+                        <span className="rounded-full bg-ca-fondo border border-ca-oro/40 px-3 py-1">{o.estado}</span>
                         {ultima && (
-                          <span className="rounded-full bg-[#2E0E1A] border border-[#B08D57]/40 px-3 py-1">
+                          <span className="rounded-full bg-ca-fondo border border-ca-oro/40 px-3 py-1">
                             Decisión: {nombreDecision(ultima.decision)}
                           </span>
                         )}
                       </div>
-                      {ultima && <p className="mt-2 text-xs text-[#F3E7DC]/70">Motivo: {ultima.motivo}</p>}
+                      {ultima && <p className="mt-2 text-xs text-ca-vino/75">Motivo: {ultima.motivo}</p>}
 
-                      <div className="mt-4 border-t border-[#B08D57]/25 pt-4 space-y-3">
+                      <div className="mt-4 border-t border-ca-oro/40 pt-4 space-y-3">
                         <label className="block text-sm font-semibold">
                           ¿Qué vas a hacer con ella?
                           <select
@@ -411,14 +411,14 @@ export function EvaluarClient({ proyecto, oportunidadesIniciales, evaluacionesIn
             )}
 
             {sinEvaluar.length > 0 && (
-              <p className="mt-4 text-sm text-[#F3E7DC]/70">
+              <p className="mt-4 text-sm text-ca-vino/75">
                 Sin evaluar todavía: {sinEvaluar.map((o) => o.nombre).join(', ')}.
               </p>
             )}
           </section>
         )}
 
-        <p className="mt-12 text-center text-sm text-[#F3E7DC]/65">
+        <p className="mt-12 text-center text-sm text-ca-vino/75">
           Descartar o aplazar no borra nada: la oportunidad y tus decisiones quedan guardadas con su motivo.
         </p>
       </div>

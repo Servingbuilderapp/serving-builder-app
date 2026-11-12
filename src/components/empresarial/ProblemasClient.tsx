@@ -16,7 +16,7 @@ import {
 
 const RELIEVE_BOTON =
   'shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-200'
-const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(11,42,74,0.06),0_10px_28px_-14px_rgba(11,42,74,0.22)]'
+const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(84,20,43,0.06),0_10px_28px_-14px_rgba(84,20,43,0.22)]'
 
 interface OportunidadCorta {
   id: string
@@ -31,7 +31,7 @@ interface Props {
 }
 
 const campoClase =
-  'mt-1 w-full rounded-xl border border-[#B08D57]/40 bg-[#2E0E1A] px-4 py-3 text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]'
+  'mt-1 w-full rounded-xl border border-ca-oro/40 bg-ca-fondo px-4 py-3 text-ca-vino placeholder:text-ca-vino/65 focus:outline-none focus:ring-2 focus:ring-ca-oro-claro'
 
 const COLUMNAS =
   'id, titulo, descripcion, afectados, ubicacion, frecuencia, consecuencias, causas, nivel_certeza, hallazgo_id, creada_en'
@@ -49,8 +49,8 @@ export function ProblemasClient({ proyecto, problemasIniciales, oportunidadesIni
   const [guardando, setGuardando] = useState<string | null>(null)
   const [nuevoTitulo, setNuevoTitulo] = useState('')
 
-  const botonOro = `h-12 px-6 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] font-extrabold disabled:opacity-50 disabled:cursor-not-allowed ${RELIEVE_BOTON}`
-  const botonSuave = `h-12 px-5 inline-flex items-center justify-center gap-2 rounded-xl border border-[#B08D57]/50 bg-[#3B1727] text-[#F3E7DC] font-semibold disabled:opacity-40 ${RELIEVE_BOTON}`
+  const botonOro = `h-12 px-6 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-ca-oro-claro to-ca-oro text-ca-vino-hondo font-extrabold disabled:opacity-50 disabled:cursor-not-allowed ${RELIEVE_BOTON}`
+  const botonSuave = `h-12 px-5 inline-flex items-center justify-center gap-2 rounded-xl border border-ca-oro/50 bg-ca-tarjeta text-ca-vino font-semibold disabled:opacity-40 ${RELIEVE_BOTON}`
 
   async function agregar() {
     if (!nuevoTitulo.trim()) return aviso('Escribe en una frase cuál es el problema.')
@@ -120,26 +120,26 @@ export function ProblemasClient({ proyecto, problemasIniciales, oportunidadesIni
   const sinProblema = oportunidades.filter((o) => !o.problema_id)
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#2E0E1A] via-[#3B1727] to-[#54142B] text-[#F3E7DC]">
+    <main className="min-h-screen bg-gradient-to-b from-ca-tarjeta via-ca-fondo to-ca-suave text-ca-vino">
       <div className="max-w-[900px] mx-auto px-5 lg:px-8 py-10 lg:py-14">
         <Link
           href={`/empresarial/oportunidades?proyecto=${proyecto.id}`}
-          className="inline-flex items-center gap-2 text-sm text-[#F3E7DC]/70 hover:text-white"
+          className="inline-flex items-center gap-2 text-sm text-ca-vino/75 hover:text-ca-vino-hondo"
         >
           <ArrowLeft className="h-4 w-4" /> Volver a mis oportunidades
         </Link>
 
-        <div className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-[#C9A46B]">
+        <div className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-ca-oro-texto">
           Problemas · {proyecto.nombre}
         </div>
         <h1 className="mt-3 text-3xl lg:text-4xl font-extrabold">¿Qué problema real quieres resolver?</h1>
-        <p className="mt-3 text-[#F3E7DC]/80 leading-relaxed">
+        <p className="mt-3 text-ca-vino/80 leading-relaxed">
           Un buen proyecto casi siempre nace de un problema que alguien vive de verdad. Aquí lo describes con claridad y
           dices qué tan seguro estás. Un mismo problema puede tener varias oportunidades para resolverlo.
         </p>
 
         {error && (
-          <div role="alert" className="mt-6 rounded-2xl border border-[#B3261E]/60 bg-[#B3261E]/15 p-4 text-sm">
+          <div role="alert" className="mt-6 rounded-2xl border border-ca-rojo/60 bg-ca-rojo/10 p-4 text-sm">
             {error}
           </div>
         )}
@@ -147,7 +147,7 @@ export function ProblemasClient({ proyecto, problemasIniciales, oportunidadesIni
         {/* AGREGAR */}
         <section className="mt-10">
           <h2 className="text-xl font-extrabold">Agregar un problema</h2>
-          <div className={`mt-4 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 space-y-4 ${RELIEVE_TARJETA}`}>
+          <div className={`mt-4 rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 space-y-4 ${RELIEVE_TARJETA}`}>
             <label className="block text-sm font-semibold">
               El problema, en una frase
               <input
@@ -167,7 +167,7 @@ export function ProblemasClient({ proyecto, problemasIniciales, oportunidadesIni
         <section className="mt-12">
           <h2 className="text-xl font-extrabold">Mis problemas</h2>
           {problemas.length === 0 ? (
-            <p className={`mt-4 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 text-sm text-[#F3E7DC]/80 ${RELIEVE_TARJETA}`}>
+            <p className={`mt-4 rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 text-sm text-ca-vino/80 ${RELIEVE_TARJETA}`}>
               Aún no tienes problemas guardados. Agrega uno arriba, o conviértelos desde las sugerencias de tu descubrimiento en
               la pantalla de oportunidades.
             </p>
@@ -178,22 +178,22 @@ export function ProblemasClient({ proyecto, problemasIniciales, oportunidadesIni
                 const relacionadas = oportunidades.filter((o) => o.problema_id === p.id)
                 const certeza = NIVELES_CERTEZA.find((n) => n.valor === p.nivel_certeza)
                 return (
-                  <details key={p.id} className={`rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 ${RELIEVE_TARJETA}`}>
+                  <details key={p.id} className={`rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 ${RELIEVE_TARJETA}`}>
                     <summary className="cursor-pointer list-none">
                       <div className="flex flex-wrap items-start justify-between gap-3">
                         <div className="font-bold">{p.titulo}</div>
                         <div className="flex flex-wrap gap-2 text-xs font-semibold">
                           {certeza && (
-                            <span className="rounded-full bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] px-3 py-1">
+                            <span className="rounded-full bg-gradient-to-b from-ca-oro-claro to-ca-oro text-ca-vino-hondo px-3 py-1">
                               {certeza.etiqueta}
                             </span>
                           )}
-                          <span className="rounded-full bg-[#2E0E1A] border border-[#B08D57]/40 px-3 py-1">
+                          <span className="rounded-full bg-ca-fondo border border-ca-oro/40 px-3 py-1">
                             {relacionadas.length} {relacionadas.length === 1 ? 'oportunidad' : 'oportunidades'}
                           </span>
                         </div>
                       </div>
-                      <p className="mt-2 text-xs text-[#F3E7DC]/65">
+                      <p className="mt-2 text-xs text-ca-vino/75">
                         {falta.length > 0 ? `Falta contar: ${falta.join(', ')}. Ábrelo para completarlo.` : 'Ficha completa. Ábrela para revisarla.'}
                       </p>
                     </summary>
@@ -206,7 +206,7 @@ export function ProblemasClient({ proyecto, problemasIniciales, oportunidadesIni
                       {CAMPOS.map((c) => (
                         <label key={c.clave} className="block text-sm font-semibold">
                           {c.etiqueta}
-                          <span className="block text-xs font-normal text-[#F3E7DC]/60">{c.ayuda}</span>
+                          <span className="block text-xs font-normal text-ca-vino/75">{c.ayuda}</span>
                           {c.largo ? (
                             <textarea
                               rows={3}
@@ -232,7 +232,7 @@ export function ProblemasClient({ proyecto, problemasIniciales, oportunidadesIni
                       </label>
                       <label className="block text-sm font-semibold">
                         Por qué ocurre (una causa por línea)
-                        <span className="block text-xs font-normal text-[#F3E7DC]/60">Puedes poner varias. Escribe una en cada renglón.</span>
+                        <span className="block text-xs font-normal text-ca-vino/75">Puedes poner varias. Escribe una en cada renglón.</span>
                         <textarea
                           rows={3}
                           className={campoClase}
@@ -254,12 +254,12 @@ export function ProblemasClient({ proyecto, problemasIniciales, oportunidadesIni
                                 onClick={() => cambiar(p.id, 'nivel_certeza', n.valor as NivelCerteza)}
                                 className={`rounded-xl border px-4 py-3 text-left text-sm ${RELIEVE_BOTON} ${
                                   activo
-                                    ? 'border-[#C9A46B] bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420]'
-                                    : 'border-[#B08D57]/40 bg-[#2E0E1A]'
+                                    ? 'border-ca-oro bg-gradient-to-b from-ca-oro-claro to-ca-oro text-ca-vino-hondo'
+                                    : 'border-ca-oro/40 bg-ca-fondo'
                                 }`}
                               >
                                 <span className="block font-bold">{n.etiqueta}</span>
-                                <span className={`block text-xs ${activo ? 'text-[#3A1420]/80' : 'text-[#F3E7DC]/65'}`}>{n.ayuda}</span>
+                                <span className={`block text-xs ${activo ? 'text-ca-vino-hondo/80' : 'text-ca-vino/75'}`}>{n.ayuda}</span>
                               </button>
                             )
                           })}
@@ -271,18 +271,18 @@ export function ProblemasClient({ proyecto, problemasIniciales, oportunidadesIni
                       </button>
 
                       {/* OPORTUNIDADES RELACIONADAS */}
-                      <div className="border-t border-[#B08D57]/25 pt-5">
+                      <div className="border-t border-ca-oro/40 pt-5">
                         <div className="text-sm font-bold">Oportunidades para resolver este problema</div>
                         {relacionadas.length === 0 ? (
-                          <p className="mt-2 text-sm text-[#F3E7DC]/70">Todavía ninguna. Relaciona una de las que ya tienes.</p>
+                          <p className="mt-2 text-sm text-ca-vino/75">Todavía ninguna. Relaciona una de las que ya tienes.</p>
                         ) : (
                           <ul className="mt-2 space-y-2">
                             {relacionadas.map((o) => (
-                              <li key={o.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-[#2E0E1A] px-4 py-3 text-sm">
+                              <li key={o.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-ca-fondo px-4 py-3 text-sm">
                                 <span>{o.nombre}</span>
                                 <button
                                   type="button"
-                                  className="text-xs underline text-[#F3E7DC]/75 hover:text-white disabled:opacity-40"
+                                  className="text-xs underline text-ca-vino/75 hover:text-ca-vino-hondo disabled:opacity-40"
                                   disabled={guardando === o.id}
                                   onClick={() => relacionar(o.id, null)}
                                 >
@@ -325,7 +325,7 @@ export function ProblemasClient({ proyecto, problemasIniciales, oportunidadesIni
           </Link>
         </div>
 
-        <p className="mt-10 text-center text-sm text-[#F3E7DC]/65">
+        <p className="mt-10 text-center text-sm text-ca-vino/75">
           Un problema descrito no es un problema comprobado. Por eso pedimos que digas qué tan seguro estás; en el siguiente
           paso lo pondrás a prueba con evidencias.
         </p>

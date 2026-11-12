@@ -14,7 +14,7 @@ import { HallazgosDiagnostico } from '@/components/empresarial/HallazgosDiagnost
 
 const RELIEVE_BOTON =
   'shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-200'
-const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(11,42,74,0.06),0_10px_28px_-14px_rgba(11,42,74,0.22)]'
+const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(84,20,43,0.06),0_10px_28px_-14px_rgba(84,20,43,0.22)]'
 
 interface Dimension {
   id: string
@@ -314,32 +314,32 @@ export function DiagnosticoEmpresarialClient(props: Props) {
     }
   }
 
-  const botonOro = `h-14 px-8 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-base font-extrabold disabled:opacity-50 disabled:cursor-not-allowed ${RELIEVE_BOTON}`
-  const botonSuave = `h-14 px-6 inline-flex items-center justify-center gap-2 rounded-xl border border-[#B08D57]/50 bg-[#3B1727] text-[#F3E7DC] font-semibold disabled:opacity-40 ${RELIEVE_BOTON}`
+  const botonOro = `h-14 px-8 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-ca-oro-claro to-ca-oro text-ca-vino-hondo text-base font-extrabold disabled:opacity-50 disabled:cursor-not-allowed ${RELIEVE_BOTON}`
+  const botonSuave = `h-14 px-6 inline-flex items-center justify-center gap-2 rounded-xl border border-ca-oro/50 bg-ca-tarjeta text-ca-vino font-semibold disabled:opacity-40 ${RELIEVE_BOTON}`
   const claseOpcion = (activa: boolean) =>
     `rounded-xl border px-1 py-2.5 text-center transition-all ${
       activa
-        ? 'border-[#C9A46B] bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420]'
-        : 'border-[#B08D57]/35 bg-[#2E0E1A] hover:bg-[#4C2032]'
+        ? 'border-ca-oro bg-gradient-to-b from-ca-oro-claro to-ca-oro text-ca-vino-hondo'
+        : 'border-ca-oro/50 bg-ca-fondo hover:bg-ca-suave'
     }`
 
   /* ----------------------------- RESULTADO ----------------------------- */
   if (resultado) {
     return (
-      <main className="min-h-screen bg-gradient-to-b from-[#2E0E1A] via-[#3B1727] to-[#54142B] text-[#F3E7DC]">
+      <main className="min-h-screen bg-gradient-to-b from-ca-tarjeta via-ca-fondo to-ca-suave text-ca-vino">
         <div className="max-w-[820px] mx-auto px-5 lg:px-8 py-10 lg:py-14">
           <div className="text-center">
-            <div className="text-sm font-bold uppercase tracking-[0.25em] text-[#C9A46B]">
+            <div className="text-sm font-bold uppercase tracking-[0.25em] text-ca-oro-texto">
               {esA ? 'Preparación de tu oportunidad' : 'Tu diagnóstico'}
             </div>
             <h1 className="mt-3 text-3xl md:text-4xl font-extrabold">{proyecto.nombre}</h1>
           </div>
 
-          <div className={`mt-10 rounded-3xl border border-[#B08D57]/45 bg-[#3B1727] p-8 text-center ${RELIEVE_TARJETA}`}>
-            <div className="text-6xl font-extrabold text-[#C9A46B]">{Math.round(resultado.puntaje_100 ?? 0)}</div>
-            <div className="mt-1 text-sm text-[#F3E7DC]/70">de 100</div>
+          <div className={`mt-10 rounded-3xl border border-ca-oro/45 bg-ca-tarjeta p-8 text-center ${RELIEVE_TARJETA}`}>
+            <div className="text-6xl font-extrabold text-ca-oro-texto">{Math.round(resultado.puntaje_100 ?? 0)}</div>
+            <div className="mt-1 text-sm text-ca-vino/75">de 100</div>
             <div className="mt-4 text-2xl font-extrabold">{resultado.banda}</div>
-            <p className="mt-3 text-sm text-[#F3E7DC]/75">
+            <p className="mt-3 text-sm text-ca-vino/75">
               Respondiste el {Math.round(resultado.cobertura)} % de las preguntas que te aplican.{' '}
               {resultado.confianza === 'provisional'
                 ? 'Por ahora el resultado es provisional: mientras más preguntas respondas, más confiable será.'
@@ -351,18 +351,18 @@ export function DiagnosticoEmpresarialClient(props: Props) {
             {dimensiones.map((d) => {
               const p = resultado.dimensiones.find((x) => x.dimension_id === d.id)
               return (
-                <div key={d.id} className={`rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 ${RELIEVE_TARJETA}`}>
+                <div key={d.id} className={`rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 ${RELIEVE_TARJETA}`}>
                   <div className="flex items-baseline justify-between gap-3">
                     <div className="font-bold">{d.nombre}</div>
-                    <div className="text-sm text-[#F3E7DC]/75">
+                    <div className="text-sm text-ca-vino/75">
                       {p?.puntaje_100 === null || p?.puntaje_100 === undefined
                         ? 'Falta información'
                         : `${Math.round(p.puntaje_100)} / 100`}
                     </div>
                   </div>
-                  <div className="mt-3 h-2.5 rounded-full bg-[#2E0E1A] overflow-hidden">
+                  <div className="mt-3 h-2.5 rounded-full bg-ca-fondo overflow-hidden">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-[#C9A46B] to-[#B08D57]"
+                      className="h-full rounded-full bg-gradient-to-r from-ca-oro-claro to-ca-oro"
                       style={{ width: `${p?.puntaje_100 ?? 0}%` }}
                     />
                   </div>
@@ -374,12 +374,12 @@ export function DiagnosticoEmpresarialClient(props: Props) {
           {hallazgos && <HallazgosDiagnostico datos={hallazgos} nombresDimension={nombresDimension} />}
 
           {avisoHallazgos && (
-            <p className="mt-6 text-center text-sm text-[#C9A46B]">
+            <p className="mt-6 text-center text-sm text-ca-oro-texto">
               No pudimos guardar estos hallazgos para tu proyecto. Puedes verlos aquí; al volver a calcular se intentará de nuevo.
             </p>
           )}
 
-          <p className="mt-8 text-center text-sm text-[#F3E7DC]/70">
+          <p className="mt-8 text-center text-sm text-ca-vino/75">
             {esA
               ? 'Este resultado mide qué tan lista está tu idea para el siguiente paso, no la madurez de una empresa. '
               : ''}
@@ -405,15 +405,15 @@ export function DiagnosticoEmpresarialClient(props: Props) {
 
   /* ----------------------------- PREGUNTAS ----------------------------- */
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#2E0E1A] via-[#3B1727] to-[#54142B] text-[#F3E7DC]">
+    <main className="min-h-screen bg-gradient-to-b from-ca-tarjeta via-ca-fondo to-ca-suave text-ca-vino">
       <div className="max-w-[820px] mx-auto px-5 lg:px-8 py-10 lg:py-14">
-        <Link href="/empresarial" className="inline-flex items-center gap-2 text-sm text-[#F3E7DC]/70 hover:text-white">
+        <Link href="/empresarial" className="inline-flex items-center gap-2 text-sm text-ca-vino/75 hover:text-ca-vino-hondo">
           <ArrowLeft className="h-4 w-4" /> Salir (tu avance queda guardado)
         </Link>
 
         <div className="mt-6">
-          <div className="text-sm font-bold uppercase tracking-[0.25em] text-[#C9A46B]">Diagnóstico · {proyecto.nombre}</div>
-          <div className="mt-3 flex items-center justify-between gap-4 text-sm text-[#F3E7DC]/75">
+          <div className="text-sm font-bold uppercase tracking-[0.25em] text-ca-oro-texto">Diagnóstico · {proyecto.nombre}</div>
+          <div className="mt-3 flex items-center justify-between gap-4 text-sm text-ca-vino/75">
             <span>
               Parte {indice + 1} de {dimensiones.length}
             </span>
@@ -421,19 +421,19 @@ export function DiagnosticoEmpresarialClient(props: Props) {
               {contestadas} de {total} preguntas
             </span>
           </div>
-          <div className="mt-2 h-2 rounded-full bg-[#2E0E1A] overflow-hidden">
+          <div className="mt-2 h-2 rounded-full bg-ca-fondo overflow-hidden">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-[#C9A46B] to-[#B08D57] transition-all"
+              className="h-full rounded-full bg-gradient-to-r from-ca-oro-claro to-ca-oro transition-all"
               style={{ width: `${total ? (contestadas / total) * 100 : 0}%` }}
             />
           </div>
         </div>
 
         <h1 className="mt-8 text-3xl font-extrabold">{dimension.nombre}</h1>
-        {dimension.descripcion && <p className="mt-2 text-[#F3E7DC]/75">{dimension.descripcion}</p>}
+        {dimension.descripcion && <p className="mt-2 text-ca-vino/75">{dimension.descripcion}</p>}
 
-        <div className={`mt-6 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727]/70 p-4 text-[13px] text-[#F3E7DC]/80 ${RELIEVE_TARJETA}`}>
-          <div className="font-semibold text-[#F3E7DC]">Cómo responder</div>
+        <div className={`mt-6 rounded-2xl border border-ca-oro/50 bg-ca-tarjeta/70 p-4 text-[13px] text-ca-vino/80 ${RELIEVE_TARJETA}`}>
+          <div className="font-semibold text-ca-vino">Cómo responder</div>
           {esA ? (
             <p className="mt-2">
               Responde con calma y con lo que hoy es cierto, no con lo que quisieras que fuera. Algunas preguntas son
@@ -463,11 +463,11 @@ export function DiagnosticoEmpresarialClient(props: Props) {
             const tipo = esA ? p.tipo : 'escala'
             const anclajes = p.anclajes ?? {}
             return (
-              <div key={p.id} className={`rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 ${RELIEVE_TARJETA}`}>
+              <div key={p.id} className={`rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 ${RELIEVE_TARJETA}`}>
                 <div className="font-bold leading-snug">
                   {i + 1}. {p.texto}
                 </div>
-                {p.ayuda && <div className="mt-1 text-xs text-[#F3E7DC]/60">{p.ayuda}</div>}
+                {p.ayuda && <div className="mt-1 text-xs text-ca-vino/75">{p.ayuda}</div>}
 
                 {tipo === 'texto' && (
                   <textarea
@@ -476,7 +476,7 @@ export function DiagnosticoEmpresarialClient(props: Props) {
                     onChange={(e) => setBorradores((b) => ({ ...b, [p.id]: e.target.value }))}
                     onBlur={() => guardarTexto(p)}
                     placeholder="Escribe aquí con tus palabras"
-                    className="mt-4 w-full rounded-xl border border-[#B08D57]/35 bg-[#2E0E1A] p-3 text-sm text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:border-[#C9A46B] focus:outline-none"
+                    className="mt-4 w-full rounded-xl border border-ca-oro/50 bg-ca-fondo p-3 text-sm text-ca-vino placeholder:text-ca-vino/65 focus:border-ca-oro focus:outline-none"
                   />
                 )}
 
@@ -498,7 +498,7 @@ export function DiagnosticoEmpresarialClient(props: Props) {
                 {tipo === 'escala' && (
                   <>
                     {esA && (
-                      <ul className="mt-3 space-y-0.5 text-xs text-[#F3E7DC]/70">
+                      <ul className="mt-3 space-y-0.5 text-xs text-ca-vino/75">
                         {['1', '3', '5'].map(
                           (k) =>
                             anclajes[k] && (
@@ -535,8 +535,8 @@ export function DiagnosticoEmpresarialClient(props: Props) {
                         onClick={() => responder(p, x.estado, null)}
                         className={`rounded-full border px-3 py-1.5 text-xs transition-all ${
                           activa
-                            ? 'border-[#C9A46B] bg-[#4C2032] text-[#F3E7DC] font-bold'
-                            : 'border-[#B08D57]/30 text-[#F3E7DC]/75 hover:bg-[#4C2032]'
+                            ? 'border-ca-oro bg-ca-suave text-ca-vino font-bold'
+                            : 'border-ca-oro/45 text-ca-vino/75 hover:bg-ca-suave'
                         }`}
                       >
                         {activa && <Check className="inline h-3 w-3 mr-1" />}
@@ -550,9 +550,9 @@ export function DiagnosticoEmpresarialClient(props: Props) {
           })}
         </div>
 
-        {error && <p className="mt-6 text-center text-sm text-red-300">{error}</p>}
+        {error && <p className="mt-6 text-center text-sm text-ca-rojo">{error}</p>}
         {faltaCobertura !== null && (
-          <p className="mt-6 text-center text-sm text-[#C9A46B]">
+          <p className="mt-6 text-center text-sm text-ca-oro-texto">
             Todavía no alcanza para calcular tu resultado: has respondido el {Math.round(faltaCobertura)} % y necesitamos
             al menos 40 %. Sigue respondiendo; lo que no sepas, déjalo en &quot;No sé&quot;.
           </p>

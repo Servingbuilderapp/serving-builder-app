@@ -230,17 +230,17 @@ function ListaPasos({ pasos, actual }: { pasos: PasoCamino[]; actual: PasoCamino
               aria-hidden
               className={`mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-extrabold ${
                 p.estado === 'hecho'
-                  ? 'bg-[#C9A46B] text-[#3A1420]'
+                  ? 'bg-ca-oro-claro text-ca-vino-hondo'
                   : esActual
-                    ? 'border-2 border-[#C9A46B] text-[#C9A46B]'
-                    : 'border border-[#B08D57]/50 text-[#F3E7DC]/60'
+                    ? 'border-2 border-ca-oro text-ca-oro-texto'
+                    : 'border border-ca-oro/50 text-ca-vino/75'
               }`}
             >
               {p.estado === 'hecho' ? <Check className="h-3.5 w-3.5" /> : p.href ? i + 1 : <Lock className="h-3 w-3" />}
             </span>
             <span>
-              <span className={`block text-sm ${esActual ? 'font-extrabold text-white' : 'font-semibold'}`}>{p.titulo}</span>
-              <span className="block text-xs text-[#F3E7DC]/60">{ETIQUETA_ESTADO[p.estado]}</span>
+              <span className={`block text-sm ${esActual ? 'font-extrabold text-ca-vino-hondo' : 'font-semibold'}`}>{p.titulo}</span>
+              <span className="block text-xs text-ca-vino/75">{ETIQUETA_ESTADO[p.estado]}</span>
             </span>
           </span>
         )
@@ -251,7 +251,7 @@ function ListaPasos({ pasos, actual }: { pasos: PasoCamino[]; actual: PasoCamino
                 href={p.href}
                 aria-current={esActual ? 'page' : undefined}
                 className={`block rounded-xl px-3 py-2.5 transition-colors ${
-                  esActual ? 'bg-[#4C2032] ring-1 ring-[#C9A46B]/70' : 'hover:bg-[#3B1727]'
+                  esActual ? 'bg-ca-suave ring-1 ring-ca-oro-claro/70' : 'hover:bg-ca-suave'
                 }`}
               >
                 {cuerpo}
@@ -277,31 +277,31 @@ function MenuInterno() {
   const actual = pasoActual(ruta)
 
   return (
-    <aside className="border-b border-[#B08D57]/30 bg-[#2E0E1A] text-[#F3E7DC] lg:sticky lg:top-0 lg:h-screen lg:w-72 lg:shrink-0 lg:overflow-y-auto lg:border-b-0 lg:border-r">
+    <aside className="border-b border-ca-oro/45 bg-ca-fondo text-ca-vino lg:sticky lg:top-0 lg:h-screen lg:w-72 lg:shrink-0 lg:overflow-y-auto lg:border-b-0 lg:border-r">
       {/* En celular: plegable, para no ocupar la pantalla */}
       <details className="lg:hidden">
         <summary className="flex cursor-pointer items-center gap-2 px-5 py-3 text-sm font-bold">
-          <IconoMapa className="h-4 w-4 text-[#C9A46B]" /> Mi camino · {datos.nombre}
+          <IconoMapa className="h-4 w-4 text-ca-oro-texto" /> Mi camino · {datos.nombre}
         </summary>
         <div className="px-3 pb-4">
           <ListaPasos pasos={datos.pasos} actual={actual} />
-          <Link href="/empresarial" className="mt-3 block px-3 text-xs underline text-[#F3E7DC]/70">
+          <Link href="/empresarial" className="mt-3 block px-3 text-xs underline text-ca-vino/75">
             Mis proyectos
           </Link>
         </div>
       </details>
 
       <div className="hidden px-4 py-8 lg:block">
-        <div className="px-3 text-xs font-bold uppercase tracking-[0.25em] text-[#C9A46B]">Mi camino</div>
+        <div className="px-3 text-xs font-bold uppercase tracking-[0.25em] text-ca-oro-texto">Mi camino</div>
         <div className="mt-2 px-3 text-lg font-extrabold leading-snug">{datos.nombre}</div>
         <div className="mt-5">
           <ListaPasos pasos={datos.pasos} actual={actual} />
         </div>
         <div className="mt-6 space-y-2 px-3 text-xs">
-          <Link href={`/empresarial/camino?proyecto=${proyectoId}`} className="block underline text-[#F3E7DC]/80 hover:text-white">
+          <Link href={`/empresarial/camino?proyecto=${proyectoId}`} className="block underline text-ca-vino/80 hover:text-ca-vino-hondo">
             Ver el camino completo
           </Link>
-          <Link href="/empresarial" className="block underline text-[#F3E7DC]/70 hover:text-white">
+          <Link href="/empresarial" className="block underline text-ca-vino/75 hover:text-ca-vino-hondo">
             Mis proyectos
           </Link>
         </div>

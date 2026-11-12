@@ -22,9 +22,9 @@ import {
 
 const RELIEVE_BOTON =
   'shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-200'
-const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(11,42,74,0.06),0_10px_28px_-14px_rgba(11,42,74,0.22)]'
+const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(84,20,43,0.06),0_10px_28px_-14px_rgba(84,20,43,0.22)]'
 const CAMPO_ENTRADA =
-  'mt-2 w-full rounded-xl border border-[#B08D57]/40 bg-[#2E0E1A] px-4 py-3 text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]'
+  'mt-2 w-full rounded-xl border border-ca-oro/40 bg-ca-fondo px-4 py-3 text-ca-vino placeholder:text-ca-vino/65 focus:outline-none focus:ring-2 focus:ring-ca-oro-claro'
 
 interface Props {
   proyecto: { id: string; nombre: string; moneda: string | null }
@@ -35,13 +35,13 @@ interface Props {
 
 function SelectorCondicion({ valor, onCambio, etiqueta }: { valor: Condicion; onCambio: (c: Condicion) => void; etiqueta: string }) {
   return (
-    <label className="mt-2 flex flex-wrap items-center gap-2 text-xs text-[#F3E7DC]/70">
+    <label className="mt-2 flex flex-wrap items-center gap-2 text-xs text-ca-vino/75">
       <span>¿Qué tan seguro es este dato?</span>
       <select
         aria-label={`Condición del dato: ${etiqueta}`}
         value={valor}
         onChange={(e) => onCambio(e.target.value as Condicion)}
-        className="h-9 rounded-lg border border-[#B08D57]/50 bg-[#3B1727] px-2 text-[#F3E7DC]"
+        className="h-9 rounded-lg border border-ca-oro/50 bg-ca-tarjeta px-2 text-ca-vino"
       >
         {CONDICIONES.map((c) => (
           <option key={c.valor} value={c.valor}>
@@ -49,16 +49,16 @@ function SelectorCondicion({ valor, onCambio, etiqueta }: { valor: Condicion; on
           </option>
         ))}
       </select>
-      <span className="text-[#F3E7DC]/55">{CONDICIONES.find((c) => c.valor === valor)?.ayuda}</span>
+      <span className="text-ca-vino/75">{CONDICIONES.find((c) => c.valor === valor)?.ayuda}</span>
     </label>
   )
 }
 
 function Seccion({ titulo, ayuda, children }: { titulo: string; ayuda: string; children: React.ReactNode }) {
   return (
-    <section className={`mt-6 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 lg:p-6 ${RELIEVE_TARJETA}`}>
+    <section className={`mt-6 rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 lg:p-6 ${RELIEVE_TARJETA}`}>
       <h2 className="text-xl font-extrabold">{titulo}</h2>
-      <p className="mt-1 text-sm text-[#F3E7DC]/70">{ayuda}</p>
+      <p className="mt-1 text-sm text-ca-vino/75">{ayuda}</p>
       <div className="mt-4 space-y-5">{children}</div>
     </section>
   )
@@ -72,10 +72,10 @@ const SOLO_DECIMAL = (v: string) => {
 }
 
 const COLOR_ALERTA: Record<string, string> = {
-  Crítica: 'border-[#B3261E]/70 bg-[#B3261E]/15',
-  Importante: 'border-[#C9A46B]/70 bg-[#2E0E1A]',
-  Preventiva: 'border-[#B08D57]/50 bg-[#2E0E1A]',
-  Informativa: 'border-[#B08D57]/30 bg-[#2E0E1A]',
+  Crítica: 'border-ca-rojo/70 bg-ca-rojo/10',
+  Importante: 'border-ca-oro/70 bg-ca-fondo',
+  Preventiva: 'border-ca-oro/50 bg-ca-fondo',
+  Informativa: 'border-ca-oro/45 bg-ca-fondo',
 }
 
 export function DemandaClient({ proyecto, inicial, yaGuardado, referencia }: Props) {
@@ -85,8 +85,8 @@ export function DemandaClient({ proyecto, inicial, yaGuardado, referencia }: Pro
   const [guardando, setGuardando] = useState(false)
   const [aviso, setAviso] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
 
-  const botonOro = `h-12 px-6 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] font-extrabold disabled:opacity-50 disabled:cursor-not-allowed ${RELIEVE_BOTON}`
-  const botonSuave = `h-11 px-4 inline-flex items-center justify-center gap-2 rounded-xl border border-[#B08D57]/50 bg-[#3B1727] text-[#F3E7DC] font-semibold ${RELIEVE_BOTON}`
+  const botonOro = `h-12 px-6 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-ca-oro-claro to-ca-oro text-ca-vino-hondo font-extrabold disabled:opacity-50 disabled:cursor-not-allowed ${RELIEVE_BOTON}`
+  const botonSuave = `h-11 px-4 inline-flex items-center justify-center gap-2 rounded-xl border border-ca-oro/50 bg-ca-tarjeta text-ca-vino font-semibold ${RELIEVE_BOTON}`
 
   const dinero = useMemo(() => calcularMercado(tm), [tm])
   const alertas = useMemo(() => alertasMercado(tm), [tm])
@@ -138,9 +138,9 @@ export function DemandaClient({ proyecto, inicial, yaGuardado, referencia }: Pro
     const d = tm.cifras[c]
     const resultado = c === 'gasto' ? null : dinero[c]
     return (
-      <div className="rounded-xl bg-[#2E0E1A] p-4">
+      <div className="rounded-xl bg-ca-fondo p-4">
         <h3 className="font-extrabold">{titulo}</h3>
-        <p className="text-xs text-[#F3E7DC]/65">{ayuda}</p>
+        <p className="text-xs text-ca-vino/75">{ayuda}</p>
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
           <div>
             <label className="block text-sm font-semibold" htmlFor={`c-${c}`}>
@@ -151,13 +151,13 @@ export function DemandaClient({ proyecto, inicial, yaGuardado, referencia }: Pro
               inputMode={c === 'gasto' ? 'decimal' : 'numeric'}
               value={d.valor}
               onChange={(e) => cambiarCifra(c, { valor: c === 'gasto' ? SOLO_DECIMAL(e.target.value) : SOLO_NUMERO(e.target.value) })}
-              className="mt-1 w-full rounded-lg border border-[#B08D57]/40 bg-[#3B1727] px-3 py-2 text-[#F3E7DC] focus:outline-none focus:ring-2 focus:ring-[#C9A46B]"
+              className="mt-1 w-full rounded-lg border border-ca-oro/40 bg-ca-tarjeta px-3 py-2 text-ca-vino focus:outline-none focus:ring-2 focus:ring-ca-oro-claro"
             />
           </div>
           {resultado !== null && (
-            <div className="rounded-lg border border-dashed border-[#C9A46B]/60 p-3 text-sm">
-              <div className="text-xs text-[#F3E7DC]/65">Equivale a, por año</div>
-              <div className="text-lg font-extrabold text-[#C9A46B]">{formatoDinero(resultado, proyecto.moneda)}</div>
+            <div className="rounded-lg border border-dashed border-ca-oro/60 p-3 text-sm">
+              <div className="text-xs text-ca-vino/75">Equivale a, por año</div>
+              <div className="text-lg font-extrabold text-ca-oro-texto">{formatoDinero(resultado, proyecto.moneda)}</div>
             </div>
           )}
         </div>
@@ -170,7 +170,7 @@ export function DemandaClient({ proyecto, inicial, yaGuardado, referencia }: Pro
           value={d.fuente}
           placeholder={ejemplo}
           onChange={(e) => cambiarCifra(c, { fuente: e.target.value })}
-          className="mt-1 w-full rounded-lg border border-[#B08D57]/40 bg-[#3B1727] px-3 py-2 text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]"
+          className="mt-1 w-full rounded-lg border border-ca-oro/40 bg-ca-tarjeta px-3 py-2 text-ca-vino placeholder:text-ca-vino/65 focus:outline-none focus:ring-2 focus:ring-ca-oro-claro"
         />
         <SelectorCondicion valor={d.condicion} onCambio={(x) => cambiarCifra(c, { condicion: x })} etiqueta={titulo} />
       </div>
@@ -182,7 +182,7 @@ export function DemandaClient({ proyecto, inicial, yaGuardado, referencia }: Pro
       <label className="block font-semibold" htmlFor={`d-${campo}`}>
         {etiqueta}
       </label>
-      <p className="text-xs text-[#F3E7DC]/60">{ayuda}</p>
+      <p className="text-xs text-ca-vino/75">{ayuda}</p>
       <textarea id={`d-${campo}`} rows={filas} value={tm[campo]} onChange={(e) => cambiarTexto(campo, e.target.value)} className={CAMPO_ENTRADA} />
       <SelectorCondicion valor={tm.condiciones[campo] ?? 'aportado'} onCambio={(c) => cambiarCondicion(campo, c)} etiqueta={etiqueta} />
     </div>
@@ -190,32 +190,32 @@ export function DemandaClient({ proyecto, inicial, yaGuardado, referencia }: Pro
   void CAMPOS_DEMANDA
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#2E0E1A] via-[#3B1727] to-[#54142B] text-[#F3E7DC]">
+    <main className="min-h-screen bg-gradient-to-b from-ca-tarjeta via-ca-fondo to-ca-suave text-ca-vino">
       <div className="max-w-[900px] mx-auto px-5 lg:px-8 py-10 lg:py-14">
-        <Link href={`/empresarial/mercado?proyecto=${proyecto.id}`} className="inline-flex items-center gap-2 text-sm text-[#F3E7DC]/70 hover:text-white">
+        <Link href={`/empresarial/mercado?proyecto=${proyecto.id}`} className="inline-flex items-center gap-2 text-sm text-ca-vino/75 hover:text-ca-vino-hondo">
           <ArrowLeft className="h-4 w-4" /> Volver a clientes y territorio
         </Link>
 
-        <div className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-[#C9A46B]">Estudio de mercado · {proyecto.nombre}</div>
+        <div className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-ca-oro-texto">Estudio de mercado · {proyecto.nombre}</div>
         <h1 className="mt-3 text-3xl lg:text-4xl font-extrabold">¿Cuánta gente lo necesita y cuánto vale?</h1>
-        <p className="mt-3 text-[#F3E7DC]/80 leading-relaxed">
+        <p className="mt-3 text-ca-vino/80 leading-relaxed">
           Aquí calculas el tamaño de tu mercado en tres niveles, de lo más grande a lo más realista. Cada cifra pide su fuente: no se
           acepta un número sin decir de dónde sale. Todavía no es una proyección de ventas; esa viene después.
         </p>
 
         {(referencia.producto || referencia.segmentos.length > 0 || referencia.cobertura) && (
-          <section className={`mt-6 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 ${RELIEVE_TARJETA}`}>
+          <section className={`mt-6 rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 ${RELIEVE_TARJETA}`}>
             <h2 className="text-lg font-extrabold">Lo que ya definiste en la pantalla anterior</h2>
-            <p className="mt-1 text-sm text-[#F3E7DC]/70">Solo lectura. Tus cifras deben hablar de estos clientes y de este territorio.</p>
+            <p className="mt-1 text-sm text-ca-vino/75">Solo lectura. Tus cifras deben hablar de estos clientes y de este territorio.</p>
             <ul className="mt-3 space-y-2 text-sm">
-              {referencia.producto && <li className="rounded-xl bg-[#2E0E1A] p-3">Ofreces: {referencia.producto}</li>}
+              {referencia.producto && <li className="rounded-xl bg-ca-fondo p-3">Ofreces: {referencia.producto}</li>}
               {referencia.cobertura && (
-                <li className="rounded-xl bg-[#2E0E1A] p-3">
+                <li className="rounded-xl bg-ca-fondo p-3">
                   Cobertura: {etiquetaDe(COBERTURAS, referencia.cobertura)}
                   {referencia.ubicacion ? ` · ${referencia.ubicacion}` : ''}
                 </li>
               )}
-              {referencia.segmentos.length > 0 && <li className="rounded-xl bg-[#2E0E1A] p-3">Clientes: {referencia.segmentos.join('; ')}</li>}
+              {referencia.segmentos.length > 0 && <li className="rounded-xl bg-ca-fondo p-3">Clientes: {referencia.segmentos.join('; ')}</li>}
             </ul>
           </section>
         )}
@@ -258,14 +258,14 @@ export function DemandaClient({ proyecto, inicial, yaGuardado, referencia }: Pro
           {campoLargo('demanda_insatisfecha', 'Qué parte de la necesidad hoy nadie la atiende bien', 'La brecha que tu proyecto puede ocupar.', 4)}
         </Seccion>
 
-        <section className={`mt-6 rounded-2xl border border-[#C9A46B]/60 bg-[#2E0E1A] p-5 ${RELIEVE_TARJETA}`}>
+        <section className={`mt-6 rounded-2xl border border-ca-oro/60 bg-ca-fondo p-5 ${RELIEVE_TARJETA}`}>
           <h2 className="text-xl font-extrabold">Resumen de tu mercado, por año</h2>
           <div className="mt-3 grid gap-3 sm:grid-cols-3">
             {(['tam', 'sam', 'som'] as const).map((c) => (
-              <div key={c} className="rounded-xl bg-[#3B1727] p-4">
-                <div className="text-xs font-bold uppercase tracking-wider text-[#C9A46B]">{c.toUpperCase()}</div>
+              <div key={c} className="rounded-xl bg-ca-tarjeta p-4">
+                <div className="text-xs font-bold uppercase tracking-wider text-ca-oro-texto">{c.toUpperCase()}</div>
                 <div className="mt-1 text-lg font-extrabold">{formatoDinero(dinero[c], proyecto.moneda)}</div>
-                <div className="text-xs text-[#F3E7DC]/65">{formatoNumero(num(tm.cifras[c].valor))} clientes</div>
+                <div className="text-xs text-ca-vino/75">{formatoNumero(num(tm.cifras[c].valor))} clientes</div>
               </div>
             ))}
           </div>
@@ -279,48 +279,48 @@ export function DemandaClient({ proyecto, inicial, yaGuardado, referencia }: Pro
               ]}
             />
           )}
-          <p className="mt-3 text-xs text-[#F3E7DC]/60">Son cuentas con tus propias cifras: clientes × gasto anual. Valen lo que valgan tus fuentes.</p>
+          <p className="mt-3 text-xs text-ca-vino/75">Son cuentas con tus propias cifras: clientes × gasto anual. Valen lo que valgan tus fuentes.</p>
         </section>
 
         {alertas.length > 0 && (
           <section className="mt-6 space-y-3" aria-label="Alertas">
             {alertas.map((a, i) => (
               <div key={i} role={a.nivel === 'Crítica' ? 'alert' : 'note'} className={`rounded-2xl border p-4 text-sm ${COLOR_ALERTA[a.nivel]}`}>
-                <span className="mr-2 text-xs font-bold uppercase tracking-wider text-[#C9A46B]">{a.nivel}</span>
+                <span className="mr-2 text-xs font-bold uppercase tracking-wider text-ca-oro-texto">{a.nivel}</span>
                 {a.texto}
               </div>
             ))}
           </section>
         )}
 
-        <section className={`mt-6 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 ${RELIEVE_TARJETA}`}>
+        <section className={`mt-6 rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 ${RELIEVE_TARJETA}`}>
           <h2 className="text-xl font-extrabold">Revisión</h2>
-          <p className="mt-1 text-sm text-[#F3E7DC]/70">
+          <p className="mt-1 text-sm text-ca-vino/75">
             {faltan.length === 0
               ? 'Tienes lo necesario para seguir. Los recomendados puedes completarlos después.'
               : `Falta${faltan.length === 1 ? '' : 'n'} ${faltan.length} ${faltan.length === 1 ? 'parte necesaria' : 'partes necesarias'}.`}
           </p>
           <ul className="mt-3 space-y-2 text-sm">
             {revision.map((r) => (
-              <li key={r.clave} className="flex items-start gap-3 rounded-xl bg-[#2E0E1A] px-4 py-3">
+              <li key={r.clave} className="flex items-start gap-3 rounded-xl bg-ca-fondo px-4 py-3">
                 <span
                   aria-hidden
                   className={`mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs font-extrabold ${
-                    r.cumple ? 'bg-[#C9A46B] text-[#3A1420]' : 'border border-[#B08D57]/60 text-[#F3E7DC]/60'
+                    r.cumple ? 'bg-ca-oro-claro text-ca-vino-hondo' : 'border border-ca-oro/60 text-ca-vino/75'
                   }`}
                 >
                   {r.cumple ? '✓' : '·'}
                 </span>
                 <span>
                   <span className="block">
-                    {r.texto} <span className="text-xs text-[#F3E7DC]/55">({r.obligatorio ? 'necesario' : 'recomendado'})</span>
+                    {r.texto} <span className="text-xs text-ca-vino/75">({r.obligatorio ? 'necesario' : 'recomendado'})</span>
                   </span>
-                  {!r.cumple && <span className="block text-xs text-[#F3E7DC]/65">{r.ayuda}</span>}
+                  {!r.cumple && <span className="block text-xs text-ca-vino/75">{r.ayuda}</span>}
                 </span>
               </li>
             ))}
           </ul>
-          {faltanRec.length > 0 && faltan.length === 0 && <p className="mt-3 text-xs text-[#F3E7DC]/60">Quedan {faltanRec.length} detalles recomendados.</p>}
+          {faltanRec.length > 0 && faltan.length === 0 && <p className="mt-3 text-xs text-ca-vino/75">Quedan {faltanRec.length} detalles recomendados.</p>}
         </section>
 
         <div className="mt-6 flex flex-wrap items-center gap-4">
@@ -332,17 +332,17 @@ export function DemandaClient({ proyecto, inicial, yaGuardado, referencia }: Pro
               Seguir: competencia y precios
             </Link>
           )}
-          {sucio && !guardando && <span className="text-sm text-[#C9A46B]">Tienes cambios sin guardar.</span>}
+          {sucio && !guardando && <span className="text-sm text-ca-oro-texto">Tienes cambios sin guardar.</span>}
         </div>
         {aviso && (
           <div
             role={aviso.tipo === 'error' ? 'alert' : 'status'}
-            className={`mt-4 rounded-2xl border p-4 text-sm ${aviso.tipo === 'error' ? 'border-[#B3261E]/60 bg-[#B3261E]/15' : 'border-[#C9A46B]/60 bg-[#2E0E1A]'}`}
+            className={`mt-4 rounded-2xl border p-4 text-sm ${aviso.tipo === 'error' ? 'border-ca-rojo/60 bg-ca-rojo/10' : 'border-ca-oro/60 bg-ca-fondo'}`}
           >
             {aviso.texto}
           </div>
         )}
-        <p className="mt-6 text-xs text-[#F3E7DC]/55">
+        <p className="mt-6 text-xs text-ca-vino/75">
           Esto es una guía para ordenar tus cifras; no garantiza ventas ni resultados. La competencia, los precios y la proyección de ventas se trabajan en las siguientes pantallas.
         </p>
       </div>

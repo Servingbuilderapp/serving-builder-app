@@ -29,10 +29,10 @@ import {
 
 const RELIEVE_BOTON =
   'shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-200'
-const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(11,42,74,0.06),0_10px_28px_-14px_rgba(11,42,74,0.22)]'
+const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(84,20,43,0.06),0_10px_28px_-14px_rgba(84,20,43,0.22)]'
 
 const campoClase =
-  'mt-1 w-full rounded-xl border border-[#B08D57]/40 bg-[#2E0E1A] px-4 py-3 text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]'
+  'mt-1 w-full rounded-xl border border-ca-oro/40 bg-ca-fondo px-4 py-3 text-ca-vino placeholder:text-ca-vino/65 focus:outline-none focus:ring-2 focus:ring-ca-oro-claro'
 
 interface OportunidadCorta extends OportunidadFicha {
   id: string
@@ -83,8 +83,8 @@ export function ValidarClient({
   const [formEvidencia, setFormEvidencia] = useState<Record<string, typeof nuevaEvidenciaVacia>>({})
   const [formExperimento, setFormExperimento] = useState<Record<string, typeof nuevoExperimentoVacio>>({})
 
-  const botonOro = `h-12 px-6 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] font-extrabold disabled:opacity-50 disabled:cursor-not-allowed ${RELIEVE_BOTON}`
-  const botonSuave = `h-12 px-5 inline-flex items-center justify-center gap-2 rounded-xl border border-[#B08D57]/50 bg-[#3B1727] text-[#F3E7DC] font-semibold disabled:opacity-40 ${RELIEVE_BOTON}`
+  const botonOro = `h-12 px-6 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-ca-oro-claro to-ca-oro text-ca-vino-hondo font-extrabold disabled:opacity-50 disabled:cursor-not-allowed ${RELIEVE_BOTON}`
+  const botonSuave = `h-12 px-5 inline-flex items-center justify-center gap-2 rounded-xl border border-ca-oro/50 bg-ca-tarjeta text-ca-vino font-semibold disabled:opacity-40 ${RELIEVE_BOTON}`
 
   const oportunidad = oportunidades.find((o) => o.id === oportunidadId)
   const deEsta = useMemo(() => hipotesis.filter((h) => h.oportunidad_id === oportunidadId), [hipotesis, oportunidadId])
@@ -238,30 +238,30 @@ export function ValidarClient({
   const etiquetaTipo = (v: string) => TIPOS_HIPOTESIS.find((t) => t.valor === v)?.etiqueta ?? v
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#2E0E1A] via-[#3B1727] to-[#54142B] text-[#F3E7DC]">
+    <main className="min-h-screen bg-gradient-to-b from-ca-tarjeta via-ca-fondo to-ca-suave text-ca-vino">
       <div className="max-w-[900px] mx-auto px-5 lg:px-8 py-10 lg:py-14">
         <Link
           href={`/empresarial/oportunidades?proyecto=${proyecto.id}`}
-          className="inline-flex items-center gap-2 text-sm text-[#F3E7DC]/70 hover:text-white"
+          className="inline-flex items-center gap-2 text-sm text-ca-vino/75 hover:text-ca-vino-hondo"
         >
           <ArrowLeft className="h-4 w-4" /> Volver a mis oportunidades
         </Link>
 
-        <div className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-[#C9A46B]">Validar · {proyecto.nombre}</div>
+        <div className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-ca-oro-texto">Validar · {proyecto.nombre}</div>
         <h1 className="mt-3 text-3xl lg:text-4xl font-extrabold">¿Qué tienes que comprobar antes de apostarle?</h1>
-        <p className="mt-3 text-[#F3E7DC]/80 leading-relaxed">
+        <p className="mt-3 text-ca-vino/80 leading-relaxed">
           Cada oportunidad se apoya en cosas que crees. Aquí las escribes como hipótesis, las pruebas con experimentos
           pequeños y guardas la evidencia. Una hipótesis solo queda validada cuando hay evidencia que lo respalde.
         </p>
 
         {error && (
-          <div role="alert" className="mt-6 rounded-2xl border border-[#B3261E]/60 bg-[#B3261E]/15 p-4 text-sm">
+          <div role="alert" className="mt-6 rounded-2xl border border-ca-rojo/60 bg-ca-rojo/10 p-4 text-sm">
             {error}
           </div>
         )}
 
         {oportunidades.length === 0 ? (
-          <p className={`mt-8 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 text-sm text-[#F3E7DC]/80 ${RELIEVE_TARJETA}`}>
+          <p className={`mt-8 rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 text-sm text-ca-vino/80 ${RELIEVE_TARJETA}`}>
             Primero guarda al menos una oportunidad para poder validarla.
           </p>
         ) : (
@@ -276,7 +276,7 @@ export function ValidarClient({
                 ))}
               </select>
             </label>
-            <p className="mt-2 text-sm text-[#F3E7DC]/70">
+            <p className="mt-2 text-sm text-ca-vino/75">
               {deEsta.length === 0
                 ? 'Todavía no tiene hipótesis.'
                 : `${validadas} de ${deEsta.length} hipótesis validadas.`}
@@ -286,18 +286,18 @@ export function ValidarClient({
             {sugeridas.length > 0 && (
               <section className="mt-10">
                 <h2 className="text-xl font-extrabold">Hipótesis sugeridas</h2>
-                <p className="mt-1 text-sm text-[#F3E7DC]/70">
+                <p className="mt-1 text-sm text-ca-vino/75">
                   Salen de la ficha de tu oportunidad. Guarda las que te sirvan; puedes cambiarlas después.
                 </p>
                 <div className="mt-4 space-y-3">
                   {sugeridas.map((s) => (
-                    <div key={s.tipo + s.enunciado} className={`rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 ${RELIEVE_TARJETA}`}>
+                    <div key={s.tipo + s.enunciado} className={`rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 ${RELIEVE_TARJETA}`}>
                       <div className="flex flex-wrap gap-2 text-xs font-semibold">
-                        <span className="rounded-full bg-[#2E0E1A] border border-[#B08D57]/40 px-3 py-1">{etiquetaTipo(s.tipo)}</span>
-                        <span className="rounded-full bg-[#2E0E1A] border border-[#B08D57]/40 px-3 py-1">Importancia {s.importancia}</span>
+                        <span className="rounded-full bg-ca-fondo border border-ca-oro/40 px-3 py-1">{etiquetaTipo(s.tipo)}</span>
+                        <span className="rounded-full bg-ca-fondo border border-ca-oro/40 px-3 py-1">Importancia {s.importancia}</span>
                       </div>
                       <p className="mt-2 text-sm leading-relaxed">{s.enunciado}</p>
-                      <p className="mt-1 text-xs text-[#F3E7DC]/65">Si fuera falsa: {s.riesgo_si_falsa}</p>
+                      <p className="mt-1 text-xs text-ca-vino/75">Si fuera falsa: {s.riesgo_si_falsa}</p>
                       <button
                         type="button"
                         className={`${botonSuave} mt-4`}
@@ -316,7 +316,7 @@ export function ValidarClient({
             <section className="mt-12">
               <h2 className="text-xl font-extrabold">Mis hipótesis</h2>
               {deEsta.length === 0 ? (
-                <p className={`mt-4 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 text-sm text-[#F3E7DC]/80 ${RELIEVE_TARJETA}`}>
+                <p className={`mt-4 rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 text-sm text-ca-vino/80 ${RELIEVE_TARJETA}`}>
                   Aún no hay hipótesis para esta oportunidad. Guarda una sugerida o escribe la tuya abajo.
                 </p>
               ) : (
@@ -328,28 +328,28 @@ export function ValidarClient({
                     const fx = formExperimento[h.id] ?? nuevoExperimentoVacio
                     const estado = ESTADOS_HIPOTESIS.find((s) => s.valor === h.estado)
                     return (
-                      <details key={h.id} className={`rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 ${RELIEVE_TARJETA}`}>
+                      <details key={h.id} className={`rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 ${RELIEVE_TARJETA}`}>
                         <summary className="cursor-pointer list-none">
                           <div className="flex flex-wrap items-start justify-between gap-3">
                             <div className="font-bold">{h.enunciado}</div>
                             <div className="flex flex-wrap gap-2 text-xs font-semibold">
-                              <span className="rounded-full bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] px-3 py-1">
+                              <span className="rounded-full bg-gradient-to-b from-ca-oro-claro to-ca-oro text-ca-vino-hondo px-3 py-1">
                                 {estado?.etiqueta}
                               </span>
-                              <span className="rounded-full bg-[#2E0E1A] border border-[#B08D57]/40 px-3 py-1">{etiquetaTipo(h.tipo)}</span>
-                              <span className="rounded-full bg-[#2E0E1A] border border-[#B08D57]/40 px-3 py-1">
+                              <span className="rounded-full bg-ca-fondo border border-ca-oro/40 px-3 py-1">{etiquetaTipo(h.tipo)}</span>
+                              <span className="rounded-full bg-ca-fondo border border-ca-oro/40 px-3 py-1">
                                 Evidencia {mejorNivel(evs)}
                               </span>
                             </div>
                           </div>
-                          <p className="mt-2 text-xs text-[#F3E7DC]/65">
+                          <p className="mt-2 text-xs text-ca-vino/75">
                             {exps.length} {exps.length === 1 ? 'experimento' : 'experimentos'} · {evs.length}{' '}
                             {evs.length === 1 ? 'evidencia' : 'evidencias'}. Ábrela para trabajarla.
                           </p>
                         </summary>
 
                         <div className="mt-5 space-y-6">
-                          {h.riesgo_si_falsa && <p className="text-sm text-[#F3E7DC]/75">Si fuera falsa: {h.riesgo_si_falsa}</p>}
+                          {h.riesgo_si_falsa && <p className="text-sm text-ca-vino/75">Si fuera falsa: {h.riesgo_si_falsa}</p>}
 
                           {/* ESTADO */}
                           <div>
@@ -365,7 +365,7 @@ export function ValidarClient({
                                     disabled={guardando === h.id}
                                     onClick={() => cambiarEstado(h, s.valor)}
                                     className={`rounded-xl border px-4 py-2 text-sm font-semibold ${RELIEVE_BOTON} ${
-                                      activo ? 'border-[#C9A46B] bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420]' : 'border-[#B08D57]/40 bg-[#2E0E1A]'
+                                      activo ? 'border-ca-oro bg-gradient-to-b from-ca-oro-claro to-ca-oro text-ca-vino-hondo' : 'border-ca-oro/40 bg-ca-fondo'
                                     }`}
                                   >
                                     {s.etiqueta}
@@ -373,22 +373,22 @@ export function ValidarClient({
                                 )
                               })}
                             </div>
-                            <p className="mt-2 text-xs text-[#F3E7DC]/60">
+                            <p className="mt-2 text-xs text-ca-vino/75">
                               “Validada” y “Validada en parte” solo se permiten cuando hay al menos una evidencia.
                             </p>
                           </div>
 
                           {/* EXPERIMENTOS */}
-                          <div className="border-t border-[#B08D57]/25 pt-5">
+                          <div className="border-t border-ca-oro/40 pt-5">
                             <div className="text-sm font-bold">Experimentos</div>
-                            {exps.length === 0 && <p className="mt-2 text-sm text-[#F3E7DC]/70">Aún no has hecho ninguno.</p>}
+                            {exps.length === 0 && <p className="mt-2 text-sm text-ca-vino/75">Aún no has hecho ninguno.</p>}
                             <div className="mt-2 space-y-3">
                               {exps.map((x) => (
-                                <div key={x.id} className="rounded-xl bg-[#2E0E1A] p-4 text-sm space-y-3">
+                                <div key={x.id} className="rounded-xl bg-ca-fondo p-4 text-sm space-y-3">
                                   <div className="font-semibold">{x.tipo}</div>
-                                  <p className="text-[#F3E7DC]/80">Qué querías averiguar: {x.objetivo}</p>
-                                  {x.metodo && <p className="text-[#F3E7DC]/70">Cómo: {x.metodo}</p>}
-                                  {x.muestra && <p className="text-[#F3E7DC]/70">A quiénes: {x.muestra}</p>}
+                                  <p className="text-ca-vino/80">Qué querías averiguar: {x.objetivo}</p>
+                                  {x.metodo && <p className="text-ca-vino/75">Cómo: {x.metodo}</p>}
+                                  {x.muestra && <p className="text-ca-vino/75">A quiénes: {x.muestra}</p>}
                                   <label className="block font-semibold">
                                     Qué encontraste
                                     <textarea
@@ -414,7 +414,7 @@ export function ValidarClient({
                               ))}
                             </div>
 
-                            <div className="mt-4 rounded-xl border border-dashed border-[#B08D57]/40 p-4 space-y-3">
+                            <div className="mt-4 rounded-xl border border-dashed border-ca-oro/40 p-4 space-y-3">
                               <div className="text-sm font-semibold">Nuevo experimento</div>
                               <label className="block text-sm font-semibold">
                                 Tipo
@@ -473,28 +473,28 @@ export function ValidarClient({
                           </div>
 
                           {/* EVIDENCIAS */}
-                          <div className="border-t border-[#B08D57]/25 pt-5">
+                          <div className="border-t border-ca-oro/40 pt-5">
                             <div className="text-sm font-bold">Evidencias</div>
-                            {evs.length === 0 && <p className="mt-2 text-sm text-[#F3E7DC]/70">Aún no hay evidencias.</p>}
+                            {evs.length === 0 && <p className="mt-2 text-sm text-ca-vino/75">Aún no hay evidencias.</p>}
                             <ul className="mt-2 space-y-2">
                               {evs.map((ev) => (
-                                <li key={ev.id} className="rounded-xl bg-[#2E0E1A] px-4 py-3 text-sm">
+                                <li key={ev.id} className="rounded-xl bg-ca-fondo px-4 py-3 text-sm">
                                   <div className="flex flex-wrap items-center justify-between gap-2">
                                     <span className="font-semibold">
                                       {TIPOS_EVIDENCIA.find((t) => t.valor === ev.tipo)?.etiqueta} · {ev.nivel}
                                     </span>
                                     <button
                                       type="button"
-                                      className="text-xs underline text-[#F3E7DC]/75 hover:text-white disabled:opacity-40"
+                                      className="text-xs underline text-ca-vino/75 hover:text-ca-vino-hondo disabled:opacity-40"
                                       disabled={guardando === ev.id}
                                       onClick={() => quitarEvidencia(ev, h)}
                                     >
                                       Quitar
                                     </button>
                                   </div>
-                                  <p className="mt-1 text-[#F3E7DC]/85">{ev.descripcion}</p>
+                                  <p className="mt-1 text-ca-vino/85">{ev.descripcion}</p>
                                   {(ev.fuente || ev.enlace) && (
-                                    <p className="mt-1 text-xs text-[#F3E7DC]/60 break-words">
+                                    <p className="mt-1 text-xs text-ca-vino/75 break-words">
                                       Fuente: {ev.fuente}
                                       {ev.fuente && ev.enlace ? ' · ' : ''}
                                       {ev.enlace}
@@ -504,7 +504,7 @@ export function ValidarClient({
                               ))}
                             </ul>
 
-                            <div className="mt-4 rounded-xl border border-dashed border-[#B08D57]/40 p-4 space-y-3">
+                            <div className="mt-4 rounded-xl border border-dashed border-ca-oro/40 p-4 space-y-3">
                               <div className="text-sm font-semibold">Nueva evidencia</div>
                               <label className="block text-sm font-semibold">
                                 Tipo
@@ -522,7 +522,7 @@ export function ValidarClient({
                               </label>
                               <label className="block text-sm font-semibold">
                                 Qué tan sólida es
-                                <span className="block text-xs font-normal text-[#F3E7DC]/60">
+                                <span className="block text-xs font-normal text-ca-vino/75">
                                   {NIVELES_EVIDENCIA.find((n) => n.valor === fe.nivel)?.ayuda}
                                 </span>
                                 <select
@@ -596,7 +596,7 @@ export function ValidarClient({
             {/* AGREGAR LA MÍA */}
             <section className="mt-12">
               <h2 className="text-xl font-extrabold">Agregar una hipótesis mía</h2>
-              <div className={`mt-4 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 space-y-4 ${RELIEVE_TARJETA}`}>
+              <div className={`mt-4 rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 space-y-4 ${RELIEVE_TARJETA}`}>
                 <label className="block text-sm font-semibold">
                   Sobre qué es
                   <select className={campoClase} value={nueva.tipo} onChange={(e) => setNueva({ ...nueva, tipo: e.target.value as TipoHipotesis })}>
@@ -639,7 +639,7 @@ export function ValidarClient({
           </>
         )}
 
-        <p className="mt-12 text-center text-sm text-[#F3E7DC]/65">
+        <p className="mt-12 text-center text-sm text-ca-vino/75">
           Esta pantalla no valida nada por sí sola: te ayuda a ordenar lo que debes comprobar. La evidencia la pones tú, y
           cada una debe tener su origen.
         </p>

@@ -25,16 +25,16 @@ import {
 
 const RELIEVE_BOTON =
   'shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-200'
-const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(11,42,74,0.06),0_10px_28px_-14px_rgba(11,42,74,0.22)]'
+const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(84,20,43,0.06),0_10px_28px_-14px_rgba(84,20,43,0.22)]'
 const CAMPO_ENTRADA =
-  'mt-2 w-full rounded-xl border border-[#B08D57]/40 bg-[#2E0E1A] px-4 py-3 text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]'
+  'mt-2 w-full rounded-xl border border-ca-oro/40 bg-ca-fondo px-4 py-3 text-ca-vino placeholder:text-ca-vino/65 focus:outline-none focus:ring-2 focus:ring-ca-oro-claro'
 const CAMPO_INTERNO =
-  'mt-1 w-full rounded-lg border border-[#B08D57]/40 bg-[#3B1727] px-3 py-2 text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]'
+  'mt-1 w-full rounded-lg border border-ca-oro/40 bg-ca-tarjeta px-3 py-2 text-ca-vino placeholder:text-ca-vino/65 focus:outline-none focus:ring-2 focus:ring-ca-oro-claro'
 const COLOR_ALERTA: Record<string, string> = {
-  Crítica: 'border-[#B3261E]/70 bg-[#B3261E]/15',
-  Importante: 'border-[#C9A46B]/70 bg-[#2E0E1A]',
-  Preventiva: 'border-[#B08D57]/50 bg-[#2E0E1A]',
-  Informativa: 'border-[#B08D57]/30 bg-[#2E0E1A]',
+  Crítica: 'border-ca-rojo/70 bg-ca-rojo/10',
+  Importante: 'border-ca-oro/70 bg-ca-fondo',
+  Preventiva: 'border-ca-oro/50 bg-ca-fondo',
+  Informativa: 'border-ca-oro/45 bg-ca-fondo',
 }
 const SOLO_DECIMAL = (v: string) => {
   const limpio = v.replace(/[^\d.]/g, '')
@@ -53,13 +53,13 @@ interface Props {
 
 function SelectorCondicion({ valor, onCambio, etiqueta }: { valor: Condicion; onCambio: (c: Condicion) => void; etiqueta: string }) {
   return (
-    <label className="mt-2 flex flex-wrap items-center gap-2 text-xs text-[#F3E7DC]/70">
+    <label className="mt-2 flex flex-wrap items-center gap-2 text-xs text-ca-vino/75">
       <span>¿Qué tan seguro es este dato?</span>
       <select
         aria-label={`Condición del dato: ${etiqueta}`}
         value={valor}
         onChange={(e) => onCambio(e.target.value as Condicion)}
-        className="h-9 rounded-lg border border-[#B08D57]/50 bg-[#3B1727] px-2 text-[#F3E7DC]"
+        className="h-9 rounded-lg border border-ca-oro/50 bg-ca-tarjeta px-2 text-ca-vino"
       >
         {CONDICIONES.map((c) => (
           <option key={c.valor} value={c.valor}>
@@ -67,16 +67,16 @@ function SelectorCondicion({ valor, onCambio, etiqueta }: { valor: Condicion; on
           </option>
         ))}
       </select>
-      <span className="text-[#F3E7DC]/55">{CONDICIONES.find((c) => c.valor === valor)?.ayuda}</span>
+      <span className="text-ca-vino/75">{CONDICIONES.find((c) => c.valor === valor)?.ayuda}</span>
     </label>
   )
 }
 
 function Seccion({ titulo, ayuda, children }: { titulo: string; ayuda: string; children: React.ReactNode }) {
   return (
-    <section className={`mt-6 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 lg:p-6 ${RELIEVE_TARJETA}`}>
+    <section className={`mt-6 rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 lg:p-6 ${RELIEVE_TARJETA}`}>
       <h2 className="text-xl font-extrabold">{titulo}</h2>
-      <p className="mt-1 text-sm text-[#F3E7DC]/70">{ayuda}</p>
+      <p className="mt-1 text-sm text-ca-vino/75">{ayuda}</p>
       <div className="mt-4 space-y-5">{children}</div>
     </section>
   )
@@ -93,9 +93,9 @@ export function TecnicoClient({ proyecto, inicial, specsIniciales, pasosIniciale
   const [guardando, setGuardando] = useState(false)
   const [aviso, setAviso] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
 
-  const botonOro = `h-12 px-6 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] font-extrabold disabled:opacity-50 disabled:cursor-not-allowed ${RELIEVE_BOTON}`
-  const botonSuave = `h-11 px-4 inline-flex items-center justify-center gap-2 rounded-xl border border-[#B08D57]/50 bg-[#3B1727] text-[#F3E7DC] font-semibold ${RELIEVE_BOTON}`
-  const botonIcono = 'inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#B08D57]/40 text-[#F3E7DC]/80 hover:text-white disabled:opacity-30'
+  const botonOro = `h-12 px-6 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-ca-oro-claro to-ca-oro text-ca-vino-hondo font-extrabold disabled:opacity-50 disabled:cursor-not-allowed ${RELIEVE_BOTON}`
+  const botonSuave = `h-11 px-4 inline-flex items-center justify-center gap-2 rounded-xl border border-ca-oro/50 bg-ca-tarjeta text-ca-vino font-semibold ${RELIEVE_BOTON}`
+  const botonIcono = 'inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-ca-oro/40 text-ca-vino/80 hover:text-ca-vino-hondo disabled:opacity-30'
 
   const alertas = useMemo(() => alertasTecnico(tc, specs, pasos), [tc, specs, pasos])
   const revision = useMemo(() => revisarTecnico(tc, specs, pasos), [tc, specs, pasos])
@@ -226,34 +226,34 @@ export function TecnicoClient({ proyecto, inicial, specsIniciales, pasosIniciale
       <label className="block font-semibold" htmlFor={`t-${campo}`}>
         {etiqueta}
       </label>
-      <p className="text-xs text-[#F3E7DC]/60">{ayuda}</p>
+      <p className="text-xs text-ca-vino/75">{ayuda}</p>
       <textarea id={`t-${campo}`} rows={filas} value={tc[campo]} onChange={(e) => cambiar(campo, e.target.value)} className={CAMPO_ENTRADA} />
       <SelectorCondicion valor={tc.condiciones[campo] ?? 'aportado'} onCambio={(c) => cambiarCond(campo, c)} etiqueta={etiqueta} />
     </div>
   )
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#2E0E1A] via-[#3B1727] to-[#54142B] text-[#F3E7DC]">
+    <main className="min-h-screen bg-gradient-to-b from-ca-tarjeta via-ca-fondo to-ca-suave text-ca-vino">
       <div className="max-w-[900px] mx-auto px-5 lg:px-8 py-10 lg:py-14">
-        <Link href={`/empresarial/camino?proyecto=${proyecto.id}`} className="inline-flex items-center gap-2 text-sm text-[#F3E7DC]/70 hover:text-white">
+        <Link href={`/empresarial/camino?proyecto=${proyecto.id}`} className="inline-flex items-center gap-2 text-sm text-ca-vino/75 hover:text-ca-vino-hondo">
           <ArrowLeft className="h-4 w-4" /> Volver a mi camino
         </Link>
 
-        <div className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-[#C9A46B]">Estudio técnico · {proyecto.nombre}</div>
+        <div className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-ca-oro-texto">Estudio técnico · {proyecto.nombre}</div>
         <h1 className="mt-3 text-3xl lg:text-4xl font-extrabold">¿Qué vas a entregar y cómo?</h1>
-        <p className="mt-3 text-[#F3E7DC]/80 leading-relaxed">
+        <p className="mt-3 text-ca-vino/80 leading-relaxed">
           Aquí describes con precisión lo que recibe el cliente y los pasos con los que lo produces o lo prestas. No se inventan valores
           técnicos: si algo aún no lo sabes, lo marcas como pendiente o supuesto. La capacidad, el personal y los equipos vienen en la
           siguiente pantalla.
         </p>
 
         {(referencia.producto || referencia.unidadPrecio) && (
-          <section className={`mt-6 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 ${RELIEVE_TARJETA}`}>
+          <section className={`mt-6 rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 ${RELIEVE_TARJETA}`}>
             <h2 className="text-lg font-extrabold">Lo que ya definiste en el estudio de mercado</h2>
             <ul className="mt-3 space-y-2 text-sm">
-              {referencia.producto && <li className="rounded-xl bg-[#2E0E1A] p-3">Ofreces: {referencia.producto}</li>}
+              {referencia.producto && <li className="rounded-xl bg-ca-fondo p-3">Ofreces: {referencia.producto}</li>}
               {referencia.unidadPrecio && (
-                <li className="rounded-xl bg-[#2E0E1A] p-3">Tu precio es {referencia.unidadPrecio}. La unidad en que vendes debe ser la misma.</li>
+                <li className="rounded-xl bg-ca-fondo p-3">Tu precio es {referencia.unidadPrecio}. La unidad en que vendes debe ser la misma.</li>
               )}
             </ul>
           </section>
@@ -315,10 +315,10 @@ export function TecnicoClient({ proyecto, inicial, specsIniciales, pasosIniciale
           titulo="2. Características y especificaciones"
           ayuda={`Cómo es, medido. ${tc.tipo_solucion ? `Para esta solución: ${EJEMPLOS_SPEC[tc.tipo_solucion]}` : 'Elige el tipo de solución arriba para ver ejemplos.'} Si aún no conoces un valor, déjalo como pendiente o supuesto.`}
         >
-          {specs.length === 0 && <p className="text-sm text-[#F3E7DC]/60">Todavía no hay ninguna.</p>}
+          {specs.length === 0 && <p className="text-sm text-ca-vino/75">Todavía no hay ninguna.</p>}
           <ul className="space-y-4">
             {specs.map((x, i) => (
-              <li key={x.id} className="rounded-xl bg-[#2E0E1A] p-4">
+              <li key={x.id} className="rounded-xl bg-ca-fondo p-4">
                 <div className="flex items-start gap-2">
                   <div className="grid w-full gap-3 sm:grid-cols-3">
                     <div>
@@ -378,12 +378,12 @@ export function TecnicoClient({ proyecto, inicial, specsIniciales, pasosIniciale
           titulo="3. Los pasos del proceso"
           ayuda="Desde que llega lo necesario hasta que el cliente recibe. Pon los pasos en orden; usa las flechas para moverlos. La duración es el tiempo para una unidad."
         >
-          {pasos.length === 0 && <p className="text-sm text-[#F3E7DC]/60">Todavía no hay ningún paso.</p>}
+          {pasos.length === 0 && <p className="text-sm text-ca-vino/75">Todavía no hay ningún paso.</p>}
           <ol className="space-y-4">
             {pasos.map((x, i) => (
-              <li key={x.id} className="rounded-xl bg-[#2E0E1A] p-4">
+              <li key={x.id} className="rounded-xl bg-ca-fondo p-4">
                 <div className="flex items-start gap-2">
-                  <span aria-hidden className="mt-7 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#C9A46B] text-sm font-extrabold text-[#C9A46B]">
+                  <span aria-hidden className="mt-7 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-ca-oro text-sm font-extrabold text-ca-oro-texto">
                     {i + 1}
                   </span>
                   <div className="grid w-full gap-3 sm:grid-cols-3">
@@ -461,9 +461,9 @@ export function TecnicoClient({ proyecto, inicial, specsIniciales, pasosIniciale
             <Plus className="h-4 w-4" /> Agregar paso
           </button>
           {total > 0 && (
-            <div className="rounded-xl border border-dashed border-[#C9A46B]/60 bg-[#2E0E1A] p-3 text-sm">
+            <div className="rounded-xl border border-dashed border-ca-oro/60 bg-ca-fondo p-3 text-sm">
               Cada unidad pasa por todos los pasos en unos{' '}
-              <span className="font-extrabold text-[#C9A46B]">{formatoMinutos(total)}</span>. Con esto, en la siguiente pantalla se calcula cuánto puedes producir.
+              <span className="font-extrabold text-ca-oro-texto">{formatoMinutos(total)}</span>. Con esto, en la siguiente pantalla se calcula cuánto puedes producir.
             </div>
           )}
         </Seccion>
@@ -472,46 +472,46 @@ export function TecnicoClient({ proyecto, inicial, specsIniciales, pasosIniciale
           <section className="mt-6 space-y-3" aria-label="Alertas">
             {alertas.map((a, i) => (
               <div key={i} role={a.nivel === 'Crítica' ? 'alert' : 'note'} className={`rounded-2xl border p-4 text-sm ${COLOR_ALERTA[a.nivel]}`}>
-                <span className="mr-2 text-xs font-bold uppercase tracking-wider text-[#C9A46B]">{a.nivel}</span>
+                <span className="mr-2 text-xs font-bold uppercase tracking-wider text-ca-oro-texto">{a.nivel}</span>
                 {a.texto}
               </div>
             ))}
           </section>
         )}
 
-        <section className={`mt-6 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 ${RELIEVE_TARJETA}`}>
+        <section className={`mt-6 rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 ${RELIEVE_TARJETA}`}>
           <h2 className="text-xl font-extrabold">Revisión</h2>
-          <p className="mt-1 text-sm text-[#F3E7DC]/70">
+          <p className="mt-1 text-sm text-ca-vino/75">
             {faltan.length === 0
               ? 'Tienes lo necesario para seguir. Los recomendados puedes completarlos después.'
               : `Falta${faltan.length === 1 ? '' : 'n'} ${faltan.length} ${faltan.length === 1 ? 'parte necesaria' : 'partes necesarias'}.`}
           </p>
           <ul className="mt-3 space-y-2 text-sm">
             {revision.map((r) => (
-              <li key={r.clave} className="flex items-start gap-3 rounded-xl bg-[#2E0E1A] px-4 py-3">
+              <li key={r.clave} className="flex items-start gap-3 rounded-xl bg-ca-fondo px-4 py-3">
                 <span
                   aria-hidden
                   className={`mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs font-extrabold ${
-                    r.cumple ? 'bg-[#C9A46B] text-[#3A1420]' : 'border border-[#B08D57]/60 text-[#F3E7DC]/60'
+                    r.cumple ? 'bg-ca-oro-claro text-ca-vino-hondo' : 'border border-ca-oro/60 text-ca-vino/75'
                   }`}
                 >
                   {r.cumple ? '✓' : '·'}
                 </span>
                 <span>
                   <span className="block">
-                    {r.texto} <span className="text-xs text-[#F3E7DC]/55">({r.obligatorio ? 'necesario' : 'recomendado'})</span>
+                    {r.texto} <span className="text-xs text-ca-vino/75">({r.obligatorio ? 'necesario' : 'recomendado'})</span>
                   </span>
-                  {!r.cumple && <span className="block text-xs text-[#F3E7DC]/65">{r.ayuda}</span>}
+                  {!r.cumple && <span className="block text-xs text-ca-vino/75">{r.ayuda}</span>}
                 </span>
               </li>
             ))}
           </ul>
           {sinRespaldo > 0 && (
-            <p className="mt-3 rounded-xl bg-[#2E0E1A] p-3 text-sm">
+            <p className="mt-3 rounded-xl bg-ca-fondo p-3 text-sm">
               {sinRespaldo} {sinRespaldo === 1 ? 'dato está marcado' : 'datos están marcados'} como “{etiquetaCondicion('supuesto')}” o “{etiquetaCondicion('pendiente')}”. Confírmalos antes de producir.
             </p>
           )}
-          {faltanRec.length > 0 && faltan.length === 0 && <p className="mt-3 text-xs text-[#F3E7DC]/60">Quedan {faltanRec.length} detalles recomendados.</p>}
+          {faltanRec.length > 0 && faltan.length === 0 && <p className="mt-3 text-xs text-ca-vino/75">Quedan {faltanRec.length} detalles recomendados.</p>}
         </section>
 
         <div className="mt-6 flex flex-wrap items-center gap-4">
@@ -523,17 +523,17 @@ export function TecnicoClient({ proyecto, inicial, specsIniciales, pasosIniciale
               Seguir: financiero básico
             </Link>
           )}
-          {sucio && !guardando && <span className="text-sm text-[#C9A46B]">Tienes cambios sin guardar.</span>}
+          {sucio && !guardando && <span className="text-sm text-ca-oro-texto">Tienes cambios sin guardar.</span>}
         </div>
         {aviso && (
           <div
             role={aviso.tipo === 'error' ? 'alert' : 'status'}
-            className={`mt-4 rounded-2xl border p-4 text-sm ${aviso.tipo === 'error' ? 'border-[#B3261E]/60 bg-[#B3261E]/15' : 'border-[#C9A46B]/60 bg-[#2E0E1A]'}`}
+            className={`mt-4 rounded-2xl border p-4 text-sm ${aviso.tipo === 'error' ? 'border-ca-rojo/60 bg-ca-rojo/10' : 'border-ca-oro/60 bg-ca-fondo'}`}
           >
             {aviso.texto}
           </div>
         )}
-        <p className="mt-6 text-xs text-[#F3E7DC]/55">
+        <p className="mt-6 text-xs text-ca-vino/75">
           Esto es una guía para ordenar tu información técnica; no reemplaza la revisión de un profesional ni garantiza resultados.
         </p>
       </div>

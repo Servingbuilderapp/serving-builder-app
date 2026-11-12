@@ -23,12 +23,12 @@ import {
 
 const RELIEVE_BOTON =
   'shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-200'
-const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(11,42,74,0.06),0_10px_28px_-14px_rgba(11,42,74,0.22)]'
+const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(84,20,43,0.06),0_10px_28px_-14px_rgba(84,20,43,0.22)]'
 
 const CAMPO_ENTRADA =
-  'mt-2 w-full rounded-xl border border-[#B08D57]/40 bg-[#2E0E1A] px-4 py-3 text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]'
+  'mt-2 w-full rounded-xl border border-ca-oro/40 bg-ca-fondo px-4 py-3 text-ca-vino placeholder:text-ca-vino/65 focus:outline-none focus:ring-2 focus:ring-ca-oro-claro'
 const CAMPO_INTERNO =
-  'mt-1 w-full rounded-lg border border-[#B08D57]/40 bg-[#3B1727] px-3 py-2 text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]'
+  'mt-1 w-full rounded-lg border border-ca-oro/40 bg-ca-tarjeta px-3 py-2 text-ca-vino placeholder:text-ca-vino/65 focus:outline-none focus:ring-2 focus:ring-ca-oro-claro'
 
 interface Props {
   proyecto: { id: string; nombre: string; pais: string | null; moneda: string | null; profundidad: string | null }
@@ -40,13 +40,13 @@ interface Props {
 
 function SelectorCondicion({ valor, onCambio, etiqueta }: { valor: Condicion; onCambio: (c: Condicion) => void; etiqueta: string }) {
   return (
-    <label className="mt-2 flex flex-wrap items-center gap-2 text-xs text-[#F3E7DC]/70">
+    <label className="mt-2 flex flex-wrap items-center gap-2 text-xs text-ca-vino/75">
       <span>¿Qué tan seguro es este dato?</span>
       <select
         aria-label={`Condición del dato: ${etiqueta}`}
         value={valor}
         onChange={(e) => onCambio(e.target.value as Condicion)}
-        className="h-9 rounded-lg border border-[#B08D57]/50 bg-[#3B1727] px-2 text-[#F3E7DC]"
+        className="h-9 rounded-lg border border-ca-oro/50 bg-ca-tarjeta px-2 text-ca-vino"
       >
         {CONDICIONES.map((c) => (
           <option key={c.valor} value={c.valor}>
@@ -54,16 +54,16 @@ function SelectorCondicion({ valor, onCambio, etiqueta }: { valor: Condicion; on
           </option>
         ))}
       </select>
-      <span className="text-[#F3E7DC]/55">{CONDICIONES.find((c) => c.valor === valor)?.ayuda}</span>
+      <span className="text-ca-vino/75">{CONDICIONES.find((c) => c.valor === valor)?.ayuda}</span>
     </label>
   )
 }
 
 function Seccion({ titulo, ayuda, children }: { titulo: string; ayuda: string; children: React.ReactNode }) {
   return (
-    <section className={`mt-6 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 lg:p-6 ${RELIEVE_TARJETA}`}>
+    <section className={`mt-6 rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 lg:p-6 ${RELIEVE_TARJETA}`}>
       <h2 className="text-xl font-extrabold">{titulo}</h2>
-      <p className="mt-1 text-sm text-[#F3E7DC]/70">{ayuda}</p>
+      <p className="mt-1 text-sm text-ca-vino/75">{ayuda}</p>
       <div className="mt-4 space-y-5">{children}</div>
     </section>
   )
@@ -78,8 +78,8 @@ export function MercadoClient({ proyecto, mercadoInicial, segmentosIniciales, ya
   const [guardando, setGuardando] = useState(false)
   const [aviso, setAviso] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
 
-  const botonOro = `h-12 px-6 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] font-extrabold disabled:opacity-50 disabled:cursor-not-allowed ${RELIEVE_BOTON}`
-  const botonSuave = `h-11 px-4 inline-flex items-center justify-center gap-2 rounded-xl border border-[#B08D57]/50 bg-[#3B1727] text-[#F3E7DC] font-semibold disabled:opacity-40 ${RELIEVE_BOTON}`
+  const botonOro = `h-12 px-6 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-ca-oro-claro to-ca-oro text-ca-vino-hondo font-extrabold disabled:opacity-50 disabled:cursor-not-allowed ${RELIEVE_BOTON}`
+  const botonSuave = `h-11 px-4 inline-flex items-center justify-center gap-2 rounded-xl border border-ca-oro/50 bg-ca-tarjeta text-ca-vino font-semibold disabled:opacity-40 ${RELIEVE_BOTON}`
 
   const revision = useMemo(() => revisarMercado(m, segs), [m, segs])
   const faltanObligatorios = revision.filter((r) => r.obligatorio && !r.cumple)
@@ -182,7 +182,7 @@ export function MercadoClient({ proyecto, mercadoInicial, segmentosIniciales, ya
       <label className="block font-semibold" htmlFor={`m-${campo}`}>
         {etiqueta}
       </label>
-      <p className="text-xs text-[#F3E7DC]/60">{ayuda}</p>
+      <p className="text-xs text-ca-vino/75">{ayuda}</p>
       <textarea id={`m-${campo}`} rows={filas} value={m[campo]} onChange={(e) => cambiar(campo, e.target.value)} className={CAMPO_ENTRADA} />
       <SelectorCondicion valor={m.condiciones[campo] ?? 'aportado'} onCambio={(c) => cambiarCondicion(campo, c)} etiqueta={etiqueta} />
     </div>
@@ -199,7 +199,7 @@ export function MercadoClient({ proyecto, mercadoInicial, segmentosIniciales, ya
       <label className="block font-semibold" htmlFor={`m-${id}`}>
         {etiqueta}
       </label>
-      {ayuda && <p className="text-xs text-[#F3E7DC]/60">{ayuda}</p>}
+      {ayuda && <p className="text-xs text-ca-vino/75">{ayuda}</p>}
       <select id={`m-${id}`} value={m[id]} onChange={(e) => cambiar(id, e.target.value)} className={CAMPO_ENTRADA}>
         {opciones.every((o) => o.valor !== '') && <option value="">{vacio}</option>}
         {opciones.map((o) => (
@@ -212,26 +212,26 @@ export function MercadoClient({ proyecto, mercadoInicial, segmentosIniciales, ya
   )
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#2E0E1A] via-[#3B1727] to-[#54142B] text-[#F3E7DC]">
+    <main className="min-h-screen bg-gradient-to-b from-ca-tarjeta via-ca-fondo to-ca-suave text-ca-vino">
       <div className="max-w-[900px] mx-auto px-5 lg:px-8 py-10 lg:py-14">
         <Link
           href={`/empresarial/formulacion?proyecto=${proyecto.id}`}
-          className="inline-flex items-center gap-2 text-sm text-[#F3E7DC]/70 hover:text-white"
+          className="inline-flex items-center gap-2 text-sm text-ca-vino/75 hover:text-ca-vino-hondo"
         >
           <ArrowLeft className="h-4 w-4" /> Volver a la formulación
         </Link>
 
-        <div className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-[#C9A46B]">Estudio de mercado · {proyecto.nombre}</div>
+        <div className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-ca-oro-texto">Estudio de mercado · {proyecto.nombre}</div>
         <h1 className="mt-3 text-3xl lg:text-4xl font-extrabold">¿Para quién es y dónde?</h1>
-        <p className="mt-3 text-[#F3E7DC]/80 leading-relaxed">
+        <p className="mt-3 text-ca-vino/80 leading-relaxed">
           Primera parte del estudio de mercado: defines qué mercado es, hasta dónde puedes atenderlo y quiénes son tus clientes. Todavía no
           se calculan cifras de ventas; eso viene en las siguientes pantallas. Cada dato dice qué tan seguro es.
         </p>
 
         {!guardado && (
-          <div className="mt-6 rounded-2xl border border-[#C9A46B]/60 bg-[#2E0E1A] p-4 text-sm">
+          <div className="mt-6 rounded-2xl border border-ca-oro/60 bg-ca-fondo p-4 text-sm">
             <p className="font-semibold">Este es un borrador.</p>
-            <p className="mt-1 text-[#F3E7DC]/80">
+            <p className="mt-1 text-ca-vino/80">
               {formulacion
                 ? 'Copiamos el sector, el lugar y los beneficiarios que escribiste en tu formulación, sin agregar nada nuevo. Revísalo, complétalo y pulsa “Guardar estudio de mercado”. Hasta que lo guardes, nada queda registrado.'
                 : 'Aún no tienes formulación guardada, así que empiezas en blanco. Escribe cada parte y pulsa “Guardar estudio de mercado”.'}
@@ -240,18 +240,18 @@ export function MercadoClient({ proyecto, mercadoInicial, segmentosIniciales, ya
         )}
 
         {formulacion && (formulacion.problema || formulacion.alcance) && (
-          <section className={`mt-6 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 ${RELIEVE_TARJETA}`}>
+          <section className={`mt-6 rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 ${RELIEVE_TARJETA}`}>
             <h2 className="text-lg font-extrabold">Lo que escribiste en tu formulación</h2>
-            <p className="mt-1 text-sm text-[#F3E7DC]/70">Solo lectura, para que lo tengas a la vista mientras describes el mercado.</p>
+            <p className="mt-1 text-sm text-ca-vino/75">Solo lectura, para que lo tengas a la vista mientras describes el mercado.</p>
             {formulacion.problema && (
-              <p className="mt-3 rounded-xl bg-[#2E0E1A] p-3 text-sm">
-                <span className="block text-xs font-semibold text-[#C9A46B]">Problema u oportunidad</span>
+              <p className="mt-3 rounded-xl bg-ca-fondo p-3 text-sm">
+                <span className="block text-xs font-semibold text-ca-oro-texto">Problema u oportunidad</span>
                 {formulacion.problema}
               </p>
             )}
             {formulacion.alcance && (
-              <p className="mt-3 rounded-xl bg-[#2E0E1A] p-3 text-sm">
-                <span className="block text-xs font-semibold text-[#C9A46B]">Alcance</span>
+              <p className="mt-3 rounded-xl bg-ca-fondo p-3 text-sm">
+                <span className="block text-xs font-semibold text-ca-oro-texto">Alcance</span>
                 {formulacion.alcance}
               </p>
             )}
@@ -263,7 +263,7 @@ export function MercadoClient({ proyecto, mercadoInicial, segmentosIniciales, ya
             <label className="block font-semibold" htmlFor="m-producto">
               Qué producto o servicio ofreces
             </label>
-            <p className="text-xs text-[#F3E7DC]/60">En una frase. Ejemplo: “servicio de entrega de almuerzos saludables a oficinas”.</p>
+            <p className="text-xs text-ca-vino/75">En una frase. Ejemplo: “servicio de entrega de almuerzos saludables a oficinas”.</p>
             <input id="m-producto" value={m.producto} onChange={(e) => cambiar('producto', e.target.value)} className={CAMPO_ENTRADA} />
           </div>
           <div className="grid gap-5 sm:grid-cols-2">
@@ -302,7 +302,7 @@ export function MercadoClient({ proyecto, mercadoInicial, segmentosIniciales, ya
               <label className="block font-semibold" htmlFor="m-ubicacion">
                 Lugar o zona
               </label>
-              <p className="text-xs text-[#F3E7DC]/60">Ciudad, barrio, departamento o país.</p>
+              <p className="text-xs text-ca-vino/75">Ciudad, barrio, departamento o país.</p>
               <input id="m-ubicacion" value={m.ubicacion} onChange={(e) => cambiar('ubicacion', e.target.value)} className={CAMPO_ENTRADA} />
             </div>
           </div>
@@ -319,7 +319,7 @@ export function MercadoClient({ proyecto, mercadoInicial, segmentosIniciales, ya
             'Transporte, permisos, costos de envío, canales que no llegan.',
             3,
           )}
-          <p className="text-xs text-[#F3E7DC]/60">
+          <p className="text-xs text-ca-vino/75">
             País: {proyecto.pais ?? 'sin definir'}
             {proyecto.moneda ? ` · Moneda: ${proyecto.moneda}` : ''}. Vienen de tu proyecto.
           </p>
@@ -329,10 +329,10 @@ export function MercadoClient({ proyecto, mercadoInicial, segmentosIniciales, ya
           titulo="3. Tus clientes"
           ayuda="Un grupo de clientes es un conjunto de personas o empresas con necesidades parecidas. Mejor pocos grupos bien descritos que uno que diga “todos”."
         >
-          {segs.length === 0 && <p className="text-sm text-[#F3E7DC]/60">Todavía no hay ningún grupo de clientes.</p>}
+          {segs.length === 0 && <p className="text-sm text-ca-vino/75">Todavía no hay ningún grupo de clientes.</p>}
           <ul className="space-y-5">
             {segs.map((s, i) => (
-              <li key={s.id} className="rounded-xl bg-[#2E0E1A] p-4">
+              <li key={s.id} className="rounded-xl bg-ca-fondo p-4">
                 <div className="flex items-start gap-2">
                   <div className="w-full">
                     <label className="block text-sm font-semibold" htmlFor={`s-${s.id}-nombre`}>
@@ -346,17 +346,17 @@ export function MercadoClient({ proyecto, mercadoInicial, segmentosIniciales, ya
                       className={CAMPO_INTERNO}
                     />
                     {esSegmentoGenerico(s.nombre) && (
-                      <p role="alert" className="mt-1 text-xs text-[#C9A46B]">
+                      <p role="alert" className="mt-1 text-xs text-ca-oro-texto">
                         Este grupo es muy amplio. Acótalo por edad, lugar, tamaño de empresa, sector u hábito de compra.
                       </p>
                     )}
-                    {s.origen === 'formulacion' && <p className="mt-1 text-xs text-[#C9A46B]">Traído de tu formulación</p>}
+                    {s.origen === 'formulacion' && <p className="mt-1 text-xs text-ca-oro-texto">Traído de tu formulación</p>}
                   </div>
                   <button
                     type="button"
                     onClick={() => quitarSegmento(s.id)}
                     aria-label={`Quitar el grupo ${i + 1}`}
-                    className="mt-6 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#B08D57]/40 text-[#F3E7DC]/80 hover:text-white"
+                    className="mt-6 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-ca-oro/40 text-ca-vino/80 hover:text-ca-vino-hondo"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -426,7 +426,7 @@ export function MercadoClient({ proyecto, mercadoInicial, segmentosIniciales, ya
 
                 <fieldset className="mt-3">
                   <legend className="text-sm font-semibold">Qué papel tiene en la compra</legend>
-                  <p className="text-xs text-[#F3E7DC]/60">Puede tener varios. A veces quien usa no es quien paga.</p>
+                  <p className="text-xs text-ca-vino/75">Puede tener varios. A veces quien usa no es quien paga.</p>
                   <div className="mt-2 flex flex-wrap gap-2">
                     {ROLES.map((r) => {
                       const activo = s.roles.includes(r.valor)
@@ -435,7 +435,7 @@ export function MercadoClient({ proyecto, mercadoInicial, segmentosIniciales, ya
                           key={r.valor}
                           title={r.ayuda}
                           className={`inline-flex min-h-9 cursor-pointer items-center gap-2 rounded-full border px-3 text-sm ${
-                            activo ? 'border-[#C9A46B] bg-[#C9A46B] font-semibold text-[#3A1420]' : 'border-[#B08D57]/50 text-[#F3E7DC]'
+                            activo ? 'border-ca-oro bg-ca-oro-claro font-semibold text-ca-vino-hondo' : 'border-ca-oro/50 text-ca-vino'
                           }`}
                         >
                           <input type="checkbox" className="sr-only" checked={activo} onChange={() => alternarRol(s.id, r.valor)} />
@@ -466,41 +466,41 @@ export function MercadoClient({ proyecto, mercadoInicial, segmentosIniciales, ya
           </button>
         </Seccion>
 
-        <section className={`mt-6 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 ${RELIEVE_TARJETA}`}>
+        <section className={`mt-6 rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 ${RELIEVE_TARJETA}`}>
           <h2 className="text-xl font-extrabold">Revisión</h2>
-          <p className="mt-1 text-sm text-[#F3E7DC]/70">
+          <p className="mt-1 text-sm text-ca-vino/75">
             {faltanObligatorios.length === 0
               ? 'Tienes lo necesario para pasar a la siguiente pantalla. Los pendientes recomendados puedes completarlos después.'
               : `Falta${faltanObligatorios.length === 1 ? '' : 'n'} ${faltanObligatorios.length} ${faltanObligatorios.length === 1 ? 'parte necesaria' : 'partes necesarias'}.`}
           </p>
           <ul className="mt-3 space-y-2 text-sm">
             {revision.map((r) => (
-              <li key={r.clave} className="flex items-start gap-3 rounded-xl bg-[#2E0E1A] px-4 py-3">
+              <li key={r.clave} className="flex items-start gap-3 rounded-xl bg-ca-fondo px-4 py-3">
                 <span
                   aria-hidden
                   className={`mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs font-extrabold ${
-                    r.cumple ? 'bg-[#C9A46B] text-[#3A1420]' : 'border border-[#B08D57]/60 text-[#F3E7DC]/60'
+                    r.cumple ? 'bg-ca-oro-claro text-ca-vino-hondo' : 'border border-ca-oro/60 text-ca-vino/75'
                   }`}
                 >
                   {r.cumple ? '✓' : '·'}
                 </span>
                 <span>
                   <span className="block">
-                    {r.texto} <span className="text-xs text-[#F3E7DC]/55">({r.obligatorio ? 'necesario' : 'recomendado'})</span>
+                    {r.texto} <span className="text-xs text-ca-vino/75">({r.obligatorio ? 'necesario' : 'recomendado'})</span>
                   </span>
-                  {!r.cumple && <span className="block text-xs text-[#F3E7DC]/65">{r.ayuda}</span>}
+                  {!r.cumple && <span className="block text-xs text-ca-vino/75">{r.ayuda}</span>}
                 </span>
               </li>
             ))}
           </ul>
           {sinRespaldo > 0 && (
-            <p className="mt-3 rounded-xl bg-[#2E0E1A] p-3 text-sm">
+            <p className="mt-3 rounded-xl bg-ca-fondo p-3 text-sm">
               {sinRespaldo} {sinRespaldo === 1 ? 'dato está marcado' : 'datos están marcados'} como “{etiquetaCondicion('supuesto')}” o “
               {etiquetaCondicion('pendiente')}”. Compruébalos con entrevistas, encuestas o fuentes antes de tratarlos como hechos.
             </p>
           )}
           {faltanRecomendados.length > 0 && faltanObligatorios.length === 0 && (
-            <p className="mt-3 text-xs text-[#F3E7DC]/60">Quedan {faltanRecomendados.length} detalles recomendados por completar.</p>
+            <p className="mt-3 text-xs text-ca-vino/75">Quedan {faltanRecomendados.length} detalles recomendados por completar.</p>
           )}
         </section>
 
@@ -513,19 +513,19 @@ export function MercadoClient({ proyecto, mercadoInicial, segmentosIniciales, ya
               Seguir: demanda y tamaño
             </Link>
           )}
-          {sucio && !guardando && <span className="text-sm text-[#C9A46B]">Tienes cambios sin guardar.</span>}
+          {sucio && !guardando && <span className="text-sm text-ca-oro-texto">Tienes cambios sin guardar.</span>}
         </div>
         {aviso && (
           <div
             role={aviso.tipo === 'error' ? 'alert' : 'status'}
             className={`mt-4 rounded-2xl border p-4 text-sm ${
-              aviso.tipo === 'error' ? 'border-[#B3261E]/60 bg-[#B3261E]/15' : 'border-[#C9A46B]/60 bg-[#2E0E1A]'
+              aviso.tipo === 'error' ? 'border-ca-rojo/60 bg-ca-rojo/10' : 'border-ca-oro/60 bg-ca-fondo'
             }`}
           >
             {aviso.texto}
           </div>
         )}
-        <p className="mt-6 text-xs text-[#F3E7DC]/55">
+        <p className="mt-6 text-xs text-ca-vino/75">
           Esto es una guía para ordenar tu información; no garantiza resultados. La demanda, el tamaño del mercado, la competencia, los
           precios y la proyección de ventas se trabajan en las siguientes pantallas.
         </p>

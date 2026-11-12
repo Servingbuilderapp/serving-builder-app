@@ -20,10 +20,10 @@ export const metadata = {
 const s = (x: unknown) => (x === null || x === undefined ? '' : String(x).trim())
 
 const mensaje = (titulo: string, texto: string) => (
-  <main className="min-h-screen bg-gradient-to-b from-[#2E0E1A] via-[#3B1727] to-[#54142B] text-[#F3E7DC] flex items-center justify-center px-5">
+  <main className="min-h-screen bg-gradient-to-b from-ca-tarjeta via-ca-fondo to-ca-suave text-ca-vino flex items-center justify-center px-5">
     <div className="max-w-md text-center">
       <h1 className="text-2xl font-extrabold">{titulo}</h1>
-      <p className="mt-3 text-[#F3E7DC]/80">{texto}</p>
+      <p className="mt-3 text-ca-vino/80">{texto}</p>
       <Link href="/empresarial" className="mt-6 inline-block underline">
         Volver
       </Link>
@@ -36,7 +36,7 @@ type Fila = { dato: string; valor: string; cond?: string }
 function Bloque({ titulo, href, vacio, children }: { titulo: string; href: string; vacio: boolean; children?: React.ReactNode }) {
   return (
     <section className="mt-8 break-inside-avoid-page">
-      <h2 className="border-b-2 border-[#B08D57] pb-1 text-xl font-extrabold text-[#54142B]">{titulo}</h2>
+      <h2 className="border-b-2 border-ca-oro pb-1 text-xl font-extrabold text-ca-vino">{titulo}</h2>
       {vacio ? (
         <p className="mt-3 text-sm text-[#6B5A4F]">
           Esta parte todavía no está completa.{' '}
@@ -55,7 +55,7 @@ function Texto({ t, v, cond }: { t: string; v: string; cond?: string }) {
   if (!v) return null
   return (
     <div>
-      <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">
+      <div className="text-xs font-bold uppercase tracking-wider text-ca-oro-texto">
         {t}
         {cond ? <span className="ml-2 font-normal normal-case tracking-normal text-[#6B5A4F]">({etiquetaCondicion(cond)})</span> : null}
       </div>
@@ -192,14 +192,14 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
   const hoy = new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' })
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#2E0E1A] via-[#3B1727] to-[#54142B] text-[#F3E7DC] print:bg-white">
+    <main className="min-h-screen bg-gradient-to-b from-ca-tarjeta via-ca-fondo to-ca-suave text-ca-vino print:bg-white">
       <div className="max-w-[900px] mx-auto px-5 lg:px-8 py-10 lg:py-14 print:p-0">
         <div className="print:hidden">
-          <Link href={`/empresarial/camino${q}`} className="inline-flex items-center gap-2 text-sm text-[#F3E7DC]/70 hover:text-white">
+          <Link href={`/empresarial/camino${q}`} className="inline-flex items-center gap-2 text-sm text-ca-vino/75 hover:text-ca-vino-hondo">
             ← Volver a mi camino
           </Link>
           <h1 className="mt-6 text-3xl lg:text-4xl font-extrabold">Tu documento final</h1>
-          <p className="mt-3 text-[#F3E7DC]/80 leading-relaxed">
+          <p className="mt-3 text-ca-vino/80 leading-relaxed">
             Aquí se reúne, en una sola hoja, todo lo que escribiste en cada paso. No se agrega nada nuevo: si algo falta, aparece marcado para que lo completes.
           </p>
           <div className="mt-5 mb-6">
@@ -207,9 +207,9 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
           </div>
         </div>
 
-        <article className="rounded-2xl bg-[#FBF7F0] p-6 lg:p-10 text-[#2B1A14] shadow-[0_10px_40px_-12px_rgba(0,0,0,0.5)] print:shadow-none print:rounded-none">
-          <div className="text-xs font-bold uppercase tracking-[0.25em] text-[#8A6A3B]">Documento del proyecto</div>
-          <h1 className="mt-2 text-3xl font-extrabold text-[#54142B]">{proyecto.nombre as string}</h1>
+        <article className="rounded-2xl bg-ca-tarjeta p-6 lg:p-10 text-[#2B1A14] shadow-[0_10px_40px_-12px_rgba(0,0,0,0.5)] print:shadow-none print:rounded-none">
+          <div className="text-xs font-bold uppercase tracking-[0.25em] text-ca-oro-texto">Documento del proyecto</div>
+          <h1 className="mt-2 text-3xl font-extrabold text-ca-vino">{proyecto.nombre as string}</h1>
           <p className="mt-1 text-sm text-[#6B5A4F]">
             {s(proyecto.pais) ? `${s(proyecto.pais)} · ` : ''}Generado el {hoy}
           </p>
@@ -229,19 +229,19 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             <Texto t="Objetivo general" v={s(f?.objetivo_general)} />
             {objetivos.length > 0 && (
               <div>
-                <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">Objetivos específicos</div>
+                <div className="text-xs font-bold uppercase tracking-wider text-ca-oro-texto">Objetivos específicos</div>
                 {lista(objetivos)}
               </div>
             )}
             {beneficiarios.length > 0 && (
               <div>
-                <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">Quiénes se benefician</div>
+                <div className="text-xs font-bold uppercase tracking-wider text-ca-oro-texto">Quiénes se benefician</div>
                 {lista(beneficiarios)}
               </div>
             )}
             {resultados.length > 0 && (
               <div>
-                <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">Resultados esperados</div>
+                <div className="text-xs font-bold uppercase tracking-wider text-ca-oro-texto">Resultados esperados</div>
                 {lista(resultados)}
               </div>
             )}
@@ -265,7 +265,7 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             <Texto t="Restricciones" v={s(m?.restricciones)} />
             {(segs.data ?? []).length > 0 && (
               <div>
-                <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">Segmentos de clientes</div>
+                <div className="text-xs font-bold uppercase tracking-wider text-ca-oro-texto">Segmentos de clientes</div>
                 <ul className="mt-1 space-y-2">
                   {(segs.data ?? []).map((x, i) => (
                     <li key={i}>
@@ -311,7 +311,7 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             )}
             {(comps.data ?? []).length > 0 && (
               <div>
-                <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">Competidores</div>
+                <div className="text-xs font-bold uppercase tracking-wider text-ca-oro-texto">Competidores</div>
                 <ul className="mt-1 space-y-2">
                   {(comps.data ?? []).map((x, i) => (
                     <li key={i}>
@@ -330,7 +330,7 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             )}
             {(canales.data ?? []).length > 0 && (
               <div>
-                <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">Canales para llegar al cliente</div>
+                <div className="text-xs font-bold uppercase tracking-wider text-ca-oro-texto">Canales para llegar al cliente</div>
                 <ul className="mt-1 list-disc space-y-1 pl-5">
                   {(canales.data ?? []).map((x, i) => (
                     <li key={i}>
@@ -363,7 +363,7 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
               if (xs.length === 0) return null
               return (
                 <div key={g.clave}>
-                  <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">{g.titulo}</div>
+                  <div className="text-xs font-bold uppercase tracking-wider text-ca-oro-texto">{g.titulo}</div>
                   <ul className="list-disc space-y-1 pl-5">
                     {xs.map((x, i) => (
                       <li key={i}>
@@ -384,7 +384,7 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
               if (xs.length === 0) return null
               return (
                 <div key={c.clave}>
-                  <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">Estrategias para {c.titulo.toLowerCase()}</div>
+                  <div className="text-xs font-bold uppercase tracking-wider text-ca-oro-texto">Estrategias para {c.titulo.toLowerCase()}</div>
                   <ul className="list-disc space-y-1 pl-5">
                     {xs.map((x, i) => (
                       <li key={i}>{x.texto}</li>
@@ -409,7 +409,7 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             <Texto t="Restricciones" v={s(te?.restricciones)} />
             {(specs.data ?? []).length > 0 && (
               <div>
-                <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">Especificaciones</div>
+                <div className="text-xs font-bold uppercase tracking-wider text-ca-oro-texto">Especificaciones</div>
                 <Tabla
                   filas={(specs.data ?? []).map((x) => ({
                     dato: s(x.caracteristica),
@@ -421,7 +421,7 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             )}
             {(pasos.data ?? []).length > 0 && (
               <div>
-                <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">Cómo se produce o se presta</div>
+                <div className="text-xs font-bold uppercase tracking-wider text-ca-oro-texto">Cómo se produce o se presta</div>
                 <ol className="mt-1 list-decimal space-y-1 pl-5">
                   {(pasos.data ?? []).map((x, i) => (
                     <li key={i}>
@@ -454,13 +454,13 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             )}
             {itemsFin.filter((x) => x.tipo === 'inversion').length > 0 && (
               <div>
-                <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">Inversión inicial</div>
+                <div className="text-xs font-bold uppercase tracking-wider text-ca-oro-texto">Inversión inicial</div>
                 <Tabla filas={itemsFin.filter((x) => x.tipo === 'inversion').map((x) => ({ dato: x.concepto, valor: din(num(x.valor)), cond: x.condicion }))} />
               </div>
             )}
             {itemsFin.filter((x) => x.tipo === 'costo_fijo').length > 0 && (
               <div>
-                <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">Costos fijos por mes</div>
+                <div className="text-xs font-bold uppercase tracking-wider text-ca-oro-texto">Costos fijos por mes</div>
                 <Tabla filas={itemsFin.filter((x) => x.tipo === 'costo_fijo').map((x) => ({ dato: x.concepto, valor: din(num(x.valor)), cond: x.condicion }))} />
               </div>
             )}

@@ -23,16 +23,16 @@ import {
 
 const RELIEVE_BOTON =
   'shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-200'
-const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(11,42,74,0.06),0_10px_28px_-14px_rgba(11,42,74,0.22)]'
+const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(84,20,43,0.06),0_10px_28px_-14px_rgba(84,20,43,0.22)]'
 const CAMPO_ENTRADA =
-  'mt-2 w-full rounded-xl border border-[#B08D57]/40 bg-[#2E0E1A] px-4 py-3 text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]'
+  'mt-2 w-full rounded-xl border border-ca-oro/40 bg-ca-fondo px-4 py-3 text-ca-vino placeholder:text-ca-vino/65 focus:outline-none focus:ring-2 focus:ring-ca-oro-claro'
 const CAMPO_INTERNO =
-  'mt-1 w-full rounded-lg border border-[#B08D57]/40 bg-[#3B1727] px-3 py-2 text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]'
+  'mt-1 w-full rounded-lg border border-ca-oro/40 bg-ca-tarjeta px-3 py-2 text-ca-vino placeholder:text-ca-vino/65 focus:outline-none focus:ring-2 focus:ring-ca-oro-claro'
 const COLOR_ALERTA: Record<string, string> = {
-  Crítica: 'border-[#B3261E]/70 bg-[#B3261E]/15',
-  Importante: 'border-[#C9A46B]/70 bg-[#2E0E1A]',
-  Preventiva: 'border-[#B08D57]/50 bg-[#2E0E1A]',
-  Informativa: 'border-[#B08D57]/30 bg-[#2E0E1A]',
+  Crítica: 'border-ca-rojo/70 bg-ca-rojo/10',
+  Importante: 'border-ca-oro/70 bg-ca-fondo',
+  Preventiva: 'border-ca-oro/50 bg-ca-fondo',
+  Informativa: 'border-ca-oro/45 bg-ca-fondo',
 }
 const SOLO_DECIMAL = (v: string) => {
   const limpio = v.replace(/[^\d.]/g, '')
@@ -51,13 +51,13 @@ interface Props {
 
 function SelectorCondicion({ valor, onCambio, etiqueta }: { valor: Condicion; onCambio: (c: Condicion) => void; etiqueta: string }) {
   return (
-    <label className="mt-2 flex flex-wrap items-center gap-2 text-xs text-[#F3E7DC]/70">
+    <label className="mt-2 flex flex-wrap items-center gap-2 text-xs text-ca-vino/75">
       <span>¿Qué tan seguro es este dato?</span>
       <select
         aria-label={`Condición del dato: ${etiqueta}`}
         value={valor}
         onChange={(e) => onCambio(e.target.value as Condicion)}
-        className="h-9 rounded-lg border border-[#B08D57]/50 bg-[#3B1727] px-2 text-[#F3E7DC]"
+        className="h-9 rounded-lg border border-ca-oro/50 bg-ca-tarjeta px-2 text-ca-vino"
       >
         {CONDICIONES.map((c) => (
           <option key={c.valor} value={c.valor}>
@@ -71,9 +71,9 @@ function SelectorCondicion({ valor, onCambio, etiqueta }: { valor: Condicion; on
 
 function Seccion({ titulo, ayuda, children }: { titulo: string; ayuda: string; children: React.ReactNode }) {
   return (
-    <section className={`mt-6 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 lg:p-6 ${RELIEVE_TARJETA}`}>
+    <section className={`mt-6 rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 lg:p-6 ${RELIEVE_TARJETA}`}>
       <h2 className="text-xl font-extrabold">{titulo}</h2>
-      <p className="mt-1 text-sm text-[#F3E7DC]/70">{ayuda}</p>
+      <p className="mt-1 text-sm text-ca-vino/75">{ayuda}</p>
       <div className="mt-4 space-y-5">{children}</div>
     </section>
   )
@@ -88,8 +88,8 @@ export function FinancieroClient({ proyecto, inicial, itemsIniciales, yaGuardado
   const [guardando, setGuardando] = useState(false)
   const [aviso, setAviso] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
 
-  const botonOro = `h-12 px-6 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] font-extrabold disabled:opacity-50 disabled:cursor-not-allowed ${RELIEVE_BOTON}`
-  const botonSuave = `h-11 px-4 inline-flex items-center justify-center gap-2 rounded-xl border border-[#B08D57]/50 bg-[#3B1727] text-[#F3E7DC] font-semibold ${RELIEVE_BOTON}`
+  const botonOro = `h-12 px-6 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-ca-oro-claro to-ca-oro text-ca-vino-hondo font-extrabold disabled:opacity-50 disabled:cursor-not-allowed ${RELIEVE_BOTON}`
+  const botonSuave = `h-11 px-4 inline-flex items-center justify-center gap-2 rounded-xl border border-ca-oro/50 bg-ca-tarjeta text-ca-vino font-semibold ${RELIEVE_BOTON}`
 
   const r = useMemo(() => calcular(f, items), [f, items])
   const alertas = useMemo(() => alertasFinanciero(f, items, r, { somAnual: referencia.somAnual }), [f, items, r, referencia.somAnual])
@@ -170,10 +170,10 @@ export function FinancieroClient({ proyecto, inicial, itemsIniciales, yaGuardado
     const propios = items.filter((i) => i.tipo === tipo)
     return (
       <div>
-        {propios.length === 0 && <p className="text-sm text-[#F3E7DC]/60">Todavía no hay ninguno.</p>}
+        {propios.length === 0 && <p className="text-sm text-ca-vino/75">Todavía no hay ninguno.</p>}
         <ul className="space-y-4">
           {propios.map((i, n) => (
-            <li key={i.id} className="rounded-xl bg-[#2E0E1A] p-4">
+            <li key={i.id} className="rounded-xl bg-ca-fondo p-4">
               <div className="flex items-start gap-2">
                 <div className="grid w-full gap-3 sm:grid-cols-3">
                   <div className="sm:col-span-2">
@@ -210,7 +210,7 @@ export function FinancieroClient({ proyecto, inicial, itemsIniciales, yaGuardado
                 <button
                   type="button"
                   aria-label={`Quitar el concepto ${n + 1}`}
-                  className="mt-6 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#B08D57]/40 text-[#F3E7DC]/80 hover:text-white"
+                  className="mt-6 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-ca-oro/40 text-ca-vino/80 hover:text-ca-vino-hondo"
                   onClick={() => {
                     setItems((p) => p.filter((x) => x.id !== i.id))
                     setSucio(true)
@@ -235,7 +235,7 @@ export function FinancieroClient({ proyecto, inicial, itemsIniciales, yaGuardado
         </button>
         <p className="mt-3 text-sm">
           Total {tipo === 'inversion' ? 'de la inversión' : 'de costos fijos por mes'}:{' '}
-          <span className="font-extrabold text-[#C9A46B]">{din(tipo === 'inversion' ? r.inversion : r.fijosMes)}</span>
+          <span className="font-extrabold text-ca-oro-texto">{din(tipo === 'inversion' ? r.inversion : r.fijosMes)}</span>
         </p>
       </div>
     )
@@ -250,23 +250,23 @@ export function FinancieroClient({ proyecto, inicial, itemsIniciales, yaGuardado
   ]
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#2E0E1A] via-[#3B1727] to-[#54142B] text-[#F3E7DC]">
+    <main className="min-h-screen bg-gradient-to-b from-ca-tarjeta via-ca-fondo to-ca-suave text-ca-vino">
       <div className="max-w-[900px] mx-auto px-5 lg:px-8 py-10 lg:py-14">
-        <Link href={`/empresarial/camino?proyecto=${proyecto.id}`} className="inline-flex items-center gap-2 text-sm text-[#F3E7DC]/70 hover:text-white">
+        <Link href={`/empresarial/camino?proyecto=${proyecto.id}`} className="inline-flex items-center gap-2 text-sm text-ca-vino/75 hover:text-ca-vino-hondo">
           <ArrowLeft className="h-4 w-4" /> Volver a mi camino
         </Link>
 
-        <div className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-[#C9A46B]">Financiero básico · {proyecto.nombre}</div>
+        <div className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-ca-oro-texto">Financiero básico · {proyecto.nombre}</div>
         <h1 className="mt-3 text-3xl lg:text-4xl font-extrabold">¿Cuánto cuesta y cuánto deja?</h1>
-        <p className="mt-3 text-[#F3E7DC]/80 leading-relaxed">
+        <p className="mt-3 text-ca-vino/80 leading-relaxed">
           Con tus cifras calculamos cuánto dinero necesitas para empezar, cuánto debes vender para no perder y en cuánto tiempo recuperas lo
           invertido. Las cuentas las hace el sistema con lo que tú escribes; no se inventa ninguna cifra.
         </p>
 
         {copiadoDeMercado && !guardado && (
-          <div className="mt-6 rounded-2xl border border-[#C9A46B]/60 bg-[#2E0E1A] p-4 text-sm">
+          <div className="mt-6 rounded-2xl border border-ca-oro/60 bg-ca-fondo p-4 text-sm">
             <p className="font-semibold">Traímos tu precio y tu costo por unidad del estudio de mercado.</p>
-            <p className="mt-1 text-[#F3E7DC]/80">Revísalos. Hasta que guardes, nada queda registrado.</p>
+            <p className="mt-1 text-ca-vino/80">Revísalos. Hasta que guardes, nada queda registrado.</p>
           </div>
         )}
 
@@ -283,7 +283,7 @@ export function FinancieroClient({ proyecto, inicial, itemsIniciales, yaGuardado
                 Costo por unidad
               </label>
               <input id="f-costo" inputMode="decimal" value={f.costo_variable_unitario} onChange={(e) => cambiar('costo_variable_unitario', SOLO_DECIMAL(e.target.value))} className={CAMPO_ENTRADA} />
-              <p className="mt-1 text-xs text-[#F3E7DC]/60">Lo que cuesta producir o prestar una unidad: insumos, empaque, comisiones.</p>
+              <p className="mt-1 text-xs text-ca-vino/75">Lo que cuesta producir o prestar una unidad: insumos, empaque, comisiones.</p>
             </div>
             <div>
               <label className="block font-semibold" htmlFor="f-unid">
@@ -296,7 +296,7 @@ export function FinancieroClient({ proyecto, inicial, itemsIniciales, yaGuardado
             <label className="block font-semibold" htmlFor="f-fuente">
               ¿De dónde sale esa cantidad?
             </label>
-            <p className="text-xs text-[#F3E7DC]/60">Apóyate en tu estudio de mercado y en lo que puedes atender. Una cantidad deseada no es una cantidad esperada.</p>
+            <p className="text-xs text-ca-vino/75">Apóyate en tu estudio de mercado y en lo que puedes atender. Una cantidad deseada no es una cantidad esperada.</p>
             <textarea id="f-fuente" rows={3} value={f.unidades_fuente} onChange={(e) => cambiar('unidades_fuente', e.target.value)} className={CAMPO_ENTRADA} />
             <SelectorCondicion
               valor={f.unidades_condicion}
@@ -308,8 +308,8 @@ export function FinancieroClient({ proyecto, inicial, itemsIniciales, yaGuardado
             />
           </div>
           {r.margenUnidad !== null && (
-            <div className="rounded-xl border border-dashed border-[#C9A46B]/60 bg-[#2E0E1A] p-3 text-sm">
-              Cada unidad te deja <span className="font-extrabold text-[#C9A46B]">{din(r.margenUnidad)}</span> antes de pagar los costos fijos.
+            <div className="rounded-xl border border-dashed border-ca-oro/60 bg-ca-fondo p-3 text-sm">
+              Cada unidad te deja <span className="font-extrabold text-ca-oro-texto">{din(r.margenUnidad)}</span> antes de pagar los costos fijos.
             </div>
           )}
         </Seccion>
@@ -325,7 +325,7 @@ export function FinancieroClient({ proyecto, inicial, itemsIniciales, yaGuardado
               <p className="mt-2 text-sm">
                 {r.faltaAporte > 0 ? (
                   <>
-                    Faltaría financiar <span className="font-extrabold text-[#C9A46B]">{din(r.faltaAporte)}</span>.
+                    Faltaría financiar <span className="font-extrabold text-ca-oro-texto">{din(r.faltaAporte)}</span>.
                   </>
                 ) : (
                   'Tu dinero propio cubre la inversión.'
@@ -339,7 +339,7 @@ export function FinancieroClient({ proyecto, inicial, itemsIniciales, yaGuardado
           {lista('costo_fijo', CATEGORIAS_COSTO_FIJO, 'Agregar costo fijo', 'Sueldo de la persona que cocina, arriendo, internet…')}
         </Seccion>
 
-        <section className={`mt-6 rounded-2xl border border-[#C9A46B]/60 bg-[#2E0E1A] p-5 ${RELIEVE_TARJETA}`}>
+        <section className={`mt-6 rounded-2xl border border-ca-oro/60 bg-ca-fondo p-5 ${RELIEVE_TARJETA}`}>
           <h2 className="text-xl font-extrabold">Lo que dicen tus cifras</h2>
           <div className="mt-3 grid gap-3 sm:grid-cols-2">
             {[
@@ -348,13 +348,13 @@ export function FinancieroClient({ proyecto, inicial, itemsIniciales, yaGuardado
               ['Para no perder, debes vender al mes', r.equilibrioUnidades === null ? '—' : `${formatoNumero(Math.ceil(r.equilibrioUnidades))} unidades`],
               ['Recuperas la inversión en', formatoMeses(r.mesesRecuperacion)],
             ].map(([t, v]) => (
-              <div key={t} className="rounded-xl bg-[#3B1727] p-4">
-                <div className="text-xs text-[#F3E7DC]/65">{t}</div>
+              <div key={t} className="rounded-xl bg-ca-tarjeta p-4">
+                <div className="text-xs text-ca-vino/75">{t}</div>
                 <div className="mt-1 text-lg font-extrabold">{v}</div>
               </div>
             ))}
           </div>
-          <p className="mt-3 text-xs text-[#F3E7DC]/60">Son cuentas con tus propias cifras: valen lo que valgan tus fuentes. No son una promesa de resultados.</p>
+          <p className="mt-3 text-xs text-ca-vino/75">Son cuentas con tus propias cifras: valen lo que valgan tus fuentes. No son una promesa de resultados.</p>
 
           {(r.fijosMes > 0 || r.inversion > 0) && (
             <div className="mt-5 grid gap-6 lg:grid-cols-2">
@@ -403,7 +403,7 @@ export function FinancieroClient({ proyecto, inicial, itemsIniciales, yaGuardado
           {r.utilidadMes !== null && (
             <div className="mt-5">
               <h3 className="font-extrabold">¿Y si cambian las cosas?</h3>
-              <p className="text-xs text-[#F3E7DC]/60">Un ejercicio para ver qué tan frágil es tu proyecto. No es un pronóstico y no se guarda.</p>
+              <p className="text-xs text-ca-vino/75">Un ejercicio para ver qué tan frágil es tu proyecto. No es un pronóstico y no se guarda.</p>
               <BarrasH
                 titulo="Utilidad por mes según cada cambio"
                 formato={(n) => `${din(n)} al mes`}
@@ -419,42 +419,42 @@ export function FinancieroClient({ proyecto, inicial, itemsIniciales, yaGuardado
           <section className="mt-6 space-y-3" aria-label="Alertas">
             {alertas.map((a, i) => (
               <div key={i} role={a.nivel === 'Crítica' ? 'alert' : 'note'} className={`rounded-2xl border p-4 text-sm ${COLOR_ALERTA[a.nivel]}`}>
-                <span className="mr-2 text-xs font-bold uppercase tracking-wider text-[#C9A46B]">{a.nivel}</span>
+                <span className="mr-2 text-xs font-bold uppercase tracking-wider text-ca-oro-texto">{a.nivel}</span>
                 {a.texto}
               </div>
             ))}
           </section>
         )}
 
-        <section className={`mt-6 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 ${RELIEVE_TARJETA}`}>
+        <section className={`mt-6 rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 ${RELIEVE_TARJETA}`}>
           <h2 className="text-xl font-extrabold">Revisión</h2>
-          <p className="mt-1 text-sm text-[#F3E7DC]/70">
+          <p className="mt-1 text-sm text-ca-vino/75">
             {faltan.length === 0
               ? 'Tienes lo necesario para seguir. Los recomendados puedes completarlos después.'
               : `Falta${faltan.length === 1 ? '' : 'n'} ${faltan.length} ${faltan.length === 1 ? 'parte necesaria' : 'partes necesarias'}.`}
           </p>
           <ul className="mt-3 space-y-2 text-sm">
             {revision.map((x) => (
-              <li key={x.clave} className="flex items-start gap-3 rounded-xl bg-[#2E0E1A] px-4 py-3">
+              <li key={x.clave} className="flex items-start gap-3 rounded-xl bg-ca-fondo px-4 py-3">
                 <span
                   aria-hidden
                   className={`mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs font-extrabold ${
-                    x.cumple ? 'bg-[#C9A46B] text-[#3A1420]' : 'border border-[#B08D57]/60 text-[#F3E7DC]/60'
+                    x.cumple ? 'bg-ca-oro-claro text-ca-vino-hondo' : 'border border-ca-oro/60 text-ca-vino/75'
                   }`}
                 >
                   {x.cumple ? '✓' : '·'}
                 </span>
                 <span>
                   <span className="block">
-                    {x.texto} <span className="text-xs text-[#F3E7DC]/55">({x.obligatorio ? 'necesario' : 'recomendado'})</span>
+                    {x.texto} <span className="text-xs text-ca-vino/75">({x.obligatorio ? 'necesario' : 'recomendado'})</span>
                   </span>
-                  {!x.cumple && <span className="block text-xs text-[#F3E7DC]/65">{x.ayuda}</span>}
+                  {!x.cumple && <span className="block text-xs text-ca-vino/75">{x.ayuda}</span>}
                 </span>
               </li>
             ))}
           </ul>
-          {faltanRec.length > 0 && faltan.length === 0 && <p className="mt-3 text-xs text-[#F3E7DC]/60">Quedan {faltanRec.length} detalles recomendados.</p>}
-          <p className="mt-3 text-xs text-[#F3E7DC]/55">Dato marcado como “{etiquetaCondicion('supuesto')}” o “{etiquetaCondicion('pendiente')}”: compruébalo antes de presentarlo como hecho.</p>
+          {faltanRec.length > 0 && faltan.length === 0 && <p className="mt-3 text-xs text-ca-vino/75">Quedan {faltanRec.length} detalles recomendados.</p>}
+          <p className="mt-3 text-xs text-ca-vino/75">Dato marcado como “{etiquetaCondicion('supuesto')}” o “{etiquetaCondicion('pendiente')}”: compruébalo antes de presentarlo como hecho.</p>
         </section>
 
         <div className="mt-6 flex flex-wrap items-center gap-4">
@@ -466,17 +466,17 @@ export function FinancieroClient({ proyecto, inicial, itemsIniciales, yaGuardado
               Seguir: documento final
             </Link>
           )}
-          {sucio && !guardando && <span className="text-sm text-[#C9A46B]">Tienes cambios sin guardar.</span>}
+          {sucio && !guardando && <span className="text-sm text-ca-oro-texto">Tienes cambios sin guardar.</span>}
         </div>
         {aviso && (
           <div
             role={aviso.tipo === 'error' ? 'alert' : 'status'}
-            className={`mt-4 rounded-2xl border p-4 text-sm ${aviso.tipo === 'error' ? 'border-[#B3261E]/60 bg-[#B3261E]/15' : 'border-[#C9A46B]/60 bg-[#2E0E1A]'}`}
+            className={`mt-4 rounded-2xl border p-4 text-sm ${aviso.tipo === 'error' ? 'border-ca-rojo/60 bg-ca-rojo/10' : 'border-ca-oro/60 bg-ca-fondo'}`}
           >
             {aviso.texto}
           </div>
         )}
-        <p className="mt-6 text-xs text-[#F3E7DC]/55">
+        <p className="mt-6 text-xs text-ca-vino/75">
           Esto es una guía básica para ordenar tus cuentas; no reemplaza a un contador ni garantiza resultados. Un análisis financiero completo (flujo de caja, VAN, TIR) viene después.
         </p>
       </div>

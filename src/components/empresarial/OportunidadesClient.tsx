@@ -21,7 +21,7 @@ import {
 
 const RELIEVE_BOTON =
   'shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-200'
-const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(11,42,74,0.06),0_10px_28px_-14px_rgba(11,42,74,0.22)]'
+const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(84,20,43,0.06),0_10px_28px_-14px_rgba(84,20,43,0.22)]'
 
 interface Oportunidad {
   id: string
@@ -66,7 +66,7 @@ const COLOR_GRAVEDAD: Record<string, string> = {
 }
 
 const campoClase =
-  'mt-1 w-full rounded-xl border border-[#B08D57]/40 bg-[#2E0E1A] px-4 py-3 text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]'
+  'mt-1 w-full rounded-xl border border-ca-oro/40 bg-ca-fondo px-4 py-3 text-ca-vino placeholder:text-ca-vino/65 focus:outline-none focus:ring-2 focus:ring-ca-oro-claro'
 
 export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportunidadesIniciales, descubrimiento, resumenHipotesis, ideasIAIniciales }: Props) {
   const [oportunidades, setOportunidades] = useState<Oportunidad[]>(oportunidadesIniciales)
@@ -74,8 +74,8 @@ export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportuni
   const [guardando, setGuardando] = useState<string | null>(null)
   const [nuevo, setNuevo] = useState({ nombre: '', descripcion: '', categoria: '' })
 
-  const botonOro = `h-12 px-6 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] font-extrabold disabled:opacity-50 disabled:cursor-not-allowed ${RELIEVE_BOTON}`
-  const botonSuave = `h-12 px-5 inline-flex items-center justify-center gap-2 rounded-xl border border-[#B08D57]/50 bg-[#3B1727] text-[#F3E7DC] font-semibold disabled:opacity-40 ${RELIEVE_BOTON}`
+  const botonOro = `h-12 px-6 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-ca-oro-claro to-ca-oro text-ca-vino-hondo font-extrabold disabled:opacity-50 disabled:cursor-not-allowed ${RELIEVE_BOTON}`
+  const botonSuave = `h-12 px-5 inline-flex items-center justify-center gap-2 rounded-xl border border-ca-oro/50 bg-ca-tarjeta text-ca-vino font-semibold disabled:opacity-40 ${RELIEVE_BOTON}`
 
   const sugeridas = useMemo(() => {
     const convertidos = new Set(oportunidades.map((o) => o.hallazgo_id).filter((x): x is string => Boolean(x)))
@@ -219,27 +219,27 @@ export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportuni
     ['cliente_o_beneficiario', 'solucion_propuesta', 'valor_generado'].filter((c) => !o[c as keyof Oportunidad]).length
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#2E0E1A] via-[#3B1727] to-[#54142B] text-[#F3E7DC]">
+    <main className="min-h-screen bg-gradient-to-b from-ca-tarjeta via-ca-fondo to-ca-suave text-ca-vino">
       <div className="max-w-[900px] mx-auto px-5 lg:px-8 py-10 lg:py-14">
         <Link
           href={`/empresarial/diagnostico?proyecto=${proyecto.id}`}
-          className="inline-flex items-center gap-2 text-sm text-[#F3E7DC]/70 hover:text-white"
+          className="inline-flex items-center gap-2 text-sm text-ca-vino/75 hover:text-ca-vino-hondo"
         >
           <ArrowLeft className="h-4 w-4" /> Volver a mi diagnóstico
         </Link>
 
-        <div className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-[#C9A46B]">
+        <div className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-ca-oro-texto">
           Oportunidades · {proyecto.nombre}
         </div>
         <h1 className="mt-3 text-3xl lg:text-4xl font-extrabold">¿Qué proyecto vale la pena desarrollar?</h1>
-        <p className="mt-3 text-[#F3E7DC]/80 leading-relaxed">
+        <p className="mt-3 text-ca-vino/80 leading-relaxed">
           Aquí convertimos lo que salió de tu diagnóstico, y lo que tú has observado, en oportunidades claras. Una
           oportunidad es una posibilidad de generar valor; todavía no es un negocio probado. En el siguiente paso las
           calificarás y las compararás.
         </p>
 
         {error && (
-          <div role="alert" className="mt-6 rounded-2xl border border-[#B3261E]/60 bg-[#B3261E]/15 p-4 text-sm">
+          <div role="alert" className="mt-6 rounded-2xl border border-ca-rojo/60 bg-ca-rojo/10 p-4 text-sm">
             {error}
           </div>
         )}
@@ -248,7 +248,7 @@ export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportuni
         <section className="mt-12">
           <h2 className="text-xl font-extrabold">Sugeridas desde tu diagnóstico</h2>
           {sugeridas.length === 0 ? (
-            <p className={`mt-4 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 text-sm text-[#F3E7DC]/80 ${RELIEVE_TARJETA}`}>
+            <p className={`mt-4 rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 text-sm text-ca-vino/80 ${RELIEVE_TARJETA}`}>
               {hallazgos.length === 0
                 ? 'Todavía no hay sugerencias porque tu diagnóstico no está terminado. Puedes completarlo o agregar tus propias oportunidades abajo.'
                 : 'Ya convertiste todas las sugerencias. Puedes agregar más abajo.'}
@@ -256,19 +256,19 @@ export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportuni
           ) : (
             <div className="mt-4 space-y-3">
               {sugeridas.map((s) => (
-                <div key={s.hallazgo_id} className={`rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 ${RELIEVE_TARJETA}`}>
+                <div key={s.hallazgo_id} className={`rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 ${RELIEVE_TARJETA}`}>
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="font-bold">{s.nombre}</div>
                     <div className="flex gap-2 text-xs font-semibold">
                       {s.gravedad && (
-                        <span className="rounded-full bg-[#2E0E1A] border border-[#B08D57]/40 px-3 py-1">
+                        <span className="rounded-full bg-ca-fondo border border-ca-oro/40 px-3 py-1">
                           {COLOR_GRAVEDAD[s.gravedad]}
                         </span>
                       )}
-                      <span className="rounded-full bg-[#2E0E1A] border border-[#B08D57]/40 px-3 py-1">{s.categoria}</span>
+                      <span className="rounded-full bg-ca-fondo border border-ca-oro/40 px-3 py-1">{s.categoria}</span>
                     </div>
                   </div>
-                  <p className="mt-2 text-sm leading-relaxed text-[#F3E7DC]/85">{s.descripcion}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-ca-vino/85">{s.descripcion}</p>
                   <button
                     type="button"
                     className={`${botonSuave} mt-4`}
@@ -287,29 +287,29 @@ export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportuni
         {descubrimiento.length > 0 && (
           <section className="mt-12">
             <h2 className="text-xl font-extrabold">Sugeridas desde lo que me contaste</h2>
-            <p className="mt-1 text-sm text-[#F3E7DC]/70">
+            <p className="mt-1 text-sm text-ca-vino/75">
               Salen de tus conocimientos, capacidades, intereses y problemas que has visto. Son ideas para explorar, no
               negocios probados.
             </p>
             {sugeridasB.length === 0 ? (
-              <p className={`mt-4 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 text-sm text-[#F3E7DC]/80 ${RELIEVE_TARJETA}`}>
+              <p className={`mt-4 rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 text-sm text-ca-vino/80 ${RELIEVE_TARJETA}`}>
                 Ya convertiste todas las sugerencias de esta ruta. Si agregas más cosas en tu descubrimiento, aparecerán aquí.
               </p>
             ) : (
               <div className="mt-4 space-y-3">
                 {sugeridasB.map((s) => (
-                  <div key={s.clave} className={`rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 ${RELIEVE_TARJETA}`}>
+                  <div key={s.clave} className={`rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 ${RELIEVE_TARJETA}`}>
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div className="font-bold">{s.nombre}</div>
                       <div className="flex gap-2 text-xs font-semibold">
-                        <span className="rounded-full bg-[#2E0E1A] border border-[#B08D57]/40 px-3 py-1">
+                        <span className="rounded-full bg-ca-fondo border border-ca-oro/40 px-3 py-1">
                           {s.origen === 'problema' ? 'Nace de un problema' : 'Nace de lo que sabes y te gusta'}
                         </span>
-                        <span className="rounded-full bg-[#2E0E1A] border border-[#B08D57]/40 px-3 py-1">{s.categoria}</span>
+                        <span className="rounded-full bg-ca-fondo border border-ca-oro/40 px-3 py-1">{s.categoria}</span>
                       </div>
                     </div>
-                    <p className="mt-2 text-sm leading-relaxed text-[#F3E7DC]/85">{s.descripcion}</p>
-                    <ul className="mt-2 list-disc pl-5 text-xs text-[#F3E7DC]/65">
+                    <p className="mt-2 text-sm leading-relaxed text-ca-vino/85">{s.descripcion}</p>
+                    <ul className="mt-2 list-disc pl-5 text-xs text-ca-vino/75">
                       {s.basadoEn.map((b) => (
                         <li key={b}>{b}</li>
                       ))}
@@ -353,31 +353,31 @@ export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportuni
             </div>
           </div>
           {oportunidades.length === 0 ? (
-            <p className={`mt-4 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 text-sm text-[#F3E7DC]/80 ${RELIEVE_TARJETA}`}>
+            <p className={`mt-4 rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 text-sm text-ca-vino/80 ${RELIEVE_TARJETA}`}>
               Aún no tienes oportunidades guardadas. Convierte una sugerencia o agrega la tuya.
             </p>
           ) : (
             <div className="mt-4 space-y-4">
               {oportunidades.map((o) => (
-                <details key={o.id} className={`rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 ${RELIEVE_TARJETA}`}>
+                <details key={o.id} className={`rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 ${RELIEVE_TARJETA}`}>
                   <summary className="cursor-pointer list-none">
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div className="font-bold">{o.nombre}</div>
                       <div className="flex flex-wrap gap-2 text-xs font-semibold">
-                        <span className="rounded-full bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] px-3 py-1">
+                        <span className="rounded-full bg-gradient-to-b from-ca-oro-claro to-ca-oro text-ca-vino-hondo px-3 py-1">
                           {o.estado}
                         </span>
                         {o.categoria && (
-                          <span className="rounded-full bg-[#2E0E1A] border border-[#B08D57]/40 px-3 py-1">{o.categoria}</span>
+                          <span className="rounded-full bg-ca-fondo border border-ca-oro/40 px-3 py-1">{o.categoria}</span>
                         )}
                       </div>
                     </div>
-                    <p className="mt-2 text-xs text-[#F3E7DC]/65">
+                    <p className="mt-2 text-xs text-ca-vino/75">
                       {faltantes(o) > 0
                         ? `Faltan ${faltantes(o)} dato${faltantes(o) === 1 ? '' : 's'} clave en la ficha. Ábrela para completarla.`
                         : 'Ficha con los datos clave. Ábrela para revisarla.'}
                     </p>
-                    <p className="mt-1 text-xs text-[#F3E7DC]/65">
+                    <p className="mt-1 text-xs text-ca-vino/75">
                       {resumenHipotesis[o.id]
                         ? `Validación: ${resumenHipotesis[o.id].validadas} de ${resumenHipotesis[o.id].total} hipótesis validadas.`
                         : 'Validación: todavía no has escrito hipótesis.'}
@@ -407,7 +407,7 @@ export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportuni
                     {CAMPOS_FICHA.map((c) => (
                       <label key={c.clave} className="block text-sm font-semibold">
                         {c.etiqueta}
-                        <span className="block text-xs font-normal text-[#F3E7DC]/60">{c.ayuda}</span>
+                        <span className="block text-xs font-normal text-ca-vino/75">{c.ayuda}</span>
                         {c.largo ? (
                           <textarea
                             rows={3}
@@ -448,10 +448,10 @@ export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportuni
         {/* AGREGAR LA MÍA */}
         <section className="mt-12">
           <h2 className="text-xl font-extrabold">Agregar una oportunidad mía</h2>
-          <p className="mt-1 text-sm text-[#F3E7DC]/70">
+          <p className="mt-1 text-sm text-ca-vino/75">
             No tiene que salir del diagnóstico. Si la viste en tus clientes, en tu operación o en tu entorno, cuéntala.
           </p>
-          <div className={`mt-4 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 space-y-4 ${RELIEVE_TARJETA}`}>
+          <div className={`mt-4 rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 space-y-4 ${RELIEVE_TARJETA}`}>
             <label className="block text-sm font-semibold">
               Nombre
               <input
@@ -487,7 +487,7 @@ export function OportunidadesClient({ proyecto, hallazgos, dimensiones, oportuni
           </div>
         </section>
 
-        <p className="mt-12 text-center text-sm text-[#F3E7DC]/65">
+        <p className="mt-12 text-center text-sm text-ca-vino/75">
           Las sugerencias salen de reglas fijas aplicadas a tus respuestas. Son una guía: no confirman que exista demanda ni
           garantizan resultados.
         </p>

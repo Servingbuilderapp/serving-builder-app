@@ -12,6 +12,21 @@
    Si algún día hay que ajustar el vino o el dorado, se cambia AQUÍ.
    ========================================================================== */
 @theme {
+  /* === CAMINO A (proyectos empresariales): crema con vino tinto y dorado ===
+     Todos los colores del Camino A salen de AQUÍ (clases ca-*). Para cambiar el
+     tono de todo el Camino A, se cambia solo este bloque. */
+  --color-ca-fondo: #F3E7DC;       /* fondo de página: crema */
+  --color-ca-tarjeta: #FBF7F0;     /* tarjetas: crema más claro */
+  --color-ca-suave: #EADBC6;       /* zonas suaves, selección, hover */
+  --color-ca-vino: #54142B;        /* letras principales: vino tinto */
+  --color-ca-vino-hondo: #3A1420;  /* letra sobre botones dorados / énfasis */
+  --color-ca-oro: #B08D57;         /* bordes y detalles dorados */
+  --color-ca-oro-claro: #C9A46B;   /* relleno de botones dorados */
+  --color-ca-oro-texto: #7A5B2C;   /* texto dorado legible sobre crema */
+  --color-ca-rojo: #B3261E;        /* alertas */
+}
+
+@theme {
   /* === NEUTROS (tema oscuro — vino) === */
   --color-base-100: #54142B; /* Fondo principal - vino burdeos */
   --color-base-200: #4C2032; /* Fondo de tarjetas/superficies secundarias - vino un poco más claro */
@@ -221,6 +236,39 @@ h1, h2, h3, h4, h5, h6 {
   transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
   position: relative;
   overflow: hidden;
+}
+
+/* Camino A (crema con vino y dorado): las pantallas de la App de Ideas se comparten con el
+   Camino B y usan .glass-card y botones fantasma pensados para fondo oscuro. Dentro de
+   .camino-a (marco de /empresarial) se ven claros. El Camino B no cambia. */
+.camino-a .glass-card {
+  background: linear-gradient(160deg, #FBF7F0, #F3E7DC);
+  border: 1px solid rgba(176, 141, 87, 0.5);
+  box-shadow:
+    0 1px 2px rgba(84, 20, 43, 0.06),
+    0 10px 28px -14px rgba(84, 20, 43, 0.22);
+}
+.camino-a .glass-card:hover {
+  border-color: rgba(176, 141, 87, 0.8);
+  box-shadow:
+    0 1px 2px rgba(84, 20, 43, 0.08),
+    0 16px 34px -14px rgba(84, 20, 43, 0.28);
+}
+.camino-a [class*="rgba(243,231,220,0.4)"] {
+  border-color: rgba(84, 20, 43, 0.35);
+}
+.camino-a [class*="rgba(243,231,220,0.4)"]:hover {
+  background: rgba(84, 20, 43, 0.06);
+}
+
+/* Contraste: en la App de Ideas, las letras con transparencia alta (grises claros) se suben a
+   un vino firme para que se lean bien sobre crema. */
+.camino-a [class*="text-color-base-content/"]:not([class*="placeholder:"]):not([class*="/70"]):not([class*="/75"]):not([class*="/80"]) {
+  color: rgba(84, 20, 43, 0.75);
+}
+.camino-a input::placeholder,
+.camino-a textarea::placeholder {
+  color: rgba(84, 20, 43, 0.62);
 }
 
 /* Menú lateral: vino más oscuro que el fondo, como una franja hundida */

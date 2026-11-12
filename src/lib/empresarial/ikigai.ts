@@ -30,7 +30,7 @@ export const PREGUNTAS: GuiaPregunta[] = [
     titulo: 'Lo que amas',
     pregunta: '¿Lo disfrutas tanto que lo harías aunque nadie te viera?',
     pistas: ['¿Qué haces que se te pasa el tiempo sin darte cuenta?', '¿Qué parte de tu trabajo te da más energía?'],
-    color: '#E3A59B',
+    color: '#C4604F',
   },
   {
     clave: 'bueno',
@@ -38,7 +38,7 @@ export const PREGUNTAS: GuiaPregunta[] = [
     titulo: 'En lo que eres bueno',
     pregunta: '¿Lo haces mejor que la mayoría, o la gente te lo reconoce?',
     pistas: ['¿Por qué te buscan otras personas?', '¿Qué has hecho que salió bien varias veces?'],
-    color: '#C9A46B',
+    color: '#B08D57',
   },
   {
     clave: 'pagan',
@@ -46,7 +46,7 @@ export const PREGUNTAS: GuiaPregunta[] = [
     titulo: 'Por lo que te pagarían',
     pregunta: '¿Hay alguien que ya pague, o diga que pagaría, por esto?',
     pistas: ['¿Quién compra algo parecido hoy?', '¿Te han hecho pedidos o te han preguntado el precio?'],
-    color: '#7FB6A4',
+    color: '#3F8A76',
   },
   {
     clave: 'necesita',
@@ -54,7 +54,7 @@ export const PREGUNTAS: GuiaPregunta[] = [
     titulo: 'Lo que el mundo necesita',
     pregunta: '¿Resuelve un problema real de personas o empresas?',
     pistas: ['¿A quién le haría la vida más fácil?', '¿Qué problema de tu entorno nadie atiende bien?'],
-    color: '#8FA8D8',
+    color: '#4A6FB5',
   },
 ]
 

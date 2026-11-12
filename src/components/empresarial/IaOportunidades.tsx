@@ -6,9 +6,9 @@ import { CAMPOS_FICHA_IA, type CampoFichaIA, type IdeaIA, type SugerenciaFichaIA
 
 const RELIEVE_BOTON =
   'shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-200'
-const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(11,42,74,0.06),0_10px_28px_-14px_rgba(11,42,74,0.22)]'
+const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(84,20,43,0.06),0_10px_28px_-14px_rgba(84,20,43,0.22)]'
 
-const botonSuave = `h-12 px-5 inline-flex items-center justify-center gap-2 rounded-xl border border-[#B08D57]/50 bg-[#3B1727] text-[#F3E7DC] font-semibold disabled:opacity-40 ${RELIEVE_BOTON}`
+const botonSuave = `h-12 px-5 inline-flex items-center justify-center gap-2 rounded-xl border border-ca-oro/50 bg-ca-tarjeta text-ca-vino font-semibold disabled:opacity-40 ${RELIEVE_BOTON}`
 
 const ETIQUETA_CAMPO: Record<CampoFichaIA, string> = {
   cliente_o_beneficiario: 'Para quién genera valor',
@@ -91,12 +91,12 @@ export function SeccionIdeasIA({ proyectoId, ideasIniciales, onCrearOportunidad 
           {cargando ? 'Pensando…' : 'Pedir ideas a la IA'}
         </button>
       </div>
-      <p className="mt-1 text-sm text-[#F3E7DC]/70">
+      <p className="mt-1 text-sm text-ca-vino/75">
         La IA mira tu diagnóstico y lo que contaste, y propone oportunidades nuevas. {AVISO_IA}
       </p>
 
       {error && (
-        <div role="alert" className="mt-4 rounded-2xl border border-[#B3261E]/60 bg-[#B3261E]/15 p-4 text-sm">
+        <div role="alert" className="mt-4 rounded-2xl border border-ca-rojo/60 bg-ca-rojo/10 p-4 text-sm">
           {error}
         </div>
       )}
@@ -104,19 +104,19 @@ export function SeccionIdeasIA({ proyectoId, ideasIniciales, onCrearOportunidad 
       {ideas.length > 0 && (
         <div className="mt-4 space-y-3">
           {ideas.map((i) => (
-            <div key={i.id} className={`rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 ${RELIEVE_TARJETA}`}>
+            <div key={i.id} className={`rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 ${RELIEVE_TARJETA}`}>
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="font-bold">{i.titulo}</div>
-                <span className="rounded-full bg-[#2E0E1A] border border-[#B08D57]/40 px-3 py-1 text-xs font-semibold">
+                <span className="rounded-full bg-ca-fondo border border-ca-oro/40 px-3 py-1 text-xs font-semibold">
                   Sugerida por la IA
                 </span>
               </div>
-              <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-[#F3E7DC]/85">{i.descripcion}</p>
+              <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-ca-vino/85">{i.descripcion}</p>
               <div className="mt-4 flex flex-wrap gap-3">
                 <button type="button" className={botonSuave} disabled={trabajando === i.id} onClick={() => convertir(i)}>
                   {trabajando === i.id ? 'Guardando…' : 'Convertir en oportunidad'}
                 </button>
-                <button type="button" className="text-sm underline text-[#F3E7DC]/70 hover:text-white disabled:opacity-40" disabled={trabajando === i.id} onClick={() => descartar(i)}>
+                <button type="button" className="text-sm underline text-ca-vino/75 hover:text-ca-vino-hondo disabled:opacity-40" disabled={trabajando === i.id} onClick={() => descartar(i)}>
                   Descartar
                 </button>
               </div>
@@ -183,11 +183,11 @@ export function AyudaFichaIA({ proyectoId, oportunidad, onUsar }: PropsFicha) {
   const campos = CAMPOS_FICHA_IA.filter((c) => sugerencias[c])
 
   return (
-    <div className="rounded-xl border border-dashed border-[#B08D57]/50 p-4 space-y-3">
+    <div className="rounded-xl border border-dashed border-ca-oro/50 p-4 space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="text-sm">
           <span className="font-bold">¿Te falta algo en la ficha?</span>
-          <span className="block text-xs text-[#F3E7DC]/65">La IA propone texto solo para los campos vacíos.</span>
+          <span className="block text-xs text-ca-vino/75">La IA propone texto solo para los campos vacíos.</span>
         </div>
         {hayVacios && (
           <button type="button" className={botonSuave} disabled={cargando} onClick={pedir}>
@@ -197,24 +197,24 @@ export function AyudaFichaIA({ proyectoId, oportunidad, onUsar }: PropsFicha) {
       </div>
 
       {error && (
-        <div role="alert" className="rounded-xl border border-[#B3261E]/60 bg-[#B3261E]/15 p-3 text-sm">
+        <div role="alert" className="rounded-xl border border-ca-rojo/60 bg-ca-rojo/10 p-3 text-sm">
           {error}
         </div>
       )}
-      {aviso && <p className="text-sm text-[#F3E7DC]/80">{aviso}</p>}
+      {aviso && <p className="text-sm text-ca-vino/80">{aviso}</p>}
 
       {campos.length > 0 && (
         <div className="space-y-3">
-          <p className="text-xs text-[#F3E7DC]/65">{AVISO_IA} Al usarla, se escribe en la ficha pero no se guarda hasta que pulses “Guardar ficha”.</p>
+          <p className="text-xs text-ca-vino/75">{AVISO_IA} Al usarla, se escribe en la ficha pero no se guarda hasta que pulses “Guardar ficha”.</p>
           {campos.map((c) => (
-            <div key={c} className="rounded-xl bg-[#2E0E1A] p-4 text-sm">
+            <div key={c} className="rounded-xl bg-ca-fondo p-4 text-sm">
               <div className="font-semibold">{ETIQUETA_CAMPO[c]}</div>
-              <p className="mt-1 text-[#F3E7DC]/85">{sugerencias[c]}</p>
+              <p className="mt-1 text-ca-vino/85">{sugerencias[c]}</p>
               <div className="mt-3 flex flex-wrap gap-4">
-                <button type="button" className="text-sm font-bold underline text-[#C9A46B] hover:text-white" onClick={() => usar(c)}>
+                <button type="button" className="text-sm font-bold underline text-ca-oro-texto hover:text-ca-vino-hondo" onClick={() => usar(c)}>
                   Usar este texto
                 </button>
-                <button type="button" className="text-sm underline text-[#F3E7DC]/70 hover:text-white" onClick={() => quitar(c)}>
+                <button type="button" className="text-sm underline text-ca-vino/75 hover:text-ca-vino-hondo" onClick={() => quitar(c)}>
                   Descartar
                 </button>
               </div>
