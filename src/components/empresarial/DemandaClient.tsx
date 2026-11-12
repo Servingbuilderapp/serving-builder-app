@@ -317,8 +317,8 @@ export function DemandaClient({ proyecto, inicial, yaGuardado, referencia }: Pro
             {guardando ? 'Guardando…' : 'Guardar demanda y tamaño'}
           </button>
           {guardado && !sucio && (
-            <Link href={`/empresarial/camino?proyecto=${proyecto.id}`} className={botonSuave}>
-              Volver a mi camino
+            <Link href={`/empresarial/mercado/competencia?proyecto=${proyecto.id}`} className={botonSuave}>
+              Seguir: competencia y precios
             </Link>
           )}
           {sucio && !guardando && <span className="text-sm text-[#C9A46B]">Tienes cambios sin guardar.</span>}
