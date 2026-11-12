@@ -27,7 +27,6 @@ const LINEAS = [
       'Diseñamos proyectos para crear empresas, consolidar negocios y abrir nuevas oportunidades de crecimiento: ideas claras de negocio llevadas a la realidad para competir.',
     boton: 'Quiero desarrollar mi proyecto',
     href: '/empresarial',
-    login: '/login?redirect=/empresarial',
     iconos: [Sprout, Building2, TrendingUp],
     claro: false,
   },
@@ -41,7 +40,6 @@ const LINEAS = [
       'Identificamos las convocatorias y estructuramos tu proyecto financiable para que pueda competir por recursos no reembolsables: dinero que no se devuelve.',
     boton: 'Estructuremos mi proyecto',
     href: '/financiables',
-    login: '/login?redirect=/dashboard',
     iconos: [Search, FileCheck2, Landmark],
     claro: true,
   },
@@ -118,14 +116,6 @@ export function EntradaDosCaminos() {
                   >
                     {l.boton}
                     <ArrowRight className="h-5 w-5 shrink-0" />
-                  </Link>
-                  <Link
-                    href={l.login}
-                    className={`mt-2.5 min-h-11 px-6 py-2 w-full inline-flex items-center justify-center rounded-xl border text-sm font-bold text-center ${RELIEVE_BOTON} ${
-                      l.claro ? 'border-[#6B1F3A]/50 text-[#54142B] bg-white/60' : 'border-[#B08D57]/60 text-[#F3E7DC] bg-[#2E0E1A]/60'
-                    }`}
-                  >
-                    Iniciar sesión
                   </Link>
                 </div>
               </div>
