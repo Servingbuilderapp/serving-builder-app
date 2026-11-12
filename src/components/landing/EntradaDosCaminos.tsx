@@ -40,7 +40,7 @@ const LINEAS = [
     texto:
       'Identificamos las convocatorias y estructuramos tu proyecto financiable para que pueda competir por recursos no reembolsables: dinero que no se devuelve.',
     boton: 'Estructuremos mi proyecto',
-    href: '/diagnostico',
+    href: '/financiables',
     login: '/login?redirect=/dashboard',
     iconos: [Search, FileCheck2, Landmark],
     claro: true,

@@ -75,6 +75,8 @@ const RELIEVE_TARJETA =
 
 interface LandingClientProps {
   user: unknown
+  /* 'portada' = solo los dos caminos. 'financiables' = todo el contenido del Camino B. */
+  modo?: 'portada' | 'financiables'
   /* Propiedades que enviaba la versión anterior de la página.
      Se dejan opcionales para que el website funcione igual sin importar en qué
      orden se suban los archivos a GitHub. Ya no se usan. */
@@ -84,7 +86,7 @@ interface LandingClientProps {
 }
 
 const NAV_LINKS = [
-  { href: '#inicio', clave: 'w.nav.inicio' },
+  { href: '/', clave: 'w.nav.inicio' },
   { href: '#servicios', clave: 'w.nav.servicios' },
   { href: '#que-hacemos', clave: 'w.nav.que_hacemos' },
   { href: '#como-funciona', clave: 'w.nav.como_funciona' },
@@ -484,7 +486,7 @@ const FAQ_CLAVES = [
 
 /* ========================================================================== */
 
-function Marca({ oscuro = false }: { oscuro?: boolean }) {
+function Marca({ oscuro = false, neutro = false }: { oscuro?: boolean; neutro?: boolean }) {
   const { t } = useTranslation()
   return (
     <div className="flex items-center gap-3">
@@ -495,7 +497,7 @@ function Marca({ oscuro = false }: { oscuro?: boolean }) {
           {t('w.marca.nombre')}
         </div>
         <div className={`text-[10px] font-medium ${oscuro ? 'text-[#F3E7DC]/60' : 'text-[#F3E7DC]/70'}`}>
-          {t('w.marca.tagline')}
+          {neutro ? 'Fábrica de proyectos estratégicos' : t('w.marca.tagline')}
         </div>
       </div>
     </div>
@@ -650,7 +652,7 @@ function VistaPreviaPanel() {
 
 /* ========================================================================== */
 
-export function LandingClient({ user }: LandingClientProps) {
+export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
   const { t } = useTranslation()
   const [menuAbierto, setMenuAbierto] = useState(false)
   const [videoAbierto, setVideoAbierto] = useState(false)
@@ -665,10 +667,10 @@ export function LandingClient({ user }: LandingClientProps) {
       <header className="sticky top-0 z-50 bg-[#54142B]/95 backdrop-blur border-b border-[#B08D57]/35">
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8 h-[72px] flex items-center justify-between gap-6">
           <Link href="/" className="shrink-0">
-            <Marca />
+            <Marca neutro={modo === 'portada'} />
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-7">
+          <nav className={`${modo === 'financiables' ? 'hidden lg:flex' : 'hidden'} items-center gap-7`}>
             {NAV_LINKS.map((enlace) => (
               <a
                 key={enlace.href}
@@ -702,7 +704,7 @@ export function LandingClient({ user }: LandingClientProps) {
           </button>
         </div>
 
-        {menuAbierto ? (
+        {menuAbierto && modo === 'financiables' ? (
           <div className="lg:hidden border-t border-[#B08D57]/35 bg-[#54142B] px-5 py-4 space-y-1">
             {NAV_LINKS.map((enlace) => (
               <a
@@ -722,8 +724,10 @@ export function LandingClient({ user }: LandingClientProps) {
       </header>
 
       {/* ================= LOS DOS CAMINOS (primera pantalla, justo después de la presentación) ================= */}
-      <EntradaDosCaminos />
+      {modo === 'portada' ? <EntradaDosCaminos /> : null}
 
+      {modo === 'financiables' ? (
+      <>
       {/* ================= VIDEO DE BIENVENIDA Y PILARES (debajo de los dos caminos) ================= */}
       <section id="bienvenida" className="relative overflow-hidden bg-[#54142B]">
         <div className="relative max-w-[1400px] mx-auto px-5 lg:px-8 py-12 lg:py-16">
@@ -1178,12 +1182,15 @@ export function LandingClient({ user }: LandingClientProps) {
         </div>
       </section>
 
+      </>
+      ) : null}
+
       {/* ================= FOOTER ================= */}
       <footer className="bg-[#2E0E1A] text-[#F3E7DC]/70">
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8 py-12 grid md:grid-cols-3 gap-10">
           <div>
-            <Marca oscuro />
-            <p className="mt-4 text-[13px] leading-relaxed max-w-xs">{t('w.footer.descripcion')}</p>
+            <Marca oscuro neutro={modo === 'portada'} />
+            <p className="mt-4 text-[13px] leading-relaxed max-w-xs">{modo === 'portada' ? 'Creamos proyectos de acuerdo a tu necesidad o momento empresarial.' : t('w.footer.descripcion')}</p>
           </div>
 
           <div>

@@ -17,5 +17,5 @@ export default async function LandingPage() {
     data: { user },
   } = await supabase.auth.getUser()
 
-  return <LandingClient user={user} />
+  return <LandingClient user={user} modo="portada" />
 }
