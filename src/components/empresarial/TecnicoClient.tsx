@@ -519,8 +519,8 @@ export function TecnicoClient({ proyecto, inicial, specsIniciales, pasosIniciale
             {guardando ? 'Guardando…' : 'Guardar solución y proceso'}
           </button>
           {guardado && !sucio && (
-            <Link href={`/empresarial/camino?proyecto=${proyecto.id}`} className={botonSuave}>
-              Volver a mi camino
+            <Link href={`/empresarial/financiero?proyecto=${proyecto.id}`} className={botonSuave}>
+              Seguir: financiero básico
             </Link>
           )}
           {sucio && !guardando && <span className="text-sm text-[#C9A46B]">Tienes cambios sin guardar.</span>}
