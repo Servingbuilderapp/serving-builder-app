@@ -22,6 +22,7 @@ import {
 export interface Sugerencia {
   cuadrante: Cuadrante
   texto: string
+  origen?: string
 }
 
 const RELIEVE_BOTON =
@@ -214,11 +215,11 @@ export function DofaClient({ proyecto, itemsIniciales, yaGuardado, sugerencias }
 
                 {sug.length > 0 && (
                   <div className="mt-4 rounded-xl border border-dashed border-ca-oro/50 p-3">
-                    <div className="text-xs font-bold text-ca-oro-texto">Salen de tu estudio de competencia. Toca para usar:</div>
+                    <div className="text-xs font-bold text-ca-oro-texto">Salen de tu estudio de competencia y de tu Radar del Entorno. Toca para usar:</div>
                     <ul className="mt-2 space-y-1.5">
                       {sug.slice(0, 4).map((x) => (
                         <li key={x.texto}>
-                          <button type="button" onClick={() => agregar(g.clave, x.texto, 'Estudio de competencia', 'aportado')} className="w-full rounded-lg bg-ca-fondo px-3 py-2 text-left text-xs hover:bg-ca-suave">
+                          <button type="button" onClick={() => agregar(g.clave, x.texto, x.origen ?? 'Estudio de competencia', 'aportado')} className="w-full rounded-lg bg-ca-fondo px-3 py-2 text-left text-xs hover:bg-ca-suave">
                             + {x.texto}
                           </button>
                         </li>

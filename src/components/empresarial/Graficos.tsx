@@ -471,3 +471,59 @@ export function MarcoGrafico({ titulo, children }: { titulo: string; children: R
     </div>
   )
 }
+
+/* -------------------------------------------------------------------------- */
+/* Radar del entorno: un eje por factor; verde = lo que ayuda, rojo = lo que perjudica */
+/* -------------------------------------------------------------------------- */
+export interface EjeRadar {
+  etiqueta: string
+  ayuda: number
+  perjudica: number
+}
+
+export function RadarEntorno({ ejes, titulo }: { ejes: EjeRadar[]; titulo: string }) {
+  const W = 600
+  const H = 400
+  const cx = W / 2
+  const cy = H / 2 - 4
+  const R = 120
+  const n = ejes.length
+  const max = Math.max(5, ...ejes.map((e) => Math.max(e.ayuda, e.perjudica)))
+  const ang = (i: number) => -Math.PI / 2 + (i * 2 * Math.PI) / n
+  const punto = (i: number, v: number): [number, number] => [cx + Math.cos(ang(i)) * R * (v / max), cy + Math.sin(ang(i)) * R * (v / max)]
+  const poligono = (vals: number[]) => vals.map((v, i) => punto(i, v).join(',')).join(' ')
+  const anillos = [0.25, 0.5, 0.75, 1]
+  return (
+    <figure aria-label={titulo} className="mx-auto max-w-[560px]">
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={titulo}>
+        {anillos.map((a) => (
+          <polygon key={a} points={ejes.map((_, i) => punto(i, max * a).join(',')).join(' ')} fill="none" stroke={CREMA} strokeOpacity="0.2" />
+        ))}
+        {ejes.map((_, i) => {
+          const [x, y] = punto(i, max)
+          return <line key={i} x1={cx} y1={cy} x2={x} y2={y} stroke={CREMA} strokeOpacity="0.2" />
+        })}
+        <polygon points={poligono(ejes.map((e) => e.ayuda))} fill="#3F8A76" fillOpacity="0.28" stroke="#3F8A76" strokeWidth="2.5" />
+        <polygon points={poligono(ejes.map((e) => e.perjudica))} fill="#C4604F" fillOpacity="0.22" stroke="#C4604F" strokeWidth="2.5" />
+        {ejes.map((e, i) => {
+          const [x, y] = punto(i, max * 1.2)
+          const anchor = Math.abs(x - cx) < 8 ? 'middle' : x > cx ? 'start' : 'end'
+          return (
+            <text key={e.etiqueta} x={x} y={y + 4} textAnchor={anchor} fill={CREMA} fontSize="15" fontWeight="700">
+              {e.etiqueta}
+            </text>
+          )
+        })}
+        <g fontSize="14" fill={CREMA}>
+          <rect x="14" y={H - 22} width="14" height="14" fill="#3F8A76" fillOpacity="0.6" />
+          <text x="34" y={H - 10}>Lo que te ayuda</text>
+          <rect x="190" y={H - 22} width="14" height="14" fill="#C4604F" fillOpacity="0.6" />
+          <text x="210" y={H - 10}>Lo que te perjudica</text>
+        </g>
+      </svg>
+      <figcaption className="mt-1 text-center text-xs text-ca-vino/75">
+        Cuanto más lejos del centro, más pesa ese factor. {ejes.map((e) => `${e.etiqueta}: ${e.ayuda} a favor, ${e.perjudica} en contra`).join(' · ')}.
+      </figcaption>
+    </figure>
+  )
+}

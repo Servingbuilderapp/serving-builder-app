@@ -65,5 +65,11 @@ export default async function DofaPage({ searchParams }: { searchParams: Promise
     if (s(c.fortalezas)) sugerencias.push({ cuadrante: 'amenaza', texto: corto(`${nombre} tiene esta fortaleza: ${s(c.fortalezas)}`) })
   }
 
+  // Lo que la persona escribió en el Radar del Entorno se ofrece como oportunidad (ayuda) o amenaza (perjudica).
+  const { data: ent } = await supabase.from('sfpe_entorno_items').select('texto, efecto').eq('proyecto_id', proyecto.id).order('orden', { ascending: true })
+  for (const e of ent ?? []) {
+    if (s(e.texto)) sugerencias.push({ cuadrante: e.efecto === 'perjudica' ? 'amenaza' : 'oportunidad', texto: corto(s(e.texto)), origen: 'Radar del Entorno' })
+  }
+
   return <DofaClient proyecto={{ id: proyecto.id as string, nombre: proyecto.nombre as string }} itemsIniciales={items} yaGuardado={items.length > 0} sugerencias={sugerencias} />
 }
