@@ -59,16 +59,18 @@ export async function cargarCamino(proyectoId: string): Promise<DatosCamino | nu
   const derivados = (convertidas ?? []).map((c) => c.proyecto_derivado_id as string)
   const derivadoId = origenId !== p.id ? (p.id as string) : (derivados[0] ?? null)
 
+  // Formulación y mercado trabajan sobre el proyecto derivado; si aún no hay uno, se puede entrar igual con este.
+  const trabajoId = derivadoId ?? (p.id as string)
   const head = { count: 'exact' as const, head: true }
   const [sesiones, descubrimiento, oportunidades, formulacion, mercado] = await Promise.all([
     contar(supabase.from('sfpe_diag_sesiones').select('id', head).eq('proyecto_id', origenId).eq('estado', 'completado')),
     contar(supabase.from('sfpe_descubrimiento').select('id', head).eq('proyecto_id', origenId)),
     contar(supabase.from('sfpe_oportunidades').select('id', head).eq('proyecto_id', origenId)),
-    derivadoId ? contar(supabase.from('sfpe_formulacion').select('id', head).eq('proyecto_id', derivadoId)) : Promise.resolve(0),
-    derivadoId ? contar(supabase.from('sfpe_mercado').select('id', head).eq('proyecto_id', derivadoId)) : Promise.resolve(0),
+    contar(supabase.from('sfpe_formulacion').select('id', head).eq('proyecto_id', trabajoId)),
+    contar(supabase.from('sfpe_mercado').select('id', head).eq('proyecto_id', trabajoId)),
   ])
 
-  const sinProyecto = 'Se abre cuando pases una oportunidad a proyecto.'
+  const aviso = derivadoId ? '' : ' Puedes entrar ya; lo ideal es antes pasar una oportunidad a proyecto.'
   const pasos: PasoCamino[] = [
     {
       clave: 'diagnostico',
@@ -87,16 +89,16 @@ export async function cargarCamino(proyectoId: string): Promise<DatosCamino | nu
     {
       clave: 'formulacion',
       titulo: 'Formulación',
-      ayuda: derivadoId ? 'Problema, objetivos, alcance y resultados.' : sinProyecto,
-      href: derivadoId ? `/empresarial/formulacion?proyecto=${derivadoId}` : null,
-      estado: !derivadoId ? 'bloqueado' : formulacion > 0 ? 'hecho' : 'por_hacer',
+      ayuda: `Problema, objetivos, alcance y resultados.${aviso}`,
+      href: `/empresarial/formulacion?proyecto=${trabajoId}`,
+      estado: formulacion > 0 ? 'hecho' : 'por_hacer',
     },
     {
       clave: 'mercado',
       titulo: 'Estudio de mercado',
-      ayuda: derivadoId ? 'Qué mercado es, dónde se atiende y quiénes son tus clientes.' : sinProyecto,
-      href: derivadoId ? `/empresarial/mercado?proyecto=${derivadoId}` : null,
-      estado: !derivadoId ? 'bloqueado' : mercado > 0 ? 'hecho' : 'por_hacer',
+      ayuda: `Qué mercado es, dónde se atiende y quiénes son tus clientes.${aviso}`,
+      href: `/empresarial/mercado?proyecto=${trabajoId}`,
+      estado: mercado > 0 ? 'hecho' : 'por_hacer',
     },
     { clave: 'tecnico', titulo: 'Estudio técnico', ayuda: 'Cómo se va a producir o prestar.', href: null, estado: 'proximamente' },
     { clave: 'financiero', titulo: 'Financiero básico', ayuda: 'Cuánto cuesta y cuánto deja.', href: null, estado: 'proximamente' },
