@@ -344,8 +344,8 @@ export function DofaClient({ proyecto, itemsIniciales, yaGuardado, sugerencias }
             {guardando ? 'Guardando…' : 'Guardar análisis DOFA'}
           </button>
           {guardado && !sucio && (
-            <Link href={`/empresarial/tecnico?proyecto=${proyecto.id}`} className={botonSuave}>
-              Seguir: estudio técnico
+            <Link href={`/empresarial/lienzo?proyecto=${proyecto.id}`} className={botonSuave}>
+              Seguir: Lienzo de Negocio
             </Link>
           )}
           {sucio && !guardando && <span className="text-sm text-ca-oro-texto">Tienes cambios sin guardar.</span>}
