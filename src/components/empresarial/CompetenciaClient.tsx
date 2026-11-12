@@ -534,8 +534,8 @@ export function CompetenciaClient({ proyecto, precioInicial, competidoresInicial
             {guardando ? 'Guardando…' : 'Guardar competencia y precios'}
           </button>
           {guardado && !sucio && (
-            <Link href={`/empresarial/camino?proyecto=${proyecto.id}`} className={botonSuave}>
-              Volver a mi camino
+            <Link href={`/empresarial/tecnico?proyecto=${proyecto.id}`} className={botonSuave}>
+              Seguir: estudio técnico
             </Link>
           )}
           {sucio && !guardando && <span className="text-sm text-[#C9A46B]">Tienes cambios sin guardar.</span>}
