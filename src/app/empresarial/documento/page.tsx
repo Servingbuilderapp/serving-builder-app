@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { ResumenVisual } from '@/components/empresarial/ResumenVisual'
 import { BotonImprimir } from '@/components/empresarial/BotonImprimir'
 import { etiquetaCondicion } from '@/lib/empresarial/formulacion'
 import { COBERTURAS, ETAPAS_MERCADO, NATURALEZAS, TIPOS_COMPRADOR, etiquetaDe } from '@/lib/empresarial/mercado'
@@ -189,6 +190,27 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
     </ul>
   )
 
+  const completos = [
+    Boolean(f),
+    Boolean(m),
+    Boolean(t),
+    Boolean(p) || (comps.data ?? []).length > 0 || (canales.data ?? []).length > 0,
+    itemsIki.length > 0,
+    itemsDofa.length > 0,
+    Boolean(te),
+    Boolean(fi),
+  ].filter(Boolean).length
+  const hayTam = t?.tam_valor != null && t?.sam_valor != null && t?.som_valor != null && gasto !== null
+  const precioN = p?.precio != null ? Number(p.precio) : null
+  const costoN = p?.costo_unitario != null ? Number(p.costo_unitario) : null
+  const mgn = precioN && costoN !== null && precioN > 0 ? (precioN - costoN) / precioN : null
+  const inv = itemsFin.filter((x) => x.tipo === 'inversion').map((x) => ({ etiqueta: x.concepto || 'Sin nombre', valor: num(x.valor) ?? 0 }))
+  const barrasMes = r && r.ingresosMes !== null && r.variablesMes !== null ? [
+    { etiqueta: 'Ingresos por mes', valor: r.ingresosMes },
+    { etiqueta: 'Costos variables', valor: r.variablesMes },
+    { etiqueta: 'Costos fijos', valor: r.fijosMes },
+    { etiqueta: 'Utilidad por mes', valor: r.utilidadMes ?? 0, destacada: true },
+  ] : []
   const hoy = new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' })
 
   return (
@@ -213,6 +235,27 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
           <p className="mt-1 text-sm text-[#6B5A4F]">
             {s(proyecto.pais) ? `${s(proyecto.pais)} · ` : ''}Generado el {hoy}
           </p>
+
+          <ResumenVisual
+            precio={precioN}
+            unidadPrecio={s(p?.unidad_precio)}
+            margen={mgn}
+            utilidadMes={r ? r.utilidadMes : null}
+            recuperacion={r ? formatoMeses(r.mesesRecuperacion) : '—'}
+            completos={completos}
+            total={8}
+            interno={balanceDofa.interno}
+            externo={balanceDofa.externo}
+            embudo={hayTam ? [
+              { etiqueta: 'TAM · mercado total', valor: enDinero(t?.tam_valor), detalle: `${formatoNumero(Number(t?.tam_valor))} clientes` },
+              { etiqueta: 'SAM · el que puedes atender', valor: enDinero(t?.sam_valor), detalle: `${formatoNumero(Number(t?.sam_valor))} clientes` },
+              { etiqueta: 'SOM · lo que puedes captar', valor: enDinero(t?.som_valor), detalle: `${formatoNumero(Number(t?.som_valor))} clientes` },
+            ] : []}
+            barrasMes={barrasMes}
+            inversion={inv}
+            inversionTotal={r ? r.inversion : 0}
+            moneda={moneda}
+          />
 
           <Bloque titulo="1. El proyecto" href={`/empresarial/formulacion${q}`} vacio={!f}>
             <Tabla

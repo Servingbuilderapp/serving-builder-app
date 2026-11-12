@@ -4,6 +4,7 @@ import React, { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, Plus, Trash2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { BarrasH, Dona, Fichas, MarcoGrafico, Medidor, compacto } from '@/components/empresarial/Graficos'
 import { CONDICIONES, etiquetaCondicion, type Condicion } from '@/lib/empresarial/formulacion'
 import { formatoDinero, num } from '@/lib/empresarial/mercadoDemanda'
 import {
@@ -103,6 +104,22 @@ export function CompetenciaClient({ proyecto, precioInicial, competidoresInicial
   const faltanRec = revision.filter((r) => !r.obligatorio && !r.cumple)
   const sinRespaldo = datosSinRespaldoCompetencia(pr, comps, cans)
   const mg = margen(pr)
+
+  const barrasPrecio = [
+    ...comps.filter((c) => c.nombre.trim() && num(c.precio) !== null && (num(c.precio) as number) > 0).map((c) => ({ etiqueta: c.nombre.trim(), valor: num(c.precio) as number, destacada: false })),
+    ...(num(pr.precio) !== null && (num(pr.precio) as number) > 0 ? [{ etiqueta: 'Tu precio', valor: num(pr.precio) as number, destacada: true }] : []),
+  ].sort((a, b) => b.valor - a.valor)
+  const porTipoComp = TIPOS_COMPETIDOR.map((t) => ({ etiqueta: t.etiqueta, valor: comps.filter((c) => c.tipo === t.valor).length })).filter((x) => x.valor > 0)
+  const porTipoCanal = TIPOS_CANAL.map((t) => ({ etiqueta: t.etiqueta, valor: cans.filter((c) => c.tipo === t.valor).length })).filter((x) => x.valor > 0)
+  const barrasCanal = cans
+    .filter((c) => num(c.costo_adquisicion) !== null && (num(c.costo_adquisicion) as number) > 0)
+    .map((c) => ({ etiqueta: TIPOS_CANAL.find((t) => t.valor === c.tipo)?.etiqueta ?? 'Otro', valor: num(c.costo_adquisicion) as number }))
+  const din = (n: number) => formatoDinero(n, proyecto.moneda)
+  const hayPanorama = barrasPrecio.length > 0 || porTipoComp.length > 0 || porTipoCanal.length > 0 || mg !== null
+  const promedioRival = (() => {
+    const xs = barrasPrecio.filter((b) => !b.destacada)
+    return xs.length ? xs.reduce((a, b) => a + b.valor, 0) / xs.length : null
+  })()
 
   const cambiarPrecio = (campo: keyof Omit<Precio, 'condiciones'>, valor: string) => {
     setPr((p) => ({ ...p, [campo]: valor }))
@@ -481,6 +498,62 @@ export function CompetenciaClient({ proyecto, precioInicial, competidoresInicial
             <Plus className="h-4 w-4" /> Agregar canal
           </button>
         </Seccion>
+
+        {hayPanorama && (
+          <section className={`mt-6 rounded-2xl border border-ca-oro/50 bg-ca-tarjeta p-5 lg:p-6 ${RELIEVE_TARJETA}`} aria-label="Panorama de tu competencia">
+            <h2 className="text-xl font-extrabold">Tu panorama en un vistazo</h2>
+            <p className="mt-1 text-sm text-ca-vino/75">Se dibuja solo con lo que escribiste arriba. Si cambias un dato, el dibujo cambia.</p>
+            <div className="mt-4">
+              <Fichas
+                titulo="Cifras clave de competencia y precio"
+                fichas={[
+                  { etiqueta: 'Alternativas', valor: String(comps.length), nota: 'que usan hoy tus clientes', tono: 'vino' },
+                  { etiqueta: 'Tu precio', valor: num(pr.precio) !== null ? din(num(pr.precio) as number) : '—', nota: pr.unidad_precio.trim() || undefined },
+                  {
+                    etiqueta: 'Contra el promedio',
+                    valor:
+                      promedioRival !== null && num(pr.precio) !== null && promedioRival > 0
+                        ? `${(((num(pr.precio) as number) - promedioRival) / promedioRival) * 100 >= 0 ? '+' : ''}${Math.round((((num(pr.precio) as number) - promedioRival) / promedioRival) * 100)} %`
+                        : '—',
+                    nota: promedioRival !== null ? `promedio de la competencia: ${din(promedioRival)}` : 'falta el precio de alguna alternativa',
+                  },
+                  { etiqueta: 'Canales', valor: String(cans.length), nota: 'para llegar a clientes', tono: 'vino' },
+                ]}
+              />
+            </div>
+            <div className="mt-5 grid gap-4 lg:grid-cols-2">
+              {barrasPrecio.length > 1 && (
+                <MarcoGrafico titulo="Tu precio frente a los demás">
+                  <BarrasH titulo="Precio de cada alternativa y el tuyo" formato={din} barras={barrasPrecio} />
+                  <p className="mt-2 text-xs text-ca-vino/75">Compara solo precios de la misma unidad (por mes con por mes, por unidad con por unidad).</p>
+                </MarcoGrafico>
+              )}
+              {mg !== null && (
+                <MarcoGrafico titulo="Cuánto te deja cada venta">
+                  <Medidor id="margen" titulo="Margen por unidad" valor={Math.max(0, mg)} centro={`${Math.round(mg * 100)} %`} subcentro="del precio es ganancia" />
+                  <p className="text-center text-xs text-ca-vino/75">{mg < 0 ? 'Hoy vendes por debajo de tu costo.' : 'Antes de pagar costos fijos como arriendo o sueldos.'}</p>
+                </MarcoGrafico>
+              )}
+              {porTipoComp.length > 0 && (
+                <MarcoGrafico titulo="Qué tipo de alternativas hay">
+                  <Dona titulo="Alternativas por tipo" porciones={porTipoComp} centro={String(comps.length)} subcentro="alternativas" formato={(n) => String(n)} />
+                </MarcoGrafico>
+              )}
+              {porTipoCanal.length > 0 && (
+                <MarcoGrafico titulo="Por dónde piensas llegar">
+                  <Dona titulo="Canales por tipo" porciones={porTipoCanal} centro={String(cans.length)} subcentro="canales" formato={(n) => String(n)} />
+                </MarcoGrafico>
+              )}
+              {barrasCanal.length > 1 && (
+                <div className="lg:col-span-2">
+                  <MarcoGrafico titulo="Cuánto cuesta conseguir un cliente por canal">
+                    <BarrasH titulo="Costo por cliente según el canal" formato={(n) => `${din(n)} (${compacto(n)})`} barras={barrasCanal} />
+                  </MarcoGrafico>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
 
         {alertas.length > 0 && (
           <section className="mt-6 space-y-3" aria-label="Alertas">

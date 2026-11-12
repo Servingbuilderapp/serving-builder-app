@@ -391,3 +391,83 @@ export function Venn4({
     </figure>
   )
 }
+
+/* -------------------------------------------------------------------------- */
+/* Medidor: semicírculo que muestra un avance o un porcentaje (de 0 a 1)       */
+/* -------------------------------------------------------------------------- */
+export function Medidor({ valor, centro, subcentro, titulo, id }: { valor: number; centro: string; subcentro: string; titulo: string; id: string }) {
+  const v = Math.min(1, Math.max(0, valor))
+  const R = 80
+  const x = 100 - R * Math.cos(Math.PI * v)
+  const y = 100 - R * Math.sin(Math.PI * v)
+  const marcas = [0, 0.25, 0.5, 0.75, 1]
+  return (
+    <figure aria-label={titulo} className="flex flex-col items-center">
+      <svg viewBox="0 0 200 128" className="w-full max-w-[260px]" role="img" aria-label={`${titulo}: ${centro}`} style={{ filter: 'drop-shadow(0 6px 8px rgba(84,20,43,0.22))' }}>
+        <defs>
+          <linearGradient id={`med-${id}`} x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#7A5B2C" />
+            <stop offset="55%" stopColor="#B08D57" />
+            <stop offset="100%" stopColor="#54142B" />
+          </linearGradient>
+        </defs>
+        <path d={`M ${100 - R} 100 A ${R} ${R} 0 0 1 ${100 + R} 100`} fill="none" stroke="#EADBC6" strokeWidth="20" strokeLinecap="round" />
+        <path d={`M ${100 - R} 100 A ${R} ${R} 0 0 1 ${100 + R} 100`} fill="none" stroke="#B08D57" strokeOpacity="0.45" strokeWidth="1" transform="translate(0 -11)" />
+        {v > 0 && <path d={`M ${100 - R} 100 A ${R} ${R} 0 0 1 ${x} ${y}`} fill="none" stroke={`url(#med-${id})`} strokeWidth="20" strokeLinecap="round" />}
+        {marcas.map((m) => (
+          <line key={m} x1={100 - 66 * Math.cos(Math.PI * m)} y1={100 - 66 * Math.sin(Math.PI * m)} x2={100 - 70 * Math.cos(Math.PI * m)} y2={100 - 70 * Math.sin(Math.PI * m)} stroke={CREMA} strokeOpacity="0.5" strokeWidth="1.5" />
+        ))}
+        <circle cx={x} cy={y} r="5" fill="#FBF7F0" stroke={CREMA} strokeWidth="2" />
+        <text x="100" y="92" textAnchor="middle" fill={CREMA} fontSize="26" fontWeight="800">
+          {centro}
+        </text>
+        <text x="100" y="110" textAnchor="middle" fill={CREMA} fillOpacity="0.85" fontSize="10" fontWeight="600">
+          {subcentro}
+        </text>
+      </svg>
+    </figure>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/* Fichas de cifras clave, con relieve (vino oscuro o crema con borde dorado)   */
+/* -------------------------------------------------------------------------- */
+export interface FichaCifra {
+  etiqueta: string
+  valor: string
+  nota?: string
+  tono?: 'vino' | 'crema'
+}
+
+export function Fichas({ fichas, titulo }: { fichas: FichaCifra[]; titulo: string }) {
+  return (
+    <ul aria-label={titulo} className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      {fichas.map((f) => {
+        const vino = f.tono === 'vino'
+        return (
+          <li
+            key={f.etiqueta}
+            className={`relative overflow-hidden rounded-2xl border p-4 shadow-[0_2px_3px_rgba(84,20,43,0.12),0_14px_26px_-14px_rgba(84,20,43,0.5)] ${
+              vino ? 'border-[#B08D57] bg-gradient-to-br from-[#54142B] to-[#3A1420] text-[#F3E7DC]' : 'border-ca-oro/60 bg-gradient-to-b from-[#FBF7F0] to-[#EADBC6] text-ca-vino'
+            }`}
+          >
+            <span aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#7A5B2C] via-[#C9A46B] to-[#7A5B2C]" />
+            <div className={`text-[11px] font-extrabold uppercase tracking-wider ${vino ? 'text-[#C9A46B]' : 'text-ca-oro-texto'}`}>{f.etiqueta}</div>
+            <div className="mt-1 break-words text-xl font-extrabold leading-tight">{f.valor}</div>
+            {f.nota && <div className={`mt-1 text-xs ${vino ? 'text-[#F3E7DC]/85' : 'text-ca-vino/75'}`}>{f.nota}</div>}
+          </li>
+        )
+      })}
+    </ul>
+  )
+}
+
+/* Marco para agrupar gráficos con título y relieve */
+export function MarcoGrafico({ titulo, children }: { titulo: string; children: React.ReactNode }) {
+  return (
+    <div className="rounded-2xl border border-ca-oro/50 bg-gradient-to-b from-[#FBF7F0] to-[#F3E7DC] p-4 shadow-[0_1px_2px_rgba(84,20,43,0.08),0_12px_24px_-14px_rgba(84,20,43,0.35)] break-inside-avoid">
+      <h3 className="border-b border-ca-oro/40 pb-2 text-sm font-extrabold uppercase tracking-wider text-ca-oro-texto">{titulo}</h3>
+      <div className="mt-3">{children}</div>
+    </div>
+  )
+}
