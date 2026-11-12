@@ -684,27 +684,12 @@ export function LandingClient({ user }: LandingClientProps) {
             <LanguageSwitcher />
             {user ? (
               <Link
-                href="/dashboard"
+                href="/entrar"
                 className={`h-10 px-5 inline-flex items-center rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-[13px] font-semibold hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25 ${RELIEVE_BOTON}`}
               >
                 {t('w.nav.dashboard')}
               </Link>
-            ) : (
-              <>
-                <a
-                  href="/login"
-                  className={`h-10 px-5 inline-flex items-center rounded-lg border border-[#B08D57]/35 bg-[#3B1727] text-[#F3E7DC] text-[13px] font-semibold hover:bg-[#4C2032] ${RELIEVE_BOTON_SUAVE}`}
-                >
-                  {t('w.nav.login')}
-                </a>
-                <a
-                  href="/signup"
-                  className={`h-10 px-5 inline-flex items-center rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-[13px] font-semibold hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25 ${RELIEVE_BOTON}`}
-                >
-                  {t('w.nav.crear_cuenta')}
-                </a>
-              </>
-            )}
+            ) : null}
           </div>
 
           <button
@@ -731,58 +716,20 @@ export function LandingClient({ user }: LandingClientProps) {
             ))}
             <div className="pt-3 flex flex-col gap-3">
               <LanguageSwitcher className="self-start" />
-              <a
-                href="/login"
-                className="h-11 inline-flex items-center justify-center rounded-lg border border-[#B08D57]/35 text-[#F3E7DC] text-sm font-semibold"
-              >
-                {t('w.nav.login')}
-              </a>
-              <a
-                href="/signup"
-                className="h-11 inline-flex items-center justify-center rounded-lg bg-[#B08D57] text-[#3A1420] text-sm font-semibold"
-              >
-                {t('w.nav.crear_cuenta')}
-              </a>
             </div>
           </div>
         ) : null}
       </header>
 
-      {/* ================= HERO ================= */}
-      <section id="inicio" className="relative overflow-hidden bg-[#54142B]">
-        <div
-          aria-hidden
-          className="absolute -top-40 left-[-8%] h-[520px] w-[520px] rounded-full bg-gradient-to-br from-[#C9A46B]/20 to-[#B08D57]/15 blur-[100px]"
-        />
-        <div
-          aria-hidden
-          className="absolute top-[-10%] right-[-6%] h-[460px] w-[460px] rounded-full bg-gradient-to-br from-[#B08D57]/20 to-[#C9A46B]/15 blur-[100px]"
-        />
-        {/* retícula sutil que le da textura al encabezado */}
-        <div
-          aria-hidden
-          className="absolute inset-0 opacity-[0.55] [background-image:linear-gradient(to_right,rgba(176,141,87,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(176,141,87,0.08)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_at_top,black,transparent_72%)]"
-        />
+      {/* ================= LOS DOS CAMINOS (primera pantalla, justo después de la presentación) ================= */}
+      <EntradaDosCaminos />
+
+      {/* ================= VIDEO DE BIENVENIDA Y PILARES (debajo de los dos caminos) ================= */}
+      <section id="bienvenida" className="relative overflow-hidden bg-[#54142B]">
         <div className="relative max-w-[1400px] mx-auto px-5 lg:px-8 py-12 lg:py-16">
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-start">
-            {/* Columna izquierda: mensaje */}
             <div className="lg:col-span-4">
-              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-[#F3E7DC] leading-[1.08]">
-                {t('w.hero.titulo1')}
-                <br />
-                <span className="relative inline-block">
-                  {t('w.hero.titulo2')}
-                  <span
-                    aria-hidden
-                    className="absolute -bottom-1 left-0 h-[6px] w-full rounded-full bg-gradient-to-r from-[#C9A46B] via-[#B08D57] to-[#8A6636] opacity-80"
-                  />
-                </span>
-              </h1>
-              <p className="mt-5 text-base text-[#F3E7DC]/70 leading-relaxed max-w-md">
-                {t('w.hero.descripcion')}
-              </p>
-
-              <div className="mt-8 grid grid-cols-3 gap-4 max-w-md">
+              <div className="grid grid-cols-3 gap-4 max-w-md">
                 {[
                   { icono: TrendingUp, clave: 'w.hero.pilar1' },
                   { icono: Search, clave: 'w.hero.pilar2' },
@@ -844,7 +791,6 @@ export function LandingClient({ user }: LandingClientProps) {
 
       {/* ================= FICHAS DE TIPS (debajo del video, antes del diagnóstico) ================= */}
       <FichasTips />
-      <EntradaDosCaminos />
 
       {/* ================= DIAGNÓSTICO GRATUITO ================= */}
       <section id="diagnostico" className="relative overflow-hidden bg-gradient-to-b from-[#54142B] via-[#3B1727] to-[#2E0E1A] py-20 lg:py-28 border-y-2 border-[#B08D57]/45">

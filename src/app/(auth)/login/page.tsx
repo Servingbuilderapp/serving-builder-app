@@ -81,7 +81,7 @@ function LoginContent() {
       })
       setLoading(false)
     } else if (data?.session) {
-      const redirectTo = searchParams.get('redirect') || '/dashboard'
+      const redirectTo = searchParams.get('redirect') || '/entrar'
       window.location.href = redirectTo
     }
   }
