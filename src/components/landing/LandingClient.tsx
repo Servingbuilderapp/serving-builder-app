@@ -33,6 +33,7 @@ import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 import { Ayuda } from '@/components/ui/Ayuda'
 import { CaminoFinanciacion } from '@/components/landing/CaminoFinanciacion'
 import { FichasTips } from '@/components/landing/FichasTips'
+import { EntradaDosCaminos } from '@/components/landing/EntradaDosCaminos'
 import { EnlaceConAcceso, ProveedorAcceso } from '@/components/landing/AccesoDiagnostico'
 
 /* ============================================================================
@@ -843,6 +844,7 @@ export function LandingClient({ user }: LandingClientProps) {
 
       {/* ================= FICHAS DE TIPS (debajo del video, antes del diagnóstico) ================= */}
       <FichasTips />
+      <EntradaDosCaminos />
 
       {/* ================= DIAGNÓSTICO GRATUITO ================= */}
       <section id="diagnostico" className="relative overflow-hidden bg-gradient-to-b from-[#54142B] via-[#3B1727] to-[#2E0E1A] py-20 lg:py-28 border-y-2 border-[#B08D57]/45">
