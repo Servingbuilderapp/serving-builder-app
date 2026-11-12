@@ -508,6 +508,11 @@ export function MercadoClient({ proyecto, mercadoInicial, segmentosIniciales, ya
           <button type="button" onClick={guardar} disabled={guardando} className={botonOro}>
             {guardando ? 'Guardando…' : 'Guardar estudio de mercado'}
           </button>
+          {guardado && !sucio && (
+            <Link href={`/empresarial/mercado/demanda?proyecto=${proyecto.id}`} className={botonSuave}>
+              Seguir: demanda y tamaño
+            </Link>
+          )}
           {sucio && !guardando && <span className="text-sm text-[#C9A46B]">Tienes cambios sin guardar.</span>}
         </div>
         {aviso && (

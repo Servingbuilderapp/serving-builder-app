@@ -13,7 +13,7 @@ import { createClient } from '@/lib/supabase/client'
 export type EstadoPaso = 'hecho' | 'en_curso' | 'por_hacer' | 'bloqueado' | 'proximamente'
 
 export interface PasoCamino {
-  clave: 'diagnostico' | 'oportunidades' | 'formulacion' | 'mercado' | 'tecnico' | 'financiero' | 'documento'
+  clave: 'diagnostico' | 'oportunidades' | 'formulacion' | 'mercado' | 'demanda' | 'tecnico' | 'financiero' | 'documento'
   titulo: string
   ayuda: string
   href: string | null
@@ -62,12 +62,13 @@ export async function cargarCamino(proyectoId: string): Promise<DatosCamino | nu
   // Formulación y mercado trabajan sobre el proyecto derivado; si aún no hay uno, se puede entrar igual con este.
   const trabajoId = derivadoId ?? (p.id as string)
   const head = { count: 'exact' as const, head: true }
-  const [sesiones, descubrimiento, oportunidades, formulacion, mercado] = await Promise.all([
+  const [sesiones, descubrimiento, oportunidades, formulacion, mercado, demanda] = await Promise.all([
     contar(supabase.from('sfpe_diag_sesiones').select('id', head).eq('proyecto_id', origenId).eq('estado', 'completado')),
     contar(supabase.from('sfpe_descubrimiento').select('id', head).eq('proyecto_id', origenId)),
     contar(supabase.from('sfpe_oportunidades').select('id', head).eq('proyecto_id', origenId)),
     contar(supabase.from('sfpe_formulacion').select('id', head).eq('proyecto_id', trabajoId)),
     contar(supabase.from('sfpe_mercado').select('id', head).eq('proyecto_id', trabajoId)),
+    contar(supabase.from('sfpe_mercado_tamano').select('id', head).eq('proyecto_id', trabajoId)),
   ])
 
   const aviso = derivadoId ? '' : ' Puedes entrar ya; lo ideal es antes pasar una oportunidad a proyecto.'
@@ -95,10 +96,17 @@ export async function cargarCamino(proyectoId: string): Promise<DatosCamino | nu
     },
     {
       clave: 'mercado',
-      titulo: 'Estudio de mercado',
+      titulo: 'Mercado: clientes y territorio',
       ayuda: `Qué mercado es, dónde se atiende y quiénes son tus clientes.${aviso}`,
       href: `/empresarial/mercado?proyecto=${trabajoId}`,
       estado: mercado > 0 ? 'hecho' : 'por_hacer',
+    },
+    {
+      clave: 'demanda',
+      titulo: 'Mercado: demanda y tamaño',
+      ayuda: `Cuánta gente lo necesita y cuánto vale (TAM, SAM, SOM).${aviso}`,
+      href: `/empresarial/mercado/demanda?proyecto=${trabajoId}`,
+      estado: demanda > 0 ? 'hecho' : 'por_hacer',
     },
     { clave: 'tecnico', titulo: 'Estudio técnico', ayuda: 'Cómo se va a producir o prestar.', href: null, estado: 'proximamente' },
     { clave: 'financiero', titulo: 'Financiero básico', ayuda: 'Cuánto cuesta y cuánto deja.', href: null, estado: 'proximamente' },
@@ -136,6 +144,7 @@ export function pasoActual(ruta: string): PasoCamino['clave'] | null {
   if (ruta.startsWith('/empresarial/diagnostico') || ruta.startsWith('/empresarial/descubrimiento')) return 'diagnostico'
   if (ruta.startsWith('/empresarial/oportunidades')) return 'oportunidades'
   if (ruta.startsWith('/empresarial/formulacion')) return 'formulacion'
+  if (ruta.startsWith('/empresarial/mercado/demanda')) return 'demanda'
   if (ruta.startsWith('/empresarial/mercado')) return 'mercado'
   return null
 }
