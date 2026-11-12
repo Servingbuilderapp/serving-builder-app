@@ -11,6 +11,18 @@ import { PREGUNTAS, conteoPorRegion, lectura as lecturaIkigai, mascara, nombreRe
 import { GUIAS, CRUCES, calcularBalance, lecturaPosicion, type ItemDofa } from '@/lib/empresarial/dofa'
 import { formatoDinero, formatoNumero, num } from '@/lib/empresarial/mercadoDemanda'
 import { calcular, formatoMeses, financieroVacio, type ItemFinanciero, type TipoItem } from '@/lib/empresarial/financiero'
+import { FACTORES as FACTORES_ENTORNO, calcularRadar as radarEntorno, lecturaRadar as lecturaEntorno, type ItemEntorno } from '@/lib/empresarial/entorno'
+import { FACTORES as FACTORES_PRESION, calcularRadar as radarPresiones, lecturaRadar as lecturaPresiones, type ItemPresion } from '@/lib/empresarial/presiones'
+import { BLOQUES, lecturaLienzo, type ItemLienzo } from '@/lib/empresarial/lienzo'
+import {
+  COLOR_NIVEL,
+  contarPorNivel,
+  etiquetaRespuesta,
+  lecturaRiesgos,
+  ordenarRiesgos,
+  tituloCategoria,
+  type ItemRiesgo,
+} from '@/lib/empresarial/riesgos'
 
 export const dynamic = 'force-dynamic'
 
@@ -101,7 +113,7 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
   const moneda = (proyecto.moneda as string | null) ?? null
   const din = (n: number | null) => formatoDinero(n, moneda)
 
-  const [form, formItems, merc, segs, tam, precio, comps, canales, tec, specs, pasos, fin, finItems, dofaQ, ikiQ] = await Promise.all([
+  const [form, formItems, merc, segs, tam, precio, comps, canales, tec, specs, pasos, fin, finItems, dofaQ, ikiQ, entQ, preQ, lieQ, rieQ] = await Promise.all([
     supabase.from('sfpe_formulacion').select('*').eq('proyecto_id', id).maybeSingle(),
     supabase.from('sfpe_formulacion_items').select('tipo, texto, condicion').eq('proyecto_id', id).order('orden', { ascending: true }),
     supabase.from('sfpe_mercado').select('*').eq('proyecto_id', id).maybeSingle(),
@@ -117,7 +129,56 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
     supabase.from('sfpe_financiero_items').select('tipo, concepto, categoria, valor, fuente, condicion').eq('proyecto_id', id).order('orden', { ascending: true }),
     supabase.from('sfpe_dofa_items').select('cuadrante, texto, impacto, fuente, condicion').eq('proyecto_id', id).order('orden', { ascending: true }),
     supabase.from('sfpe_ikigai_items').select('texto, ama, bueno, necesita, pagan, fuente, condicion').eq('proyecto_id', id).order('orden', { ascending: true }),
+    supabase.from('sfpe_entorno_items').select('factor, texto, efecto, peso, fuente, condicion').eq('proyecto_id', id).order('orden', { ascending: true }),
+    supabase.from('sfpe_presiones_items').select('factor, texto, efecto, peso, fuente, condicion').eq('proyecto_id', id).order('orden', { ascending: true }),
+    supabase.from('sfpe_lienzo_items').select('bloque, texto, fuente, condicion').eq('proyecto_id', id).order('orden', { ascending: true }),
+    supabase.from('sfpe_riesgos_items').select('categoria, texto, probabilidad, impacto, respuesta, plan, responsable, fuente, condicion').eq('proyecto_id', id).order('orden', { ascending: true }),
   ])
+  const itemsEnt: ItemEntorno[] = (entQ.data ?? []).map((x, i) => ({
+    id: String(i),
+    factor: x.factor,
+    texto: s(x.texto),
+    efecto: x.efecto,
+    peso: s(x.peso) || '3',
+    fuente: s(x.fuente),
+    condicion: x.condicion,
+  }))
+  const itemsPre: ItemPresion[] = (preQ.data ?? []).map((x, i) => ({
+    id: String(i),
+    factor: x.factor,
+    texto: s(x.texto),
+    efecto: x.efecto,
+    peso: s(x.peso) || '3',
+    fuente: s(x.fuente),
+    condicion: x.condicion,
+  }))
+  const itemsLie: ItemLienzo[] = (lieQ.data ?? []).map((x, i) => ({
+    id: String(i),
+    bloque: x.bloque,
+    texto: s(x.texto),
+    fuente: s(x.fuente),
+    condicion: x.condicion,
+  }))
+  const itemsRie: ItemRiesgo[] = (rieQ.data ?? []).map((x, i) => ({
+    id: String(i),
+    categoria: x.categoria,
+    texto: s(x.texto),
+    probabilidad: String(x.probabilidad ?? 3),
+    impacto: String(x.impacto ?? 3),
+    respuesta: x.respuesta ?? '',
+    plan: s(x.plan),
+    responsable: s(x.responsable),
+    fuente: s(x.fuente),
+    condicion: x.condicion,
+  }))
+  const llenosEnt = itemsEnt.filter((x) => x.texto)
+  const llenosPre = itemsPre.filter((x) => x.texto)
+  const llenosLie = itemsLie.filter((x) => x.texto)
+  const riesgosOrd = ordenarRiesgos(itemsRie)
+  const lecEnt = lecturaEntorno(radarEntorno(itemsEnt))
+  const lecPre = lecturaPresiones(radarPresiones(itemsPre))
+  const lecLie = lecturaLienzo(itemsLie)
+  const lecRie = lecturaRiesgos(itemsRie)
   const itemsIki: ItemIkigai[] = (ikiQ.data ?? []).map((x, i) => ({
     id: String(i),
     texto: s(x.texto),
@@ -199,6 +260,10 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
     itemsDofa.length > 0,
     Boolean(te),
     Boolean(fi),
+    llenosEnt.length > 0,
+    llenosPre.length > 0,
+    llenosLie.length > 0,
+    riesgosOrd.length > 0,
   ].filter(Boolean).length
   const hayTam = t?.tam_valor != null && t?.sam_valor != null && t?.som_valor != null && gasto !== null
   const precioN = p?.precio != null ? Number(p.precio) : null
@@ -243,7 +308,7 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             utilidadMes={r ? r.utilidadMes : null}
             recuperacion={r ? formatoMeses(r.mesesRecuperacion) : '—'}
             completos={completos}
-            total={8}
+            total={12}
             interno={balanceDofa.interno}
             externo={balanceDofa.externo}
             embudo={hayTam ? [
@@ -508,6 +573,124 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
               </div>
             )}
             <p className="text-xs text-[#6B5A4F]">Cuentas hechas con las cifras que escribiste; valen lo que valgan sus fuentes. No son una promesa de resultados.</p>
+          </Bloque>
+
+          <Bloque titulo="9. Radar del entorno" href={`/empresarial/entorno${q}`} vacio={llenosEnt.length === 0}>
+            {FACTORES_ENTORNO.map((fa) => {
+              const xs = llenosEnt.filter((i) => i.factor === fa.clave)
+              if (xs.length === 0) return null
+              return (
+                <div key={fa.clave}>
+                  <div className="text-xs font-bold uppercase tracking-wider text-ca-oro-texto">{fa.titulo}</div>
+                  <ul className="list-disc space-y-1 pl-5">
+                    {xs.map((x, i) => (
+                      <li key={i}>
+                        {x.texto}{' '}
+                        <span className="text-xs text-[#6B5A4F]">
+                          ({x.efecto === 'ayuda' ? 'te ayuda' : 'te perjudica'} · peso {x.peso} · {etiquetaCondicion(x.condicion)}
+                          {x.fuente ? ` · ${x.fuente}` : ''})
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )
+            })}
+            {lecEnt.map((l, i) => (
+              <p key={i}>
+                <span className="font-semibold">{l.titulo}:</span> {l.texto}
+              </p>
+            ))}
+          </Bloque>
+
+          <Bloque titulo="10. Mapa de presiones del sector" href={`/empresarial/presiones${q}`} vacio={llenosPre.length === 0}>
+            {FACTORES_PRESION.map((fa) => {
+              const xs = llenosPre.filter((i) => i.factor === fa.clave)
+              if (xs.length === 0) return null
+              return (
+                <div key={fa.clave}>
+                  <div className="text-xs font-bold uppercase tracking-wider text-ca-oro-texto">{fa.titulo}</div>
+                  <ul className="list-disc space-y-1 pl-5">
+                    {xs.map((x, i) => (
+                      <li key={i}>
+                        {x.texto}{' '}
+                        <span className="text-xs text-[#6B5A4F]">
+                          ({x.efecto === 'presiona' ? 'te presiona' : 'te protege'} · peso {x.peso} · {etiquetaCondicion(x.condicion)}
+                          {x.fuente ? ` · ${x.fuente}` : ''})
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )
+            })}
+            {lecPre.map((l, i) => (
+              <p key={i}>
+                <span className="font-semibold">{l.titulo}:</span> {l.texto}
+              </p>
+            ))}
+          </Bloque>
+
+          <Bloque titulo="11. Lienzo del modelo de negocio" href={`/empresarial/lienzo${q}`} vacio={llenosLie.length === 0}>
+            {BLOQUES.map((b) => {
+              const xs = llenosLie.filter((i) => i.bloque === b.clave)
+              if (xs.length === 0) return null
+              return (
+                <div key={b.clave}>
+                  <div className="text-xs font-bold uppercase tracking-wider text-ca-oro-texto">{b.titulo}</div>
+                  <ul className="list-disc space-y-1 pl-5">
+                    {xs.map((x, i) => (
+                      <li key={i}>
+                        {x.texto}{' '}
+                        <span className="text-xs text-[#6B5A4F]">
+                          ({etiquetaCondicion(x.condicion)}
+                          {x.fuente ? ` · ${x.fuente}` : ''})
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )
+            })}
+            {lecLie.map((l, i) => (
+              <p key={i}>
+                <span className="font-semibold">{l.titulo}:</span> {l.texto}
+              </p>
+            ))}
+          </Bloque>
+
+          <Bloque titulo="12. Termómetro de riesgos" href={`/empresarial/riesgos${q}`} vacio={riesgosOrd.length === 0}>
+            <div className="flex flex-wrap gap-2">
+              {contarPorNivel(itemsRie).map((c) => (
+                <span key={c.nivel} className="rounded-full px-3 py-1 text-xs font-bold text-white" style={{ backgroundColor: COLOR_NIVEL[c.nivel] }}>
+                  {c.nivel}: {c.cantidad}
+                </span>
+              ))}
+            </div>
+            <ol className="space-y-3">
+              {riesgosOrd.map((x) => (
+                <li key={x.numero} className="break-inside-avoid">
+                  <span className="mr-2 inline-block rounded px-2 py-0.5 text-xs font-bold text-white" style={{ backgroundColor: COLOR_NIVEL[x.nivel] }}>
+                    {x.numero} · {x.nivel}
+                  </span>
+                  <span className="font-semibold">{x.item.texto}</span>
+                  <span className="block text-sm text-[#6B5A4F]">
+                    {tituloCategoria(x.item.categoria)} · probabilidad {x.item.probabilidad} × impacto {x.item.impacto} = {x.puntaje} de 25
+                  </span>
+                  {x.item.respuesta ? <span className="block text-sm text-[#6B5A4F]">Qué piensa hacer: {etiquetaRespuesta(x.item.respuesta)}</span> : null}
+                  {x.item.plan ? <span className="block text-sm text-[#6B5A4F]">Plan: {x.item.plan}</span> : null}
+                  {x.item.responsable ? <span className="block text-sm text-[#6B5A4F]">Responsable: {x.item.responsable}</span> : null}
+                  <span className="block text-xs text-[#6B5A4F]">
+                    Fuente: {x.item.fuente || 'sin fuente'} ({etiquetaCondicion(x.item.condicion)})
+                  </span>
+                </li>
+              ))}
+            </ol>
+            {lecRie.map((l, i) => (
+              <p key={i}>
+                <span className="font-semibold">{l.titulo}:</span> {l.texto}
+              </p>
+            ))}
           </Bloque>
 
           <p className="mt-10 border-t border-[#E7DCCB] pt-3 text-xs text-[#6B5A4F]">
