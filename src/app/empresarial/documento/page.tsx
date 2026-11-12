@@ -1,0 +1,403 @@
+import React from 'react'
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import { createClient } from '@/lib/supabase/server'
+import { BotonImprimir } from '@/components/empresarial/BotonImprimir'
+import { etiquetaCondicion } from '@/lib/empresarial/formulacion'
+import { COBERTURAS, ETAPAS_MERCADO, NATURALEZAS, TIPOS_COMPRADOR, etiquetaDe } from '@/lib/empresarial/mercado'
+import { ESTADOS_SOLUCION, TIPOS_SOLUCION, formatoMinutos, tiempoTotalMin } from '@/lib/empresarial/tecnico'
+import { formatoDinero, formatoNumero, num } from '@/lib/empresarial/mercadoDemanda'
+import { calcular, formatoMeses, financieroVacio, type ItemFinanciero, type TipoItem } from '@/lib/empresarial/financiero'
+
+export const dynamic = 'force-dynamic'
+
+export const metadata = {
+  title: 'Documento final | Serving',
+}
+
+const s = (x: unknown) => (x === null || x === undefined ? '' : String(x).trim())
+
+const mensaje = (titulo: string, texto: string) => (
+  <main className="min-h-screen bg-gradient-to-b from-[#2E0E1A] via-[#3B1727] to-[#54142B] text-[#F3E7DC] flex items-center justify-center px-5">
+    <div className="max-w-md text-center">
+      <h1 className="text-2xl font-extrabold">{titulo}</h1>
+      <p className="mt-3 text-[#F3E7DC]/80">{texto}</p>
+      <Link href="/empresarial" className="mt-6 inline-block underline">
+        Volver
+      </Link>
+    </div>
+  </main>
+)
+
+type Fila = { dato: string; valor: string; cond?: string }
+
+function Bloque({ titulo, href, vacio, children }: { titulo: string; href: string; vacio: boolean; children?: React.ReactNode }) {
+  return (
+    <section className="mt-8 break-inside-avoid-page">
+      <h2 className="border-b-2 border-[#B08D57] pb-1 text-xl font-extrabold text-[#54142B]">{titulo}</h2>
+      {vacio ? (
+        <p className="mt-3 text-sm text-[#6B5A4F]">
+          Esta parte todavía no está completa.{' '}
+          <Link href={href} className="font-semibold underline print:hidden">
+            Completarla
+          </Link>
+        </p>
+      ) : (
+        <div className="mt-3 space-y-3 text-[15px] leading-relaxed">{children}</div>
+      )}
+    </section>
+  )
+}
+
+function Texto({ t, v, cond }: { t: string; v: string; cond?: string }) {
+  if (!v) return null
+  return (
+    <div>
+      <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">
+        {t}
+        {cond ? <span className="ml-2 font-normal normal-case tracking-normal text-[#6B5A4F]">({etiquetaCondicion(cond)})</span> : null}
+      </div>
+      <p className="whitespace-pre-line">{v}</p>
+    </div>
+  )
+}
+
+function Tabla({ filas }: { filas: Fila[] }) {
+  if (filas.length === 0) return null
+  return (
+    <table className="w-full text-sm">
+      <tbody>
+        {filas.map((f, i) => (
+          <tr key={i} className="border-b border-[#E7DCCB] align-top">
+            <td className="py-1.5 pr-3 font-semibold">{f.dato}</td>
+            <td className="py-1.5 pr-3">{f.valor}</td>
+            <td className="py-1.5 text-xs text-[#6B5A4F]">{f.cond ? etiquetaCondicion(f.cond) : ''}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
+/**
+ * Documento final: reúne en una sola hoja lo que la persona escribió en cada paso.
+ * No inventa nada ni usa IA: solo ordena lo guardado. Lo que falta se marca como pendiente.
+ */
+export default async function DocumentoPage({ searchParams }: { searchParams: Promise<{ proyecto?: string }> }) {
+  const { proyecto: proyectoId } = await searchParams
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) redirect('/login?redirect=/empresarial')
+  if (!proyectoId) return mensaje('Falta el proyecto', 'Entra desde tu proyecto para ver el documento.')
+
+  const { data: proyecto } = await supabase.from('sfpe_proyectos').select('id, nombre, pais, moneda').eq('id', proyectoId).maybeSingle()
+  if (!proyecto) return mensaje('No encontramos ese proyecto', 'Revisa que hayas entrado con tu cuenta.')
+  const id = proyecto.id as string
+  const moneda = (proyecto.moneda as string | null) ?? null
+  const din = (n: number | null) => formatoDinero(n, moneda)
+
+  const [form, formItems, merc, segs, tam, precio, comps, canales, tec, specs, pasos, fin, finItems] = await Promise.all([
+    supabase.from('sfpe_formulacion').select('*').eq('proyecto_id', id).maybeSingle(),
+    supabase.from('sfpe_formulacion_items').select('tipo, texto, condicion').eq('proyecto_id', id).order('orden', { ascending: true }),
+    supabase.from('sfpe_mercado').select('*').eq('proyecto_id', id).maybeSingle(),
+    supabase.from('sfpe_mercado_segmentos').select('nombre, descripcion, necesidades, capacidad_compra, barreras').eq('proyecto_id', id),
+    supabase.from('sfpe_mercado_tamano').select('*').eq('proyecto_id', id).maybeSingle(),
+    supabase.from('sfpe_mercado_precio').select('*').eq('proyecto_id', id).maybeSingle(),
+    supabase.from('sfpe_mercado_competidores').select('nombre, tipo, producto, precio, unidad_precio, fortalezas, debilidades, fuente, condicion').eq('proyecto_id', id),
+    supabase.from('sfpe_mercado_canales').select('tipo, descripcion, costo_adquisicion, conversion, condicion').eq('proyecto_id', id),
+    supabase.from('sfpe_tecnico').select('*').eq('proyecto_id', id).maybeSingle(),
+    supabase.from('sfpe_tecnico_specs').select('caracteristica, especificacion, unidad, criterio, condicion').eq('proyecto_id', id),
+    supabase.from('sfpe_tecnico_pasos').select('nombre, responsable, duracion_min, recursos, condicion').eq('proyecto_id', id),
+    supabase.from('sfpe_financiero').select('*').eq('proyecto_id', id).maybeSingle(),
+    supabase.from('sfpe_financiero_items').select('tipo, concepto, categoria, valor, fuente, condicion').eq('proyecto_id', id).order('orden', { ascending: true }),
+  ])
+
+  const f = form.data
+  const m = merc.data
+  const t = tam.data
+  const p = precio.data
+  const te = tec.data
+  const fi = fin.data
+  const objetivos = (formItems.data ?? []).filter((x) => x.tipo === 'objetivo_especifico')
+  const beneficiarios = (formItems.data ?? []).filter((x) => x.tipo === 'beneficiario')
+  const resultados = (formItems.data ?? []).filter((x) => x.tipo === 'resultado')
+
+  // Cálculos financieros: los mismos de la pantalla de financiero.
+  const itemsFin: ItemFinanciero[] = (finItems.data ?? []).map((x, i) => ({
+    id: String(i),
+    tipo: x.tipo as TipoItem,
+    concepto: s(x.concepto),
+    categoria: s(x.categoria),
+    valor: s(x.valor),
+    fuente: s(x.fuente),
+    condicion: x.condicion,
+  }))
+  const r = fi
+    ? calcular(
+        {
+          ...financieroVacio(),
+          precio_unitario: s(fi.precio_unitario),
+          costo_variable_unitario: s(fi.costo_variable_unitario),
+          unidades_mes: s(fi.unidades_mes),
+          aporte_propio: s(fi.aporte_propio),
+        },
+        itemsFin,
+      )
+    : null
+
+  const gasto = t?.gasto_valor === null || t?.gasto_valor === undefined ? null : Number(t.gasto_valor)
+  const enDinero = (v: unknown) => (gasto !== null && v !== null && v !== undefined ? din(Number(v) * gasto) : '—')
+
+  const pasosT = (pasos.data ?? []).map((x) => ({ ...x, duracion_min: s(x.duracion_min) }))
+  const tiempo = tiempoTotalMin(pasosT as never)
+
+  const q = `?proyecto=${id}`
+  const lista = (xs: { texto: unknown; condicion: unknown }[]) => (
+    <ul className="list-disc space-y-1 pl-5">
+      {xs.map((x, i) => (
+        <li key={i}>
+          {s(x.texto)} <span className="text-xs text-[#6B5A4F]">({etiquetaCondicion(s(x.condicion))})</span>
+        </li>
+      ))}
+    </ul>
+  )
+
+  const hoy = new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' })
+
+  return (
+    <main className="min-h-screen bg-gradient-to-b from-[#2E0E1A] via-[#3B1727] to-[#54142B] text-[#F3E7DC] print:bg-white">
+      <div className="max-w-[900px] mx-auto px-5 lg:px-8 py-10 lg:py-14 print:p-0">
+        <div className="print:hidden">
+          <Link href={`/empresarial/camino${q}`} className="inline-flex items-center gap-2 text-sm text-[#F3E7DC]/70 hover:text-white">
+            ← Volver a mi camino
+          </Link>
+          <h1 className="mt-6 text-3xl lg:text-4xl font-extrabold">Tu documento final</h1>
+          <p className="mt-3 text-[#F3E7DC]/80 leading-relaxed">
+            Aquí se reúne, en una sola hoja, todo lo que escribiste en cada paso. No se agrega nada nuevo: si algo falta, aparece marcado para que lo completes.
+          </p>
+          <div className="mt-5 mb-6">
+            <BotonImprimir />
+          </div>
+        </div>
+
+        <article className="rounded-2xl bg-[#FBF7F0] p-6 lg:p-10 text-[#2B1A14] shadow-[0_10px_40px_-12px_rgba(0,0,0,0.5)] print:shadow-none print:rounded-none">
+          <div className="text-xs font-bold uppercase tracking-[0.25em] text-[#8A6A3B]">Documento del proyecto</div>
+          <h1 className="mt-2 text-3xl font-extrabold text-[#54142B]">{proyecto.nombre as string}</h1>
+          <p className="mt-1 text-sm text-[#6B5A4F]">
+            {s(proyecto.pais) ? `${s(proyecto.pais)} · ` : ''}Generado el {hoy}
+          </p>
+
+          <Bloque titulo="1. El proyecto" href={`/empresarial/formulacion${q}`} vacio={!f}>
+            <Tabla
+              filas={[
+                { dato: 'Tipo de proyecto', valor: s(f?.tipo_proyecto) },
+                { dato: 'Sector', valor: s(f?.sector) },
+                { dato: 'Ubicación', valor: s(f?.ubicacion) },
+                { dato: 'Duración', valor: f?.duracion_meses ? `${f.duracion_meses} meses` : '' },
+              ].filter((x) => x.valor)}
+            />
+            <Texto t="Problema" v={s(f?.problema)} />
+            <Texto t="Por qué vale la pena" v={s(f?.justificacion)} />
+            <Texto t="Antecedentes" v={s(f?.antecedentes)} />
+            <Texto t="Objetivo general" v={s(f?.objetivo_general)} />
+            {objetivos.length > 0 && (
+              <div>
+                <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">Objetivos específicos</div>
+                {lista(objetivos)}
+              </div>
+            )}
+            {beneficiarios.length > 0 && (
+              <div>
+                <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">Quiénes se benefician</div>
+                {lista(beneficiarios)}
+              </div>
+            )}
+            {resultados.length > 0 && (
+              <div>
+                <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">Resultados esperados</div>
+                {lista(resultados)}
+              </div>
+            )}
+            <Texto t="Alcance" v={s(f?.alcance)} />
+            <Texto t="Lo que no incluye" v={s(f?.exclusiones)} />
+          </Bloque>
+
+          <Bloque titulo="2. El mercado" href={`/empresarial/mercado${q}`} vacio={!m}>
+            <Tabla
+              filas={[
+                { dato: 'Producto o servicio', valor: s(m?.producto) },
+                { dato: 'Quién compra', valor: etiquetaDe(TIPOS_COMPRADOR, s(m?.tipo_comprador)) },
+                { dato: 'Naturaleza', valor: etiquetaDe(NATURALEZAS, s(m?.naturaleza)) },
+                { dato: 'Cobertura', valor: etiquetaDe(COBERTURAS, s(m?.cobertura)) },
+                { dato: 'Etapa del mercado', valor: etiquetaDe(ETAPAS_MERCADO, s(m?.etapa_mercado)) },
+                { dato: 'Ubicación', valor: s(m?.ubicacion) },
+              ].filter((x) => x.valor && x.valor !== 'undefined')}
+            />
+            <Texto t="Descripción del mercado" v={s(m?.descripcion_mercado)} />
+            <Texto t="Delimitación" v={s(m?.delimitacion)} />
+            <Texto t="Restricciones" v={s(m?.restricciones)} />
+            {(segs.data ?? []).length > 0 && (
+              <div>
+                <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">Segmentos de clientes</div>
+                <ul className="mt-1 space-y-2">
+                  {(segs.data ?? []).map((x, i) => (
+                    <li key={i}>
+                      <span className="font-semibold">{s(x.nombre)}</span>
+                      {s(x.descripcion) ? ` — ${s(x.descripcion)}` : ''}
+                      {s(x.necesidades) ? <span className="block text-sm text-[#6B5A4F]">Necesita: {s(x.necesidades)}</span> : null}
+                      {s(x.capacidad_compra) ? <span className="block text-sm text-[#6B5A4F]">Capacidad de compra: {s(x.capacidad_compra)}</span> : null}
+                      {s(x.barreras) ? <span className="block text-sm text-[#6B5A4F]">Barreras: {s(x.barreras)}</span> : null}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </Bloque>
+
+          <Bloque titulo="3. Tamaño y demanda" href={`/empresarial/mercado/demanda${q}`} vacio={!t}>
+            <Tabla
+              filas={[
+                { dato: 'Gasto anual por cliente', valor: gasto !== null ? din(gasto) : '', cond: s(t?.gasto_condicion) },
+                { dato: 'Mercado total (TAM)', valor: t?.tam_valor != null ? `${formatoNumero(Number(t.tam_valor))} clientes · ${enDinero(t.tam_valor)} al año` : '', cond: s(t?.tam_condicion) },
+                { dato: 'Mercado que puedes atender (SAM)', valor: t?.sam_valor != null ? `${formatoNumero(Number(t.sam_valor))} clientes · ${enDinero(t.sam_valor)} al año` : '', cond: s(t?.sam_condicion) },
+                { dato: 'Lo que puedes captar (SOM)', valor: t?.som_valor != null ? `${formatoNumero(Number(t.som_valor))} clientes · ${enDinero(t.som_valor)} al año` : '', cond: s(t?.som_condicion) },
+              ].filter((x) => x.valor)}
+            />
+            <Texto t="Cuántos clientes puedes atender" v={s(t?.capacidad_clientes)} />
+            <Texto t="Frecuencia de compra" v={s(t?.frecuencia_compra)} />
+            <Texto t="Estacionalidad" v={s(t?.estacionalidad)} />
+            <Texto t="Intención de compra" v={s(t?.intencion_compra)} />
+            <Texto t="Demanda sin atender" v={s(t?.demanda_insatisfecha)} />
+          </Bloque>
+
+          <Bloque titulo="4. Competencia, precio y canales" href={`/empresarial/mercado/competencia${q}`} vacio={!p && (comps.data ?? []).length === 0 && (canales.data ?? []).length === 0}>
+            {p && (
+              <Tabla
+                filas={[
+                  { dato: 'Precio', valor: p.precio != null ? `${din(Number(p.precio))}${s(p.unidad_precio) ? ` ${s(p.unidad_precio)}` : ''}` : '' },
+                  { dato: 'Costo por unidad', valor: p.costo_unitario != null ? din(Number(p.costo_unitario)) : '' },
+                  { dato: 'Cómo se fijó el precio', valor: s(p.metodo) },
+                  { dato: 'Por qué ese precio', valor: s(p.justificacion) },
+                  { dato: 'Disposición a pagar', valor: s(p.disposicion_pago) },
+                ].filter((x) => x.valor)}
+              />
+            )}
+            {(comps.data ?? []).length > 0 && (
+              <div>
+                <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">Competidores</div>
+                <ul className="mt-1 space-y-2">
+                  {(comps.data ?? []).map((x, i) => (
+                    <li key={i}>
+                      <span className="font-semibold">{s(x.nombre)}</span>
+                      {s(x.producto) ? ` — ${s(x.producto)}` : ''}
+                      {x.precio != null ? ` · ${din(Number(x.precio))}${s(x.unidad_precio) ? ` ${s(x.unidad_precio)}` : ''}` : ''}
+                      {s(x.fortalezas) ? <span className="block text-sm text-[#6B5A4F]">Fortalezas: {s(x.fortalezas)}</span> : null}
+                      {s(x.debilidades) ? <span className="block text-sm text-[#6B5A4F]">Debilidades: {s(x.debilidades)}</span> : null}
+                      <span className="block text-xs text-[#6B5A4F]">
+                        Fuente: {s(x.fuente) || 'sin fuente'} ({etiquetaCondicion(s(x.condicion))})
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {(canales.data ?? []).length > 0 && (
+              <div>
+                <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">Canales para llegar al cliente</div>
+                <ul className="mt-1 list-disc space-y-1 pl-5">
+                  {(canales.data ?? []).map((x, i) => (
+                    <li key={i}>
+                      {s(x.tipo)}
+                      {s(x.descripcion) ? ` — ${s(x.descripcion)}` : ''}
+                      {x.costo_adquisicion != null ? ` · costo por cliente ${din(Number(x.costo_adquisicion))}` : ''}{' '}
+                      <span className="text-xs text-[#6B5A4F]">({etiquetaCondicion(s(x.condicion))})</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </Bloque>
+
+          <Bloque titulo="5. Estudio técnico" href={`/empresarial/tecnico${q}`} vacio={!te}>
+            <Tabla
+              filas={[
+                { dato: 'Solución', valor: s(te?.nombre_solucion) },
+                { dato: 'Tipo', valor: etiquetaDe(TIPOS_SOLUCION, s(te?.tipo_solucion)) },
+                { dato: 'Se vende por', valor: s(te?.unidad_comercializacion) },
+                { dato: 'Estado', valor: etiquetaDe(ESTADOS_SOLUCION, s(te?.estado_solucion)) },
+              ].filter((x) => x.valor && x.valor !== 'undefined')}
+            />
+            <Texto t="Descripción" v={s(te?.descripcion)} />
+            <Texto t="Calidad esperada" v={s(te?.calidad_esperada)} />
+            <Texto t="Restricciones" v={s(te?.restricciones)} />
+            {(specs.data ?? []).length > 0 && (
+              <div>
+                <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">Especificaciones</div>
+                <Tabla
+                  filas={(specs.data ?? []).map((x) => ({
+                    dato: s(x.caracteristica),
+                    valor: `${s(x.especificacion)}${s(x.unidad) ? ` ${s(x.unidad)}` : ''}`,
+                    cond: s(x.condicion),
+                  }))}
+                />
+              </div>
+            )}
+            {(pasos.data ?? []).length > 0 && (
+              <div>
+                <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">Cómo se produce o se presta</div>
+                <ol className="mt-1 list-decimal space-y-1 pl-5">
+                  {(pasos.data ?? []).map((x, i) => (
+                    <li key={i}>
+                      {s(x.nombre)}
+                      {s(x.responsable) ? ` — responsable: ${s(x.responsable)}` : ''}
+                      {x.duracion_min != null ? ` · ${formatoMinutos(Number(x.duracion_min))}` : ''}
+                    </li>
+                  ))}
+                </ol>
+                {tiempo > 0 && <p className="mt-2 text-sm">Tiempo total por unidad: {formatoMinutos(tiempo)}.</p>}
+              </div>
+            )}
+          </Bloque>
+
+          <Bloque titulo="6. Financiero básico" href={`/empresarial/financiero${q}`} vacio={!fi}>
+            {r && (
+              <Tabla
+                filas={[
+                  { dato: 'Precio por unidad', valor: din(num(s(fi?.precio_unitario))) },
+                  { dato: 'Costo por unidad', valor: din(num(s(fi?.costo_variable_unitario))) },
+                  { dato: 'Unidades por mes', valor: s(fi?.unidades_mes) ? formatoNumero(Number(fi?.unidades_mes)) : '', cond: s(fi?.unidades_condicion) },
+                  { dato: 'Inversión inicial', valor: din(r.inversion) },
+                  { dato: 'Costos fijos por mes', valor: din(r.fijosMes) },
+                  { dato: 'Ingresos por mes', valor: din(r.ingresosMes) },
+                  { dato: 'Utilidad por mes', valor: din(r.utilidadMes) },
+                  { dato: 'Punto de equilibrio', valor: r.equilibrioUnidades === null ? '' : `${formatoNumero(Math.ceil(r.equilibrioUnidades))} unidades al mes` },
+                  { dato: 'Recuperación de la inversión', valor: formatoMeses(r.mesesRecuperacion) },
+                ].filter((x) => x.valor && x.valor !== '—')}
+              />
+            )}
+            {itemsFin.filter((x) => x.tipo === 'inversion').length > 0 && (
+              <div>
+                <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">Inversión inicial</div>
+                <Tabla filas={itemsFin.filter((x) => x.tipo === 'inversion').map((x) => ({ dato: x.concepto, valor: din(num(x.valor)), cond: x.condicion }))} />
+              </div>
+            )}
+            {itemsFin.filter((x) => x.tipo === 'costo_fijo').length > 0 && (
+              <div>
+                <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">Costos fijos por mes</div>
+                <Tabla filas={itemsFin.filter((x) => x.tipo === 'costo_fijo').map((x) => ({ dato: x.concepto, valor: din(num(x.valor)), cond: x.condicion }))} />
+              </div>
+            )}
+            <p className="text-xs text-[#6B5A4F]">Cuentas hechas con las cifras que escribiste; valen lo que valgan sus fuentes. No son una promesa de resultados.</p>
+          </Bloque>
+
+          <p className="mt-10 border-t border-[#E7DCCB] pt-3 text-xs text-[#6B5A4F]">
+            Este documento ordena la información que aportó la persona; no la certifica. Cada dato lleva su condición (verificado, aportado, estimado, supuesto o pendiente).
+            Antes de presentarlo a un tercero, comprueba lo que esté marcado como supuesto o pendiente.
+          </p>
+        </article>
+      </div>
+    </main>
+  )
+}

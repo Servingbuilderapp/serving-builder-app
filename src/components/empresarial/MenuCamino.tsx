@@ -132,7 +132,13 @@ export async function cargarCamino(proyectoId: string): Promise<DatosCamino | nu
       href: `/empresarial/financiero?proyecto=${trabajoId}`,
       estado: financiero > 0 ? 'hecho' : 'por_hacer',
     },
-    { clave: 'documento', titulo: 'Documento final', ayuda: 'Tu proyecto completo, listo para presentar.', href: null, estado: 'proximamente' },
+    {
+      clave: 'documento',
+      titulo: 'Documento final',
+      ayuda: `Tu proyecto completo, listo para presentar.${aviso}`,
+      href: `/empresarial/documento?proyecto=${trabajoId}`,
+      estado: 'por_hacer',
+    },
   ]
   const siguiente = pasos.find((x) => x.href && x.estado !== 'hecho') ?? null
   return { nombre, origenId, derivadoId, pasos, siguiente }
@@ -166,6 +172,7 @@ export function pasoActual(ruta: string): PasoCamino['clave'] | null {
   if (ruta.startsWith('/empresarial/diagnostico') || ruta.startsWith('/empresarial/descubrimiento')) return 'diagnostico'
   if (ruta.startsWith('/empresarial/oportunidades')) return 'oportunidades'
   if (ruta.startsWith('/empresarial/formulacion')) return 'formulacion'
+  if (ruta.startsWith('/empresarial/documento')) return 'documento'
   if (ruta.startsWith('/empresarial/financiero')) return 'financiero'
   if (ruta.startsWith('/empresarial/tecnico')) return 'tecnico'
   if (ruta.startsWith('/empresarial/mercado/competencia')) return 'competencia'
