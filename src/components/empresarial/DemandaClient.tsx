@@ -4,6 +4,7 @@ import React, { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { Embudo } from '@/components/empresarial/Graficos'
 import { CONDICIONES, type Condicion } from '@/lib/empresarial/formulacion'
 import { COBERTURAS, etiquetaDe } from '@/lib/empresarial/mercado'
 import {
@@ -268,6 +269,16 @@ export function DemandaClient({ proyecto, inicial, yaGuardado, referencia }: Pro
               </div>
             ))}
           </div>
+          {(['tam', 'sam', 'som'] as const).every((c) => dinero[c] !== null) && (
+            <Embudo
+              titulo="Embudo de tu mercado: del mercado total a lo que puedes captar"
+              etapas={[
+                { etiqueta: 'TAM · mercado total', valor: formatoDinero(dinero.tam, proyecto.moneda), detalle: `${formatoNumero(num(tm.cifras.tam.valor))} clientes` },
+                { etiqueta: 'SAM · el que puedes atender', valor: formatoDinero(dinero.sam, proyecto.moneda), detalle: `${formatoNumero(num(tm.cifras.sam.valor))} clientes` },
+                { etiqueta: 'SOM · lo que puedes captar', valor: formatoDinero(dinero.som, proyecto.moneda), detalle: `${formatoNumero(num(tm.cifras.som.valor))} clientes` },
+              ]}
+            />
+          )}
           <p className="mt-3 text-xs text-[#F3E7DC]/60">Son cuentas con tus propias cifras: clientes × gasto anual. Valen lo que valgan tus fuentes.</p>
         </section>
 

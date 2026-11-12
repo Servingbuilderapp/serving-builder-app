@@ -4,6 +4,7 @@ import React, { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, Plus, Trash2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { BarrasH, Dona, LineaEquilibrio, compacto } from '@/components/empresarial/Graficos'
 import { CONDICIONES, etiquetaCondicion, type Condicion } from '@/lib/empresarial/formulacion'
 import { formatoDinero, formatoNumero, num } from '@/lib/empresarial/mercadoDemanda'
 import {
@@ -355,21 +356,61 @@ export function FinancieroClient({ proyecto, inicial, itemsIniciales, yaGuardado
           </div>
           <p className="mt-3 text-xs text-[#F3E7DC]/60">Son cuentas con tus propias cifras: valen lo que valgan tus fuentes. No son una promesa de resultados.</p>
 
+          {(r.fijosMes > 0 || r.inversion > 0) && (
+            <div className="mt-5 grid gap-6 lg:grid-cols-2">
+              {r.fijosMes > 0 && (
+                <div>
+                  <h3 className="font-extrabold">¿En qué se va cada mes?</h3>
+                  <Dona
+                    titulo="Costos fijos por mes, por concepto"
+                    centro={compacto(r.fijosMes)}
+                    subcentro="al mes"
+                    formato={din}
+                    porciones={items.filter((i) => i.tipo === 'costo_fijo').map((i) => ({ etiqueta: i.concepto || 'Sin nombre', valor: num(i.valor) ?? 0 }))}
+                  />
+                </div>
+              )}
+              {r.inversion > 0 && (
+                <div>
+                  <h3 className="font-extrabold">¿En qué se va la inversión?</h3>
+                  <Dona
+                    titulo="Inversión inicial, por concepto"
+                    centro={compacto(r.inversion)}
+                    subcentro="en total"
+                    formato={din}
+                    porciones={items.filter((i) => i.tipo === 'inversion').map((i) => ({ etiqueta: i.concepto || 'Sin nombre', valor: num(i.valor) ?? 0 }))}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+
+          {num(f.precio_unitario) !== null && num(f.costo_variable_unitario) !== null && r.margenUnidad !== null && r.margenUnidad > 0 && r.fijosMes > 0 && (
+            <div className="mt-5">
+              <h3 className="font-extrabold">¿Cuánto debes vender para no perder?</h3>
+              <LineaEquilibrio
+                titulo="Ingresos y costos según las unidades vendidas al mes"
+                precio={num(f.precio_unitario) ?? 0}
+                costoVariable={num(f.costo_variable_unitario) ?? 0}
+                costosFijos={r.fijosMes}
+                unidadesActuales={num(f.unidades_mes)}
+                equilibrio={r.equilibrioUnidades}
+                formatoUnidades={formatoNumero}
+              />
+            </div>
+          )}
+
           {r.utilidadMes !== null && (
             <div className="mt-5">
               <h3 className="font-extrabold">¿Y si cambian las cosas?</h3>
               <p className="text-xs text-[#F3E7DC]/60">Un ejercicio para ver qué tan frágil es tu proyecto. No es un pronóstico y no se guarda.</p>
-              <ul className="mt-2 space-y-2 text-sm">
-                {sens.map((s) => {
-                  const u = utilidadCon(f, items, s.fu, s.fp)
-                  return (
-                    <li key={s.etiqueta} className="flex items-center justify-between gap-3 rounded-xl bg-[#3B1727] px-4 py-2">
-                      <span>{s.etiqueta}</span>
-                      <span className={`font-extrabold ${u !== null && u < 0 ? 'text-[#FF8A80]' : 'text-[#C9A46B]'}`}>{din(u)} al mes</span>
-                    </li>
-                  )
-                })}
-              </ul>
+              <BarrasH
+                titulo="Utilidad por mes según cada cambio"
+                formato={(n) => `${din(n)} al mes`}
+                barras={sens
+                  .map((x) => ({ etiqueta: x.etiqueta, valor: utilidadCon(f, items, x.fu, x.fp), destacada: x.fu === 1 && x.fp === 1 }))
+                  .filter((b): b is { etiqueta: string; valor: number; destacada: boolean } => b.valor !== null)}
+              />
             </div>
           )}
         </section>
