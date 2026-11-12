@@ -45,7 +45,13 @@ const PERFILES: Record<
 
 type Paso = 'preguntas' | 'confirmar' | 'guardado'
 
-export function EmpresarialClient({ userId }: { userId: string | null }) {
+export interface ProyectoResumen {
+  id: string
+  nombre: string
+  estado: string
+}
+
+export function EmpresarialClient({ userId, proyectos = [] }: { userId: string | null; proyectos?: ProyectoResumen[] }) {
   const [paso, setPaso] = useState<Paso>('preguntas')
 
   // Respuestas
@@ -131,6 +137,31 @@ export function EmpresarialClient({ userId }: { userId: string | null }) {
           </h1>
           <p className="mt-4 text-lg text-[#F3E7DC]/80">Crea. Fortalece. Crece.</p>
         </div>
+
+        {/* ---------------- MIS PROYECTOS ---------------- */}
+        {paso === 'preguntas' && proyectos.length > 0 && (
+          <section className={`mt-10 rounded-2xl border border-[#C9A46B]/60 bg-[#2E0E1A] p-5 ${RELIEVE_TARJETA}`}>
+            <h2 className="text-xl font-extrabold">Continúa con tu proyecto</h2>
+            <p className="mt-1 text-sm text-[#F3E7DC]/75">Ya tienes proyectos guardados. Entra a uno para ver tu camino completo.</p>
+            <ul className="mt-4 space-y-3">
+              {proyectos.map((p) => (
+                <li key={p.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-[#3B1727] p-4">
+                  <div>
+                    <div className="font-bold">{p.nombre}</div>
+                    <div className="text-xs text-[#F3E7DC]/60">{p.estado}</div>
+                  </div>
+                  <Link
+                    href={`/empresarial/camino?proyecto=${p.id}`}
+                    className={`h-11 px-5 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] font-extrabold ${RELIEVE_BOTON}`}
+                  >
+                    Continuar <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-4 text-xs text-[#F3E7DC]/60">¿Quieres empezar otro proyecto? Responde las preguntas de abajo.</p>
+          </section>
+        )}
 
         {/* ---------------- PASO 1: PREGUNTAS ---------------- */}
         {paso === 'preguntas' && (
