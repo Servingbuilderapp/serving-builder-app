@@ -36,7 +36,7 @@ const COLOR_ALERTA: Record<string, string> = {
 const CREMA = '#54142B'
 
 /** Mapa de calor 5 × 5: probabilidad hacia la derecha, impacto hacia arriba. Cada riesgo es un círculo numerado. */
-function MapaCalor({ riesgos }: { riesgos: RiesgoOrdenado[] }) {
+export function MapaCalor({ riesgos }: { riesgos: RiesgoOrdenado[] }) {
   const W = 420
   const H = 404
   const x0 = 50

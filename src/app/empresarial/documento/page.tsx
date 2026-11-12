@@ -13,6 +13,8 @@ import { formatoDinero, formatoNumero, num } from '@/lib/empresarial/mercadoDema
 import { calcular, formatoMeses, financieroVacio, type ItemFinanciero, type TipoItem } from '@/lib/empresarial/financiero'
 import { FACTORES as FACTORES_ENTORNO, calcularRadar as radarEntorno, lecturaRadar as lecturaEntorno, type ItemEntorno } from '@/lib/empresarial/entorno'
 import { FACTORES as FACTORES_PRESION, calcularRadar as radarPresiones, lecturaRadar as lecturaPresiones, type ItemPresion } from '@/lib/empresarial/presiones'
+import { RadarEntorno } from '@/components/empresarial/Graficos'
+import { MapaCalor } from '@/components/empresarial/RiesgosClient'
 import { BLOQUES, lecturaLienzo, type ItemLienzo } from '@/lib/empresarial/lienzo'
 import {
   COLOR_NIVEL,
@@ -576,6 +578,9 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
           </Bloque>
 
           <Bloque titulo="9. Radar del entorno" href={`/empresarial/entorno${q}`} vacio={llenosEnt.length === 0}>
+            {llenosEnt.length > 0 ? (
+              <RadarEntorno titulo="Radar del entorno: lo que ayuda y lo que perjudica en cada frente" ejes={radarEntorno(itemsEnt).map((p) => ({ etiqueta: p.titulo, ayuda: p.ayuda, perjudica: p.perjudica }))} />
+            ) : null}
             {FACTORES_ENTORNO.map((fa) => {
               const xs = llenosEnt.filter((i) => i.factor === fa.clave)
               if (xs.length === 0) return null
@@ -604,6 +609,9 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
           </Bloque>
 
           <Bloque titulo="10. Mapa de presiones del sector" href={`/empresarial/presiones${q}`} vacio={llenosPre.length === 0}>
+            {llenosPre.length > 0 ? (
+              <RadarEntorno titulo="Mapa de presiones: lo que te protege y lo que te presiona en cada frente" etiquetaAyuda="Lo que te protege" etiquetaDano="Lo que te presiona" textoAyuda="a favor" textoDano="de presión" ejes={radarPresiones(itemsPre).map((p) => ({ etiqueta: p.corto, ayuda: p.protege, perjudica: p.presiona }))} />
+            ) : null}
             {FACTORES_PRESION.map((fa) => {
               const xs = llenosPre.filter((i) => i.factor === fa.clave)
               if (xs.length === 0) return null
@@ -667,6 +675,7 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
                 </span>
               ))}
             </div>
+            <MapaCalor riesgos={riesgosOrd} />
             <ol className="space-y-3">
               {riesgosOrd.map((x) => (
                 <li key={x.numero} className="break-inside-avoid">
