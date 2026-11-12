@@ -253,8 +253,8 @@ export function EntornoClient({ proyecto, itemsIniciales, yaGuardado }: Props) {
             {guardando ? 'Guardando…' : 'Guardar Radar del Entorno'}
           </button>
           {guardado && !sucio && (
-            <Link href={`/empresarial/dofa?proyecto=${proyecto.id}`} className={botonSuave}>
-              Seguir: análisis DOFA
+            <Link href={`/empresarial/presiones?proyecto=${proyecto.id}`} className={botonSuave}>
+              Seguir: Mapa de Presiones
             </Link>
           )}
           {sucio && !guardando && <span className="text-sm text-ca-oro-texto">Tienes cambios sin guardar.</span>}

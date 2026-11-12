@@ -71,5 +71,11 @@ export default async function DofaPage({ searchParams }: { searchParams: Promise
     if (s(e.texto)) sugerencias.push({ cuadrante: e.efecto === 'perjudica' ? 'amenaza' : 'oportunidad', texto: corto(s(e.texto)), origen: 'Radar del Entorno' })
   }
 
+  // Lo que la persona escribió en el Mapa de Presiones: la protección se ofrece como oportunidad y la presión como amenaza.
+  const { data: pre } = await supabase.from('sfpe_presiones_items').select('texto, efecto').eq('proyecto_id', proyecto.id).order('orden', { ascending: true })
+  for (const e of pre ?? []) {
+    if (s(e.texto)) sugerencias.push({ cuadrante: e.efecto === 'presiona' ? 'amenaza' : 'oportunidad', texto: corto(s(e.texto)), origen: 'Mapa de Presiones' })
+  }
+
   return <DofaClient proyecto={{ id: proyecto.id as string, nombre: proyecto.nombre as string }} itemsIniciales={items} yaGuardado={items.length > 0} sugerencias={sugerencias} />
 }

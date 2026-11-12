@@ -481,7 +481,7 @@ export interface EjeRadar {
   perjudica: number
 }
 
-export function RadarEntorno({ ejes, titulo }: { ejes: EjeRadar[]; titulo: string }) {
+export function RadarEntorno({ ejes, titulo, etiquetaAyuda = 'Lo que te ayuda', etiquetaDano = 'Lo que te perjudica', textoAyuda = 'a favor', textoDano = 'en contra' }: { ejes: EjeRadar[]; titulo: string; etiquetaAyuda?: string; etiquetaDano?: string; textoAyuda?: string; textoDano?: string }) {
   const W = 600
   const H = 400
   const cx = W / 2
@@ -516,13 +516,13 @@ export function RadarEntorno({ ejes, titulo }: { ejes: EjeRadar[]; titulo: strin
         })}
         <g fontSize="14" fill={CREMA}>
           <rect x="14" y={H - 22} width="14" height="14" fill="#3F8A76" fillOpacity="0.6" />
-          <text x="34" y={H - 10}>Lo que te ayuda</text>
+          <text x="34" y={H - 10}>{etiquetaAyuda}</text>
           <rect x="190" y={H - 22} width="14" height="14" fill="#C4604F" fillOpacity="0.6" />
-          <text x="210" y={H - 10}>Lo que te perjudica</text>
+          <text x="210" y={H - 10}>{etiquetaDano}</text>
         </g>
       </svg>
       <figcaption className="mt-1 text-center text-xs text-ca-vino/75">
-        Cuanto más lejos del centro, más pesa ese factor. {ejes.map((e) => `${e.etiqueta}: ${e.ayuda} a favor, ${e.perjudica} en contra`).join(' · ')}.
+        Cuanto más lejos del centro, más pesa ese factor. {ejes.map((e) => `${e.etiqueta}: ${e.ayuda} ${textoAyuda}, ${e.perjudica} ${textoDano}`).join(' · ')}.
       </figcaption>
     </figure>
   )
