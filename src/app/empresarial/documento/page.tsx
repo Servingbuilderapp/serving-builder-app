@@ -6,6 +6,7 @@ import { BotonImprimir } from '@/components/empresarial/BotonImprimir'
 import { etiquetaCondicion } from '@/lib/empresarial/formulacion'
 import { COBERTURAS, ETAPAS_MERCADO, NATURALEZAS, TIPOS_COMPRADOR, etiquetaDe } from '@/lib/empresarial/mercado'
 import { ESTADOS_SOLUCION, TIPOS_SOLUCION, formatoMinutos, tiempoTotalMin } from '@/lib/empresarial/tecnico'
+import { PREGUNTAS, conteoPorRegion, lectura as lecturaIkigai, mascara, nombreRegion, type ItemIkigai } from '@/lib/empresarial/ikigai'
 import { GUIAS, CRUCES, calcularBalance, lecturaPosicion, type ItemDofa } from '@/lib/empresarial/dofa'
 import { formatoDinero, formatoNumero, num } from '@/lib/empresarial/mercadoDemanda'
 import { calcular, formatoMeses, financieroVacio, type ItemFinanciero, type TipoItem } from '@/lib/empresarial/financiero'
@@ -99,7 +100,7 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
   const moneda = (proyecto.moneda as string | null) ?? null
   const din = (n: number | null) => formatoDinero(n, moneda)
 
-  const [form, formItems, merc, segs, tam, precio, comps, canales, tec, specs, pasos, fin, finItems, dofaQ] = await Promise.all([
+  const [form, formItems, merc, segs, tam, precio, comps, canales, tec, specs, pasos, fin, finItems, dofaQ, ikiQ] = await Promise.all([
     supabase.from('sfpe_formulacion').select('*').eq('proyecto_id', id).maybeSingle(),
     supabase.from('sfpe_formulacion_items').select('tipo, texto, condicion').eq('proyecto_id', id).order('orden', { ascending: true }),
     supabase.from('sfpe_mercado').select('*').eq('proyecto_id', id).maybeSingle(),
@@ -114,7 +115,19 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
     supabase.from('sfpe_financiero').select('*').eq('proyecto_id', id).maybeSingle(),
     supabase.from('sfpe_financiero_items').select('tipo, concepto, categoria, valor, fuente, condicion').eq('proyecto_id', id).order('orden', { ascending: true }),
     supabase.from('sfpe_dofa_items').select('cuadrante, texto, impacto, fuente, condicion').eq('proyecto_id', id).order('orden', { ascending: true }),
+    supabase.from('sfpe_ikigai_items').select('texto, ama, bueno, necesita, pagan, fuente, condicion').eq('proyecto_id', id).order('orden', { ascending: true }),
   ])
+  const itemsIki: ItemIkigai[] = (ikiQ.data ?? []).map((x, i) => ({
+    id: String(i),
+    texto: s(x.texto),
+    ama: Boolean(x.ama),
+    bueno: Boolean(x.bueno),
+    necesita: Boolean(x.necesita),
+    pagan: Boolean(x.pagan),
+    fuente: s(x.fuente),
+    condicion: x.condicion,
+  }))
+  const lecIki = lecturaIkigai(itemsIki)
   const itemsDofa: ItemDofa[] = (dofaQ.data ?? []).map((x, i) => ({
     id: String(i),
     cuadrante: x.cuadrante,
@@ -332,7 +345,19 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             )}
           </Bloque>
 
-          <Bloque titulo="5. Análisis DOFA" href={`/empresarial/dofa${q}`} vacio={itemsDofa.length === 0}>
+          <Bloque titulo="5. Ikigai del proyecto" href={`/empresarial/ikigai${q}`} vacio={itemsIki.length === 0}>
+            <ul className="list-disc space-y-1 pl-5">
+              {itemsIki.filter((x) => x.texto).map((x, i) => (
+                <li key={i}>
+                  {x.texto}: <span className="text-[#6B5A4F]">{nombreRegion(mascara(x))}{x.fuente ? ` · ${x.fuente}` : ''}</span>
+                </li>
+              ))}
+            </ul>
+            {lecIki && <p>{lecIki.texto}</p>}
+            <p className="text-xs text-[#6B5A4F]">Preguntas: {PREGUNTAS.map((p) => p.titulo).join(' · ')}. Ideas por zona: {Object.entries(conteoPorRegion(itemsIki)).length}.</p>
+          </Bloque>
+
+          <Bloque titulo="6. Análisis DOFA" href={`/empresarial/dofa${q}`} vacio={itemsDofa.length === 0}>
             {GUIAS.map((g) => {
               const xs = itemsDofa.filter((i) => i.cuadrante === g.clave && i.texto)
               if (xs.length === 0) return null
@@ -370,7 +395,7 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             })}
           </Bloque>
 
-          <Bloque titulo="6. Estudio técnico" href={`/empresarial/tecnico${q}`} vacio={!te}>
+          <Bloque titulo="7. Estudio técnico" href={`/empresarial/tecnico${q}`} vacio={!te}>
             <Tabla
               filas={[
                 { dato: 'Solución', valor: s(te?.nombre_solucion) },
@@ -411,7 +436,7 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             )}
           </Bloque>
 
-          <Bloque titulo="7. Financiero básico" href={`/empresarial/financiero${q}`} vacio={!fi}>
+          <Bloque titulo="8. Financiero básico" href={`/empresarial/financiero${q}`} vacio={!fi}>
             {r && (
               <Tabla
                 filas={[

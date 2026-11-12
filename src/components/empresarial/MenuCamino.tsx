@@ -13,7 +13,7 @@ import { createClient } from '@/lib/supabase/client'
 export type EstadoPaso = 'hecho' | 'en_curso' | 'por_hacer' | 'bloqueado' | 'proximamente'
 
 export interface PasoCamino {
-  clave: 'diagnostico' | 'oportunidades' | 'formulacion' | 'mercado' | 'demanda' | 'competencia' | 'dofa' | 'tecnico' | 'financiero' | 'documento'
+  clave: 'diagnostico' | 'ideas' | 'oportunidades' | 'ikigai' | 'formulacion' | 'mercado' | 'demanda' | 'competencia' | 'dofa' | 'tecnico' | 'financiero' | 'documento'
   titulo: string
   ayuda: string
   href: string | null
@@ -62,10 +62,11 @@ export async function cargarCamino(proyectoId: string): Promise<DatosCamino | nu
   // Formulación y mercado trabajan sobre el proyecto derivado; si aún no hay uno, se puede entrar igual con este.
   const trabajoId = derivadoId ?? (p.id as string)
   const head = { count: 'exact' as const, head: true }
-  const [sesiones, descubrimiento, oportunidades, formulacion, mercado, demanda, competencia, dofa, tecnico, financiero] = await Promise.all([
+  const [sesiones, descubrimiento, oportunidades, ikigai, formulacion, mercado, demanda, competencia, dofa, tecnico, financiero] = await Promise.all([
     contar(supabase.from('sfpe_diag_sesiones').select('id', head).eq('proyecto_id', origenId).eq('estado', 'completado')),
     contar(supabase.from('sfpe_descubrimiento').select('id', head).eq('proyecto_id', origenId)),
     contar(supabase.from('sfpe_oportunidades').select('id', head).eq('proyecto_id', origenId)),
+    contar(supabase.from('sfpe_ikigai_items').select('id', head).eq('proyecto_id', trabajoId)),
     contar(supabase.from('sfpe_formulacion').select('id', head).eq('proyecto_id', trabajoId)),
     contar(supabase.from('sfpe_mercado').select('id', head).eq('proyecto_id', trabajoId)),
     contar(supabase.from('sfpe_mercado_tamano').select('id', head).eq('proyecto_id', trabajoId)),
@@ -85,11 +86,25 @@ export async function cargarCamino(proyectoId: string): Promise<DatosCamino | nu
       estado: sesiones + descubrimiento > 0 ? 'hecho' : 'por_hacer',
     },
     {
+      clave: 'ideas',
+      titulo: 'App de Ideas (gratis)',
+      ayuda: 'Tres herramientas para explorar y afinar tus ideas. Puedes usarlas cuando quieras.',
+      href: '/ideas',
+      estado: 'por_hacer',
+    },
+    {
       clave: 'oportunidades',
       titulo: 'Oportunidades',
       ayuda: 'Elegir, comprobar y pasar a proyecto la que más vale la pena.',
       href: `/empresarial/oportunidades?proyecto=${origenId}`,
       estado: derivadoId ? 'hecho' : oportunidades > 0 ? 'en_curso' : 'por_hacer',
+    },
+    {
+      clave: 'ikigai',
+      titulo: 'Ikigai: ¿esta idea es para ti?',
+      ayuda: `Lo que amas, lo que sabes, lo que el mundo necesita y lo que pagan, en un diagrama.${aviso}`,
+      href: `/empresarial/ikigai?proyecto=${trabajoId}`,
+      estado: ikigai > 0 ? 'hecho' : 'por_hacer',
     },
     {
       clave: 'formulacion',
@@ -148,7 +163,7 @@ export async function cargarCamino(proyectoId: string): Promise<DatosCamino | nu
       estado: 'por_hacer',
     },
   ]
-  const siguiente = pasos.find((x) => x.href && x.estado !== 'hecho') ?? null
+  const siguiente = pasos.find((x) => x.clave !== 'ideas' && x.href && x.estado !== 'hecho') ?? null
   return { nombre, origenId, derivadoId, pasos, siguiente }
 }
 
@@ -182,6 +197,8 @@ export function pasoActual(ruta: string): PasoCamino['clave'] | null {
   if (ruta.startsWith('/empresarial/formulacion')) return 'formulacion'
   if (ruta.startsWith('/empresarial/documento')) return 'documento'
   if (ruta.startsWith('/empresarial/dofa')) return 'dofa'
+  if (ruta.startsWith('/empresarial/ikigai')) return 'ikigai'
+  if (ruta.startsWith('/ideas')) return 'ideas'
   if (ruta.startsWith('/empresarial/financiero')) return 'financiero'
   if (ruta.startsWith('/empresarial/tecnico')) return 'tecnico'
   if (ruta.startsWith('/empresarial/mercado/competencia')) return 'competencia'

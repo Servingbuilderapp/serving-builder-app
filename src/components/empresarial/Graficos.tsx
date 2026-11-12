@@ -299,3 +299,95 @@ export function PlanoPosicion({ interno, externo, titulo }: { interno: number; e
     </figure>
   )
 }
+
+/* -------------------------------------------------------------------------- */
+/* Diagrama de cuatro círculos que se cruzan (Ikigai)                          */
+/* -------------------------------------------------------------------------- */
+const V = { cx: 260, cy: 188, d: 56, r: 84 }
+const CENTROS: [number, number][] = [
+  [V.cx, V.cy - V.d], // bit 1 (arriba)
+  [V.cx + V.d, V.cy], // bit 2 (derecha)
+  [V.cx, V.cy + V.d], // bit 8 (abajo)
+  [V.cx - V.d, V.cy], // bit 4 (izquierda)
+]
+const BITS = [1, 2, 8, 4]
+
+/** Zona de cada combinación: se calcula una vez, muestreando el plano. */
+const ZONAS: Record<number, { x: number; y: number }> = (() => {
+  const acc: Record<number, { sx: number; sy: number; n: number }> = {}
+  for (let x = V.cx - 150; x <= V.cx + 150; x += 3) {
+    for (let y = 40; y <= 370; y += 3) {
+      let m = 0
+      CENTROS.forEach(([cx, cy], i) => {
+        if ((x - cx) ** 2 + (y - cy) ** 2 <= V.r ** 2) m |= BITS[i]
+      })
+      if (m > 0) {
+        const a = (acc[m] ??= { sx: 0, sy: 0, n: 0 })
+        a.sx += x
+        a.sy += y
+        a.n++
+      }
+    }
+  }
+  const out: Record<number, { x: number; y: number }> = {}
+  for (const k of Object.keys(acc)) out[Number(k)] = { x: acc[Number(k)].sx / acc[Number(k)].n, y: acc[Number(k)].sy / acc[Number(k)].n }
+  return out
+})()
+
+export function Venn4({
+  titulos,
+  colores,
+  conteos,
+  titulo,
+}: {
+  titulos: [string, string, string, string] // arriba, derecha, abajo, izquierda
+  colores: [string, string, string, string]
+  conteos: Record<number, number>
+  titulo: string
+}) {
+  const W = 520
+  const H = 372
+  const etiqueta = [
+    { x: V.cx, y: 18, a: 'middle' as const },
+    { x: V.cx + V.d + V.r + 8, y: V.cy - 4, a: 'start' as const },
+    { x: V.cx, y: H - 6, a: 'middle' as const },
+    { x: V.cx - V.d - V.r - 8, y: V.cy - 4, a: 'end' as const },
+  ]
+  return (
+    <figure aria-label={titulo} className="mx-auto max-w-[460px]">
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={titulo}>
+        {CENTROS.map(([cx, cy], i) => (
+          <circle key={i} cx={cx} cy={cy} r={V.r} fill={colores[i]} fillOpacity="0.28" stroke={colores[i]} strokeWidth="2.5" />
+        ))}
+        {etiqueta.map((e, i) => {
+          const lado = i === 1 || i === 3
+          const mitad = Math.ceil(titulos[i].split(' ').length / 2)
+          const partes = lado ? [titulos[i].split(' ').slice(0, mitad).join(' '), titulos[i].split(' ').slice(mitad).join(' ')] : [titulos[i]]
+          return (
+            <text key={i} x={e.x} y={lado ? e.y - 6 : e.y} textAnchor={e.a} fill={colores[i]} fontSize="12" fontWeight="800">
+              {partes.map((t, k) => (
+                <tspan key={k} x={e.x} dy={k === 0 ? 0 : 15}>
+                  {t}
+                </tspan>
+              ))}
+            </text>
+          )
+        })}
+        {Object.entries(ZONAS).map(([k, z]) => {
+          const n = conteos[Number(k)] ?? 0
+          if (n === 0) return null
+          const centro = Number(k) === 15
+          return (
+            <g key={k}>
+              <circle cx={z.x} cy={z.y} r={centro ? 17 : 11} fill={centro ? CREMA : '#2E0E1A'} stroke={centro ? ORO : CREMA} strokeWidth={centro ? 3 : 1.5} />
+              <text x={z.x} y={z.y + (centro ? 5 : 4)} textAnchor="middle" fill={centro ? '#2E0E1A' : CREMA} fontSize={centro ? 14 : 11} fontWeight="800">
+                {n}
+              </text>
+            </g>
+          )
+        })}
+      </svg>
+      <figcaption className="mt-1 text-center text-xs text-[#F3E7DC]/55">Cada número es la cantidad de ideas tuyas que caen en esa zona. En el centro están las que cumplen las cuatro preguntas.</figcaption>
+    </figure>
+  )
+}
