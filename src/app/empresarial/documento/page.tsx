@@ -6,6 +6,7 @@ import { BotonImprimir } from '@/components/empresarial/BotonImprimir'
 import { etiquetaCondicion } from '@/lib/empresarial/formulacion'
 import { COBERTURAS, ETAPAS_MERCADO, NATURALEZAS, TIPOS_COMPRADOR, etiquetaDe } from '@/lib/empresarial/mercado'
 import { ESTADOS_SOLUCION, TIPOS_SOLUCION, formatoMinutos, tiempoTotalMin } from '@/lib/empresarial/tecnico'
+import { GUIAS, CRUCES, calcularBalance, lecturaPosicion, type ItemDofa } from '@/lib/empresarial/dofa'
 import { formatoDinero, formatoNumero, num } from '@/lib/empresarial/mercadoDemanda'
 import { calcular, formatoMeses, financieroVacio, type ItemFinanciero, type TipoItem } from '@/lib/empresarial/financiero'
 
@@ -98,7 +99,7 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
   const moneda = (proyecto.moneda as string | null) ?? null
   const din = (n: number | null) => formatoDinero(n, moneda)
 
-  const [form, formItems, merc, segs, tam, precio, comps, canales, tec, specs, pasos, fin, finItems] = await Promise.all([
+  const [form, formItems, merc, segs, tam, precio, comps, canales, tec, specs, pasos, fin, finItems, dofaQ] = await Promise.all([
     supabase.from('sfpe_formulacion').select('*').eq('proyecto_id', id).maybeSingle(),
     supabase.from('sfpe_formulacion_items').select('tipo, texto, condicion').eq('proyecto_id', id).order('orden', { ascending: true }),
     supabase.from('sfpe_mercado').select('*').eq('proyecto_id', id).maybeSingle(),
@@ -112,7 +113,18 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
     supabase.from('sfpe_tecnico_pasos').select('nombre, responsable, duracion_min, recursos, condicion').eq('proyecto_id', id),
     supabase.from('sfpe_financiero').select('*').eq('proyecto_id', id).maybeSingle(),
     supabase.from('sfpe_financiero_items').select('tipo, concepto, categoria, valor, fuente, condicion').eq('proyecto_id', id).order('orden', { ascending: true }),
+    supabase.from('sfpe_dofa_items').select('cuadrante, texto, impacto, fuente, condicion').eq('proyecto_id', id).order('orden', { ascending: true }),
   ])
+  const itemsDofa: ItemDofa[] = (dofaQ.data ?? []).map((x, i) => ({
+    id: String(i),
+    cuadrante: x.cuadrante,
+    texto: s(x.texto),
+    impacto: s(x.impacto) || '3',
+    fuente: s(x.fuente),
+    condicion: x.condicion,
+  }))
+  const balanceDofa = calcularBalance(itemsDofa)
+  const lecturaDofa = lecturaPosicion(balanceDofa)
 
   const f = form.data
   const m = merc.data
@@ -320,7 +332,45 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             )}
           </Bloque>
 
-          <Bloque titulo="5. Estudio técnico" href={`/empresarial/tecnico${q}`} vacio={!te}>
+          <Bloque titulo="5. Análisis DOFA" href={`/empresarial/dofa${q}`} vacio={itemsDofa.length === 0}>
+            {GUIAS.map((g) => {
+              const xs = itemsDofa.filter((i) => i.cuadrante === g.clave && i.texto)
+              if (xs.length === 0) return null
+              return (
+                <div key={g.clave}>
+                  <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">{g.titulo}</div>
+                  <ul className="list-disc space-y-1 pl-5">
+                    {xs.map((x, i) => (
+                      <li key={i}>
+                        {x.texto} <span className="text-xs text-[#6B5A4F]">(peso {x.impacto} · {etiquetaCondicion(x.condicion)}{x.fuente ? ` · ${x.fuente}` : ''})</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )
+            })}
+            {lecturaDofa && (
+              <p>
+                <span className="font-semibold">Posición {lecturaDofa.nombre}:</span> {lecturaDofa.texto}
+              </p>
+            )}
+            {CRUCES.map((c) => {
+              const xs = itemsDofa.filter((i) => i.cuadrante === c.clave && i.texto)
+              if (xs.length === 0) return null
+              return (
+                <div key={c.clave}>
+                  <div className="text-xs font-bold uppercase tracking-wider text-[#8A6A3B]">Estrategias para {c.titulo.toLowerCase()}</div>
+                  <ul className="list-disc space-y-1 pl-5">
+                    {xs.map((x, i) => (
+                      <li key={i}>{x.texto}</li>
+                    ))}
+                  </ul>
+                </div>
+              )
+            })}
+          </Bloque>
+
+          <Bloque titulo="6. Estudio técnico" href={`/empresarial/tecnico${q}`} vacio={!te}>
             <Tabla
               filas={[
                 { dato: 'Solución', valor: s(te?.nombre_solucion) },
@@ -361,7 +411,7 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             )}
           </Bloque>
 
-          <Bloque titulo="6. Financiero básico" href={`/empresarial/financiero${q}`} vacio={!fi}>
+          <Bloque titulo="7. Financiero básico" href={`/empresarial/financiero${q}`} vacio={!fi}>
             {r && (
               <Tabla
                 filas={[

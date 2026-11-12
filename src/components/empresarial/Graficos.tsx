@@ -243,3 +243,59 @@ export function LineaEquilibrio({
     </figure>
   )
 }
+
+/* -------------------------------------------------------------------------- */
+/* Plano de posición: dentro de ti (horizontal) contra el entorno (vertical)    */
+/* -------------------------------------------------------------------------- */
+export function PlanoPosicion({ interno, externo, titulo }: { interno: number; externo: number; titulo: string }) {
+  const W = 420
+  const H = 340
+  const m = { l: 34, r: 12, t: 22, b: 40 }
+  const ancho = W - m.l - m.r
+  const alto = H - m.t - m.b
+  const px = (v: number) => m.l + ((v + 1) / 2) * ancho
+  const py = (v: number) => m.t + ((1 - v) / 2) * alto
+  const cx = px(0)
+  const cy = py(0)
+  const nombres = [
+    { t: 'REORIENTACIÓN', x: m.l + ancho * 0.25, y: m.t + 18, c: '#8FA8D8' },
+    { t: 'OFENSIVA', x: m.l + ancho * 0.75, y: m.t + 18, c: '#7FB6A4' },
+    { t: 'SUPERVIVENCIA', x: m.l + ancho * 0.25, y: H - m.b - 10, c: '#E3A59B' },
+    { t: 'DEFENSIVA', x: m.l + ancho * 0.75, y: H - m.b - 10, c: ORO },
+  ]
+  return (
+    <figure aria-label={titulo} className="mx-auto max-w-[460px]">
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={titulo}>
+        <rect x={m.l} y={m.t} width={ancho / 2} height={alto / 2} fill="#8FA8D8" fillOpacity="0.14" />
+        <rect x={cx} y={m.t} width={ancho / 2} height={alto / 2} fill="#7FB6A4" fillOpacity="0.2" />
+        <rect x={m.l} y={cy} width={ancho / 2} height={alto / 2} fill="#E3A59B" fillOpacity="0.14" />
+        <rect x={cx} y={cy} width={ancho / 2} height={alto / 2} fill={ORO} fillOpacity="0.16" />
+        <line x1={cx} x2={cx} y1={m.t} y2={H - m.b} stroke={CREMA} strokeOpacity="0.45" />
+        <line x1={m.l} x2={W - m.r} y1={cy} y2={cy} stroke={CREMA} strokeOpacity="0.45" />
+        <rect x={m.l} y={m.t} width={ancho} height={alto} fill="none" stroke={CREMA} strokeOpacity="0.25" />
+        {nombres.map((n) => (
+          <text key={n.t} x={n.x} y={n.y} textAnchor="middle" fill={n.c} fontSize="11" fontWeight="800" letterSpacing="1.5">
+            {n.t}
+          </text>
+        ))}
+        <text x={m.l + 4} y={H - m.b + 15} fill={CREMA} fillOpacity="0.7" fontSize="10">
+          ← Más debilidades
+        </text>
+        <text x={W - m.r - 4} y={H - m.b + 15} textAnchor="end" fill={CREMA} fillOpacity="0.7" fontSize="10">
+          Más fortalezas →
+        </text>
+        <text x={W / 2} y={H - 6} textAnchor="middle" fill={CREMA} fillOpacity="0.6" fontSize="10">
+          Dentro de ti
+        </text>
+        <text x="12" y={cy} fill={CREMA} fillOpacity="0.6" fontSize="10" textAnchor="middle" transform={`rotate(-90 12 ${cy})`}>
+          El entorno
+        </text>
+        <circle cx={px(interno)} cy={py(externo)} r="11" fill="#2E0E1A" stroke={CREMA} strokeWidth="3" />
+        <text x={px(interno)} y={py(externo) + 4} textAnchor="middle" fill={CREMA} fontSize="11" fontWeight="800">
+          Tú
+        </text>
+      </svg>
+      <figcaption className="mt-1 text-center text-xs text-[#F3E7DC]/55">Tu punto sale de los pesos que pusiste. Arriba: el entorno te ayuda. A la derecha: tus fuerzas pesan más que tus debilidades.</figcaption>
+    </figure>
+  )
+}

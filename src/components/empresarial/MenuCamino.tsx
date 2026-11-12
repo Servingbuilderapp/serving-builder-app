@@ -13,7 +13,7 @@ import { createClient } from '@/lib/supabase/client'
 export type EstadoPaso = 'hecho' | 'en_curso' | 'por_hacer' | 'bloqueado' | 'proximamente'
 
 export interface PasoCamino {
-  clave: 'diagnostico' | 'oportunidades' | 'formulacion' | 'mercado' | 'demanda' | 'competencia' | 'tecnico' | 'financiero' | 'documento'
+  clave: 'diagnostico' | 'oportunidades' | 'formulacion' | 'mercado' | 'demanda' | 'competencia' | 'dofa' | 'tecnico' | 'financiero' | 'documento'
   titulo: string
   ayuda: string
   href: string | null
@@ -62,7 +62,7 @@ export async function cargarCamino(proyectoId: string): Promise<DatosCamino | nu
   // Formulación y mercado trabajan sobre el proyecto derivado; si aún no hay uno, se puede entrar igual con este.
   const trabajoId = derivadoId ?? (p.id as string)
   const head = { count: 'exact' as const, head: true }
-  const [sesiones, descubrimiento, oportunidades, formulacion, mercado, demanda, competencia, tecnico, financiero] = await Promise.all([
+  const [sesiones, descubrimiento, oportunidades, formulacion, mercado, demanda, competencia, dofa, tecnico, financiero] = await Promise.all([
     contar(supabase.from('sfpe_diag_sesiones').select('id', head).eq('proyecto_id', origenId).eq('estado', 'completado')),
     contar(supabase.from('sfpe_descubrimiento').select('id', head).eq('proyecto_id', origenId)),
     contar(supabase.from('sfpe_oportunidades').select('id', head).eq('proyecto_id', origenId)),
@@ -70,6 +70,7 @@ export async function cargarCamino(proyectoId: string): Promise<DatosCamino | nu
     contar(supabase.from('sfpe_mercado').select('id', head).eq('proyecto_id', trabajoId)),
     contar(supabase.from('sfpe_mercado_tamano').select('id', head).eq('proyecto_id', trabajoId)),
     contar(supabase.from('sfpe_mercado_precio').select('id', head).eq('proyecto_id', trabajoId)),
+    contar(supabase.from('sfpe_dofa_items').select('id', head).eq('proyecto_id', trabajoId)),
     contar(supabase.from('sfpe_tecnico').select('id', head).eq('proyecto_id', trabajoId)),
     contar(supabase.from('sfpe_financiero').select('id', head).eq('proyecto_id', trabajoId)),
   ])
@@ -117,6 +118,13 @@ export async function cargarCamino(proyectoId: string): Promise<DatosCamino | nu
       ayuda: `Con quién compites, a qué precio y cómo llegas.${aviso}`,
       href: `/empresarial/mercado/competencia?proyecto=${trabajoId}`,
       estado: competencia > 0 ? 'hecho' : 'por_hacer',
+    },
+    {
+      clave: 'dofa',
+      titulo: 'Análisis DOFA',
+      ayuda: `Tus fortalezas, debilidades, oportunidades y amenazas, con gráfico.${aviso}`,
+      href: `/empresarial/dofa?proyecto=${trabajoId}`,
+      estado: dofa > 0 ? 'hecho' : 'por_hacer',
     },
     {
       clave: 'tecnico',
@@ -173,6 +181,7 @@ export function pasoActual(ruta: string): PasoCamino['clave'] | null {
   if (ruta.startsWith('/empresarial/oportunidades')) return 'oportunidades'
   if (ruta.startsWith('/empresarial/formulacion')) return 'formulacion'
   if (ruta.startsWith('/empresarial/documento')) return 'documento'
+  if (ruta.startsWith('/empresarial/dofa')) return 'dofa'
   if (ruta.startsWith('/empresarial/financiero')) return 'financiero'
   if (ruta.startsWith('/empresarial/tecnico')) return 'tecnico'
   if (ruta.startsWith('/empresarial/mercado/competencia')) return 'competencia'
