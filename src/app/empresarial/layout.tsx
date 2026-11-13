@@ -1,5 +1,8 @@
 import React from 'react'
 import { MenuCamino } from '@/components/empresarial/MenuCamino'
+import { GuardaAcceso } from '@/components/empresarial/GuardaAcceso'
+import { createClient } from '@/lib/supabase/server'
+import { asegurarMembresia, calcularAcceso } from '@/lib/empresarial/membresia'
 
 /**
  * Marco común de todas las pantallas de Proyectos Empresariales.
@@ -20,11 +23,22 @@ const COLORES_CAMINO_A = {
   '--color-color-accent-blue': '#4A6FB5',
 } as React.CSSProperties
 
-export default function EmpresarialLayout({ children }: { children: React.ReactNode }) {
+export default async function EmpresarialLayout({ children }: { children: React.ReactNode }) {
+  // Se lee el plan de la persona. Si es la primera vez que entra, aquí empieza a contar su mes.
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  const fila = user ? await asegurarMembresia(user.id) : null
+  const acceso = fila ? calcularAcceso(fila) : null
+
   return (
     <div className="camino-a bg-ca-fondo text-ca-vino lg:flex" style={COLORES_CAMINO_A}>
       <MenuCamino />
-      <div className="min-w-0 flex-1">{children}</div>
+      <div className="min-w-0 flex-1">
+        {acceso && <GuardaAcceso activo={acceso.activo} diasRestantes={acceso.diasRestantes} enPeriodoInicial={acceso.enPeriodoInicial} />}
+        {children}
+      </div>
     </div>
   )
 }

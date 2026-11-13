@@ -366,7 +366,10 @@ function MenuInterno() {
         </summary>
         <div className="px-3 pb-4">
           <ListaPasos pasos={datos.pasos} actual={actual} />
-          <Link href="/empresarial" className="mt-3 block px-3 text-xs underline text-ca-vino/75">
+          <Link href="/empresarial/membresia" className="mt-3 block px-3 text-xs underline text-ca-vino/75">
+            Mi plan
+          </Link>
+          <Link href="/empresarial" className="mt-2 block px-3 text-xs underline text-ca-vino/75">
             Mis proyectos
           </Link>
         </div>
@@ -381,6 +384,9 @@ function MenuInterno() {
         <div className="mt-6 space-y-2 px-3 text-xs">
           <Link href={`/empresarial/camino?proyecto=${proyectoId}`} className="block underline text-ca-vino/80 hover:text-ca-vino-hondo">
             Ver el camino completo
+          </Link>
+          <Link href="/empresarial/membresia" className="block underline text-ca-vino/80 hover:text-ca-vino-hondo">
+            Mi plan
           </Link>
           <Link href="/empresarial" className="block underline text-ca-vino/75 hover:text-ca-vino-hondo">
             Mis proyectos

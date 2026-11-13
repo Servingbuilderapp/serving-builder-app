@@ -4,6 +4,7 @@ import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { verificarFirmaWebhookBold } from '@/lib/bold'
 import { arrancarEstructuracion } from '@/lib/arrancarEstructuracion'
 import { cabecerasInternas } from '@/lib/candadoMotores'
+import { vencimientoTrasPago } from '@/lib/empresarial/membresia'
 
 export const dynamic = 'force-dynamic'
 
@@ -62,13 +63,14 @@ export async function POST(req: Request) {
   // Idempotencia: si Bold reenvía el mismo aviso, no se procesa dos veces en
   // ninguna de las tres tablas.
   if (paymentId) {
-    const [academiaYa, proyectoYa, membresiaYa, abanicoYa] = await Promise.all([
+    const [academiaYa, proyectoYa, membresiaYa, abanicoYa, caminoAYa] = await Promise.all([
       supabaseAdmin.from('academia_compras').select('id').eq('bold_payment_id', paymentId).maybeSingle(),
       supabaseAdmin.from('proyectos_clientes_serving').select('id').eq('bold_payment_id', paymentId).maybeSingle(),
       supabaseAdmin.from('membresias_clientes').select('id').eq('bold_payment_id', paymentId).maybeSingle(),
       supabaseAdmin.from('abanicos').select('id').eq('bold_payment_id', paymentId).maybeSingle(),
+      supabaseAdmin.from('sfpe_membresias').select('id').eq('bold_payment_id', paymentId).maybeSingle(),
     ])
-    if (academiaYa.data || proyectoYa.data || membresiaYa.data || abanicoYa.data) {
+    if (academiaYa.data || proyectoYa.data || membresiaYa.data || abanicoYa.data || caminoAYa.data) {
       return NextResponse.json({ recibido: true, yaProcesado: true })
     }
   }
@@ -169,6 +171,28 @@ export async function POST(req: Request) {
           console.error('Error arrancando la preparación del abanico:', e)
         }
       })
+    }
+    return NextResponse.json({ recibido: true })
+  }
+
+  // 5) Plan mensual del Camino A (Sencillo / Completo): cada pago aprobado suma 30 días de acceso.
+  const { data: planCaminoA } = await supabaseAdmin
+    .from('sfpe_membresias')
+    .select('id, plan_pendiente, acceso_hasta')
+    .eq('bold_order_id', referencia)
+    .maybeSingle()
+
+  if (planCaminoA) {
+    if (planCaminoA.plan_pendiente) {
+      await supabaseAdmin
+        .from('sfpe_membresias')
+        .update({
+          plan: planCaminoA.plan_pendiente,
+          plan_pendiente: null,
+          acceso_hasta: vencimientoTrasPago(planCaminoA.acceso_hasta as string).toISOString(),
+          bold_payment_id: paymentId || null,
+        })
+        .eq('id', planCaminoA.id)
     }
     return NextResponse.json({ recibido: true })
   }
