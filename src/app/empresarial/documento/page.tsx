@@ -712,7 +712,14 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             <p className="text-xs text-[#6B5A4F]">Cuentas hechas con las cifras que escribiste; valen lo que valgan sus fuentes. No son una promesa de resultados.</p>
           </Bloque>
 
-          <Bloque titulo="9. Radar del entorno" href={`/empresarial/entorno${q}`} vacio={llenosEnt.length === 0}>
+          <Bloque
+            id="parte-9"
+            titulo="9. Radar del entorno"
+            href={`/empresarial/entorno${q}`}
+            vacio={llenosEnt.length === 0}
+            intro={PLANTILLAS.entorno}
+            significa={<Significa proyectoId={id} seccion="entorno" texto={textoDe('entorno')} />}
+          >
             {llenosEnt.length > 0 ? (
               <RadarEntorno titulo="Radar del entorno: lo que ayuda y lo que perjudica en cada frente" ejes={radarEntorno(itemsEnt).map((p) => ({ etiqueta: p.titulo, ayuda: p.ayuda, perjudica: p.perjudica }))} />
             ) : null}
@@ -743,7 +750,14 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             ))}
           </Bloque>
 
-          <Bloque titulo="10. Mapa de presiones del sector" href={`/empresarial/presiones${q}`} vacio={llenosPre.length === 0}>
+          <Bloque
+            id="parte-10"
+            titulo="10. Mapa de presiones del sector"
+            href={`/empresarial/presiones${q}`}
+            vacio={llenosPre.length === 0}
+            intro={PLANTILLAS.presiones}
+            significa={<Significa proyectoId={id} seccion="presiones" texto={textoDe('presiones')} />}
+          >
             {llenosPre.length > 0 ? (
               <RadarEntorno titulo="Mapa de presiones: lo que te protege y lo que te presiona en cada frente" etiquetaAyuda="Lo que te protege" etiquetaDano="Lo que te presiona" textoAyuda="a favor" textoDano="de presión" ejes={radarPresiones(itemsPre).map((p) => ({ etiqueta: p.corto, ayuda: p.protege, perjudica: p.presiona }))} />
             ) : null}
@@ -774,7 +788,14 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             ))}
           </Bloque>
 
-          <Bloque titulo="11. Lienzo del modelo de negocio" href={`/empresarial/lienzo${q}`} vacio={llenosLie.length === 0}>
+          <Bloque
+            id="parte-11"
+            titulo="11. Lienzo del modelo de negocio"
+            href={`/empresarial/lienzo${q}`}
+            vacio={llenosLie.length === 0}
+            intro={PLANTILLAS.lienzo}
+            significa={<Significa proyectoId={id} seccion="lienzo" texto={textoDe('lienzo')} />}
+          >
             {BLOQUES.map((b) => {
               const xs = llenosLie.filter((i) => i.bloque === b.clave)
               if (xs.length === 0) return null
@@ -802,7 +823,14 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             ))}
           </Bloque>
 
-          <Bloque titulo="12. Termómetro de riesgos" href={`/empresarial/riesgos${q}`} vacio={riesgosOrd.length === 0}>
+          <Bloque
+            id="parte-12"
+            titulo="12. Termómetro de riesgos"
+            href={`/empresarial/riesgos${q}`}
+            vacio={riesgosOrd.length === 0}
+            intro={PLANTILLAS.riesgos}
+            significa={<Significa proyectoId={id} seccion="riesgos" texto={textoDe('riesgos')} />}
+          >
             <div className="flex flex-wrap gap-2">
               {contarPorNivel(itemsRie).map((c) => (
                 <span key={c.nivel} className="rounded-full px-3 py-1 text-xs font-bold text-white" style={{ backgroundColor: COLOR_NIVEL[c.nivel] }}>

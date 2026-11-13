@@ -6,9 +6,9 @@
  */
 import { REGLAS_SIN_INVENTAR } from '@/lib/empresarial/iaOportunidades'
 
-export type SeccionDocumento = 'proyecto' | 'mercado' | 'demanda' | 'competencia' | 'ikigai' | 'dofa' | 'tecnico' | 'financiero'
+export type SeccionDocumento = 'proyecto' | 'mercado' | 'demanda' | 'competencia' | 'ikigai' | 'dofa' | 'tecnico' | 'financiero' | 'entorno' | 'presiones' | 'lienzo' | 'riesgos'
 
-export const SECCIONES_CON_IA: SeccionDocumento[] = ['proyecto', 'mercado', 'demanda', 'competencia', 'ikigai', 'dofa', 'tecnico', 'financiero']
+export const SECCIONES_CON_IA: SeccionDocumento[] = ['proyecto', 'mercado', 'demanda', 'competencia', 'ikigai', 'dofa', 'tecnico', 'financiero', 'entorno', 'presiones', 'lienzo', 'riesgos']
 
 export const esSeccionDocumento = (x: unknown): x is SeccionDocumento => typeof x === 'string' && (SECCIONES_CON_IA as string[]).includes(x)
 
@@ -53,6 +53,26 @@ export const PLANTILLAS: Record<SeccionDocumento, { que: string; porque: string 
     porque:
       'Muestra si el proyecto se sostiene con sus propias ventas. Las cuentas se hacen con las cifras que escribió la persona, así que valen lo que valgan sus fuentes: por eso cada dato dice si es verificado, estimado o un supuesto por comprobar.',
   },
+  entorno: {
+    que: 'El radar del entorno mira lo que pasa afuera del proyecto y no se puede controlar: política, economía, sociedad, tecnología, ambiente y normas. En cada frente se anota qué ayuda al proyecto y qué lo perjudica, con un peso.',
+    porque:
+      'Muchos proyectos se tuercen por algo de afuera: una norma nueva, una subida de precios, un cambio en los hábitos de la gente. Verlo con tiempo permite aprovechar lo que ayuda y prepararse para lo que perjudica.',
+  },
+  presiones: {
+    que: 'El mapa de presiones revisa cinco fuerzas del sector: la rivalidad entre competidores, los que podrían entrar, los sustitutos, el poder de los clientes y el poder de los proveedores. En cada una se anota qué presiona al proyecto y qué lo protege.',
+    porque:
+      'Muestra qué tan difícil es sostenerse en este sector. Si las presiones superan lo que protege, hay que pensar cómo diferenciarse o cómo reducir la dependencia de ciertos clientes o proveedores.',
+  },
+  lienzo: {
+    que: 'El lienzo del modelo de negocio resume en nueve bloques cómo funciona el proyecto: a quién le sirve, qué ofrece, cómo llega al cliente, cómo gana dinero, con qué recursos y aliados trabaja y qué costos tiene.',
+    porque:
+      'Pone todo el negocio en una sola mirada. Si un bloque queda vacío o no encaja con los demás (por ejemplo, una propuesta que ningún canal alcanza), se nota de inmediato y se puede corregir antes de gastar.',
+  },
+  riesgos: {
+    que: 'El termómetro de riesgos lista lo que podría salir mal. Cada riesgo se califica por qué tan probable es y qué tanto daño haría, y se anota qué se piensa hacer, con qué plan y quién lo vigila.',
+    porque:
+      'Un riesgo conocido se puede manejar; uno ignorado sorprende. Ordenar los riesgos por gravedad permite atender primero los que más pueden dañar el proyecto y dejar constancia de que se pensó en ellos.',
+  },
 }
 
 export const TITULO_SECCION: Record<SeccionDocumento, string> = {
@@ -64,6 +84,10 @@ export const TITULO_SECCION: Record<SeccionDocumento, string> = {
   dofa: 'Análisis DOFA',
   tecnico: 'Estudio técnico',
   financiero: 'Financiero básico',
+  entorno: 'Radar del entorno',
+  presiones: 'Mapa de presiones del sector',
+  lienzo: 'Lienzo del modelo de negocio',
+  riesgos: 'Termómetro de riesgos',
 }
 
 const GUIA: Record<SeccionDocumento, string> = {
@@ -83,6 +107,14 @@ const GUIA: Record<SeccionDocumento, string> = {
     'Explica qué se va a ofrecer, cómo se produce o se presta según los pasos escritos y cuánto tarda, y señala lo que falte (por ejemplo, pasos sin responsable o duración, o especificaciones sin definir). No inventes especificaciones ni tiempos.',
   financiero:
     'Explica qué dicen las cuentas de ESTE proyecto usando solo los números entregados: cuánto cuesta empezar, si el mes cubre sus costos, el punto de equilibrio y la recuperación de la inversión. Señala cuáles cifras son supuestos o estimados por comprobar. No calcules cifras nuevas ni prometas rentabilidad.',
+  entorno:
+    'Explica qué factores externos más ayudan y cuáles más perjudican a ESTE proyecto según los puntos escritos y su peso, y qué frentes quedaron sin mirar. No inventes hechos del entorno.',
+  presiones:
+    'Explica en qué fuerzas del sector el proyecto está más presionado y en cuáles más protegido según los puntos escritos y su peso, y qué frentes quedaron sin mirar. No inventes competidores, clientes ni proveedores.',
+  lienzo:
+    'Explica cómo funciona el negocio según los bloques escritos: a quién le sirve, qué ofrece y cómo gana dinero, y señala bloques vacíos o que no se conectan entre sí. No inventes contenido de los bloques.',
+  riesgos:
+    'Explica cuáles son los riesgos más graves de ESTE proyecto según su calificación, qué piensa hacer la persona frente a ellos y cuáles quedaron sin plan o sin responsable. No inventes riesgos ni calificaciones nuevas.',
 }
 
 const linea = (x: unknown) => (x === null || x === undefined ? '' : String(x).replace(/\s+/g, ' ').trim())

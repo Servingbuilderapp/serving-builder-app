@@ -10,6 +10,11 @@ import { ESTADOS_SOLUCION, TIPOS_SOLUCION, formatoMinutos, tiempoTotalMin } from
 import { etiquetaDe } from '@/lib/empresarial/mercado'
 import { calcular, formatoMeses, financieroVacio, type ItemFinanciero, type TipoItem } from '@/lib/empresarial/financiero'
 
+import { FACTORES as FACTORES_ENTORNO } from '@/lib/empresarial/entorno'
+import { FACTORES as FACTORES_PRESION } from '@/lib/empresarial/presiones'
+import { BLOQUES } from '@/lib/empresarial/lienzo'
+import { etiquetaRespuesta, ordenarRiesgos, tituloCategoria, type ItemRiesgo } from '@/lib/empresarial/riesgos'
+
 export const maxDuration = 120
 
 const TOPE_POR_MODELO_MS = 35000
@@ -178,6 +183,62 @@ async function datosDeSeccion(supabase: Cliente, proyectoId: string, seccion: Se
       ['Lectura de la posición', lectura ? `${lectura.nombre}: ${lectura.texto}` : ''],
       ...CRUCES.map((c) => [`Estrategias para ${c.titulo.toLowerCase()}`, deCuadrante(c.clave)] as [string, unknown]),
     ]) || null
+  }
+  if (seccion === 'entorno' || seccion === 'presiones') {
+    const tabla = seccion === 'entorno' ? 'sfpe_entorno_items' : 'sfpe_presiones_items'
+    const frentes = seccion === 'entorno' ? FACTORES_ENTORNO : FACTORES_PRESION
+    const etiquetaEfecto = (e: unknown) => (e === 'ayuda' ? 'ayuda' : e === 'perjudica' ? 'perjudica' : e === 'protege' ? 'protege' : 'presiona')
+    const { data: items } = await supabase.from(tabla).select('factor, texto, efecto, peso, condicion').eq('proyecto_id', proyectoId).order('orden', { ascending: true })
+    const llenos = (items ?? []).filter((x) => String(x.texto ?? '').trim())
+    if (llenos.length === 0) return null
+    return (
+      textoDatos(
+        frentes.map((fa) => [
+          fa.titulo,
+          llenos.filter((x) => x.factor === fa.clave).map((x) => `${String(x.texto).trim()} (${etiquetaEfecto(x.efecto)}, peso ${x.peso ?? 3}, ${x.condicion})`),
+        ]),
+      ) || null
+    )
+  }
+  if (seccion === 'lienzo') {
+    const { data: items } = await supabase.from('sfpe_lienzo_items').select('bloque, texto, condicion').eq('proyecto_id', proyectoId).order('orden', { ascending: true })
+    const llenos = (items ?? []).filter((x) => String(x.texto ?? '').trim())
+    if (llenos.length === 0) return null
+    return (
+      textoDatos(BLOQUES.map((b) => [b.titulo, llenos.filter((x) => x.bloque === b.clave).map((x) => `${String(x.texto).trim()} (${x.condicion})`)])) || null
+    )
+  }
+  if (seccion === 'riesgos') {
+    const { data: items } = await supabase
+      .from('sfpe_riesgos_items')
+      .select('categoria, texto, probabilidad, impacto, respuesta, plan, responsable, condicion')
+      .eq('proyecto_id', proyectoId)
+      .order('orden', { ascending: true })
+    const itemsRie: ItemRiesgo[] = (items ?? []).map((x, i) => ({
+      id: String(i),
+      categoria: x.categoria,
+      texto: String(x.texto ?? '').trim(),
+      probabilidad: String(x.probabilidad ?? 3),
+      impacto: String(x.impacto ?? 3),
+      respuesta: x.respuesta ?? '',
+      plan: String(x.plan ?? '').trim(),
+      responsable: String(x.responsable ?? '').trim(),
+      fuente: '',
+      condicion: x.condicion,
+    }))
+    const ord = ordenarRiesgos(itemsRie)
+    if (ord.length === 0) return null
+    const txt = ord.map((x) =>
+      [
+        `${x.numero}. ${x.item.texto} (${tituloCategoria(x.item.categoria)}; nivel ${x.nivel}, ${x.puntaje} de 25)`,
+        x.item.respuesta && `piensa: ${etiquetaRespuesta(x.item.respuesta)}`,
+        x.item.plan ? `plan: ${x.item.plan}` : 'sin plan',
+        x.item.responsable ? `responsable: ${x.item.responsable}` : 'sin responsable',
+      ]
+        .filter(Boolean)
+        .join(' — '),
+    )
+    return textoDatos([['Riesgos de mayor a menor gravedad', txt]]) || null
   }
   if (seccion === 'tecnico') {
     const [{ data: te }, { data: specs }, { data: pasos }] = await Promise.all([
