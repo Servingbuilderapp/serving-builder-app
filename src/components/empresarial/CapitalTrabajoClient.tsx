@@ -167,8 +167,8 @@ export function CapitalTrabajoClient({ proyecto, inicial, yaGuardado, copiadoDeF
             {guardando ? 'Guardando…' : 'Guardar capital de trabajo'}
           </button>
           {guardado && !sucio && (
-            <Link href={`/empresarial/riesgos?proyecto=${proyecto.id}`} className={BOTON_SUAVE}>
-              Seguir: Termómetro de Riesgos
+            <Link href={`/empresarial/calculadoras/costo-cliente?proyecto=${proyecto.id}`} className={BOTON_SUAVE}>
+              Seguir: Costo por cliente
             </Link>
           )}
           {sucio && !guardando && <span className="text-sm text-ca-oro-texto">Tienes cambios sin guardar.</span>}

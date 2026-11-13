@@ -82,7 +82,7 @@ export function Cifra({ etiqueta, valor, fuerte }: { etiqueta: string; valor: st
 }
 
 /** Barras del saldo de caja mes a mes. Arriba de la línea = hay dinero; abajo, en rojo = falta. */
-export function BarrasSaldo({ saldos, titulo }: { saldos: number[]; titulo: string }) {
+export function BarrasSaldo({ saldos, titulo, primero = 1, unidad = 'mes' }: { saldos: number[]; titulo: string; primero?: number; unidad?: string }) {
   const max = Math.max(1, ...saldos.map((s) => Math.abs(s)))
   const hasta = Math.max(...saldos, 0)
   const desde = Math.min(...saldos, 0)
@@ -93,7 +93,7 @@ export function BarrasSaldo({ saldos, titulo }: { saldos: number[]; titulo: stri
   const paso = ancho / saldos.length
   return (
     <figure>
-      <svg viewBox={`0 0 ${ancho} ${alto + 44}`} role="img" aria-label={titulo} className="w-full">
+      <svg viewBox={`0 0 ${ancho} ${alto + 60}`} role="img" aria-label={titulo} className="w-full">
         <line x1="0" x2={ancho} y1={ceroY} y2={ceroY} stroke="#54142B" strokeOpacity="0.5" />
         {saldos.map((s, i) => {
           const h = (Math.abs(s) / rango) * alto
@@ -101,8 +101,8 @@ export function BarrasSaldo({ saldos, titulo }: { saldos: number[]; titulo: stri
           return (
             <g key={i}>
               <rect x={i * paso + 6} y={y} width={paso - 12} height={Math.max(1, h)} rx="3" fill={s >= 0 ? '#B08D57' : '#B3261E'} />
-              <text x={i * paso + paso / 2} y={alto + 30} textAnchor="middle" fontSize="12" fill="#54142B">
-                {i + 1}
+              <text x={i * paso + paso / 2} y={alto + 46} textAnchor="middle" fontSize="12" fill="#54142B">
+                {i + primero}
               </text>
               {max > 0 && (
                 <text x={i * paso + paso / 2} y={s >= 0 ? y - 3 : y + h + 12} textAnchor="middle" fontSize="9" fill="#54142B">
@@ -113,7 +113,7 @@ export function BarrasSaldo({ saldos, titulo }: { saldos: number[]; titulo: stri
           )
         })}
       </svg>
-      <figcaption className="text-center text-xs text-ca-vino/75">{titulo} (número de mes abajo)</figcaption>
+      <figcaption className="text-center text-xs text-ca-vino/75">{titulo} (número de {unidad} abajo)</figcaption>
     </figure>
   )
 }
