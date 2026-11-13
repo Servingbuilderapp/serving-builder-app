@@ -13,7 +13,7 @@ import { createClient } from '@/lib/supabase/client'
 export type EstadoPaso = 'hecho' | 'en_curso' | 'por_hacer' | 'bloqueado' | 'proximamente'
 
 export interface PasoCamino {
-  clave: 'diagnostico' | 'ideas' | 'oportunidades' | 'ikigai' | 'formulacion' | 'mercado' | 'demanda' | 'competencia' | 'entorno' | 'presiones' | 'dofa' | 'lienzo' | 'tecnico' | 'financiero' | 'riesgos' | 'documento'
+  clave: 'diagnostico' | 'ideas' | 'oportunidades' | 'ikigai' | 'formulacion' | 'mercado' | 'demanda' | 'competencia' | 'entorno' | 'presiones' | 'dofa' | 'lienzo' | 'tecnico' | 'financiero' | 'flujocaja' | 'capitaltrabajo' | 'riesgos' | 'documento'
   titulo: string
   ayuda: string
   href: string | null
@@ -62,7 +62,7 @@ export async function cargarCamino(proyectoId: string): Promise<DatosCamino | nu
   // Formulación y mercado trabajan sobre el proyecto derivado; si aún no hay uno, se puede entrar igual con este.
   const trabajoId = derivadoId ?? (p.id as string)
   const head = { count: 'exact' as const, head: true }
-  const [sesiones, descubrimiento, oportunidades, ikigai, formulacion, mercado, demanda, competencia, entorno, presiones, dofa, lienzo, tecnico, financiero, riesgos] = await Promise.all([
+  const [sesiones, descubrimiento, oportunidades, ikigai, formulacion, mercado, demanda, competencia, entorno, presiones, dofa, lienzo, tecnico, financiero, flujocaja, capitaltrabajo, riesgos] = await Promise.all([
     contar(supabase.from('sfpe_diag_sesiones').select('id', head).eq('proyecto_id', origenId).eq('estado', 'completado')),
     contar(supabase.from('sfpe_descubrimiento').select('id', head).eq('proyecto_id', origenId)),
     contar(supabase.from('sfpe_oportunidades').select('id', head).eq('proyecto_id', origenId)),
@@ -77,6 +77,8 @@ export async function cargarCamino(proyectoId: string): Promise<DatosCamino | nu
     contar(supabase.from('sfpe_lienzo_items').select('id', head).eq('proyecto_id', trabajoId)),
     contar(supabase.from('sfpe_tecnico').select('id', head).eq('proyecto_id', trabajoId)),
     contar(supabase.from('sfpe_financiero').select('id', head).eq('proyecto_id', trabajoId)),
+    contar(supabase.from('sfpe_calculadoras').select('id', head).eq('proyecto_id', trabajoId).eq('tipo', 'flujo_caja')),
+    contar(supabase.from('sfpe_calculadoras').select('id', head).eq('proyecto_id', trabajoId).eq('tipo', 'capital_trabajo')),
     contar(supabase.from('sfpe_riesgos_items').select('id', head).eq('proyecto_id', trabajoId)),
   ])
 
@@ -181,6 +183,20 @@ export async function cargarCamino(proyectoId: string): Promise<DatosCamino | nu
       estado: financiero > 0 ? 'hecho' : 'por_hacer',
     },
     {
+      clave: 'flujocaja',
+      titulo: 'Flujo de caja a 12 meses',
+      ayuda: `En qué mes te quedas sin plata.${aviso}`,
+      href: `/empresarial/calculadoras/flujo-caja?proyecto=${trabajoId}`,
+      estado: flujocaja > 0 ? 'hecho' : 'por_hacer',
+    },
+    {
+      clave: 'capitaltrabajo',
+      titulo: 'Capital de trabajo',
+      ayuda: `La plata necesaria antes de que las ventas te sostengan.${aviso}`,
+      href: `/empresarial/calculadoras/capital-trabajo?proyecto=${trabajoId}`,
+      estado: capitaltrabajo > 0 ? 'hecho' : 'por_hacer',
+    },
+    {
       clave: 'riesgos',
       titulo: 'Termómetro de Riesgos',
       ayuda: `Qué podría salir mal, qué tan grave sería y qué harás.${aviso}`,
@@ -236,6 +252,8 @@ export function pasoActual(ruta: string): PasoCamino['clave'] | null {
   if (ruta.startsWith('/empresarial/ikigai')) return 'ikigai'
   if (ruta.startsWith('/empresarial/ideas') || ruta.startsWith('/ideas')) return 'ideas'
   if (ruta.startsWith('/empresarial/financiero')) return 'financiero'
+  if (ruta.startsWith('/empresarial/calculadoras/flujo-caja')) return 'flujocaja'
+  if (ruta.startsWith('/empresarial/calculadoras/capital-trabajo')) return 'capitaltrabajo'
   if (ruta.startsWith('/empresarial/tecnico')) return 'tecnico'
   if (ruta.startsWith('/empresarial/mercado/competencia')) return 'competencia'
   if (ruta.startsWith('/empresarial/mercado/demanda')) return 'demanda'

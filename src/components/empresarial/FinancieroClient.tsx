@@ -462,8 +462,8 @@ export function FinancieroClient({ proyecto, inicial, itemsIniciales, yaGuardado
             {guardando ? 'Guardando…' : 'Guardar financiero básico'}
           </button>
           {guardado && !sucio && (
-            <Link href={`/empresarial/riesgos?proyecto=${proyecto.id}`} className={botonSuave}>
-              Seguir: Termómetro de Riesgos
+            <Link href={`/empresarial/calculadoras/flujo-caja?proyecto=${proyecto.id}`} className={botonSuave}>
+              Seguir: Flujo de caja
             </Link>
           )}
           {sucio && !guardando && <span className="text-sm text-ca-oro-texto">Tienes cambios sin guardar.</span>}
