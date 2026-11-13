@@ -6,9 +6,9 @@
  */
 import { REGLAS_SIN_INVENTAR } from '@/lib/empresarial/iaOportunidades'
 
-export type SeccionDocumento = 'proyecto' | 'mercado' | 'demanda' | 'competencia' | 'ikigai'
+export type SeccionDocumento = 'proyecto' | 'mercado' | 'demanda' | 'competencia' | 'ikigai' | 'dofa' | 'tecnico' | 'financiero'
 
-export const SECCIONES_CON_IA: SeccionDocumento[] = ['proyecto', 'mercado', 'demanda', 'competencia', 'ikigai']
+export const SECCIONES_CON_IA: SeccionDocumento[] = ['proyecto', 'mercado', 'demanda', 'competencia', 'ikigai', 'dofa', 'tecnico', 'financiero']
 
 export const esSeccionDocumento = (x: unknown): x is SeccionDocumento => typeof x === 'string' && (SECCIONES_CON_IA as string[]).includes(x)
 
@@ -38,6 +38,21 @@ export const PLANTILLAS: Record<SeccionDocumento, { que: string; porque: string 
     porque:
       'Muestra dónde el proyecto es fuerte y dónde le falta algo. Una idea que gusta y se sabe hacer pero nadie paga es un pasatiempo; una que pagan pero no se sabe hacer es un riesgo. Verlo claro ayuda a decidir qué ofrecer primero.',
   },
+  dofa: {
+    que: 'El DOFA ordena en cuatro cuadros lo propio del proyecto (Debilidades y Fortalezas) y lo de afuera (Amenazas y Oportunidades). Después cruza los cuadros para proponer estrategias: aprovechar lo que se tiene, corregir lo que falta y protegerse de lo que viene.',
+    porque:
+      'Obliga a mirar con honestidad dónde el proyecto es fuerte y dónde es vulnerable, antes de gastar dinero. Cada punto lleva un peso, así se ve cuáles pesan más. Las estrategias que salen del cruce son un buen punto de partida para el plan de trabajo.',
+  },
+  tecnico: {
+    que: 'Esta parte describe qué se va a ofrecer, con qué características y cómo se produce o se presta, paso a paso. Dice también cuánto tiempo toma cada paso y quién lo hace.',
+    porque:
+      'Un proyecto se puede cumplir solo si de verdad se sabe cómo hacerlo. Poner por escrito las especificaciones y los pasos permite calcular tiempos y costos reales, y descubrir a tiempo lo que todavía no se sabe resolver.',
+  },
+  financiero: {
+    que: 'Esta parte junta las cuentas básicas del proyecto: cuánto cuesta empezar (inversión), cuánto cuesta funcionar cada mes (costos fijos y por unidad), cuánto se vendería y cuánto quedaría de utilidad. También calcula el punto de equilibrio y en cuánto tiempo se recuperaría la inversión.',
+    porque:
+      'Muestra si el proyecto se sostiene con sus propias ventas. Las cuentas se hacen con las cifras que escribió la persona, así que valen lo que valgan sus fuentes: por eso cada dato dice si es verificado, estimado o un supuesto por comprobar.',
+  },
 }
 
 export const TITULO_SECCION: Record<SeccionDocumento, string> = {
@@ -46,6 +61,9 @@ export const TITULO_SECCION: Record<SeccionDocumento, string> = {
   demanda: 'Tamaño y demanda',
   competencia: 'Competencia, precio y canales',
   ikigai: 'Ikigai del proyecto',
+  dofa: 'Análisis DOFA',
+  tecnico: 'Estudio técnico',
+  financiero: 'Financiero básico',
 }
 
 const GUIA: Record<SeccionDocumento, string> = {
@@ -59,6 +77,12 @@ const GUIA: Record<SeccionDocumento, string> = {
     'Explica cómo se compara el precio del proyecto con el de los competidores listados, en qué parece distinto o más débil, y qué dicen los canales sobre cómo llegar al cliente. Señala lo que falte (por ejemplo, competidores sin fuente o canales sin costo). No inventes competidores ni precios.',
   ikigai:
     'Explica qué ideas del proyecto cumplen las cuatro preguntas y cuáles solo algunas, y qué sugiere eso sobre qué ofrecer primero o qué reforzar. No inventes ideas nuevas.',
+  dofa:
+    'Explica qué dicen los cuatro cuadros del DOFA de ESTE proyecto: dónde está más fuerte (lo propio o lo de afuera), qué debilidades o amenazas pesan más según el peso dado, y qué estrategias de las escritas convendría atender primero. No inventes puntos ni estrategias nuevas.',
+  tecnico:
+    'Explica qué se va a ofrecer, cómo se produce o se presta según los pasos escritos y cuánto tarda, y señala lo que falte (por ejemplo, pasos sin responsable o duración, o especificaciones sin definir). No inventes especificaciones ni tiempos.',
+  financiero:
+    'Explica qué dicen las cuentas de ESTE proyecto usando solo los números entregados: cuánto cuesta empezar, si el mes cubre sus costos, el punto de equilibrio y la recuperación de la inversión. Señala cuáles cifras son supuestos o estimados por comprobar. No calcules cifras nuevas ni prometas rentabilidad.',
 }
 
 const linea = (x: unknown) => (x === null || x === undefined ? '' : String(x).replace(/\s+/g, ' ').trim())

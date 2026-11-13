@@ -5,6 +5,11 @@ import { callGemini } from '@/lib/gemini'
 import { LIMITE_DIARIO_IA } from '@/lib/empresarial/iaOportunidades'
 import { armarPromptDocumento, esSeccionDocumento, limpiarTextoIA, textoDatos, type SeccionDocumento } from '@/lib/empresarial/documentoTextos'
 
+import { CRUCES, GUIAS, calcularBalance, lecturaPosicion, type ItemDofa } from '@/lib/empresarial/dofa'
+import { ESTADOS_SOLUCION, TIPOS_SOLUCION, formatoMinutos, tiempoTotalMin } from '@/lib/empresarial/tecnico'
+import { etiquetaDe } from '@/lib/empresarial/mercado'
+import { calcular, formatoMeses, financieroVacio, type ItemFinanciero, type TipoItem } from '@/lib/empresarial/financiero'
+
 export const maxDuration = 120
 
 const TOPE_POR_MODELO_MS = 35000
@@ -153,6 +158,91 @@ async function datosDeSeccion(supabase: Cliente, proyectoId: string, seccion: Se
         return `${x.texto} — cumple: ${si.length ? si.join(', ') : 'ninguna de las cuatro'} (${x.condicion})`
       })
     return textoDatos([['Ideas del proyecto y qué preguntas cumplen', txt]]) || null
+  }
+  if (seccion === 'dofa') {
+    const { data: items } = await supabase.from('sfpe_dofa_items').select('cuadrante, texto, impacto, fuente, condicion').eq('proyecto_id', proyectoId).order('orden', { ascending: true })
+    const llenos = (items ?? []).filter((x) => String(x.texto ?? '').trim())
+    if (llenos.length === 0) return null
+    const itemsDofa: ItemDofa[] = llenos.map((x, i) => ({
+      id: String(i),
+      cuadrante: x.cuadrante,
+      texto: String(x.texto).trim(),
+      impacto: String(x.impacto ?? '3'),
+      fuente: String(x.fuente ?? ''),
+      condicion: x.condicion,
+    }))
+    const deCuadrante = (c: string) => itemsDofa.filter((x) => x.cuadrante === c).map((x) => `${x.texto} (peso ${x.impacto}, ${x.condicion})`)
+    const lectura = lecturaPosicion(calcularBalance(itemsDofa))
+    return textoDatos([
+      ...GUIAS.map((g) => [g.titulo, deCuadrante(g.clave)] as [string, unknown]),
+      ['Lectura de la posición', lectura ? `${lectura.nombre}: ${lectura.texto}` : ''],
+      ...CRUCES.map((c) => [`Estrategias para ${c.titulo.toLowerCase()}`, deCuadrante(c.clave)] as [string, unknown]),
+    ]) || null
+  }
+  if (seccion === 'tecnico') {
+    const [{ data: te }, { data: specs }, { data: pasos }] = await Promise.all([
+      supabase.from('sfpe_tecnico').select('*').eq('proyecto_id', proyectoId).maybeSingle(),
+      supabase.from('sfpe_tecnico_specs').select('caracteristica, especificacion, unidad, condicion').eq('proyecto_id', proyectoId),
+      supabase.from('sfpe_tecnico_pasos').select('nombre, responsable, duracion_min, recursos, condicion').eq('proyecto_id', proyectoId),
+    ])
+    if (!te) return null
+    const specsTxt = (specs ?? []).map((x) => `${x.caracteristica}: ${x.especificacion}${x.unidad ? ` ${x.unidad}` : ''} (${x.condicion})`)
+    const pasosTxt = (pasos ?? []).map((x) =>
+      [x.nombre, x.responsable && `responsable: ${x.responsable}`, x.duracion_min != null && `duración ${formatoMinutos(Number(x.duracion_min))}`, x.recursos && `recursos: ${x.recursos}`].filter(Boolean).join(' — '),
+    )
+    const tiempo = tiempoTotalMin((pasos ?? []).map((x) => ({ ...x, duracion_min: String(x.duracion_min ?? '') })) as never)
+    return (
+      textoDatos([
+        ['Solución', te.nombre_solucion],
+        ['Tipo', etiquetaDe(TIPOS_SOLUCION, String(te.tipo_solucion ?? ''))],
+        ['Se vende por', te.unidad_comercializacion],
+        ['Estado', etiquetaDe(ESTADOS_SOLUCION, String(te.estado_solucion ?? ''))],
+        ['Descripción', te.descripcion],
+        ['Calidad esperada', te.calidad_esperada],
+        ['Restricciones', te.restricciones],
+        ['Especificaciones', specsTxt],
+        ['Pasos para producir o prestar', pasosTxt],
+        ['Tiempo total por unidad', tiempo > 0 ? formatoMinutos(tiempo) : ''],
+      ]) || null
+    )
+  }
+  if (seccion === 'financiero') {
+    const [{ data: fi }, { data: filas }] = await Promise.all([
+      supabase.from('sfpe_financiero').select('*').eq('proyecto_id', proyectoId).maybeSingle(),
+      supabase.from('sfpe_financiero_items').select('tipo, concepto, categoria, valor, fuente, condicion').eq('proyecto_id', proyectoId).order('orden', { ascending: true }),
+    ])
+    if (!fi) return null
+    const s = (x: unknown) => (x === null || x === undefined ? '' : String(x).trim())
+    const itemsFin: ItemFinanciero[] = (filas ?? []).map((x, i) => ({
+      id: String(i),
+      tipo: x.tipo as TipoItem,
+      concepto: s(x.concepto),
+      categoria: s(x.categoria),
+      valor: s(x.valor),
+      fuente: s(x.fuente),
+      condicion: x.condicion,
+    }))
+    const r = calcular(
+      { ...financieroVacio(), precio_unitario: s(fi.precio_unitario), costo_variable_unitario: s(fi.costo_variable_unitario), unidades_mes: s(fi.unidades_mes), aporte_propio: s(fi.aporte_propio) },
+      itemsFin,
+    )
+    const detalle = (tipo: string) => itemsFin.filter((x) => x.tipo === tipo && x.concepto).map((x) => `${x.concepto}: ${x.valor} (${x.condicion})`)
+    return (
+      textoDatos([
+        ['Precio por unidad', fi.precio_unitario],
+        ['Costo por unidad', fi.costo_variable_unitario],
+        ['Unidades por mes', fi.unidades_mes ? `${fi.unidades_mes}${fi.unidades_condicion ? ` (${fi.unidades_condicion})` : ''}` : ''],
+        ['Aporte propio', fi.aporte_propio],
+        ['Inversión inicial total', r.inversion],
+        ['Detalle de la inversión', detalle('inversion')],
+        ['Costos fijos por mes', r.fijosMes],
+        ['Detalle de costos fijos', detalle('costo_fijo')],
+        ['Ingresos por mes', r.ingresosMes],
+        ['Utilidad por mes', r.utilidadMes],
+        ['Punto de equilibrio (unidades al mes)', r.equilibrioUnidades === null ? '' : Math.ceil(r.equilibrioUnidades)],
+        ['Recuperación de la inversión', formatoMeses(r.mesesRecuperacion)],
+      ]) || null
+    )
   }
   const { data: m } = await supabase.from('sfpe_mercado').select('*').eq('proyecto_id', proyectoId).maybeSingle()
   if (!m) return null

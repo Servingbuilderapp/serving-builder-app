@@ -581,7 +581,14 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             <p className="text-xs text-[#6B5A4F]">Preguntas: {PREGUNTAS.map((p) => p.titulo).join(' · ')}. Ideas por zona: {Object.entries(conteoPorRegion(itemsIki)).length}.</p>
           </Bloque>
 
-          <Bloque titulo="6. Análisis DOFA" href={`/empresarial/dofa${q}`} vacio={itemsDofa.length === 0}>
+          <Bloque
+            id="parte-6"
+            titulo="6. Análisis DOFA"
+            href={`/empresarial/dofa${q}`}
+            vacio={itemsDofa.length === 0}
+            intro={PLANTILLAS.dofa}
+            significa={<Significa proyectoId={id} seccion="dofa" texto={textoDe('dofa')} />}
+          >
             {GUIAS.map((g) => {
               const xs = itemsDofa.filter((i) => i.cuadrante === g.clave && i.texto)
               if (xs.length === 0) return null
@@ -619,7 +626,14 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             })}
           </Bloque>
 
-          <Bloque titulo="7. Estudio técnico" href={`/empresarial/tecnico${q}`} vacio={!te}>
+          <Bloque
+            id="parte-7"
+            titulo="7. Estudio técnico"
+            href={`/empresarial/tecnico${q}`}
+            vacio={!te}
+            intro={PLANTILLAS.tecnico}
+            significa={<Significa proyectoId={id} seccion="tecnico" texto={textoDe('tecnico')} />}
+          >
             <Tabla
               filas={[
                 { dato: 'Solución', valor: s(te?.nombre_solucion) },
@@ -660,7 +674,14 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             )}
           </Bloque>
 
-          <Bloque titulo="8. Financiero básico" href={`/empresarial/financiero${q}`} vacio={!fi}>
+          <Bloque
+            id="parte-8"
+            titulo="8. Financiero básico"
+            href={`/empresarial/financiero${q}`}
+            vacio={!fi}
+            intro={PLANTILLAS.financiero}
+            significa={<Significa proyectoId={id} seccion="financiero" texto={textoDe('financiero')} />}
+          >
             {r && (
               <Tabla
                 filas={[
