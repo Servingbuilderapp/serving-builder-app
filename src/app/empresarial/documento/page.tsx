@@ -14,6 +14,8 @@ import { calcular, formatoMeses, financieroVacio, type ItemFinanciero, type Tipo
 import { FACTORES as FACTORES_ENTORNO, calcularRadar as radarEntorno, lecturaRadar as lecturaEntorno, type ItemEntorno } from '@/lib/empresarial/entorno'
 import { FACTORES as FACTORES_PRESION, calcularRadar as radarPresiones, lecturaRadar as lecturaPresiones, type ItemPresion } from '@/lib/empresarial/presiones'
 import { RadarEntorno } from '@/components/empresarial/Graficos'
+import { TextoProyectoIA } from '@/components/empresarial/TextoProyectoIA'
+import { PLANTILLAS } from '@/lib/empresarial/documentoTextos'
 import { MapaCalor } from '@/components/empresarial/RiesgosClient'
 import { BLOQUES, lecturaLienzo, type ItemLienzo } from '@/lib/empresarial/lienzo'
 import {
@@ -48,9 +50,25 @@ const mensaje = (titulo: string, texto: string) => (
 
 type Fila = { dato: string; valor: string; cond?: string }
 
-function Bloque({ titulo, href, vacio, children }: { titulo: string; href: string; vacio: boolean; children?: React.ReactNode }) {
+function Bloque({
+  titulo,
+  href,
+  vacio,
+  children,
+  id,
+  intro,
+  significa,
+}: {
+  titulo: string
+  href: string
+  vacio: boolean
+  children?: React.ReactNode
+  id?: string
+  intro?: { que: string; porque: string }
+  significa?: React.ReactNode
+}) {
   return (
-    <section className="mt-8 break-inside-avoid-page">
+    <section id={id} className="mt-8 print:break-before-page">
       <h2 className="border-b-2 border-ca-oro pb-1 text-xl font-extrabold text-ca-vino">{titulo}</h2>
       {vacio ? (
         <p className="mt-3 text-sm text-[#6B5A4F]">
@@ -60,9 +78,39 @@ function Bloque({ titulo, href, vacio, children }: { titulo: string; href: strin
           </Link>
         </p>
       ) : (
-        <div className="mt-3 space-y-3 text-[15px] leading-relaxed">{children}</div>
+        <div className="mt-3 space-y-3 text-[15px] leading-relaxed">
+          {intro ? (
+            <div className="space-y-2 rounded-lg bg-ca-suave/40 p-4">
+              <p>
+                <span className="font-bold text-ca-vino">Qué es esta parte. </span>
+                {intro.que}
+              </p>
+              <p>
+                <span className="font-bold text-ca-vino">Por qué importa. </span>
+                {intro.porque}
+              </p>
+            </div>
+          ) : null}
+          {children}
+          {significa}
+        </div>
       )}
     </section>
+  )
+}
+
+/** Cierre de una sección: lo que la IA escribió sobre ESTE proyecto, o el botón para pedirlo. */
+function Significa({ proyectoId, seccion, texto }: { proyectoId: string; seccion: string; texto: string }) {
+  return (
+    <div className="border-l-4 border-ca-oro pl-4">
+      <div className="text-xs font-bold uppercase tracking-wider text-ca-oro-texto">
+        Qué significa en tu proyecto <span className="ml-2 font-normal normal-case tracking-normal text-[#6B5A4F]">(redactado por IA con lo que escribiste; revísalo)</span>
+      </div>
+      {texto ? <p className="mt-1 whitespace-pre-line">{texto}</p> : <p className="mt-1 text-sm text-[#6B5A4F] print:hidden">Todavía no se ha redactado.</p>}
+      <div className="mt-2">
+        <TextoProyectoIA proyectoId={proyectoId} seccion={seccion} hayTexto={Boolean(texto)} />
+      </div>
+    </div>
   )
 }
 
@@ -136,6 +184,9 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
     supabase.from('sfpe_lienzo_items').select('bloque, texto, fuente, condicion').eq('proyecto_id', id).order('orden', { ascending: true }),
     supabase.from('sfpe_riesgos_items').select('categoria, texto, probabilidad, impacto, respuesta, plan, responsable, fuente, condicion').eq('proyecto_id', id).order('orden', { ascending: true }),
   ])
+  // Textos que la IA ya redactó y quedaron guardados (si la tabla aún no existe, queda vacío).
+  const { data: textosQ } = await supabase.from('sfpe_documento_textos').select('seccion, texto').eq('proyecto_id', id)
+  const textoDe = (seccion: string) => s((textosQ ?? []).find((x) => x.seccion === seccion)?.texto)
   const itemsEnt: ItemEntorno[] = (entQ.data ?? []).map((x, i) => ({
     id: String(i),
     factor: x.factor,
@@ -279,6 +330,20 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
     { etiqueta: 'Utilidad por mes', valor: r.utilidadMes ?? 0, destacada: true },
   ] : []
   const hoy = new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' })
+  const indice: { n: number; titulo: string; hecho: boolean }[] = [
+    { n: 1, titulo: 'El proyecto', hecho: Boolean(f) },
+    { n: 2, titulo: 'El mercado', hecho: Boolean(m) },
+    { n: 3, titulo: 'Tamaño y demanda', hecho: Boolean(t) },
+    { n: 4, titulo: 'Competencia, precio y canales', hecho: Boolean(p) || (comps.data ?? []).length > 0 || (canales.data ?? []).length > 0 },
+    { n: 5, titulo: 'Ikigai del proyecto', hecho: itemsIki.length > 0 },
+    { n: 6, titulo: 'Análisis DOFA', hecho: itemsDofa.length > 0 },
+    { n: 7, titulo: 'Estudio técnico', hecho: Boolean(te) },
+    { n: 8, titulo: 'Financiero básico', hecho: Boolean(fi) },
+    { n: 9, titulo: 'Radar del entorno', hecho: llenosEnt.length > 0 },
+    { n: 10, titulo: 'Mapa de presiones del sector', hecho: llenosPre.length > 0 },
+    { n: 11, titulo: 'Lienzo del modelo de negocio', hecho: llenosLie.length > 0 },
+    { n: 12, titulo: 'Termómetro de riesgos', hecho: riesgosOrd.length > 0 },
+  ]
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-ca-tarjeta via-ca-fondo to-ca-suave text-ca-vino print:bg-white">
@@ -289,7 +354,7 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
           </Link>
           <h1 className="mt-6 text-3xl lg:text-4xl font-extrabold">Tu documento final</h1>
           <p className="mt-3 text-ca-vino/80 leading-relaxed">
-            Aquí se reúne, en una sola hoja, todo lo que escribiste en cada paso. No se agrega nada nuevo: si algo falta, aparece marcado para que lo completes.
+            Aquí se reúne todo lo que escribiste en cada paso, con una explicación de cada tema. Tus datos no se cambian: si algo falta, aparece marcado para que lo completes.
           </p>
           <div className="mt-5 mb-6">
             <BotonImprimir />
@@ -302,6 +367,20 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
           <p className="mt-1 text-sm text-[#6B5A4F]">
             {s(proyecto.pais) ? `${s(proyecto.pais)} · ` : ''}Generado el {hoy}
           </p>
+
+          <section className="mt-8">
+            <h2 className="border-b-2 border-ca-oro pb-1 text-xl font-extrabold text-ca-vino">Contenido</h2>
+            <ol className="mt-3 grid gap-x-8 gap-y-1 text-[15px] sm:grid-cols-2">
+              {indice.map((x) => (
+                <li key={x.n} className="flex items-baseline justify-between gap-3 border-b border-[#E7DCCB] py-1">
+                  <span>
+                    {x.n}. {x.titulo}
+                  </span>
+                  <span className={`text-xs ${x.hecho ? 'text-ca-oro-texto' : 'text-[#6B5A4F]'}`}>{x.hecho ? 'Completa' : 'Pendiente'}</span>
+                </li>
+              ))}
+            </ol>
+          </section>
 
           <ResumenVisual
             precio={precioN}
@@ -324,7 +403,14 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             moneda={moneda}
           />
 
-          <Bloque titulo="1. El proyecto" href={`/empresarial/formulacion${q}`} vacio={!f}>
+          <Bloque
+            id="parte-1"
+            titulo="1. El proyecto"
+            href={`/empresarial/formulacion${q}`}
+            vacio={!f}
+            intro={PLANTILLAS.proyecto}
+            significa={<Significa proyectoId={id} seccion="proyecto" texto={textoDe('proyecto')} />}
+          >
             <Tabla
               filas={[
                 { dato: 'Tipo de proyecto', valor: s(f?.tipo_proyecto) },
@@ -359,7 +445,14 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             <Texto t="Lo que no incluye" v={s(f?.exclusiones)} />
           </Bloque>
 
-          <Bloque titulo="2. El mercado" href={`/empresarial/mercado${q}`} vacio={!m}>
+          <Bloque
+            id="parte-2"
+            titulo="2. El mercado"
+            href={`/empresarial/mercado${q}`}
+            vacio={!m}
+            intro={PLANTILLAS.mercado}
+            significa={<Significa proyectoId={id} seccion="mercado" texto={textoDe('mercado')} />}
+          >
             <Tabla
               filas={[
                 { dato: 'Producto o servicio', valor: s(m?.producto) },
