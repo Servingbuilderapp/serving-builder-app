@@ -102,6 +102,58 @@ async function datosDeSeccion(supabase: Cliente, proyectoId: string, seccion: Se
       ['Lo que no incluye', f.exclusiones],
     ])
   }
+  if (seccion === 'demanda') {
+    const { data: t } = await supabase.from('sfpe_mercado_tamano').select('*').eq('proyecto_id', proyectoId).maybeSingle()
+    if (!t) return null
+    const c = (v: unknown, cond: unknown) => (v === null || v === undefined ? '' : `${v}${cond ? ` (${cond})` : ''}`)
+    return (
+      textoDatos([
+        ['Gasto anual por cliente', c(t.gasto_valor, t.gasto_condicion)],
+        ['Mercado total TAM (número de clientes)', c(t.tam_valor, t.tam_condicion)],
+        ['Mercado atendible SAM (número de clientes)', c(t.sam_valor, t.sam_condicion)],
+        ['Mercado captable SOM (número de clientes)', c(t.som_valor, t.som_condicion)],
+        ['Cuántos clientes puede atender', t.capacidad_clientes],
+        ['Frecuencia de compra', t.frecuencia_compra],
+        ['Estacionalidad', t.estacionalidad],
+        ['Intención de compra', t.intencion_compra],
+        ['Demanda sin atender', t.demanda_insatisfecha],
+      ]) || null
+    )
+  }
+  if (seccion === 'competencia') {
+    const [{ data: p }, { data: comps }, { data: canales }] = await Promise.all([
+      supabase.from('sfpe_mercado_precio').select('*').eq('proyecto_id', proyectoId).maybeSingle(),
+      supabase.from('sfpe_mercado_competidores').select('nombre, producto, precio, unidad_precio, fortalezas, debilidades, fuente, condicion').eq('proyecto_id', proyectoId),
+      supabase.from('sfpe_mercado_canales').select('tipo, descripcion, costo_adquisicion, condicion').eq('proyecto_id', proyectoId),
+    ])
+    const compTxt = (comps ?? []).map((x) =>
+      [x.nombre, x.producto, x.precio != null && `precio ${x.precio}${x.unidad_precio ? ` ${x.unidad_precio}` : ''}`, x.fortalezas && `fortalezas: ${x.fortalezas}`, x.debilidades && `debilidades: ${x.debilidades}`, `fuente: ${x.fuente || 'sin fuente'} (${x.condicion})`]
+        .filter(Boolean)
+        .join(' — '),
+    )
+    const canTxt = (canales ?? []).map((x) => [x.tipo, x.descripcion, x.costo_adquisicion != null && `costo por cliente ${x.costo_adquisicion}`, `(${x.condicion})`].filter(Boolean).join(' — '))
+    return (
+      textoDatos([
+        ['Precio del proyecto', p?.precio != null ? `${p.precio}${p.unidad_precio ? ` ${p.unidad_precio}` : ''}` : ''],
+        ['Costo por unidad', p?.costo_unitario],
+        ['Cómo se fijó el precio', p?.metodo],
+        ['Por qué ese precio', p?.justificacion],
+        ['Disposición a pagar', p?.disposicion_pago],
+        ['Competidores', compTxt],
+        ['Canales', canTxt],
+      ]) || null
+    )
+  }
+  if (seccion === 'ikigai') {
+    const { data: items } = await supabase.from('sfpe_ikigai_items').select('texto, ama, bueno, necesita, pagan, fuente, condicion').eq('proyecto_id', proyectoId).order('orden', { ascending: true })
+    const txt = (items ?? [])
+      .filter((x) => String(x.texto ?? '').trim())
+      .map((x) => {
+        const si = [x.ama && 'les gusta', x.bueno && 'lo saben hacer bien', x.necesita && 'el mundo lo necesita', x.pagan && 'pagan por ello'].filter(Boolean)
+        return `${x.texto} — cumple: ${si.length ? si.join(', ') : 'ninguna de las cuatro'} (${x.condicion})`
+      })
+    return textoDatos([['Ideas del proyecto y qué preguntas cumplen', txt]]) || null
+  }
   const { data: m } = await supabase.from('sfpe_mercado').select('*').eq('proyecto_id', proyectoId).maybeSingle()
   if (!m) return null
   const { data: segs } = await supabase.from('sfpe_mercado_segmentos').select('nombre, descripcion, necesidades, capacidad_compra, barreras').eq('proyecto_id', proyectoId)

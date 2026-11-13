@@ -484,7 +484,14 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             )}
           </Bloque>
 
-          <Bloque titulo="3. Tamaño y demanda" href={`/empresarial/mercado/demanda${q}`} vacio={!t}>
+          <Bloque
+            id="parte-3"
+            titulo="3. Tamaño y demanda"
+            href={`/empresarial/mercado/demanda${q}`}
+            vacio={!t}
+            intro={PLANTILLAS.demanda}
+            significa={<Significa proyectoId={id} seccion="demanda" texto={textoDe('demanda')} />}
+          >
             <Tabla
               filas={[
                 { dato: 'Gasto anual por cliente', valor: gasto !== null ? din(gasto) : '', cond: s(t?.gasto_condicion) },
@@ -500,7 +507,14 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             <Texto t="Demanda sin atender" v={s(t?.demanda_insatisfecha)} />
           </Bloque>
 
-          <Bloque titulo="4. Competencia, precio y canales" href={`/empresarial/mercado/competencia${q}`} vacio={!p && (comps.data ?? []).length === 0 && (canales.data ?? []).length === 0}>
+          <Bloque
+            id="parte-4"
+            titulo="4. Competencia, precio y canales"
+            href={`/empresarial/mercado/competencia${q}`}
+            vacio={!p && (comps.data ?? []).length === 0 && (canales.data ?? []).length === 0}
+            intro={PLANTILLAS.competencia}
+            significa={<Significa proyectoId={id} seccion="competencia" texto={textoDe('competencia')} />}
+          >
             {p && (
               <Tabla
                 filas={[
@@ -548,7 +562,14 @@ export default async function DocumentoPage({ searchParams }: { searchParams: Pr
             )}
           </Bloque>
 
-          <Bloque titulo="5. Ikigai del proyecto" href={`/empresarial/ikigai${q}`} vacio={itemsIki.length === 0}>
+          <Bloque
+            id="parte-5"
+            titulo="5. Ikigai del proyecto"
+            href={`/empresarial/ikigai${q}`}
+            vacio={itemsIki.length === 0}
+            intro={PLANTILLAS.ikigai}
+            significa={<Significa proyectoId={id} seccion="ikigai" texto={textoDe('ikigai')} />}
+          >
             <ul className="list-disc space-y-1 pl-5">
               {itemsIki.filter((x) => x.texto).map((x, i) => (
                 <li key={i}>
