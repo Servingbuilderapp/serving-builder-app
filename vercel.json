@@ -67,6 +67,10 @@
     {
       "path": "/api/centinela/conciliar-fuentes",
       "schedule": "30 12 * * *"
+    },
+    {
+      "path": "/api/empresarial/membresia/avisos-vencimiento",
+      "schedule": "20 13 * * *"
     }
   ]
 }
