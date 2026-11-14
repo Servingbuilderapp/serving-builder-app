@@ -85,3 +85,25 @@ export function vencimientoTrasPago(accesoHastaActual: string, ahora = new Date(
   const base = Math.max(new Date(accesoHastaActual).getTime(), ahora.getTime())
   return new Date(base + DIAS_POR_PAGO * MS_DIA)
 }
+
+/**
+ * Marca que la persona ya entregó su documento (lo imprimió o lo guardó como PDF) y le
+ * regala un mes más de acceso. Solo pasa la primera vez: si ya estaba marcado, no hace nada.
+ */
+export async function marcarDocumentoEntregado(userId: string): Promise<void> {
+  const admin = clienteAdmin()
+  const { data: fila } = await admin
+    .from('sfpe_membresias')
+    .select('id, documento_entregado_en, acceso_hasta')
+    .eq('user_id', userId)
+    .maybeSingle()
+  if (!fila || fila.documento_entregado_en) return
+
+  await admin
+    .from('sfpe_membresias')
+    .update({
+      documento_entregado_en: new Date().toISOString(),
+      acceso_hasta: vencimientoTrasPago(fila.acceso_hasta).toISOString(),
+    })
+    .eq('id', fila.id)
+}
