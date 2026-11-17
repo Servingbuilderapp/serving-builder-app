@@ -20,12 +20,12 @@ const RELIEVE_TARJETA = 'shadow-[0_10px_24px_-8px_rgba(84,20,43,0.35),inset_0_1p
 
 const INCLUYE: Record<ClavePlan, string[]> = {
   sencillo: [
-    'Unas 10 matrices esenciales para decidir y arrancar',
-    'Radar del Entorno, Mapa de Presiones, Lienzo de Negocio y Termómetro de Riesgos',
+    '10 matrices esenciales para decidir y arrancar',
+    'Radar del Entorno, Mapa de Presiones, Mapa del Cliente, Lienzo de Negocio y Termómetro de Riesgos',
     'Tu documento final y tu tablero de escenarios',
   ],
   completo: [
-    'Todas las matrices (unas 26)',
+    'Todas las matrices (29)',
     'Matrices de finanzas, ventas, productividad y crecimiento',
     'Todo lo del plan Sencillo',
   ],

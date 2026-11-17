@@ -13,7 +13,7 @@ import { createClient } from '@/lib/supabase/client'
 export type EstadoPaso = 'hecho' | 'en_curso' | 'por_hacer' | 'bloqueado' | 'proximamente'
 
 export interface PasoCamino {
-  clave: 'diagnostico' | 'ideas' | 'oportunidades' | 'ikigai' | 'formulacion' | 'mercado' | 'demanda' | 'competencia' | 'entorno' | 'presiones' | 'dofa' | 'lienzo' | 'tecnico' | 'financiero' | 'flujocaja' | 'capitaltrabajo' | 'costocliente' | 'vantir' | 'riesgos' | 'documento' | 'escenarios'
+  clave: 'diagnostico' | 'ideas' | 'oportunidades' | 'ikigai' | 'formulacion' | 'mercado' | 'demanda' | 'competencia' | 'entorno' | 'presiones' | 'dofa' | 'lienzo' | 'tecnico' | 'financiero' | 'flujocaja' | 'capitaltrabajo' | 'costocliente' | 'vantir' | 'riesgos' | 'documento' | 'escenarios' | 'cliente' | 'herramientas'
   titulo: string
   ayuda: string
   href: string | null
@@ -62,7 +62,7 @@ export async function cargarCamino(proyectoId: string): Promise<DatosCamino | nu
   // Formulación y mercado trabajan sobre el proyecto derivado; si aún no hay uno, se puede entrar igual con este.
   const trabajoId = derivadoId ?? (p.id as string)
   const head = { count: 'exact' as const, head: true }
-  const [sesiones, descubrimiento, oportunidades, ikigai, formulacion, mercado, demanda, competencia, entorno, presiones, dofa, lienzo, tecnico, financiero, flujocaja, capitaltrabajo, costocliente, vantir, riesgos, escenarios] = await Promise.all([
+  const [sesiones, descubrimiento, oportunidades, ikigai, formulacion, mercado, demanda, competencia, entorno, presiones, dofa, lienzo, tecnico, financiero, flujocaja, capitaltrabajo, costocliente, vantir, riesgos, escenarios, cliente] = await Promise.all([
     contar(supabase.from('sfpe_diag_sesiones').select('id', head).eq('proyecto_id', origenId).eq('estado', 'completado')),
     contar(supabase.from('sfpe_descubrimiento').select('id', head).eq('proyecto_id', origenId)),
     contar(supabase.from('sfpe_oportunidades').select('id', head).eq('proyecto_id', origenId)),
@@ -83,6 +83,7 @@ export async function cargarCamino(proyectoId: string): Promise<DatosCamino | nu
     contar(supabase.from('sfpe_calculadoras').select('id', head).eq('proyecto_id', trabajoId).eq('tipo', 'van_tir')),
     contar(supabase.from('sfpe_riesgos_items').select('id', head).eq('proyecto_id', trabajoId)),
     contar(supabase.from('sfpe_escenarios').select('id', head).eq('proyecto_id', trabajoId)),
+    contar(supabase.from('sfpe_cliente_items').select('id', head).eq('proyecto_id', trabajoId)),
   ])
 
   const aviso = derivadoId ? '' : ' Puedes entrar ya; lo ideal es antes pasar una oportunidad a proyecto.'
@@ -156,6 +157,13 @@ export async function cargarCamino(proyectoId: string): Promise<DatosCamino | nu
       ayuda: `Quién te aprieta y quién te protege, en cinco frentes.${aviso}`,
       href: `/empresarial/presiones?proyecto=${trabajoId}`,
       estado: presiones > 0 ? 'hecho' : 'por_hacer',
+    },
+    {
+      clave: 'cliente',
+      titulo: 'Mapa del Cliente',
+      ayuda: `Quién es tu cliente, qué necesita y dónde encontrarlo.${aviso}`,
+      href: `/empresarial/cliente?proyecto=${trabajoId}`,
+      estado: cliente > 0 ? 'hecho' : 'por_hacer',
     },
     {
       clave: 'dofa',
@@ -234,8 +242,15 @@ export async function cargarCamino(proyectoId: string): Promise<DatosCamino | nu
       href: `/empresarial/escenarios?proyecto=${trabajoId}`,
       estado: escenarios > 0 ? 'hecho' : 'por_hacer',
     },
+    {
+      clave: 'herramientas',
+      titulo: 'Mis herramientas',
+      ayuda: 'Las matrices de tu plan, por tema, y cuáles vienen pronto.',
+      href: `/empresarial/herramientas?proyecto=${trabajoId}`,
+      estado: 'por_hacer',
+    },
   ]
-  const siguiente = pasos.find((x) => x.clave !== 'ideas' && x.href && x.estado !== 'hecho') ?? null
+  const siguiente = pasos.find((x) => x.clave !== 'ideas' && x.clave !== 'herramientas' && x.href && x.estado !== 'hecho') ?? null
   return { nombre, origenId, derivadoId, pasos, siguiente }
 }
 
@@ -274,6 +289,8 @@ export function pasoActual(ruta: string): PasoCamino['clave'] | null {
   if (ruta.startsWith('/empresarial/dofa')) return 'dofa'
   if (ruta.startsWith('/empresarial/lienzo')) return 'lienzo'
   if (ruta.startsWith('/empresarial/riesgos')) return 'riesgos'
+  if (ruta.startsWith('/empresarial/cliente')) return 'cliente'
+  if (ruta.startsWith('/empresarial/herramientas')) return 'herramientas'
   if (ruta.startsWith('/empresarial/ikigai')) return 'ikigai'
   if (ruta.startsWith('/empresarial/ideas') || ruta.startsWith('/ideas')) return 'ideas'
   if (ruta.startsWith('/empresarial/financiero')) return 'financiero'
