@@ -13,7 +13,7 @@ import { createClient } from '@/lib/supabase/client'
 export type EstadoPaso = 'hecho' | 'en_curso' | 'por_hacer' | 'bloqueado' | 'proximamente'
 
 export interface PasoCamino {
-  clave: 'diagnostico' | 'ideas' | 'oportunidades' | 'ikigai' | 'formulacion' | 'mercado' | 'demanda' | 'competencia' | 'entorno' | 'presiones' | 'dofa' | 'lienzo' | 'tecnico' | 'financiero' | 'flujocaja' | 'capitaltrabajo' | 'costocliente' | 'vantir' | 'riesgos' | 'documento' | 'escenarios' | 'cliente' | 'propuesta' | 'herramientas'
+  clave: 'diagnostico' | 'ideas' | 'oportunidades' | 'ikigai' | 'formulacion' | 'mercado' | 'demanda' | 'competencia' | 'entorno' | 'presiones' | 'dofa' | 'lienzo' | 'tecnico' | 'financiero' | 'flujocaja' | 'capitaltrabajo' | 'costocliente' | 'vantir' | 'riesgos' | 'documento' | 'escenarios' | 'cliente' | 'propuesta' | 'metas' | 'herramientas'
   titulo: string
   ayuda: string
   href: string | null
@@ -62,7 +62,7 @@ export async function cargarCamino(proyectoId: string): Promise<DatosCamino | nu
   // Formulación y mercado trabajan sobre el proyecto derivado; si aún no hay uno, se puede entrar igual con este.
   const trabajoId = derivadoId ?? (p.id as string)
   const head = { count: 'exact' as const, head: true }
-  const [sesiones, descubrimiento, oportunidades, ikigai, formulacion, mercado, demanda, competencia, entorno, presiones, dofa, lienzo, tecnico, financiero, flujocaja, capitaltrabajo, costocliente, vantir, riesgos, escenarios, cliente, propuesta] = await Promise.all([
+  const [sesiones, descubrimiento, oportunidades, ikigai, formulacion, mercado, demanda, competencia, entorno, presiones, dofa, lienzo, tecnico, financiero, flujocaja, capitaltrabajo, costocliente, vantir, riesgos, escenarios, cliente, propuesta, metas] = await Promise.all([
     contar(supabase.from('sfpe_diag_sesiones').select('id', head).eq('proyecto_id', origenId).eq('estado', 'completado')),
     contar(supabase.from('sfpe_descubrimiento').select('id', head).eq('proyecto_id', origenId)),
     contar(supabase.from('sfpe_oportunidades').select('id', head).eq('proyecto_id', origenId)),
@@ -85,6 +85,7 @@ export async function cargarCamino(proyectoId: string): Promise<DatosCamino | nu
     contar(supabase.from('sfpe_escenarios').select('id', head).eq('proyecto_id', trabajoId)),
     contar(supabase.from('sfpe_cliente_items').select('id', head).eq('proyecto_id', trabajoId)),
     contar(supabase.from('sfpe_propuesta_items').select('id', head).eq('proyecto_id', trabajoId)),
+    contar(supabase.from('sfpe_metas_items').select('id', head).eq('proyecto_id', trabajoId)),
   ])
 
   const aviso = derivadoId ? '' : ' Puedes entrar ya; lo ideal es antes pasar una oportunidad a proyecto.'
@@ -172,6 +173,13 @@ export async function cargarCamino(proyectoId: string): Promise<DatosCamino | nu
       ayuda: `Por qué te elegirían a ti: qué alivias, qué das y qué prueba tienes.${aviso}`,
       href: `/empresarial/propuesta?proyecto=${trabajoId}`,
       estado: propuesta > 0 ? 'hecho' : 'por_hacer',
+    },
+    {
+      clave: 'metas',
+      titulo: 'Tablero de Metas',
+      ayuda: `Qué quieres lograr a 3, 6 y 12 meses, cómo lo medirás y qué te puede frenar.${aviso}`,
+      href: `/empresarial/metas?proyecto=${trabajoId}`,
+      estado: metas > 0 ? 'hecho' : 'por_hacer',
     },
     {
       clave: 'dofa',
@@ -299,6 +307,7 @@ export function pasoActual(ruta: string): PasoCamino['clave'] | null {
   if (ruta.startsWith('/empresarial/riesgos')) return 'riesgos'
   if (ruta.startsWith('/empresarial/cliente')) return 'cliente'
   if (ruta.startsWith('/empresarial/propuesta')) return 'propuesta'
+  if (ruta.startsWith('/empresarial/metas')) return 'metas'
   if (ruta.startsWith('/empresarial/herramientas')) return 'herramientas'
   if (ruta.startsWith('/empresarial/ikigai')) return 'ikigai'
   if (ruta.startsWith('/empresarial/ideas') || ruta.startsWith('/ideas')) return 'ideas'

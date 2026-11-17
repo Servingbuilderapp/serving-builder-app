@@ -26,7 +26,7 @@ export const MATRICES: Matriz[] = [
   { clave: 'cliente', titulo: 'Mapa del Cliente', grupo: 'Entorno y cliente', plan: 'sencillo', ruta: '/empresarial/cliente', ayuda: 'Quién es tu cliente, qué necesita y dónde encontrarlo.' },
   { clave: 'lienzo', titulo: 'Lienzo de Negocio', grupo: 'Negocio', plan: 'sencillo', ruta: '/empresarial/lienzo', ayuda: 'Cómo funciona tu negocio en nueve piezas.' },
   { clave: 'propuesta', titulo: 'Propuesta de Valor', grupo: 'Negocio', plan: 'sencillo', ruta: '/empresarial/propuesta', ayuda: 'Por qué te elegirían a ti.' },
-  { clave: 'metas', titulo: 'Tablero de Metas', grupo: 'Productividad', plan: 'sencillo', ruta: null, ayuda: 'Qué quieres lograr y cómo vas.' },
+  { clave: 'metas', titulo: 'Tablero de Metas', grupo: 'Productividad', plan: 'sencillo', ruta: '/empresarial/metas', ayuda: 'Qué quieres lograr y cómo vas.' },
   { clave: 'flujo', titulo: 'Flujo de Caja a 12 meses', grupo: 'Finanzas', plan: 'sencillo', ruta: '/empresarial/calculadoras/flujo-caja', ayuda: 'En qué mes te quedas sin plata.' },
   { clave: 'costeo', titulo: 'Costeo', grupo: 'Finanzas', plan: 'sencillo', ruta: null, ayuda: 'Cuánto te cuesta lo que vendes.' },
   { clave: 'prioridades', titulo: 'Matriz de Prioridades', grupo: 'Productividad', plan: 'sencillo', ruta: null, ayuda: 'Qué hacer primero.' },
