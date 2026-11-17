@@ -184,6 +184,12 @@ Alcance (geografía y sector): ${data.alcance || 'no indicó'}`
       resultado.nivelMadurez = nivelIA
     }
 
+    // Cuando se vuelve a generar un diagnóstico viejo que quedó incompleto, solo se devuelve
+    // el resultado: la fila ya existe y la actualiza quien lo pidió (no se crea otra).
+    if (body.sinGuardar === true) {
+      return NextResponse.json(resultado)
+    }
+
     // Guardar el diagnóstico COMPLETO (resultado + lo que escribió el cliente) con un código
     // al azar. Se guarda con la llave de servicio para no depender de permisos de lectura.
     const codigoAcceso = randomBytes(18).toString('base64url')
