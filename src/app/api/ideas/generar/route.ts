@@ -98,11 +98,21 @@ export async function GET() {
     if (!user) {
       return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 })
     }
+    // Último documento guardado: así el cliente siempre puede volver a verlo y descargarlo
+    const { data: ultimoDoc } = await supabase
+      .from('app_ideas_documentos')
+      .select('resultado, created_at')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+    const ultimo = ultimoDoc?.resultado ? { ...ultimoDoc.resultado, creadoEn: ultimoDoc.created_at } : null
+
     if (await esAdministrador(supabase, user)) {
-      return NextResponse.json({ disponible: true, sinLimite: true })
+      return NextResponse.json({ disponible: true, sinLimite: true, ultimo })
     }
     const estado = await calcularDisponibilidad(supabase, user.id)
-    return NextResponse.json(estado)
+    return NextResponse.json({ ...estado, ultimo })
   } catch (error: any) {
     console.error('Error en GET /api/ideas/generar:', error)
     return NextResponse.json({ error: 'Error al verificar disponibilidad' }, { status: 500 })

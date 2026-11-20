@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
+import ReactMarkdown from 'react-markdown'
 import { Sparkles, Loader2, Lightbulb, ArrowRight, Download, ChevronDown, ChevronUp, Compass, Layers, HeartHandshake, Clock, Network, Users, BookOpen } from 'lucide-react'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { GlowButton } from '@/components/ui/GlowButton'
@@ -45,6 +46,8 @@ export default function IdeasClient() {
       .then(data => {
         setDisponible(data.disponible ?? true)
         setProximaFecha(data.proximaFechaDisponible || null)
+        // Si ya tiene un documento guardado, se muestra de una vez
+        if (data.ultimo) setResultado(data.ultimo as IdeasResultado)
       })
       .catch(() => setDisponible(true))
       .finally(() => setVerificando(false))
@@ -100,12 +103,37 @@ export default function IdeasClient() {
       setResultado(data)
       setDisponible(false)
       setProximaFecha(data.proximaFechaDisponible || null)
-      setTimeout(() => window.print(), 400)
     } catch (e: any) {
       setError('No se pudo conectar con el generador de ideas. Intenta de nuevo.')
     } finally {
       setCargando(false)
     }
+  }
+
+  /** Descarga el documento como archivo de Word (.doc). No depende de imprimir. */
+  const descargarDocumento = () => {
+    if (!resultado?.notaConceptoMarkdown) return
+    const escapar = (t: string) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    const lineas = resultado.notaConceptoMarkdown.split('\n').map(l => {
+      const t = escapar(l.trim())
+      if (!t) return ''
+      const conNegrita = t.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
+      if (t.startsWith('### ')) return `<h3>${conNegrita.slice(4)}</h3>`
+      if (t.startsWith('## ')) return `<h2>${conNegrita.slice(3)}</h2>`
+      if (t.startsWith('# ')) return `<h2>${conNegrita.slice(2)}</h2>`
+      if (/^[-*] /.test(t)) return `<p style="margin-left:18px">• ${conNegrita.slice(2)}</p>`
+      return `<p>${conNegrita}</p>`
+    }).join('\n')
+    const html = `<html><head><meta charset="utf-8"><title>Documento de Idea de Proyecto</title></head><body style="font-family:Calibri,Arial,sans-serif;font-size:12pt;line-height:1.5"><h1>Documento de Idea de Proyecto</h1>${lineas}</body></html>`
+    const blob = new Blob(['﻿', html], { type: 'application/msword' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'Documento-de-Idea-de-Proyecto.doc'
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    setTimeout(() => URL.revokeObjectURL(url), 1000)
   }
 
   const fechaFormateada = proximaFecha
@@ -471,11 +499,24 @@ export default function IdeasClient() {
         </div>
       )}
 
-      {/* Documento final imprimible */}
+      {/* Documento final: se ve completo en pantalla y se descarga con un botón */}
       {resultado?.notaConceptoMarkdown && (
-        <div className="hidden print:block bg-white text-slate-900 p-10">
-          <h1 className="text-2xl font-black mb-6">Documento de Idea de Proyecto</h1>
-          <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed">{resultado.notaConceptoMarkdown}</pre>
+        <div className="space-y-4">
+          <div className="text-center">
+            <span className="text-[10px] font-black text-color-primary uppercase tracking-[0.4em]">Tu documento de idea de proyecto</span>
+          </div>
+          <div className="bg-white text-slate-900 rounded-2xl p-8 shadow-lg border border-slate-200">
+            <h2 className="text-xl font-black mb-4">Documento de Idea de Proyecto</h2>
+            <div className="text-sm leading-relaxed [&_h1]:text-lg [&_h1]:font-black [&_h1]:mt-5 [&_h2]:text-base [&_h2]:font-black [&_h2]:mt-5 [&_h3]:font-bold [&_h3]:mt-4 [&_p]:mt-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mt-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mt-2">
+              <ReactMarkdown>{resultado.notaConceptoMarkdown}</ReactMarkdown>
+            </div>
+          </div>
+          <div className="flex justify-center">
+            <GlowButton onClick={descargarDocumento}>
+              <Download className="h-4 w-4 mr-2" />
+              Descargar mi documento
+            </GlowButton>
+          </div>
         </div>
       )}
     </div>
