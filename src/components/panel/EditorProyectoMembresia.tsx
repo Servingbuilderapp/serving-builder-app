@@ -206,7 +206,7 @@ export function EditorProyectoMembresia({
             <div className="rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-4">
               <p className="text-[13.5px] font-bold text-[#F3E7DC]">¿Terminaste tu proyecto?</p>
               <p className="mt-1 text-[12.5px] text-[#F3E7DC]/60">
-                Cuando todos los pasos estén completos, márcalo como terminado. Después podrás pedir que lo postulemos a una convocatoria.
+                Cuando todos los pasos estén completos, márcalo como terminado. Después postulas tú mismo, hasta en 3 convocatorias por proyecto.
               </p>
               {error && <p className="mt-2 text-[13px] text-[#E0917E]">{error}</p>}
               <button

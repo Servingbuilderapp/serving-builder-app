@@ -12,6 +12,10 @@ import {
   CLAVE_ARCHIVO_RUTA,
   CLAVE_DECLARACION,
   CLAVE_ORIGEN,
+  CLAVE_POSTULACIONES,
+  MAX_POSTULACIONES_POR_PROYECTO,
+  leerPostulaciones,
+  type PostulacionRegistrada,
   EXTENSIONES_PERMITIDAS,
   MAX_BYTES_PROYECTO_LISTO,
   ORIGEN_TRAIDO,
@@ -150,6 +154,48 @@ export async function POST(req: Request) {
       .maybeSingle<{ id: string; estado: string; respuestas: Record<string, string> | null }>()
     if (!proyecto) return NextResponse.json({ error: 'No encontramos ese proyecto.' }, { status: 404 })
 
+    if (c?.accion === 'registrar_postulacion') {
+      if (proyecto.estado !== 'terminado') {
+        return NextResponse.json({ error: 'Primero termina tu proyecto.' }, { status: 400 })
+      }
+      const usadas = leerPostulaciones(proyecto.respuestas)
+      if (usadas.length >= MAX_POSTULACIONES_POR_PROYECTO) {
+        return NextResponse.json({ error: `Ya usaste las ${MAX_POSTULACIONES_POR_PROYECTO} postulaciones de este proyecto.` }, { status: 409 })
+      }
+      const convocatoriaId = typeof c.convocatoriaId === 'string' && c.convocatoriaId ? c.convocatoriaId : null
+      const otra = typeof c.convocatoriaTexto === 'string' ? c.convocatoriaTexto.trim().slice(0, 300) : ''
+      if (!convocatoriaId && !otra) return NextResponse.json({ error: 'Elige la convocatoria o escribe cuál es.' }, { status: 400 })
+      if (c.acepto !== true) return NextResponse.json({ error: 'Confirma que entiendes que esto usa una de tus postulaciones.' }, { status: 400 })
+
+      let nueva: PostulacionRegistrada = { id: null, texto: otra, fuente_oficial: null, requisitos: null, mecanismo: null, registrada_en: new Date().toISOString() }
+      if (convocatoriaId) {
+        if (usadas.some((u) => u.id === convocatoriaId)) {
+          return NextResponse.json({ error: 'Esa convocatoria ya la registraste en este proyecto.' }, { status: 409 })
+        }
+        const { data: conv } = await ctx.servicio
+          .from('biblioteca_convocatorias')
+          .select('nombre, entidad, fuente_oficial, requisitos, mecanismo_postulacion')
+          .eq('id', convocatoriaId)
+          .maybeSingle<{ nombre: string | null; entidad: string | null; fuente_oficial: string | null; requisitos: string | null; mecanismo_postulacion: string | null }>()
+        if (!conv) return NextResponse.json({ error: 'No encontramos esa convocatoria.' }, { status: 404 })
+        nueva = {
+          id: convocatoriaId,
+          texto: [conv.nombre, conv.entidad].filter(Boolean).join(' — '),
+          fuente_oficial: conv.fuente_oficial,
+          requisitos: conv.requisitos,
+          mecanismo: conv.mecanismo_postulacion,
+          registrada_en: nueva.registrada_en,
+        }
+      }
+      const respuestasNuevas = { ...(proyecto.respuestas || {}), [CLAVE_POSTULACIONES]: JSON.stringify([...usadas, nueva]) }
+      const { error } = await ctx.servicio
+        .from('membresias_proyectos')
+        .update({ respuestas: respuestasNuevas, actualizado_en: new Date().toISOString() })
+        .eq('id', id)
+      if (error) return NextResponse.json({ error: 'No se pudo registrar. Intenta de nuevo.' }, { status: 500 })
+      return NextResponse.json({ success: true, usadas: usadas.length + 1 })
+    }
+
     if (esProyectoTraido(proyecto.respuestas)) {
       return NextResponse.json({ error: 'Este proyecto lo trajiste ya hecho; no se edita aquí.' }, { status: 409 })
     }
@@ -171,6 +217,10 @@ export async function POST(req: Request) {
     }
 
     if (c?.accion === 'terminar') {
+      // Si ya está terminado no se vuelve a escribir: así nadie borra el conteo de postulaciones.
+      if (proyecto.estado === 'terminado') {
+        return NextResponse.json({ error: 'Este proyecto ya está terminado.' }, { status: 409 })
+      }
       const respuestas = limpiarRespuestas(c.respuestas)
       const faltan = TODOS_LOS_PASOS.filter((p) => !pasoCompleto(p, respuestas))
       if (faltan.length > 0) {

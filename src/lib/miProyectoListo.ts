@@ -61,3 +61,27 @@ export function nombreSeguroArchivo(nombre: string): string {
     .replace(/[^a-zA-Z0-9._-]+/g, '_')
     .slice(-90)
 }
+
+/** Cuántas convocatorias puede postular el miembro por cada proyecto. Es la regla de la membresía: no se abre. */
+export const MAX_POSTULACIONES_POR_PROYECTO = 3
+export const CLAVE_POSTULACIONES = '_postulaciones'
+
+export type PostulacionRegistrada = {
+  id: string | null
+  texto: string
+  fuente_oficial: string | null
+  requisitos: string | null
+  mecanismo: string | null
+  registrada_en: string
+}
+
+export function leerPostulaciones(respuestas: Record<string, string> | null | undefined): PostulacionRegistrada[] {
+  const bruto = respuestas?.[CLAVE_POSTULACIONES]
+  if (!bruto) return []
+  try {
+    const lista = JSON.parse(bruto)
+    return Array.isArray(lista) ? (lista as PostulacionRegistrada[]) : []
+  } catch {
+    return []
+  }
+}

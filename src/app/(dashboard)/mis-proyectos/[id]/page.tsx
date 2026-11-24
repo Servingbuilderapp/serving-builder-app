@@ -4,9 +4,9 @@ import { notFound } from 'next/navigation'
 import { contextoMiembro } from '@/lib/membresiasServicios'
 import { AvisoMiembros } from '@/components/panel/AvisoMiembros'
 import { EditorProyectoMembresia } from '@/components/panel/EditorProyectoMembresia'
-import { PostularProyecto } from '@/components/panel/PostularProyecto'
 import { BloqueProyectoTraido } from '@/components/panel/BloqueProyectoTraido'
-import { BUCKET_PROYECTOS, CLAVE_ARCHIVO_RUTA, esProyectoTraido } from '@/lib/miProyectoListo'
+import { RegistrarPostulaciones } from '@/components/panel/RegistrarPostulaciones'
+import { BUCKET_PROYECTOS, CLAVE_ARCHIVO_RUTA, MAX_POSTULACIONES_POR_PROYECTO, esProyectoTraido, leerPostulaciones } from '@/lib/miProyectoListo'
 import type { RespuestasProyecto } from '@/lib/miProyectoPasos'
 
 export const dynamic = 'force-dynamic'
@@ -14,13 +14,6 @@ export const revalidate = 0
 
 const SOMBRA_TARJETA =
   'shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]'
-
-const ESTADOS: Record<string, string> = {
-  solicitada: 'Solicitada: el equipo la va a revisar',
-  en_revision: 'En revisión por el equipo',
-  postulada: 'Postulada',
-  no_viable: 'El equipo te escribirá: no era viable para esa convocatoria',
-}
 
 export default async function ProyectoMembresiaPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -46,20 +39,16 @@ export default async function ProyectoMembresiaPage({ params }: { params: Promis
       .createSignedUrl(proyecto.respuestas?.[CLAVE_ARCHIVO_RUTA] || '', 60 * 60)
     urlArchivo = firmada?.signedUrl || null
   }
-  let postulacion: { estado: string; convocatoria_texto: string | null; nota_equipo: string | null } | null = null
-  let opciones: { id: string; etiqueta: string }[] = []
 
-  if (terminado) {
-    const [{ data: post }, { data: abiertas }] = await Promise.all([
-      ctx.servicio.from('membresias_postulaciones').select('estado, convocatoria_texto, nota_equipo').eq('proyecto_id', id).maybeSingle(),
-      ctx.servicio
-        .from('biblioteca_convocatorias')
-        .select('id, nombre, entidad')
-        .or(`fecha_cierre.is.null,fecha_cierre.gte.${new Date().toISOString().slice(0, 10)}`)
-        .order('nombre', { ascending: true })
-        .limit(600),
-    ])
-    postulacion = post
+  const usadas = leerPostulaciones(proyecto.respuestas)
+  let opciones: { id: string; etiqueta: string }[] = []
+  if (terminado && usadas.length < MAX_POSTULACIONES_POR_PROYECTO) {
+    const { data: abiertas } = await ctx.servicio
+      .from('biblioteca_convocatorias')
+      .select('id, nombre, entidad')
+      .or(`fecha_cierre.is.null,fecha_cierre.gte.${new Date().toISOString().slice(0, 10)}`)
+      .order('nombre', { ascending: true })
+      .limit(600)
     opciones = ((abiertas || []) as { id: string; nombre: string | null; entidad: string | null }[]).map((c) => ({
       id: c.id,
       etiqueta: `${c.nombre || 'Sin nombre'}${c.entidad ? ' — ' + c.entidad : ''}`.slice(0, 140),
@@ -74,20 +63,21 @@ export default async function ProyectoMembresiaPage({ params }: { params: Promis
       {terminado && (
         <section className={`mb-5 rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
           <h2 className="text-[15px] font-extrabold text-[#E0B868]">Tu proyecto está terminado</h2>
-          {postulacion ? (
-            <div className="mt-2 text-[13.5px] text-[#F3E7DC]/80">
-              <p className="font-bold text-[#E0B868]">{ESTADOS[postulacion.estado] || postulacion.estado}</p>
-              {postulacion.convocatoria_texto && <p>Convocatoria: {postulacion.convocatoria_texto}</p>}
-              {postulacion.nota_equipo && <p className="mt-1">Mensaje del equipo: {postulacion.nota_equipo}</p>}
-            </div>
-          ) : (
-            <>
-              <p className="mt-1 text-[13px] text-[#F3E7DC]/60">
-                Escoge una convocatoria de la biblioteca y nosotros te ayudamos a postular. Si ganas, el 10 % es para Serving.
-              </p>
-              <PostularProyecto proyectoId={id} opciones={opciones} />
-            </>
-          )}
+          <p className="mt-1 text-[13px] leading-relaxed text-[#F3E7DC]/70">
+            Busca la convocatoria que más te sirva, regístrala aquí y postula tú mismo en el portal de la entidad. Cada proyecto tiene máximo {MAX_POSTULACIONES_POR_PROYECTO} postulaciones. Si ganas, el 10 % es para Serving.
+          </p>
+          <RegistrarPostulaciones proyectoId={id} opciones={opciones} usadas={usadas} />
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Link href="/mis-convocatorias" className="rounded-xl bg-[#C9A46B] px-4 py-2 text-[13px] font-bold text-[#3B1727]">
+              Explorar convocatorias
+            </Link>
+            <Link href="/convocatorias-del-mes" className="rounded-xl border border-[#C9A46B]/50 px-4 py-2 text-[13px] font-bold text-[#C9A46B]">
+              Ventajas del mes
+            </Link>
+          </div>
+          <p className="mt-4 text-[12.5px] leading-relaxed text-[#F3E7DC]/60">
+            ¿Necesitas ayuda con algo, por ejemplo conseguir aliados? Llámanos al 3123335966 o escríbenos a servingproyectosgi@gmail.com.
+          </p>
         </section>
       )}
 
