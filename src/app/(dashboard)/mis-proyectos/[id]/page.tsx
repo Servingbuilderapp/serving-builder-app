@@ -5,6 +5,8 @@ import { contextoMiembro } from '@/lib/membresiasServicios'
 import { AvisoMiembros } from '@/components/panel/AvisoMiembros'
 import { EditorProyectoMembresia } from '@/components/panel/EditorProyectoMembresia'
 import { PostularProyecto } from '@/components/panel/PostularProyecto'
+import { BloqueProyectoTraido } from '@/components/panel/BloqueProyectoTraido'
+import { BUCKET_PROYECTOS, CLAVE_ARCHIVO_RUTA, esProyectoTraido } from '@/lib/miProyectoListo'
 import type { RespuestasProyecto } from '@/lib/miProyectoPasos'
 
 export const dynamic = 'force-dynamic'
@@ -36,6 +38,14 @@ export default async function ProyectoMembresiaPage({ params }: { params: Promis
   if (!proyecto) notFound()
 
   const terminado = proyecto.estado === 'terminado'
+  const traido = esProyectoTraido(proyecto.respuestas)
+  let urlArchivo: string | null = null
+  if (traido) {
+    const { data: firmada } = await ctx.servicio.storage
+      .from(BUCKET_PROYECTOS)
+      .createSignedUrl(proyecto.respuestas?.[CLAVE_ARCHIVO_RUTA] || '', 60 * 60)
+    urlArchivo = firmada?.signedUrl || null
+  }
   let postulacion: { estado: string; convocatoria_texto: string | null; nota_equipo: string | null } | null = null
   let opciones: { id: string; etiqueta: string }[] = []
 
@@ -81,7 +91,11 @@ export default async function ProyectoMembresiaPage({ params }: { params: Promis
         </section>
       )}
 
-      <EditorProyectoMembresia proyectoId={id} nombre={proyecto.nombre} inicial={proyecto.respuestas || {}} terminado={terminado} />
+      {traido ? (
+        <BloqueProyectoTraido respuestas={proyecto.respuestas || {}} urlArchivo={urlArchivo} />
+      ) : (
+        <EditorProyectoMembresia proyectoId={id} nombre={proyecto.nombre} inicial={proyecto.respuestas || {}} terminado={terminado} />
+      )}
     </div>
   )
 }

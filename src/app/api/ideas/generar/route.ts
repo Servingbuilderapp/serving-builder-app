@@ -58,14 +58,15 @@ export interface IdeasResultado {
 
 const DIAS_VENTANA_LIMITE = 15
 
-const ADMIN_EMAIL = 'servingbuilderapp@gmail.com'
+// Correos del equipo administrador (sin tope de generaciones)
+const ADMIN_EMAILS = ['servingbuilderapp@gmail.com', 'contacto@portalarquitecturadigital.com']
 
 /**
  * El administrador no tiene tope: necesita poder generar documentos las veces
  * que quiera para demos y pruebas de la plataforma.
  */
 async function esAdministrador(supabase: any, user: { id: string; email?: string | null }) {
-  if ((user.email || '').toLowerCase().trim() === ADMIN_EMAIL) return true
+  if (ADMIN_EMAILS.includes((user.email || '').toLowerCase().trim())) return true
 
   const { data: perfil } = await supabase
     .from('users')

@@ -8,8 +8,13 @@ import {
   campoCompleto,
   pasoCompleto,
   porcentajeProyecto,
+  hojasEstimadas,
+  MINIMO_TOTAL_CARACTERES,
+  CARACTERES_POR_HOJA,
+  MAX_CARACTERES_CAMPO,
   type RespuestasProyecto,
 } from '@/lib/miProyectoPasos'
+import { descargarEnWord, guardarEnPdf } from '@/lib/miProyectoDocumento'
 
 const CAMPO = 'mt-1 w-full rounded-xl border border-white/10 bg-[#3B1727] px-3 py-2 text-[13.5px] text-[#F3E7DC] placeholder:text-[#F3E7DC]/30'
 
@@ -82,6 +87,8 @@ export function EditorProyectoMembresia({
   }
 
   const pct = porcentajeProyecto(respuestas)
+  const hojas = hojasEstimadas(respuestas)
+  const hojasMinimas = Math.round(MINIMO_TOTAL_CARACTERES / CARACTERES_POR_HOJA)
   const todoListo = TODOS_LOS_PASOS.every((p) => pasoCompleto(p, respuestas))
 
   return (
@@ -96,9 +103,21 @@ export function EditorProyectoMembresia({
         <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-[#3B1727]">
           <div className="h-full rounded-full bg-[#C9A46B]" style={{ width: `${Math.max(pct, 3)}%` }} />
         </div>
-        <button onClick={() => setVerTodo((v) => !v)} className="mt-3 text-[12.5px] font-bold text-[#C9A46B] underline">
-          {verTodo ? 'Volver a llenar paso a paso' : 'Ver mi proyecto completo'}
-        </button>
+        <p className="mt-2 text-[12.5px] text-[#F3E7DC]/60">
+          Hojas escritas hasta ahora: unas {hojas}. Para terminar necesitas al menos {hojasMinimas} hojas de texto; con portada, índice y cada paso en hoja nueva, el documento final queda de unas 45 a 55 hojas.
+        </p>
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <button onClick={() => setVerTodo((v) => !v)} className="rounded-xl border border-[#C9A46B]/50 px-3.5 py-2 text-[12.5px] font-bold text-[#C9A46B]">
+            {verTodo ? 'Volver a llenar paso a paso' : 'Ver mi proyecto completo'}
+          </button>
+          <button onClick={() => descargarEnWord(nombre, respuestas)} className="rounded-xl bg-[#C9A46B] px-3.5 py-2 text-[12.5px] font-bold text-[#3B1727]">
+            Descargar en Word
+          </button>
+          <button onClick={() => guardarEnPdf(nombre, respuestas)} className="rounded-xl bg-[#C9A46B] px-3.5 py-2 text-[12.5px] font-bold text-[#3B1727]">
+            Descargar en PDF
+          </button>
+        </div>
+        <p className="mt-1.5 text-[11.5px] text-[#F3E7DC]/40">Para el PDF se abre el cuadro de impresión: elige &quot;Guardar como PDF&quot; como destino.</p>
       </div>
 
       {verTodo ? (
@@ -115,9 +134,6 @@ export function EditorProyectoMembresia({
               ))}
             </div>
           ))}
-          <button onClick={() => window.print()} className="rounded-xl bg-[#C9A46B] px-4 py-2 text-[13px] font-bold text-[#3B1727]">
-            Imprimir o guardar en PDF
-          </button>
         </div>
       ) : (
         <div className="space-y-6">
@@ -160,14 +176,20 @@ export function EditorProyectoMembresia({
                                   {campo.etiqueta}{campo.opcional ? ' (opcional)' : ''}
                                   {!campoCompleto(campo, respuestas) && !campo.opcional && <span className="text-[#C9A46B]"> *</span>}
                                 </label>
+                                {campo.ayuda && <p className="mt-0.5 text-[12px] leading-relaxed text-[#F3E7DC]/50">{campo.ayuda}</p>}
                                 <textarea
                                   rows={campo.filas || 4}
-                                  maxLength={6000}
+                                  maxLength={MAX_CARACTERES_CAMPO}
                                   disabled={terminado}
                                   value={respuestas[campo.id] || ''}
                                   onChange={(e) => cambiar(campo.id, e.target.value)}
                                   className={CAMPO}
                                 />
+                                {!campo.opcional && (campo.minimo ?? 3) > 3 && (
+                                  <p className={`mt-0.5 text-right text-[11.5px] ${campoCompleto(campo, respuestas) ? 'text-[#9BB18D]' : 'text-[#E0B868]'}`}>
+                                    {(respuestas[campo.id] || '').trim().length} de {campo.minimo} caracteres mínimos
+                                  </p>
+                                )}
                               </div>
                             ),
                           )}

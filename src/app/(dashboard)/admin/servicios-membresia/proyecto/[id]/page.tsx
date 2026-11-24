@@ -2,6 +2,8 @@ import React from 'react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
+import { BloqueProyectoTraido } from '@/components/panel/BloqueProyectoTraido'
+import { BUCKET_PROYECTOS, CLAVE_ARCHIVO_RUTA, esProyectoTraido } from '@/lib/miProyectoListo'
 import { TODOS_LOS_PASOS, porcentajeProyecto, type RespuestasProyecto } from '@/lib/miProyectoPasos'
 
 export const dynamic = 'force-dynamic'
@@ -18,6 +20,12 @@ export default async function ProyectoMiembroAdminPage({ params }: { params: Pro
     .maybeSingle<{ id: string; nombre: string; correo_cliente: string; estado: string; respuestas: RespuestasProyecto }>()
   if (!p) notFound()
   const r = p.respuestas || {}
+  const traido = esProyectoTraido(r)
+  let urlArchivo: string | null = null
+  if (traido) {
+    const { data: firmada } = await s.storage.from(BUCKET_PROYECTOS).createSignedUrl(r[CLAVE_ARCHIVO_RUTA] || '', 60 * 60)
+    urlArchivo = firmada?.signedUrl || null
+  }
 
   return (
     <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
@@ -26,6 +34,9 @@ export default async function ProyectoMiembroAdminPage({ params }: { params: Pro
       <p className="mb-5 text-[13px] text-[#F3E7DC]/55">
         {p.correo_cliente} · {p.estado === 'terminado' ? 'Terminado' : `En proceso (${porcentajeProyecto(r)} %)`}
       </p>
+      {traido ? (
+        <BloqueProyectoTraido respuestas={r} urlArchivo={urlArchivo} />
+      ) : (
       <div className="space-y-4 rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 text-[13.5px] text-[#F3E7DC]/85">
         {TODOS_LOS_PASOS.map((paso) => (
           <div key={paso.n}>
@@ -39,6 +50,7 @@ export default async function ProyectoMiembroAdminPage({ params }: { params: Pro
           </div>
         ))}
       </div>
+      )}
     </div>
   )
 }

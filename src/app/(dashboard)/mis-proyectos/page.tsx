@@ -6,6 +6,7 @@ import { contextoMiembro } from '@/lib/membresiasServicios'
 import { AvisoMiembros } from '@/components/panel/AvisoMiembros'
 import { NuevoProyectoMembresia } from '@/components/panel/NuevoProyectoMembresia'
 import { porcentajeProyecto, type RespuestasProyecto } from '@/lib/miProyectoPasos'
+import { esProyectoTraido } from '@/lib/miProyectoListo'
 import { Ayuda } from '@/components/ui/Ayuda'
 
 export const dynamic = 'force-dynamic'
@@ -57,10 +58,10 @@ export default async function MisProyectosPage() {
             ? 'Vista de administrador: puedes probar sin membresía y sin gastar cupo.'
             : restante === null
               ? 'Tu nivel no tiene límite de proyectos este mes.'
-              : `Este mes puedes estructurar ${limite} ${limite === 1 ? 'proyecto' : 'proyectos'}. Te quedan ${restante}. Se renuevan el ${uso?.hasta.toLocaleDateString('es-CO', { day: 'numeric', month: 'long' })}.`}
+              : `Este mes puedes abrir ${limite} ${limite === 1 ? 'proyecto' : 'proyectos'}. Te quedan ${restante}. Se renuevan el ${uso?.hasta.toLocaleDateString('es-CO', { day: 'numeric', month: 'long' })}.`}
         </p>
         <p className="mt-1 max-w-2xl text-[13px] text-[#F3E7DC]/50">
-          Tú llenas tu proyecto, paso a paso, con tus propias palabras. Cuando lo termines, pides que lo postulemos a la convocatoria que elijas. Si ganas, el 10 % es para Serving.
+          Tú llenas tu proyecto paso a paso, o traes uno que ya tengas hecho. Cuando esté listo, pides que lo postulemos a la convocatoria que elijas. Si ganas, el 10 % es para Serving.
         </p>
       </header>
 
@@ -74,7 +75,7 @@ export default async function MisProyectosPage() {
             <Link key={p.id} href={`/mis-proyectos/${p.id}`} className={`block rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-4 hover:brightness-110 ${SOMBRA_TARJETA}`}>
               <p className="text-[14.5px] font-extrabold text-[#F3E7DC]">{p.respuestas?.titulo_elegido?.trim() || p.nombre}</p>
               <p className="mt-1 text-[12.5px] text-[#F3E7DC]/55">
-                {p.estado === 'terminado' ? 'Terminado' : `En proceso · ${porcentajeProyecto(p.respuestas || {})} %`}
+                {esProyectoTraido(p.respuestas) ? 'Trajiste este proyecto ya hecho' : p.estado === 'terminado' ? 'Terminado' : `En proceso · ${porcentajeProyecto(p.respuestas || {})} %`}
                 {estadoPost.get(p.id) ? ` · ${TEXTO_POST[estadoPost.get(p.id) as string] || ''}` : ''}
               </p>
               <p className="mt-1 text-[12px] text-[#F3E7DC]/40">Creado el {new Date(p.created_at).toLocaleDateString('es-CO', { day: 'numeric', month: 'long' })}</p>
