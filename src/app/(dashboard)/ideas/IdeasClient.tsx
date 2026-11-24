@@ -491,11 +491,19 @@ export default function IdeasClient() {
             </ResultadoSeccion>
           )}
 
-          <ResultadoSeccion titulo="Ideas Generadas para Ti">
+          <ResultadoSeccion titulo={`Ideas de Negocio para Ti (${resultado.ideas?.length || 0})`}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {resultado.ideas?.map((idea, idx) => <IdeaCard key={idx} idea={idea} idx={idx} />)}
             </div>
           </ResultadoSeccion>
+
+          {resultado.ideasInnovacion && resultado.ideasInnovacion.length > 0 && (
+            <ResultadoSeccion titulo={`Ideas de Innovación para Ti (${resultado.ideasInnovacion.length})`}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {resultado.ideasInnovacion.map((idea, idx) => <IdeaCard key={idx} idea={idea} idx={idx} />)}
+              </div>
+            </ResultadoSeccion>
+          )}
         </div>
       )}
 

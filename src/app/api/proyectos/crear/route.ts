@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { PLAN_EMPRENDEDOR, MONTO_EMPRENDEDOR_COP, ESTADO_PENDIENTE_AVAL } from '@/lib/planEmprendedor'
 import { COBRO_EXTERIOR } from '@/lib/mediosDePago'
+import { buscarAliado } from '@/lib/aliados'
 
 function generarPasswordTemporal() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789'
@@ -48,11 +49,19 @@ export async function POST(req: Request) {
     const forwardedFor = req.headers.get('x-forwarded-for')
     const ip = forwardedFor ? forwardedFor.split(',')[0].trim() : 'desconocida'
 
+    // Código de aliado: se vuelve a validar aquí; el porcentaje sale de la tabla,
+    // nunca de lo que mande el navegador. Aplica a todos los planes, incluido Emprendedor.
+    const aliado = body.codigoAliado ? await buscarAliado(body.codigoAliado) : null
+    if (body.codigoAliado && !aliado) {
+      return NextResponse.json({ error: 'El código de aliado no es válido. Revísalo o déjalo en blanco.' }, { status: 400 })
+    }
+
     const firmaDigital = {
       nombre: nombreCliente,
       aceptado: true,
       fecha: new Date().toISOString(),
       ip,
+      ...(aliado ? { codigo_aliado: aliado.codigo, porcentaje_exito_pactado: aliado.porcentaje } : {}),
       autoriza_datos_personales: true,
       ...(esEmprendedor ? { declaracion_bajos_recursos: true } : {}),
     }
@@ -106,6 +115,7 @@ export async function POST(req: Request) {
         contrato_firmado: true,
         firma_digital: firmaDigital,
         pasarela_pago: pais === 'colombia' ? 'Manual' : 'Bold USD',
+        ...(aliado ? { codigo_aliado: aliado.codigo, porcentaje_exito_pactado: aliado.porcentaje } : {}),
       })
       .select('id')
       .single()

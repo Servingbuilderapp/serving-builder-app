@@ -5,7 +5,7 @@ import { callGemini } from '@/lib/gemini'
 export const maxDuration = 120
 
 // Tope por modelo: con 3 modelos de respaldo, ninguno puede gastarse todo el tiempo de la ruta.
-const TOPE_POR_MODELO_IDEAS_MS = 35000
+const TOPE_POR_MODELO_IDEAS_MS = 55000
 
 export interface IdeasGenerarInput {
   // Descripción libre de lo que el usuario está pensando (obligatorio). Puede ser "no tengo idea todavía".
@@ -47,8 +47,10 @@ export interface IdeasResultado {
   ideasConvergencia?: IdeaPropuesta[]
   // Cómo la necesidad humana elegida ancla el proyecto
   notaNecesidades?: string
-  // Ideas generales (siempre presentes)
+  // Ideas de negocio (siempre presentes, mínimo 20)
   ideas: IdeaPropuesta[]
+  // Ideas de innovación (siempre presentes, mínimo 20)
+  ideasInnovacion?: IdeaPropuesta[]
   notaConceptoMarkdown: string
   disponible: boolean
   proximaFechaDisponible?: string
@@ -198,7 +200,7 @@ Responde ÚNICAMENTE con un JSON válido (sin texto adicional, sin markdown, sin
   ${tieneNecesidad ? `"notaNecesidades": "<2-3 frases explicando cómo esa necesidad humana y esa forma de satisfacerla debería ser el punto de partida de sus proyectos, y qué necesitan sus clientes/beneficiarios reales a partir de ahí>",` : ''}
   "ideas": [
     { "titulo": "...", "descripcion": "...", "porQueFunciona": "...", "primerPaso": "..." }
-    // exactamente 5 ideas generales, variadas, tomando en cuenta TODO el contexto de arriba
+    // EXACTAMENTE 20 ideas de NEGOCIO distintas entre sí (nada de repetir con otras palabras), variadas en tamaño, público y modelo de ingresos, tomando en cuenta TODO el contexto de arriba. Cada campo en 1 o 2 frases concretas.
   ],
   "notaConceptoMarkdown": "<documento en formato markdown, 1-2 páginas, con estas secciones: Resumen de la Idea, Problema que Resuelve, A Quién Ayuda, Cómo Funciona, Primeros Pasos Sugeridos, Posibles Fuentes de Financiación — listo para que el usuario lo use como punto de partida si decide estructurar el proyecto formalmente>"
 }
@@ -206,20 +208,52 @@ Responde ÚNICAMENTE con un JSON válido (sin texto adicional, sin markdown, sin
 LO QUE EL USUARIO CONTÓ SOBRE SÍ MISMO O SU IDEA:
 ${body.descripcionIdea}${contextoHerramientas}`
 
-    // Si la IA devuelve algo ilegible (vacio, cortado), se le pide una vez mas antes de rendirse.
-    let resultado: Partial<IdeasResultado> | null = null
-    for (let intento = 1; intento <= 2 && !resultado; intento++) {
-      const respuestaIA = await callGemini(prompt, TOPE_POR_MODELO_IDEAS_MS)
-      try {
-        const jsonLimpio = respuestaIA.replace(/```json\n?|\n?```/g, '').trim()
-        resultado = JSON.parse(jsonLimpio)
-      } catch {
-        console.error(`No se pudo interpretar la respuesta de la IA (intento ${intento}):`, respuestaIA)
+    // Segundo pedido, en paralelo: 20 ideas de INNOVACION (producto, servicio, proceso o modelo nuevo)
+    const promptInnovacion = `Eres un consultor experto en innovación, especializado en Latinoamérica, subvenciones y cooperación internacional. Un usuario puede llegar con una idea clara, o completamente sin ideas — en ambos casos entrégale algo concreto y accionable.
+
+Responde ÚNICAMENTE con un JSON válido (sin texto adicional, sin markdown, sin \`\`\`json), con exactamente esta forma:
+
+{
+  "ideasInnovacion": [
+    { "titulo": "...", "descripcion": "...", "porQueFunciona": "...", "primerPaso": "..." }
+    // EXACTAMENTE 20 ideas de INNOVACIÓN distintas entre sí: algo nuevo o mejorado en un producto, servicio, proceso, tecnología o modelo de negocio (no ideas de negocio comunes). Mezcla innovación pequeña y de gran alcance. Cada campo en 1 o 2 frases concretas.
+  ]
+}
+
+LO QUE EL USUARIO CONTÓ SOBRE SÍ MISMO O SU IDEA:
+${body.descripcionIdea}${contextoHerramientas}`
+
+    // Si la IA devuelve algo ilegible o con menos de 20 ideas, se le pide una vez mas antes de rendirse.
+    const MINIMO_IDEAS = 20
+    async function pedirJson<T extends Partial<IdeasResultado>>(texto: string, clave: 'ideas' | 'ideasInnovacion'): Promise<T | null> {
+      let mejor: T | null = null
+      for (let intento = 1; intento <= 2; intento++) {
+        const respuestaIA = await callGemini(texto, TOPE_POR_MODELO_IDEAS_MS)
+        try {
+          const jsonLimpio = respuestaIA.replace(/```json\n?|\n?```/g, '').trim()
+          const candidato = JSON.parse(jsonLimpio) as T
+          const cantidad = Array.isArray(candidato[clave]) ? candidato[clave].length : 0
+          const cantidadMejor = mejor && Array.isArray(mejor[clave]) ? mejor[clave].length : -1
+          if (cantidad > cantidadMejor) mejor = candidato
+          if (cantidad >= MINIMO_IDEAS) return candidato
+        } catch {
+          console.error(`No se pudo interpretar la respuesta de la IA (intento ${intento}):`, respuestaIA)
+        }
       }
+      return mejor
     }
+
+    const [resultado, resultadoInnovacion] = await Promise.all([
+      pedirJson<Partial<IdeasResultado>>(prompt, 'ideas'),
+      pedirJson<Partial<IdeasResultado>>(promptInnovacion, 'ideasInnovacion').catch((e) => {
+        console.error('Fallaron las ideas de innovación:', e)
+        return null
+      }),
+    ])
     if (!resultado) {
       throw new Error('No se pudieron generar las ideas, intenta de nuevo')
     }
+    resultado.ideasInnovacion = resultadoInnovacion?.ideasInnovacion || []
 
     // Guardar el uso (esto es lo que cuenta contra el único uso cada 15 días)
     const { error: insertError } = await supabase.from('app_ideas_documentos').insert({

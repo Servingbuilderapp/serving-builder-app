@@ -62,5 +62,10 @@ general) únicamente para este plan:
 5. Todo lo demás del contrato (tratamiento de datos personales, alcance y
    límite de la responsabilidad, veracidad de la información) sigue igual.`
 
+/** Mismo anexo, pero con el porcentaje fijo del aliado con el que llegó el cliente. */
+export function anexoEmprendedorConAliado(porcentaje: number): string {
+  return ANEXO_EMPRENDEDOR.replace(`${COMISION_EMPRENDEDOR_PCT} %`, `${porcentaje} %`)
+}
+
 export const DECLARACION_EMPRENDEDOR =
   'Declaro que soy emprendedor, MiPyme o empresa sin empleados, que no cuento con los recursos para estructurar mi proyecto por otra vía, y que la información que entrego es verdadera. Entiendo que Serving revisa esta solicitud y puede no aprobarla.'

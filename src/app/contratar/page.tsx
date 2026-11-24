@@ -2,7 +2,7 @@
 
 import React, { Suspense, useState } from 'react'
 import { COBRO_COLOMBIA, COBRO_EXTERIOR, desglosarPrecio } from '@/lib/mediosDePago'
-import { TEXTO_CONTRATO } from '@/lib/textoContrato'
+import { TEXTO_CONTRATO, textoContratoConAliado } from '@/lib/textoContrato'
 import { useSearchParams } from 'next/navigation'
 import { GlowButton } from '@/components/ui/GlowButton'
 import { GlassCard } from '@/components/ui/GlassCard'
@@ -21,6 +21,7 @@ import {
   INCLUYE_EMPRENDEDOR,
   DECLARACION_EMPRENDEDOR,
   ANEXO_EMPRENDEDOR,
+  anexoEmprendedorConAliado,
 } from '@/lib/planEmprendedor'
 
 const TASA_COP_POR_USD = 3244 // Actualizar periódicamente según la TRM del día
@@ -143,6 +144,45 @@ function ContratarContent() {
     declaracionBajosRecursos: false,
   })
 
+  // Código de aliado: llega en el enlace (?aliado=LORENA) o lo escribe el cliente.
+  const [codigoAliado, setCodigoAliado] = useState((searchParams.get('aliado') || '').toUpperCase())
+  const [aliado, setAliado] = useState<{ codigo: string; nombre: string; porcentaje: number } | null>(null)
+  const [estadoAliado, setEstadoAliado] = useState<'' | 'buscando' | 'invalido'>('')
+
+  const validarAliado = async (codigo: string) => {
+    const limpio = codigo.trim().toUpperCase().replace(/\s+/g, '')
+    if (!limpio) {
+      setAliado(null)
+      setEstadoAliado('')
+      return
+    }
+    setEstadoAliado('buscando')
+    try {
+      const res = await fetch('/api/aliados/validar?codigo=' + encodeURIComponent(limpio))
+      const d = await res.json()
+      if (d.valido) {
+        setAliado({ codigo: d.codigo, nombre: d.nombre, porcentaje: d.porcentaje })
+        setEstadoAliado('')
+      } else {
+        setAliado(null)
+        setEstadoAliado('invalido')
+      }
+    } catch {
+      setAliado(null)
+      setEstadoAliado('invalido')
+    }
+  }
+
+  // Si el código vino en el enlace, se valida apenas se abre la página.
+  React.useEffect(() => {
+    const inicial = (searchParams.get('aliado') || '').trim()
+    if (inicial) validarAliado(inicial)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const textoContratoFinal = aliado ? textoContratoConAliado(TEXTO_CONTRATO, aliado.porcentaje) : TEXTO_CONTRATO
+  const anexoEmprendedorFinal = aliado ? anexoEmprendedorConAliado(aliado.porcentaje) : ANEXO_EMPRENDEDOR
+
   const handleFirmar = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!formData.aceptaTerminos || !formData.autorizaDatos || !pais) return
@@ -164,6 +204,7 @@ function ContratarContent() {
           verticalDiagnostico,
           declaracionBajosRecursos: formData.declaracionBajosRecursos,
           autorizaDatos: formData.autorizaDatos,
+          codigoAliado: aliado?.codigo || null,
         }),
       })
       const data = await res.json()
@@ -395,6 +436,32 @@ function ContratarContent() {
                 </div>
               </div>
 
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-color-base-content/70 mb-2">
+                  Código de aliado (opcional)
+                </label>
+                <input
+                  value={codigoAliado}
+                  onChange={(e) => setCodigoAliado(e.target.value.toUpperCase())}
+                  onBlur={() => validarAliado(codigoAliado)}
+                  placeholder="Si te recomendó un aliado, escribe su código"
+                  className="w-full px-4 py-3 rounded-xl border border-color-base-300 text-sm"
+                />
+                {estadoAliado === 'buscando' && (
+                  <p className="text-xs text-color-base-content/60 mt-1">Revisando el código...</p>
+                )}
+                {estadoAliado === 'invalido' && (
+                  <p className="text-xs text-red-600 font-bold mt-1">
+                    Ese código no existe. Revísalo, o déjalo en blanco para continuar sin código.
+                  </p>
+                )}
+                {aliado && (
+                  <p className="text-xs text-emerald-700 font-bold mt-1">
+                    Código válido: llegaste recomendado por {aliado.nombre}. Tu comisión de éxito queda en {aliado.porcentaje} %, y así aparece en el contrato de abajo.
+                  </p>
+                )}
+              </div>
+
               {esEmprendedor && (
                 <div className="p-5 rounded-2xl bg-amber-50 border border-amber-300 space-y-3">
                   <h4 className="text-xs font-black uppercase tracking-widest text-amber-800">
@@ -429,7 +496,7 @@ function ContratarContent() {
                   }}
                   className="text-xs text-[#1f1f1f] max-h-56 overflow-y-auto leading-relaxed pr-2 whitespace-pre-line border border-color-base-content/10 rounded-xl p-3 bg-white"
                 >
-                  {esEmprendedor ? TEXTO_CONTRATO + '\n\n' + ANEXO_EMPRENDEDOR : TEXTO_CONTRATO}
+                  {esEmprendedor ? textoContratoFinal + '\n\n' + anexoEmprendedorFinal : textoContratoFinal}
                 </div>
                 {!contratoLeido && (
                   <p className="text-[10px] text-amber-600 font-bold">

@@ -188,6 +188,18 @@ function seccion(n: number): string {
 }
 
 /**
+ * Contrato para un cliente que llegó con código de aliado: en lugar de las
+ * escalas por monto, la comisión de éxito es un porcentaje fijo sobre el monto
+ * desembolsado. Aplica tanto a la escala general como a la de Fondo Emprender.
+ */
+export function textoContratoConAliado(texto: string, porcentaje: number): string {
+  const fijo = `  - Sobre todo el monto efectivamente desembolsado: ${porcentaje}% (porcentaje pactado por la alianza comercial con la que usted llegó a la plataforma)`
+  return texto
+    .replace(TEXTO_ESCALA_EXITO_GENERAL, fijo)
+    .replace(TEXTO_ESCALA_EXITO_FONDO_EMPRENDER, fijo.replace('  - ', '   - '))
+}
+
+/**
  * Lo que lee y acepta quien recibe una cortesía: la autorización de datos
  * personales (cláusulas 1 a 6, Ley 1581) y las cláusulas generales que sí
  * aplican sin pago (8 naturaleza y no garantía, 9 alcance y límite, 12
