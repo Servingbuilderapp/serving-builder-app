@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
+import { VERSION_ACEPTACION_MEMBRESIA, textoAceptacionMembresia } from '@/lib/aceptacionMembresia'
 
 function generarPasswordTemporal() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789'
@@ -26,6 +27,9 @@ export async function POST(req: Request) {
 
     if (!nombreCliente || !correoCliente || !whatsapp || !nivel || !ciclo) {
       return NextResponse.json({ error: 'Faltan datos obligatorios' }, { status: 400 })
+    }
+    if (body.aceptaTerminos !== true) {
+      return NextResponse.json({ error: 'Debes aceptar las condiciones de la membresía para continuar.' }, { status: 400 })
     }
 
     const supabaseAdmin = createAdminClient(
@@ -75,6 +79,19 @@ export async function POST(req: Request) {
       .single()
 
     if (error) throw error
+
+    // Constancia de lo que aceptó. Va aparte y nunca frena la compra: si las columnas
+    // todavía no existen (falta correr supabase_migration_membresias_aceptacion.sql), solo se avisa en el registro.
+    const { error: errorConstancia } = await supabaseAdmin
+      .from('membresias_clientes')
+      .update({
+        texto_aceptado: textoAceptacionMembresia(ciclo === 'anual' ? 'anual' : 'mensual'),
+        version_aceptacion: VERSION_ACEPTACION_MEMBRESIA,
+        aceptado_en: new Date().toISOString(),
+        ip_aceptacion: (req.headers.get('x-forwarded-for') || '').split(',')[0].trim() || null,
+      })
+      .eq('id', data.id)
+    if (errorConstancia) console.error('No se pudo guardar la constancia de aceptación de la membresía:', errorConstancia)
 
     return NextResponse.json({
       success: true,

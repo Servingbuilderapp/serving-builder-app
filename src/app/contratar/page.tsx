@@ -24,7 +24,7 @@ import {
   anexoEmprendedorConAliado,
 } from '@/lib/planEmprendedor'
 
-const TASA_COP_POR_USD = 3244 // Actualizar periódicamente según la TRM del día
+const TASA_COP_POR_USD = 3493 // Actualizar periódicamente según la TRM del día
 
 /**
  * Modalidades de estructuración.

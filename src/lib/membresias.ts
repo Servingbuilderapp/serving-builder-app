@@ -15,7 +15,7 @@
  * `factorAnual` de cada nivel.
  */
 
-export const TASA_COP_POR_USD = 3244 // La misma tasa que usa /contratar. Actualizar periódicamente.
+export const TASA_COP_POR_USD = 3493 // La misma tasa que usa /contratar. Actualizar periódicamente.
 
 export type NivelMembresia = {
   slug: 'explorador' | 'constructor' | 'arquitecto'

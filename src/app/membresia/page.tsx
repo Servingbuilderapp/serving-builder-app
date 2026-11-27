@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils'
 import { COBRO_COLOMBIA } from '@/lib/mediosDePago'
 import { NIVELES_MEMBRESIA, nivelPorSlug, precioAnualUsd, aPesos, formatoUSD } from '@/lib/membresias'
 import { BotonPagoBold } from '@/components/pagos/BotonPagoBold'
+import { textoAceptacionMembresia } from '@/lib/aceptacionMembresia'
 
 function formatoCOP(valor: number): string {
   return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(valor)
@@ -119,6 +120,7 @@ function MembresiaContent() {
           ciclo,
           montoUsd,
           montoCop: pais === 'colombia' ? montoCop : null,
+          aceptaTerminos: true,
         }),
       })
       const data = await res.json()
@@ -243,8 +245,7 @@ function MembresiaContent() {
                   onChange={(e) => setFormData({ ...formData, aceptaTerminos: e.target.checked })}
                   className="mt-0.5"
                 />
-                Acepto que esta es una suscripción {ciclo === 'anual' ? 'anual' : 'mensual'} y que
-                debo renovar el pago cuando venza para seguir teniendo acceso.
+                {textoAceptacionMembresia(ciclo === 'anual' ? 'anual' : 'mensual')}
               </label>
 
               {error && <p className="text-sm text-red-600">{error}</p>}
