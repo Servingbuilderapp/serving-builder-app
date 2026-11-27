@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { DIAS_DE_AVISO } from '@/lib/empresarial/membresia'
 
 /** Pantallas que se pueden ver aunque el acceso haya vencido (solo lectura). */
-const PERMITIDAS_VENCIDO = ['/empresarial/documento', '/empresarial/membresia', '/empresarial/camino']
+const PERMITIDAS_VENCIDO = ['/empresarial/documento', '/empresarial/membresia', '/empresarial/camino', '/empresarial/proyecto-hecho']
 
 interface Props {
   activo: boolean

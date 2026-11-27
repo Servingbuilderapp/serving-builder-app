@@ -138,6 +138,22 @@ export function EmpresarialClient({ userId, proyectos = [] }: { userId: string |
           <p className="mt-4 text-lg text-ca-vino/80">Crea. Fortalece. Crece.</p>
         </div>
 
+        {/* ---------------- QUE LA IA FORMULE MI PROYECTO ---------------- */}
+        {paso === 'preguntas' && (
+          <section className={`mt-10 rounded-2xl border border-ca-oro/60 bg-ca-suave p-5 text-center ${RELIEVE_TARJETA}`}>
+            <h2 className="text-xl font-extrabold">¿Prefieres que la IA formule tu proyecto?</h2>
+            <p className="mt-1 text-sm text-ca-vino/80">
+              Sube tu documento o cuéntanos tu idea, responde unas preguntas básicas y la IA arma tu proyecto.
+            </p>
+            <Link
+              href="/empresarial/proyecto-hecho"
+              className={`mt-4 h-12 px-6 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-ca-oro-claro to-ca-oro text-ca-vino-hondo font-extrabold ${RELIEVE_BOTON}`}
+            >
+              Empezar <ArrowRight className="h-4 w-4" />
+            </Link>
+          </section>
+        )}
+
         {/* ---------------- MIS PROYECTOS ---------------- */}
         {paso === 'preguntas' && proyectos.length > 0 && (
           <section className={`mt-10 rounded-2xl border border-ca-oro/60 bg-ca-fondo p-5 ${RELIEVE_TARJETA}`}>
