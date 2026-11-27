@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, ArrowRight, Check, FileText } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { ArrowLeft, ArrowRight, FileText } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 const RELIEVE_BOTON =
@@ -57,14 +58,27 @@ export function ProyectoHechoClient({ userId }: { userId: string }) {
   const [aQuien, setAQuien] = useState('')
   const [ciudad, setCiudad] = useState('')
   const [pais, setPais] = useState('Colombia')
+  const [personas, setPersonas] = useState('')
 
   const [guardando, setGuardando] = useState(false)
   const [error, setError] = useState('')
-  const [proyectoId, setProyectoId] = useState<string | null>(null)
+  const router = useRouter()
 
   const tieneContenido = idea.trim().length >= 30 || archivo !== null
+  // Solo se pregunta cuántas personas trabajan cuando ya hay ventas: de eso depende el precio.
+  const vende = etapa === 'vendiendo' || etapa === 'consolidada' || yaVendio === true
+  const personasValidas = !vende || (personas !== '' && Number(personas) >= 0)
   const completo =
-    nombre.trim() && tieneContenido && tipo && etapa && dinero && tiempo && yaVendio !== null && aQuien.trim() && ciudad.trim()
+    nombre.trim() &&
+    tieneContenido &&
+    tipo &&
+    etapa &&
+    dinero &&
+    tiempo &&
+    yaVendio !== null &&
+    aQuien.trim() &&
+    ciudad.trim() &&
+    personasValidas
 
   async function guardar() {
     if (!completo) return
@@ -112,10 +126,12 @@ export function ProyectoHechoClient({ userId }: { userId: string }) {
         ya_vendio: yaVendio,
         a_quien_vende: aQuien.trim(),
         ciudad: ciudad.trim(),
+        personas: vende ? Math.round(Number(personas)) : null,
       })
       if (errorEntrada) throw errorEntrada
 
-      setProyectoId(proyecto.id as string)
+      // Sigue la muestra gratis.
+      router.push(`/empresarial/proyecto-hecho?proyecto=${proyecto.id as string}`)
     } catch (err) {
       const mensaje = (err as { message?: string } | null)?.message || ''
       setError(mensaje || 'No se pudo guardar. Intenta de nuevo.')
@@ -137,23 +153,7 @@ export function ProyectoHechoClient({ userId }: { userId: string }) {
           <ArrowLeft className="h-4 w-4" /> Volver
         </Link>
 
-        {proyectoId ? (
-          <section className={`mt-10 text-center rounded-3xl border border-ca-oro/45 bg-ca-tarjeta p-8 md:p-10 ${RELIEVE_TARJETA}`}>
-            <div className="mx-auto h-14 w-14 rounded-full bg-ca-oro-claro flex items-center justify-center">
-              <Check className="h-7 w-7 text-ca-vino-hondo" />
-            </div>
-            <h1 className="mt-5 text-2xl font-extrabold">Recibimos tu información</h1>
-            <p className="mt-3 text-ca-vino/80">
-              Ya tenemos tu documento o tu idea y tus respuestas. En el siguiente paso la IA los lee y te muestra un adelanto de tu proyecto.
-            </p>
-            <div className="mt-6">
-              <Link href={`/empresarial/camino?proyecto=${proyectoId}`} className={botonOro}>
-                Ver mi proyecto <ArrowRight className="h-5 w-5" />
-              </Link>
-            </div>
-          </section>
-        ) : (
-          <>
+        <>
             <div className="mt-8 text-center">
               <div className="text-sm font-bold uppercase tracking-[0.25em] text-ca-oro-texto">Serving</div>
               <h1 className="mt-3 text-3xl md:text-4xl font-extrabold tracking-tight text-balance">
@@ -185,13 +185,13 @@ export function ProyectoHechoClient({ userId }: { userId: string }) {
                 </label>
 
                 <div className="mt-5">
-                  <span className="text-sm font-semibold">O sube tu documento (PDF o Word)</span>
+                  <span className="text-sm font-semibold">O sube tu documento (PDF o Word .docx)</span>
                   <label
                     className={`mt-2 flex items-center gap-3 rounded-xl border border-dashed border-ca-oro/60 bg-ca-fondo p-4 cursor-pointer hover:bg-ca-suave ${RELIEVE_BOTON}`}
                   >
                     <FileText className="h-6 w-6 text-ca-oro-texto shrink-0" />
                     <span className="text-sm">{archivo ? archivo.name : 'Elegir archivo de tu computador'}</span>
-                    <input type="file" accept=".pdf,.doc,.docx" className="hidden" onChange={(e) => setArchivo(e.target.files?.[0] ?? null)} />
+                    <input type="file" accept=".pdf,.docx" className="hidden" onChange={(e) => setArchivo(e.target.files?.[0] ?? null)} />
                   </label>
                   <p className="mt-2 text-xs text-ca-vino/75">Con una de las dos basta: el documento o tu idea escrita (mínimo unas dos frases).</p>
                 </div>
@@ -258,6 +258,20 @@ export function ProyectoHechoClient({ userId }: { userId: string }) {
                   </div>
                 </div>
 
+                {vende && (
+                  <label className="block mt-5">
+                    <span className="text-sm font-semibold">¿Cuántas personas trabajan hoy en el negocio? (cuéntate a ti también)</span>
+                    <input
+                      type="number"
+                      min={0}
+                      value={personas}
+                      onChange={(e) => setPersonas(e.target.value)}
+                      placeholder="Por ejemplo: 4"
+                      className={campo}
+                    />
+                  </label>
+                )}
+
                 <label className="block mt-5">
                   <span className="text-sm font-semibold">¿A quién le vendes (o le venderías)?</span>
                   <input value={aQuien} onChange={(e) => setAQuien(e.target.value)} placeholder="Por ejemplo: familias de Cali, restaurantes, colegios" className={campo} />
@@ -284,8 +298,7 @@ export function ProyectoHechoClient({ userId }: { userId: string }) {
                 {!completo && <p className="mt-3 text-xs text-ca-vino/75">Responde todo lo anterior para poder enviar.</p>}
               </div>
             </section>
-          </>
-        )}
+        </>
       </div>
     </main>
   )

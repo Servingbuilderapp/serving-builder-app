@@ -63,14 +63,15 @@ export async function POST(req: Request) {
   // Idempotencia: si Bold reenvía el mismo aviso, no se procesa dos veces en
   // ninguna de las tres tablas.
   if (paymentId) {
-    const [academiaYa, proyectoYa, membresiaYa, abanicoYa, caminoAYa] = await Promise.all([
+    const [academiaYa, proyectoYa, membresiaYa, abanicoYa, caminoAYa, formulacionYa] = await Promise.all([
       supabaseAdmin.from('academia_compras').select('id').eq('bold_payment_id', paymentId).maybeSingle(),
       supabaseAdmin.from('proyectos_clientes_serving').select('id').eq('bold_payment_id', paymentId).maybeSingle(),
       supabaseAdmin.from('membresias_clientes').select('id').eq('bold_payment_id', paymentId).maybeSingle(),
       supabaseAdmin.from('abanicos').select('id').eq('bold_payment_id', paymentId).maybeSingle(),
       supabaseAdmin.from('sfpe_membresias').select('id').eq('bold_payment_id', paymentId).maybeSingle(),
+      supabaseAdmin.from('sfpe_entrada').select('id').eq('bold_payment_id', paymentId).maybeSingle(),
     ])
-    if (academiaYa.data || proyectoYa.data || membresiaYa.data || abanicoYa.data || caminoAYa.data) {
+    if (academiaYa.data || proyectoYa.data || membresiaYa.data || abanicoYa.data || caminoAYa.data || formulacionYa.data) {
       return NextResponse.json({ recibido: true, yaProcesado: true })
     }
   }
@@ -193,6 +194,24 @@ export async function POST(req: Request) {
           bold_payment_id: paymentId || null,
         })
         .eq('id', planCaminoA.id)
+    }
+    return NextResponse.json({ recibido: true })
+  }
+
+  // 6) Pago único de la formulación del proyecto (Camino A, "Que la IA formule mi proyecto").
+  // Solo se marca como pagado; el documento lo arma /api/empresarial/proyecto-hecho/formular cuando la persona vuelve.
+  const formulacion = await supabaseAdmin
+    .from('sfpe_entrada')
+    .select('id, estado_pago')
+    .eq('bold_order_id', referencia)
+    .maybeSingle()
+
+  if (formulacion.data) {
+    if (formulacion.data.estado_pago !== 'pagado') {
+      await supabaseAdmin
+        .from('sfpe_entrada')
+        .update({ estado_pago: 'pagado', pagado_en: new Date().toISOString(), bold_payment_id: paymentId || null })
+        .eq('id', formulacion.data.id)
     }
     return NextResponse.json({ recibido: true })
   }
