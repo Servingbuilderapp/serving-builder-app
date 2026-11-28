@@ -39,13 +39,13 @@ export default async function AdminConfiguracionPage() {
       </div>
 
       {/* MEDIOS DE PAGO */}
-      <div className="bg-[#3B1727] border border-color-base-content/10 rounded-2xl p-6 space-y-5">
+      <div className="bg-[#153F55] border border-color-base-content/10 rounded-2xl p-6 space-y-5">
         <h2 className="text-sm font-black text-color-base-content uppercase tracking-wider flex items-center gap-2">
           <CreditCard className="w-4 h-4 text-color-primary" /> Medios de pago activos
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-[#4C2032]/60 border border-white/10 rounded-xl p-4 space-y-2">
+          <div className="bg-[#1E5A7A]/60 border border-white/10 rounded-xl p-4 space-y-2">
             <span className="text-[10px] font-black text-color-base-content/45 uppercase tracking-widest">Colombia</span>
             <div>
               <span className={`inline-flex px-2.5 py-1 rounded-full text-[11px] font-bold ${
@@ -67,7 +67,7 @@ export default async function AdminConfiguracionPage() {
             )}
           </div>
 
-          <div className="bg-[#4C2032]/60 border border-white/10 rounded-xl p-4 space-y-2">
+          <div className="bg-[#1E5A7A]/60 border border-white/10 rounded-xl p-4 space-y-2">
             <span className="text-[10px] font-black text-color-base-content/45 uppercase tracking-widest">Exterior</span>
             <span className={`inline-flex px-2.5 py-1 rounded-full text-[11px] font-bold ${
               COBRO_EXTERIOR.paypal ? 'bg-[#7A8B6F]/20 text-[#9BB18D]' : 'bg-color-base-content/10 text-color-base-content/50'
@@ -82,14 +82,14 @@ export default async function AdminConfiguracionPage() {
       </div>
 
       {/* PRECIOS Y COMISIONES */}
-      <div className="bg-[#3B1727] border border-color-base-content/10 rounded-2xl p-6 space-y-5">
+      <div className="bg-[#153F55] border border-color-base-content/10 rounded-2xl p-6 space-y-5">
         <h2 className="text-sm font-black text-color-base-content uppercase tracking-wider flex items-center gap-2">
           <DollarSign className="w-4 h-4 text-color-primary" /> Precios internos y comisiones
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {MODALIDADES_ESTRUCTURACION.map((plan: PlanEstructuracionMapeado) => (
-            <div key={plan.nombre} className="bg-[#4C2032]/60 border border-white/10 rounded-xl p-4">
+            <div key={plan.nombre} className="bg-[#1E5A7A]/60 border border-white/10 rounded-xl p-4">
               <span className="text-[10px] font-black text-color-base-content/45 uppercase tracking-widest">{plan.nombre}</span>
               <p className="text-xl font-black text-color-base-content mt-1">
                 {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(plan.honorariosBase)}
@@ -100,7 +100,7 @@ export default async function AdminConfiguracionPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-[#4C2032]/60 border border-white/10 rounded-xl p-4">
+          <div className="bg-[#1E5A7A]/60 border border-white/10 rounded-xl p-4">
             <span className="text-[10px] font-black text-color-base-content/45 uppercase tracking-widest">{NOMBRE_PLAN_EMPRENDEDOR}</span>
             <p className="text-xl font-black text-color-base-content mt-1">
               {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(MONTO_EMPRENDEDOR_COP)}
@@ -108,7 +108,7 @@ export default async function AdminConfiguracionPage() {
             </p>
             <p className="text-xs text-color-base-content/50 mt-1">Comisión de éxito: {COMISION_EMPRENDEDOR_PCT}%</p>
           </div>
-          <div className="bg-[#4C2032]/60 border border-white/10 rounded-xl p-4 space-y-1.5">
+          <div className="bg-[#1E5A7A]/60 border border-white/10 rounded-xl p-4 space-y-1.5">
             <span className="text-[10px] font-black text-color-base-content/45 uppercase tracking-widest">Fondo Emprender — por monto solicitado</span>
             {/* Mismos valores de ESCALONES_FONDO_EMPRENDER en src/app/contratar/page.tsx (decisión del 27 oct 2026). */}
             {[
@@ -153,7 +153,7 @@ export default async function AdminConfiguracionPage() {
       </div>
 
       {/* ACCESO DEL EQUIPO */}
-      <div className="bg-[#3B1727] border border-color-base-content/10 rounded-2xl overflow-hidden">
+      <div className="bg-[#153F55] border border-color-base-content/10 rounded-2xl overflow-hidden">
         <div className="p-6 pb-0">
           <h2 className="text-sm font-black text-color-base-content uppercase tracking-wider flex items-center gap-2">
             <Users className="w-4 h-4 text-color-primary" /> Quién tiene acceso
@@ -162,7 +162,7 @@ export default async function AdminConfiguracionPage() {
         <div className="overflow-x-auto mt-4">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-color-base-content/10 bg-[#4C2032]">
+              <tr className="border-b border-color-base-content/10 bg-[#1E5A7A]">
                 <th className="px-6 py-3 text-xs font-bold text-color-base-content/40 uppercase tracking-widest">Persona</th>
                 <th className="px-6 py-3 text-xs font-bold text-color-base-content/40 uppercase tracking-widest">Rol</th>
                 <th className="px-6 py-3 text-xs font-bold text-color-base-content/40 uppercase tracking-widest">Desde</th>

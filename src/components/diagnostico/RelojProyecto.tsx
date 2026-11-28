@@ -41,7 +41,7 @@ export function RelojProyecto({
   const enlaceAnalista = `https://wa.me/573123335966?text=${encodeURIComponent(mensajeAnalista)}`
 
   return (
-    <div className="rounded-3xl bg-[#3B1727] border border-[#B08D57]/45 p-6 md:p-8 space-y-6 text-[#F3E7DC]">
+    <div className="rounded-3xl bg-[#153F55] border border-[#B08D57]/45 p-6 md:p-8 space-y-6 text-[#F3E7DC]">
       <div className="space-y-1 text-center md:text-left">
         <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#C9A46B]">El reloj de tu proyecto</span>
         <p className="text-xs text-[#F3E7DC]/75">Mide la madurez de tu proyecto, no el tiempo que te queda.</p>
@@ -131,7 +131,7 @@ export function RelojProyecto({
                 href={enlaceAnalista}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] font-black text-xs uppercase tracking-wider hover:brightness-110 shadow-lg"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D] font-black text-xs uppercase tracking-wider hover:brightness-110 shadow-lg"
               >
                 <MessageSquare className="h-4 w-4" /> Quiero hablar con la analista financiera
               </a>

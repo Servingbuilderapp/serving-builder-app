@@ -56,19 +56,19 @@ export default async function ProyectoMembresiaPage({ params }: { params: Promis
   }
 
   return (
-    <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
+    <div className="min-h-full bg-[#1A4D68] px-4 py-6 lg:px-6">
       <Link href="/mis-proyectos" className="text-[12.5px] font-bold text-[#C9A46B] underline">← Mis proyectos</Link>
       <h1 className="mb-4 mt-2 text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">{proyecto.nombre}</h1>
 
       {terminado && (
-        <section className={`mb-5 rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
+        <section className={`mb-5 rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 ${SOMBRA_TARJETA}`}>
           <h2 className="text-[15px] font-extrabold text-[#E0B868]">Tu proyecto está terminado</h2>
           <p className="mt-1 text-[13px] leading-relaxed text-[#F3E7DC]/70">
             Busca la convocatoria que más te sirva, regístrala aquí y postula tú mismo en el portal de la entidad. Cada proyecto tiene máximo {MAX_POSTULACIONES_POR_PROYECTO} postulaciones.
           </p>
           <RegistrarPostulaciones proyectoId={id} opciones={opciones} usadas={usadas} />
           <div className="mt-4 flex flex-wrap gap-2">
-            <Link href="/mis-convocatorias" className="rounded-xl bg-[#C9A46B] px-4 py-2 text-[13px] font-bold text-[#3B1727]">
+            <Link href="/mis-convocatorias" className="rounded-xl bg-[#C9A46B] px-4 py-2 text-[13px] font-bold text-[#153F55]">
               Explorar convocatorias
             </Link>
             <Link href="/convocatorias-del-mes" className="rounded-xl border border-[#C9A46B]/50 px-4 py-2 text-[13px] font-bold text-[#C9A46B]">

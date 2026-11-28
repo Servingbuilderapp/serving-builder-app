@@ -66,11 +66,11 @@ function LineasSaldo({ r }: { r: Record<ClaveEscenario, ResultadoEscenario> }) {
   return (
     <figure>
       <svg viewBox={`0 0 ${ancho} ${alto + 52}`} role="img" aria-label="Dinero en caja mes a mes en cada escenario" className="w-full">
-        <line x1={mi} x2={ancho - 12} y1={ceroY} y2={ceroY} stroke="#54142B" strokeOpacity="0.55" strokeDasharray="5 4" />
-        <text x={mi - 6} y={ceroY + 4} textAnchor="end" fontSize="11" fill="#54142B">
+        <line x1={mi} x2={ancho - 12} y1={ceroY} y2={ceroY} stroke="#1A4D68" strokeOpacity="0.55" strokeDasharray="5 4" />
+        <text x={mi - 6} y={ceroY + 4} textAnchor="end" fontSize="11" fill="#1A4D68">
           0
         </text>
-        <text x={mi - 6} y={y(hasta) + 4} textAnchor="end" fontSize="10" fill="#54142B">
+        <text x={mi - 6} y={y(hasta) + 4} textAnchor="end" fontSize="10" fill="#1A4D68">
           {compacto(hasta)}
         </text>
         {desde < 0 && (
@@ -94,7 +94,7 @@ function LineasSaldo({ r }: { r: Record<ClaveEscenario, ResultadoEscenario> }) {
           </g>
         ))}
         {r.normal.filas.map((f, i) => (
-          <text key={i} x={x(i)} y={alto + 36} textAnchor="middle" fontSize="12" fill="#54142B">
+          <text key={i} x={x(i)} y={alto + 36} textAnchor="middle" fontSize="12" fill="#1A4D68">
             {f.mes}
           </text>
         ))}

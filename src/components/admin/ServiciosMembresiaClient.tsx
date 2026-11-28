@@ -8,9 +8,9 @@ export type SesionAdmin = { id: string; titulo: string; fecha_hora: string; insc
 export type AcompAdmin = { id: string; correo: string; tema: string; estado: string; fecha_hora: string | null; enlace: string | null; nota_equipo: string | null }
 export type MensajeAdmin = { id: string; nombre: string; texto: string }
 
-const CAMPO = 'mt-1 w-full rounded-lg border border-white/10 bg-[#3B1727] px-2.5 py-1.5 text-[13px] text-[#F3E7DC]'
-const BOTON = 'rounded-lg bg-[#C9A46B] px-3 py-1.5 text-[12.5px] font-bold text-[#3B1727] disabled:opacity-50'
-const TARJETA = 'rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-4'
+const CAMPO = 'mt-1 w-full rounded-lg border border-white/10 bg-[#153F55] px-2.5 py-1.5 text-[13px] text-[#F3E7DC]'
+const BOTON = 'rounded-lg bg-[#C9A46B] px-3 py-1.5 text-[12.5px] font-bold text-[#153F55] disabled:opacity-50'
+const TARJETA = 'rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-4'
 
 function aLocal(iso: string | null) {
   if (!iso) return ''

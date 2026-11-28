@@ -71,7 +71,7 @@ export default async function AcademiaPage() {
 
                 <Link
                   href={`/academia/${curso.slug}`}
-                  className="relative inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 font-semibold text-sm transition-all duration-200 active:scale-[0.98] bg-gradient-to-b from-[#C39F68] to-[#A8804B] text-[#3A1420] border border-[#8A6636] shadow-[0_1px_0_rgba(255,255,255,0.35)_inset,0_8px_20px_-10px_rgba(0,0,0,0.5)] hover:from-[#CDAC79] hover:to-[#B08D57] w-full"
+                  className="relative inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 font-semibold text-sm transition-all duration-200 active:scale-[0.98] bg-gradient-to-b from-[#C39F68] to-[#A8804B] text-[#12394D] border border-[#8A6636] shadow-[0_1px_0_rgba(255,255,255,0.35)_inset,0_8px_20px_-10px_rgba(0,0,0,0.5)] hover:from-[#CDAC79] hover:to-[#B08D57] w-full"
                 >
                   {yaEsTuyo ? 'Ya es tuyo — entrar al curso' : 'Ver curso'}
                 </Link>

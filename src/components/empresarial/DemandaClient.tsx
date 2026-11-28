@@ -22,7 +22,7 @@ import {
 
 const RELIEVE_BOTON =
   'shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-200'
-const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(84,20,43,0.06),0_10px_28px_-14px_rgba(84,20,43,0.22)]'
+const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(26,77,104,0.06),0_10px_28px_-14px_rgba(26,77,104,0.22)]'
 const CAMPO_ENTRADA =
   'mt-2 w-full rounded-xl border border-ca-oro/40 bg-ca-fondo px-4 py-3 text-ca-vino placeholder:text-ca-vino/65 focus:outline-none focus:ring-2 focus:ring-ca-oro-claro'
 

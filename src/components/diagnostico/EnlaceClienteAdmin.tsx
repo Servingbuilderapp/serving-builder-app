@@ -19,7 +19,7 @@ export function EnlaceClienteAdmin({ enlace, correo }: { enlace: string; correo:
   const whatsapp = `https://wa.me/?text=${encodeURIComponent(mensaje)}`
 
   return (
-    <section className="rounded-2xl border-2 border-color-primary/40 bg-white text-[#2B1220] p-6 space-y-3 shadow-lg">
+    <section className="rounded-2xl border-2 border-color-primary/40 bg-white text-[#0E2B3B] p-6 space-y-3 shadow-lg">
       <h2 className="text-sm font-black uppercase tracking-wider">Enlace del cliente</h2>
       <p className="text-xs">
         Mándale este enlace al cliente. Al abrirlo escribe el correo con el que hizo el diagnóstico

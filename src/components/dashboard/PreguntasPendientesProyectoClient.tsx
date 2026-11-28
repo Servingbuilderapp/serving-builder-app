@@ -69,7 +69,7 @@ export function PreguntasPendientesProyectoClient({ preguntasIniciales }: Props)
   }
 
   return (
-    <div className="p-8 rounded-3xl border border-[#B08D57]/35 bg-[#4C2032] space-y-5">
+    <div className="p-8 rounded-3xl border border-[#B08D57]/35 bg-[#1E5A7A] space-y-5">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-black text-[#F3E7DC]">
           Nos falta un poco de información
@@ -100,7 +100,7 @@ export function PreguntasPendientesProyectoClient({ preguntasIniciales }: Props)
         placeholder="Escribe tu respuesta aquí..."
         rows={4}
         disabled={enviando}
-        className="w-full p-4 rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] text-[#F3E7DC] text-sm placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/30"
+        className="w-full p-4 rounded-2xl border border-[#B08D57]/35 bg-[#153F55] text-[#F3E7DC] text-sm placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/30"
       />
 
       {error && <p className="text-xs text-[#E0917E] font-bold">{error}</p>}
@@ -108,7 +108,7 @@ export function PreguntasPendientesProyectoClient({ preguntasIniciales }: Props)
       <button
         onClick={handleEnviar}
         disabled={enviando || !respuestaTexto.trim()}
-        className="w-full py-3 rounded-2xl bg-[#C9A46B] text-[#3B1727] font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50"
+        className="w-full py-3 rounded-2xl bg-[#C9A46B] text-[#153F55] font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50"
       >
         {enviando ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
         {enviando ? 'Enviando...' : 'Enviar respuesta'}

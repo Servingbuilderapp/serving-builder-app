@@ -320,7 +320,7 @@ export default async function EjemploPage({
             href={`/admin/ejemplo?pantalla=${p.clave}`}
             className={
               p.clave === actual
-                ? 'rounded-full bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-4 py-2 text-xs font-bold text-[#3A1420] shadow-md'
+                ? 'rounded-full bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-4 py-2 text-xs font-bold text-[#12394D] shadow-md'
                 : 'rounded-full border border-[#B08D57]/40 px-4 py-2 text-xs font-bold text-color-base-content/75 hover:bg-color-primary/10'
             }
           >
@@ -331,7 +331,7 @@ export default async function EjemploPage({
 
       <div className="overflow-hidden rounded-2xl">
         {actual === 'diagnostico' ? (
-          <div className="bg-[#54142B] p-4 md:p-6">
+          <div className="bg-[#1A4D68] p-4 md:p-6">
             <ResultadoDiagnosticoVista resultado={DIAGNOSTICO} nombreProyecto={NOMBRE_PROYECTO} mostrarCierre={false} />
           </div>
         ) : null}

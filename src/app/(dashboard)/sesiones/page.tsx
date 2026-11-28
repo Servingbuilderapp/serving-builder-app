@@ -39,7 +39,7 @@ export default async function SesionesPage() {
   const sinCupo = !ctx.esEquipo && reservadasMes >= ctx.servicios.sesionesPorMes
 
   return (
-    <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
+    <div className="min-h-full bg-[#1A4D68] px-4 py-6 lg:px-6">
       <header className="mb-5">
         <h1 className="flex items-center gap-2 text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">
           <CalendarClock className="h-5 w-5 text-[#C9A46B]" />
@@ -57,7 +57,7 @@ export default async function SesionesPage() {
           {lista.map((s) => {
             const inscrito = inscritas.has(s.id)
             return (
-              <article key={s.id} className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
+              <article key={s.id} className={`rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 ${SOMBRA_TARJETA}`}>
                 <h2 className="text-[14.5px] font-extrabold text-[#F3E7DC]">{s.titulo}</h2>
                 <p className="mt-1 text-[12.5px] font-semibold text-[#E0B868]">
                   {new Date(s.fecha_hora).toLocaleString('es-CO', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZone: 'America/Bogota' })} (hora de Colombia)

@@ -3,7 +3,7 @@
 import React from 'react'
 import type { SalidaHallazgos, NivelAlerta, Gravedad } from '@/lib/empresarial/generarHallazgos'
 
-const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(84,20,43,0.06),0_10px_28px_-14px_rgba(84,20,43,0.22)]'
+const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(26,77,104,0.06),0_10px_28px_-14px_rgba(26,77,104,0.22)]'
 
 interface Props {
   datos: SalidaHallazgos

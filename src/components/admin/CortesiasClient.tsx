@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { diasRestantes, type Cortesia } from '@/lib/cortesias'
 
 const SOMBRA = 'shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]'
-const campo = 'mt-1 w-full rounded-xl border border-white/10 bg-[#3B1727] px-3 py-2 text-[13.5px] text-[#F3E7DC]'
+const campo = 'mt-1 w-full rounded-xl border border-white/10 bg-[#153F55] px-3 py-2 text-[13.5px] text-[#F3E7DC]'
 const etiqueta = 'text-[12px] font-bold text-[#F3E7DC]/70'
 
 function fecha(f: string | null) {
@@ -73,14 +73,14 @@ export function CortesiasClient({
       {conteoPorOrigen.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {conteoPorOrigen.map((o) => (
-            <span key={o.origen} className="rounded-full border border-[#B08D57]/40 bg-[#4C2032] px-3 py-1 text-[12.5px] font-semibold text-[#F3E7DC]">
+            <span key={o.origen} className="rounded-full border border-[#B08D57]/40 bg-[#1E5A7A] px-3 py-1 text-[12.5px] font-semibold text-[#F3E7DC]">
               {o.origen}: {o.n} de {cupo}
             </span>
           ))}
         </div>
       )}
 
-      <form onSubmit={crear} className={`grid gap-3 rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-4 sm:grid-cols-2 lg:grid-cols-4 ${SOMBRA}`}>
+      <form onSubmit={crear} className={`grid gap-3 rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-4 sm:grid-cols-2 lg:grid-cols-4 ${SOMBRA}`}>
         <h2 className="sm:col-span-2 lg:col-span-4 text-[15px] font-extrabold text-[#F3E7DC]">Invitar a una persona</h2>
         <div><label className={etiqueta}>Nombre</label><input required value={f.nombre} onChange={(e) => setF({ ...f, nombre: e.target.value })} className={campo} /></div>
         <div><label className={etiqueta}>Correo</label><input required type="email" value={f.correo} onChange={(e) => setF({ ...f, correo: e.target.value })} className={campo} /></div>
@@ -94,7 +94,7 @@ export function CortesiasClient({
           Ya subió su proyecto: contar los días desde hoy
         </label>
         <div className="sm:col-span-2 lg:col-span-4 flex items-center gap-3">
-          <button type="submit" disabled={enviando} className="rounded-xl bg-[#C9A46B] px-5 py-2.5 text-[14px] font-bold text-[#3B1727] disabled:opacity-60">
+          <button type="submit" disabled={enviando} className="rounded-xl bg-[#C9A46B] px-5 py-2.5 text-[14px] font-bold text-[#153F55] disabled:opacity-60">
             {enviando ? 'Creando…' : 'Crear invitación'}
           </button>
           {mensaje && <span className="text-[13px] font-semibold text-[#F0A8A8]">{mensaje}</span>}
@@ -102,14 +102,14 @@ export function CortesiasClient({
       </form>
 
       {entrega && (
-        <div className={`rounded-2xl border border-[#C9A46B]/50 bg-[#3B1727] p-4 ${SOMBRA}`}>
+        <div className={`rounded-2xl border border-[#C9A46B]/50 bg-[#153F55] p-4 ${SOMBRA}`}>
           <p className="text-[14px] font-extrabold text-[#E0B868]">Copia este mensaje y mándalo por WhatsApp:</p>
           <pre className="mt-2 whitespace-pre-wrap rounded-xl bg-black/25 p-3 text-[13px] text-[#F3E7DC]">{textoWhatsapp}</pre>
           <p className="mt-2 text-[12px] text-[#F3E7DC]/55">La clave solo se muestra ahora. Si se pierde, usa el botón “Ver mensaje (clave nueva)” de la lista.</p>
         </div>
       )}
 
-      <div className={`overflow-x-auto rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] ${SOMBRA}`}>
+      <div className={`overflow-x-auto rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] ${SOMBRA}`}>
         <table className="w-full text-left text-[13px] text-[#F3E7DC]">
           <thead className="text-[11px] uppercase tracking-wider text-[#F3E7DC]/50">
             <tr>
@@ -132,7 +132,7 @@ export function CortesiasClient({
                   </td>
                   <td className="p-3">{c.comision_pct}</td>
                   <td className="p-3">
-                    <select value={c.estado} onChange={(e) => accion({ accion: 'estado', id: c.id, estado: e.target.value })} className="rounded-lg border border-white/10 bg-[#3B1727] px-2 py-1 text-[12.5px]">
+                    <select value={c.estado} onChange={(e) => accion({ accion: 'estado', id: c.id, estado: e.target.value })} className="rounded-lg border border-white/10 bg-[#153F55] px-2 py-1 text-[12.5px]">
                       {ESTADOS.map((e) => <option key={e} value={e}>{e}</option>)}
                     </select>
                   </td>
@@ -155,7 +155,7 @@ export function CortesiasClient({
                         Ver mensaje (clave nueva)
                       </button>
                     )}
-                    {!c.inicia_en && <button type="button" onClick={() => accion({ accion: 'iniciar', id: c.id })} className="rounded-lg bg-[#C9A46B] px-2.5 py-1 text-[12px] font-bold text-[#3B1727]">Contar desde hoy</button>}
+                    {!c.inicia_en && <button type="button" onClick={() => accion({ accion: 'iniciar', id: c.id })} className="rounded-lg bg-[#C9A46B] px-2.5 py-1 text-[12px] font-bold text-[#153F55]">Contar desde hoy</button>}
                     <button type="button" onClick={() => accion({ accion: 'extender', id: c.id, dias: 7 })} className="rounded-lg border border-[#C9A46B]/60 px-2.5 py-1 text-[12px] font-bold text-[#E0B868]">+7 días</button>
                   </td>
                 </tr>

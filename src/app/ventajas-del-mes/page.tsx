@@ -39,7 +39,7 @@ function diaCorto(f: string) {
 
 function Tarjeta({ c, etiqueta }: { c: Ficha; etiqueta: string }) {
   return (
-    <li className={`rounded-2xl border border-[#B08D57]/35 bg-gradient-to-b from-[#4C2032] to-[#3B1727] p-5 ${SOMBRA_TARJETA}`}>
+    <li className={`rounded-2xl border border-[#B08D57]/35 bg-gradient-to-b from-[#1E5A7A] to-[#153F55] p-5 ${SOMBRA_TARJETA}`}>
       <p className="text-[15px] font-extrabold leading-snug text-[#F3E7DC]">
         {c.nombre || 'Convocatoria sin nombre'}
       </p>
@@ -90,8 +90,8 @@ export default async function VentajasDelMesPage() {
   const textoCompartir = `Tus ventajas este mes: las convocatorias de ${nombreMes} que puedes aprovechar. ${enlace}`
 
   return (
-    <main className="min-h-screen bg-[#54142B] text-[#F3E7DC]">
-      <section className="relative overflow-hidden border-b-2 border-[#B08D57]/45 bg-gradient-to-r from-[#3B1727] via-[#2E0E1A] to-[#54142B]">
+    <main className="min-h-screen bg-[#1A4D68] text-[#F3E7DC]">
+      <section className="relative overflow-hidden border-b-2 border-[#B08D57]/45 bg-gradient-to-r from-[#153F55] via-[#0E2B3B] to-[#1A4D68]">
         <div className="mx-auto max-w-5xl px-5 py-14 lg:px-8 lg:py-20 text-center">
           <div className="mb-3 flex items-center justify-center gap-2.5">
             <span className="h-px w-8 bg-gradient-to-r from-transparent to-[#B08D57]" />
@@ -108,7 +108,7 @@ export default async function VentajasDelMesPage() {
           <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/diagnostico"
-              className="inline-flex h-12 items-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-6 text-sm font-semibold text-[#3A1420] shadow-lg"
+              className="inline-flex h-12 items-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-6 text-sm font-semibold text-[#12394D] shadow-lg"
             >
               Diagnóstico gratuito
               <ArrowRight className="h-4 w-4" />
@@ -117,7 +117,7 @@ export default async function VentajasDelMesPage() {
               href={`https://wa.me/${TELEFONO_WHATSAPP}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-12 items-center rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-6 text-sm font-semibold text-[#F3E7DC] hover:bg-[#4C2032]"
+              className="inline-flex h-12 items-center rounded-lg border border-[#B08D57]/35 bg-[#153F55] px-6 text-sm font-semibold text-[#F3E7DC] hover:bg-[#1E5A7A]"
             >
               Hablar por WhatsApp
             </a>
@@ -153,7 +153,7 @@ export default async function VentajasDelMesPage() {
           </>
         ) : null}
 
-        <div className={`mt-12 rounded-2xl border border-[#B08D57]/45 bg-gradient-to-r from-[#4C2032] to-[#3B1727] p-6 text-center ${SOMBRA_TARJETA}`}>
+        <div className={`mt-12 rounded-2xl border border-[#B08D57]/45 bg-gradient-to-r from-[#1E5A7A] to-[#153F55] p-6 text-center ${SOMBRA_TARJETA}`}>
           <p className="flex items-center justify-center gap-2 text-[15px] font-extrabold">
             <Share2 className="h-4 w-4 text-[#C9A46B]" />
             Comparte estas ventajas
@@ -163,7 +163,7 @@ export default async function VentajasDelMesPage() {
               href={`https://wa.me/?text=${encodeURIComponent(textoCompartir)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-10 items-center rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-5 text-[13px] font-semibold text-[#3A1420]"
+              className="inline-flex h-10 items-center rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-5 text-[13px] font-semibold text-[#12394D]"
             >
               Por WhatsApp
             </a>
@@ -172,7 +172,7 @@ export default async function VentajasDelMesPage() {
                 href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(enlace)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-10 items-center rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-5 text-[13px] font-semibold hover:bg-[#4C2032]"
+                className="inline-flex h-10 items-center rounded-lg border border-[#B08D57]/35 bg-[#153F55] px-5 text-[13px] font-semibold hover:bg-[#1E5A7A]"
               >
                 En LinkedIn
               </a>

@@ -53,14 +53,14 @@ export default async function MiMembresiaPage() {
   if ((!membresia || !nivel) && (await esEquipoServing())) {
     const ETIQ_CUPO = (n: number | null) => (n === null ? 'Sin límite' : n === 0 ? 'No incluido' : `${n} al mes`)
     return (
-      <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
+      <div className="min-h-full bg-[#1A4D68] px-4 py-6 lg:px-6">
         <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]"><Ayuda clave="panel.mi_membresia" claro={false}>Mi membresía</Ayuda></h1>
         <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#F3E7DC]/60">
           Vista de administrador: así ve la membresía cada nivel. Tú entras a todas las pantallas sin pagar ni gastar cupo.
         </p>
         <div className="mt-5 grid gap-4 lg:grid-cols-3">
           {NIVELES_MEMBRESIA.map((n) => (
-            <section key={n.slug} className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
+            <section key={n.slug} className={`rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 ${SOMBRA_TARJETA}`}>
               <h2 className="text-[17px] font-extrabold text-[#F3E7DC]"><Ayuda clave={CLAVE_AYUDA_NIVEL[n.slug]} claro={false}>{n.nombre}</Ayuda></h2>
               <p className="mt-1 text-[13px] text-[#F3E7DC]/60">{n.resumen}</p>
               <ul className="mt-3 space-y-1 text-[13px] text-[#F3E7DC]/80">
@@ -72,13 +72,13 @@ export default async function MiMembresiaPage() {
                 <li>Ventajas del mes (convocatorias):{ETIQ_CUPO(CUPOS_POR_NIVEL[n.slug].convocatorias)}</li>
               </ul>
               <p className="mt-3 text-[15px] font-extrabold text-[#C9A46B]">{formatoUSD(n.precioMensualUsd)} al mes</p>
-              <Link href={`/membresia?nivel=${n.slug}`} className="mt-2 inline-flex rounded-xl bg-[#C9A46B] px-4 py-2 text-[13px] font-bold text-[#3B1727]">
+              <Link href={`/membresia?nivel=${n.slug}`} className="mt-2 inline-flex rounded-xl bg-[#C9A46B] px-4 py-2 text-[13px] font-bold text-[#153F55]">
                 Elegir y pagar
               </Link>
             </section>
           ))}
         </div>
-        <section className={`mt-5 rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
+        <section className={`mt-5 rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 ${SOMBRA_TARJETA}`}>
           <h2 className="text-[15px] font-extrabold text-[#F3E7DC]">Entrar a cada pantalla</h2>
           <div className="mt-3 flex flex-wrap gap-2">
             {[
@@ -87,7 +87,7 @@ export default async function MiMembresiaPage() {
               ['Calendario', '/calendario'],
               ['Mis proyectos', '/mis-proyectos'],
             ].map(([texto, href]) => (
-              <Link key={href} href={href} className="rounded-xl bg-[#C9A46B] px-3 py-2 text-[13px] font-bold text-[#3B1727]">{texto}</Link>
+              <Link key={href} href={href} className="rounded-xl bg-[#C9A46B] px-3 py-2 text-[13px] font-bold text-[#153F55]">{texto}</Link>
             ))}
           </div>
         </section>
@@ -97,9 +97,9 @@ export default async function MiMembresiaPage() {
 
   if (!membresia || !nivel) {
     return (
-      <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
+      <div className="min-h-full bg-[#1A4D68] px-4 py-6 lg:px-6">
         <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]"><Ayuda clave="panel.mi_membresia" claro={false}>Mi membresía</Ayuda></h1>
-        <div className={`mx-auto mt-6 max-w-xl rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-8 text-center ${SOMBRA_TARJETA}`}>
+        <div className={`mx-auto mt-6 max-w-xl rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-8 text-center ${SOMBRA_TARJETA}`}>
           <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-[#C9A46B]/15 text-[#C9A46B]">
             <Crown className="h-5 w-5" />
           </span>
@@ -107,18 +107,18 @@ export default async function MiMembresiaPage() {
           <p className="mx-auto mt-2 max-w-md text-[13.5px] leading-relaxed text-[#F3E7DC]/60">
             Elige el nivel que va contigo: Explorador, Constructor o Arquitecto.
           </p>
-          <Link href="/membresia" className="mt-4 inline-flex rounded-xl bg-[#C9A46B] px-4 py-2.5 text-[13px] font-bold text-[#3B1727]">
+          <Link href="/membresia" className="mt-4 inline-flex rounded-xl bg-[#C9A46B] px-4 py-2.5 text-[13px] font-bold text-[#153F55]">
             Ver las membresías
           </Link>
         </div>
 
         <div className="mx-auto mt-5 grid max-w-4xl gap-4 lg:grid-cols-3">
           {NIVELES_MEMBRESIA.map((n) => (
-            <section key={n.slug} className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
+            <section key={n.slug} className={`rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 ${SOMBRA_TARJETA}`}>
               <h2 className="text-[17px] font-extrabold text-[#F3E7DC]">{n.nombre}</h2>
               <p className="mt-1 text-[13px] text-[#F3E7DC]/60">{n.resumen}</p>
               <p className="mt-3 text-[18px] font-extrabold text-[#C9A46B]">{formatoUSD(n.precioMensualUsd)} <span className="text-[12px] font-semibold text-[#F3E7DC]/55">al mes</span></p>
-              <Link href={`/membresia?nivel=${n.slug}`} className="mt-3 inline-flex rounded-xl bg-[#C9A46B] px-4 py-2 text-[13px] font-bold text-[#3B1727]">
+              <Link href={`/membresia?nivel=${n.slug}`} className="mt-3 inline-flex rounded-xl bg-[#C9A46B] px-4 py-2 text-[13px] font-bold text-[#153F55]">
                 Elegir y pagar
               </Link>
             </section>
@@ -146,7 +146,7 @@ export default async function MiMembresiaPage() {
   }
 
   return (
-    <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
+    <div className="min-h-full bg-[#1A4D68] px-4 py-6 lg:px-6">
       <header className="mb-5">
         <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]"><Ayuda clave="panel.mi_membresia" claro={false}>Mi membresía</Ayuda></h1>
         <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#F3E7DC]/60">
@@ -155,7 +155,7 @@ export default async function MiMembresiaPage() {
       </header>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <section className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
+        <section className={`rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 ${SOMBRA_TARJETA}`}>
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3">
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#C9A46B]/15 text-[#C9A46B]">
@@ -201,7 +201,7 @@ export default async function MiMembresiaPage() {
           )}
         </section>
 
-        <section className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
+        <section className={`rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 ${SOMBRA_TARJETA}`}>
           <h2 className="text-[15px] font-extrabold text-[#F3E7DC]">Tus beneficios de este mes</h2>
           {uso ? (
             <>
@@ -218,7 +218,7 @@ export default async function MiMembresiaPage() {
         </section>
       </div>
 
-      <section className={`mt-4 rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
+      <section className={`mt-4 rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 ${SOMBRA_TARJETA}`}>
         <h2 className="text-[15px] font-extrabold text-[#F3E7DC]">Todo lo que incluye tu nivel</h2>
         <ul className="mt-3 grid gap-x-6 gap-y-1.5 text-[13.5px] text-[#F3E7DC]/75 sm:grid-cols-2">
           {nivel.incluye.map((x) => (

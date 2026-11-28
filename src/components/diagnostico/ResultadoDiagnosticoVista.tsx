@@ -116,8 +116,8 @@ export function ResultadoDiagnosticoVista({
                 {resultado.mecanismosSugeridos.map((m, i) => (
                   <div key={i} className="p-4 rounded-2xl bg-[#F3E7DC] border border-[#B08D57]/50 space-y-2">
                     <div className="flex justify-between items-center">
-                      <span className="text-xs font-bold text-[#3A1420]">{m.nombre}</span>
-                      <span className="text-lg font-black text-[#8C3654]">{m.porcentaje}%</span>
+                      <span className="text-xs font-bold text-[#12394D]">{m.nombre}</span>
+                      <span className="text-lg font-black text-[#3F7E9E]">{m.porcentaje}%</span>
                     </div>
                     <p className="text-[11px] text-[#5A3A2E]">{m.descripcion}</p>
                   </div>
@@ -144,7 +144,7 @@ export function ResultadoDiagnosticoVista({
               </div>
             </div>
 
-            <div className="p-6 rounded-3xl bg-[#3B1727] border border-color-base-300 space-y-4">
+            <div className="p-6 rounded-3xl bg-[#153F55] border border-color-base-300 space-y-4">
               <div className="flex items-center justify-between">
                 <h5 className="text-sm font-black text-color-base-content">Tu Nota Concepto (borrador para pitch deck)</h5>
                 <button onClick={() => setVerNotaConcepto(!verNotaConcepto)} className="text-xs font-bold text-color-primary flex items-center gap-1">
@@ -167,7 +167,7 @@ export function ResultadoDiagnosticoVista({
             </div>
 
             {mostrarCierre && (
-            <div className="p-6 md:p-8 rounded-3xl bg-[#3B1727] border-2 border-[#B08D57]/70 space-y-5">
+            <div className="p-6 md:p-8 rounded-3xl bg-[#153F55] border-2 border-[#B08D57]/70 space-y-5">
               <div>
                 <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#C9A46B] mb-2">Lo que sigue</div>
                 <h5 className="text-xl md:text-2xl font-black text-[#F3E7DC]">Sube un documento con tu proyecto</h5>
@@ -178,8 +178,8 @@ export function ResultadoDiagnosticoVista({
               </div>
               <ol className="grid gap-3 sm:grid-cols-2">
                 {LAS_SIETE_COSAS_CLAVE.map((cosa, i) => (
-                  <li key={cosa.titulo} className="flex items-start gap-3 rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-4">
-                    <span className="h-7 w-7 shrink-0 rounded-full bg-gradient-to-br from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-sm font-extrabold flex items-center justify-center">
+                  <li key={cosa.titulo} className="flex items-start gap-3 rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-4">
+                    <span className="h-7 w-7 shrink-0 rounded-full bg-gradient-to-br from-[#C9A46B] to-[#B08D57] text-[#12394D] text-sm font-extrabold flex items-center justify-center">
                       {i + 1}
                     </span>
                     <div>
@@ -196,7 +196,7 @@ export function ResultadoDiagnosticoVista({
             )}
 
             {mostrarCierre && (
-            <div className="bg-gradient-to-r from-[#3B1727] via-[#2E0E1A] to-[#54142B] border border-[#B08D57]/45 text-white p-8 rounded-3xl shadow-2xl relative overflow-hidden space-y-6">
+            <div className="bg-gradient-to-r from-[#153F55] via-[#0E2B3B] to-[#1A4D68] border border-[#B08D57]/45 text-white p-8 rounded-3xl shadow-2xl relative overflow-hidden space-y-6">
               <div className="relative z-10 max-w-2xl space-y-3">
                 <h4 className="text-2xl md:text-3xl font-black italic uppercase tracking-tight">¿Listo para llevar tu ventaja más lejos?</h4>
                 <p className="text-xs md:text-sm text-[#F3E7DC]/75 font-medium leading-relaxed">

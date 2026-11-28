@@ -23,7 +23,7 @@ export default async function AdminCortesiasPage() {
   }
 
   return (
-    <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
+    <div className="min-h-full bg-[#1A4D68] px-4 py-6 lg:px-6">
       <header className="mb-5">
         <h1 className="flex items-center gap-2 text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">
           <Gift className="h-5 w-5 text-[#C9A46B]" />

@@ -78,14 +78,14 @@ export default async function ConvocatoriasDelMesPage() {
 
   if (!vigente && !esEquipo) {
     return (
-      <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
+      <div className="min-h-full bg-[#1A4D68] px-4 py-6 lg:px-6">
         <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]"><Ayuda clave="panel.convocatorias_mes" claro={false}>Ventajas del mes</Ayuda></h1>
-        <div className={`mx-auto mt-6 max-w-xl rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-8 text-center ${SOMBRA_TARJETA}`}>
+        <div className={`mx-auto mt-6 max-w-xl rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-8 text-center ${SOMBRA_TARJETA}`}>
           <h2 className="text-[15px] font-extrabold text-[#F3E7DC]">Esta sección es para miembros</h2>
           <p className="mx-auto mt-2 max-w-md text-[13.5px] leading-relaxed text-[#F3E7DC]/60">
             Con una membresía activa ves cada mes las convocatorias abiertas y abres la ficha completa de las que te interesan.
           </p>
-          <Link href="/membresia" className="mt-4 inline-flex rounded-xl bg-[#C9A46B] px-4 py-2.5 text-[13px] font-bold text-[#3B1727]">
+          <Link href="/membresia" className="mt-4 inline-flex rounded-xl bg-[#C9A46B] px-4 py-2.5 text-[13px] font-bold text-[#153F55]">
             Ver las membresías
           </Link>
         </div>
@@ -126,7 +126,7 @@ export default async function ConvocatoriasDelMesPage() {
   const lista = (fichas || []) as Ficha[]
 
   return (
-    <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
+    <div className="min-h-full bg-[#1A4D68] px-4 py-6 lg:px-6">
       <header className="mb-5">
         <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]"><Ayuda clave="panel.convocatorias_mes" claro={false}>Ventajas del mes</Ayuda></h1>
         <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#F3E7DC]/60">
@@ -157,7 +157,7 @@ export default async function ConvocatoriasDelMesPage() {
                   {items.map((c) => {
                     const abierta = esEquipo || abiertas.has(c.id)
                     return (
-                      <article key={c.id} className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
+                      <article key={c.id} className={`rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 ${SOMBRA_TARJETA}`}>
                         <div className="flex items-start gap-3">
                           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#C9A46B]/15 text-[#C9A46B]">
                             <Target className="h-4 w-4" />

@@ -8,7 +8,7 @@ import Link from 'next/link'
  */
 export function PanelAbanico({ proyectoId }: { proyectoId: string }) {
   return (
-    <div className="rounded-2xl border border-[#C9A46B] bg-[#3B1727] p-5">
+    <div className="rounded-2xl border border-[#C9A46B] bg-[#153F55] p-5">
       <h2 className="text-[13px] font-bold uppercase tracking-wider text-[#C9A46B]">Abanico</h2>
       <p className="mt-1.5 text-[13px] leading-relaxed text-[#F3E7DC]/70">
         El abanico es automático: el cliente paga con Bold, la plataforma arma sola las convocatorias que mejor le

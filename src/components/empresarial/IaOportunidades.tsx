@@ -6,7 +6,7 @@ import { CAMPOS_FICHA_IA, type CampoFichaIA, type IdeaIA, type SugerenciaFichaIA
 
 const RELIEVE_BOTON =
   'shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-200'
-const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(84,20,43,0.06),0_10px_28px_-14px_rgba(84,20,43,0.22)]'
+const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(26,77,104,0.06),0_10px_28px_-14px_rgba(26,77,104,0.22)]'
 
 const botonSuave = `h-12 px-5 inline-flex items-center justify-center gap-2 rounded-xl border border-ca-oro/50 bg-ca-tarjeta text-ca-vino font-semibold disabled:opacity-40 ${RELIEVE_BOTON}`
 

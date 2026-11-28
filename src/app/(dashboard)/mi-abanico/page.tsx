@@ -30,7 +30,7 @@ type FilaReplica = {
 }
 
 function Caja({ children }: { children: React.ReactNode }) {
-  return <div className="rounded-xl border border-[#B08D57]/40 bg-[#4C2032] p-5 text-sm text-[#F3E7DC]">{children}</div>
+  return <div className="rounded-xl border border-[#B08D57]/40 bg-[#1E5A7A] p-5 text-sm text-[#F3E7DC]">{children}</div>
 }
 
 export default async function MiAbanicoPage({

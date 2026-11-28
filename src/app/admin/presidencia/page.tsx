@@ -223,7 +223,7 @@ export default function PresidenciaDashboard() {
   // 4. Renderización del Acceso Denegado Premium
   if (checkingAuth) {
     return (
-      <div className="h-screen w-full flex flex-col items-center justify-center bg-[#2E0E1A] text-[#F3E7DC]">
+      <div className="h-screen w-full flex flex-col items-center justify-center bg-[#0E2B3B] text-[#F3E7DC]">
         <Loader2 className="w-10 h-10 animate-spin text-[#B08D57] mb-4 glow-blue" />
         <p className="text-[#F3E7DC]/55 font-bold uppercase tracking-widest text-xs animate-pulse">Verificando Credenciales de Presidencia...</p>
       </div>
@@ -279,7 +279,7 @@ export default function PresidenciaDashboard() {
             <RefreshCw className={`w-3.5 h-3.5 ${syncing ? 'animate-spin' : ''}`} />
             {syncing ? 'Sincronizando...' : 'Live Sync'}
           </button>
-          <div className="flex items-center gap-2 bg-[#3B1727]/80 px-4 py-2.5 rounded-lg border border-[#B08D57]/20 shadow-[0_0_15px_rgba(176,141,87,0.10)]">
+          <div className="flex items-center gap-2 bg-[#153F55]/80 px-4 py-2.5 rounded-lg border border-[#B08D57]/20 shadow-[0_0_15px_rgba(176,141,87,0.10)]">
             <Activity className="w-4 h-4 text-[#B08D57] animate-pulse" />
             <span className="text-xs font-black text-[#F3E7DC]/70 uppercase tracking-widest">Presidencia de Serving</span>
           </div>
@@ -298,7 +298,7 @@ export default function PresidenciaDashboard() {
             {/* KPI Cards */}
             <div className="lg:col-span-1 flex flex-col gap-6">
               
-              <GlassCard className="p-6 border-[#B08D57]/10 bg-[#3B1727]/75 relative overflow-hidden group">
+              <GlassCard className="p-6 border-[#B08D57]/10 bg-[#153F55]/75 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 p-4 opacity-10 text-[#B08D57] group-hover:scale-110 transition-transform">
                   <DollarSign className="w-12 h-12" />
                 </div>
@@ -307,7 +307,7 @@ export default function PresidenciaDashboard() {
                 <p className="text-[10px] text-[#F3E7DC]/55 mt-2 leading-relaxed">Suma de pilotos semilla facturados e inyectados en la pasarela de pagos.</p>
               </GlassCard>
 
-              <GlassCard className="p-6 border-[#7A8B6F]/10 bg-[#3B1727]/75 relative overflow-hidden group">
+              <GlassCard className="p-6 border-[#7A8B6F]/10 bg-[#153F55]/75 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 p-4 opacity-10 text-[#9BB18D]">
                   <HeartHandshake className="w-12 h-12" />
                 </div>
@@ -316,7 +316,7 @@ export default function PresidenciaDashboard() {
                 <p className="text-[10px] text-[#F3E7DC]/55 mt-2">Validadas e inyectadas en la red de aliados.</p>
               </GlassCard>
 
-              <GlassCard className="p-6 border-[#C99A3D]/10 bg-[#3B1727]/75 relative overflow-hidden group">
+              <GlassCard className="p-6 border-[#C99A3D]/10 bg-[#153F55]/75 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 p-4 opacity-10 text-[#E0B868]">
                   <TrendingUp className="w-12 h-12" />
                 </div>
@@ -328,7 +328,7 @@ export default function PresidenciaDashboard() {
             </div>
 
             {/* Gráfico 1: Recaudo por Plan (Pie Chart SVG interactivo) */}
-            <div className="lg:col-span-1.5 bg-[#3B1727]/80 border border-white/10 rounded-2xl p-6 flex flex-col justify-between">
+            <div className="lg:col-span-1.5 bg-[#153F55]/80 border border-white/10 rounded-2xl p-6 flex flex-col justify-between">
               <div>
                 <h4 className="text-sm font-black text-[#F3E7DC] uppercase tracking-wider mb-4 flex items-center gap-1.5">
                   <BarChart3 className="w-4 h-4 text-[#B08D57]" /> Distribución de Recaudo por Plan
@@ -337,7 +337,7 @@ export default function PresidenciaDashboard() {
                 {/* SVG Pie Chart / Rosquilla */}
                 <div className="flex justify-center items-center py-4">
                   <svg className="w-36 h-36 transform -rotate-90" viewBox="0 0 42 42">
-                    <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#3B1727" strokeWidth="4.5" />
+                    <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#153F55" strokeWidth="4.5" />
                     
                     {/* BASE: ~10% (StrokeDasharray: "10 90") */}
                     <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#B08D57" strokeWidth="4.5" 
@@ -349,7 +349,7 @@ export default function PresidenciaDashboard() {
                       strokeDashoffset={`-${((recaudoPorPlan.BASE || 0)/recaudoTotal)*100}`} />
                     
                     {/* VIP: ~30% */}
-                    <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#8C3654" strokeWidth="4.5" 
+                    <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#3F7E9E" strokeWidth="4.5" 
                       strokeDasharray={`${((recaudoPorPlan.VIP || 0)/recaudoTotal)*100} ${100 - (((recaudoPorPlan.VIP || 0)/recaudoTotal)*100)}`} 
                       strokeDashoffset={`-${(((recaudoPorPlan.BASE || 0) + (recaudoPorPlan.PRO || 0))/recaudoTotal)*100}`} />
                     
@@ -372,7 +372,7 @@ export default function PresidenciaDashboard() {
                   <span>PRO: ${(recaudoPorPlan.PRO || 0).toLocaleString()} USD</span>
                 </div>
                 <div className="flex items-center gap-1.5 text-[#C98CA8]">
-                  <span className="w-2.5 h-2.5 bg-[#8C3654] rounded-sm shrink-0" />
+                  <span className="w-2.5 h-2.5 bg-[#3F7E9E] rounded-sm shrink-0" />
                   <span>VIP: ${(recaudoPorPlan.VIP || 0).toLocaleString()} USD</span>
                 </div>
                 <div className="flex items-center gap-1.5 text-[#9BB18D]">
@@ -383,7 +383,7 @@ export default function PresidenciaDashboard() {
             </div>
 
             {/* Gráfico 2: Recaudo Histórico (Line Chart Area SVG) */}
-            <div className="lg:col-span-1.5 bg-[#3B1727]/80 border border-white/10 rounded-2xl p-6 flex flex-col justify-between">
+            <div className="lg:col-span-1.5 bg-[#153F55]/80 border border-white/10 rounded-2xl p-6 flex flex-col justify-between">
               <div>
                 <h4 className="text-sm font-black text-[#F3E7DC] uppercase tracking-wider mb-4 flex items-center gap-1.5">
                   <Activity className="w-4 h-4 text-[#E0B868] animate-pulse" /> Histórico de Ingresos (Días de Operación)
@@ -441,7 +441,7 @@ export default function PresidenciaDashboard() {
                       <tr key={com.id} className="hover:bg-white/[0.02] transition-colors">
                         <td className="p-3 pl-4 font-bold text-[#F3E7DC]/85">{com.nombre_proyecto}</td>
                         <td className="p-3">
-                          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#2E0E1A]/50 border border-white/10 rounded-full font-bold text-[#F3E7DC]/70">
+                          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#0E2B3B]/50 border border-white/10 rounded-full font-bold text-[#F3E7DC]/70">
                             <UserCheck className="w-3.5 h-3.5 text-[#B08D57]" />
                             {com.beneficiario}
                           </div>
@@ -455,8 +455,8 @@ export default function PresidenciaDashboard() {
                             className={`p-2 rounded-lg font-bold text-[10px] uppercase outline-none cursor-pointer border
                               ${com.estado === 'Entregada' ? 'bg-[#7A8B6F]/15 border-[#7A8B6F]/50 text-[#9BB18D] shadow-[0_0_10px_rgba(122,139,111,0.20)]' : 'bg-[#C99A3D]/15 border-[#C99A3D]/50 text-[#E0B868] shadow-[0_0_10px_rgba(249,115,22,0.15)]'}`}
                           >
-                            <option value="Entregada" className="bg-[#3B1727] text-[#F3E7DC]">Entregada</option>
-                            <option value="Por Entregar" className="bg-[#3B1727] text-[#F3E7DC]">Por Entregar</option>
+                            <option value="Entregada" className="bg-[#153F55] text-[#F3E7DC]">Entregada</option>
+                            <option value="Por Entregar" className="bg-[#153F55] text-[#F3E7DC]">Por Entregar</option>
                           </select>
                         </td>
                       </tr>
@@ -471,7 +471,7 @@ export default function PresidenciaDashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             {/* Gráfico 3: Distribución Analítica por Sectores (Barras Horizontales SVG) */}
-            <div className="lg:col-span-1 bg-[#3B1727]/80 border border-white/10 rounded-2xl p-6 flex flex-col justify-between">
+            <div className="lg:col-span-1 bg-[#153F55]/80 border border-white/10 rounded-2xl p-6 flex flex-col justify-between">
               <div>
                 <h4 className="text-sm font-black text-[#F3E7DC] uppercase tracking-wider mb-4 flex items-center gap-1.5">
                   <BarChart3 className="w-4 h-4 text-[#B08D57]" /> Proyectos por Vertical del Holding
@@ -500,7 +500,7 @@ export default function PresidenciaDashboard() {
             </div>
 
             {/* Fondeo Convocatorias y Logs */}
-            <div className="lg:col-span-2 bg-[#3B1727]/80 border border-white/10 rounded-2xl p-6">
+            <div className="lg:col-span-2 bg-[#153F55]/80 border border-white/10 rounded-2xl p-6">
               <h4 className="text-sm font-black text-[#F3E7DC] uppercase tracking-wider mb-4 flex items-center gap-1.5">
                 <FileText className="w-4 h-4 text-[#E0B868] animate-pulse" /> Monitoreo de Fondeo y Convocatorias
               </h4>
@@ -508,7 +508,7 @@ export default function PresidenciaDashboard() {
               {/* Convocatorias KPI Grid */}
               <div className="grid grid-cols-4 gap-4 mb-6">
                 {Object.entries(convocatoriasEstados).map(([estado, val]) => (
-                  <div key={estado} className="p-3 bg-[#2E0E1A]/50 border border-white/5 rounded-xl text-center">
+                  <div key={estado} className="p-3 bg-[#0E2B3B]/50 border border-white/5 rounded-xl text-center">
                     <span className="block text-[8px] font-black text-[#F3E7DC]/45 uppercase tracking-widest">{estado}</span>
                     <span className={`text-xl font-black mt-1 block 
                       ${estado === 'Adjudicado' ? 'text-[#9BB18D]' : 
@@ -587,7 +587,7 @@ export default function PresidenciaDashboard() {
 
           {/* CHECKLIST DE CUMPLIMIENTO CRUZADO */}
           <div className="grid grid-cols-1 gap-6">
-            <GlassCard className="p-6 border-white/10 shadow-lg bg-[#3B1727]/75">
+            <GlassCard className="p-6 border-white/10 shadow-lg bg-[#153F55]/75">
               <h4 className="text-sm font-black text-[#F3E7DC] uppercase tracking-wider mb-6 flex items-center gap-1.5">
                 <ShieldCheck className="w-4.5 h-4.5 text-[#E0B868] animate-pulse" /> Matriz de Cumplimiento Cruzado (Cliente vs Auditoría)
               </h4>
@@ -630,12 +630,12 @@ export default function PresidenciaDashboard() {
                               className={`p-2 rounded-lg font-bold text-[10px] uppercase outline-none cursor-pointer border
                                 ${proy.auditoria_financiera_estado === 'Aprobado' ? 'bg-[#7A8B6F]/15 border-[#7A8B6F]/50 text-[#9BB18D] shadow-[0_0_10px_rgba(122,139,111,0.20)]' : 
                                   proy.auditoria_financiera_estado === 'Rechazado' ? 'bg-[#C0604A]/15 border-[#C0604A]/50 text-[#E0917E]' :
-                                  proy.auditoria_financiera_estado === 'En Proceso' ? 'bg-[#C99A3D]/15 border-[#C99A3D]/50 text-[#E0B868]' : 'bg-[#2E0E1A]/60 border-white/10 text-[#F3E7DC]/55'}`}
+                                  proy.auditoria_financiera_estado === 'En Proceso' ? 'bg-[#C99A3D]/15 border-[#C99A3D]/50 text-[#E0B868]' : 'bg-[#0E2B3B]/60 border-white/10 text-[#F3E7DC]/55'}`}
                             >
-                              <option value="Pendiente" className="bg-[#3B1727] text-[#F3E7DC]">Pendiente</option>
-                              <option value="En Proceso" className="bg-[#3B1727] text-[#F3E7DC]">En Proceso</option>
-                              <option value="Aprobado" className="bg-[#3B1727] text-[#F3E7DC]">Aprobado</option>
-                              <option value="Rechazado" className="bg-[#3B1727] text-[#F3E7DC]">Rechazado</option>
+                              <option value="Pendiente" className="bg-[#153F55] text-[#F3E7DC]">Pendiente</option>
+                              <option value="En Proceso" className="bg-[#153F55] text-[#F3E7DC]">En Proceso</option>
+                              <option value="Aprobado" className="bg-[#153F55] text-[#F3E7DC]">Aprobado</option>
+                              <option value="Rechazado" className="bg-[#153F55] text-[#F3E7DC]">Rechazado</option>
                             </select>
                           </td>
                           <td className="p-3 pr-4">
@@ -645,12 +645,12 @@ export default function PresidenciaDashboard() {
                               className={`p-2 rounded-lg font-bold text-[10px] uppercase outline-none cursor-pointer border
                                 ${proy.auditoria_legal_estado === 'Aprobado' ? 'bg-[#7A8B6F]/15 border-[#7A8B6F]/50 text-[#9BB18D] shadow-[0_0_10px_rgba(122,139,111,0.20)]' : 
                                   proy.auditoria_legal_estado === 'Rechazado' ? 'bg-[#C0604A]/15 border-[#C0604A]/50 text-[#E0917E]' :
-                                  proy.auditoria_legal_estado === 'En Proceso' ? 'bg-[#C99A3D]/15 border-[#C99A3D]/50 text-[#E0B868]' : 'bg-[#2E0E1A]/60 border-white/10 text-[#F3E7DC]/55'}`}
+                                  proy.auditoria_legal_estado === 'En Proceso' ? 'bg-[#C99A3D]/15 border-[#C99A3D]/50 text-[#E0B868]' : 'bg-[#0E2B3B]/60 border-white/10 text-[#F3E7DC]/55'}`}
                             >
-                              <option value="Pendiente" className="bg-[#3B1727] text-[#F3E7DC]">Pendiente</option>
-                              <option value="En Proceso" className="bg-[#3B1727] text-[#F3E7DC]">En Proceso</option>
-                              <option value="Aprobado" className="bg-[#3B1727] text-[#F3E7DC]">Aprobado</option>
-                              <option value="Rechazado" className="bg-[#3B1727] text-[#F3E7DC]">Rechazado</option>
+                              <option value="Pendiente" className="bg-[#153F55] text-[#F3E7DC]">Pendiente</option>
+                              <option value="En Proceso" className="bg-[#153F55] text-[#F3E7DC]">En Proceso</option>
+                              <option value="Aprobado" className="bg-[#153F55] text-[#F3E7DC]">Aprobado</option>
+                              <option value="Rechazado" className="bg-[#153F55] text-[#F3E7DC]">Rechazado</option>
                             </select>
                           </td>
                         </tr>
@@ -664,7 +664,7 @@ export default function PresidenciaDashboard() {
 
           {/* SECCIÓN 3: ATENCIÓN Y CALIDAD (QUEJAS Y FALLOS DE IA) */}
           <div className="grid grid-cols-1 gap-6">
-            <GlassCard className="p-6 border-white/10 shadow-lg bg-[#3B1727]/75">
+            <GlassCard className="p-6 border-white/10 shadow-lg bg-[#153F55]/75">
               <h4 className="text-sm font-black text-[#F3E7DC] uppercase tracking-wider mb-6 flex items-center gap-1.5">
                 <ShieldAlert className="w-4.5 h-4.5 text-[#E0917E] animate-pulse" /> Consola de Atención al Cliente e Incidencias del Motor de IA
               </h4>
@@ -698,9 +698,9 @@ export default function PresidenciaDashboard() {
                               ${tkt.estado === 'Resuelto' ? 'bg-[#7A8B6F]/15 border-[#7A8B6F]/50 text-[#9BB18D] shadow-[0_0_10px_rgba(122,139,111,0.20)]' : 
                                 tkt.estado === 'En Proceso' ? 'bg-[#C99A3D]/15 border-[#C99A3D]/50 text-[#E0B868]' : 'bg-[#C0604A]/15 border-[#C0604A]/50 text-[#E0917E] shadow-[0_0_10px_rgba(192,96,74,0.20)]'}`}
                           >
-                            <option value="Abierto" className="bg-[#3B1727] text-[#F3E7DC]">Abierto</option>
-                            <option value="En Proceso" className="bg-[#3B1727] text-[#F3E7DC]">En Proceso</option>
-                            <option value="Resuelto" className="bg-[#3B1727] text-[#F3E7DC]">Resuelto</option>
+                            <option value="Abierto" className="bg-[#153F55] text-[#F3E7DC]">Abierto</option>
+                            <option value="En Proceso" className="bg-[#153F55] text-[#F3E7DC]">En Proceso</option>
+                            <option value="Resuelto" className="bg-[#153F55] text-[#F3E7DC]">Resuelto</option>
                           </select>
                         </td>
                       </tr>

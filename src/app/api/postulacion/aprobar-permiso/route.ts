@@ -17,7 +17,7 @@ export const maxDuration = 180
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
 function pagina(titulo: string, texto: string, estado = 200) {
-  const html = `<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${titulo}</title><body style="font-family:system-ui;background:#54142B;color:#F3E7DC;display:flex;min-height:100vh;align-items:center;justify-content:center;margin:0"><div style="max-width:420px;padding:24px;text-align:center"><h1 style="font-size:20px">${titulo}</h1><p style="line-height:1.5">${texto}</p></div></body></html>`
+  const html = `<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${titulo}</title><body style="font-family:system-ui;background:#1A4D68;color:#F3E7DC;display:flex;min-height:100vh;align-items:center;justify-content:center;margin:0"><div style="max-width:420px;padding:24px;text-align:center"><h1 style="font-size:20px">${titulo}</h1><p style="line-height:1.5">${texto}</p></div></body></html>`
   return new NextResponse(html, { status: estado, headers: { 'Content-Type': 'text/html; charset=utf-8' } })
 }
 

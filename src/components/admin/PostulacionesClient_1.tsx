@@ -74,7 +74,7 @@ const COLOR_ESTADO: Record<string, string> = {
   Radicada: 'bg-[#7A8B6F]/20 text-[#9BB18D]',
   Adjudicada: 'bg-[#7A8B6F]/20 text-[#9BB18D]',
   Rechazada: 'bg-[#C0604A]/20 text-[#E0917E]',
-  Descartada: 'bg-[#6E4A50]/40 text-[#F3E7DC]/60',
+  Descartada: 'bg-[#5B7886]/40 text-[#F3E7DC]/60',
 }
 
 function comoLista(valor: unknown): string[] {
@@ -143,7 +143,7 @@ export function PostulacionesClient({
       </header>
 
       {/* preparar una nueva ---------------------------------------------- */}
-      <div className={`rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 ${SOMBRA}`}>
+      <div className={`rounded-2xl border border-[#B08D57]/35 bg-[#153F55] p-5 ${SOMBRA}`}>
         <h2 className="text-[13px] font-bold uppercase tracking-wider text-[#F3E7DC]">
           Preparar una postulación
         </h2>
@@ -157,7 +157,7 @@ export function PostulacionesClient({
           <select
             value={convocatoriaId}
             onChange={(e) => setConvocatoriaId(e.target.value)}
-            className="h-11 flex-1 rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-3 text-[13.5px] text-[#F3E7DC] outline-none focus:border-[#B08D57]"
+            className="h-11 flex-1 rounded-lg border border-[#B08D57]/35 bg-[#153F55] px-3 text-[13.5px] text-[#F3E7DC] outline-none focus:border-[#B08D57]"
           >
             <option value="">Escoge una convocatoria de la biblioteca…</option>
             {convocatorias.map((c) => (
@@ -172,7 +172,7 @@ export function PostulacionesClient({
             type="button"
             disabled={!convocatoriaId || trabajando !== null}
             onClick={() => llamar({ accion: 'preparar', proyectoId, convocatoriaId }, 'preparar')}
-            className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-6 text-[13px] font-semibold text-[#3A1420] disabled:opacity-45"
+            className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-6 text-[13px] font-semibold text-[#12394D] disabled:opacity-45"
           >
             <Sparkles className="h-4 w-4" />
             {trabajando === 'preparar' ? 'Trabajando…' : 'Preparar'}
@@ -198,7 +198,7 @@ export function PostulacionesClient({
 
       {/* listado ---------------------------------------------------------- */}
       {postulaciones.length === 0 ? (
-        <div className={`rounded-2xl border border-dashed border-[#B08D57]/35 bg-[#4C2032] p-10 text-center ${SOMBRA}`}>
+        <div className={`rounded-2xl border border-dashed border-[#B08D57]/35 bg-[#1E5A7A] p-10 text-center ${SOMBRA}`}>
           <FileText className="mx-auto h-6 w-6 text-[#F3E7DC]/50" />
           <p className="mt-3 text-[13.5px] text-[#F3E7DC]/65">
             Este proyecto todavía no tiene ninguna postulación preparada.
@@ -212,7 +212,7 @@ export function PostulacionesClient({
           const cumplidos = p.requisitos.filter((r) => r.cumplido).length
 
           return (
-            <div key={p.id} className={`overflow-hidden rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] ${SOMBRA}`}>
+            <div key={p.id} className={`overflow-hidden rounded-2xl border border-[#B08D57]/35 bg-[#153F55] ${SOMBRA}`}>
               <button
                 type="button"
                 onClick={() => setAbierta(desplegada ? null : p.id)}
@@ -223,7 +223,7 @@ export function PostulacionesClient({
                     <span className="text-[15px] font-bold text-[#F3E7DC]">{p.convocatoria_nombre}</span>
                     <span
                       className={`rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${
-                        COLOR_ESTADO[p.estado] || 'bg-[#6E4A50]/40 text-[#F3E7DC]/60'
+                        COLOR_ESTADO[p.estado] || 'bg-[#5B7886]/40 text-[#F3E7DC]/60'
                       }`}
                     >
                       {p.estado}
@@ -259,7 +259,7 @@ export function PostulacionesClient({
                       return (
                         <div key={c.clave} className="flex items-center gap-3">
                           <span className="w-[150px] shrink-0 text-[12.5px] text-[#F3E7DC]/65">{c.nombre}</span>
-                          <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-[#3B1727]">
+                          <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-[#153F55]">
                             <div
                               className="h-full rounded-full bg-[#B08D57]"
                               style={{ width: `${Math.round((valor / c.tope) * 100)}%` }}
@@ -332,7 +332,7 @@ export function PostulacionesClient({
                           </span>
                         ) : null}
                       </p>
-                      <ul className="mt-2 divide-y divide-[#6E4A50]/40">
+                      <ul className="mt-2 divide-y divide-[#5B7886]/40">
                         {p.requisitos.map((r) => (
                           <li key={r.id} className="flex items-start gap-3 py-2">
                             <button
@@ -378,7 +378,7 @@ export function PostulacionesClient({
                   ) : null}
 
                   {p.validacion_final && p.validacion_final.length > 0 ? (
-                    <div className="rounded-xl border border-[#B08D57]/35 bg-[#4C2032] px-4 py-3.5">
+                    <div className="rounded-xl border border-[#B08D57]/35 bg-[#1E5A7A] px-4 py-3.5">
                       <h3 className="flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-wider text-[#F3E7DC]">
                         <ShieldCheck className="h-3.5 w-3.5 text-[#B08D57]" />
                         Validación final — {p.validacion_final.length} punto(s) por revisar
@@ -403,7 +403,7 @@ export function PostulacionesClient({
                   ) : null}
 
                   {p.nota_concepto_ajustada ? (
-                    <details className="rounded-xl border border-[#B08D57]/35 bg-[#4C2032] p-4">
+                    <details className="rounded-xl border border-[#B08D57]/35 bg-[#1E5A7A] p-4">
                       <summary className="cursor-pointer text-[12.5px] font-semibold text-[#B08D57]">
                         Ver la Nota de Concepto ajustada a esta convocatoria
                       </summary>
@@ -414,7 +414,7 @@ export function PostulacionesClient({
                   ) : null}
 
                   {p.estado === 'Lista para radicar' ? (
-                    <div className="rounded-xl border border-[#B08D57]/35 bg-[#4C2032] px-4 py-3">
+                    <div className="rounded-xl border border-[#B08D57]/35 bg-[#1E5A7A] px-4 py-3">
                       <h3 className="text-[12px] font-bold uppercase tracking-wider text-[#F3E7DC]">
                         ¿Quién la va a radicar?
                       </h3>
@@ -448,7 +448,7 @@ export function PostulacionesClient({
                   ) : null}
 
                   {p.carta_intencion ? (
-                    <details className="rounded-xl border border-[#B08D57]/35 bg-[#4C2032] p-4">
+                    <details className="rounded-xl border border-[#B08D57]/35 bg-[#1E5A7A] p-4">
                       <summary className="cursor-pointer text-[12.5px] font-semibold text-[#B08D57]">
                         Ver la carta de intención
                       </summary>
@@ -469,7 +469,7 @@ export function PostulacionesClient({
                             `reevaluar-${p.id}`
                           )
                         }
-                        className="inline-flex h-10 items-center gap-2 rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-4 text-[13px] font-semibold text-[#B08D57] disabled:opacity-45"
+                        className="inline-flex h-10 items-center gap-2 rounded-lg border border-[#B08D57]/35 bg-[#153F55] px-4 text-[13px] font-semibold text-[#B08D57] disabled:opacity-45"
                       >
                         <Sparkles className="h-4 w-4" />
                         {trabajando === `reevaluar-${p.id}` ? 'Evaluando…' : 'Volver a evaluar'}

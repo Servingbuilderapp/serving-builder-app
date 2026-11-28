@@ -7,7 +7,7 @@ import { MATRICES, ORDEN_GRUPOS, TOTAL_COMPLETO, TOTAL_SENCILLO, estadoMatriz, t
 import { PLANES, type ClavePlan } from '@/lib/empresarial/membresia'
 
 const RELIEVE_BOTON = 'shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-200'
-const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(84,20,43,0.06),0_10px_28px_-14px_rgba(84,20,43,0.22)]'
+const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(26,77,104,0.06),0_10px_28px_-14px_rgba(26,77,104,0.22)]'
 
 interface Props {
   proyectoId: string | null

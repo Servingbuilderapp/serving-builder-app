@@ -86,12 +86,12 @@ export async function GET(req: NextRequest) {
   const html = `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Evidencia del servicio — ${esc(p.nombre_iniciativa)}</title>
 <style>
- body{font-family:Georgia,'Times New Roman',serif;color:#2a1a1f;max-width:820px;margin:32px auto;padding:0 20px;line-height:1.5}
- h1{font-size:22px;margin:0 0 4px;color:#54142B} h2{font-size:15px;margin:26px 0 8px;color:#54142B;border-bottom:1px solid #B08D57;padding-bottom:4px}
- .sub{color:#6b4a52;font-size:13px} table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px}
+ body{font-family:Georgia,'Times New Roman',serif;color:#1A2A33;max-width:820px;margin:32px auto;padding:0 20px;line-height:1.5}
+ h1{font-size:22px;margin:0 0 4px;color:#1A4D68} h2{font-size:15px;margin:26px 0 8px;color:#1A4D68;border-bottom:1px solid #B08D57;padding-bottom:4px}
+ .sub{color:#5B7886;font-size:13px} table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px}
  th,td{border:1px solid #d9c7b0;padding:6px 8px;text-align:left;vertical-align:top} th{background:#f3e7dc}
- .nota{font-size:11.5px;color:#6b4a52;margin-top:26px;border-top:1px solid #d9c7b0;padding-top:10px}
- button{background:#B08D57;color:#2a1a1f;border:0;border-radius:8px;padding:9px 16px;font-weight:bold;cursor:pointer;margin-bottom:14px}
+ .nota{font-size:11.5px;color:#5B7886;margin-top:26px;border-top:1px solid #d9c7b0;padding-top:10px}
+ button{background:#B08D57;color:#1A2A33;border:0;border-radius:8px;padding:9px 16px;font-weight:bold;cursor:pointer;margin-bottom:14px}
  @media print{button{display:none}body{margin:0}}
 </style></head><body>
 <button onclick="window.print()">Imprimir / guardar como PDF</button>

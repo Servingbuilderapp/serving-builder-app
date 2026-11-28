@@ -166,8 +166,8 @@ export default async function ATuMedidaPage({
               href={`/a-tu-medida?minimo=${u.valor}${aProyecto}`}
               className={`rounded-full border px-3 py-1.5 text-xs font-bold ${
                 minimo === u.valor
-                  ? 'border-[#C9A46B] bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420]'
-                  : 'border-[#B08D57]/50 text-[#F3E7DC]/80 hover:bg-[#4C2032]'
+                  ? 'border-[#C9A46B] bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D]'
+                  : 'border-[#B08D57]/50 text-[#F3E7DC]/80 hover:bg-[#1E5A7A]'
               }`}
             >
               {u.etiqueta} ({conteo[u.valor]})
@@ -180,7 +180,7 @@ export default async function ATuMedidaPage({
         </p>
 
         {visibles.length === 0 ? (
-          <div className="mt-6 rounded-xl border border-[#B08D57]/40 bg-[#4C2032] p-5 text-sm">
+          <div className="mt-6 rounded-xl border border-[#B08D57]/40 bg-[#1E5A7A] p-5 text-sm">
             Todavía no hay convocatorias con ese nivel de encaje. Cada día se suman más a la biblioteca; vuelve pronto.
           </div>
         ) : (
@@ -188,7 +188,7 @@ export default async function ATuMedidaPage({
             {visibles.map(({ c, resultado }) => {
               const enlace = c.enlace_aplicacion || c.fuente_oficial
               return (
-                <div key={c.id} className="rounded-xl border border-[#B08D57]/40 bg-[#4C2032] p-4">
+                <div key={c.id} className="rounded-xl border border-[#B08D57]/40 bg-[#1E5A7A] p-4">
                   <div className="flex gap-4">
                     <div
                       className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 text-base font-black ${colorPuntaje(resultado.puntaje)}`}

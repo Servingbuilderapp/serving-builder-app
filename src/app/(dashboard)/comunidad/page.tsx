@@ -30,7 +30,7 @@ export default async function ComunidadPage() {
   const mensajes = (data || []) as Mensaje[]
 
   return (
-    <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
+    <div className="min-h-full bg-[#1A4D68] px-4 py-6 lg:px-6">
       <header className="mb-5">
         <h1 className="flex items-center gap-2 text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">
           <Users className="h-5 w-5 text-[#C9A46B]" />
@@ -41,7 +41,7 @@ export default async function ComunidadPage() {
         </p>
       </header>
 
-      <section className={`mb-5 rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
+      <section className={`mb-5 rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 ${SOMBRA_TARJETA}`}>
         <PublicarComunidad />
       </section>
 
@@ -50,7 +50,7 @@ export default async function ComunidadPage() {
       ) : (
         <div className="space-y-3">
           {mensajes.map((m) => (
-            <article key={m.id} className={`rounded-2xl border border-[#B08D57]/25 bg-[#4C2032] p-4 ${SOMBRA_TARJETA}`}>
+            <article key={m.id} className={`rounded-2xl border border-[#B08D57]/25 bg-[#1E5A7A] p-4 ${SOMBRA_TARJETA}`}>
               <p className="text-[13px] font-extrabold text-[#E0B868]">
                 {m.nombre}{' '}
                 <span className="font-normal text-[#F3E7DC]/45">

@@ -138,11 +138,11 @@ export default async function VerComoClientePage({
         </p>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-color-base-content/10 bg-[#3B1727]">
+      <div className="overflow-hidden rounded-2xl border border-color-base-content/10 bg-[#153F55]">
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left">
             <thead>
-              <tr className="border-b border-color-base-content/10 bg-[#4C2032]">
+              <tr className="border-b border-color-base-content/10 bg-[#1E5A7A]">
                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-color-base-content/40">Cliente</th>
                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-color-base-content/40">Proyecto</th>
                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-color-base-content/40">Preguntas sin responder</th>

@@ -141,7 +141,7 @@ export function UserDetailClient({ user, plans, totalAppsCount, accessibleApps, 
               <button 
                 onClick={handleUpdatePlan}
                 disabled={isUpdating}
-                className="w-full flex items-center justify-center gap-2 py-3 bg-[#B08D57] text-[#3A1420] text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-[#C9A46B] disabled:opacity-50 transition-all"
+                className="w-full flex items-center justify-center gap-2 py-3 bg-[#B08D57] text-[#12394D] text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-[#C9A46B] disabled:opacity-50 transition-all"
               >
                 {isUpdating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                 {language === 'en' ? 'Save Changes' : 'Guardar Cambios'}

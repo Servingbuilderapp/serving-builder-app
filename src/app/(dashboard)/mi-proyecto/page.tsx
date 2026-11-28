@@ -143,7 +143,7 @@ async function contenidoMiProyecto(vista: ProyectoVisto) {
         <div className="px-4 pb-6 lg:px-6">
           <Link
             href="/pendientes"
-            className="flex items-center gap-3 rounded-2xl border border-[#C99A3D]/40 bg-[#4C2032] px-5 py-4 shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)] transition-transform hover:-translate-y-px"
+            className="flex items-center gap-3 rounded-2xl border border-[#C99A3D]/40 bg-[#1E5A7A] px-5 py-4 shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)] transition-transform hover:-translate-y-px"
           >
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#C99A3D]/20 text-[#E0B868]">
               <Inbox className="h-4.5 w-4.5" />

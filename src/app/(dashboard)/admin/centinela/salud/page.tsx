@@ -97,8 +97,8 @@ export default async function SaludCentinelaPage() {
         <Link href="/admin/centinela" className="text-xs font-bold text-[#7A5A2B] underline">
           ← Volver al Centinela
         </Link>
-        <h1 className="mt-2 text-2xl font-black text-[#3B1727]">Salud del Centinela</h1>
-        <p className="mt-1 text-sm text-[#3B1727]/70">
+        <h1 className="mt-2 text-2xl font-black text-[#153F55]">Salud del Centinela</h1>
+        <p className="mt-1 text-sm text-[#153F55]/70">
           Qué leyó cada proceso automático en los últimos 14 días. Las horas y los días son de Colombia.
         </p>
       </div>
@@ -116,7 +116,7 @@ export default async function SaludCentinelaPage() {
             <div key={p.clave} className="rounded-xl border border-[#B08D57]/40 bg-white p-3 shadow-sm">
               <div className="text-xs font-bold uppercase tracking-wide text-[#7A5A2B]">{p.titulo}</div>
               {u ? (
-                <div className="mt-1 text-sm text-[#3B1727]">
+                <div className="mt-1 text-sm text-[#153F55]">
                   Última corrida:{' '}
                   <strong>
                     {new Date(u.creado_en).toLocaleString('es-CO', { timeZone: 'America/Bogota', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}
@@ -134,7 +134,7 @@ export default async function SaludCentinelaPage() {
       </div>
 
       <div className="overflow-x-auto rounded-xl border border-[#B08D57]/40 bg-white shadow-sm">
-        <table className="w-full text-left text-sm text-[#3B1727]">
+        <table className="w-full text-left text-sm text-[#153F55]">
           <thead className="bg-[#F3E7DC] text-xs uppercase tracking-wide text-[#7A5A2B]">
             <tr>
               <th className="px-3 py-2">Día</th>
@@ -148,7 +148,7 @@ export default async function SaludCentinelaPage() {
           <tbody>
             {listaDias.length === 0 ? (
               <tr>
-                <td colSpan={8} className="px-3 py-4 text-[#3B1727]/60">
+                <td colSpan={8} className="px-3 py-4 text-[#153F55]/60">
                   Todavía no hay corridas anotadas. Aparecen desde la próxima ejecución automática.
                 </td>
               </tr>

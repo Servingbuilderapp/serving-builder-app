@@ -105,7 +105,7 @@ export default function TorreDeControlPage() {
                       </div>
                     </td>
                     <td className="p-4">
-                      <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#2E0E1A]/50 border border-white/10 rounded-full shadow-sm text-xs font-semibold text-[#F3E7DC]/70">
+                      <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#0E2B3B]/50 border border-white/10 rounded-full shadow-sm text-xs font-semibold text-[#F3E7DC]/70">
                         <Users className="w-3 h-3 text-[#B08D57]" />
                         {cita.asesor_asignado}
                       </div>
@@ -131,11 +131,11 @@ export default function TorreDeControlPage() {
                             ${cita.estado_comercial === 'Pago Realizado' ? 'bg-[#7A8B6F]/15 border-[#7A8B6F]/50 text-[#9BB18D] shadow-[0_0_15px_rgba(122,139,111,0.2)]' : 
                               cita.estado_comercial === 'Pausado' ? 'bg-[#C99A3D]/15 border-[#C99A3D]/50 text-[#E0B868] shadow-[0_0_15px_rgba(201,154,61,0.2)]' :
                               cita.estado_comercial === 'No Asistió' || cita.estado_comercial === 'Descartado' ? 'bg-[#C0604A]/15 border-[#C0604A]/50 text-[#E0917E] shadow-[0_0_15px_rgba(192,96,74,0.2)]' :
-                              'bg-[#2E0E1A]/50 border-white/10 text-[#F3E7DC]/70 hover:border-[#B08D57]/50 focus:border-[#B08D57]'
+                              'bg-[#0E2B3B]/50 border-white/10 text-[#F3E7DC]/70 hover:border-[#B08D57]/50 focus:border-[#B08D57]'
                             }`}
                         >
                           {ESTADOS.map(estado => (
-                            <option key={estado} value={estado} className="bg-[#3B1727] text-[#F3E7DC]">{estado}</option>
+                            <option key={estado} value={estado} className="bg-[#153F55] text-[#F3E7DC]">{estado}</option>
                           ))}
                         </select>
                       )}

@@ -35,7 +35,7 @@ function diaCorto(f: string) {
 
 function Tarjeta({ c, etiqueta }: { c: Ficha; etiqueta: string }) {
   return (
-    <li className={`rounded-xl border border-[#B08D57]/30 bg-[#4C2032] p-3.5 ${SOMBRA_TARJETA}`}>
+    <li className={`rounded-xl border border-[#B08D57]/30 bg-[#1E5A7A] p-3.5 ${SOMBRA_TARJETA}`}>
       <p className="text-[13.5px] font-extrabold text-[#F3E7DC]">{c.nombre || 'Convocatoria sin nombre'}</p>
       <p className="text-[12.5px] text-[#F3E7DC]/55">{c.entidad || 'Entidad sin dato'}</p>
       <p className="mt-1 text-[12.5px] font-semibold text-[#E0B868]">{etiqueta}</p>
@@ -59,14 +59,14 @@ export default async function CalendarioPage() {
 
   if (!vigente && !esEquipo) {
     return (
-      <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
+      <div className="min-h-full bg-[#1A4D68] px-4 py-6 lg:px-6">
         <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">Calendario de convocatorias</h1>
-        <div className={`mx-auto mt-6 max-w-xl rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-8 text-center ${SOMBRA_TARJETA}`}>
+        <div className={`mx-auto mt-6 max-w-xl rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-8 text-center ${SOMBRA_TARJETA}`}>
           <h2 className="text-[15px] font-extrabold text-[#F3E7DC]">Esta sección es para miembros</h2>
           <p className="mx-auto mt-2 max-w-md text-[13.5px] leading-relaxed text-[#F3E7DC]/60">
             Con una membresía activa ves mes a mes cuándo cierran las convocatorias y cuándo suelen abrir.
           </p>
-          <Link href="/membresia" className="mt-4 inline-flex rounded-xl bg-[#C9A46B] px-4 py-2.5 text-[13px] font-bold text-[#3B1727]">
+          <Link href="/membresia" className="mt-4 inline-flex rounded-xl bg-[#C9A46B] px-4 py-2.5 text-[13px] font-bold text-[#153F55]">
             Ver las membresías
           </Link>
         </div>
@@ -131,7 +131,7 @@ export default async function CalendarioPage() {
   })).filter((g) => g.items.length > 0)
 
   return (
-    <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
+    <div className="min-h-full bg-[#1A4D68] px-4 py-6 lg:px-6">
       <header className="mb-6">
         <h1 className="flex items-center gap-2 text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">
           <CalendarDays className="h-5 w-5 text-[#C9A46B]" />
@@ -146,7 +146,7 @@ export default async function CalendarioPage() {
         <h2 className="mb-3 text-[15px] font-extrabold text-[#E0B868]">Cierres mes a mes</h2>
         <div className="grid items-start gap-4 lg:grid-cols-2">
           {porMes.map(({ anio, mes, items }) => (
-            <div key={`${anio}-${mes}`} className={`rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-4 ${SOMBRA_TARJETA}`}>
+            <div key={`${anio}-${mes}`} className={`rounded-2xl border border-[#B08D57]/35 bg-[#153F55] p-4 ${SOMBRA_TARJETA}`}>
               <h3 className="mb-2 text-[14px] font-extrabold text-[#F3E7DC]">
                 <span className="capitalize">{MESES[mes]}</span> {anio}
                 <span className="ml-2 text-[12px] font-semibold text-[#F3E7DC]/45">

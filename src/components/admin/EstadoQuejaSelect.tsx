@@ -41,9 +41,9 @@ export function EstadoQuejaSelect({ quejaId, estadoActual }: { quejaId: string; 
       onChange={(e) => handleChange(e.target.value)}
       className={`px-3 py-1.5 rounded-lg font-bold text-[11px] uppercase outline-none cursor-pointer border disabled:opacity-50 ${ESTILO_POR_ESTADO[estado] || ESTILO_POR_ESTADO['Abierto']}`}
     >
-      <option value="Abierto" className="bg-[#3B1727] text-[#F3E7DC]">Abierto</option>
-      <option value="En Proceso" className="bg-[#3B1727] text-[#F3E7DC]">En Proceso</option>
-      <option value="Resuelto" className="bg-[#3B1727] text-[#F3E7DC]">Resuelto</option>
+      <option value="Abierto" className="bg-[#153F55] text-[#F3E7DC]">Abierto</option>
+      <option value="En Proceso" className="bg-[#153F55] text-[#F3E7DC]">En Proceso</option>
+      <option value="Resuelto" className="bg-[#153F55] text-[#F3E7DC]">Resuelto</option>
     </select>
   )
 }

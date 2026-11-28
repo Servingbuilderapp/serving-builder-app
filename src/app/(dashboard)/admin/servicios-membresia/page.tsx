@@ -26,7 +26,7 @@ export default async function ServiciosMembresiaPage() {
   for (const i of ins || []) conteo.set(i.sesion_id, (conteo.get(i.sesion_id) || 0) + 1)
 
   return (
-    <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
+    <div className="min-h-full bg-[#1A4D68] px-4 py-6 lg:px-6">
       <header className="mb-6">
         <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]"><Ayuda clave="equipo.servicios_membresia" claro={false}>Servicios de membresía</Ayuda></h1>
         <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#F3E7DC]/60">

@@ -89,11 +89,11 @@ export default async function BuscarFondosPage({ searchParams }: { searchParams:
   const sectores = unicos('sector')
   const financiadores = unicos('tipo_financiador')
 
-  const campo = 'mt-1 w-full rounded-xl border border-white/10 bg-[#3B1727] px-3 py-2 text-[13.5px] text-[#F3E7DC]'
+  const campo = 'mt-1 w-full rounded-xl border border-white/10 bg-[#153F55] px-3 py-2 text-[13.5px] text-[#F3E7DC]'
   const etiqueta = 'text-[12px] font-bold text-[#F3E7DC]/70'
 
   return (
-    <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
+    <div className="min-h-full bg-[#1A4D68] px-4 py-6 lg:px-6">
       <header className="mb-5">
         <h1 className="flex items-center gap-2 text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">
           <Search className="h-5 w-5 text-[#C9A46B]" />
@@ -106,7 +106,7 @@ export default async function BuscarFondosPage({ searchParams }: { searchParams:
 
       <FuentesDeFrente />
 
-      <form method="get" className={`mb-6 grid gap-3 rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-4 sm:grid-cols-2 lg:grid-cols-5 ${SOMBRA_TARJETA}`}>
+      <form method="get" className={`mb-6 grid gap-3 rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-4 sm:grid-cols-2 lg:grid-cols-5 ${SOMBRA_TARJETA}`}>
         <div className="sm:col-span-2 lg:col-span-5">
           <label className={etiqueta}>Palabra (nombre, entidad o tema)</label>
           <input name="q" defaultValue={q} placeholder="Ej.: agua, mujeres, educación…" className={campo} />
@@ -140,7 +140,7 @@ export default async function BuscarFondosPage({ searchParams }: { searchParams:
           </select>
         </div>
         <div className="flex items-end">
-          <button type="submit" className="w-full rounded-xl bg-[#C9A46B] px-4 py-2.5 text-[13.5px] font-bold text-[#3B1727]">
+          <button type="submit" className="w-full rounded-xl bg-[#C9A46B] px-4 py-2.5 text-[13.5px] font-bold text-[#153F55]">
             Buscar
           </button>
         </div>
@@ -152,7 +152,7 @@ export default async function BuscarFondosPage({ searchParams }: { searchParams:
 
       <div className="grid items-start gap-4 lg:grid-cols-2">
         {lista.map((c) => (
-          <article key={c.id} className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
+          <article key={c.id} className={`rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 ${SOMBRA_TARJETA}`}>
             <h2 className="text-[14.5px] font-extrabold text-[#F3E7DC]">{c.nombre}</h2>
             <p className="text-[12.5px] text-[#F3E7DC]/55">
               {[c.entidad, c.pais].filter(Boolean).join(' · ') || 'Entidad sin dato'}

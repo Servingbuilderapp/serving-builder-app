@@ -92,8 +92,8 @@ const COLOR_SEMAFORO: Record<string, string> = {
   critico: 'bg-[#C0604A]/20 text-[#E0917E] border-[#C0604A]/40',
   corriendo: 'bg-[#C99A3D]/20 text-[#E0B868] border-[#C99A3D]/40',
   holgado: 'bg-[#7A8B6F]/20 text-[#9BB18D] border-[#7A8B6F]/40',
-  cerrada: 'bg-[#6E4A50]/30 text-[#F3E7DC]/55 border-[#B08D57]/35',
-  sin_fecha: 'bg-[#6E4A50]/30 text-[#F3E7DC]/55 border-[#B08D57]/35',
+  cerrada: 'bg-[#5B7886]/30 text-[#F3E7DC]/55 border-[#B08D57]/35',
+  sin_fecha: 'bg-[#5B7886]/30 text-[#F3E7DC]/55 border-[#B08D57]/35',
 }
 
 export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarga, correoEquipo }: Props) {
@@ -221,7 +221,7 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
             value={texto}
             onChange={(e) => setTexto(e.target.value)}
             placeholder="Buscar por nombre, entidad, objetivo, sector o territorio"
-            className="w-full pl-10 pr-4 py-3 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm"
+            className="w-full pl-10 pr-4 py-3 rounded-xl border border-color-base-300 bg-[#153F55] text-sm"
           />
         </div>
 
@@ -230,13 +230,13 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
             value={pais}
             onChange={(e) => setPais(e.target.value)}
             placeholder="País elegible (ej. Colombia)"
-            className="px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm"
+            className="px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#153F55] text-sm"
           />
 
           <select
             value={postulante}
             onChange={(e) => setPostulante(e.target.value)}
-            className="px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm"
+            className="px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#153F55] text-sm"
           >
             <option value="">Cualquier postulante</option>
             {TIPOS_POSTULANTE.map((t) => (
@@ -247,7 +247,7 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
           <select
             value={financiador}
             onChange={(e) => setFinanciador(e.target.value)}
-            className="px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm"
+            className="px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#153F55] text-sm"
           >
             <option value="">Quién pone la plata</option>
             {TIPOS_FINANCIADOR.map((t) => (
@@ -258,7 +258,7 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
           <select
             value={cuando}
             onChange={(e) => setCuando(e.target.value)}
-            className="px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm"
+            className="px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#153F55] text-sm"
           >
             <option value="abiertas">Abiertas</option>
             <option value="urgentes">Cierran pronto (20 días o menos)</option>
@@ -292,7 +292,7 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
           return (
             <div
               key={c.id}
-              className="p-5 rounded-2xl border border-color-base-content/10 bg-[#3B1727] space-y-3"
+              className="p-5 rounded-2xl border border-color-base-content/10 bg-[#153F55] space-y-3"
             >
               <div className="flex flex-col md:flex-row md:items-start justify-between gap-3">
                 <div className="space-y-1 min-w-0">
@@ -318,7 +318,7 @@ export function ConvocatoriasClient({ convocatorias, conteoDocumentos, errorCarg
                     className={`text-[11px] font-bold px-2.5 py-1 rounded-full border inline-flex items-center gap-1 ${
                       documentos > 0
                         ? 'bg-[#7A8B6F]/20 text-[#9BB18D] border-[#7A8B6F]/40'
-                        : 'bg-[#6E4A50]/30 text-[#F3E7DC]/55 border-[#B08D57]/35'
+                        : 'bg-[#5B7886]/30 text-[#F3E7DC]/55 border-[#B08D57]/35'
                     }`}
                   >
                     {documentos > 0 ? <Check className="h-3 w-3" /> : <FileText className="h-3 w-3" />}
@@ -488,14 +488,14 @@ function FormularioFicha({ correoEquipo, onCerrar }: { correoEquipo: string; onC
     }
   }
 
-  const campo = 'w-full px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm'
+  const campo = 'w-full px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#153F55] text-sm'
   const etiqueta = 'block text-[11px] font-black uppercase tracking-wider text-color-base-content/70 mb-1'
 
   return (
     <div className="fixed inset-0 z-50 bg-black/40 overflow-y-auto p-4">
       <form
         onSubmit={guardar}
-        className="max-w-3xl mx-auto my-8 bg-[#3B1727] rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl"
+        className="max-w-3xl mx-auto my-8 bg-[#153F55] rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl"
       >
         <div className="flex items-start justify-between gap-4">
           <div>
@@ -556,7 +556,7 @@ function FormularioFicha({ correoEquipo, onCerrar }: { correoEquipo: string; onC
                     className={`px-3 py-1.5 rounded-full text-xs font-bold border transition-colors ${
                       activo
                         ? 'bg-color-primary text-white border-color-primary'
-                        : 'bg-[#3B1727] text-color-base-content/70 border-color-base-300'
+                        : 'bg-[#153F55] text-color-base-content/70 border-color-base-300'
                     }`}
                   >
                     {t.replace(/_/g, ' ')}
@@ -758,7 +758,7 @@ function SubirBoletin({ onCerrar }: { onCerrar: () => void }) {
   const [resultado, setResultado] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  const campo = 'w-full px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm'
+  const campo = 'w-full px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#153F55] text-sm'
   const etiqueta = 'block text-[11px] font-black uppercase tracking-wider text-color-base-content/70 mb-1'
 
   const enviar = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -813,7 +813,7 @@ function SubirBoletin({ onCerrar }: { onCerrar: () => void }) {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/40 overflow-y-auto p-4">
-      <form onSubmit={enviar} className="max-w-xl mx-auto my-8 bg-[#3B1727] rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl">
+      <form onSubmit={enviar} className="max-w-xl mx-auto my-8 bg-[#153F55] rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl">
         <div className="flex items-start justify-between gap-4">
           <div>
             <h2 className="text-lg font-black text-color-base-content">Subir un boletín</h2>
@@ -877,7 +877,7 @@ function CargarLista({ onCerrar }: { onCerrar: () => void }) {
   const [aviso, setAviso] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  const campo = 'w-full px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm'
+  const campo = 'w-full px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#153F55] text-sm'
 
   const cargar = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -949,7 +949,7 @@ function CargarLista({ onCerrar }: { onCerrar: () => void }) {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/40 overflow-y-auto p-4">
-      <form onSubmit={cargar} className="max-w-xl mx-auto my-8 bg-[#3B1727] rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl">
+      <form onSubmit={cargar} className="max-w-xl mx-auto my-8 bg-[#153F55] rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl">
         <div className="flex items-start justify-between gap-4">
           <div>
             <h2 className="text-lg font-black text-color-base-content">Cargar lista de convocatorias</h2>
@@ -1006,7 +1006,7 @@ function CompletarCondiciones({ convocatoria, onCerrar }: { convocatoria: Convoc
   const [mensaje, setMensaje] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  const campo = 'w-full px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm'
+  const campo = 'w-full px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#153F55] text-sm'
   const etiqueta = 'block text-[11px] font-black uppercase tracking-wider text-color-base-content/70 mb-1'
 
   const enviar = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -1033,7 +1033,7 @@ function CompletarCondiciones({ convocatoria, onCerrar }: { convocatoria: Convoc
 
   return (
     <div className="fixed inset-0 z-50 bg-black/40 overflow-y-auto p-4">
-      <form onSubmit={enviar} className="max-w-xl mx-auto my-8 bg-[#3B1727] rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl">
+      <form onSubmit={enviar} className="max-w-xl mx-auto my-8 bg-[#153F55] rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
             <h2 className="text-lg font-black text-color-base-content">Condiciones para postular</h2>
@@ -1178,11 +1178,11 @@ function SubirDocumento({ convocatoria, onCerrar }: { convocatoria: Convocatoria
     }
   }
 
-  const campo = 'w-full px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm'
+  const campo = 'w-full px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#153F55] text-sm'
 
   return (
     <div className="fixed inset-0 z-50 bg-black/40 overflow-y-auto p-4">
-      <form onSubmit={enviar} className="max-w-xl mx-auto my-8 bg-[#3B1727] rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl">
+      <form onSubmit={enviar} className="max-w-xl mx-auto my-8 bg-[#153F55] rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
             <h2 className="text-lg font-black text-color-base-content">Términos de referencia</h2>
@@ -1211,7 +1211,7 @@ function SubirDocumento({ convocatoria, onCerrar }: { convocatoria: Convocatoria
               className={`px-3 py-2 rounded-lg text-xs font-bold border ${
                 modo === valor
                   ? 'bg-color-primary text-white border-color-primary'
-                  : 'bg-[#3B1727] text-color-base-content/70 border-color-base-300'
+                  : 'bg-[#153F55] text-color-base-content/70 border-color-base-300'
               }`}
             >
               {titulo}

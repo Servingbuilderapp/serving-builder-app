@@ -74,7 +74,7 @@ export function SubirDocumentoProyecto({ proyectoId, archivoActualNombre, archiv
           )}
         </div>
       )}
-      <label className="flex items-center gap-3 p-4 rounded-xl border-2 border-dashed border-[#7A8B6F]/50 bg-[#3B1727] cursor-pointer hover:bg-[#7A8B6F]/10 transition-colors">
+      <label className="flex items-center gap-3 p-4 rounded-xl border-2 border-dashed border-[#7A8B6F]/50 bg-[#153F55] cursor-pointer hover:bg-[#7A8B6F]/10 transition-colors">
         {loading ? <Loader2 className="h-5 w-5 animate-spin text-[#A9BC9C]" /> : <FileText className="h-5 w-5 text-[#A9BC9C]" />}
         <span className="text-sm font-bold text-[#F3E7DC]">
           {loading ? 'Subiendo...' : archivoActualNombre ? 'Subir otro documento (reemplazar)' : 'Haz clic para subir tu documento (PDF o Word)'}

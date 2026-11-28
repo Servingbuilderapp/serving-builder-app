@@ -28,7 +28,7 @@ export default async function ProyectoMiembroAdminPage({ params }: { params: Pro
   }
 
   return (
-    <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
+    <div className="min-h-full bg-[#1A4D68] px-4 py-6 lg:px-6">
       <Link href="/admin/servicios-membresia" className="text-[12.5px] font-bold text-[#C9A46B] underline">← Servicios de membresía</Link>
       <h1 className="mt-2 text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">{r.titulo_elegido?.trim() || p.nombre}</h1>
       <p className="mb-5 text-[13px] text-[#F3E7DC]/55">
@@ -37,7 +37,7 @@ export default async function ProyectoMiembroAdminPage({ params }: { params: Pro
       {traido ? (
         <BloqueProyectoTraido respuestas={r} urlArchivo={urlArchivo} />
       ) : (
-      <div className="space-y-4 rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 text-[13.5px] text-[#F3E7DC]/85">
+      <div className="space-y-4 rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 text-[13.5px] text-[#F3E7DC]/85">
         {TODOS_LOS_PASOS.map((paso) => (
           <div key={paso.n}>
             <h2 className="font-extrabold text-[#E0B868]">Paso {paso.n}. {paso.titulo}</h2>

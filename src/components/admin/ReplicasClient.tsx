@@ -49,11 +49,11 @@ const COLOR_ESTADO: Record<string, string> = {
   Planeada: 'bg-[#C99A3D]/20 text-[#E0B868]',
   'Proyecto creado': 'bg-[#8C93A6]/20 text-[#AEB4C4]',
   Postulada: 'bg-[#7A8B6F]/20 text-[#9BB18D]',
-  Descartada: 'bg-[#6E4A50]/40 text-[#F3E7DC]/60',
+  Descartada: 'bg-[#5B7886]/40 text-[#F3E7DC]/60',
 }
 
 const COLOR_ESTADO_PAGO: Record<string, string> = {
-  'Sin cotizar': 'bg-[#6E4A50]/40 text-[#F3E7DC]/60',
+  'Sin cotizar': 'bg-[#5B7886]/40 text-[#F3E7DC]/60',
   Cotizado: 'bg-[#C99A3D]/20 text-[#E0B868]',
   Pagado: 'bg-[#7A8B6F]/20 text-[#9BB18D]',
 }
@@ -91,7 +91,7 @@ function Columna({
   puntos: Punto[]
 }) {
   return (
-    <div className="rounded-xl border border-[#B08D57]/35 bg-[#4C2032] p-4">
+    <div className="rounded-xl border border-[#B08D57]/35 bg-[#1E5A7A] p-4">
       <div className="flex items-center gap-2">
         <Icono className="h-4 w-4 shrink-0" style={{ color }} />
         <h4 className="text-[12px] font-bold uppercase tracking-wider text-[#F3E7DC]">{titulo}</h4>
@@ -117,7 +117,7 @@ function Columna({
 /** Cómo se le cobra al cliente — mismos datos que ve en /contratar, en modo lectura. */
 function InfoDeCobro() {
   return (
-    <div className="mt-3 rounded-lg border border-[#B08D57]/35 bg-[#3B1727] p-3.5 text-[12.5px] leading-relaxed text-[#F3E7DC]/65">
+    <div className="mt-3 rounded-lg border border-[#B08D57]/35 bg-[#153F55] p-3.5 text-[12.5px] leading-relaxed text-[#F3E7DC]/65">
       <p className="font-semibold text-[#F3E7DC]">Cómo cobrarle</p>
       <p className="mt-1">
         Cliente en Colombia: transferencia a {COBRO_COLOMBIA.cuenta?.banco}, cuenta{' '}
@@ -157,7 +157,7 @@ function Cotizacion({
 
   if (!replica.modalidad_cobro) {
     return (
-      <div className="mx-5 mb-5 rounded-xl border border-dashed border-[#B08D57]/35 bg-[#4C2032] p-4">
+      <div className="mx-5 mb-5 rounded-xl border border-dashed border-[#B08D57]/35 bg-[#1E5A7A] p-4">
         <div className="flex items-center gap-2">
           <Banknote className="h-4 w-4 text-[#E0B868]" />
           <h4 className="text-[12px] font-bold uppercase tracking-wider text-[#F3E7DC]">
@@ -176,7 +176,7 @@ function Cotizacion({
               className={`rounded-lg border p-3 text-left transition ${
                 modalidadElegida === p.id
                   ? 'border-[#B08D57] bg-[#B08D57]/15'
-                  : 'border-[#B08D57]/35 bg-[#3B1727] hover:border-[#B08D57]'
+                  : 'border-[#B08D57]/35 bg-[#153F55] hover:border-[#B08D57]'
               }`}
             >
               <p className="text-[12.5px] font-semibold text-[#F3E7DC]">{p.nombre}</p>
@@ -191,7 +191,7 @@ function Cotizacion({
           type="button"
           disabled={!modalidadElegida || trabajando}
           onClick={() => modalidadElegida && onCotizar(modalidadElegida)}
-          className="mt-3 inline-flex h-9 items-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-4 text-[12.5px] font-semibold text-[#3A1420] disabled:opacity-45"
+          className="mt-3 inline-flex h-9 items-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-4 text-[12.5px] font-semibold text-[#12394D] disabled:opacity-45"
         >
           Guardar cotización
         </button>
@@ -203,7 +203,7 @@ function Cotizacion({
 
   if (yaCubiertaPor) {
     return (
-      <div className="mx-5 mb-5 rounded-xl border border-[#B08D57]/35 bg-[#4C2032] p-4">
+      <div className="mx-5 mb-5 rounded-xl border border-[#B08D57]/35 bg-[#1E5A7A] p-4">
         <div className="flex items-center gap-2">
           <Banknote className="h-4 w-4 text-[#9BB18D]" />
           <h4 className="text-[12px] font-bold uppercase tracking-wider text-[#F3E7DC]">
@@ -220,7 +220,7 @@ function Cotizacion({
   }
 
   return (
-    <div className="mx-5 mb-5 rounded-xl border border-[#B08D57]/35 bg-[#4C2032] p-4">
+    <div className="mx-5 mb-5 rounded-xl border border-[#B08D57]/35 bg-[#1E5A7A] p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <Banknote className="h-4 w-4 text-[#B08D57]" />
@@ -245,7 +245,7 @@ function Cotizacion({
             type="button"
             disabled={trabajando}
             onClick={() => onCambiarEstadoPago('Cotizado')}
-            className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-3.5 text-[12.5px] font-semibold text-[#F3E7DC] disabled:opacity-45"
+            className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-[#B08D57]/35 bg-[#153F55] px-3.5 text-[12.5px] font-semibold text-[#F3E7DC] disabled:opacity-45"
           >
             Marcar como cotizado
           </button>
@@ -336,7 +336,7 @@ export function ReplicasClient({
       <PanelAbanico proyectoId={proyectoId} />
 
       {/* preparar --------------------------------------------------------- */}
-      <div className={`rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 ${SOMBRA}`}>
+      <div className={`rounded-2xl border border-[#B08D57]/35 bg-[#153F55] p-5 ${SOMBRA}`}>
         <h2 className="text-[13px] font-bold uppercase tracking-wider text-[#F3E7DC]">
           Preparar una réplica
         </h2>
@@ -356,7 +356,7 @@ export function ReplicasClient({
               setValorCampoDestino('')
               setNotaAdicional('')
             }}
-            className="h-11 rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-3 text-[13.5px] text-[#F3E7DC] outline-none focus:border-[#B08D57] sm:col-span-2"
+            className="h-11 rounded-lg border border-[#B08D57]/35 bg-[#153F55] px-3 text-[13.5px] text-[#F3E7DC] outline-none focus:border-[#B08D57] sm:col-span-2"
           >
             <option value="">Tipo de réplica…</option>
             {tipos.map((t) => (
@@ -376,7 +376,7 @@ export function ReplicasClient({
                 value={valorCampoDestino}
                 onChange={(e) => setValorCampoDestino(e.target.value)}
                 placeholder={campoDestino.ejemplo}
-                className="h-11 w-full rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-3 text-[13.5px] text-[#F3E7DC] outline-none placeholder:text-[#F3E7DC]/35 focus:border-[#B08D57]"
+                className="h-11 w-full rounded-lg border border-[#B08D57]/35 bg-[#153F55] px-3 text-[13.5px] text-[#F3E7DC] outline-none placeholder:text-[#F3E7DC]/35 focus:border-[#B08D57]"
               />
 
               <label className="mb-1 mt-3 block text-[12px] font-semibold text-[#F3E7DC]/65">
@@ -387,11 +387,11 @@ export function ReplicasClient({
                 onChange={(e) => setNotaAdicional(e.target.value)}
                 rows={2}
                 placeholder="Algo más que el equipo deba saber sobre esta réplica"
-                className="w-full rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-3 py-2.5 text-[13.5px] text-[#F3E7DC] outline-none placeholder:text-[#F3E7DC]/35 focus:border-[#B08D57]"
+                className="w-full rounded-lg border border-[#B08D57]/35 bg-[#153F55] px-3 py-2.5 text-[13.5px] text-[#F3E7DC] outline-none placeholder:text-[#F3E7DC]/35 focus:border-[#B08D57]"
               />
 
               {destinoCompuesto ? (
-                <p className="mt-2 rounded-lg bg-[#4C2032] px-3 py-2 text-[12.5px] italic leading-relaxed text-[#F3E7DC]/65">
+                <p className="mt-2 rounded-lg bg-[#1E5A7A] px-3 py-2 text-[12.5px] italic leading-relaxed text-[#F3E7DC]/65">
                   Así va a quedar redactado: &ldquo;{destinoCompuesto}&rdquo;
                 </p>
               ) : null}
@@ -401,7 +401,7 @@ export function ReplicasClient({
           <select
             value={convocatoriaId}
             onChange={(e) => setConvocatoriaId(e.target.value)}
-            className="h-11 rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-3 text-[13.5px] text-[#F3E7DC] outline-none focus:border-[#B08D57] sm:col-span-2"
+            className="h-11 rounded-lg border border-[#B08D57]/35 bg-[#153F55] px-3 text-[13.5px] text-[#F3E7DC] outline-none focus:border-[#B08D57] sm:col-span-2"
           >
             <option value="">Convocatoria de destino (opcional)</option>
             {convocatorias.map((c) => (
@@ -415,7 +415,7 @@ export function ReplicasClient({
           <select
             value={modalidadCobro}
             onChange={(e) => setModalidadCobro(e.target.value as ModalidadReplica | '')}
-            className="h-11 rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-3 text-[13.5px] text-[#F3E7DC] outline-none focus:border-[#B08D57] sm:col-span-2"
+            className="h-11 rounded-lg border border-[#B08D57]/35 bg-[#153F55] px-3 text-[13.5px] text-[#F3E7DC] outline-none focus:border-[#B08D57] sm:col-span-2"
           >
             <option value="">Modalidad de cobro (se puede fijar después)…</option>
             {Object.values(PRECIOS_REPLICA).filter((p) => MODALIDADES_OFRECIDAS.includes(p.id)).map((p) => (
@@ -442,7 +442,7 @@ export function ReplicasClient({
               'preparar'
             )
           }
-          className="mt-4 inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-6 text-[13px] font-semibold text-[#3A1420] disabled:opacity-45"
+          className="mt-4 inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-6 text-[13px] font-semibold text-[#12394D] disabled:opacity-45"
         >
           <Sparkles className="h-4 w-4" />
           {trabajando === 'preparar' ? 'Pensando la réplica…' : 'Preparar la réplica'}
@@ -461,7 +461,7 @@ export function ReplicasClient({
 
       {/* listado ---------------------------------------------------------- */}
       {replicas.length === 0 ? (
-        <div className={`rounded-2xl border border-dashed border-[#B08D57]/35 bg-[#4C2032] p-10 text-center ${SOMBRA}`}>
+        <div className={`rounded-2xl border border-dashed border-[#B08D57]/35 bg-[#1E5A7A] p-10 text-center ${SOMBRA}`}>
           <Copy className="mx-auto h-6 w-6 text-[#F3E7DC]/50" />
           <p className="mt-3 text-[13.5px] text-[#F3E7DC]/65">
             Este proyecto todavía no tiene réplicas pensadas.
@@ -469,14 +469,14 @@ export function ReplicasClient({
         </div>
       ) : (
         replicas.map((r) => (
-          <div key={r.id} className={`overflow-hidden rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] ${SOMBRA}`}>
+          <div key={r.id} className={`overflow-hidden rounded-2xl border border-[#B08D57]/35 bg-[#153F55] ${SOMBRA}`}>
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#B08D57]/35 px-5 py-4">
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-[15px] font-bold capitalize text-[#F3E7DC]">{r.tipo}</span>
                   <span
                     className={`rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${
-                      COLOR_ESTADO[r.estado] || 'bg-[#6E4A50]/40 text-[#F3E7DC]/60'
+                      COLOR_ESTADO[r.estado] || 'bg-[#5B7886]/40 text-[#F3E7DC]/60'
                     }`}
                   >
                     {r.estado}
@@ -492,7 +492,7 @@ export function ReplicasClient({
                   type="button"
                   disabled={trabajando !== null}
                   onClick={() => llamar({ accion: 'crear', replicaId: r.id }, `crear-${r.id}`)}
-                  className="inline-flex h-10 shrink-0 items-center gap-2 rounded-lg bg-gradient-to-b from-[#6E4A50] to-[#3B1727] px-5 text-[13px] font-semibold text-white disabled:opacity-45"
+                  className="inline-flex h-10 shrink-0 items-center gap-2 rounded-lg bg-gradient-to-b from-[#5B7886] to-[#153F55] px-5 text-[13px] font-semibold text-white disabled:opacity-45"
                 >
                   <Copy className="h-4 w-4" />
                   {trabajando === `crear-${r.id}` ? 'Creando…' : 'Crear el proyecto réplica'}
@@ -500,7 +500,7 @@ export function ReplicasClient({
               ) : r.proyecto_replica_id ? (
                 <Link
                   href={`/admin/proyectos/${r.proyecto_replica_id}/arbol`}
-                  className="inline-flex h-10 shrink-0 items-center gap-2 rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-4 text-[13px] font-semibold text-[#B08D57]"
+                  className="inline-flex h-10 shrink-0 items-center gap-2 rounded-lg border border-[#B08D57]/35 bg-[#153F55] px-4 text-[13px] font-semibold text-[#B08D57]"
                 >
                   Abrir el proyecto réplica <ArrowRight className="h-4 w-4" />
                 </Link>

@@ -63,21 +63,21 @@ export default async function AdminMotoresPage() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-        <div className="bg-[#3B1727]/80 border border-white/10 rounded-2xl p-4 flex flex-col gap-1">
+        <div className="bg-[#153F55]/80 border border-white/10 rounded-2xl p-4 flex flex-col gap-1">
           <span className="text-[10px] font-black text-color-base-content/45 uppercase tracking-widest">Proyectos listos</span>
           <span className="text-2xl font-black text-color-base-content tabular-nums">{totalListos}</span>
         </div>
-        <div className="bg-[#3B1727]/80 border border-white/10 rounded-2xl p-4 flex flex-col gap-1">
+        <div className="bg-[#153F55]/80 border border-white/10 rounded-2xl p-4 flex flex-col gap-1">
           <span className="text-[10px] font-black text-color-base-content/45 uppercase tracking-widest">Nunca corrió Motor 2</span>
           <span className={`text-2xl font-black tabular-nums ${totalNuncaCorrio > 0 ? 'text-[#E0917E]' : 'text-color-base-content'}`}>
             {totalNuncaCorrio}
           </span>
         </div>
-        <div className="bg-[#3B1727]/80 border border-white/10 rounded-2xl p-4 flex flex-col gap-1">
+        <div className="bg-[#153F55]/80 border border-white/10 rounded-2xl p-4 flex flex-col gap-1">
           <span className="text-[10px] font-black text-color-base-content/45 uppercase tracking-widest">Convocatorias encontradas</span>
           <span className="text-2xl font-black text-color-primary tabular-nums">{totalCandidatas}</span>
         </div>
-        <div className="bg-[#3B1727]/80 border border-white/10 rounded-2xl p-4 flex flex-col gap-1">
+        <div className="bg-[#153F55]/80 border border-white/10 rounded-2xl p-4 flex flex-col gap-1">
           <span className="text-[10px] font-black text-color-base-content/45 uppercase tracking-widest">Encajes hechos</span>
           <span className="text-2xl font-black text-color-primary tabular-nums">{totalEncajes}</span>
         </div>
@@ -92,11 +92,11 @@ export default async function AdminMotoresPage() {
         </div>
       )}
 
-      <div className="bg-[#3B1727] border border-color-base-content/10 rounded-2xl overflow-hidden backdrop-blur-xl shadow-2xl">
+      <div className="bg-[#153F55] border border-color-base-content/10 rounded-2xl overflow-hidden backdrop-blur-xl shadow-2xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-color-base-content/10 bg-[#4C2032]">
+              <tr className="border-b border-color-base-content/10 bg-[#1E5A7A]">
                 <th className="px-6 py-4 text-xs font-bold text-color-base-content/40 uppercase tracking-widest">Proyecto</th>
                 <th className="px-6 py-4 text-xs font-bold text-color-base-content/40 uppercase tracking-widest">Último lote (Motor 2)</th>
                 <th className="px-6 py-4 text-xs font-bold text-color-base-content/40 uppercase tracking-widest text-center">Convocatorias</th>

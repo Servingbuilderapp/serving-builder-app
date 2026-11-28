@@ -116,7 +116,7 @@ type EstiloPostulacion = {
 
 const ESTADOS_POSTULACION: Record<EstadoPostulacion, EstiloPostulacion> = {
   Preparando: {
-    fondo: 'bg-[#3B1727]',
+    fondo: 'bg-[#153F55]',
     texto: 'text-[#C9A46B]',
     borde: 'border-[#B08D57]/35',
     titulo: 'Se está preparando la postulación',
@@ -151,7 +151,7 @@ const ESTADOS_POSTULACION: Record<EstadoPostulacion, EstiloPostulacion> = {
     Icono: XCircle,
   },
   Descartada: {
-    fondo: 'bg-[#3B1727]',
+    fondo: 'bg-[#153F55]',
     texto: TINTA_TENUE,
     borde: BORDE,
     titulo: 'Se descartó esta convocatoria',
@@ -160,7 +160,7 @@ const ESTADOS_POSTULACION: Record<EstadoPostulacion, EstiloPostulacion> = {
 }
 
 const SIN_POSTULAR: EstiloPostulacion = {
-  fondo: 'bg-[#3B1727]',
+  fondo: 'bg-[#153F55]',
   texto: TINTA_TENUE,
   borde: BORDE,
   titulo: 'Todavía no se ha postulado',
@@ -211,7 +211,7 @@ function Barra({ puntaje }: { puntaje: number }) {
           <span className={`text-[11px] font-bold ${TINTA_TENUE}`}> /100</span>
         </span>
       </div>
-      <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-[#3B1727]">
+      <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-[#153F55]">
         <div
           className="h-full rounded-full transition-[width] duration-700"
           style={{ width: `${Math.max(0, Math.min(100, puntaje))}%`, backgroundColor: color }}
@@ -249,7 +249,7 @@ function TarjetaConvocatoria({ convocatoria }: { convocatoria: ConvocatoriaClien
   )
 
   return (
-    <div className={`rounded-2xl border ${BORDE} bg-[#4C2032] ${RELIEVE_TARJETA}`}>
+    <div className={`rounded-2xl border ${BORDE} bg-[#1E5A7A] ${RELIEVE_TARJETA}`}>
       <div className="px-5 py-4">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
@@ -286,7 +286,7 @@ function TarjetaConvocatoria({ convocatoria }: { convocatoria: ConvocatoriaClien
               {semaforo.nombre}
             </span>
           ) : (
-            <span className={`shrink-0 rounded-full border ${BORDE} bg-[#3B1727] px-3 py-1 text-[11.5px] font-bold ${TINTA_TENUE}`}>
+            <span className={`shrink-0 rounded-full border ${BORDE} bg-[#153F55] px-3 py-1 text-[11.5px] font-bold ${TINTA_TENUE}`}>
               En análisis
             </span>
           )}
@@ -305,7 +305,7 @@ function TarjetaConvocatoria({ convocatoria }: { convocatoria: ConvocatoriaClien
             <button
               type="button"
               onClick={() => setAbierta((v) => !v)}
-              className={`inline-flex items-center gap-1.5 rounded-lg border ${BORDE} bg-[#3B1727] px-3 py-1.5 text-[12.5px] font-bold text-[#C9A46B] transition-colors hover:bg-[#4C2032]`}
+              className={`inline-flex items-center gap-1.5 rounded-lg border ${BORDE} bg-[#153F55] px-3 py-1.5 text-[12.5px] font-bold text-[#C9A46B] transition-colors hover:bg-[#1E5A7A]`}
             >
               {abierta ? 'Ocultar el análisis' : 'Ver el análisis'}
               <ChevronDown
@@ -328,7 +328,7 @@ function TarjetaConvocatoria({ convocatoria }: { convocatoria: ConvocatoriaClien
       </div>
 
       {abierta && encaje ? (
-        <div className={`space-y-4 border-t ${BORDE} bg-[#3B1727] px-5 py-4`}>
+        <div className={`space-y-4 border-t ${BORDE} bg-[#153F55] px-5 py-4`}>
           {encaje.resumen ? <Parrafo titulo="De qué se trata" texto={encaje.resumen} /> : null}
           {encaje.encajeActual ? (
             <Parrafo titulo="Cómo estás hoy frente a ella" texto={encaje.encajeActual} />
@@ -380,7 +380,7 @@ export function ConvocatoriasCliente({ convocatorias }: { convocatorias: Convoca
   const conEncaje = convocatorias.filter((c) => typeof c.encaje?.puntaje === 'number').length
 
   return (
-    <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
+    <div className="min-h-full bg-[#1A4D68] px-4 py-6 lg:px-6">
       <header className="mb-5">
         <h1 className={`text-[19px] font-extrabold tracking-tight ${TINTA}`}>
           Mis convocatorias
@@ -405,11 +405,11 @@ export function ConvocatoriasCliente({ convocatorias }: { convocatorias: Convoca
 
 function Aviso({ titulo, texto }: { titulo: string; texto: string }) {
   return (
-    <div className="min-h-full bg-[#54142B] px-4 py-10 lg:px-6">
+    <div className="min-h-full bg-[#1A4D68] px-4 py-10 lg:px-6">
       <div
-        className={`mx-auto max-w-xl rounded-2xl border ${BORDE} bg-[#4C2032] p-8 text-center ${RELIEVE_TARJETA}`}
+        className={`mx-auto max-w-xl rounded-2xl border ${BORDE} bg-[#1E5A7A] p-8 text-center ${RELIEVE_TARJETA}`}
       >
-        <span className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-[#3B1727] text-[#C9A46B]">
+        <span className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-[#153F55] text-[#C9A46B]">
           <Search className="h-5 w-5" />
         </span>
         <h1 className={`text-[17px] font-extrabold ${TINTA}`}>{titulo}</h1>

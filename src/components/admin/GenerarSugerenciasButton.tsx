@@ -35,7 +35,7 @@ export function GenerarSugerenciasButton({ proyectoId }: { proyectoId: string })
         type="button"
         onClick={generar}
         disabled={cargando}
-        className="px-3 py-1.5 rounded-lg bg-[#C9A46B] text-[#2E0E1A] text-xs font-bold hover:brightness-105 disabled:opacity-50"
+        className="px-3 py-1.5 rounded-lg bg-[#C9A46B] text-[#0E2B3B] text-xs font-bold hover:brightness-105 disabled:opacity-50"
       >
         {cargando ? 'Generando…' : 'Generar sugerencias para las preguntas pendientes'}
       </button>

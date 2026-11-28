@@ -261,7 +261,7 @@ export default async function ProductividadPage() {
   const esperanCliente = filas.filter((f) => f.razon?.quien === 'cliente').length
   const frenaPlataforma = filas.filter((f) => f.razon?.quien === 'plataforma' && f.semaforo === 'rojo').length
 
-  const tarjeta = 'bg-[#3B1727] border border-color-base-content/10 rounded-2xl p-6 space-y-4'
+  const tarjeta = 'bg-[#153F55] border border-color-base-content/10 rounded-2xl p-6 space-y-4'
   const rotulo = 'text-[10px] font-black text-color-base-content/45 uppercase tracking-widest'
 
   return (
@@ -282,7 +282,7 @@ export default async function ProductividadPage() {
           { t: 'Esperan al cliente', v: esperanCliente, c: 'text-color-base-content' },
           { t: 'Los frena la plataforma', v: frenaPlataforma, c: frenaPlataforma > 0 ? 'text-[#E0917E]' : 'text-[#9BB18D]' },
         ].map((k) => (
-          <div key={k.t} className="bg-[#3B1727]/80 border border-white/10 rounded-2xl p-4 flex flex-col gap-1">
+          <div key={k.t} className="bg-[#153F55]/80 border border-white/10 rounded-2xl p-4 flex flex-col gap-1">
             <span className={rotulo}>{k.t}</span>
             <span className={`text-2xl font-black tabular-nums ${k.c}`}>{k.v}</span>
           </div>
@@ -348,7 +348,7 @@ export default async function ProductividadPage() {
       </div>
 
       {/* 2 + el por qué: cada proyecto */}
-      <div className="bg-[#3B1727] border border-color-base-content/10 rounded-2xl overflow-hidden">
+      <div className="bg-[#153F55] border border-color-base-content/10 rounded-2xl overflow-hidden">
         <div className="p-6 pb-3 space-y-1">
           <h2 className="text-sm font-black text-color-base-content uppercase tracking-wider">Cada proyecto: cuántos días lleva y por qué</h2>
           <p className="text-xs text-color-base-content/50">
@@ -359,7 +359,7 @@ export default async function ProductividadPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-color-base-content/10 bg-[#4C2032]">
+              <tr className="border-b border-color-base-content/10 bg-[#1E5A7A]">
                 {['Proyecto', 'Paso actual', 'Lleva', 'Quién lo frena', 'Acción'].map((h) => (
                   <th key={h} className="px-5 py-3 text-xs font-bold text-color-base-content/40 uppercase tracking-widest">{h}</th>
                 ))}

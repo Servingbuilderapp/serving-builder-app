@@ -7,7 +7,7 @@ import type { Alerta } from '@/lib/empresarial/calculadoras'
 
 export const RELIEVE_BOTON =
   'shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-200'
-export const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(84,20,43,0.06),0_10px_28px_-14px_rgba(84,20,43,0.22)]'
+export const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(26,77,104,0.06),0_10px_28px_-14px_rgba(26,77,104,0.22)]'
 export const CAMPO_ENTRADA =
   'mt-2 w-full rounded-xl border border-ca-oro/40 bg-ca-fondo px-4 py-3 text-ca-vino placeholder:text-ca-vino/65 focus:outline-none focus:ring-2 focus:ring-ca-oro-claro'
 export const CAMPO_CELDA =
@@ -94,18 +94,18 @@ export function BarrasSaldo({ saldos, titulo, primero = 1, unidad = 'mes' }: { s
   return (
     <figure>
       <svg viewBox={`0 0 ${ancho} ${alto + 60}`} role="img" aria-label={titulo} className="w-full">
-        <line x1="0" x2={ancho} y1={ceroY} y2={ceroY} stroke="#54142B" strokeOpacity="0.5" />
+        <line x1="0" x2={ancho} y1={ceroY} y2={ceroY} stroke="#1A4D68" strokeOpacity="0.5" />
         {saldos.map((s, i) => {
           const h = (Math.abs(s) / rango) * alto
           const y = s >= 0 ? ceroY - h : ceroY
           return (
             <g key={i}>
               <rect x={i * paso + 6} y={y} width={paso - 12} height={Math.max(1, h)} rx="3" fill={s >= 0 ? '#B08D57' : '#B3261E'} />
-              <text x={i * paso + paso / 2} y={alto + 46} textAnchor="middle" fontSize="12" fill="#54142B">
+              <text x={i * paso + paso / 2} y={alto + 46} textAnchor="middle" fontSize="12" fill="#1A4D68">
                 {i + primero}
               </text>
               {max > 0 && (
-                <text x={i * paso + paso / 2} y={s >= 0 ? y - 3 : y + h + 12} textAnchor="middle" fontSize="9" fill="#54142B">
+                <text x={i * paso + paso / 2} y={s >= 0 ? y - 3 : y + h + 12} textAnchor="middle" fontSize="9" fill="#1A4D68">
                   {compacto(s)}
                 </text>
               )}

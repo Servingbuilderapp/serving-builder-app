@@ -98,7 +98,7 @@ export function ResumenGestionKPIs({
       </div>
 
       {/* Embudo real */}
-      <div className="bg-[#3B1727]/80 border border-white/10 rounded-2xl p-6">
+      <div className="bg-[#153F55]/80 border border-white/10 rounded-2xl p-6">
         <h3 className="text-sm font-black text-[#F3E7DC] uppercase tracking-wider mb-4 flex items-center gap-1.5">
           <Wrench className="w-4 h-4 text-[#B08D57]" /> Embudo del cliente
         </h3>
@@ -144,7 +144,7 @@ function KpiTile({
   iconColor: string
 }) {
   return (
-    <div className="bg-[#3B1727]/80 border border-white/10 rounded-2xl p-4 flex flex-col gap-2">
+    <div className="bg-[#153F55]/80 border border-white/10 rounded-2xl p-4 flex flex-col gap-2">
       <div className="flex items-center gap-2">
         <Icon className="w-4 h-4" style={{ color: iconColor }} />
         <span className="text-[10px] font-black text-[#F3E7DC]/45 uppercase tracking-widest">

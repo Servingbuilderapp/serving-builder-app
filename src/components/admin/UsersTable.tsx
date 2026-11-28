@@ -73,7 +73,7 @@ export function UsersTable({ initialUsers, plans }: UsersTableProps) {
               setSearchTerm(e.target.value)
               setCurrentPage(1)
             }}
-            className="w-full bg-[#2E0E1A] border border-color-base-content/10 rounded-xl py-2.5 pl-10 pr-4 text-sm text-color-base-content placeholder:text-color-base-content/20 focus:outline-hidden focus:border-color-primary/50 transition-all shadow-inner"
+            className="w-full bg-[#0E2B3B] border border-color-base-content/10 rounded-xl py-2.5 pl-10 pr-4 text-sm text-color-base-content placeholder:text-color-base-content/20 focus:outline-hidden focus:border-color-primary/50 transition-all shadow-inner"
           />
         </div>
 
@@ -86,11 +86,11 @@ export function UsersTable({ initialUsers, plans }: UsersTableProps) {
         </GlowButton>
       </div>
 
-      <div className="bg-[#3B1727] border border-color-base-content/10 rounded-2xl overflow-hidden backdrop-blur-xl shadow-2xl">
+      <div className="bg-[#153F55] border border-color-base-content/10 rounded-2xl overflow-hidden backdrop-blur-xl shadow-2xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-color-base-content/10 bg-[#4C2032]">
+              <tr className="border-b border-color-base-content/10 bg-[#1E5A7A]">
                 <th className="px-6 py-4 text-xs font-bold text-color-base-content/40 uppercase tracking-widest">
                   {language === 'en' ? 'User' : 'Usuario'}
                 </th>

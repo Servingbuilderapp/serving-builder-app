@@ -118,15 +118,15 @@ export default async function AdminProyectosPage({
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-[#3B1727]/80 border border-white/10 rounded-2xl p-4 flex flex-col gap-1">
+        <div className="bg-[#153F55]/80 border border-white/10 rounded-2xl p-4 flex flex-col gap-1">
           <span className="text-[10px] font-black text-color-base-content/45 uppercase tracking-widest">Proyectos totales</span>
           <span className="text-2xl font-black text-color-base-content tabular-nums">{totalProyectos}</span>
         </div>
-        <div className="bg-[#3B1727]/80 border border-white/10 rounded-2xl p-4 flex flex-col gap-1">
+        <div className="bg-[#153F55]/80 border border-white/10 rounded-2xl p-4 flex flex-col gap-1">
           <span className="text-[10px] font-black text-color-base-content/45 uppercase tracking-widest">Con pago confirmado</span>
           <span className="text-2xl font-black text-[#9BB18D] tabular-nums">{totalPagados}</span>
         </div>
-        <div className="bg-[#3B1727]/80 border border-white/10 rounded-2xl p-4 flex flex-col gap-1">
+        <div className="bg-[#153F55]/80 border border-white/10 rounded-2xl p-4 flex flex-col gap-1">
           <span className="text-[10px] font-black text-color-base-content/45 uppercase tracking-widest">Estancados (+5 días)</span>
           <span className={`text-2xl font-black tabular-nums ${totalEstancados > 0 ? 'text-[#E0917E]' : 'text-color-base-content'}`}>
             {totalEstancados}
@@ -134,11 +134,11 @@ export default async function AdminProyectosPage({
         </div>
       </div>
 
-      <div className="bg-[#3B1727] border border-color-base-content/10 rounded-2xl overflow-hidden backdrop-blur-xl shadow-2xl">
+      <div className="bg-[#153F55] border border-color-base-content/10 rounded-2xl overflow-hidden backdrop-blur-xl shadow-2xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-color-base-content/10 bg-[#4C2032]">
+              <tr className="border-b border-color-base-content/10 bg-[#1E5A7A]">
                 <th className="px-6 py-4 text-xs font-bold text-color-base-content/40 uppercase tracking-widest">Cliente</th>
                 <th className="px-6 py-4 text-xs font-bold text-color-base-content/40 uppercase tracking-widest">Proyecto</th>
                 <th className="px-6 py-4 text-xs font-bold text-color-base-content/40 uppercase tracking-widest">Monto</th>

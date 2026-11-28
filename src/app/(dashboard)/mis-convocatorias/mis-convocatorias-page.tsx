@@ -112,7 +112,7 @@ export default async function MisConvocatoriasPage({
 /** Lo que ve el equipo cuando el cliente todavía no ha elegido: solo lectura, sin botones. */
 function AvisoPorElegir({ lista }: { lista: ConvocatoriaPendiente[] }) {
   return (
-    <div className="mb-4 rounded-xl border border-[#B08D57]/40 bg-[#4C2032] p-4 text-sm text-[#F3E7DC]">
+    <div className="mb-4 rounded-xl border border-[#B08D57]/40 bg-[#1E5A7A] p-4 text-sm text-[#F3E7DC]">
       <p>
         El cliente tiene <strong>{lista.length}</strong> convocatorias encontradas por elegir. Solo él puede elegirlas;
         aquí las ves todas, en solo lectura.

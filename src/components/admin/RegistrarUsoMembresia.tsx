@@ -35,7 +35,7 @@ export function RegistrarUsoMembresia({ membresiaId }: { membresiaId: string }) 
       <select
         value={beneficio}
         onChange={(e) => setBeneficio(e.target.value as ClaveBeneficio)}
-        className="rounded-lg bg-[#4C2032] border border-white/10 px-2 py-1.5 text-xs text-[#F3E7DC]"
+        className="rounded-lg bg-[#1E5A7A] border border-white/10 px-2 py-1.5 text-xs text-[#F3E7DC]"
       >
         {CLAVES_BENEFICIO.map((c) => (
           <option key={c} value={c}>{ETIQUETA_BENEFICIO[c]}</option>
@@ -44,7 +44,7 @@ export function RegistrarUsoMembresia({ membresiaId }: { membresiaId: string }) 
       <button
         onClick={registrar}
         disabled={loading}
-        className="px-3 py-1.5 rounded-lg bg-[#C9A46B] text-[#3B1727] text-xs font-bold disabled:opacity-50 whitespace-nowrap"
+        className="px-3 py-1.5 rounded-lg bg-[#C9A46B] text-[#153F55] text-xs font-bold disabled:opacity-50 whitespace-nowrap"
       >
         {loading ? 'Anotando...' : 'Anotar 1 uso'}
       </button>

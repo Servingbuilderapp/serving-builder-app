@@ -183,7 +183,7 @@ export function RecentActivity() {
         ) : (
           <div className="space-y-4">
             {activities.map((item) => (
-              <div key={item.id} className="flex items-start gap-4 p-4 rounded-[1.5rem] bg-[#4C2032] border border-white/5 hover:border-color-primary/30 transition-all group shadow-lg hover:shadow-color-primary/5">
+              <div key={item.id} className="flex items-start gap-4 p-4 rounded-[1.5rem] bg-[#1E5A7A] border border-white/5 hover:border-color-primary/30 transition-all group shadow-lg hover:shadow-color-primary/5">
                 <div className={cn(
                   "p-2.5 rounded-xl border shrink-0 transition-all duration-500 group-hover:rotate-12 group-hover:scale-110 shadow-md",
                   getColor(item.type)

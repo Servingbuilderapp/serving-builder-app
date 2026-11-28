@@ -37,27 +37,27 @@ export default async function AdminSoportePage() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-[#3B1727]/80 border border-white/10 rounded-2xl p-4 flex flex-col gap-1">
+        <div className="bg-[#153F55]/80 border border-white/10 rounded-2xl p-4 flex flex-col gap-1">
           <span className="text-[10px] font-black text-color-base-content/45 uppercase tracking-widest">Abiertas</span>
           <span className={`text-2xl font-black tabular-nums ${totalAbiertas > 0 ? 'text-[#E0917E]' : 'text-color-base-content'}`}>
             {totalAbiertas}
           </span>
         </div>
-        <div className="bg-[#3B1727]/80 border border-white/10 rounded-2xl p-4 flex flex-col gap-1">
+        <div className="bg-[#153F55]/80 border border-white/10 rounded-2xl p-4 flex flex-col gap-1">
           <span className="text-[10px] font-black text-color-base-content/45 uppercase tracking-widest">En proceso</span>
           <span className="text-2xl font-black text-[#E0B868] tabular-nums">{totalEnProceso}</span>
         </div>
-        <div className="bg-[#3B1727]/80 border border-white/10 rounded-2xl p-4 flex flex-col gap-1">
+        <div className="bg-[#153F55]/80 border border-white/10 rounded-2xl p-4 flex flex-col gap-1">
           <span className="text-[10px] font-black text-color-base-content/45 uppercase tracking-widest">Resueltas</span>
           <span className="text-2xl font-black text-[#9BB18D] tabular-nums">{totalResueltas}</span>
         </div>
       </div>
 
-      <div className="bg-[#3B1727] border border-color-base-content/10 rounded-2xl overflow-hidden backdrop-blur-xl shadow-2xl">
+      <div className="bg-[#153F55] border border-color-base-content/10 rounded-2xl overflow-hidden backdrop-blur-xl shadow-2xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-color-base-content/10 bg-[#4C2032]">
+              <tr className="border-b border-color-base-content/10 bg-[#1E5A7A]">
                 <th className="px-6 py-4 text-xs font-bold text-color-base-content/40 uppercase tracking-widest w-1/5">Cliente</th>
                 <th className="px-6 py-4 text-xs font-bold text-color-base-content/40 uppercase tracking-widest w-1/6">Tipo</th>
                 <th className="px-6 py-4 text-xs font-bold text-color-base-content/40 uppercase tracking-widest">Descripción</th>

@@ -171,7 +171,7 @@ export function CentinelaFuentesClient({ fuentes, errorCarga }: Props) {
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             placeholder="Buscar una entidad por nombre"
-            className="w-full pl-10 pr-4 py-3 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm"
+            className="w-full pl-10 pr-4 py-3 rounded-xl border border-color-base-300 bg-[#153F55] text-sm"
           />
         </div>
 
@@ -179,7 +179,7 @@ export function CentinelaFuentesClient({ fuentes, errorCarga }: Props) {
           <select
             value={nivelFiltro}
             onChange={(e) => setNivelFiltro(e.target.value)}
-            className="px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm"
+            className="px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#153F55] text-sm"
           >
             <option value="">Todos los niveles</option>
             {NIVELES.map((n) => (
@@ -192,7 +192,7 @@ export function CentinelaFuentesClient({ fuentes, errorCarga }: Props) {
           <select
             value={estadoFiltro}
             onChange={(e) => setEstadoFiltro(e.target.value)}
-            className="px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm"
+            className="px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#153F55] text-sm"
           >
             <option value="">Todos los estados</option>
             {ESTADOS.map((e) => (
@@ -205,7 +205,7 @@ export function CentinelaFuentesClient({ fuentes, errorCarga }: Props) {
           <select
             value={categoriaFiltro}
             onChange={(e) => setCategoriaFiltro(e.target.value)}
-            className="px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm"
+            className="px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#153F55] text-sm"
           >
             <option value="">Todos los grupos</option>
             {categorias.map((c) => (
@@ -242,7 +242,7 @@ export function CentinelaFuentesClient({ fuentes, errorCarga }: Props) {
           return (
             <div
               key={f.id}
-              className="p-5 rounded-2xl border border-color-base-content/10 bg-[#3B1727] space-y-3"
+              className="p-5 rounded-2xl border border-color-base-content/10 bg-[#153F55] space-y-3"
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0">
@@ -257,7 +257,7 @@ export function CentinelaFuentesClient({ fuentes, errorCarga }: Props) {
 
                 <span
                   className={`px-2.5 py-1 rounded-lg border text-xs font-medium shrink-0 ${
-                    COLOR_ESTADO[f.estado] || 'bg-[#6E4A50]/30 text-[#F3E7DC]/55 border-[#B08D57]/35'
+                    COLOR_ESTADO[f.estado] || 'bg-[#5B7886]/30 text-[#F3E7DC]/55 border-[#B08D57]/35'
                   }`}
                 >
                   {NOMBRE_ESTADO[f.estado] || f.estado}
@@ -273,7 +273,7 @@ export function CentinelaFuentesClient({ fuentes, errorCarga }: Props) {
                   value={f.estado}
                   disabled={guardando === f.id}
                   onChange={(e) => cambiar(f.id, { estado: e.target.value })}
-                  className="px-3 py-2 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm"
+                  className="px-3 py-2 rounded-xl border border-color-base-300 bg-[#153F55] text-sm"
                 >
                   {estadosDelNivel(f.nivel).map((clave) => (
                     <option key={clave} value={clave}>
@@ -286,7 +286,7 @@ export function CentinelaFuentesClient({ fuentes, errorCarga }: Props) {
                   value={String(f.nivel)}
                   disabled={guardando === f.id}
                   onChange={(e) => cambiar(f.id, { nivel: Number(e.target.value) })}
-                  className="px-3 py-2 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm"
+                  className="px-3 py-2 rounded-xl border border-color-base-300 bg-[#153F55] text-sm"
                 >
                   {NIVELES.map((n) => (
                     <option key={n.nivel} value={String(n.nivel)}>
@@ -366,7 +366,7 @@ function FormularioFuente({
   const [error, setError] = useState<string | null>(null)
   const [enviando, setEnviando] = useState(false)
 
-  const campo = 'w-full px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#3B1727] text-sm'
+  const campo = 'w-full px-3 py-2.5 rounded-xl border border-color-base-300 bg-[#153F55] text-sm'
 
   async function enviar(e: React.FormEvent) {
     e.preventDefault()
@@ -415,7 +415,7 @@ function FormularioFuente({
     <div className="fixed inset-0 z-50 bg-black/40 overflow-y-auto p-4">
       <form
         onSubmit={enviar}
-        className="max-w-xl mx-auto my-8 bg-[#3B1727] rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl"
+        className="max-w-xl mx-auto my-8 bg-[#153F55] rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl"
       >
         <div className="flex items-start justify-between gap-4">
           <h2 className="text-xl font-semibold">Agregar una fuente</h2>

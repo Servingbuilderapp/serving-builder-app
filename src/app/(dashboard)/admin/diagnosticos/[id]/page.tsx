@@ -63,20 +63,20 @@ export default async function AdminDiagnosticoDetallePage({
         </p>
       )}
 
-      <section className="rounded-2xl border border-color-base-200 bg-white text-[#2B1220] p-6 space-y-3">
+      <section className="rounded-2xl border border-color-base-200 bg-white text-[#0E2B3B] p-6 space-y-3">
         <h2 className="text-sm font-black uppercase tracking-wider">Quién lo hizo y qué escribió</h2>
         <dl className="grid md:grid-cols-2 gap-x-8 gap-y-3 text-sm">
           {campos
             .filter(([, v]) => v)
             .map(([k, v]) => (
               <div key={k}>
-                <dt className="text-[11px] font-black uppercase text-[#2B1220]/60">{k}</dt>
+                <dt className="text-[11px] font-black uppercase text-[#0E2B3B]/60">{k}</dt>
                 <dd className="whitespace-pre-line">{v}</dd>
               </div>
             ))}
         </dl>
         {data.codigo_acceso && (
-          <p className="text-xs text-[#2B1220]/70 pt-2 break-all">
+          <p className="text-xs text-[#0E2B3B]/70 pt-2 break-all">
             Enlace del cliente (para enviárselo, abre con su correo): {enlace || `/diagnostico/resultado/${data.codigo_acceso}`}
           </p>
         )}

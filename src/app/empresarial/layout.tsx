@@ -18,7 +18,7 @@ const COLORES_CAMINO_A = {
   '--color-color-base-100': '#F3E7DC',
   '--color-color-base-200': '#FBF7F0',
   '--color-color-base-300': '#EADBC6',
-  '--color-color-base-content': '#54142B',
+  '--color-color-base-content': '#1A4D68',
   '--color-color-primary': '#7A5B2C',
   '--color-color-accent-blue': '#4A6FB5',
 } as React.CSSProperties

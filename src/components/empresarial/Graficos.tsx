@@ -9,7 +9,7 @@ import React from 'react'
 export const PALETA = ['#B08D57', '#3F8A76', '#4A6FB5', '#C4604F', '#7E5FB0', '#A38A2E']
 const ORO = '#B08D57'
 const ROJO = '#B3261E'
-const CREMA = '#54142B' // vino: color de letras y líneas sobre fondo crema
+const CREMA = '#1A4D68' // vino: color de letras y líneas sobre fondo crema
 
 /** Número corto para ejes: 1,2 M · 850 mil. */
 export function compacto(n: number): string {
@@ -198,7 +198,7 @@ export function LineaEquilibrio({
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={titulo}>
         {ticksY.map((t) => (
           <g key={t}>
-            <line x1={m.l} x2={W - m.r} y1={py(t)} y2={py(t)} stroke="#54142B" strokeOpacity="0.12" />
+            <line x1={m.l} x2={W - m.r} y1={py(t)} y2={py(t)} stroke="#1A4D68" strokeOpacity="0.12" />
             <text x={m.l - 6} y={py(t) + 3} textAnchor="end" fill={CREMA} fillOpacity="0.85" fontSize="10">
               {compacto(t)}
             </text>
@@ -403,12 +403,12 @@ export function Medidor({ valor, centro, subcentro, titulo, id }: { valor: numbe
   const marcas = [0, 0.25, 0.5, 0.75, 1]
   return (
     <figure aria-label={titulo} className="flex flex-col items-center">
-      <svg viewBox="0 0 200 128" className="w-full max-w-[260px]" role="img" aria-label={`${titulo}: ${centro}`} style={{ filter: 'drop-shadow(0 6px 8px rgba(84,20,43,0.22))' }}>
+      <svg viewBox="0 0 200 128" className="w-full max-w-[260px]" role="img" aria-label={`${titulo}: ${centro}`} style={{ filter: 'drop-shadow(0 6px 8px rgba(26,77,104,0.22))' }}>
         <defs>
           <linearGradient id={`med-${id}`} x1="0" y1="0" x2="1" y2="0">
             <stop offset="0%" stopColor="#7A5B2C" />
             <stop offset="55%" stopColor="#B08D57" />
-            <stop offset="100%" stopColor="#54142B" />
+            <stop offset="100%" stopColor="#1A4D68" />
           </linearGradient>
         </defs>
         <path d={`M ${100 - R} 100 A ${R} ${R} 0 0 1 ${100 + R} 100`} fill="none" stroke="#EADBC6" strokeWidth="20" strokeLinecap="round" />
@@ -447,8 +447,8 @@ export function Fichas({ fichas, titulo }: { fichas: FichaCifra[]; titulo: strin
         return (
           <li
             key={f.etiqueta}
-            className={`relative overflow-hidden rounded-2xl border p-4 shadow-[0_2px_3px_rgba(84,20,43,0.12),0_14px_26px_-14px_rgba(84,20,43,0.5)] ${
-              vino ? 'border-[#B08D57] bg-gradient-to-br from-[#54142B] to-[#3A1420] text-[#F3E7DC]' : 'border-ca-oro/60 bg-gradient-to-b from-[#FBF7F0] to-[#EADBC6] text-ca-vino'
+            className={`relative overflow-hidden rounded-2xl border p-4 shadow-[0_2px_3px_rgba(26,77,104,0.12),0_14px_26px_-14px_rgba(26,77,104,0.5)] ${
+              vino ? 'border-[#B08D57] bg-gradient-to-br from-[#1A4D68] to-[#12394D] text-[#F3E7DC]' : 'border-ca-oro/60 bg-gradient-to-b from-[#FBF7F0] to-[#EADBC6] text-ca-vino'
             }`}
           >
             <span aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#7A5B2C] via-[#C9A46B] to-[#7A5B2C]" />
@@ -465,7 +465,7 @@ export function Fichas({ fichas, titulo }: { fichas: FichaCifra[]; titulo: strin
 /* Marco para agrupar gráficos con título y relieve */
 export function MarcoGrafico({ titulo, children }: { titulo: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-ca-oro/50 bg-gradient-to-b from-[#FBF7F0] to-[#F3E7DC] p-4 shadow-[0_1px_2px_rgba(84,20,43,0.08),0_12px_24px_-14px_rgba(84,20,43,0.35)] break-inside-avoid">
+    <div className="rounded-2xl border border-ca-oro/50 bg-gradient-to-b from-[#FBF7F0] to-[#F3E7DC] p-4 shadow-[0_1px_2px_rgba(26,77,104,0.08),0_12px_24px_-14px_rgba(26,77,104,0.35)] break-inside-avoid">
       <h3 className="border-b border-ca-oro/40 pb-2 text-sm font-extrabold uppercase tracking-wider text-ca-oro-texto">{titulo}</h3>
       <div className="mt-3">{children}</div>
     </div>

@@ -47,7 +47,7 @@ export default async function MisProyectosPage() {
   }
 
   return (
-    <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
+    <div className="min-h-full bg-[#1A4D68] px-4 py-6 lg:px-6">
       <header className="mb-5">
         <h1 className="flex items-center gap-2 text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">
           <FolderKanban className="h-5 w-5 text-[#C9A46B]" />
@@ -65,14 +65,14 @@ export default async function MisProyectosPage() {
         </p>
       </header>
 
-      <section className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
+      <section className={`rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 ${SOMBRA_TARJETA}`}>
         <NuevoProyectoMembresia sinCupo={sinCupo} />
       </section>
 
       {proyectos && proyectos.length > 0 && (
         <section className="mt-5 grid items-start gap-3 lg:grid-cols-2">
           {(proyectos as Proyecto[]).map((p) => (
-            <Link key={p.id} href={`/mis-proyectos/${p.id}`} className={`block rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-4 hover:brightness-110 ${SOMBRA_TARJETA}`}>
+            <Link key={p.id} href={`/mis-proyectos/${p.id}`} className={`block rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-4 hover:brightness-110 ${SOMBRA_TARJETA}`}>
               <p className="text-[14.5px] font-extrabold text-[#F3E7DC]">{p.respuestas?.titulo_elegido?.trim() || p.nombre}</p>
               <p className="mt-1 text-[12.5px] text-[#F3E7DC]/55">
                 {esProyectoTraido(p.respuestas) ? 'Trajiste este proyecto ya hecho' : p.estado === 'terminado' ? 'Terminado' : `En proceso · ${porcentajeProyecto(p.respuestas || {})} %`}

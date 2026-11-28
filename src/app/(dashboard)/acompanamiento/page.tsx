@@ -38,7 +38,7 @@ export default async function AcompanamientoPage() {
   const hayPendiente = citas.some((c) => c.estado === 'pedida' || c.estado === 'agendada')
 
   return (
-    <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
+    <div className="min-h-full bg-[#1A4D68] px-4 py-6 lg:px-6">
       <header className="mb-5">
         <h1 className="flex items-center gap-2 text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">
           <HeartHandshake className="h-5 w-5 text-[#C9A46B]" />
@@ -49,7 +49,7 @@ export default async function AcompanamientoPage() {
         </p>
       </header>
 
-      <section className={`mb-5 rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
+      <section className={`mb-5 rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 ${SOMBRA_TARJETA}`}>
         <PedirAcompanamiento bloqueado={hayPendiente && !ctx.esEquipo} />
       </section>
 
@@ -57,7 +57,7 @@ export default async function AcompanamientoPage() {
         <section className="space-y-3">
           <h2 className="text-[15px] font-extrabold text-[#E0B868]">Mis encuentros</h2>
           {citas.map((c) => (
-            <article key={c.id} className={`rounded-2xl border border-[#B08D57]/25 bg-[#4C2032] p-4 ${SOMBRA_TARJETA}`}>
+            <article key={c.id} className={`rounded-2xl border border-[#B08D57]/25 bg-[#1E5A7A] p-4 ${SOMBRA_TARJETA}`}>
               <p className="text-[13px] font-extrabold text-[#E0B868]">{ESTADOS[c.estado] || c.estado}</p>
               <p className="mt-1 text-[13.5px] text-[#F3E7DC]/85">{c.tema}</p>
               {c.fecha_hora && (
