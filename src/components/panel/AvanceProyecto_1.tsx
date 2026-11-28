@@ -46,7 +46,7 @@ function Tarjeta({
   className?: string
 }) {
   return (
-    <div className={`rounded-2xl border border-[rgba(176,141,87,0.25)] bg-gradient-to-br from-[#4C2032] to-[#3B1727] ${SOMBRA_TARJETA} ${className}`}>
+    <div className={`rounded-2xl border border-[rgba(176,141,87,0.25)] bg-gradient-to-br from-[#1E5A7A] to-[#153F55] ${SOMBRA_TARJETA} ${className}`}>
       {children}
     </div>
   )
@@ -169,11 +169,11 @@ export function AvanceProyecto({ datos }: { datos: DatosAvance }) {
             paso.completado
               ? 'bg-[#B08D57]'
               : pasoActual && paso.id === pasoActual.id
-                ? 'border-2 border-[#F3E7DC] bg-[#4C2032]'
+                ? 'border-2 border-[#F3E7DC] bg-[#1E5A7A]'
                 : 'border-2 border-[rgba(176,141,87,0.3)]'
           }`}
         >
-          {paso.completado ? <Check className="h-3 w-3 text-[#3A1420]" strokeWidth={3.5} /> : null}
+          {paso.completado ? <Check className="h-3 w-3 text-[#12394D]" strokeWidth={3.5} /> : null}
         </span>
 
         <div className="min-w-0 flex-1">
@@ -190,7 +190,7 @@ export function AvanceProyecto({ datos }: { datos: DatosAvance }) {
               {paso.nombre}
             </span>
             {pasoActual && paso.id === pasoActual.id ? (
-              <span className="shrink-0 rounded-full bg-[#B08D57] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#3A1420]">
+              <span className="shrink-0 rounded-full bg-[#B08D57] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#12394D]">
                 Aquí vamos
               </span>
             ) : null}
@@ -385,7 +385,7 @@ export function AvanceProyecto({ datos }: { datos: DatosAvance }) {
           href={`https://wa.me/${WHATSAPP_SERVING}?text=${mensajeWhatsapp}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex h-10 shrink-0 items-center gap-2 rounded-lg bg-gradient-to-b from-[#C39F68] to-[#A8804B] px-5 text-[13px] font-semibold text-[#3A1420] shadow-[0_1px_0_rgba(255,255,255,0.35)_inset] hover:brightness-105"
+          className="inline-flex h-10 shrink-0 items-center gap-2 rounded-lg bg-gradient-to-b from-[#C39F68] to-[#A8804B] px-5 text-[13px] font-semibold text-[#12394D] shadow-[0_1px_0_rgba(255,255,255,0.35)_inset] hover:brightness-105"
         >
           <MessageSquare className="h-4 w-4" />
           Hablar con mi estructurador
@@ -410,7 +410,7 @@ export function AvanceSinProyecto() {
         </p>
         <Link
           href="/estructuracion"
-          className="mt-6 inline-flex h-11 items-center gap-2 rounded-lg bg-gradient-to-b from-[#C39F68] to-[#A8804B] px-6 text-sm font-semibold text-[#3A1420]"
+          className="mt-6 inline-flex h-11 items-center gap-2 rounded-lg bg-gradient-to-b from-[#C39F68] to-[#A8804B] px-6 text-sm font-semibold text-[#12394D]"
         >
           Ver las modalidades <ArrowRight className="h-4 w-4" />
         </Link>
@@ -437,7 +437,7 @@ export function AvancePendienteDePago({ nombreProyecto }: { nombreProyecto: stri
           href={`https://wa.me/${WHATSAPP_SERVING}?text=${mensaje}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-6 inline-flex h-11 items-center gap-2 rounded-lg bg-gradient-to-b from-[#C39F68] to-[#A8804B] px-6 text-sm font-semibold text-[#3A1420]"
+          className="mt-6 inline-flex h-11 items-center gap-2 rounded-lg bg-gradient-to-b from-[#C39F68] to-[#A8804B] px-6 text-sm font-semibold text-[#12394D]"
         >
           <MessageSquare className="h-4 w-4" />
           Enviar mi comprobante

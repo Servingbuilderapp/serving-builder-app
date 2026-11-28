@@ -10,8 +10,8 @@ import {
   TEXTO_DECLARACION_AUTORIA,
 } from '@/lib/miProyectoListo'
 
-const CAMPO = 'mt-1 w-full rounded-xl border border-white/10 bg-[#3B1727] px-3 py-2 text-[13.5px] text-[#F3E7DC] placeholder:text-[#F3E7DC]/30'
-const BOTON = 'rounded-xl bg-[#C9A46B] px-5 py-2.5 text-[13.5px] font-bold text-[#3B1727] disabled:opacity-50'
+const CAMPO = 'mt-1 w-full rounded-xl border border-white/10 bg-[#153F55] px-3 py-2 text-[13.5px] text-[#F3E7DC] placeholder:text-[#F3E7DC]/30'
+const BOTON = 'rounded-xl bg-[#C9A46B] px-5 py-2.5 text-[13.5px] font-bold text-[#153F55] disabled:opacity-50'
 
 /**
  * Abre un proyecto nuevo (descuenta 1 del cupo). Dos caminos:
@@ -143,7 +143,7 @@ export function NuevoProyectoMembresia({ sinCupo }: { sinCupo: boolean }) {
             <input type="file" accept=".pdf,.doc,.docx" onChange={alElegirArchivo} className="mt-1 block w-full text-[13px] text-[#F3E7DC]/80" />
             {archivo && <p className="mt-1 text-[12px] text-[#9BB18D]">Listo para subir: {archivo.name}</p>}
           </div>
-          <div className="rounded-xl border border-[#B08D57]/35 bg-[#3B1727] p-3">
+          <div className="rounded-xl border border-[#B08D57]/35 bg-[#153F55] p-3">
             <p className="text-[13px] font-bold text-[#E0B868]">Declaración de autoría</p>
             <p className="mt-1 text-[12.5px] leading-relaxed text-[#F3E7DC]/75">{TEXTO_DECLARACION_AUTORIA}</p>
             <label className="mt-3 block text-[13px] font-bold text-[#F3E7DC]">Tu nombre completo, como firma</label>

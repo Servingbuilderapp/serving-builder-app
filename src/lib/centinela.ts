@@ -73,7 +73,7 @@ export const ESTADOS: {
     clave: 'pendiente',
     nombre: 'Falta suscribir',
     explicacion: 'Todavía nadie inscribió el buzón del Centinela a su boletín.',
-    color: 'bg-[#6E4A50]/30 text-[#F3E7DC]/55 border-[#6E4A50]/50',
+    color: 'bg-[#5B7886]/30 text-[#F3E7DC]/55 border-[#5B7886]/50',
   },
   {
     clave: 'suscrito',
@@ -99,13 +99,13 @@ export const ESTADOS: {
     clave: 'sin_revisar',
     nombre: 'Sin revisar',
     explicacion: 'Todavía no se ha mirado cómo publica esta fuente.',
-    color: 'bg-[#6E4A50]/30 text-[#F3E7DC]/55 border-[#6E4A50]/50',
+    color: 'bg-[#5B7886]/30 text-[#F3E7DC]/55 border-[#5B7886]/50',
   },
   {
     clave: 'no_aplica',
     nombre: 'No se puede seguir',
     explicacion: 'Es por invitación. No entra al sistema automático.',
-    color: 'bg-[#6E4A50]/30 text-[#F3E7DC]/50 border-[#6E4A50]/50',
+    color: 'bg-[#5B7886]/30 text-[#F3E7DC]/50 border-[#5B7886]/50',
   },
   {
     clave: 'descartada',

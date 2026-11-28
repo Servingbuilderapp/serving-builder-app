@@ -38,7 +38,7 @@ export type DatosAvance = {
 
 /** Botón de acento dorado, mismo lenguaje visual que GlowButton, para usarlo en un <a>. */
 const BOTON_DORADO =
-  'bg-gradient-to-b from-[#C39F68] to-[#A8804B] text-[#3A1420] border border-[#8A6636] shadow-[0_1px_0_rgba(255,255,255,0.35)_inset,0_8px_20px_-10px_rgba(0,0,0,0.5)] hover:from-[#CDAC79] hover:to-[#B08D57]'
+  'bg-gradient-to-b from-[#C39F68] to-[#A8804B] text-[#12394D] border border-[#8A6636] shadow-[0_1px_0_rgba(255,255,255,0.35)_inset,0_8px_20px_-10px_rgba(0,0,0,0.5)] hover:from-[#CDAC79] hover:to-[#B08D57]'
 
 function Tarjeta({
   children,
@@ -57,7 +57,7 @@ function Tarjeta({
  */
 const ETAPAS = [
   { nombre: 'Diagnóstico', desde: 1, hasta: 19, color: '#8C93A6' },
-  { nombre: 'Objetivos y solución', desde: 20, hasta: 26, color: '#8C3654' },
+  { nombre: 'Objetivos y solución', desde: 20, hasta: 26, color: '#3F7E9E' },
   { nombre: 'Ejecución', desde: 27, hasta: 37, color: '#C99A3D' },
   { nombre: 'Cierre', desde: 38, hasta: 42, color: '#7A8B6F' },
 ] as const
@@ -184,7 +184,7 @@ export function AvanceProyecto({ datos }: { datos: DatosAvance }) {
               {paso.nombre}
             </span>
             {pasoActual && paso.id === pasoActual.id ? (
-              <span className="shrink-0 rounded-full bg-color-primary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#3A1420]">
+              <span className="shrink-0 rounded-full bg-color-primary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#12394D]">
                 Aquí vamos
               </span>
             ) : null}
@@ -222,7 +222,7 @@ export function AvanceProyecto({ datos }: { datos: DatosAvance }) {
         <div className="flex flex-col sm:flex-row items-center gap-6">
           <div className="relative shrink-0">
             <svg viewBox="0 0 120 120" className="h-[112px] w-[112px] -rotate-90">
-              <circle cx="60" cy="60" r={radio} fill="none" stroke="#6E4A50" strokeWidth="13" />
+              <circle cx="60" cy="60" r={radio} fill="none" stroke="#5B7886" strokeWidth="13" />
               <circle
                 cx="60"
                 cy="60"

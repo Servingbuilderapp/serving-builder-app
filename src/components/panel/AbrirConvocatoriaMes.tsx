@@ -35,7 +35,7 @@ export function AbrirConvocatoriaMes({ convocatoriaId, sinCupo }: { convocatoria
       <button
         onClick={abrir}
         disabled={cargando || sinCupo}
-        className="rounded-xl bg-[#C9A46B] px-4 py-2 text-[13px] font-bold text-[#3B1727] disabled:opacity-50"
+        className="rounded-xl bg-[#C9A46B] px-4 py-2 text-[13px] font-bold text-[#153F55] disabled:opacity-50"
       >
         {cargando ? 'Abriendo...' : sinCupo ? 'Sin cupo este mes' : 'Ver ficha completa (usa 1 del cupo)'}
       </button>

@@ -59,7 +59,7 @@ const ESTADOS: Record<string, string> = {
 
 function Tarjeta({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] ${SOMBRA} ${className}`}>
+    <div className={`rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] ${SOMBRA} ${className}`}>
       {children}
     </div>
   )
@@ -79,7 +79,7 @@ export function FichaProyecto({ datos }: { datos: DatosFicha }) {
   const { proyectoId, porcentaje, areas } = datos
 
   return (
-    <div className="min-h-full space-y-5 bg-[#54142B] p-4 lg:p-6">
+    <div className="min-h-full space-y-5 bg-[#1A4D68] p-4 lg:p-6">
       {/* datos del proyecto ------------------------------------------------ */}
       <Tarjeta className="p-5 lg:p-6">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -95,7 +95,7 @@ export function FichaProyecto({ datos }: { datos: DatosFicha }) {
           </span>
 
           <div className="flex flex-1 items-center gap-3">
-            <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-[#3B1727]">
+            <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-[#153F55]">
               <div
                 className="h-full rounded-full bg-[#C9A46B] transition-all duration-500"
                 style={{ width: `${porcentaje}%` }}

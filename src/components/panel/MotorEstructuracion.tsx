@@ -16,7 +16,7 @@ const RELIEVE_TARJETA =
 /** Botón dorado con relieve fuerte: brillo arriba, escalón abajo que se
  * aplana al hacer clic — igual al de Estructuración, para que combinen. */
 const BOTON_DORADO =
-  'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#2E0E1A] border border-[#7A5A2E]/60 ' +
+  'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#0E2B3B] border border-[#7A5A2E]/60 ' +
   'shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_4px_0_#7A5A2E,0_12px_20px_-6px_rgba(20,5,10,0.55)] ' +
   'hover:brightness-105 hover:-translate-y-0.5 ' +
   'active:translate-y-[3px] active:shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_1px_0_#7A5A2E,0_4px_10px_-4px_rgba(20,5,10,0.5)] ' +
@@ -124,7 +124,7 @@ export function MotorEstructuracion({
   const yaHayContenido = pasosEscritos > 0
 
   return (
-    <div className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${RELIEVE_TARJETA}`}>
+    <div className={`rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 ${RELIEVE_TARJETA}`}>
       <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-[#F3E7DC]/50">
         <Play className="h-3.5 w-3.5" />
         Estructuración automática
@@ -165,7 +165,7 @@ export function MotorEstructuracion({
               value={rutaElegida}
               onChange={(e) => setRutaElegida(e.target.value)}
               disabled={corriendo}
-              className="w-full rounded-xl border border-[#B08D57]/35 bg-[#3B1727] px-3 py-2.5 text-[13.5px] font-semibold text-[#F3E7DC] outline-none transition focus:border-[#B08D57] disabled:opacity-60"
+              className="w-full rounded-xl border border-[#B08D57]/35 bg-[#153F55] px-3 py-2.5 text-[13.5px] font-semibold text-[#F3E7DC] outline-none transition focus:border-[#B08D57] disabled:opacity-60"
             >
               {documentos.map((d) => (
                 <option key={d.ruta} value={d.ruta}>

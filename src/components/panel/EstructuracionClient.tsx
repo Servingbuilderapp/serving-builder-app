@@ -46,7 +46,7 @@ const RELIEVE_TARJETA =
  * abajo que se aplana al hacer clic — para que se sienta un botón de verdad,
  * no un rectángulo plano. */
 const BOTON_DORADO =
-  'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#2E0E1A] border border-[#7A5A2E]/60 ' +
+  'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#0E2B3B] border border-[#7A5A2E]/60 ' +
   'shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_4px_0_#7A5A2E,0_12px_20px_-6px_rgba(20,5,10,0.55)] ' +
   'hover:brightness-105 hover:-translate-y-0.5 ' +
   'active:translate-y-[3px] active:shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_1px_0_#7A5A2E,0_4px_10px_-4px_rgba(20,5,10,0.5)] ' +
@@ -190,9 +190,9 @@ export function EstructuracionClient({
   ]
 
   return (
-    <div className="min-h-full bg-[#54142B] p-4 lg:p-6 space-y-5">
+    <div className="min-h-full bg-[#1A4D68] p-4 lg:p-6 space-y-5">
       {/* Encabezado */}
-      <div className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${RELIEVE_TARJETA}`}>
+      <div className={`rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 ${RELIEVE_TARJETA}`}>
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="min-w-0">
             <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-[#F3E7DC]/50">
@@ -208,7 +208,7 @@ export function EstructuracionClient({
           </div>
 
           <div className="flex gap-3">
-            <div className="rounded-xl border border-[#B08D57]/35 bg-[#3B1727] px-4 py-2 text-center">
+            <div className="rounded-xl border border-[#B08D57]/35 bg-[#153F55] px-4 py-2 text-center">
               <div className="text-[20px] font-black leading-none text-[#F3E7DC]">
                 {conContenido}
                 <span className="text-[13px] font-bold text-[#F3E7DC]/50">/{pasos.length}</span>
@@ -221,7 +221,7 @@ export function EstructuracionClient({
               className={`rounded-xl border px-4 py-2 text-center ${
                 porReforzar > 0
                   ? 'border-[#C99A3D]/40 bg-[#C99A3D]/12'
-                  : 'border-[#B08D57]/35 bg-[#3B1727]'
+                  : 'border-[#B08D57]/35 bg-[#153F55]'
               }`}
             >
               <div
@@ -257,7 +257,7 @@ export function EstructuracionClient({
               className={`rounded-lg border px-3 py-1.5 text-[12.5px] font-semibold transition-colors ${
                 filtro === f.clave
                   ? 'border-[#B08D57] bg-[#B08D57]/15 text-[#B08D57]'
-                  : 'border-[#B08D57]/35 bg-[#4C2032] text-[#F3E7DC]/80 hover:bg-[#3B1727]'
+                  : 'border-[#B08D57]/35 bg-[#1E5A7A] text-[#F3E7DC]/80 hover:bg-[#153F55]'
               }`}
             >
               {f.texto}
@@ -286,12 +286,12 @@ export function EstructuracionClient({
         return (
           <div
             key={etapa.nombre}
-            className={`overflow-hidden rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] ${RELIEVE_TARJETA}`}
+            className={`overflow-hidden rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] ${RELIEVE_TARJETA}`}
           >
             <button
               type="button"
               onClick={() => alternarEtapa(etapa.nombre)}
-              className="flex w-full items-center gap-3 px-5 py-4 text-left hover:bg-[#3B1727]"
+              className="flex w-full items-center gap-3 px-5 py-4 text-left hover:bg-[#153F55]"
             >
               <span
                 className="h-2.5 w-2.5 shrink-0 rounded-full"
@@ -319,14 +319,14 @@ export function EstructuracionClient({
                   const enEdicion = editando === paso.id
 
                   return (
-                    <li key={paso.id} className="border-b border-[#3B1727] last:border-b-0">
+                    <li key={paso.id} className="border-b border-[#153F55] last:border-b-0">
                       <button
                         type="button"
                         onClick={() => {
                           setPasoAbierto(desplegado ? null : paso.id)
                           if (desplegado) setEditando(null)
                         }}
-                        className="flex w-full items-center gap-3 px-5 py-3 text-left hover:bg-[#3B1727]"
+                        className="flex w-full items-center gap-3 px-5 py-3 text-left hover:bg-[#153F55]"
                       >
                         <span
                           className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${
@@ -373,7 +373,7 @@ export function EstructuracionClient({
                       </button>
 
                       {desplegado ? (
-                        <div className="space-y-3 bg-[#3B1727] px-5 pb-5 pt-1">
+                        <div className="space-y-3 bg-[#153F55] px-5 pb-5 pt-1">
                           {aviso ? (
                             <div className="flex gap-2 rounded-xl border border-[#C99A3D]/40 bg-[#C99A3D]/12 p-3">
                               <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-[#E0B868]" />
@@ -390,7 +390,7 @@ export function EstructuracionClient({
                                 value={borrador}
                                 onChange={(e) => setBorrador(e.target.value)}
                                 rows={14}
-                                className="w-full rounded-xl border border-[#B08D57]/35 bg-[#4C2032] p-4 text-[13.5px] leading-relaxed text-[#F3E7DC] outline-none focus:border-[#B08D57] focus:ring-2 focus:ring-[#B08D57]/15"
+                                className="w-full rounded-xl border border-[#B08D57]/35 bg-[#1E5A7A] p-4 text-[13.5px] leading-relaxed text-[#F3E7DC] outline-none focus:border-[#B08D57] focus:ring-2 focus:ring-[#B08D57]/15"
                               />
 
                               {aviso ? (
@@ -429,7 +429,7 @@ export function EstructuracionClient({
                                   type="button"
                                   disabled={guardando}
                                   onClick={() => setEditando(null)}
-                                  className="inline-flex items-center gap-1.5 rounded-lg border border-[#B08D57]/35 bg-[#4C2032] px-4 py-2 text-[13px] font-semibold text-[#F3E7DC]/80 hover:bg-[#3B1727]"
+                                  className="inline-flex items-center gap-1.5 rounded-lg border border-[#B08D57]/35 bg-[#1E5A7A] px-4 py-2 text-[13px] font-semibold text-[#F3E7DC]/80 hover:bg-[#153F55]"
                                 >
                                   <X className="h-4 w-4" />
                                   Cancelar
@@ -439,11 +439,11 @@ export function EstructuracionClient({
                           ) : (
                             <>
                               {tieneContenido ? (
-                                <div className="whitespace-pre-wrap rounded-xl border border-[#B08D57]/35 bg-[#4C2032] p-4 text-[13.5px] leading-relaxed text-[#F3E7DC]/90">
+                                <div className="whitespace-pre-wrap rounded-xl border border-[#B08D57]/35 bg-[#1E5A7A] p-4 text-[13.5px] leading-relaxed text-[#F3E7DC]/90">
                                   {paso.contenido}
                                 </div>
                               ) : (
-                                <div className="rounded-xl border border-dashed border-[#B08D57]/35 bg-[#4C2032] p-4 text-[13px] text-[#F3E7DC]/50">
+                                <div className="rounded-xl border border-dashed border-[#B08D57]/35 bg-[#1E5A7A] p-4 text-[13px] text-[#F3E7DC]/50">
                                   Este paso todavía no tiene contenido. Puedes escribirlo a mano
                                   aquí, o esperar a que la estructuración automática lo complete.
                                 </div>
@@ -452,7 +452,7 @@ export function EstructuracionClient({
                               <button
                                 type="button"
                                 onClick={() => abrirEdicion(paso)}
-                                className="inline-flex items-center gap-1.5 rounded-lg border border-[#B08D57]/35 bg-[#4C2032] px-3.5 py-2 text-[13px] font-semibold text-[#B08D57] shadow-[0_1px_2px_rgba(11,42,74,0.06)] hover:bg-[#B08D57]/15"
+                                className="inline-flex items-center gap-1.5 rounded-lg border border-[#B08D57]/35 bg-[#1E5A7A] px-3.5 py-2 text-[13px] font-semibold text-[#B08D57] shadow-[0_1px_2px_rgba(11,42,74,0.06)] hover:bg-[#B08D57]/15"
                               >
                                 <Pencil className="h-3.5 w-3.5" />
                                 {tieneContenido ? 'Corregir este paso' : 'Escribir este paso'}
@@ -472,7 +472,7 @@ export function EstructuracionClient({
 
       {visibles.length === 0 ? (
         <div
-          className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-8 text-center text-[13.5px] text-[#F3E7DC]/70 ${RELIEVE_TARJETA}`}
+          className={`rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-8 text-center text-[13.5px] text-[#F3E7DC]/70 ${RELIEVE_TARJETA}`}
         >
           No hay pasos que cumplan ese filtro.
         </div>

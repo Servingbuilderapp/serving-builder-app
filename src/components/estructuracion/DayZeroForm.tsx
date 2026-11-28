@@ -137,7 +137,7 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
   return (
     <div className="w-full max-w-4xl mx-auto my-6 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Banner de Day Zero */}
-      <GlassCard className="p-8 border border-color-primary/30 bg-gradient-to-r from-[#2E0E1A] via-[#3B1727] to-[#2E0E1A] text-[#F3E7DC] shadow-2xl relative overflow-hidden">
+      <GlassCard className="p-8 border border-color-primary/30 bg-gradient-to-r from-[#0E2B3B] via-[#153F55] to-[#0E2B3B] text-[#F3E7DC] shadow-2xl relative overflow-hidden">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
           <div>
             <span className="text-[10px] font-black uppercase tracking-[0.25em] text-color-primary bg-color-primary/20 px-3 py-1 rounded-full border border-color-primary/40">
@@ -152,7 +152,7 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
           </div>
 
           {/* Progress Badge */}
-          <div className="flex flex-col items-center justify-center p-4 bg-[#3B1727] backdrop-blur-md rounded-2xl border border-color-primary/30 min-w-[150px]">
+          <div className="flex flex-col items-center justify-center p-4 bg-[#153F55] backdrop-blur-md rounded-2xl border border-color-primary/30 min-w-[150px]">
             <span className="text-[10px] font-black text-[#F3E7DC]/70 uppercase tracking-widest">
               Entregables Day Zero
             </span>
@@ -169,11 +169,11 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
       </GlassCard>
 
       {/* REQUISITO 1: VIDEO PITCH (MÁX 3 MINUTOS) */}
-      <div className="bg-[#4C2032] rounded-3xl p-6 md:p-8 border border-color-base-300 shadow-md space-y-4">
+      <div className="bg-[#1E5A7A] rounded-3xl p-6 md:p-8 border border-color-base-300 shadow-md space-y-4">
         <div className="flex items-center justify-between border-b border-color-base-200 pb-3">
           <div className="flex items-center gap-3">
             <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs ${
-              req1VideoOk ? 'bg-[#7A8B6F] text-[#F3E7DC]' : 'bg-[#3B1727] text-[#F3E7DC]/60'
+              req1VideoOk ? 'bg-[#7A8B6F] text-[#F3E7DC]' : 'bg-[#153F55] text-[#F3E7DC]/60'
             }`}>
               {req1VideoOk ? <CheckCircle2 className="h-5 w-5" /> : '1'}
             </div>
@@ -189,7 +189,7 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
           </div>
 
           <span className={`text-xs font-bold px-3 py-1 rounded-full ${
-            req1VideoOk ? 'bg-[#7A8B6F]/15 text-[#A9BC9C]' : 'bg-[#3B1727] text-[#F3E7DC]/60'
+            req1VideoOk ? 'bg-[#7A8B6F]/15 text-[#A9BC9C]' : 'bg-[#153F55] text-[#F3E7DC]/60'
           }`}>
             {req1VideoOk ? 'Completado' : 'Pendiente'}
           </span>
@@ -207,7 +207,7 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
                 placeholder="https://www.youtube.com/watch?v=... o https://www.loom.com/share/..."
                 value={videoUrl}
                 onChange={e => handleVideoUrlChange(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#B08D57]/35 bg-[#3B1727] text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 text-xs font-medium focus:ring-2 focus:ring-color-primary outline-none"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#B08D57]/35 bg-[#153F55] text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 text-xs font-medium focus:ring-2 focus:ring-color-primary outline-none"
               />
             </div>
           </div>
@@ -220,11 +220,11 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
       </div>
 
       {/* REQUISITO 2: DOCUMENTO ACTUAL DEL PROYECTO */}
-      <div className="bg-[#4C2032] rounded-3xl p-6 md:p-8 border border-color-base-300 shadow-md space-y-4">
+      <div className="bg-[#1E5A7A] rounded-3xl p-6 md:p-8 border border-color-base-300 shadow-md space-y-4">
         <div className="flex items-center justify-between border-b border-color-base-200 pb-3">
           <div className="flex items-center gap-3">
             <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs ${
-              req2DocOk ? 'bg-[#7A8B6F] text-[#F3E7DC]' : 'bg-[#3B1727] text-[#F3E7DC]/60'
+              req2DocOk ? 'bg-[#7A8B6F] text-[#F3E7DC]' : 'bg-[#153F55] text-[#F3E7DC]/60'
             }`}>
               {req2DocOk ? <CheckCircle2 className="h-5 w-5" /> : '2'}
             </div>
@@ -240,13 +240,13 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
           </div>
 
           <span className={`text-xs font-bold px-3 py-1 rounded-full ${
-            req2DocOk ? 'bg-[#7A8B6F]/15 text-[#A9BC9C]' : 'bg-[#3B1727] text-[#F3E7DC]/60'
+            req2DocOk ? 'bg-[#7A8B6F]/15 text-[#A9BC9C]' : 'bg-[#153F55] text-[#F3E7DC]/60'
           }`}>
             {req2DocOk ? 'Completado' : 'Pendiente'}
           </span>
         </div>
 
-        <div className="border-2 border-dashed border-color-base-300 rounded-2xl p-6 text-center bg-[#3B1727] hover:bg-[#3B1727]/70 transition-colors cursor-pointer relative">
+        <div className="border-2 border-dashed border-color-base-300 rounded-2xl p-6 text-center bg-[#153F55] hover:bg-[#153F55]/70 transition-colors cursor-pointer relative">
           <input
             type="file"
             accept=".pdf,.doc,.docx,.ppt,.pptx"
@@ -273,11 +273,11 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
       </div>
 
       {/* REQUISITO 3: FORMULARIO DE 22 PREGUNTAS */}
-      <div className="bg-[#4C2032] rounded-3xl p-6 md:p-8 border border-color-base-300 shadow-md space-y-6">
+      <div className="bg-[#1E5A7A] rounded-3xl p-6 md:p-8 border border-color-base-300 shadow-md space-y-6">
         <div className="flex items-center justify-between border-b border-color-base-200 pb-3">
           <div className="flex items-center gap-3">
             <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs ${
-              req3FormOk ? 'bg-[#7A8B6F] text-[#F3E7DC]' : 'bg-[#3B1727] text-[#F3E7DC]/60'
+              req3FormOk ? 'bg-[#7A8B6F] text-[#F3E7DC]' : 'bg-[#153F55] text-[#F3E7DC]/60'
             }`}>
               {req3FormOk ? <CheckCircle2 className="h-5 w-5" /> : '3'}
             </div>
@@ -293,7 +293,7 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
           </div>
 
           <span className={`text-xs font-bold px-3 py-1 rounded-full ${
-            req3FormOk ? 'bg-[#7A8B6F]/15 text-[#A9BC9C]' : 'bg-[#3B1727] text-[#F3E7DC]/60'
+            req3FormOk ? 'bg-[#7A8B6F]/15 text-[#A9BC9C]' : 'bg-[#153F55] text-[#F3E7DC]/60'
           }`}>
             {req3FormOk ? 'Completado' : 'Incompleto'}
           </span>
@@ -302,7 +302,7 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
         {/* Formulario de 22 Preguntas */}
         <div className="space-y-6 max-h-[500px] overflow-y-auto pr-2">
           {PREGUNTAS_22.map(p => (
-            <div key={p.id} className="p-4 rounded-2xl bg-[#3B1727] border border-color-base-300 space-y-2">
+            <div key={p.id} className="p-4 rounded-2xl bg-[#153F55] border border-color-base-300 space-y-2">
               <label className="block text-xs font-bold text-color-base-content">
                 Pregunta {p.num} de 22: {p.text} *
               </label>
@@ -311,7 +311,7 @@ export function DayZeroForm({ onCompleted }: DayZeroFormProps) {
                 placeholder="Escribe tu respuesta clara y sintética aquí..."
                 value={respuestas[p.id] || ''}
                 onChange={e => handleRespuestaChange(p.id, e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#B08D57]/35 bg-[#2E0E1A] text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 text-xs font-medium focus:ring-2 focus:ring-color-primary outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#B08D57]/35 bg-[#0E2B3B] text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 text-xs font-medium focus:ring-2 focus:ring-color-primary outline-none"
               />
             </div>
           ))}

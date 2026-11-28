@@ -18,7 +18,7 @@ export async function BannerProyectoVisto({ vista }: { vista: ProyectoVisto }) {
 
   return (
     <div className="mx-4 mt-4 lg:mx-6 space-y-2">
-      <div className="rounded-xl border border-[#B08D57]/40 bg-[#4C2032] px-4 py-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[#F3E7DC]">
+      <div className="rounded-xl border border-[#B08D57]/40 bg-[#1E5A7A] px-4 py-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[#F3E7DC]">
         <span className="text-[11px] font-black uppercase tracking-wider text-[#B08D57]">Proyecto</span>
         <span className="text-sm font-bold">{vista.nombreProyecto || 'Sin nombre'}</span>
         {vista.vistaEquipo ? (
@@ -38,7 +38,7 @@ export async function BannerProyectoVisto({ vista }: { vista: ProyectoVisto }) {
 
       {paso ? (
         <div
-          className={`rounded-xl border bg-[#4C2032] px-4 py-3 text-[#F3E7DC] flex flex-wrap items-center gap-x-4 gap-y-2 ${
+          className={`rounded-xl border bg-[#1E5A7A] px-4 py-3 text-[#F3E7DC] flex flex-wrap items-center gap-x-4 gap-y-2 ${
             paso.accion ? 'border-[#C9A46B]' : 'border-[#B08D57]/40'
           }`}
         >
@@ -55,7 +55,7 @@ export async function BannerProyectoVisto({ vista }: { vista: ProyectoVisto }) {
           {paso.accion ? (
             <Link
               href={destino(paso.accion.href)}
-              className="shrink-0 px-4 py-2 rounded-full bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-xs font-bold hover:brightness-110"
+              className="shrink-0 px-4 py-2 rounded-full bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D] text-xs font-bold hover:brightness-110"
             >
               {paso.accion.texto}
             </Link>

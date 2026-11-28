@@ -77,7 +77,7 @@ export function GuiaDelPanel() {
       ref={caja}
       open
       onToggle={alCambiar}
-      className="group mx-4 mt-3 lg:mx-6 rounded-xl border border-[#B08D57]/40 bg-[#4C2032] px-4 py-3 text-[#F3E7DC]"
+      className="group mx-4 mt-3 lg:mx-6 rounded-xl border border-[#B08D57]/40 bg-[#1E5A7A] px-4 py-3 text-[#F3E7DC]"
     >
       <summary className="cursor-pointer text-sm font-extrabold">
         {idioma === 'es' ? 'Conoce tu panel: qué es cada cosa' : 'Get to know your panel: what each thing is'}
@@ -89,7 +89,7 @@ export function GuiaDelPanel() {
 
       <div className="mt-4 grid gap-3 md:grid-cols-2">
         {DEFINICIONES.map((d) => (
-          <div key={d.titulo.es} className="rounded-lg border border-[#B08D57]/45 bg-[#3B1727] p-3">
+          <div key={d.titulo.es} className="rounded-lg border border-[#B08D57]/45 bg-[#153F55] p-3">
             <div className="text-[13px] font-extrabold text-[#C9A46B]">{d.titulo[idioma]}</div>
             <p className="mt-1 text-[12.5px] leading-relaxed text-[#F3E7DC]/85">{d.texto[idioma]}</p>
           </div>

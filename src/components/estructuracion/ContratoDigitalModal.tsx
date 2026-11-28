@@ -59,7 +59,7 @@ export function ContratoDigitalModal({ plan, onContratoFirmado, onBack }: Contra
 
   return (
     <div className="w-full max-w-4xl mx-auto my-6 animate-in fade-in zoom-in-95 duration-500">
-      <GlassCard className="p-8 md:p-12 border border-color-primary/30 bg-[#4C2032]/95 shadow-2xl space-y-8">
+      <GlassCard className="p-8 md:p-12 border border-color-primary/30 bg-[#1E5A7A]/95 shadow-2xl space-y-8">
         {/* Top Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-color-base-200">
           <div>
@@ -74,14 +74,14 @@ export function ContratoDigitalModal({ plan, onContratoFirmado, onBack }: Contra
             </p>
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-bold text-[#F3E7DC]/70 bg-[#3B1727] px-3 py-2 rounded-xl">
+          <div className="flex items-center gap-2 text-xs font-bold text-[#F3E7DC]/70 bg-[#153F55] px-3 py-2 rounded-xl">
             <Lock className="h-4 w-4 text-[#9BB18D]" />
             Firma Encriptada con SSL
           </div>
         </div>
 
         {/* Visor de Contrato Legible */}
-        <div className="bg-[#3B1727] p-6 rounded-2xl border border-color-base-300 h-64 overflow-y-auto space-y-4 text-xs text-color-base-content/85 leading-relaxed font-sans shadow-inner">
+        <div className="bg-[#153F55] p-6 rounded-2xl border border-color-base-300 h-64 overflow-y-auto space-y-4 text-xs text-color-base-content/85 leading-relaxed font-sans shadow-inner">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo-serving.jpg" alt="Serving Proyectos Estratégicos" className="mx-auto h-20 w-20 rounded-xl bg-white object-contain p-1" />
           <h4 className="font-extrabold text-color-base-content text-sm uppercase">
@@ -161,7 +161,7 @@ export function ContratoDigitalModal({ plan, onContratoFirmado, onBack }: Contra
         </div>
 
         {/* Checkboxes de Aceptación Legal & Habeas Data */}
-        <div className="space-y-3 bg-[#3B1727] p-5 rounded-2xl border border-color-base-200">
+        <div className="space-y-3 bg-[#153F55] p-5 rounded-2xl border border-color-base-200">
           <label className="flex items-start gap-3 cursor-pointer">
             <input
               type="checkbox"
@@ -204,7 +204,7 @@ export function ContratoDigitalModal({ plan, onContratoFirmado, onBack }: Contra
                 placeholder="Ej: Juan Carlos Perez"
                 value={nombreFirmante}
                 onChange={e => setNombreFirmante(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl border border-color-base-300 bg-[#2E0E1A] text-color-base-content placeholder:text-color-base-content/40 text-xs font-medium focus:ring-2 focus:ring-color-primary outline-none"
+                className="w-full px-4 py-2.5 rounded-xl border border-color-base-300 bg-[#0E2B3B] text-color-base-content placeholder:text-color-base-content/40 text-xs font-medium focus:ring-2 focus:ring-color-primary outline-none"
               />
             </div>
 
@@ -217,7 +217,7 @@ export function ContratoDigitalModal({ plan, onContratoFirmado, onBack }: Contra
                 placeholder="Ej: 1.098.765.432 / 901.234.567-8"
                 value={documentoIdentidad}
                 onChange={e => setDocumentoIdentidad(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl border border-color-base-300 bg-[#2E0E1A] text-color-base-content placeholder:text-color-base-content/40 text-xs font-medium focus:ring-2 focus:ring-color-primary outline-none"
+                className="w-full px-4 py-2.5 rounded-xl border border-color-base-300 bg-[#0E2B3B] text-color-base-content placeholder:text-color-base-content/40 text-xs font-medium focus:ring-2 focus:ring-color-primary outline-none"
               />
             </div>
 
@@ -230,7 +230,7 @@ export function ContratoDigitalModal({ plan, onContratoFirmado, onBack }: Contra
                 placeholder="cliente@empresa.com"
                 value={emailFirmante}
                 onChange={e => setEmailFirmante(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl border border-color-base-300 bg-[#2E0E1A] text-color-base-content placeholder:text-color-base-content/40 text-xs font-medium focus:ring-2 focus:ring-color-primary outline-none"
+                className="w-full px-4 py-2.5 rounded-xl border border-color-base-300 bg-[#0E2B3B] text-color-base-content placeholder:text-color-base-content/40 text-xs font-medium focus:ring-2 focus:ring-color-primary outline-none"
               />
             </div>
           </div>

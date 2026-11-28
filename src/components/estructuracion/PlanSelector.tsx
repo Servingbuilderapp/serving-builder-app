@@ -102,7 +102,7 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
             <Award className="h-5 w-5 text-color-primary" />
             <span>Modalidad sugerida por tu diagnóstico:</span>
           </div>
-          <span className="text-color-primary bg-[#3B1727] px-3 py-1 rounded-full font-black uppercase tracking-wider border border-color-primary/30">
+          <span className="text-color-primary bg-[#153F55] px-3 py-1 rounded-full font-black uppercase tracking-wider border border-color-primary/30">
             {modalidadSugerida.nombre}
           </span>
         </div>
@@ -120,12 +120,12 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
               onClick={() => setSelectedPlanId(plan.id)}
               className={`relative rounded-3xl p-7 transition-all duration-300 cursor-pointer flex flex-col justify-between border ${
                 activa
-                  ? 'bg-[#4C2032] border-color-primary shadow-2xl ring-2 ring-color-primary/40 scale-[1.02]'
-                  : 'bg-[#4C2032]/70 border-color-base-300 hover:border-color-primary/40 shadow-md'
+                  ? 'bg-[#1E5A7A] border-color-primary shadow-2xl ring-2 ring-color-primary/40 scale-[1.02]'
+                  : 'bg-[#1E5A7A]/70 border-color-base-300 hover:border-color-primary/40 shadow-md'
               }`}
             >
               {sugerida && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-color-primary text-[#3A1420] text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full shadow-lg whitespace-nowrap">
+                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-color-primary text-[#12394D] text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full shadow-lg whitespace-nowrap">
                   ★ Sugerida para tu proyecto
                 </div>
               )}
@@ -138,7 +138,7 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
                   <div
                     className={`w-5 h-5 shrink-0 rounded-full border flex items-center justify-center ${
                       activa
-                        ? 'bg-color-primary border-color-primary text-[#3A1420]'
+                        ? 'bg-color-primary border-color-primary text-[#12394D]'
                         : 'border-color-base-300'
                     }`}
                   >
@@ -206,7 +206,7 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
       </div>
 
       {/* Desglose técnico de la modalidad escogida */}
-      <GlassCard className="p-6 md:p-8 bg-[#4C2032]/95 border border-color-primary/20 space-y-6 shadow-xl">
+      <GlassCard className="p-6 md:p-8 bg-[#1E5A7A]/95 border border-color-primary/20 space-y-6 shadow-xl">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-color-base-200 pb-4">
           <div className="flex items-center gap-2">
             <Layers className="h-5 w-5 text-color-primary" />
@@ -220,7 +220,7 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
-          <div className="p-5 rounded-2xl bg-[#3B1727] border border-color-base-300 space-y-2.5">
+          <div className="p-5 rounded-2xl bg-[#153F55] border border-color-base-300 space-y-2.5">
             <div className="flex items-center gap-2 text-color-primary font-black text-xs uppercase tracking-wider">
               <FileText className="h-4 w-4" />
               Componente Técnico
@@ -230,7 +230,7 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
             </p>
           </div>
 
-          <div className="p-5 rounded-2xl bg-[#3B1727] border border-color-base-300 space-y-2.5">
+          <div className="p-5 rounded-2xl bg-[#153F55] border border-color-base-300 space-y-2.5">
             <div className="flex items-center gap-2 text-color-primary font-black text-xs uppercase tracking-wider">
               <Coins className="h-4 w-4" />
               Componente Financiero
@@ -240,7 +240,7 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
             </p>
           </div>
 
-          <div className="p-5 rounded-2xl bg-[#3B1727] border border-color-base-300 space-y-2.5">
+          <div className="p-5 rounded-2xl bg-[#153F55] border border-color-base-300 space-y-2.5">
             <div className="flex items-center gap-2 text-color-primary font-black text-xs uppercase tracking-wider">
               <Scale className="h-4 w-4" />
               Componente Legal
@@ -253,9 +253,9 @@ export function PlanSelector({ diagnosticoContext, onSelectPlan }: PlanSelectorP
       </GlassCard>
 
       {/* Formalización */}
-      <div className="bg-gradient-to-r from-[#2E0E1A] via-[#3B1727] to-[#2E0E1A] text-[#F3E7DC] p-8 rounded-3xl shadow-2xl border border-color-primary/30 flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="bg-gradient-to-r from-[#0E2B3B] via-[#153F55] to-[#0E2B3B] text-[#F3E7DC] p-8 rounded-3xl shadow-2xl border border-color-primary/30 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-2 max-w-2xl">
-          <span className="inline-block text-[10px] font-black uppercase tracking-[0.2em] text-[#3A1420] bg-color-primary px-3 py-1 rounded-full">
+          <span className="inline-block text-[10px] font-black uppercase tracking-[0.2em] text-[#12394D] bg-color-primary px-3 py-1 rounded-full">
             Contratar
           </span>
           <h4 className="text-2xl font-black italic uppercase">

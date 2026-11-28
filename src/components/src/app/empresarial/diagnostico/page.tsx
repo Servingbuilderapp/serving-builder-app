@@ -11,7 +11,7 @@ export const metadata = {
 }
 
 const mensaje = (titulo: string, texto: string) => (
-  <main className="min-h-screen bg-gradient-to-b from-[#2E0E1A] via-[#3B1727] to-[#54142B] text-[#F3E7DC] flex items-center justify-center px-5">
+  <main className="min-h-screen bg-gradient-to-b from-[#0E2B3B] via-[#153F55] to-[#1A4D68] text-[#F3E7DC] flex items-center justify-center px-5">
     <div className="max-w-md text-center">
       <h1 className="text-2xl font-extrabold">{titulo}</h1>
       <p className="mt-3 text-[#F3E7DC]/80">{texto}</p>

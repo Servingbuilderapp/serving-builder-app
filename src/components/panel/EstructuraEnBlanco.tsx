@@ -24,7 +24,7 @@ export function EstructuraEnBlanco({
   pasos?: PasoDelMotor[]
 }) {
   return (
-    <div className="min-h-full bg-[#54142B] mx-auto max-w-4xl px-4 py-10">
+    <div className="min-h-full bg-[#1A4D68] mx-auto max-w-4xl px-4 py-10">
       <h1 className="text-xl font-extrabold text-[#F3E7DC]">{titulo}</h1>
       {pasos && pasos.length > 0 ? (
         <>
@@ -34,7 +34,7 @@ export function EstructuraEnBlanco({
           </p>
           <div className="mt-5 space-y-4">
             {pasos.map((p) => (
-              <div key={p.orden} className="rounded-xl border border-[#B08D57]/40 bg-[#3B1727] p-4">
+              <div key={p.orden} className="rounded-xl border border-[#B08D57]/40 bg-[#153F55] p-4">
                 <div className="text-[11px] font-black uppercase tracking-wider text-[#B08D57]">
                   Paso {p.orden} · {p.nombre}
                 </div>
@@ -51,12 +51,12 @@ export function EstructuraEnBlanco({
         {bloques.map((b) => (
           <div
             key={b.titulo}
-            className="rounded-xl border border-dashed border-[#B08D57]/50 bg-[#3B1727] p-4"
+            className="rounded-xl border border-dashed border-[#B08D57]/50 bg-[#153F55] p-4"
           >
             <div className="text-[11px] font-black uppercase tracking-wider text-[#B08D57]">{b.titulo}</div>
             <p className="mt-1 text-[12.5px] leading-snug text-[#F3E7DC]/60">{b.texto}</p>
-            <div className="mt-3 h-8 rounded-lg border border-[#B08D57]/25 bg-[#54142B]/60" />
-            <div className="mt-2 h-8 rounded-lg border border-[#B08D57]/25 bg-[#54142B]/60" />
+            <div className="mt-3 h-8 rounded-lg border border-[#B08D57]/25 bg-[#1A4D68]/60" />
+            <div className="mt-2 h-8 rounded-lg border border-[#B08D57]/25 bg-[#1A4D68]/60" />
           </div>
         ))}
       </div>
@@ -65,7 +65,7 @@ export function EstructuraEnBlanco({
 
       <Link
         href={enlace.href}
-        className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-4 py-2.5 text-[13px] font-extrabold text-[#3A1420] hover:brightness-110"
+        className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-4 py-2.5 text-[13px] font-extrabold text-[#12394D] hover:brightness-110"
       >
         {enlace.texto} <ArrowRight className="h-4 w-4" />
       </Link>

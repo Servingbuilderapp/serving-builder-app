@@ -54,14 +54,14 @@ function Tarjeta({ f, grande }: { f: Fuente; grande?: boolean }) {
       className={`flex flex-col rounded-2xl border border-[#B08D57]/60 bg-gradient-to-b from-[#FBF4EA] to-[#F0E1CF] ${grande ? 'p-5' : 'p-4'} ${SOMBRA_TARJETA}`}
     >
       <div className="flex flex-wrap items-center gap-2">
-        <h3 className={`font-extrabold text-[#3B1727] ${grande ? 'text-[15px]' : 'text-[14px]'}`}>{f.nombre}</h3>
+        <h3 className={`font-extrabold text-[#153F55] ${grande ? 'text-[15px]' : 'text-[14px]'}`}>{f.nombre}</h3>
         {f.etiqueta && (
-          <span className="rounded-full bg-[#54142B] px-2 py-0.5 text-[10.5px] font-bold text-[#F3E7DC]">
+          <span className="rounded-full bg-[#1A4D68] px-2 py-0.5 text-[10.5px] font-bold text-[#F3E7DC]">
             {t(`fuentes.etiqueta_${f.etiqueta}`)}
           </span>
         )}
       </div>
-      <p className="mt-1.5 flex-1 text-[13px] leading-relaxed text-[#3B1727]/75">{t(`fuentes.d_${f.id}`)}</p>
+      <p className="mt-1.5 flex-1 text-[13px] leading-relaxed text-[#153F55]/75">{t(`fuentes.d_${f.id}`)}</p>
       <div className="mt-3 flex flex-wrap gap-2">
         {f.enlaces.map((e) => (
           <a
@@ -70,7 +70,7 @@ function Tarjeta({ f, grande }: { f: Fuente; grande?: boolean }) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`${t('fuentes.abrir')}: ${f.nombre} (${e.rotulo})`}
-            className={`inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-b from-[#DDB97C] to-[#C9A46B] px-3.5 py-2 text-[12.5px] font-bold text-[#3B1727] ${SOMBRA_BOTON}`}
+            className={`inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-b from-[#DDB97C] to-[#C9A46B] px-3.5 py-2 text-[12.5px] font-bold text-[#153F55] ${SOMBRA_BOTON}`}
           >
             {f.enlaces.length > 1 ? e.rotulo : t('fuentes.abrir')}
             <ExternalLink className="h-3.5 w-3.5" />

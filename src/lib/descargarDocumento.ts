@@ -131,10 +131,10 @@ export function markdownAHtml(markdown: string): string {
 
 const ESTILOS = `
   body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.5; color: #222; margin: 2cm; }
-  h1 { font-size: 20pt; color: #54142B; border-bottom: 2px solid #B08D57; padding-bottom: 6px; }
-  h2 { font-size: 15pt; color: #54142B; margin-top: 22px; }
-  h3 { font-size: 12.5pt; color: #4C2032; margin-top: 16px; }
-  h4 { font-size: 11.5pt; color: #4C2032; }
+  h1 { font-size: 20pt; color: #1A4D68; border-bottom: 2px solid #B08D57; padding-bottom: 6px; }
+  h2 { font-size: 15pt; color: #1A4D68; margin-top: 22px; }
+  h3 { font-size: 12.5pt; color: #1E5A7A; margin-top: 16px; }
+  h4 { font-size: 11.5pt; color: #1E5A7A; }
   table { border-collapse: collapse; width: 100%; margin: 10px 0; }
   th, td { border: 1px solid #bbb; padding: 5px 8px; text-align: left; vertical-align: top; }
   th { background: #f1e8dc; }

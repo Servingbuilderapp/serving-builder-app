@@ -23,7 +23,7 @@ const RELIEVE_TARJETA =
 /** Botón dorado con relieve fuerte: brillo arriba, escalón abajo que se
  * aplana al hacer clic — igual al de Estructuración, para que combinen. */
 const BOTON_DORADO =
-  'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#2E0E1A] border border-[#7A5A2E]/60 ' +
+  'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#0E2B3B] border border-[#7A5A2E]/60 ' +
   'shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_4px_0_#7A5A2E,0_12px_20px_-6px_rgba(20,5,10,0.55)] ' +
   'hover:brightness-105 hover:-translate-y-0.5 ' +
   'active:translate-y-[3px] active:shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_1px_0_#7A5A2E,0_4px_10px_-4px_rgba(20,5,10,0.5)] ' +
@@ -96,7 +96,7 @@ function TarjetaPendiente({
 
   return (
     <article
-      className={`flex flex-col rounded-2xl border bg-gradient-to-b from-[#5A2438] to-[#4C2032] p-5 transition-colors ${RELIEVE_TARJETA} ${
+      className={`flex flex-col rounded-2xl border bg-gradient-to-b from-[#24607F] to-[#1E5A7A] p-5 transition-colors ${RELIEVE_TARJETA} ${
         elegida ? 'border-[#C9A46B] ring-1 ring-[#C9A46B]/60' : 'border-[#B08D57]/35 hover:border-[#B08D57]/60'
       }`}
     >
@@ -134,7 +134,7 @@ function TarjetaPendiente({
       </div>
 
       {convocatoria.razon ? (
-        <p className="mt-3 rounded-xl border border-[#B08D57]/25 bg-[#3B1727]/60 px-3 py-2 text-[12.5px] leading-relaxed text-[#F3E7DC]/80">
+        <p className="mt-3 rounded-xl border border-[#B08D57]/25 bg-[#153F55]/60 px-3 py-2 text-[12.5px] leading-relaxed text-[#F3E7DC]/80">
           <span className="font-bold text-[#E8C777]">Por qué te sirve: </span>
           {convocatoria.razon}
         </p>
@@ -158,7 +158,7 @@ function TarjetaPendiente({
             type="checkbox"
             checked={elegida}
             onChange={(e) => onCambiar(convocatoria.id, e.target.checked)}
-            className="h-5 w-5 accent-[#C9A46B] rounded border-[#B08D57] bg-[#3B1727] text-[#C9A46B] focus:ring-[#C9A46B]"
+            className="h-5 w-5 accent-[#C9A46B] rounded border-[#B08D57] bg-[#153F55] text-[#C9A46B] focus:ring-[#C9A46B]"
           />
           {elegida ? 'La quiero' : 'Quiero'}
         </label>
@@ -223,7 +223,7 @@ export function ElegirConvocatorias({
   }
 
   return (
-    <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
+    <div className="min-h-full bg-[#1A4D68] px-4 py-6 lg:px-6">
       <header className="mb-5">
         <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">
           Elige tus convocatorias

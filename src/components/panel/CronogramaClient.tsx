@@ -59,7 +59,7 @@ const MESES_MAXIMO = 60
 const RELIEVE_TARJETA =
   'shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]'
 const BOTON_DORADO =
-  'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#2E0E1A] border border-[#7A5A2E]/60 ' +
+  'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#0E2B3B] border border-[#7A5A2E]/60 ' +
   'shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_4px_0_#7A5A2E,0_12px_20px_-6px_rgba(20,5,10,0.55)] ' +
   'hover:brightness-105 hover:-translate-y-0.5 ' +
   'active:translate-y-[3px] active:shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_1px_0_#7A5A2E,0_4px_10px_-4px_rgba(20,5,10,0.5)] ' +
@@ -71,7 +71,7 @@ const TINTA_TENUE = 'text-[#F3E7DC]/50'
 const BORDE = 'border-[#B08D57]/35'
 
 const CAMPO =
-  'w-full rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-2.5 py-2 text-[13px] leading-snug text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/25'
+  'w-full rounded-lg border border-[#B08D57]/35 bg-[#153F55] px-2.5 py-2 text-[13px] leading-snug text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/25'
 
 /** Un color por objetivo, para que cada bloque se distinga de un vistazo. */
 const COLORES = [
@@ -90,7 +90,7 @@ const entero = (valor: string, porDefecto: number): number => {
 }
 
 function Tarjeta({ children, className = '' }: { children: React.ReactNode; className?: string }) {
-  return <div className={`rounded-2xl border ${BORDE} bg-[#4C2032] ${RELIEVE_TARJETA} ${className}`}>{children}</div>
+  return <div className={`rounded-2xl border ${BORDE} bg-[#1E5A7A] ${RELIEVE_TARJETA} ${className}`}>{children}</div>
 }
 
 function Etiqueta({ children }: { children: React.ReactNode }) {
@@ -244,7 +244,7 @@ export function CronogramaClient({
   const anchoMes = totalMeses > 18 ? 28 : 36
 
   return (
-    <div className="min-h-full bg-[#54142B] mx-auto max-w-[1180px] px-4 py-6 sm:px-6">
+    <div className="min-h-full bg-[#1A4D68] mx-auto max-w-[1180px] px-4 py-6 sm:px-6">
       <header className="mb-5">
         <Link
           href={`/admin/proyectos/${proyectoId}/presupuesto`}
@@ -256,7 +256,7 @@ export function CronogramaClient({
           <h1 className={`text-[19px] font-extrabold uppercase tracking-tight ${TINTA}`}>
             Cronograma
           </h1>
-          <span className="rounded-full bg-[#3B1727] border border-[#B08D57]/35 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#C9A46B]">
+          <span className="rounded-full bg-[#153F55] border border-[#B08D57]/35 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#C9A46B]">
             Interno
           </span>
         </div>
@@ -409,7 +409,7 @@ export function CronogramaClient({
                                     className={`h-5 rounded-[3px] transition ${
                                       dentro
                                         ? `${color.barra} hover:opacity-80`
-                                        : 'bg-[#3B1727] hover:bg-[#54142B]'
+                                        : 'bg-[#153F55] hover:bg-[#1A4D68]'
                                     }`}
                                   />
                                 )
@@ -438,7 +438,7 @@ export function CronogramaClient({
               {lineas.map((linea) => (
                 <div
                   key={linea.clave}
-                  className="grid gap-2 rounded-xl border border-[#B08D57]/35 bg-[#3B1727] p-2.5 md:grid-cols-2"
+                  className="grid gap-2 rounded-xl border border-[#B08D57]/35 bg-[#153F55] p-2.5 md:grid-cols-2"
                 >
                   <div className="flex items-start gap-2">
                     <span

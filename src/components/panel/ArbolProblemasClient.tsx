@@ -74,7 +74,7 @@ const RELIEVE_TARJETA =
   'shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]'
 
 const BOTON_DORADO =
-  'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#2E0E1A] border border-[#7A5A2E]/60 ' +
+  'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#0E2B3B] border border-[#7A5A2E]/60 ' +
   'shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_4px_0_#7A5A2E,0_12px_20px_-6px_rgba(20,5,10,0.55)] ' +
   'hover:brightness-105 hover:-translate-y-0.5 ' +
   'active:translate-y-[3px] active:shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_1px_0_#7A5A2E,0_4px_10px_-4px_rgba(20,5,10,0.5)] ' +
@@ -85,7 +85,7 @@ const TINTA = 'text-[#F3E7DC]'
 const TINTA_SUAVE = 'text-[#F3E7DC]/70'
 const TINTA_TENUE = 'text-[#F3E7DC]/50'
 const BORDE = 'border-[#B08D57]/35'
-const CAMPO = `w-full rounded-lg border ${BORDE} bg-[#3B1727] px-2.5 py-1.5 text-[12px] ${TINTA} placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/25`
+const CAMPO = `w-full rounded-lg border ${BORDE} bg-[#153F55] px-2.5 py-1.5 text-[12px] ${TINTA} placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/25`
 
 const COLOR_FILA: Record<
   TipoNodo,
@@ -93,7 +93,7 @@ const COLOR_FILA: Record<
 > = {
   EFECTO_INDIRECTO: { fondo: 'bg-[#C99A3D]/10', borde: 'border-[#C99A3D]/30', etiqueta: 'text-[#E0B868]' },
   EFECTO_DIRECTO: { fondo: 'bg-[#C99A3D]/15', borde: 'border-[#C99A3D]/40', etiqueta: 'text-[#E0B868]' },
-  CENTRAL: { fondo: 'bg-[#2E0E1A]', borde: 'border-[#2E0E1A]', etiqueta: 'text-[#F3E7DC]' },
+  CENTRAL: { fondo: 'bg-[#0E2B3B]', borde: 'border-[#0E2B3B]', etiqueta: 'text-[#F3E7DC]' },
   CAUSA_DIRECTA: { fondo: 'bg-[#C9A46B]/15', borde: 'border-[#C9A46B]/40', etiqueta: 'text-[#E0C48A]' },
   CAUSA_INDIRECTA: { fondo: 'bg-[#C9A46B]/10', borde: 'border-[#C9A46B]/30', etiqueta: 'text-[#E0C48A]' },
 }
@@ -138,7 +138,7 @@ const VEREDICTOS = [
 /* -------------------------------------------------------------------------- */
 
 function Tarjeta({ children, className = '' }: { children: React.ReactNode; className?: string }) {
-  return <div className={`rounded-2xl border ${BORDE} bg-[#4C2032] ${RELIEVE_TARJETA} ${className}`}>{children}</div>
+  return <div className={`rounded-2xl border ${BORDE} bg-[#1E5A7A] ${RELIEVE_TARJETA} ${className}`}>{children}</div>
 }
 
 function Semaforo({ estado }: { estado: 'verde' | 'amarillo' | 'rojo' }) {
@@ -201,7 +201,7 @@ function Casilla({
         className={
           esCentral
             ? 'w-full resize-none rounded-lg border border-[#F3E7DC]/20 bg-[#F3E7DC]/5 px-3 py-2 text-[15px] font-semibold leading-snug text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/40'
-            : `w-full resize-none rounded-lg border ${BORDE} bg-[#3B1727] px-2.5 py-2 text-[13px] leading-snug ${TINTA} placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/25`
+            : `w-full resize-none rounded-lg border ${BORDE} bg-[#153F55] px-2.5 py-2 text-[13px] leading-snug ${TINTA} placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/25`
         }
       />
 
@@ -394,7 +394,7 @@ export function ArbolProblemasClient({
   /* ---------------------------------------------------------------------- */
 
   return (
-    <div className="min-h-full bg-[#54142B] px-4 py-6 sm:px-6">
+    <div className="min-h-full bg-[#1A4D68] px-4 py-6 sm:px-6">
       <div className="mx-auto max-w-[1180px]">
         <header className="mb-5">
           <Link
@@ -407,7 +407,7 @@ export function ArbolProblemasClient({
             <h1 className={`text-[19px] font-extrabold uppercase tracking-tight ${TINTA}`}>
               Árbol de problemas
             </h1>
-            <span className="rounded-full bg-[#3B1727] border border-[#B08D57]/35 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#C9A46B]">
+            <span className="rounded-full bg-[#153F55] border border-[#B08D57]/35 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#C9A46B]">
               Interno
             </span>
           </div>
@@ -566,7 +566,7 @@ export function ArbolProblemasClient({
                 type="button"
                 onClick={alEnviarPregunta}
                 disabled={enviandoPregunta || !textoPregunta.trim() || !pasoElegido}
-                className={`mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#B08D57]/35 bg-[#3B1727] px-4 py-2.5 text-[13px] font-bold text-[#C9A46B] ${RELIEVE_TARJETA} transition hover:-translate-y-px disabled:opacity-50 disabled:hover:translate-y-0`}
+                className={`mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#B08D57]/35 bg-[#153F55] px-4 py-2.5 text-[13px] font-bold text-[#C9A46B] ${RELIEVE_TARJETA} transition hover:-translate-y-px disabled:opacity-50 disabled:hover:translate-y-0`}
               >
                 {enviandoPregunta ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -583,7 +583,7 @@ export function ArbolProblemasClient({
                   </p>
                   <ul className="space-y-2">
                     {abiertas.map((p) => (
-                      <li key={p.id} className="rounded-lg border border-[#B08D57]/35 bg-[#3B1727] p-2">
+                      <li key={p.id} className="rounded-lg border border-[#B08D57]/35 bg-[#153F55] p-2">
                         <p className={`text-[12px] leading-snug ${TINTA}`}>{p.texto}</p>
                         <p className={`mt-1 text-[11px] ${TINTA_TENUE}`}>
                           {p.nombrePaso}
@@ -612,7 +612,7 @@ export function ArbolProblemasClient({
                 {PREGUNTAS_REVISION.map((p) => {
                   const valor = respuestas[String(p.n)] || ''
                   return (
-                    <li key={p.n} className="rounded-xl border border-[#B08D57]/35 bg-[#3B1727] p-2.5">
+                    <li key={p.n} className="rounded-xl border border-[#B08D57]/35 bg-[#153F55] p-2.5">
                       <p className={`mb-2 text-[12.5px] leading-snug ${TINTA}`}>
                         <span className={`font-bold ${TINTA_TENUE}`}>{p.n}.</span> {p.texto}
                       </p>
@@ -632,7 +632,7 @@ export function ArbolProblemasClient({
                               }}
                               aria-pressed={activo}
                               className={`rounded-lg border px-2 py-1 text-[11.5px] font-semibold transition ${
-                                activo ? v.activo : `border-[#B08D57]/35 bg-[#3B1727] ${TINTA_SUAVE} hover:border-[#C9A46B]/40`
+                                activo ? v.activo : `border-[#B08D57]/35 bg-[#153F55] ${TINTA_SUAVE} hover:border-[#C9A46B]/40`
                               }`}
                             >
                               {v.texto}
@@ -660,7 +660,7 @@ export function ArbolProblemasClient({
                 type="button"
                 onClick={alGuardarRevision}
                 disabled={guardandoRevision}
-                className={`mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#B08D57]/35 bg-[#3B1727] px-4 py-2.5 text-[13px] font-bold text-[#C9A46B] ${RELIEVE_TARJETA} transition hover:-translate-y-px disabled:opacity-60 disabled:hover:translate-y-0`}
+                className={`mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#B08D57]/35 bg-[#153F55] px-4 py-2.5 text-[13px] font-bold text-[#C9A46B] ${RELIEVE_TARJETA} transition hover:-translate-y-px disabled:opacity-60 disabled:hover:translate-y-0`}
               >
                 {guardandoRevision ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                 {guardandoRevision ? 'Guardando…' : 'Guardar la revisión'}

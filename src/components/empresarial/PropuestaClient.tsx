@@ -20,7 +20,7 @@ import {
 } from '@/lib/empresarial/propuesta'
 
 const RELIEVE_BOTON = 'shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-200'
-const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(84,20,43,0.06),0_10px_28px_-14px_rgba(84,20,43,0.22)]'
+const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(26,77,104,0.06),0_10px_28px_-14px_rgba(26,77,104,0.22)]'
 const CAMPO_INTERNO =
   'mt-1 w-full rounded-lg border border-ca-oro/40 bg-ca-tarjeta px-3 py-2 text-ca-vino placeholder:text-ca-vino/65 focus:outline-none focus:ring-2 focus:ring-ca-oro-claro'
 const COLOR_ALERTA: Record<string, string> = {
@@ -28,9 +28,9 @@ const COLOR_ALERTA: Record<string, string> = {
   Preventiva: 'border-ca-oro/50 bg-ca-fondo',
   Informativa: 'border-ca-oro/45 bg-ca-fondo',
 }
-const VINO = '#54142B'
+const VINO = '#1A4D68'
 const DORADO = '#C9A44A'
-const VINO_CLARO = '#8A3A57'
+const VINO_CLARO = '#3F7E9E'
 
 const GRUPOS: NumeroGrupo[] = [1, 2, 3]
 

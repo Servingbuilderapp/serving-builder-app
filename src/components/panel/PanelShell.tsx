@@ -28,7 +28,7 @@ export function PanelShell({
   const [menuMovil, setMenuMovil] = useState(false)
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-[#54142B] text-[#F3E7DC]">
+    <div className="flex h-screen w-full overflow-hidden bg-[#1A4D68] text-[#F3E7DC]">
       <MenuLateral
         abiertoEnMovil={menuMovil}
         onCerrar={() => setMenuMovil(false)}

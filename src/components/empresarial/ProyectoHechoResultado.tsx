@@ -7,7 +7,7 @@ import ReactMarkdown from 'react-markdown'
 import { ArrowLeft, Check, Loader2, Printer } from 'lucide-react'
 import { BotonPagoBold } from '@/components/pagos/BotonPagoBold'
 
-const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(84,20,43,0.06),0_10px_28px_-14px_rgba(84,20,43,0.22)]'
+const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(26,77,104,0.06),0_10px_28px_-14px_rgba(26,77,104,0.22)]'
 const pesos = (n: number) => `$${n.toLocaleString('es-CO')}`
 
 export interface MuestraVista {

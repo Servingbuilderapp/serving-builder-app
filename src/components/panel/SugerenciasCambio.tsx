@@ -66,11 +66,11 @@ export function SugerenciasCambio({
   return (
     <section className="rounded-2xl border border-[#B08D57]/50 bg-white/80 p-5 shadow-sm space-y-4">
       <div className="flex items-start gap-3">
-        <div className="h-9 w-9 shrink-0 rounded-full bg-[#C9A46B]/25 flex items-center justify-center text-[#8C3654]">
+        <div className="h-9 w-9 shrink-0 rounded-full bg-[#C9A46B]/25 flex items-center justify-center text-[#3F7E9E]">
           <Lightbulb className="h-5 w-5" />
         </div>
         <div>
-          <h2 className="text-base font-extrabold text-[#3A1420]">Sugerencias para fortalecer tu proyecto</h2>
+          <h2 className="text-base font-extrabold text-[#12394D]">Sugerencias para fortalecer tu proyecto</h2>
           <p className="text-xs text-[#5A3A2E]/80 mt-0.5">
             Revisamos tu proyecto y te dejamos cada cambio ya escrito. Úsalo tal cual, corrígelo a tu manera o déjalo como está.
             {pendientes.length > 0 ? ` Te faltan ${pendientes.length} por revisar.` : ' Ya las revisaste todas.'}
@@ -117,14 +117,14 @@ function Tarjeta({ s, soloVista }: { s: SugerenciaVista; soloVista: boolean }) {
   return (
     <div className="rounded-xl border border-[#B08D57]/30 bg-[#FBF5EC] p-4 space-y-2">
       <div className="flex items-center justify-between gap-2">
-        <div className="text-[11px] font-black uppercase tracking-wider text-[#8C3654]">{s.tema}</div>
+        <div className="text-[11px] font-black uppercase tracking-wider text-[#3F7E9E]">{s.tema}</div>
         {respondida ? (
           <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#3E7A4F]">
             <Check className="h-3.5 w-3.5" /> {etiqueta}
           </span>
         ) : null}
       </div>
-      <p className="text-sm font-semibold text-[#3A1420]">{s.hallazgo}</p>
+      <p className="text-sm font-semibold text-[#12394D]">{s.hallazgo}</p>
       {respondida && s.estado !== 'descartada' ? (
         <p className="text-xs text-[#5A3A2E] whitespace-pre-wrap rounded-lg bg-white/70 p-3">{s.texto_final}</p>
       ) : !respondida ? (
@@ -136,10 +136,10 @@ function Tarjeta({ s, soloVista }: { s: SugerenciaVista; soloVista: boolean }) {
               onChange={(e) => setTexto(e.target.value)}
               rows={6}
               disabled={soloVista}
-              className="w-full rounded-lg border border-[#B08D57]/50 bg-white p-3 text-sm text-[#3A1420] focus:outline-none focus:ring-2 focus:ring-[#C9A46B]"
+              className="w-full rounded-lg border border-[#B08D57]/50 bg-white p-3 text-sm text-[#12394D] focus:outline-none focus:ring-2 focus:ring-[#C9A46B]"
             />
           ) : (
-            <p className="text-sm text-[#3A1420] whitespace-pre-wrap rounded-lg bg-white/80 p-3">{s.propuesta}</p>
+            <p className="text-sm text-[#12394D] whitespace-pre-wrap rounded-lg bg-white/80 p-3">{s.propuesta}</p>
           )}
           {texto.includes('[COMPLETAR') || s.propuesta.includes('[COMPLETAR') ? (
             <p className="text-[11px] font-semibold text-[#8A5A12]">Donde dice [COMPLETAR…] falta un dato que solo tú sabes: corrígelo antes de usarlo.</p>
@@ -151,7 +151,7 @@ function Tarjeta({ s, soloVista }: { s: SugerenciaVista; soloVista: boolean }) {
                   type="button"
                   disabled={guardando}
                   onClick={() => enviar('editar')}
-                  className="rounded-full bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-4 py-1.5 text-xs font-bold text-[#3A1420] shadow disabled:opacity-60"
+                  className="rounded-full bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-4 py-1.5 text-xs font-bold text-[#12394D] shadow disabled:opacity-60"
                 >
                   Guardar mi versión
                 </button>
@@ -161,7 +161,7 @@ function Tarjeta({ s, soloVista }: { s: SugerenciaVista; soloVista: boolean }) {
                     type="button"
                     disabled={guardando}
                     onClick={() => enviar('aceptar')}
-                    className="rounded-full bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-4 py-1.5 text-xs font-bold text-[#3A1420] shadow disabled:opacity-60"
+                    className="rounded-full bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-4 py-1.5 text-xs font-bold text-[#12394D] shadow disabled:opacity-60"
                   >
                     Usar esta versión
                   </button>

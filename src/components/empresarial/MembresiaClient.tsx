@@ -16,7 +16,7 @@ interface Props {
   pagoEnProceso: boolean
 }
 
-const RELIEVE_TARJETA = 'shadow-[0_10px_24px_-8px_rgba(84,20,43,0.35),inset_0_1px_0_rgba(255,255,255,0.7)]'
+const RELIEVE_TARJETA = 'shadow-[0_10px_24px_-8px_rgba(26,77,104,0.35),inset_0_1px_0_rgba(255,255,255,0.7)]'
 
 const INCLUYE: Record<ClavePlan, string[]> = {
   sencillo: [
@@ -100,7 +100,7 @@ export function MembresiaClient({ membresiaId, plan, activo, diasRestantes, enPe
                     <button
                       type="button"
                       onClick={() => setElegido(clave)}
-                      className="w-full rounded-xl bg-ca-oro-claro px-6 py-3 text-sm font-bold text-ca-vino-hondo shadow-[0_6px_14px_-4px_rgba(84,20,43,0.45),inset_0_1px_0_rgba(255,255,255,0.5)] hover:brightness-105"
+                      className="w-full rounded-xl bg-ca-oro-claro px-6 py-3 text-sm font-bold text-ca-vino-hondo shadow-[0_6px_14px_-4px_rgba(26,77,104,0.45),inset_0_1px_0_rgba(255,255,255,0.5)] hover:brightness-105"
                     >
                       {esActual ? 'Renovar este plan' : `Elegir ${p.nombre}`}
                     </button>

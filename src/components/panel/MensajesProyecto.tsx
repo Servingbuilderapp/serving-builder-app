@@ -76,7 +76,7 @@ export function MensajesProyecto({ proyectoId, soyEquipo = false }: { proyectoId
   }
 
   return (
-    <div className="rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]">
+    <div className="rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]">
       <div className="flex items-center gap-2 border-b border-[#B08D57]/35 px-5 py-3.5">
         <MessageCircle className="h-4 w-4 text-[#C9A46B]" />
         <h3 className="text-[13.5px] font-extrabold text-[#F3E7DC]">
@@ -101,12 +101,12 @@ export function MensajesProyecto({ proyectoId, soyEquipo = false }: { proyectoId
                 <div
                   className={`max-w-[80%] rounded-2xl px-3.5 py-2 text-[13px] leading-relaxed ${
                     esPropio
-                      ? 'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#2E0E1A]'
-                      : 'bg-[#3B1727] text-[#F3E7DC]/85 border border-[#B08D57]/35'
+                      ? 'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#0E2B3B]'
+                      : 'bg-[#153F55] text-[#F3E7DC]/85 border border-[#B08D57]/35'
                   }`}
                 >
                   <p className="whitespace-pre-wrap">{m.mensaje}</p>
-                  <p className={`mt-1 text-[10.5px] ${esPropio ? 'text-[#2E0E1A]/60' : 'text-[#F3E7DC]/50'}`}>
+                  <p className={`mt-1 text-[10.5px] ${esPropio ? 'text-[#0E2B3B]/60' : 'text-[#F3E7DC]/50'}`}>
                     {m.autor_tipo === 'equipo' ? 'Serving' : 'Cliente'} · {formatearHora(m.creado_en)}
                   </p>
                 </div>
@@ -129,13 +129,13 @@ export function MensajesProyecto({ proyectoId, soyEquipo = false }: { proyectoId
           }}
           placeholder="Escribe un mensaje…"
           rows={1}
-          className="h-10 flex-1 resize-none rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-3 py-2 text-[13px] text-[#F3E7DC] outline-none focus:border-[#B08D57]"
+          className="h-10 flex-1 resize-none rounded-lg border border-[#B08D57]/35 bg-[#153F55] px-3 py-2 text-[13px] text-[#F3E7DC] outline-none focus:border-[#B08D57]"
         />
         <button
           type="button"
           onClick={enviar}
           disabled={enviando || !texto.trim()}
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#2E0E1A] disabled:opacity-40"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#0E2B3B] disabled:opacity-40"
         >
           <Send className="h-4 w-4" />
         </button>

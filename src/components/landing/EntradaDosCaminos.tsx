@@ -49,7 +49,7 @@ export function EntradaDosCaminos() {
   return (
     <section
       id="inicio"
-      className="relative overflow-hidden bg-gradient-to-b from-[#2E0E1A] via-[#3B1727] to-[#54142B] py-8 lg:py-10 border-y-2 border-[#B08D57]/45"
+      className="relative overflow-hidden bg-gradient-to-b from-[#0E2B3B] via-[#153F55] to-[#1A4D68] py-8 lg:py-10 border-y-2 border-[#B08D57]/45"
     >
       <div className="max-w-[1100px] mx-auto px-5 lg:px-8">
         <div className="text-center">
@@ -68,15 +68,15 @@ export function EntradaDosCaminos() {
               key={l.numero}
               className={`rounded-3xl border overflow-hidden flex flex-col ${RELIEVE_TARJETA} ${
                 l.claro
-                  ? 'bg-[#F3E7DC] border-[#B08D57]/60 text-[#3A1420]'
-                  : 'bg-gradient-to-br from-[#4C2032] to-[#3B1727] border-[#B08D57]/45 text-[#F3E7DC]'
+                  ? 'bg-[#F3E7DC] border-[#B08D57]/60 text-[#12394D]'
+                  : 'bg-gradient-to-br from-[#1E5A7A] to-[#153F55] border-[#B08D57]/45 text-[#F3E7DC]'
               }`}
             >
               {/* Imagen propia: tres iconos sobre un fondo con retícula */}
               <div
                 aria-hidden
                 className={`relative h-14 flex items-center justify-center gap-4 ${
-                  l.claro ? 'bg-gradient-to-br from-[#E9D5BF] to-[#F3E7DC]' : 'bg-gradient-to-br from-[#2E0E1A] to-[#4C2032]'
+                  l.claro ? 'bg-gradient-to-br from-[#E9D5BF] to-[#F3E7DC]' : 'bg-gradient-to-br from-[#0E2B3B] to-[#1E5A7A]'
                 }`}
               >
                 <div className="absolute inset-0 opacity-60 [background-image:linear-gradient(to_right,rgba(176,141,87,0.18)_1px,transparent_1px),linear-gradient(to_bottom,rgba(176,141,87,0.18)_1px,transparent_1px)] [background-size:32px_32px]" />
@@ -85,7 +85,7 @@ export function EntradaDosCaminos() {
                     key={i}
                     className={`relative rounded-2xl flex items-center justify-center ring-1 shadow-md ${
                       i === 1 ? 'h-11 w-11' : 'h-8 w-8'
-                    } ${l.claro ? 'bg-white ring-[#B08D57]/40' : 'bg-[#3B1727] ring-[#B08D57]/40'}`}
+                    } ${l.claro ? 'bg-white ring-[#B08D57]/40' : 'bg-[#153F55] ring-[#B08D57]/40'}`}
                   >
                     <Icono className={`${i === 1 ? 'h-6 w-6' : 'h-4 w-4'} text-[#B08D57]`} />
                   </div>
@@ -103,15 +103,15 @@ export function EntradaDosCaminos() {
                   {l.lema}
                 </div>
                 <p className="mt-2 text-base font-semibold leading-snug">{l.frase}</p>
-                <p className={`mt-2 text-sm leading-relaxed ${l.claro ? 'text-[#3A1420]/80' : 'text-[#F3E7DC]/80'}`}>{l.texto}</p>
+                <p className={`mt-2 text-sm leading-relaxed ${l.claro ? 'text-[#12394D]/80' : 'text-[#F3E7DC]/80'}`}>{l.texto}</p>
 
                 <div className="mt-auto pt-4 w-full">
                   <Link
                     href={l.href}
                     className={`min-h-12 px-6 py-2.5 w-full inline-flex items-center justify-center gap-2 rounded-xl text-[15px] font-extrabold uppercase tracking-wide text-center ${RELIEVE_BOTON} ${
                       l.claro
-                        ? 'bg-gradient-to-b from-[#6B1F3A] to-[#54142B] text-[#F3E7DC]'
-                        : 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420]'
+                        ? 'bg-gradient-to-b from-[#1E5A7A] to-[#1A4D68] text-[#F3E7DC]'
+                        : 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D]'
                     }`}
                   >
                     {l.boton}

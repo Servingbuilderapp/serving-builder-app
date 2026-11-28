@@ -209,25 +209,25 @@ export function DescubrimientoClient({ proyecto, filasIniciales }: Props) {
   const vacio: Dato = { detalle: '', nivel: null, ejemplo: '' }
   const get = (clave: string) => datos[clave] ?? vacio
 
-  const botonOro = `h-14 px-8 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-base font-extrabold disabled:opacity-50 ${RELIEVE_BOTON}`
-  const botonSuave = `h-14 px-6 inline-flex items-center justify-center gap-2 rounded-xl border border-[#B08D57]/50 bg-[#3B1727] text-[#F3E7DC] font-semibold disabled:opacity-40 ${RELIEVE_BOTON}`
+  const botonOro = `h-14 px-8 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D] text-base font-extrabold disabled:opacity-50 ${RELIEVE_BOTON}`
+  const botonSuave = `h-14 px-6 inline-flex items-center justify-center gap-2 rounded-xl border border-[#B08D57]/50 bg-[#153F55] text-[#F3E7DC] font-semibold disabled:opacity-40 ${RELIEVE_BOTON}`
   const claseOpcion = (activa: boolean) =>
     `rounded-xl border px-1 py-2.5 text-center transition-all ${
       activa
-        ? 'border-[#C9A46B] bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420]'
-        : 'border-[#B08D57]/35 bg-[#2E0E1A] hover:bg-[#4C2032]'
+        ? 'border-[#C9A46B] bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D]'
+        : 'border-[#B08D57]/35 bg-[#0E2B3B] hover:bg-[#1E5A7A]'
     }`
   const claseTexto =
-    'mt-3 w-full rounded-xl border border-[#B08D57]/35 bg-[#2E0E1A] p-3 text-sm text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:border-[#C9A46B] focus:outline-none'
+    'mt-3 w-full rounded-xl border border-[#B08D57]/35 bg-[#0E2B3B] p-3 text-sm text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:border-[#C9A46B] focus:outline-none'
 
   /* ----------------------------- FINAL ----------------------------- */
   if (terminado) {
     return (
-      <main className="min-h-screen bg-gradient-to-b from-[#2E0E1A] via-[#3B1727] to-[#54142B] text-[#F3E7DC]">
+      <main className="min-h-screen bg-gradient-to-b from-[#0E2B3B] via-[#153F55] to-[#1A4D68] text-[#F3E7DC]">
         <div className="max-w-[720px] mx-auto px-5 lg:px-8 py-14 text-center">
           <div className="text-sm font-bold uppercase tracking-[0.25em] text-[#C9A46B]">Tu ruta de descubrimiento</div>
           <h1 className="mt-3 text-3xl md:text-4xl font-extrabold">Quedó guardado todo lo que contaste</h1>
-          <div className={`mt-8 rounded-3xl border border-[#B08D57]/45 bg-[#3B1727] p-8 ${RELIEVE_TARJETA}`}>
+          <div className={`mt-8 rounded-3xl border border-[#B08D57]/45 bg-[#153F55] p-8 ${RELIEVE_TARJETA}`}>
             <p className="text-lg">
               Respondiste {contestadas} de {totalItems} preguntas.
             </p>
@@ -253,7 +253,7 @@ export function DescubrimientoClient({ proyecto, filasIniciales }: Props) {
 
   /* ----------------------------- PREGUNTAS ----------------------------- */
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#2E0E1A] via-[#3B1727] to-[#54142B] text-[#F3E7DC]">
+    <main className="min-h-screen bg-gradient-to-b from-[#0E2B3B] via-[#153F55] to-[#1A4D68] text-[#F3E7DC]">
       <div className="max-w-[820px] mx-auto px-5 lg:px-8 py-10 lg:py-14">
         <Link href="/empresarial" className="inline-flex items-center gap-2 text-sm text-[#F3E7DC]/70 hover:text-white">
           <ArrowLeft className="h-4 w-4" /> Salir (tu avance queda guardado)
@@ -269,7 +269,7 @@ export function DescubrimientoClient({ proyecto, filasIniciales }: Props) {
               {contestadas} de {totalItems} preguntas
             </span>
           </div>
-          <div className="mt-2 h-2 rounded-full bg-[#2E0E1A] overflow-hidden">
+          <div className="mt-2 h-2 rounded-full bg-[#0E2B3B] overflow-hidden">
             <div
               className="h-full rounded-full bg-gradient-to-r from-[#C9A46B] to-[#B08D57] transition-all"
               style={{ width: `${(contestadas / totalItems) * 100}%` }}
@@ -287,7 +287,7 @@ export function DescubrimientoClient({ proyecto, filasIniciales }: Props) {
           {etapa.items.map((it, i) => {
             const d = get(it.clave)
             return (
-              <div key={it.clave} className={`rounded-2xl border border-[#B08D57]/35 bg-[#3B1727] p-5 ${RELIEVE_TARJETA}`}>
+              <div key={it.clave} className={`rounded-2xl border border-[#B08D57]/35 bg-[#153F55] p-5 ${RELIEVE_TARJETA}`}>
                 <div className="font-bold leading-snug">
                   {i + 1}. {it.texto}
                 </div>

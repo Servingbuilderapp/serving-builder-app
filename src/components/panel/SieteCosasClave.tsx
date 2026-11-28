@@ -23,7 +23,7 @@ export async function SieteCosasClave({ vista }: { vista: ProyectoVisto }) {
   const listas = cosas.filter((c) => c.estado === 'lista').length
 
   return (
-    <details className="mx-4 mt-2 lg:mx-6 rounded-xl border border-[#B08D57]/40 bg-[#4C2032] px-4 py-3 text-[#F3E7DC]">
+    <details className="mx-4 mt-2 lg:mx-6 rounded-xl border border-[#B08D57]/40 bg-[#1E5A7A] px-4 py-3 text-[#F3E7DC]">
       <summary className="cursor-pointer text-sm font-extrabold">
         Las 7 cosas clave de tu proyecto
         <span className="ml-2 text-xs font-medium text-[#F3E7DC]/70">

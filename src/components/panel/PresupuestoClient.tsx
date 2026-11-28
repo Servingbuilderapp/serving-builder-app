@@ -76,7 +76,7 @@ const RELIEVE_TARJETA =
   'shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]'
 
 const BOTON_DORADO =
-  'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#2E0E1A] border border-[#7A5A2E]/60 ' +
+  'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#0E2B3B] border border-[#7A5A2E]/60 ' +
   'shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_4px_0_#7A5A2E,0_12px_20px_-6px_rgba(20,5,10,0.55)] ' +
   'hover:brightness-105 hover:-translate-y-0.5 ' +
   'active:translate-y-[3px] active:shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_1px_0_#7A5A2E,0_4px_10px_-4px_rgba(20,5,10,0.5)] ' +
@@ -89,7 +89,7 @@ const TINTA_TENUE = 'text-[#F3E7DC]/50'
 const BORDE = 'border-[#B08D57]/35'
 
 const CAMPO =
-  'w-full rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-2.5 py-2 text-[13px] leading-snug text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/25'
+  'w-full rounded-lg border border-[#B08D57]/35 bg-[#153F55] px-2.5 py-2 text-[13px] leading-snug text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/25'
 
 /** Los rubros del método. El nombre visible va en español corriente. */
 const RUBROS: { valor: string; nombre: string }[] = [
@@ -121,7 +121,7 @@ function formatearPlata(valor: number, moneda: string): string {
 }
 
 function Tarjeta({ children, className = '' }: { children: React.ReactNode; className?: string }) {
-  return <div className={`rounded-2xl border ${BORDE} bg-[#4C2032] ${RELIEVE_TARJETA} ${className}`}>{children}</div>
+  return <div className={`rounded-2xl border ${BORDE} bg-[#1E5A7A] ${RELIEVE_TARJETA} ${className}`}>{children}</div>
 }
 
 function Etiqueta({ children }: { children: React.ReactNode }) {
@@ -333,7 +333,7 @@ export function PresupuestoClient({
   }
 
   return (
-    <div className="min-h-full bg-[#54142B] px-4 py-6 sm:px-6">
+    <div className="min-h-full bg-[#1A4D68] px-4 py-6 sm:px-6">
       <div className="mx-auto max-w-[1180px]">
         <header className="mb-5">
           <Link
@@ -346,7 +346,7 @@ export function PresupuestoClient({
             <h1 className={`text-[19px] font-extrabold uppercase tracking-tight ${TINTA}`}>
               Presupuesto
             </h1>
-            <span className="rounded-full bg-[#3B1727] border border-[#B08D57]/35 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#C9A46B]">
+            <span className="rounded-full bg-[#153F55] border border-[#B08D57]/35 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#C9A46B]">
               Interno
             </span>
           </div>
@@ -448,7 +448,7 @@ export function PresupuestoClient({
             {[...porObjetivo.entries()].map(([numeroObjetivo, delObjetivo]) => (
               <Tarjeta key={numeroObjetivo} className="p-4 sm:p-5">
                 <div className="mb-3 flex items-start gap-3">
-                  <span className="mt-0.5 flex h-7 w-7 flex-none items-center justify-center rounded-full bg-[#3B1727] text-[12px] font-bold text-[#C9A46B]">
+                  <span className="mt-0.5 flex h-7 w-7 flex-none items-center justify-center rounded-full bg-[#153F55] text-[12px] font-bold text-[#C9A46B]">
                     {numeroObjetivo}
                   </span>
                   <div className="min-w-0 flex-1">
@@ -467,7 +467,7 @@ export function PresupuestoClient({
                     return (
                       <div
                         key={actividad.clave}
-                        className="rounded-xl border border-[#B08D57]/35 bg-[#3B1727] p-3"
+                        className="rounded-xl border border-[#B08D57]/35 bg-[#153F55] p-3"
                       >
                         <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
                           <div className="flex min-w-0 flex-1 items-center gap-2">
@@ -490,7 +490,7 @@ export function PresupuestoClient({
                             return (
                               <div
                                 key={linea.claveLocal}
-                                className="rounded-lg border border-[#B08D57]/35 bg-[#4C2032] p-2.5"
+                                className="rounded-lg border border-[#B08D57]/35 bg-[#1E5A7A] p-2.5"
                               >
                                 <div className="grid gap-2 sm:grid-cols-12">
                                   <div className="sm:col-span-3">
@@ -550,7 +550,7 @@ export function PresupuestoClient({
                                       type="button"
                                       onClick={() => quitarLinea(linea.claveLocal)}
                                       title="Quitar este gasto"
-                                      className="mb-1 rounded-lg border border-[#C0604A]/40 bg-[#3B1727] p-2 text-[#E0917E] transition hover:bg-[#C0604A]/10"
+                                      className="mb-1 rounded-lg border border-[#C0604A]/40 bg-[#153F55] p-2 text-[#E0917E] transition hover:bg-[#C0604A]/10"
                                     >
                                       <Trash2 className="h-3.5 w-3.5" />
                                     </button>
@@ -586,7 +586,7 @@ export function PresupuestoClient({
                                   <div className="sm:col-span-4">
                                     <Etiqueta>Total del ítem</Etiqueta>
                                     <div
-                                      className={`rounded-lg border ${BORDE} bg-[#3B1727] px-2.5 py-2 text-[13px] font-bold ${TINTA}`}
+                                      className={`rounded-lg border ${BORDE} bg-[#153F55] px-2.5 py-2 text-[13px] font-bold ${TINTA}`}
                                     >
                                       {formatearPlata(total, moneda)}
                                     </div>
@@ -645,7 +645,7 @@ export function PresupuestoClient({
                         <button
                           type="button"
                           onClick={() => agregarLinea(actividad)}
-                          className="mt-2 inline-flex items-center gap-1.5 rounded-xl border border-[#B08D57]/35 bg-[#3B1727] px-3 py-1.5 text-[12px] font-bold text-[#C9A46B] transition hover:-translate-y-px"
+                          className="mt-2 inline-flex items-center gap-1.5 rounded-xl border border-[#B08D57]/35 bg-[#153F55] px-3 py-1.5 text-[12px] font-bold text-[#C9A46B] transition hover:-translate-y-px"
                         >
                           <Plus className="h-3.5 w-3.5" /> Agregar un gasto a esta actividad
                         </button>

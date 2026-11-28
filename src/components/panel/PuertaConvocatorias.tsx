@@ -30,7 +30,7 @@ export function PuertaConvocatorias({
 }) {
   const total = convocatorias.length
   return (
-    <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
+    <div className="min-h-full bg-[#1A4D68] px-4 py-6 lg:px-6">
       <header className="mb-5">
         <h1 className="flex items-center gap-2 text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">
           <BellRing className="h-5 w-5 text-[#C9A46B]" />
@@ -44,7 +44,7 @@ export function PuertaConvocatorias({
 
       <div className="max-w-2xl space-y-4">
         {convocatorias.map((c) => (
-          <section key={c.id} className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA}`}>
+          <section key={c.id} className={`rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 ${SOMBRA}`}>
             <h2 className="text-[15px] font-extrabold text-[#F3E7DC]">{c.nombre}</h2>
             <p className="mt-1 text-[13px] text-[#F3E7DC]/70">
               {[c.entidad, c.monto, c.fechaCierre ? `cierra ${c.fechaCierre}` : null].filter(Boolean).join(' · ')}

@@ -9,10 +9,10 @@ const RELIEVE_TARJETA = 'shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_r
 function VistaDocumento({ titulo, contenido, onCerrar }: { titulo: string; contenido: string; onCerrar: () => void }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-      <div className="flex max-h-[85vh] w-full max-w-3xl flex-col rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] shadow-2xl">
+      <div className="flex max-h-[85vh] w-full max-w-3xl flex-col rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] shadow-2xl">
         <div className="flex items-center justify-between border-b border-[#B08D57]/35 px-5 py-3.5">
           <h3 className="text-[14px] font-extrabold text-[#F3E7DC]">{titulo}</h3>
-          <button type="button" onClick={onCerrar} className="rounded-lg p-1.5 hover:bg-[#3B1727]">
+          <button type="button" onClick={onCerrar} className="rounded-lg p-1.5 hover:bg-[#153F55]">
             <X className="h-4.5 w-4.5 text-[#F3E7DC]/70" />
           </button>
         </div>
@@ -40,7 +40,7 @@ export function TarjetaEntregable({
   const [viendo, setViendo] = React.useState(false)
 
   return (
-    <div className={`flex items-start gap-3.5 rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-4 ${RELIEVE_TARJETA}`}>
+    <div className={`flex items-start gap-3.5 rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-4 ${RELIEVE_TARJETA}`}>
       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#B08D57]/15 text-[#C9A46B]">
         <Icono className="h-5 w-5" />
       </span>
@@ -58,14 +58,14 @@ export function TarjetaEntregable({
           <button
             type="button"
             onClick={() => descargarComoWord(nombreArchivo.replace(/\.md$/, ''), titulo, contenido)}
-            className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] px-3 text-[12px] font-bold text-[#2E0E1A] hover:brightness-105"
+            className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] px-3 text-[12px] font-bold text-[#0E2B3B] hover:brightness-105"
           >
             <Download className="h-3.5 w-3.5" /> Word
           </button>
           <button
             type="button"
             onClick={() => guardarComoPdf(titulo, contenido)}
-            className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] px-3 text-[12px] font-bold text-[#2E0E1A] hover:brightness-105"
+            className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] px-3 text-[12px] font-bold text-[#0E2B3B] hover:brightness-105"
           >
             <Download className="h-3.5 w-3.5" /> PDF
           </button>

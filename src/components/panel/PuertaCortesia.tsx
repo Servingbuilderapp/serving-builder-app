@@ -20,7 +20,7 @@ export function PuertaCortesia({
   dias: number
 }) {
   return (
-    <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
+    <div className="min-h-full bg-[#1A4D68] px-4 py-6 lg:px-6">
       <header className="mb-5">
         <h1 className="flex items-center gap-2 text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">
           <Gift className="h-5 w-5 text-[#C9A46B]" />
@@ -32,7 +32,7 @@ export function PuertaCortesia({
         </p>
       </header>
 
-      <section className={`max-w-2xl rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA}`}>
+      <section className={`max-w-2xl rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 ${SOMBRA}`}>
         <h2 className="text-[15px] font-extrabold text-[#F3E7DC]">Las condiciones</h2>
         <ul className="mt-3 space-y-2 text-[13.5px] leading-relaxed text-[#F3E7DC]/80">
           {textoCondiciones(comisionPct, dias).map((t) => (

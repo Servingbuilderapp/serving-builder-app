@@ -83,7 +83,7 @@ export function Ayuda({
             transform: pos.arriba ? 'translateY(-100%)' : undefined,
             zIndex: 9999,
           }}
-          className="pointer-events-none rounded-xl border border-[#C9A46B]/45 bg-[#2E101D]/95 px-4 py-3 text-left text-[12.5px] font-normal normal-case leading-relaxed tracking-normal text-[#F3E7DC]/90 shadow-[0_14px_34px_-12px_rgba(0,0,0,0.65)] backdrop-blur-sm"
+          className="pointer-events-none rounded-xl border border-[#C9A46B]/45 bg-[#0E2B3B]/95 px-4 py-3 text-left text-[12.5px] font-normal normal-case leading-relaxed tracking-normal text-[#F3E7DC]/90 shadow-[0_14px_34px_-12px_rgba(0,0,0,0.65)] backdrop-blur-sm"
         >
           <span aria-hidden className="mb-2 block h-px w-8 bg-[#C9A46B]/70" />
           {texto}

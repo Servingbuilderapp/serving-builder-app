@@ -30,7 +30,7 @@ export async function TarjetaGanado({ vista }: { vista: ProyectoVisto }) {
   const sinMonto = filas.filter((f) => !f.monto_adjudicado_cop).length
 
   return (
-    <div className="mx-4 mt-2 lg:mx-6 rounded-xl border border-[#C9A46B] bg-[#4C2032] px-4 py-3 text-[#F3E7DC]">
+    <div className="mx-4 mt-2 lg:mx-6 rounded-xl border border-[#C9A46B] bg-[#1E5A7A] px-4 py-3 text-[#F3E7DC]">
       <div className="text-[11px] font-black uppercase tracking-wider text-[#B08D57]">
         {vista.vistaEquipo ? 'Lo que ha ganado este proyecto' : 'Lo que has ganado'}
       </div>

@@ -44,7 +44,7 @@ type Props = {
 const RELIEVE_TARJETA =
   'shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]'
 const BOTON_DORADO =
-  'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#2E0E1A] border border-[#7A5A2E]/60 ' +
+  'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#0E2B3B] border border-[#7A5A2E]/60 ' +
   'shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_4px_0_#7A5A2E,0_12px_20px_-6px_rgba(20,5,10,0.55)] ' +
   'hover:brightness-105 hover:-translate-y-0.5 ' +
   'active:translate-y-[3px] active:shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_1px_0_#7A5A2E,0_4px_10px_-4px_rgba(20,5,10,0.5)] ' +
@@ -61,10 +61,10 @@ const ACTIVIDADES_FIJAS = ['Administrar el proyecto', 'Supervisar el proyecto']
 const PRIMERA_FIJA = CUANTAS_ACTIVIDADES - ACTIVIDADES_FIJAS.length
 
 const CAMPO =
-  'w-full rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-2.5 py-2 text-[13px] leading-snug text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/25'
+  'w-full rounded-lg border border-[#B08D57]/35 bg-[#153F55] px-2.5 py-2 text-[13px] leading-snug text-[#F3E7DC] placeholder:text-[#F3E7DC]/40 focus:outline-none focus:ring-2 focus:ring-[#C9A46B]/25'
 
 function Tarjeta({ children, className = '' }: { children: React.ReactNode; className?: string }) {
-  return <div className={`rounded-2xl border ${BORDE} bg-[#4C2032] ${RELIEVE_TARJETA} ${className}`}>{children}</div>
+  return <div className={`rounded-2xl border ${BORDE} bg-[#1E5A7A] ${RELIEVE_TARJETA} ${className}`}>{children}</div>
 }
 
 function Etiqueta({ children }: { children: React.ReactNode }) {
@@ -217,7 +217,7 @@ export function CadenaValorClient({
   }
 
   return (
-    <div className="min-h-full bg-[#54142B] mx-auto max-w-[1180px] px-4 py-6 sm:px-6">
+    <div className="min-h-full bg-[#1A4D68] mx-auto max-w-[1180px] px-4 py-6 sm:px-6">
       <header className="mb-5">
         <Link
           href={`/admin/proyectos/${proyectoId}/objetivos`}
@@ -229,7 +229,7 @@ export function CadenaValorClient({
           <h1 className={`text-[19px] font-extrabold uppercase tracking-tight ${TINTA}`}>
             Cadena de valor
           </h1>
-          <span className="rounded-full bg-[#3B1727] border border-[#B08D57]/35 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#C9A46B]">
+          <span className="rounded-full bg-[#153F55] border border-[#B08D57]/35 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#C9A46B]">
             Interno
           </span>
         </div>
@@ -240,7 +240,7 @@ export function CadenaValorClient({
       </header>
 
       {objetivoGeneral ? (
-        <div className={`mb-4 rounded-xl border ${BORDE} bg-[#3B1727] px-4 py-3`}>
+        <div className={`mb-4 rounded-xl border ${BORDE} bg-[#153F55] px-4 py-3`}>
           <Etiqueta>Objetivo general</Etiqueta>
           <p className={`text-[13.5px] leading-snug ${TINTA}`}>{objetivoGeneral}</p>
         </div>
@@ -264,7 +264,7 @@ export function CadenaValorClient({
           {datos.map((fila) => (
             <Tarjeta key={fila.objetivoId} className="p-4 sm:p-5">
               <div className="mb-3 flex items-start gap-3">
-                <span className="mt-0.5 flex h-7 w-7 flex-none items-center justify-center rounded-full bg-[#3B1727] border border-[#B08D57]/35 text-[12px] font-bold text-[#C9A46B]">
+                <span className="mt-0.5 flex h-7 w-7 flex-none items-center justify-center rounded-full bg-[#153F55] border border-[#B08D57]/35 text-[12px] font-bold text-[#C9A46B]">
                   {fila.numero}
                 </span>
                 <div className="min-w-0">
@@ -336,7 +336,7 @@ export function CadenaValorClient({
                 </div>
               </div>
 
-              <div className="mt-4 rounded-xl border border-[#B08D57]/35 bg-[#3B1727] p-3">
+              <div className="mt-4 rounded-xl border border-[#B08D57]/35 bg-[#153F55] p-3">
                 <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
                   <span className={`text-[11px] font-bold uppercase tracking-wider ${TINTA}`}>
                     Seis actividades · todas en infinitivo
@@ -361,7 +361,7 @@ export function CadenaValorClient({
                       <div key={posicion} className="flex items-start gap-2">
                         <span
                           className={`mt-2 flex h-5 w-5 flex-none items-center justify-center rounded-full text-[10px] font-bold ${
-                            esFija ? 'bg-[#54142B] text-[#F3E7DC]/60' : 'bg-[#B08D57]/15 text-[#C9A46B]'
+                            esFija ? 'bg-[#1A4D68] text-[#F3E7DC]/60' : 'bg-[#B08D57]/15 text-[#C9A46B]'
                           }`}
                         >
                           {posicion + 1}

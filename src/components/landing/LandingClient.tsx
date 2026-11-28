@@ -95,12 +95,12 @@ const NAV_LINKS = [
 ]
 
 const RUTA_PROYECTO = [
-  { icono: Lightbulb, clave: 'w.ruta.idea', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#4C2032]', borde: 'border-[#B08D57]/35' },
-  { icono: FileText, clave: 'w.ruta.estructuracion', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#4C2032]', borde: 'border-[#B08D57]/35' },
-  { icono: Search, clave: 'w.ruta.busqueda', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#4C2032]', borde: 'border-[#B08D57]/35' },
-  { icono: Target, clave: 'w.ruta.encaje', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#4C2032]', borde: 'border-[#B08D57]/35' },
-  { icono: RefreshCw, clave: 'w.ruta.adaptacion', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#4C2032]', borde: 'border-[#B08D57]/35' },
-  { icono: Send, clave: 'w.ruta.postulacion', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#4C2032]', borde: 'border-[#B08D57]/35' },
+  { icono: Lightbulb, clave: 'w.ruta.idea', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#1E5A7A]', borde: 'border-[#B08D57]/35' },
+  { icono: FileText, clave: 'w.ruta.estructuracion', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#1E5A7A]', borde: 'border-[#B08D57]/35' },
+  { icono: Search, clave: 'w.ruta.busqueda', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#1E5A7A]', borde: 'border-[#B08D57]/35' },
+  { icono: Target, clave: 'w.ruta.encaje', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#1E5A7A]', borde: 'border-[#B08D57]/35' },
+  { icono: RefreshCw, clave: 'w.ruta.adaptacion', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#1E5A7A]', borde: 'border-[#B08D57]/35' },
+  { icono: Send, clave: 'w.ruta.postulacion', de: 'from-[#C9A46B]', a: 'to-[#B08D57]', tinte: 'bg-[#1E5A7A]', borde: 'border-[#B08D57]/35' },
 ]
 
 const PROPUESTA_VALOR = [
@@ -141,9 +141,9 @@ const ESCALERA: Escalon[] = [
     href: '/diagnostico',
     icono: Stethoscope,
     color: 'text-[#B08D57]',
-    fondo: 'bg-[#4C2032]',
+    fondo: 'bg-[#1E5A7A]',
     borde: 'border-[#B08D57]/35',
-    boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
+    boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
   {
     numero: '2',
@@ -161,9 +161,9 @@ const ESCALERA: Escalon[] = [
     href: '/membresia?nivel=explorador',
     icono: GraduationCap,
     color: 'text-[#B08D57]',
-    fondo: 'bg-[#4C2032]',
+    fondo: 'bg-[#1E5A7A]',
     borde: 'border-[#B08D57]/35',
-    boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
+    boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
   {
     numero: '3',
@@ -181,9 +181,9 @@ const ESCALERA: Escalon[] = [
     href: '/membresia?nivel=constructor',
     icono: Rocket,
     color: 'text-[#B08D57]',
-    fondo: 'bg-[#4C2032]',
+    fondo: 'bg-[#1E5A7A]',
     borde: 'border-[#B08D57]/35',
-    boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
+    boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
   {
     numero: '4',
@@ -201,9 +201,9 @@ const ESCALERA: Escalon[] = [
     href: '/membresia?nivel=arquitecto',
     icono: Crown,
     color: 'text-[#B08D57]',
-    fondo: 'bg-[#4C2032]',
+    fondo: 'bg-[#1E5A7A]',
     borde: 'border-[#B08D57]/35',
-    boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
+    boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
   {
     numero: '5',
@@ -220,9 +220,9 @@ const ESCALERA: Escalon[] = [
     href: '/academia',
     icono: BookOpen,
     color: 'text-[#B08D57]',
-    fondo: 'bg-[#4C2032]',
+    fondo: 'bg-[#1E5A7A]',
     borde: 'border-[#B08D57]/35',
-    boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
+    boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
   {
     numero: '6',
@@ -240,9 +240,9 @@ const ESCALERA: Escalon[] = [
     externo: false,
     icono: Users,
     color: 'text-[#B08D57]',
-    fondo: 'bg-[#4C2032]',
+    fondo: 'bg-[#1E5A7A]',
     borde: 'border-[#B08D57]/35',
-    boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
+    boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
   {
     numero: '7',
@@ -259,9 +259,9 @@ const ESCALERA: Escalon[] = [
     href: '/contratar',
     icono: Briefcase,
     color: 'text-[#B08D57]',
-    fondo: 'bg-[#4C2032]',
+    fondo: 'bg-[#1E5A7A]',
     borde: 'border-[#B08D57]/35',
-    boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
+    boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
   {
     numero: '8',
@@ -278,9 +278,9 @@ const ESCALERA: Escalon[] = [
     href: '/mi-abanico',
     icono: RefreshCw,
     color: 'text-[#B08D57]',
-    fondo: 'bg-[#4C2032]',
+    fondo: 'bg-[#1E5A7A]',
     borde: 'border-[#B08D57]/35',
-    boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
+    boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
   },
 ]
 
@@ -303,9 +303,9 @@ const ESCALON_FONDO_EMPRENDER: Escalon = {
   href: '/contratar?plan=fondo_emprender',
   icono: Rocket,
   color: 'text-[#B08D57]',
-  fondo: 'bg-[#4C2032]',
+  fondo: 'bg-[#1E5A7A]',
   borde: 'border-[#B08D57]/35',
-  boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
+  boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
 }
 
 /**
@@ -328,9 +328,9 @@ const ESCALON_EMPRENDEDOR: Escalon = {
   href: '/contratar?plan=emprendedor',
   icono: Users,
   color: 'text-[#B08D57]',
-  fondo: 'bg-[#4C2032]',
+  fondo: 'bg-[#1E5A7A]',
   borde: 'border-[#B08D57]/35',
-  boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
+  boton: 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25',
 }
 
 const escalonPorNumero = (numero: string): Escalon => {
@@ -384,7 +384,7 @@ function TarjetaPlan({ escalon, delay, ancha = false }: { escalon: Escalon; dela
       >
         <div className={ancha ? 'lg:w-1/3' : ''}>
           <div className="flex items-start gap-3">
-            <div className="h-11 w-11 rounded-xl bg-[#3B1727]/90 border border-[#B08D57]/35 flex items-center justify-center shrink-0">
+            <div className="h-11 w-11 rounded-xl bg-[#153F55]/90 border border-[#B08D57]/35 flex items-center justify-center shrink-0">
               <Icono className={`h-5 w-5 ${escalon.color}`} />
             </div>
             <div>
@@ -596,7 +596,7 @@ function VistaPreviaPanel() {
   const { t } = useTranslation()
   const barras = [72, 88, 54, 95, 63]
   return (
-    <div className="rounded-2xl bg-[#4C2032] border border-[#B08D57]/35 shadow-sm p-5">
+    <div className="rounded-2xl bg-[#1E5A7A] border border-[#B08D57]/35 shadow-sm p-5">
       <div className="flex items-center justify-between mb-5">
         <span className="text-[11px] font-bold uppercase tracking-wider text-[#F3E7DC]/70">
           {t('w.preview.titulo')}
@@ -608,7 +608,7 @@ function VistaPreviaPanel() {
       <div className="flex items-center gap-5">
         <div className="relative h-24 w-24 shrink-0">
           <svg viewBox="0 0 100 100" className="h-24 w-24 -rotate-90">
-            <circle cx="50" cy="50" r="42" fill="none" stroke="#6E4A50" strokeWidth="10" />
+            <circle cx="50" cy="50" r="42" fill="none" stroke="#5B7886" strokeWidth="10" />
             <circle
               cx="50"
               cy="50"
@@ -658,10 +658,10 @@ export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
 
   return (
     <ProveedorAcceso user={user}>
-    <div className="relative min-h-screen bg-[#54142B] text-[#F3E7DC] font-sans">
+    <div className="relative min-h-screen bg-[#1A4D68] text-[#F3E7DC] font-sans">
       <FondoDecorativo />
       {/* ================= HEADER ================= */}
-      <header className="sticky top-0 z-50 bg-[#54142B]/95 backdrop-blur border-b border-[#B08D57]/35">
+      <header className="sticky top-0 z-50 bg-[#1A4D68]/95 backdrop-blur border-b border-[#B08D57]/35">
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8 h-[72px] flex items-center justify-between gap-6">
           <Link href="/" className="shrink-0">
             <Marca neutro={modo === 'portada'} />
@@ -684,7 +684,7 @@ export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
             {user ? (
               <Link
                 href="/entrar"
-                className={`h-10 px-5 inline-flex items-center rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-[13px] font-semibold hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25 ${RELIEVE_BOTON}`}
+                className={`h-10 px-5 inline-flex items-center rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D] text-[13px] font-semibold hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25 ${RELIEVE_BOTON}`}
               >
                 {t('w.nav.dashboard')}
               </Link>
@@ -702,7 +702,7 @@ export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
         </div>
 
         {menuAbierto && modo === 'financiables' ? (
-          <div className="lg:hidden border-t border-[#B08D57]/35 bg-[#54142B] px-5 py-4 space-y-1">
+          <div className="lg:hidden border-t border-[#B08D57]/35 bg-[#1A4D68] px-5 py-4 space-y-1">
             {NAV_LINKS.map((enlace) => (
               <a
                 key={enlace.href}
@@ -726,7 +726,7 @@ export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
       {modo === 'financiables' ? (
       <>
       {/* ================= VIDEO DE BIENVENIDA Y PILARES (debajo de los dos caminos) ================= */}
-      <section id="bienvenida" className="relative overflow-hidden bg-[#54142B]">
+      <section id="bienvenida" className="relative overflow-hidden bg-[#1A4D68]">
         <div className="relative max-w-[1400px] mx-auto px-5 lg:px-8 py-12 lg:py-16">
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-start">
             <div className="lg:col-span-4">
@@ -737,7 +737,7 @@ export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
                   { icono: Target, clave: 'w.hero.pilar3' },
                 ].map(({ icono: Icono, clave }) => (
                   <div key={clave}>
-                    <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-[#4C2032] to-[#3B1727] ring-1 ring-[#B08D57]/20 flex items-center justify-center mb-2.5">
+                    <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-[#1E5A7A] to-[#153F55] ring-1 ring-[#B08D57]/20 flex items-center justify-center mb-2.5">
                       <Icono className="h-5 w-5 text-[#B08D57]" />
                     </div>
                     <div className="text-[12px] font-semibold text-[#F3E7DC] leading-snug">
@@ -752,10 +752,10 @@ export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
             {/* Columna derecha: video */}
             <div className="lg:col-span-8">
               <div className="relative rounded-2xl overflow-hidden p-[2px] bg-gradient-to-br from-[#C9A46B] via-[#B08D57] to-[#8A6636] shadow-[0_18px_50px_-18px_rgba(176,141,87,0.4)]">
-              <div className="relative rounded-[14px] overflow-hidden bg-gradient-to-br from-[#3B1727] to-[#54142B] aspect-video">
+              <div className="relative rounded-[14px] overflow-hidden bg-gradient-to-br from-[#153F55] to-[#1A4D68] aspect-video">
                 {videoAbierto && VIDEO_ARCHIVO ? (
                   <video
-                    className="absolute inset-0 h-full w-full object-cover bg-[#2E0E1A]"
+                    className="absolute inset-0 h-full w-full object-cover bg-[#0E2B3B]"
                     src={VIDEO_ARCHIVO}
                     poster={VIDEO_PORTADA}
                     controls
@@ -794,7 +794,7 @@ export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
       <FichasTips />
 
       {/* ================= DIAGNÓSTICO GRATUITO ================= */}
-      <section id="diagnostico" className="relative overflow-hidden bg-gradient-to-b from-[#54142B] via-[#3B1727] to-[#2E0E1A] py-20 lg:py-28 border-y-2 border-[#B08D57]/45">
+      <section id="diagnostico" className="relative overflow-hidden bg-gradient-to-b from-[#1A4D68] via-[#153F55] to-[#0E2B3B] py-20 lg:py-28 border-y-2 border-[#B08D57]/45">
         <div className="max-w-[1100px] mx-auto px-5 lg:px-8 text-center">
           <div className="text-sm font-bold uppercase tracking-[0.25em] text-[#C9A46B] mb-4">
             {t('w.diagnostico.eyebrow')}
@@ -808,7 +808,7 @@ export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
           <div className="mt-10 flex flex-wrap justify-center gap-4">
             <Link
               href="/diagnostico"
-              className={`h-16 px-10 inline-flex items-center gap-3 rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-lg font-extrabold hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/40 ${RELIEVE_BOTON}`}
+              className={`h-16 px-10 inline-flex items-center gap-3 rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D] text-lg font-extrabold hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/40 ${RELIEVE_BOTON}`}
             >
               {t('w.diagnostico.boton')}
               <ArrowRight className="h-5 w-5" />
@@ -817,14 +817,14 @@ export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
               href={`https://wa.me/${TELEFONO_WHATSAPP}`}
               target="_blank"
               rel="noopener noreferrer"
-              className={`h-16 px-8 inline-flex items-center rounded-xl border border-[#B08D57]/50 bg-[#3B1727] text-[#F3E7DC] text-base font-semibold hover:bg-[#4C2032] ${RELIEVE_BOTON_SUAVE}`}
+              className={`h-16 px-8 inline-flex items-center rounded-xl border border-[#B08D57]/50 bg-[#153F55] text-[#F3E7DC] text-base font-semibold hover:bg-[#1E5A7A] ${RELIEVE_BOTON_SUAVE}`}
             >
               {t('w.diagnostico.boton_hablar')}
             </a>
           </div>
           <p className="mt-5 text-sm text-[#F3E7DC]/65">{t('w.diagnostico.nota')}</p>
 
-          <div className="mt-14 text-left rounded-3xl border border-[#B08D57]/45 bg-[#2E0E1A]/70 p-8 md:p-10">
+          <div className="mt-14 text-left rounded-3xl border border-[#B08D57]/45 bg-[#0E2B3B]/70 p-8 md:p-10">
             <h3 className="text-xl font-extrabold text-[#F3E7DC] mb-6 text-center">
               {t('w.diagnostico.incluye_titulo')}
             </h3>
@@ -859,9 +859,9 @@ export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
 
           {/* Diagnóstico gratuito: va arriba de los tres grupos */}
           <Aparece>
-            <div className={`mb-12 rounded-2xl border border-[#B08D57]/45 bg-gradient-to-r from-[#4C2032] to-[#3B1727] p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center gap-4 ${RELIEVE_TARJETA}`}>
+            <div className={`mb-12 rounded-2xl border border-[#B08D57]/45 bg-gradient-to-r from-[#1E5A7A] to-[#153F55] p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center gap-4 ${RELIEVE_TARJETA}`}>
               <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-[#C9A46B] to-[#B08D57] flex items-center justify-center shrink-0">
-                <Stethoscope className="h-5 w-5 text-[#3A1420]" />
+                <Stethoscope className="h-5 w-5 text-[#12394D]" />
               </div>
               <div className="flex-1">
                 <div className="text-[15px] font-extrabold text-[#F3E7DC]">{t('w.escalera.diagnostico.titulo')}</div>
@@ -869,7 +869,7 @@ export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
               </div>
               <Link
                 href="/diagnostico"
-                className={`h-11 px-5 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-sm font-semibold hover:from-[#C9A46B] hover:to-[#8A6636] ${RELIEVE_BOTON}`}
+                className={`h-11 px-5 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D] text-sm font-semibold hover:from-[#C9A46B] hover:to-[#8A6636] ${RELIEVE_BOTON}`}
               >
                 {t('w.escalera.diagnostico.boton')}
                 <ArrowRight className="h-4 w-4" />
@@ -956,9 +956,9 @@ export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
               <Aparece key={claveTitulo} delay={i * 110}>
               <div
                 className={`relative overflow-hidden rounded-2xl border p-7 ${
-                  ['bg-gradient-to-br from-[#4C2032] to-[#3B1727] border-[#B08D57]/35',
-                   'bg-gradient-to-br from-[#4C2032] to-[#3B1727] border-[#B08D57]/35',
-                   'bg-gradient-to-br from-[#4C2032] to-[#3B1727] border-[#B08D57]/35'][i]
+                  ['bg-gradient-to-br from-[#1E5A7A] to-[#153F55] border-[#B08D57]/35',
+                   'bg-gradient-to-br from-[#1E5A7A] to-[#153F55] border-[#B08D57]/35',
+                   'bg-gradient-to-br from-[#1E5A7A] to-[#153F55] border-[#B08D57]/35'][i]
                 } ${RELIEVE_TARJETA}`}
               >
                 <span
@@ -976,7 +976,7 @@ export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
                      'bg-gradient-to-br from-[#C9A46B] to-[#B08D57]'][i]
                   }`}
                 >
-                  <Icono className="h-5 w-5 text-[#3A1420]" />
+                  <Icono className="h-5 w-5 text-[#12394D]" />
                 </div>
                 <h3 className="text-lg font-extrabold text-[#F3E7DC] mb-2"><Ayuda clave={claveTitulo} claro={false}>{t(claveTitulo)}</Ayuda></h3>
                 <p className="text-[14px] text-[#F3E7DC]/70 leading-relaxed">{t(claveTexto)}</p>
@@ -985,7 +985,7 @@ export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
             ))}
           </div>
 
-          <div className="relative mt-12 grid lg:grid-cols-12 gap-8 items-center overflow-hidden rounded-3xl bg-gradient-to-br from-[#3B1727] via-[#2E0E1A] to-[#54142B] p-8 lg:p-10 shadow-[0_30px_70px_-30px_rgba(0,0,0,0.5)]">
+          <div className="relative mt-12 grid lg:grid-cols-12 gap-8 items-center overflow-hidden rounded-3xl bg-gradient-to-br from-[#153F55] via-[#0E2B3B] to-[#1A4D68] p-8 lg:p-10 shadow-[0_30px_70px_-30px_rgba(0,0,0,0.5)]">
             <div aria-hidden className="absolute -top-24 -left-16 h-72 w-72 rounded-full bg-[#B08D57]/30 blur-3xl" />
             <div aria-hidden className="absolute -bottom-24 right-[10%] h-72 w-72 rounded-full bg-[#C9A46B]/25 blur-3xl" />
             <div className="relative lg:col-span-7">
@@ -1016,7 +1016,7 @@ export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
               <VistaPreviaPanel />
               <Link
                 href="/ejemplo-panel"
-                className={`mt-4 h-11 px-5 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-sm font-semibold hover:from-[#C9A46B] hover:to-[#8A6636] ${RELIEVE_BOTON}`}
+                className={`mt-4 h-11 px-5 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D] text-sm font-semibold hover:from-[#C9A46B] hover:to-[#8A6636] ${RELIEVE_BOTON}`}
               >
                 {t('w.ejemplo.ver')}
                 <ArrowRight className="h-4 w-4" />
@@ -1028,7 +1028,7 @@ export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
 
       {/* ================= ENTIDADES (solo si hay autorización) ================= */}
       {ENTIDADES_ALIADAS.length > 0 ? (
-        <section className="bg-[#8C3654] border-y-2 border-[#B08D57]/45 py-8">
+        <section className="bg-[#3F7E9E] border-y-2 border-[#B08D57]/45 py-8">
           <div className="max-w-[1400px] mx-auto px-5 lg:px-8 flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
             <span className="text-[12px] font-bold uppercase tracking-wider text-[#F3E7DC]/70">
               {t('w.aliados.titulo')}
@@ -1054,7 +1054,7 @@ export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
             {(faqTodas ? FAQ_CLAVES : FAQ_CLAVES.slice(0, 6)).map((id) => {
               const abierta = faqAbierta === id
               return (
-                <div key={id} className="rounded-xl border border-[#B08D57]/35 bg-[#3B1727] overflow-hidden">
+                <div key={id} className="rounded-xl border border-[#B08D57]/35 bg-[#153F55] overflow-hidden">
                   <button
                     type="button"
                     onClick={() => setFaqAbierta(abierta ? null : id)}
@@ -1084,7 +1084,7 @@ export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
                 <button
                   type="button"
                   onClick={() => setFaqTodas(true)}
-                  className={`h-11 px-6 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-sm font-semibold ${RELIEVE_BOTON}`}
+                  className={`h-11 px-6 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D] text-sm font-semibold ${RELIEVE_BOTON}`}
                 >
                   {t('w.faq.ver_mas')}
                 </button>
@@ -1095,7 +1095,7 @@ export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
       </section>
 
       {/* ================= TRABAJA CON NOSOTROS ================= */}
-      <section id="trabaja-con-nosotros" className="bg-[#8C3654] border-y-2 border-[#B08D57]/45 py-16 lg:py-20">
+      <section id="trabaja-con-nosotros" className="bg-[#3F7E9E] border-y-2 border-[#B08D57]/45 py-16 lg:py-20">
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
           <TituloSeccion
             eyebrow={t('w.trabaja.eyebrow')}
@@ -1108,8 +1108,8 @@ export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
               const Icono = camino.icono
               return (
                 <Aparece key={camino.claveTitulo} className="flex">
-                  <div className={`w-full rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 flex flex-col ${RELIEVE_TARJETA}`}>
-                    <div className="h-12 w-12 rounded-xl bg-[#3B1727]/90 border border-[#B08D57]/35 flex items-center justify-center mb-4">
+                  <div className={`w-full rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 flex flex-col ${RELIEVE_TARJETA}`}>
+                    <div className="h-12 w-12 rounded-xl bg-[#153F55]/90 border border-[#B08D57]/35 flex items-center justify-center mb-4">
                       <Icono className="h-5 w-5 text-[#B08D57]" />
                     </div>
 
@@ -1137,7 +1137,7 @@ export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
                       href={`https://wa.me/${TELEFONO_WHATSAPP}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`min-h-9 px-3 py-2 rounded-lg text-[12px] font-semibold inline-flex items-center justify-center text-center leading-tight bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25 ${RELIEVE_BOTON}`}
+                      className={`min-h-9 px-3 py-2 rounded-lg text-[12px] font-semibold inline-flex items-center justify-center text-center leading-tight bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D] hover:from-[#C9A46B] hover:to-[#8A6636] shadow-[#B08D57]/25 ${RELIEVE_BOTON}`}
                     >
                       {t(camino.claveBoton)}
                     </a>
@@ -1154,7 +1154,7 @@ export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
       </section>
 
       {/* ================= CTA FINAL ================= */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-[#3B1727] via-[#2E0E1A] to-[#54142B] py-16 lg:py-20">
+      <section className="relative overflow-hidden bg-gradient-to-r from-[#153F55] via-[#0E2B3B] to-[#1A4D68] py-16 lg:py-20">
         <div
           aria-hidden
           className="absolute inset-y-0 left-[-15%] w-1/2 -rotate-12 bg-gradient-to-r from-transparent via-white/10 to-transparent"
@@ -1169,7 +1169,7 @@ export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
               href="/diagnostico"
-              className={`h-12 px-7 inline-flex items-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-sm font-bold hover:from-[#C9A46B] hover:to-[#8A6636] shadow-black/25 ${RELIEVE_BOTON}`}
+              className={`h-12 px-7 inline-flex items-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D] text-sm font-bold hover:from-[#C9A46B] hover:to-[#8A6636] shadow-black/25 ${RELIEVE_BOTON}`}
             >
               {t('w.cta.boton')}
               <ArrowRight className="h-4 w-4" />
@@ -1183,7 +1183,7 @@ export function LandingClient({ user, modo = 'portada' }: LandingClientProps) {
       ) : null}
 
       {/* ================= FOOTER ================= */}
-      <footer className="bg-[#2E0E1A] text-[#F3E7DC]/70">
+      <footer className="bg-[#0E2B3B] text-[#F3E7DC]/70">
         <div className="max-w-[1400px] mx-auto px-5 lg:px-8 py-12 grid md:grid-cols-3 gap-10">
           <div>
             <Marca oscuro neutro={modo === 'portada'} />

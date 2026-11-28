@@ -70,7 +70,7 @@ export function FormularioProyectoMinimo({ sinCupo }: { sinCupo: boolean }) {
     )
   }
 
-  const campo = 'mt-1 w-full rounded-xl border border-white/10 bg-[#3B1727] px-3 py-2 text-[13.5px] text-[#F3E7DC] placeholder:text-[#F3E7DC]/30'
+  const campo = 'mt-1 w-full rounded-xl border border-white/10 bg-[#153F55] px-3 py-2 text-[13.5px] text-[#F3E7DC] placeholder:text-[#F3E7DC]/30'
 
   return (
     <div className="space-y-4">
@@ -112,7 +112,7 @@ export function FormularioProyectoMinimo({ sinCupo }: { sinCupo: boolean }) {
       <button
         onClick={enviar}
         disabled={cargando || sinCupo || !nombre.trim()}
-        className="rounded-xl bg-[#C9A46B] px-5 py-2.5 text-[13.5px] font-bold text-[#3B1727] disabled:opacity-50"
+        className="rounded-xl bg-[#C9A46B] px-5 py-2.5 text-[13.5px] font-bold text-[#153F55] disabled:opacity-50"
       >
         {cargando ? 'Armando tu proyecto… (puede tardar un minuto)' : sinCupo ? 'Sin cupo este mes' : 'Crear mi proyecto (usa 1 del cupo)'}
       </button>

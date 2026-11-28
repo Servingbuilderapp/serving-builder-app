@@ -64,7 +64,7 @@ export function ElegirAbanico({
 
   if (listo) {
     return (
-      <div className="rounded-xl border border-[#C9A46B] bg-[#4C2032] p-5 text-sm text-[#F3E7DC]">
+      <div className="rounded-xl border border-[#C9A46B] bg-[#1E5A7A] p-5 text-sm text-[#F3E7DC]">
         <p className="font-extrabold text-[#C9A46B]">✔ Listo, confirmaste tu abanico.</p>
         <p className="mt-1 text-[#F3E7DC]/80">
           Ya estamos preparando tus postulaciones para las {elegidas.size} convocatorias que escogiste. Las verás con su
@@ -105,7 +105,7 @@ export function ElegirAbanico({
           return (
             <div
               key={c.replicaId}
-              className={`rounded-xl border p-4 ${marcada ? 'border-[#C9A46B] bg-[#4C2032]' : 'border-[#B08D57]/30 bg-[#3B1727] opacity-80'}`}
+              className={`rounded-xl border p-4 ${marcada ? 'border-[#C9A46B] bg-[#1E5A7A]' : 'border-[#B08D57]/30 bg-[#153F55] opacity-80'}`}
             >
               <label className="flex cursor-pointer items-start gap-3">
                 <input
@@ -162,7 +162,7 @@ export function ElegirAbanico({
           type="button"
           onClick={confirmar}
           disabled={enviando || elegidas.size === 0}
-          className="rounded-full bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-6 py-2.5 text-sm font-bold text-[#3A1420] hover:brightness-110 disabled:opacity-50"
+          className="rounded-full bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-6 py-2.5 text-sm font-bold text-[#12394D] hover:brightness-110 disabled:opacity-50"
         >
           {enviando ? 'Guardando…' : `Confirmar mi abanico (${elegidas.size})`}
         </button>

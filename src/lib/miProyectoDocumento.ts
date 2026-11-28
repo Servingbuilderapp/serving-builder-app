@@ -69,7 +69,7 @@ export function construirDocumentoHtml(tituloProyecto: string, r: RespuestasProy
 body { font-family: 'Times New Roman', serif; font-size: 12pt; line-height: 1.5; color: #111; }
 p { margin: 0 0 8pt 0; text-align: justify; }
 h1 { font-size: 24pt; text-align: center; margin: 0 0 18pt 0; }
-h2 { font-size: 16pt; margin: 0 0 12pt 0; color: #54142B; border-bottom: 1px solid #B08D57; padding-bottom: 4pt; }
+h2 { font-size: 16pt; margin: 0 0 12pt 0; color: #1A4D68; border-bottom: 1px solid #B08D57; padding-bottom: 4pt; }
 h3 { font-size: 12.5pt; margin: 14pt 0 4pt 0; color: #333; }
 .portada { text-align: center; padding-top: 140pt; page-break-after: always; }
 .portada p { text-align: center; }

@@ -7,12 +7,12 @@ export function BloqueProyectoTraido({ respuestas, urlArchivo }: { respuestas: R
   const d = leerDeclaracion(respuestas)
   const nombre = respuestas[CLAVE_ARCHIVO_NOMBRE] || 'Proyecto'
   return (
-    <div className="space-y-4 rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 text-[13.5px] text-[#F3E7DC]/85">
+    <div className="space-y-4 rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 text-[13.5px] text-[#F3E7DC]/85">
       <div>
         <h2 className="text-[15px] font-extrabold text-[#E0B868]">Proyecto que trajiste ya hecho</h2>
         <p className="mt-1">Archivo: {nombre}</p>
         {urlArchivo ? (
-          <a href={urlArchivo} target="_blank" rel="noreferrer" className="mt-2 inline-block rounded-xl bg-[#C9A46B] px-4 py-2 text-[13px] font-bold text-[#3B1727]">
+          <a href={urlArchivo} target="_blank" rel="noreferrer" className="mt-2 inline-block rounded-xl bg-[#C9A46B] px-4 py-2 text-[13px] font-bold text-[#153F55]">
             Abrir el archivo
           </a>
         ) : (
@@ -20,7 +20,7 @@ export function BloqueProyectoTraido({ respuestas, urlArchivo }: { respuestas: R
         )}
       </div>
       {d && (
-        <div className="rounded-xl border border-[#9BB18D]/40 bg-[#3B1727] p-4">
+        <div className="rounded-xl border border-[#9BB18D]/40 bg-[#153F55] p-4">
           <h3 className="font-extrabold text-[#9BB18D]">Constancia de autoría</h3>
           <p className="mt-2 text-[12.5px] leading-relaxed text-[#F3E7DC]/75">{d.texto}</p>
           <dl className="mt-3 grid gap-x-4 gap-y-1 text-[12.5px] sm:grid-cols-[auto,1fr]">

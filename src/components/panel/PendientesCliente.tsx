@@ -78,7 +78,7 @@ const RELIEVE_TARJETA =
   'shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]'
 
 const BOTON_DORADO =
-  'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#2E0E1A] border border-[#7A5A2E]/60 ' +
+  'bg-gradient-to-b from-[#E8C777] via-[#C9A46B] to-[#9C7A3E] text-[#0E2B3B] border border-[#7A5A2E]/60 ' +
   'shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_4px_0_#7A5A2E,0_12px_20px_-6px_rgba(20,5,10,0.55)] ' +
   'hover:brightness-105 hover:-translate-y-0.5 ' +
   'active:translate-y-[3px] active:shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_1px_0_#7A5A2E,0_4px_10px_-4px_rgba(20,5,10,0.5)] ' +
@@ -95,7 +95,7 @@ function Tarjeta({
   className?: string
 }) {
   return (
-    <div className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] ${RELIEVE_TARJETA} ${className}`}>
+    <div className={`rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] ${RELIEVE_TARJETA} ${className}`}>
       {children}
     </div>
   )
@@ -115,7 +115,7 @@ function TituloBloque({
   return (
     <div className="flex items-start justify-between gap-3 border-b border-[#B08D57]/35 px-5 py-4">
       <div className="flex items-start gap-3">
-        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#3B1727] text-[#C9A46B]">
+        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#153F55] text-[#C9A46B]">
           <Icono className="h-4 w-4" />
         </span>
         <div>
@@ -124,7 +124,7 @@ function TituloBloque({
         </div>
       </div>
       {contador ? (
-        <span className="shrink-0 rounded-full bg-[#3B1727] border border-[#B08D57]/35 px-2.5 py-1 text-[11px] font-bold text-[#C9A46B]">
+        <span className="shrink-0 rounded-full bg-[#153F55] border border-[#B08D57]/35 px-2.5 py-1 text-[11px] font-bold text-[#C9A46B]">
           {contador}
         </span>
       ) : null}
@@ -209,7 +209,7 @@ function BloquePreguntas({ preguntasIniciales }: { preguntasIniciales: PreguntaP
 
       <div className="space-y-4 px-5 py-5">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-full bg-[#3B1727] border border-[#B08D57]/35 px-2.5 py-1 text-[11px] font-bold text-[#C9A46B]">
+          <span className="rounded-full bg-[#153F55] border border-[#B08D57]/35 px-2.5 py-1 text-[11px] font-bold text-[#C9A46B]">
             {actual.nombrePaso}
           </span>
           {actual.critico ? (
@@ -238,7 +238,7 @@ function BloquePreguntas({ preguntasIniciales }: { preguntasIniciales: PreguntaP
         ) : null}
 
         {actual.sugerencia ? (
-          <div className="rounded-xl border border-[#B08D57]/35 bg-[#3B1727] px-3.5 py-3">
+          <div className="rounded-xl border border-[#B08D57]/35 bg-[#153F55] px-3.5 py-3">
             <p className="text-[11px] font-bold uppercase tracking-wide text-[#C9A46B]">
               Respuesta sugerida
             </p>
@@ -273,7 +273,7 @@ function BloquePreguntas({ preguntasIniciales }: { preguntasIniciales: PreguntaP
           onChange={(e) => setTexto(e.target.value)}
           rows={5}
           placeholder="Escribe aquí tu respuesta…"
-          className="w-full rounded-xl border border-[#B08D57]/35 bg-[#3B1727] px-3.5 py-3 text-[13.5px] leading-relaxed text-[#F3E7DC] outline-none transition-colors placeholder:text-[#F3E7DC]/40 focus:border-[#C9A46B] focus:bg-[#3B1727]"
+          className="w-full rounded-xl border border-[#B08D57]/35 bg-[#153F55] px-3.5 py-3 text-[13.5px] leading-relaxed text-[#F3E7DC] outline-none transition-colors placeholder:text-[#F3E7DC]/40 focus:border-[#C9A46B] focus:bg-[#153F55]"
         />
 
         {error ? <p className="text-[12.5px] font-semibold text-[#E0917E]">{error}</p> : null}
@@ -520,7 +520,7 @@ function BloqueDocumentos({
             {archivos.map((archivo) => (
               <li
                 key={archivo.ruta}
-                className="flex items-center gap-2.5 rounded-xl border border-[#B08D57]/35 bg-[#3B1727] px-3.5 py-2.5"
+                className="flex items-center gap-2.5 rounded-xl border border-[#B08D57]/35 bg-[#153F55] px-3.5 py-2.5"
               >
                 <FileText className="h-4 w-4 shrink-0 text-[#F3E7DC]/70" />
                 <span className="min-w-0 flex-1 truncate text-[13px] font-semibold text-[#F3E7DC]">
@@ -546,7 +546,7 @@ function BloqueDocumentos({
 
         <div>
           <label
-            className={`flex cursor-pointer items-center justify-center gap-2.5 rounded-xl border-2 border-dashed border-[#B08D57]/40 bg-[#3B1727] px-4 py-5 text-[13.5px] font-bold text-[#C9A46B] transition-colors hover:bg-[#4C2032] ${
+            className={`flex cursor-pointer items-center justify-center gap-2.5 rounded-xl border-2 border-dashed border-[#B08D57]/40 bg-[#153F55] px-4 py-5 text-[13.5px] font-bold text-[#C9A46B] transition-colors hover:bg-[#1E5A7A] ${
               subiendo ? 'pointer-events-none opacity-70' : ''
             }`}
           >
@@ -623,11 +623,11 @@ function BloqueSupuestos({ supuestosIniciales }: { supuestosIniciales: PreguntaS
         descripcion="No alcanzaste a responder en el plazo, así que el proyecto siguió. Puedes completar estos puntos cuando quieras para que el proyecto quede más sólido."
         contador={`${supuestos.length}`}
       />
-      <ul className="divide-y divide-[#3B1727]">
+      <ul className="divide-y divide-[#153F55]">
         {supuestos.map((s) => (
           <li key={s.id} className="space-y-3 px-5 py-4">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-full bg-[#3B1727] border border-[#B08D57]/35 px-2.5 py-1 text-[11px] font-bold text-[#C9A46B]">
+              <span className="rounded-full bg-[#153F55] border border-[#B08D57]/35 px-2.5 py-1 text-[11px] font-bold text-[#C9A46B]">
                 {s.nombrePaso}
               </span>
               <span className="rounded-full bg-[#C99A3D]/15 px-2.5 py-1 text-[11px] font-bold text-[#E0B868]">
@@ -648,7 +648,7 @@ function BloqueSupuestos({ supuestosIniciales }: { supuestosIniciales: PreguntaS
                   onChange={(e) => setTexto(e.target.value)}
                   rows={4}
                   placeholder="Escribe aquí tu respuesta…"
-                  className="w-full rounded-xl border border-[#B08D57]/35 bg-[#3B1727] px-3.5 py-3 text-[13.5px] leading-relaxed text-[#F3E7DC] outline-none placeholder:text-[#F3E7DC]/40 focus:border-[#C9A46B]"
+                  className="w-full rounded-xl border border-[#B08D57]/35 bg-[#153F55] px-3.5 py-3 text-[13.5px] leading-relaxed text-[#F3E7DC] outline-none placeholder:text-[#F3E7DC]/40 focus:border-[#C9A46B]"
                 />
                 {error ? <p className="text-[12.5px] font-semibold text-[#E0917E]">{error}</p> : null}
                 <div className="flex items-center gap-3">
@@ -779,7 +779,7 @@ function BloquePasosDebiles({ pasosIniciales }: { pasosIniciales: PasoDebil[] })
         {pasos.map((p) => {
           const editando = abierto === p.idPaso
           return (
-            <li key={p.idPaso} className="border-b border-[#3B1727] px-5 py-4 last:border-b-0">
+            <li key={p.idPaso} className="border-b border-[#153F55] px-5 py-4 last:border-b-0">
               <p className="text-[14px] font-extrabold text-[#F3E7DC]">{p.nombrePaso}</p>
 
               <div className="mt-2 rounded-xl border-l-4 border-[#C99A3D] bg-[#C99A3D]/12 px-3.5 py-3">
@@ -805,7 +805,7 @@ function BloquePasosDebiles({ pasosIniciales }: { pasosIniciales: PasoDebil[] })
                     value={texto}
                     onChange={(e) => setTexto(e.target.value)}
                     rows={10}
-                    className="w-full rounded-xl border border-[#B08D57]/35 bg-[#3B1727] px-3.5 py-3 text-[13.5px] leading-relaxed text-[#F3E7DC] outline-none transition-colors focus:border-[#C9A46B]"
+                    className="w-full rounded-xl border border-[#B08D57]/35 bg-[#153F55] px-3.5 py-3 text-[13.5px] leading-relaxed text-[#F3E7DC] outline-none transition-colors focus:border-[#C9A46B]"
                   />
                   {error ? <p className="text-[12.5px] font-semibold text-[#E0917E]">{error}</p> : null}
                   <div className="flex flex-wrap items-center gap-3">
@@ -882,7 +882,7 @@ export function PendientesCliente({
   const total = datos.preguntas.length + datos.documentosPedidos.length + datos.pasosDebiles.length
 
   return (
-    <div className="min-h-full bg-[#54142B] px-4 py-6 lg:px-6">
+    <div className="min-h-full bg-[#1A4D68] px-4 py-6 lg:px-6">
       <fieldset disabled={soloVista} className="m-0 min-w-0 border-0 p-0">
       <header className="mb-5">
         <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]">Lo que me piden</h1>
@@ -915,8 +915,8 @@ export function PendientesCliente({
 
 export function PendientesSinProyecto() {
   return (
-    <div className="min-h-full bg-[#54142B] px-4 py-10 lg:px-6">
-      <div className="mx-auto max-w-xl rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-8 text-center shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]">
+    <div className="min-h-full bg-[#1A4D68] px-4 py-10 lg:px-6">
+      <div className="mx-auto max-w-xl rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-8 text-center shadow-[0_1px_2px_rgba(20,5,10,0.28),0_8px_24px_-14px_rgba(20,5,10,0.55)]">
         <h1 className="text-[17px] font-extrabold text-[#F3E7DC]">Todavía no hay proyecto</h1>
         <p className="mx-auto mt-2 max-w-md text-[13.5px] leading-relaxed text-[#F3E7DC]/70">
           Cuando contrates la estructuración, esta pantalla te va a mostrar las preguntas y los

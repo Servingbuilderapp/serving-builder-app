@@ -13,8 +13,8 @@ async function enviar(url: string, cuerpo: unknown): Promise<string | null> {
   }
 }
 
-const BOTON = 'rounded-xl bg-[#C9A46B] px-4 py-2 text-[13px] font-bold text-[#3B1727] disabled:opacity-50'
-const CAMPO = 'mt-1 w-full rounded-xl border border-white/10 bg-[#3B1727] px-3 py-2 text-[13.5px] text-[#F3E7DC] placeholder:text-[#F3E7DC]/30'
+const BOTON = 'rounded-xl bg-[#C9A46B] px-4 py-2 text-[13px] font-bold text-[#153F55] disabled:opacity-50'
+const CAMPO = 'mt-1 w-full rounded-xl border border-white/10 bg-[#153F55] px-3 py-2 text-[13.5px] text-[#F3E7DC] placeholder:text-[#F3E7DC]/30'
 
 export function ReservarSesion({ sesionId, inscrito, sinCupo }: { sesionId: string; inscrito: boolean; sinCupo: boolean }) {
   const router = useRouter()

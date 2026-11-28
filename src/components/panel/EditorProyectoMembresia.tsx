@@ -16,7 +16,7 @@ import {
 } from '@/lib/miProyectoPasos'
 import { descargarEnWord, guardarEnPdf } from '@/lib/miProyectoDocumento'
 
-const CAMPO = 'mt-1 w-full rounded-xl border border-white/10 bg-[#3B1727] px-3 py-2 text-[13.5px] text-[#F3E7DC] placeholder:text-[#F3E7DC]/30'
+const CAMPO = 'mt-1 w-full rounded-xl border border-white/10 bg-[#153F55] px-3 py-2 text-[13.5px] text-[#F3E7DC] placeholder:text-[#F3E7DC]/30'
 
 /** El miembro llena su proyecto paso a paso. Se guarda solo mientras escribe. */
 export function EditorProyectoMembresia({
@@ -93,14 +93,14 @@ export function EditorProyectoMembresia({
 
   return (
     <div>
-      <div className="mb-4 rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-4">
+      <div className="mb-4 rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-4">
         <div className="flex items-baseline justify-between gap-3">
           <p className="text-[13.5px] font-bold text-[#F3E7DC]">Avance de tu proyecto: {pct} %</p>
           <p className="text-[12px] text-[#F3E7DC]/50">
             {terminado ? 'Proyecto terminado' : estado === 'guardando' ? 'Guardando…' : estado === 'error' ? 'No se pudo guardar. Revisa tu conexión.' : 'Todo guardado'}
           </p>
         </div>
-        <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-[#3B1727]">
+        <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-[#153F55]">
           <div className="h-full rounded-full bg-[#C9A46B]" style={{ width: `${Math.max(pct, 3)}%` }} />
         </div>
         <p className="mt-2 text-[12.5px] text-[#F3E7DC]/60">
@@ -110,10 +110,10 @@ export function EditorProyectoMembresia({
           <button onClick={() => setVerTodo((v) => !v)} className="rounded-xl border border-[#C9A46B]/50 px-3.5 py-2 text-[12.5px] font-bold text-[#C9A46B]">
             {verTodo ? 'Volver a llenar paso a paso' : 'Ver mi proyecto completo'}
           </button>
-          <button onClick={() => descargarEnWord(nombre, respuestas)} className="rounded-xl bg-[#C9A46B] px-3.5 py-2 text-[12.5px] font-bold text-[#3B1727]">
+          <button onClick={() => descargarEnWord(nombre, respuestas)} className="rounded-xl bg-[#C9A46B] px-3.5 py-2 text-[12.5px] font-bold text-[#153F55]">
             Descargar en Word
           </button>
-          <button onClick={() => guardarEnPdf(nombre, respuestas)} className="rounded-xl bg-[#C9A46B] px-3.5 py-2 text-[12.5px] font-bold text-[#3B1727]">
+          <button onClick={() => guardarEnPdf(nombre, respuestas)} className="rounded-xl bg-[#C9A46B] px-3.5 py-2 text-[12.5px] font-bold text-[#153F55]">
             Descargar en PDF
           </button>
         </div>
@@ -121,7 +121,7 @@ export function EditorProyectoMembresia({
       </div>
 
       {verTodo ? (
-        <div className="space-y-4 rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 text-[13.5px] text-[#F3E7DC]/85">
+        <div className="space-y-4 rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 text-[13.5px] text-[#F3E7DC]/85">
           <h2 className="text-[17px] font-extrabold text-[#F3E7DC]">{respuestas.titulo_elegido?.trim() || nombre}</h2>
           {TODOS_LOS_PASOS.map((p) => (
             <div key={p.n}>
@@ -145,7 +145,7 @@ export function EditorProyectoMembresia({
                   const completo = pasoCompleto(paso, respuestas)
                   const abierto = pasoAbierto === paso.n
                   return (
-                    <div key={paso.n} className="rounded-2xl border border-[#B08D57]/30 bg-[#4C2032]">
+                    <div key={paso.n} className="rounded-2xl border border-[#B08D57]/30 bg-[#1E5A7A]">
                       <button
                         onClick={() => setPasoAbierto(abierto ? 0 : paso.n)}
                         className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left"
@@ -203,7 +203,7 @@ export function EditorProyectoMembresia({
           ))}
 
           {!terminado && (
-            <div className="rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-4">
+            <div className="rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-4">
               <p className="text-[13.5px] font-bold text-[#F3E7DC]">¿Terminaste tu proyecto?</p>
               <p className="mt-1 text-[12.5px] text-[#F3E7DC]/60">
                 Cuando todos los pasos estén completos, márcalo como terminado. Después postulas tú mismo, hasta en 3 convocatorias por proyecto.
@@ -212,7 +212,7 @@ export function EditorProyectoMembresia({
               <button
                 onClick={terminar}
                 disabled={cerrando || !todoListo}
-                className="mt-3 rounded-xl bg-[#C9A46B] px-5 py-2.5 text-[13.5px] font-bold text-[#3B1727] disabled:opacity-50"
+                className="mt-3 rounded-xl bg-[#C9A46B] px-5 py-2.5 text-[13.5px] font-bold text-[#153F55] disabled:opacity-50"
               >
                 {cerrando ? 'Cerrando…' : todoListo ? 'Marcar mi proyecto como terminado' : 'Aún faltan pasos por completar'}
               </button>

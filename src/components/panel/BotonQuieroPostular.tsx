@@ -118,7 +118,7 @@ export function BotonQuieroPostular({
           type="button"
           onClick={pedirPermiso}
           disabled={estado === 'pidiendo'}
-          className="mt-2 rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-5 py-2.5 text-[14px] font-extrabold text-[#3A1420] shadow-[0_1px_2px_rgba(20,5,10,0.4)] hover:brightness-110 disabled:opacity-50"
+          className="mt-2 rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-5 py-2.5 text-[14px] font-extrabold text-[#12394D] shadow-[0_1px_2px_rgba(20,5,10,0.4)] hover:brightness-110 disabled:opacity-50"
         >
           {estado === 'pidiendo' ? 'Pidiendo…' : 'Pedir permiso para otra'}
         </button>
@@ -143,7 +143,7 @@ export function BotonQuieroPostular({
         type="button"
         onClick={postular}
         disabled={estado === 'enviando'}
-        className="rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-5 py-2.5 text-[14px] font-extrabold text-[#3A1420] shadow-[0_1px_2px_rgba(20,5,10,0.4),0_8px_20px_-12px_rgba(20,5,10,0.6)] hover:brightness-110 disabled:opacity-50"
+        className="rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-5 py-2.5 text-[14px] font-extrabold text-[#12394D] shadow-[0_1px_2px_rgba(20,5,10,0.4),0_8px_20px_-12px_rgba(20,5,10,0.6)] hover:brightness-110 disabled:opacity-50"
       >
         {estado === 'enviando' ? 'Iniciando…' : 'Quiero postular'}
       </button>

@@ -72,7 +72,7 @@ function Tarjeta({
   className?: string
 }) {
   return (
-    <div className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] ${SOMBRA_TARJETA} ${className}`}>
+    <div className={`rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] ${SOMBRA_TARJETA} ${className}`}>
       {children}
     </div>
   )
@@ -107,7 +107,7 @@ function colorSemaforo(estado: EstadoSemaforo) {
     verde: 'bg-[#7A8B6F]',
     amarillo: 'bg-[#C99A3D]',
     rojo: 'bg-[#C0604A]',
-    gris: 'bg-[#6E4A50]',
+    gris: 'bg-[#5B7886]',
   }[estado]
 }
 
@@ -132,7 +132,7 @@ function Anillo({ valor }: { valor: number }) {
   return (
     <div className="relative h-[70px] w-[70px] shrink-0">
       <svg viewBox="0 0 80 80" className="h-[70px] w-[70px] -rotate-90">
-        <circle cx="40" cy="40" r={radio} fill="none" stroke="#6E4A50" strokeWidth="8" />
+        <circle cx="40" cy="40" r={radio} fill="none" stroke="#5B7886" strokeWidth="8" />
         <circle
           cx="40"
           cy="40"
@@ -194,12 +194,12 @@ function Rueda({ ejes }: { ejes: { nombre: string; puntaje: number }[] }) {
           cy={cy}
           r={radioMax * f}
           fill="none"
-          stroke="#6E4A50"
+          stroke="#5B7886"
           strokeWidth="1"
         />
       ))}
       {puntos.map((p) => (
-        <line key={`r-${p.nombre}`} x1={cx} y1={cy} x2={p.ex} y2={p.ey} stroke="#6E4A50" strokeWidth="1" />
+        <line key={`r-${p.nombre}`} x1={cx} y1={cy} x2={p.ex} y2={p.ey} stroke="#5B7886" strokeWidth="1" />
       ))}
       <polygon points={poligono} fill="#B08D57" fillOpacity="0.20" stroke="#B08D57" strokeWidth="2" />
       {puntos.map((p) => (
@@ -249,7 +249,7 @@ function fechaBonita(valor: string | null): string | null {
 
 function Vacio({ texto }: { texto: string }) {
   return (
-    <div className="rounded-xl border border-dashed border-[#B08D57]/35 bg-[#3B1727] px-4 py-6 text-center text-[12.5px] text-[#F3E7DC]/60">
+    <div className="rounded-xl border border-dashed border-[#B08D57]/35 bg-[#153F55] px-4 py-6 text-center text-[12.5px] text-[#F3E7DC]/60">
       {texto}
     </div>
   )
@@ -288,7 +288,7 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
           </p>
           <Link
             href="/contratar"
-            className="mt-6 inline-flex items-center gap-2 h-11 px-6 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-sm font-semibold"
+            className="mt-6 inline-flex items-center gap-2 h-11 px-6 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D] text-sm font-semibold"
           >
             Ver las modalidades <ArrowRight className="h-4 w-4" />
           </Link>
@@ -482,8 +482,8 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
                             completado
                               ? 'bg-[#7A8B6F] text-white'
                               : enProceso
-                                ? 'bg-[#B08D57] text-[#3A1420] ring-4 ring-[#B08D57]/25'
-                                : 'bg-[#3B1727] text-[#F3E7DC]/50'
+                                ? 'bg-[#B08D57] text-[#12394D] ring-4 ring-[#B08D57]/25'
+                                : 'bg-[#153F55] text-[#F3E7DC]/50'
                           }`}
                         >
                           {completado ? <Check className="h-4 w-4" /> : i + 1}
@@ -499,7 +499,7 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
                       {i < ruta.length - 1 ? (
                         <div
                           className={`h-0.5 flex-1 mt-4 rounded ${
-                            completado ? 'bg-[#7A8B6F]' : 'bg-[#3B1727]'
+                            completado ? 'bg-[#7A8B6F]' : 'bg-[#153F55]'
                           }`}
                         />
                       ) : null}
@@ -516,7 +516,7 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
               <TituloBloque texto="Recomendación" />
               <div className="flex gap-3">
                 <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#C9A46B] to-[#B08D57] flex items-center justify-center shrink-0">
-                  <Sparkles className="h-5 w-5 text-[#3A1420]" />
+                  <Sparkles className="h-5 w-5 text-[#12394D]" />
                 </div>
                 <p className="text-[13px] text-[#F3E7DC]/80 leading-relaxed">
                   {recomendacionIA || 'Cuando avance la estructuración aparecerán aquí las recomendaciones.'}
@@ -525,7 +525,7 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
               {proximoPaso ? (
                 <Link
                   href="/mi-proyecto"
-                  className="mt-4 inline-flex items-center gap-2 rounded-lg border border-[#B08D57]/35 bg-[#3B1727] px-4 py-2 text-[12.5px] font-semibold text-[#F3E7DC] hover:border-[#B08D57] hover:text-[#B08D57] transition-colors"
+                  className="mt-4 inline-flex items-center gap-2 rounded-lg border border-[#B08D57]/35 bg-[#153F55] px-4 py-2 text-[12.5px] font-semibold text-[#F3E7DC] hover:border-[#B08D57] hover:text-[#B08D57] transition-colors"
                 >
                   {proximoPaso.titulo} <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
@@ -541,7 +541,7 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
                     <div className="w-[130px] shrink-0 text-[12px] text-[#F3E7DC]/80 truncate">
                       {area.nombre}
                     </div>
-                    <div className="flex-1 h-2 rounded-full bg-[#3B1727] overflow-hidden">
+                    <div className="flex-1 h-2 rounded-full bg-[#153F55] overflow-hidden">
                       <div
                         className={`h-full rounded-full ${
                           area.valor >= 90
@@ -685,7 +685,7 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
               <div className="space-y-2.5">
                 {pendientes.map((p, i) => (
                   <div key={i} className="flex items-start gap-2.5">
-                    <Circle className="h-4 w-4 text-[#6E4A50] shrink-0 mt-0.5" />
+                    <Circle className="h-4 w-4 text-[#5B7886] shrink-0 mt-0.5" />
                     <div className="min-w-0 flex-1">
                       <div className="text-[12.5px] text-[#F3E7DC]/80 leading-snug">{p.texto}</div>
                       <span
@@ -737,7 +737,7 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
                     <div className="text-[11px] text-center text-[#F3E7DC]/60 leading-tight">{texto}</div>
                   </div>
                   {i < arr.length - 1 ? (
-                    <ArrowRight className="h-4 w-4 text-[#6E4A50] mt-0.5 hidden sm:block" />
+                    <ArrowRight className="h-4 w-4 text-[#5B7886] mt-0.5 hidden sm:block" />
                   ) : null}
                 </React.Fragment>
               ))}
@@ -745,7 +745,7 @@ export function ResumenProyecto({ datos }: { datos: DatosResumen }) {
           </div>
           <Link
             href={destinoContinuar.href}
-            className="shrink-0 h-12 px-6 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-[14px] font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all"
+            className="shrink-0 h-12 px-6 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D] text-[14px] font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all"
           >
             {destinoContinuar.texto} <ArrowRight className="h-4 w-4" />
           </Link>

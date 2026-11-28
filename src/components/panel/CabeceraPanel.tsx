@@ -20,7 +20,7 @@ const ETIQUETAS_ESTADO: Record<string, { texto: string; clases: string }> = {
   pagado: { texto: 'Listo para iniciar', clases: 'bg-[rgba(176,141,87,0.16)] text-[#E0C79A] border-[rgba(176,141,87,0.35)]' },
   estructurando_ia: { texto: 'En estructuración', clases: 'bg-[rgba(122,139,111,0.18)] text-[#A9C29A] border-[rgba(122,139,111,0.35)]' },
   estructurado: { texto: 'Estructurado', clases: 'bg-[rgba(122,139,111,0.18)] text-[#A9C29A] border-[rgba(122,139,111,0.35)]' },
-  en_encaje: { texto: 'En encaje', clases: 'bg-[rgba(140,54,84,0.22)] text-[#E3B9C2] border-[rgba(140,54,84,0.4)]' },
+  en_encaje: { texto: 'En encaje', clases: 'bg-[rgba(63,126,158,0.22)] text-[#E3B9C2] border-[rgba(63,126,158,0.4)]' },
   postulado: { texto: 'Postulado', clases: 'bg-[rgba(140,147,166,0.18)] text-[#AEB4C4] border-[rgba(140,147,166,0.35)]' },
 }
 
@@ -77,7 +77,7 @@ export function CabeceraPanel({
     .toUpperCase()
 
   return (
-    <header className="h-[68px] shrink-0 bg-[#4C2032] border-b border-[rgba(176,141,87,0.2)] flex items-center gap-4 px-4 lg:px-6">
+    <header className="h-[68px] shrink-0 bg-[#1E5A7A] border-b border-[rgba(176,141,87,0.2)] flex items-center gap-4 px-4 lg:px-6">
       <button
         type="button"
         onClick={onAbrirMenu}
@@ -144,7 +144,7 @@ export function CabeceraPanel({
           </button>
 
           {campanaAbierta ? (
-            <div className="absolute right-0 top-11 z-50 w-72 rounded-xl border border-[#B08D57]/50 bg-[#3B1727] p-4 text-[#F3E7DC] shadow-2xl">
+            <div className="absolute right-0 top-11 z-50 w-72 rounded-xl border border-[#B08D57]/50 bg-[#153F55] p-4 text-[#F3E7DC] shadow-2xl">
               {aviso ? (
                 <>
                   <div className="text-[11px] font-black uppercase tracking-wider text-[#C9A46B]">
@@ -156,7 +156,7 @@ export function CabeceraPanel({
                     <Link
                       href={aviso.accion.href}
                       onClick={() => setCampanaAbierta(false)}
-                      className="mt-3 inline-flex rounded-full bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-4 py-1.5 text-xs font-bold text-[#3A1420] hover:brightness-110"
+                      className="mt-3 inline-flex rounded-full bg-gradient-to-b from-[#C9A46B] to-[#B08D57] px-4 py-1.5 text-xs font-bold text-[#12394D] hover:brightness-110"
                     >
                       {aviso.accion.texto}
                     </Link>
@@ -183,7 +183,7 @@ export function CabeceraPanel({
             onClick={() => setMenuPerfil((v) => !v)}
             className="flex items-center gap-2.5 rounded-lg pl-1.5 pr-2 py-1.5 hover:bg-[rgba(176,141,87,0.1)]"
           >
-            <div className="h-8 w-8 rounded-full bg-gradient-to-br from-[#C39F68] to-[#8C3654] text-[#3A1420] text-[12px] font-bold flex items-center justify-center">
+            <div className="h-8 w-8 rounded-full bg-gradient-to-br from-[#C39F68] to-[#3F7E9E] text-[#12394D] text-[12px] font-bold flex items-center justify-center">
               {iniciales || 'U'}
             </div>
             <div className="hidden md:block text-left leading-tight">
@@ -194,7 +194,7 @@ export function CabeceraPanel({
           </button>
 
           {menuPerfil ? (
-            <div className="absolute right-0 top-full mt-2 w-52 rounded-xl border border-[rgba(176,141,87,0.25)] bg-[#4C2032] shadow-lg py-1.5 z-50">
+            <div className="absolute right-0 top-full mt-2 w-52 rounded-xl border border-[rgba(176,141,87,0.25)] bg-[#1E5A7A] shadow-lg py-1.5 z-50">
               <Link
                 href="/profile"
                 onClick={() => setMenuPerfil(false)}

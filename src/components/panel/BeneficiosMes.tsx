@@ -25,7 +25,7 @@ export function BeneficiosMes({ lineas }: { lineas: LineaBeneficio[] }) {
               </span>
             </div>
             {!noIncluido && !ilimitado && (
-              <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-[#3B1727]">
+              <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-[#153F55]">
                 <div className="h-full rounded-full bg-[#C9A46B]" style={{ width: `${Math.max(pct, l.usados > 0 ? 4 : 0)}%` }} />
               </div>
             )}

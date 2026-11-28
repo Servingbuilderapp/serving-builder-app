@@ -33,7 +33,7 @@ export function AceptarCortesia() {
 
   return (
     <div className="mt-5 space-y-3">
-      <div className="space-y-2 rounded-xl border border-[#B08D57]/35 bg-[#3B1727] p-3">
+      <div className="space-y-2 rounded-xl border border-[#B08D57]/35 bg-[#153F55] p-3">
         <p className="text-[12px] font-extrabold uppercase tracking-wider text-[#E0B868]">
           Autorización de datos personales y términos del servicio
         </p>
@@ -46,7 +46,7 @@ export function AceptarCortesia() {
             const el = e.currentTarget
             if (el.scrollTop + el.clientHeight >= el.scrollHeight - 60) setTextoLeido(true)
           }}
-          className="max-h-56 overflow-y-scroll whitespace-pre-line pr-2 text-[12px] leading-relaxed text-[#F3E7DC]/80 [scrollbar-color:#C9A46B_#2a0f1c] [&::-webkit-scrollbar]:w-2.5 [&::-webkit-scrollbar-track]:rounded [&::-webkit-scrollbar-track]:bg-[#2a0f1c] [&::-webkit-scrollbar-thumb]:rounded [&::-webkit-scrollbar-thumb]:bg-[#C9A46B]"
+          className="max-h-56 overflow-y-scroll whitespace-pre-line pr-2 text-[12px] leading-relaxed text-[#F3E7DC]/80 [scrollbar-color:#C9A46B_#0C2735] [&::-webkit-scrollbar]:w-2.5 [&::-webkit-scrollbar-track]:rounded [&::-webkit-scrollbar-track]:bg-[#0C2735] [&::-webkit-scrollbar-thumb]:rounded [&::-webkit-scrollbar-thumb]:bg-[#C9A46B]"
         >
           {TEXTO_LEGAL_CORTESIA}
         </div>
@@ -76,7 +76,7 @@ export function AceptarCortesia() {
         disabled={!marcado || !autorizaDatos || enviando}
         title={!autorizaDatos ? 'Primero baja el texto hasta el final y marca la casilla de autorización.' : undefined}
         onClick={aceptar}
-        className="rounded-xl bg-[#C9A46B] px-5 py-2.5 text-[14px] font-bold text-[#3B1727] shadow-[0_1px_2px_rgba(20,5,10,0.4)] disabled:opacity-50"
+        className="rounded-xl bg-[#C9A46B] px-5 py-2.5 text-[14px] font-bold text-[#153F55] shadow-[0_1px_2px_rgba(20,5,10,0.4)] disabled:opacity-50"
       >
         {enviando ? 'Guardando…' : 'Aceptar y empezar'}
       </button>

@@ -6,7 +6,7 @@ import { MAX_POSTULACIONES_POR_PROYECTO, type PostulacionRegistrada } from '@/li
 
 export type OpcionConvocatoria = { id: string; etiqueta: string }
 
-const CAMPO = 'mt-1 w-full rounded-xl border border-white/10 bg-[#54142B] px-3 py-2 text-[13px] text-[#F3E7DC] placeholder:text-[#F3E7DC]/30'
+const CAMPO = 'mt-1 w-full rounded-xl border border-white/10 bg-[#1A4D68] px-3 py-2 text-[13px] text-[#F3E7DC] placeholder:text-[#F3E7DC]/30'
 
 /** Las postulaciones de un proyecto: máximo 3. Cada una que el miembro registra gasta una y no se devuelve. */
 export function RegistrarPostulaciones({
@@ -58,7 +58,7 @@ export function RegistrarPostulaciones({
       </p>
 
       {usadas.map((u, i) => (
-        <div key={`${u.id || u.texto}-${i}`} className="rounded-xl bg-[#3B1727] p-3 text-[13px] text-[#F3E7DC]/85">
+        <div key={`${u.id || u.texto}-${i}`} className="rounded-xl bg-[#153F55] p-3 text-[13px] text-[#F3E7DC]/85">
           <p className="font-bold text-[#F3E7DC]">{i + 1}. {u.texto}</p>
           {u.mecanismo && <p className="mt-1"><span className="font-bold text-[#F3E7DC]/60">Cómo se postula: </span>{u.mecanismo}</p>}
           {u.requisitos && <p className="mt-1 whitespace-pre-wrap"><span className="font-bold text-[#F3E7DC]/60">Requisitos: </span>{u.requisitos}</p>}
@@ -80,7 +80,7 @@ export function RegistrarPostulaciones({
           Ya usaste las {MAX_POSTULACIONES_POR_PROYECTO} postulaciones de este proyecto. Para postular más, necesitas otro proyecto.
         </p>
       ) : (
-        <div className="space-y-3 rounded-xl bg-[#3B1727] p-3">
+        <div className="space-y-3 rounded-xl bg-[#153F55] p-3">
           <p className="text-[13.5px] font-bold text-[#F3E7DC]">Registrar una postulación (te quedan {quedan})</p>
           <div>
             <label className="text-[12px] text-[#F3E7DC]/60">¿A qué convocatoria vas a postular?</label>
@@ -101,7 +101,7 @@ export function RegistrarPostulaciones({
           <button
             onClick={registrar}
             disabled={cargando || !acepto || (!convocatoriaId && !otra.trim())}
-            className="rounded-xl bg-[#C9A46B] px-5 py-2.5 text-[13.5px] font-bold text-[#3B1727] disabled:opacity-50"
+            className="rounded-xl bg-[#C9A46B] px-5 py-2.5 text-[13.5px] font-bold text-[#153F55] disabled:opacity-50"
           >
             {cargando ? 'Registrando…' : 'Registrar esta postulación'}
           </button>

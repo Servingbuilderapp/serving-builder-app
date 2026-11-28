@@ -43,7 +43,7 @@ export function EjemploPanelClient() {
   const longitud = 2 * Math.PI * 42
 
   return (
-    <main className="min-h-screen bg-[#54142B] text-[#F3E7DC]">
+    <main className="min-h-screen bg-[#1A4D68] text-[#F3E7DC]">
       <div className="max-w-[1200px] mx-auto px-5 lg:px-8 py-10 lg:py-14">
         <Link
           href="/"
@@ -60,7 +60,7 @@ export function EjemploPanelClient() {
 
         {/* Ventana del panel */}
         <div
-          className={`mt-10 overflow-hidden rounded-3xl border border-[#B08D57]/45 bg-gradient-to-br from-[#3B1727] to-[#2E0E1A] ${RELIEVE_TARJETA}`}
+          className={`mt-10 overflow-hidden rounded-3xl border border-[#B08D57]/45 bg-gradient-to-br from-[#153F55] to-[#0E2B3B] ${RELIEVE_TARJETA}`}
         >
           <div className="grid lg:grid-cols-12">
             {/* Menú lateral */}
@@ -71,7 +71,7 @@ export function EjemploPanelClient() {
                     key={clave}
                     className={`flex items-center gap-2.5 whitespace-nowrap rounded-lg px-3 py-2.5 text-[13px] font-semibold ${
                       i === 0
-                        ? 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420]'
+                        ? 'bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D]'
                         : 'text-[#F3E7DC]/75'
                     }`}
                   >
@@ -96,10 +96,10 @@ export function EjemploPanelClient() {
 
               {/* Avance + cifras */}
               <div className="grid md:grid-cols-12 gap-4">
-                <div className={`md:col-span-4 rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 flex items-center gap-4 ${RELIEVE_TARJETA}`}>
+                <div className={`md:col-span-4 rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 flex items-center gap-4 ${RELIEVE_TARJETA}`}>
                   <div className="relative h-24 w-24 shrink-0">
                     <svg viewBox="0 0 100 100" className="h-24 w-24 -rotate-90">
-                      <circle cx="50" cy="50" r="42" fill="none" stroke="#6E4A50" strokeWidth="10" />
+                      <circle cx="50" cy="50" r="42" fill="none" stroke="#5B7886" strokeWidth="10" />
                       <circle
                         cx="50"
                         cy="50"
@@ -122,7 +122,7 @@ export function EjemploPanelClient() {
                     { valor: '84%', clave: 'w.ejemplo.stat2' },
                     { valor: '9/12', clave: 'w.ejemplo.stat3' },
                   ].map((s) => (
-                    <div key={s.clave} className={`rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${RELIEVE_TARJETA}`}>
+                    <div key={s.clave} className={`rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 ${RELIEVE_TARJETA}`}>
                       <div className="text-3xl font-extrabold bg-gradient-to-r from-white to-[#E0B868] bg-clip-text text-transparent">
                         {s.valor}
                       </div>
@@ -134,7 +134,7 @@ export function EjemploPanelClient() {
 
               {/* Convocatorias + pendientes */}
               <div className="grid md:grid-cols-12 gap-4">
-                <div className={`md:col-span-7 rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${RELIEVE_TARJETA}`}>
+                <div className={`md:col-span-7 rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 ${RELIEVE_TARJETA}`}>
                   <div className="text-[12px] font-bold uppercase tracking-wider text-[#F3E7DC]/70 mb-4">
                     {t('w.ejemplo.conv_titulo')}
                   </div>
@@ -147,7 +147,7 @@ export function EjemploPanelClient() {
                           </span>
                           <span className="text-[#E0B868]">{c.encaje}%</span>
                         </div>
-                        <div className="mt-1.5 h-2 rounded-full bg-[#6E4A50]">
+                        <div className="mt-1.5 h-2 rounded-full bg-[#5B7886]">
                           <div
                             className="h-2 rounded-full bg-gradient-to-r from-[#B08D57] to-[#C9A46B]"
                             style={{ width: `${c.encaje}%` }}
@@ -158,7 +158,7 @@ export function EjemploPanelClient() {
                   </div>
                 </div>
 
-                <div className={`md:col-span-5 rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${RELIEVE_TARJETA}`}>
+                <div className={`md:col-span-5 rounded-2xl border border-[#B08D57]/35 bg-[#1E5A7A] p-5 ${RELIEVE_TARJETA}`}>
                   <div className="text-[12px] font-bold uppercase tracking-wider text-[#F3E7DC]/70 mb-4">
                     {t('w.ejemplo.pide_titulo')}
                   </div>
@@ -179,7 +179,7 @@ export function EjemploPanelClient() {
         <div className="mt-10 text-center">
           <Link
             href="/diagnostico"
-            className={`h-12 px-7 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#3A1420] text-sm font-semibold hover:from-[#C9A46B] hover:to-[#8A6636] ${RELIEVE_BOTON}`}
+            className={`h-12 px-7 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-[#C9A46B] to-[#B08D57] text-[#12394D] text-sm font-semibold hover:from-[#C9A46B] hover:to-[#8A6636] ${RELIEVE_BOTON}`}
           >
             {t('w.ejemplo.cta')}
             <ArrowRight className="h-4 w-4" />

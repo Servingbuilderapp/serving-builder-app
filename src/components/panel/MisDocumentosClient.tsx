@@ -47,7 +47,7 @@ export function MisDocumentosClient({ etapas }: { etapas: EtapaDocumentos[] }) {
             ) : (
               <div
                 key={`${d.titulo}-${i}`}
-                className={`flex items-start gap-3.5 rounded-2xl border border-[#B08D57]/20 bg-[#4C2032]/60 p-4 ${RELIEVE_TARJETA}`}
+                className={`flex items-start gap-3.5 rounded-2xl border border-[#B08D57]/20 bg-[#1E5A7A]/60 p-4 ${RELIEVE_TARJETA}`}
               >
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F3E7DC]/10 text-[#F3E7DC]/50">
                   <Clock className="h-5 w-5" />
