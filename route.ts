@@ -1,135 +1,184 @@
-import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
-import { createClient as createAdminClient } from '@supabase/supabase-js'
-import { PLAN_EMPRENDEDOR, MONTO_EMPRENDEDOR_COP, ESTADO_PENDIENTE_AVAL } from '@/lib/planEmprendedor'
-import { COBRO_EXTERIOR } from '@/lib/mediosDePago'
-import { buscarAliado } from '@/lib/aliados'
+import { NextRequest, NextResponse, after } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
+import { motorAutorizado } from '@/lib/candadoMotores'
+import { prepararPostulacion } from '@/lib/motorPostulacion'
+import { buildEmailTemplate, sendEmail } from '@/lib/email'
 
-function generarPasswordTemporal() {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789'
-  let pass = ''
-  for (let i = 0; i < 10; i++) {
-    pass += chars.charAt(Math.floor(Math.random() * chars.length))
-  }
-  return pass
-}
+// Preparar la postulación hace varias consultas al modelo seguidas.
+export const maxDuration = 180
 
-export async function POST(req: Request) {
+/**
+ * "Quiero postular": el cliente aprieta el botón en una convocatoria con encaje
+ * y la plataforma sigue sola — prepara la postulación (requisitos, documentos,
+ * carta, evaluación) y al equipo le llega un informe por correo.
+ *
+ * Regla del dueño (30 oct 2026): sin contrato aceptado no arranca nada.
+ */
+
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+const DESTINOS = ['contacto@portalarquitecturadigital.com']
+
+// Cupo de postulaciones por semana según la modalidad (decisión del dueño, 30 oct 2026):
+// Estratégica ($12.000.000) = 1, Élite ($17.000.000) = 3. Cualquier otra = 1.
+// Pasado el cupo, el cliente puede pedir permiso y el equipo lo aprueba.
+const CUPO_SEMANAL: Record<string, number> = { esencial: 1, completo: 3 }
+const CUPO_POR_DEFECTO = 1
+
+export async function POST(req: NextRequest) {
   try {
-    const body = await req.json()
-    const {
-      nombreCliente,
-      correoCliente,
-      whatsapp,
-      nombreIniciativa,
-      planPago,
-      montoCop,
-      montoUsd,
-      pais,
-      verticalDiagnostico,
-    } = body
-
-    if (!nombreCliente || !correoCliente || !whatsapp || !planPago) {
-      return NextResponse.json({ error: 'Faltan datos obligatorios' }, { status: 400 })
+    const { id_proyecto, id_biblioteca, accion, id_candidata } = await req.json()
+    if (!id_proyecto || (accion === 'descartar' || accion === 'esperar' || accion === 'pedir_permiso' ? !id_candidata : !id_biblioteca)) {
+      return NextResponse.json({ error: 'Faltan datos' }, { status: 400 })
+    }
+    if (!(await motorAutorizado(req, id_proyecto))) {
+      return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
     }
 
-    // Sin la autorización de datos personales (habeas data) no se firma nada.
-    if (body.autorizaDatos !== true) {
-      return NextResponse.json({ error: 'Debes autorizar el tratamiento de tus datos personales.' }, { status: 400 })
+    // "Descartar": sale de la lista del cliente pero no se borra (queda en el historial).
+    // "Esperar": se queda en la lista marcada «En espera», con respuesta del cliente.
+    if (accion === 'descartar' || accion === 'esperar') {
+      const { error: errorMarcar } = await supabase
+        .from('convocatorias_candidatas_proyecto')
+        .update({ eleccion_cliente: accion === 'descartar' ? 'no_elegida' : 'en_espera' })
+        .eq('id', id_candidata)
+        .eq('id_proyecto', id_proyecto)
+      if (errorMarcar) return NextResponse.json({ error: 'No se pudo guardar tu respuesta.' }, { status: 500 })
+      return NextResponse.json({ ok: true, mensaje: accion === 'descartar' ? 'Convocatoria descartada.' : 'Quedó en espera.' })
     }
 
-    // Plan Emprendedor: es avalado. Se exige la declaración y el proyecto queda
-    // en 'pendiente_aval' hasta que Serving lo apruebe. El monto lo fija el
-    // servidor, no lo que mande el navegador.
-    const esEmprendedor = planPago === PLAN_EMPRENDEDOR
-    if (esEmprendedor && body.declaracionBajosRecursos !== true) {
-      return NextResponse.json({ error: 'Debes aceptar la declaración para solicitar este plan' }, { status: 400 })
-    }
-
-    const forwardedFor = req.headers.get('x-forwarded-for')
-    const ip = forwardedFor ? forwardedFor.split(',')[0].trim() : 'desconocida'
-
-    // Código de aliado: se vuelve a validar aquí; el porcentaje sale de la tabla,
-    // nunca de lo que mande el navegador. Aplica a todos los planes, incluido Emprendedor.
-    const aliado = body.codigoAliado ? await buscarAliado(body.codigoAliado) : null
-    if (body.codigoAliado && !aliado) {
-      return NextResponse.json({ error: 'El código de aliado no es válido. Revísalo o déjalo en blanco.' }, { status: 400 })
-    }
-
-    const firmaDigital = {
-      nombre: nombreCliente,
-      aceptado: true,
-      fecha: new Date().toISOString(),
-      ip,
-      ...(aliado ? { codigo_aliado: aliado.codigo, porcentaje_exito_pactado: aliado.porcentaje } : {}),
-      autoriza_datos_personales: true,
-      ...(esEmprendedor ? { declaracion_bajos_recursos: true } : {}),
-    }
-
-    // Cliente con permisos de administrador, solo para crear la cuenta de acceso
-    const supabaseAdmin = createAdminClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    )
-
-    let passwordTemporal: string | null = null
-    let esUsuarioNuevo = false
-
-    // Verificar si ya existe una cuenta con este correo
-    const { data: usuariosExistentes } = await supabaseAdmin.auth.admin.listUsers()
-    const yaExiste = usuariosExistentes?.users?.some(
-      (u) => u.email?.toLowerCase() === correoCliente.toLowerCase()
-    )
-
-    if (!yaExiste) {
-      passwordTemporal = generarPasswordTemporal()
-      const { error: authError } = await supabaseAdmin.auth.admin.createUser({
-        email: correoCliente,
-        password: passwordTemporal,
-        email_confirm: true,
-        user_metadata: { first_name: nombreCliente.split(' ')[0] },
-      })
-      if (authError) {
-        console.error('No se pudo crear la cuenta de acceso:', authError)
-      } else {
-        esUsuarioNuevo = true
+    // «Pedir permiso»: el cliente ya usó su cupo de la semana y quiere otra.
+    if (accion === 'pedir_permiso') {
+      const { data: cand } = await supabase
+        .from('convocatorias_candidatas_proyecto')
+        .select('id, nombre, entidad')
+        .eq('id', id_candidata)
+        .eq('id_proyecto', id_proyecto)
+        .maybeSingle<{ id: string; nombre: string | null; entidad: string | null }>()
+      if (!cand) return NextResponse.json({ error: 'No encontramos esa convocatoria.' }, { status: 404 })
+      const { data: proy } = await supabase
+        .from('proyectos_clientes_serving')
+        .select('nombre_iniciativa, nombre_cliente, correo_cliente')
+        .eq('id', id_proyecto)
+        .maybeSingle<{ nombre_iniciativa: string | null; nombre_cliente: string | null; correo_cliente: string | null }>()
+      await supabase
+        .from('convocatorias_candidatas_proyecto')
+        .update({ eleccion_cliente: 'permiso_pedido' })
+        .eq('id', id_candidata)
+        .eq('id_proyecto', id_proyecto)
+      try {
+        const html = buildEmailTemplate({
+          title: 'Un cliente pide permiso para otra postulación',
+          greeting: 'Hola equipo,',
+          bodyLines: [
+            `${proy?.nombre_cliente || proy?.correo_cliente} ya usó su cupo de la semana y quiere postular también a «${cand.nombre || 'una convocatoria'}»${cand.entidad ? ` (${cand.entidad})` : ''} con su proyecto «${proy?.nombre_iniciativa || 'sin nombre'}».`,
+            'Si lo apruebas, la plataforma prepara la postulación de inmediato.',
+          ],
+          ctaText: 'Aprobar el permiso',
+          ctaUrl: `${req.nextUrl.origin}/api/postulacion/aprobar-permiso?candidata=${id_candidata}&proyecto=${id_proyecto}`,
+        })
+        await Promise.all(DESTINOS.map((to) => sendEmail({ to, subject: 'Permiso para otra postulación', html })))
+      } catch (e) {
+        console.error('[quiero-postular] No se pudo avisar el permiso:', e)
       }
+      return NextResponse.json({ ok: true, mensaje: 'Pediste permiso. Te respondemos pronto.' })
     }
 
-    const supabase = await createClient()
-
-    const { data, error } = await supabase
+    const { data: proyecto } = await supabase
       .from('proyectos_clientes_serving')
-      .insert({
-        nombre_cliente: nombreCliente,
-        correo_cliente: correoCliente,
-        telefono_whatsapp: whatsapp,
-        nombre_iniciativa: nombreIniciativa || nombreCliente,
-        vertical_asignada: verticalDiagnostico || 'sin_clasificar',
-        plan_pago: planPago,
-        monto_solicitado_cop: esEmprendedor ? MONTO_EMPRENDEDOR_COP : montoCop || null,
-        // Para las dos modalidades normales el precio en USD lo fija el servidor.
-        monto_solicitado_usd: COBRO_EXTERIOR.precioUsdFijo[planPago] ?? montoUsd ?? null,
-        estado_actual: esEmprendedor ? ESTADO_PENDIENTE_AVAL : 'pendiente_pago',
-        estado_comercial: 'nuevo',
-        contrato_firmado: true,
-        firma_digital: firmaDigital,
-        pasarela_pago: pais === 'colombia' ? 'Manual' : 'Bold USD',
-        ...(aliado ? { codigo_aliado: aliado.codigo, porcentaje_exito_pactado: aliado.porcentaje } : {}),
-      })
-      .select('id')
-      .single()
+      .select('id, nombre_iniciativa, nombre_cliente, correo_cliente, contrato_firmado, plan_pago')
+      .eq('id', id_proyecto)
+      .maybeSingle<{
+        id: string
+        nombre_iniciativa: string | null
+        nombre_cliente: string | null
+        correo_cliente: string | null
+        contrato_firmado: boolean | null
+        plan_pago: string | null
+      }>()
+    if (!proyecto) return NextResponse.json({ error: 'No encontramos tu proyecto.' }, { status: 404 })
 
-    if (error) throw error
+    if (!proyecto.contrato_firmado) {
+      return NextResponse.json(
+        { error: 'Para postular primero debes aceptar tu contrato. Sin contrato no podemos continuar.' },
+        { status: 403 },
+      )
+    }
+
+    // Cupo de la semana: si ya lo usó, no se prepara sola; puede pedir permiso.
+    const cupo = CUPO_SEMANAL[proyecto.plan_pago || ''] ?? CUPO_POR_DEFECTO
+    const hace7Dias = new Date(Date.now() - 7 * 86400000).toISOString()
+    const { count: usadas } = await supabase
+      .from('postulaciones')
+      .select('id', { count: 'exact', head: true })
+      .eq('proyecto_id', id_proyecto)
+      .gte('actualizada_en', hace7Dias)
+    if ((usadas || 0) >= cupo) {
+      return NextResponse.json(
+        {
+          necesita_permiso: true,
+          error: `Ya usaste tu cupo de esta semana (${cupo} ${cupo === 1 ? 'postulación' : 'postulaciones'}). Puedes pedir permiso para otra.`,
+        },
+        { status: 409 },
+      )
+    }
+
+    // Recién ahora, con contrato firmado y cupo disponible, la respuesta cuenta:
+    // si estaba en espera y ahora quiere postular, vuelve a ser una elegida.
+    // (Antes se guardaba al principio y el cliente salía de la pantalla
+    // obligatoria sin haber quedado realmente postulado.)
+    if (id_candidata) {
+      await supabase
+        .from('convocatorias_candidatas_proyecto')
+        .update({ eleccion_cliente: 'elegida' })
+        .eq('id', id_candidata)
+        .eq('id_proyecto', id_proyecto)
+    }
+
+    const { data: ficha } = await supabase
+      .from('biblioteca_convocatorias')
+      .select('id, nombre, entidad, fecha_cierre_texto, fuente_oficial')
+      .eq('id', id_biblioteca)
+      .maybeSingle<{ id: string; nombre: string | null; entidad: string | null; fecha_cierre_texto: string | null; fuente_oficial: string | null }>()
+    if (!ficha) return NextResponse.json({ error: 'No encontramos esa convocatoria.' }, { status: 404 })
+
+    const origen = req.nextUrl.origin
+    after(async () => {
+      let resumen = ''
+      try {
+        const r = await prepararPostulacion(supabase, id_proyecto, id_biblioteca)
+        resumen = r.ok
+          ? `Postulación preparada. Puntaje de la evaluación: ${r.puntaje ?? 's/d'}. ${r.veredicto || ''} ${r.mensaje || ''}`
+          : `No se pudo preparar todavía: ${r.mensaje}`
+      } catch (e) {
+        resumen = `Error preparando la postulación: ${(e as Error).message}`
+      }
+      try {
+        const html = buildEmailTemplate({
+          title: 'Un cliente quiere postular',
+          greeting: 'Hola equipo,',
+          bodyLines: [
+            `${proyecto.nombre_cliente || proyecto.correo_cliente} apretó «Quiero postular» en su proyecto «${proyecto.nombre_iniciativa || 'sin nombre'}».`,
+            `Convocatoria: ${ficha.nombre || 'sin nombre'}${ficha.entidad ? ` (${ficha.entidad})` : ''}${ficha.fecha_cierre_texto ? ` — cierre: ${ficha.fecha_cierre_texto}` : ''}.`,
+            `Tipo de proyecto: ${proyecto.plan_pago === 'cortesia' ? 'cortesía (comisión de éxito 10 %)' : 'plan contratado'}.`,
+            resumen,
+          ],
+          ctaText: 'Abrir el proyecto',
+          ctaUrl: `${origen}/mis-convocatorias?proyecto=${proyecto.id}`,
+        })
+        await Promise.all(
+          DESTINOS.map((to) => sendEmail({ to, subject: `Quiere postular: ${ficha.nombre || 'convocatoria'}`, html })),
+        )
+      } catch (e) {
+        console.error('[quiero-postular] No se pudo enviar el informe:', e)
+      }
+    })
 
     return NextResponse.json({
-      success: true,
-      proyectoId: data.id,
-      esUsuarioNuevo,
-      passwordTemporal,
+      ok: true,
+      mensaje: 'Listo: ya estamos preparando tu postulación. Te avisamos cuando esté lista.',
     })
-  } catch (error: any) {
-    console.error('Error creando proyecto:', error)
-    return NextResponse.json({ error: error.message || 'Error al crear el proyecto' }, { status: 500 })
+  } catch (e) {
+    console.error('[quiero-postular] Error:', e)
+    return NextResponse.json({ error: 'No se pudo procesar tu solicitud.' }, { status: 500 })
   }
 }
