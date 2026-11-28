@@ -16,6 +16,14 @@ function formatoCOP(valor: number): string {
   return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(valor)
 }
 
+/** Texto de un precio según el país: Colombia en pesos con IVA incluido, exterior en dólares, sin país elegido ambos. */
+function textoPrecio(usd: number, pais: 'colombia' | 'internacional' | null, tasa: number): string {
+  if (pais === 'internacional') return formatoUSD(usd)
+  const c = precioColombia(usd, tasa)
+  if (pais === 'colombia') return `${formatoCOP(c.total)} (IVA incluido)`
+  return `${formatoUSD(usd)} · Colombia: ${formatoCOP(c.total)} con IVA incluido`
+}
+
 function MembresiaContent() {
   // Si llega ?nivel=explorador (o constructor / arquitecto) en la dirección,
   // se abre directo esa membresía, sin pasar por la pantalla de "elige tu
@@ -82,10 +90,10 @@ function MembresiaContent() {
                 </div>
                 <div>
                   <div className="text-2xl font-black text-color-primary">
-                    {formatoUSD(n.precioMensualUsd)}<span className="text-xs font-bold text-color-base-content/50 ml-1">/mes</span>
+                    {formatoCOP(precioColombia(n.precioMensualUsd, tasa).total)}<span className="text-xs font-bold text-color-base-content/50 ml-1">/mes · IVA incluido</span>
                   </div>
                   <p className="text-xs font-bold text-color-base-content/60 mt-0.5">
-                    o {formatoUSD(precioAnualUsd(n))}/año · 2 meses gratis
+                    o {formatoCOP(precioColombia(precioAnualUsd(n), tasa).total)}/año · 2 meses gratis · Desde el exterior: {formatoUSD(n.precioMensualUsd)}/mes
                   </p>
                 </div>
                 <ul className="space-y-2 flex-1">
@@ -179,7 +187,7 @@ function MembresiaContent() {
                       ciclo === 'mensual' ? 'border-color-primary bg-color-primary/10' : 'border-color-base-300'
                     )}
                   >
-                    Mensual — {formatoUSD(nivel.precioMensualUsd)}
+                    Mensual — {textoPrecio(nivel.precioMensualUsd, pais, tasa)}
                   </button>
                   <button
                     type="button"
@@ -189,7 +197,7 @@ function MembresiaContent() {
                       ciclo === 'anual' ? 'border-color-primary bg-color-primary/10' : 'border-color-base-300'
                     )}
                   >
-                    Anual — {formatoUSD(precioAnualUsd(nivel))}
+                    Anual — {textoPrecio(precioAnualUsd(nivel), pais, tasa)}
                   </button>
                 </div>
               </div>
