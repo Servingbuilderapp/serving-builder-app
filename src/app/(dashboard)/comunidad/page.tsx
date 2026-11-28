@@ -16,10 +16,10 @@ type Mensaje = { id: string; nombre: string; texto: string; created_at: string }
 export default async function ComunidadPage() {
   const ctx = await contextoMiembro()
   if (!ctx.vigente && !ctx.esEquipo) {
-    return <AvisoMiembros titulo="Comunidad" texto="Con la membresía Arquitecto entras a la comunidad de miembros de Serving para compartir y resolver dudas." />
+    return <AvisoMiembros titulo="Comunidad" texto="Las membresías ya no incluyen comunidad." />
   }
   if (!ctx.servicios.comunidad) {
-    return <AvisoMiembros titulo="Comunidad" texto="La comunidad está incluida en el nivel Arquitecto." boton="Ver los niveles" />
+    return <AvisoMiembros titulo="Comunidad" texto="Las membresías ya no incluyen comunidad." boton="Ver los niveles" />
   }
 
   const { data } = await ctx.servicio

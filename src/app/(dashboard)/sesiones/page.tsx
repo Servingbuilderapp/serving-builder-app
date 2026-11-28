@@ -17,10 +17,10 @@ type Sesion = { id: string; titulo: string; descripcion: string | null; fecha_ho
 export default async function SesionesPage() {
   const ctx = await contextoMiembro()
   if (!ctx.vigente && !ctx.esEquipo) {
-    return <AvisoMiembros titulo="Sesiones grupales" texto="Con una membresía Constructor o Arquitecto participas en sesiones grupales en vivo con el equipo de Serving." />
+    return <AvisoMiembros titulo="Sesiones grupales" texto="Las membresías ya no incluyen sesiones grupales." />
   }
   if (ctx.servicios.sesionesPorMes === 0) {
-    return <AvisoMiembros titulo="Sesiones grupales" texto="Las sesiones grupales están incluidas desde el nivel Constructor." boton="Ver los niveles" />
+    return <AvisoMiembros titulo="Sesiones grupales" texto="Las membresías ya no incluyen sesiones grupales." boton="Ver los niveles" />
   }
 
   const ahora = new Date().toISOString()

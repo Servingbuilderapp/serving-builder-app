@@ -64,7 +64,7 @@ export default async function ProyectoMembresiaPage({ params }: { params: Promis
         <section className={`mb-5 rounded-2xl border border-[#B08D57]/35 bg-[#4C2032] p-5 ${SOMBRA_TARJETA}`}>
           <h2 className="text-[15px] font-extrabold text-[#E0B868]">Tu proyecto está terminado</h2>
           <p className="mt-1 text-[13px] leading-relaxed text-[#F3E7DC]/70">
-            Busca la convocatoria que más te sirva, regístrala aquí y postula tú mismo en el portal de la entidad. Cada proyecto tiene máximo {MAX_POSTULACIONES_POR_PROYECTO} postulaciones. Si ganas, el 10 % es para Serving.
+            Busca la convocatoria que más te sirva, regístrala aquí y postula tú mismo en el portal de la entidad. Cada proyecto tiene máximo {MAX_POSTULACIONES_POR_PROYECTO} postulaciones.
           </p>
           <RegistrarPostulaciones proyectoId={id} opciones={opciones} usadas={usadas} />
           <div className="mt-4 flex flex-wrap gap-2">

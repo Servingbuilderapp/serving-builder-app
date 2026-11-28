@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
+import { nivelPorSlug, precioAnualUsd } from '@/lib/membresias'
+import { obtenerTasa, precioColombia } from '@/lib/tasaCambio'
 import { VERSION_ACEPTACION_MEMBRESIA, textoAceptacionMembresia } from '@/lib/aceptacionMembresia'
 
 function generarPasswordTemporal() {
@@ -62,6 +64,18 @@ export async function POST(req: Request) {
 
     const supabase = await createClient()
 
+    // El precio en pesos (con IVA) se calcula aquí con la tasa del día; no se confía en el que manda el navegador.
+    let montoCopFinal: number | null = null
+    if (pais === 'colombia') {
+      const n = nivelPorSlug(nivel)
+      if (n) {
+        const usd = ciclo === 'anual' ? precioAnualUsd(n) : n.precioMensualUsd
+        montoCopFinal = precioColombia(usd, (await obtenerTasa()).tasa).total
+      } else {
+        montoCopFinal = montoCop || null
+      }
+    }
+
     const { data, error } = await supabase
       .from('membresias_clientes')
       .insert({
@@ -72,7 +86,7 @@ export async function POST(req: Request) {
         nivel,
         ciclo,
         monto_usd: montoUsd,
-        monto_cop: montoCop || null,
+        monto_cop: montoCopFinal,
         estado: 'pendiente_pago',
       })
       .select('id')

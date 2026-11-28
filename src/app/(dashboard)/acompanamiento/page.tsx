@@ -22,10 +22,10 @@ type Cita = { id: string; tema: string; estado: string; fecha_hora: string | nul
 export default async function AcompanamientoPage() {
   const ctx = await contextoMiembro()
   if (!ctx.vigente && !ctx.esEquipo) {
-    return <AvisoMiembros titulo="Acompañamiento semanal" texto="Con la membresía Arquitecto tienes un encuentro cada semana con el equipo de Serving para avanzar en tus proyectos." />
+    return <AvisoMiembros titulo="Acompañamiento semanal" texto="Las membresías ya no incluyen acompañamiento semanal." />
   }
   if (!ctx.servicios.acompanamientoSemanal) {
-    return <AvisoMiembros titulo="Acompañamiento semanal" texto="El acompañamiento de una vez por semana está incluido en el nivel Arquitecto." boton="Ver los niveles" />
+    return <AvisoMiembros titulo="Acompañamiento semanal" texto="Las membresías ya no incluyen acompañamiento semanal." boton="Ver los niveles" />
   }
 
   const { data } = await ctx.servicio

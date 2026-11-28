@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { Crown } from 'lucide-react'
-import { nivelPorSlug, NIVELES_MEMBRESIA, CUPOS_POR_NIVEL, SERVICIOS_POR_NIVEL, formatoUSD } from '@/lib/membresias'
+import { nivelPorSlug, NIVELES_MEMBRESIA, CUPOS_POR_NIVEL, formatoUSD } from '@/lib/membresias'
 import { esEquipoServing } from '@/lib/guardiaEquipo'
 import { resumenDeUso } from '@/lib/membresiasUso'
 import { BeneficiosMes } from '@/components/panel/BeneficiosMes'
@@ -70,9 +70,6 @@ export default async function MiMembresiaPage() {
               <ul className="mt-1 space-y-1 text-[13px] text-[#F3E7DC]/80">
                 <li>Proyectos al mes: {ETIQ_CUPO(CUPOS_POR_NIVEL[n.slug].proyecto_minimo)}</li>
                 <li>Ventajas del mes (convocatorias):{ETIQ_CUPO(CUPOS_POR_NIVEL[n.slug].convocatorias)}</li>
-                <li>Sesiones grupales: {SERVICIOS_POR_NIVEL[n.slug].sesionesPorMes === 0 ? 'No incluido' : `${SERVICIOS_POR_NIVEL[n.slug].sesionesPorMes} al mes`}</li>
-                <li>Comunidad: {SERVICIOS_POR_NIVEL[n.slug].comunidad ? 'Incluida' : 'No incluida'}</li>
-                <li>Acompañamiento semanal: {SERVICIOS_POR_NIVEL[n.slug].acompanamientoSemanal ? 'Incluido' : 'No incluido'}</li>
               </ul>
               <p className="mt-3 text-[15px] font-extrabold text-[#C9A46B]">{formatoUSD(n.precioMensualUsd)} al mes</p>
               <Link href={`/membresia?nivel=${n.slug}`} className="mt-2 inline-flex rounded-xl bg-[#C9A46B] px-4 py-2 text-[13px] font-bold text-[#3B1727]">
@@ -89,10 +86,6 @@ export default async function MiMembresiaPage() {
               ['Ventajas del mes', '/convocatorias-del-mes'],
               ['Calendario', '/calendario'],
               ['Mis proyectos', '/mis-proyectos'],
-              ['Sesiones grupales', '/sesiones'],
-              ['Comunidad', '/comunidad'],
-              ['Acompañamiento', '/acompanamiento'],
-              ['App de Ideas', '/ideas'],
             ].map(([texto, href]) => (
               <Link key={href} href={href} className="rounded-xl bg-[#C9A46B] px-3 py-2 text-[13px] font-bold text-[#3B1727]">{texto}</Link>
             ))}
@@ -157,7 +150,7 @@ export default async function MiMembresiaPage() {
       <header className="mb-5">
         <h1 className="text-[19px] font-extrabold tracking-tight text-[#F3E7DC]"><Ayuda clave="panel.mi_membresia" claro={false}>Mi membresía</Ayuda></h1>
         <p className="mt-1 max-w-2xl text-[13.5px] leading-relaxed text-[#F3E7DC]/60">
-          Tu nivel, hasta cuándo está activo y cuánto te queda este mes de cada beneficio.
+          Tu nivel, hasta cuándo está activo y cuánto te queda este mes de cada beneficio. Tienes un mes para desarrollar tu proyecto y 45 días para postular.
         </p>
       </header>
 

@@ -61,7 +61,7 @@ export default async function MisProyectosPage() {
               : `Este mes puedes abrir ${limite} ${limite === 1 ? 'proyecto' : 'proyectos'}. Te quedan ${restante}. Se renuevan el ${uso?.hasta.toLocaleDateString('es-CO', { day: 'numeric', month: 'long' })}.`}
         </p>
         <p className="mt-1 max-w-2xl text-[13px] text-[#F3E7DC]/50">
-          Tú llenas tu proyecto paso a paso, o traes uno que ya tengas hecho. Cuando esté listo, postulas tú mismo, hasta en 3 convocatorias por proyecto. Si ganas, el 10 % es para Serving.
+          Tú llenas tu proyecto paso a paso, o traes uno que ya tengas hecho. Cuando esté listo, postulas tú mismo, hasta en 3 convocatorias por proyecto.
         </p>
       </header>
 

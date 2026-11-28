@@ -15,7 +15,7 @@
  * `factorAnual` de cada nivel.
  */
 
-export const TASA_COP_POR_USD = 3493 // La misma tasa que usa /contratar. Actualizar periódicamente.
+export const TASA_COP_POR_USD = 3486.64 // Tasa de respaldo (28 nov 2026) si falla la TRM automática. Actualizar periódicamente.
 
 export type NivelMembresia = {
   slug: 'explorador' | 'constructor' | 'arquitecto'
@@ -33,44 +33,38 @@ export const NIVELES_MEMBRESIA: NivelMembresia[] = [
     nombre: 'Explorador',
     precioMensualUsd: 47,
     factorAnual: 10,
-    resumen: 'Trae 1 proyecto listo o arma el tuyo por tu cuenta, y postula tú mismo hasta en 3 convocatorias.',
+    resumen: 'Trae 1 proyecto listo o arma el tuyo por tu cuenta, y postula tú mismo hasta en 3 convocatorias durante 45 días.',
     incluye: [
       'Trae 1 proyecto listo, o arma el tuyo por ti mismo',
       'Centinela Digital',
-      'App de ideas',
       'Postulas tu proyecto tú mismo, hasta en 3 convocatorias',
-      'Si ganas, el 10 % es para Serving',
+      'Un mes para desarrollar tu proyecto y 45 días para postular',
     ],
   },
   {
     slug: 'constructor',
     nombre: 'Constructor',
-    precioMensualUsd: 97,
+    precioMensualUsd: 67,
     factorAnual: 10,
-    resumen: 'Trae o arma 2 proyectos diferentes y postula cada uno tú mismo, hasta en 3 convocatorias.',
+    resumen: 'Trae o arma 2 proyectos diferentes y postula cada uno tú mismo, hasta en 3 convocatorias durante 45 días.',
     incluye: [
       'Trae o arma 2 proyectos diferentes',
       'Postulas cada proyecto tú mismo, hasta en 3 convocatorias',
       'Centinela Digital',
-      'App de ideas',
-      'Charla mensual',
-      'Si ganas, el 10 % es para Serving',
+      'Un mes para desarrollar tus proyectos y 45 días para postular',
     ],
   },
   {
     slug: 'arquitecto',
     nombre: 'Arquitecto',
-    precioMensualUsd: 197,
+    precioMensualUsd: 97,
     factorAnual: 10,
-    resumen: 'Trae o arma 3 proyectos, postula cada uno tú mismo hasta en 3 convocatorias y cuenta con acompañamiento semanal.',
+    resumen: 'Trae o arma 3 proyectos diferentes y postula cada uno tú mismo, hasta en 3 convocatorias durante 45 días.',
     incluye: [
       'Trae o arma 3 proyectos diferentes',
       'Postulas cada proyecto tú mismo, hasta en 3 convocatorias',
       'Centinela Digital',
-      'App de ideas',
-      'Charla mensual',
-      'Acompañamiento semanal',
-      'Si ganas, el 10 % es para Serving',
+      'Un mes para desarrollar tus proyectos y 45 días para postular',
     ],
   },
 ]
@@ -122,8 +116,8 @@ export const SERVICIOS_POR_NIVEL: Record<
   NivelMembresia['slug'],
   { sesionesPorMes: number; comunidad: boolean; acompanamientoSemanal: boolean }
 > = {
-  // Desde el 23 nov 2026: charla mensual en Constructor y Arquitectura; acompañamiento semanal solo en Arquitecto. Sin comunidad.
+  // Desde el 28 nov 2026: ningún nivel trae charla mensual, comunidad ni acompañamiento semanal.
   explorador: { sesionesPorMes: 0, comunidad: false, acompanamientoSemanal: false },
-  constructor: { sesionesPorMes: 1, comunidad: false, acompanamientoSemanal: false },
-  arquitecto: { sesionesPorMes: 1, comunidad: false, acompanamientoSemanal: true },
+  constructor: { sesionesPorMes: 0, comunidad: false, acompanamientoSemanal: false },
+  arquitecto: { sesionesPorMes: 0, comunidad: false, acompanamientoSemanal: false },
 }

@@ -312,7 +312,7 @@ const ESCALON_FONDO_EMPRENDER: Escalon = {
 }
 
 /**
- * Estructuración Emprendedor ($6.000.000 + IVA): el plan para emprendedores y MiPymes sin
+ * Estructuración Emprendedor ($4.000.000 + IVA): el plan para emprendedores y MiPymes sin
  * recursos. Antes solo se veía dentro de la pantalla de contratar; ahora tiene su tarjeta
  * en "Nuestros planes".
  */

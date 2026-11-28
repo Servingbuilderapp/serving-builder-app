@@ -1,13 +1,14 @@
 'use client'
 
-import React, { Suspense, useState } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { CheckCircle2, ShieldCheck, Loader2 } from 'lucide-react'
 import { GlowButton } from '@/components/ui/GlowButton'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { cn } from '@/lib/utils'
 import { COBRO_COLOMBIA } from '@/lib/mediosDePago'
-import { NIVELES_MEMBRESIA, nivelPorSlug, precioAnualUsd, aPesos, formatoUSD } from '@/lib/membresias'
+import { NIVELES_MEMBRESIA, nivelPorSlug, precioAnualUsd, formatoUSD, TASA_COP_POR_USD } from '@/lib/membresias'
+import { precioColombia } from '@/lib/tasaCambio'
 import { BotonPagoBold } from '@/components/pagos/BotonPagoBold'
 import { textoAceptacionMembresia } from '@/lib/aceptacionMembresia'
 
@@ -27,6 +28,13 @@ function MembresiaContent() {
   const [ciclo, setCiclo] = useState<'mensual' | 'anual'>('mensual')
   const [pais, setPais] = useState<'colombia' | 'internacional' | null>(null)
   const [step, setStep] = useState(1)
+  const [tasa, setTasa] = useState<number>(TASA_COP_POR_USD)
+  useEffect(() => {
+    fetch('/api/tasa-cambio')
+      .then((r) => r.json())
+      .then((d) => { if (typeof d?.tasa === 'number') setTasa(d.tasa) })
+      .catch(() => {})
+  }, [])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [membresiaId, setMembresiaId] = useState('')
@@ -100,7 +108,8 @@ function MembresiaContent() {
   }
 
   const montoUsd = ciclo === 'anual' ? precioAnualUsd(nivel) : nivel.precioMensualUsd
-  const montoCop = aPesos(montoUsd)
+  const cop = precioColombia(montoUsd, tasa)
+  const montoCop = cop.total
 
   const handleConfirmar = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -238,6 +247,7 @@ function MembresiaContent() {
                 />
               </div>
 
+              <p className="text-xs font-bold uppercase tracking-widest text-color-base-content/60">Contrato de la membresía (obligatorio)</p>
               <label className="flex items-start gap-2 text-xs text-color-base-content/70">
                 <input
                   type="checkbox"
@@ -272,7 +282,10 @@ function MembresiaContent() {
               {pais === 'colombia' && COBRO_COLOMBIA.modo === 'transferencia' && COBRO_COLOMBIA.cuenta ? (
                 <div className="text-left p-6 rounded-2xl bg-color-base-content/5 border border-color-base-content/10 space-y-4">
                   <p className="text-sm font-bold text-color-base-content">
-                    Valor a pagar: {formatoCOP(montoCop)}
+                    Valor a pagar: {formatoCOP(cop.total)}
+                  </p>
+                  <p className="text-xs text-color-base-content/60">
+                    {formatoCOP(cop.base)} + IVA 19 % ({formatoCOP(cop.iva)}). Calculado con la tasa de cambio del día.
                   </p>
 
                   {membresiaId && (

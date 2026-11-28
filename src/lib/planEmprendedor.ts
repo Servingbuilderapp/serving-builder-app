@@ -9,12 +9,12 @@
  *   dejarla pagar. Mientras tanto el proyecto queda en 'pendiente_aval'.
  * - Duración: un mes. Al terminar el plan se cierra.
  * - Comisión de éxito: 10 %.
- * - Cobro: botón integrado de Bold (monto firmado en el servidor), un solo pago de $7.140.000.
+ * - Cobro: botón integrado de Bold (monto firmado en el servidor), un solo pago de $4.760.000.
  */
 
 export const PLAN_EMPRENDEDOR = 'emprendedor'
 export const NOMBRE_PLAN_EMPRENDEDOR = 'Estructuración Emprendedor'
-export const MONTO_EMPRENDEDOR_COP = 6000000 // + IVA
+export const MONTO_EMPRENDEDOR_COP = 4000000 // + IVA
 export const COMISION_EMPRENDEDOR_PCT = 10
 export const MESES_EMPRENDEDOR = 1
 
@@ -51,7 +51,7 @@ general) únicamente para este plan:
    plan no tiene período adicional de cortesía ni extensión: al terminar el
    mes, el plan se cierra.
 
-3. Valor y forma de pago: $6.000.000 COP + IVA (19 %), es decir $7.140.000
+3. Valor y forma de pago: $4.000.000 COP + IVA (19 %), es decir $4.760.000
    COP en total, pagados en un solo contado, una vez aprobada la solicitud.
 
 4. Comisión de éxito: en caso de que el proyecto sea aprobado y reciba
