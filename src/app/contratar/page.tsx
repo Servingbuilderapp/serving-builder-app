@@ -3,6 +3,7 @@
 import React, { Suspense, useState } from 'react'
 import { COBRO_COLOMBIA, COBRO_EXTERIOR, desglosarPrecio } from '@/lib/mediosDePago'
 import { TEXTO_CONTRATO, textoContratoConAliado } from '@/lib/textoContrato'
+import { PUNTOS_COMPROMISO, TITULO_COMPROMISO } from '@/lib/compromisoCliente'
 import { useSearchParams } from 'next/navigation'
 import { GlowButton } from '@/components/ui/GlowButton'
 import { GlassCard } from '@/components/ui/GlassCard'
@@ -38,24 +39,25 @@ const PLANES: Record<
   esencial: {
     nombre: 'Estructuración Estratégica',
     montoCop: 12000000,
-    resumen: 'Formulación completa de tu proyecto y tres meses buscando convocatorias.',
+    resumen: 'Formulación completa de tu proyecto y dos meses buscando convocatorias.',
     incluye: [
       'Diagnóstico incluido',
       'Formulación completa del proyecto',
-      '3 meses de búsqueda de convocatorias',
+      '2 meses de búsqueda de convocatorias',
       'Encaje con los términos de referencia',
-      '3 meses adicionales de cortesía si no se gana nada',
+      'Ayuda para postular a la primera convocatoria',
+      'Prórroga o mes de cortesía si no se consiguen convocatorias acordes',
     ],
   },
   completo: {
     nombre: 'Estructuración Élite',
     montoCop: 17000000,
-    resumen: 'El acompañamiento más completo: seis meses de búsqueda y encaje prioritario.',
+    resumen: 'El acompañamiento más completo: tres meses de búsqueda y encaje prioritario.',
     incluye: [
       'Todo lo de la Estructuración Estratégica',
-      '6 meses de búsqueda de convocatorias',
+      '3 meses de búsqueda de convocatorias',
       'Encaje prioritario con los términos de referencia',
-      '6 meses adicionales de cortesía si no se gana nada',
+      'Prórroga o mes de cortesía si no se consiguen convocatorias acordes',
       'Atención prioritaria',
     ],
   },
@@ -141,6 +143,7 @@ function ContratarContent() {
     whatsapp: '',
     aceptaTerminos: false,
     autorizaDatos: false,
+    aceptaCompromiso: false,
     declaracionBajosRecursos: false,
   })
 
@@ -185,7 +188,7 @@ function ContratarContent() {
 
   const handleFirmar = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!formData.aceptaTerminos || !formData.autorizaDatos || !pais) return
+    if (!formData.aceptaTerminos || !formData.autorizaDatos || !formData.aceptaCompromiso || !pais) return
     setLoading(true)
     setError('')
     try {
@@ -529,11 +532,33 @@ function ContratarContent() {
                 </label>
               </div>
 
+              <div className="p-5 rounded-2xl bg-amber-50 border border-amber-300 space-y-3">
+                <h4 className="text-xs font-black uppercase tracking-widest text-[#1f1f1f]">
+                  {TITULO_COMPROMISO}
+                </h4>
+                <ol className="list-decimal pl-5 space-y-1.5 text-xs text-[#1f1f1f] leading-relaxed">
+                  {PUNTOS_COMPROMISO.map((punto) => (
+                    <li key={punto}>{punto}</li>
+                  ))}
+                </ol>
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.aceptaCompromiso}
+                    onChange={(e) => setFormData({ ...formData, aceptaCompromiso: e.target.checked })}
+                    className="mt-1"
+                  />
+                  <span className="text-xs font-bold text-[#1f1f1f]">
+                    He leído y acepto mi compromiso con la plataforma.
+                  </span>
+                </label>
+              </div>
+
               {error && <p className="text-xs text-red-500 font-bold">{error}</p>}
 
               <GlowButton
                 type="submit"
-                disabled={!formData.aceptaTerminos || !formData.autorizaDatos || !pais || loading || (esEmprendedor && !formData.declaracionBajosRecursos)}
+                disabled={!formData.aceptaTerminos || !formData.autorizaDatos || !formData.aceptaCompromiso || !pais || loading || (esEmprendedor && !formData.declaracionBajosRecursos)}
                 className="w-full py-4 text-sm font-black uppercase tracking-widest"
               >
                 {loading ? <Loader2 className="h-5 w-5 animate-spin mx-auto" /> : t('contratar.boton_firmar')}

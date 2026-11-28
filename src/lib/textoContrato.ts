@@ -5,6 +5,7 @@ import {
   PLAZO_PAGO_EXITO_DIAS,
 } from '@/lib/comisionExito'
 import { TEXTO_CLAUSULA_REPLICA, TITULO_CLAUSULA_REPLICA } from '@/lib/clausulaReplica'
+import { TEXTO_COMPROMISO, TITULO_COMPROMISO } from '@/lib/compromisoCliente'
 
 /**
  * Texto legal del contrato de Estructuración (habeas data + términos).
@@ -65,11 +66,17 @@ Al firmar y proceder con el pago del plan seleccionado, usted contrata el
 servicio de estructuración de proyecto descrito en la oferta, que incluye
 el proceso de formulación técnica y el período de búsqueda, encaje y
 acompañamiento para la postulación a convocatorias indicado en el plan
-elegido (3 o 6 meses, según el plan), sujeto a lo establecido en la
-Cláusula 9 sobre el alcance y límite de esta responsabilidad. Si al
-finalizar dicho período no se ha logrado la aprobación de financiamiento,
-ARQUITECTURA DIGITAL extenderá el período de búsqueda de convocatorias por
-el mismo tiempo adicional, sin costo extra, en los términos ofrecidos.
+elegido (2 meses en la Estructuración Estratégica y 3 meses en la
+Estructuración Élite), sujeto a lo establecido en la Cláusula 9 sobre el
+alcance y límite de esta responsabilidad.
+
+Los meses contratados son un derecho del cliente, no una obligación:
+puede parar cuando quiera. El compromiso de ARQUITECTURA DIGITAL es
+conseguirle convocatorias acordes con su proyecto y ayudarle a postular a
+la primera; ahí termina el servicio. Solo habrá prórroga o mes de cortesía
+si no se consiguieron convocatorias acordes. Si se le presentaron
+convocatorias acordes y el cliente no quiso postular, no hay prórroga ni
+mes de cortesía, sin excepciones.
 
 Todos los valores de los planes se expresan SIN IVA. Al valor del plan se
 suma el IVA a la tarifa vigente (19%), que se factura y declara conforme a
@@ -91,11 +98,13 @@ El resultado final de cada postulación dependerá de su esfuerzo,
 experiencia y capacidad de ejecución, combinados con la rapidez y
 tecnología que ARQUITECTURA DIGITAL aporta para producir proyectos más
 robustos, profesionales y con alta probabilidad de éxito. El servicio
-contratado incluye el derecho a que su proyecto sea presentado, sin
-restricción de cantidad, a todas las convocatorias que la plataforma
-identifique como compatibles durante el período contratado, siempre sujeto
-a que el cliente entregue oportunamente la información y documentación que
-cada convocatoria exija, conforme a la Cláusula 9.
+contratado incluye el derecho a que su proyecto sea presentado a las
+convocatorias que la plataforma identifique como compatibles durante el
+período contratado. La plataforma prepara 1 postulación por semana en la
+Estructuración Estratégica y 3 por semana en la Estructuración Élite; si el
+cliente quiere una más, puede pedir permiso. Todo ello sujeto a que el
+cliente entregue oportunamente la información y documentación que cada
+convocatoria exija, conforme a la Cláusula 9.
 
 9. ALCANCE Y LÍMITE DE LA RESPONSABILIDAD DEL SERVICIO
 La responsabilidad de ARQUITECTURA DIGITAL consiste en: (i) identificar
@@ -176,6 +185,9 @@ autorizar su tratamiento y contratar este servicio.
 
 13. ${TITULO_CLAUSULA_REPLICA}
 ${TEXTO_CLAUSULA_REPLICA}
+
+14. ${TITULO_COMPROMISO.toUpperCase()}
+${TEXTO_COMPROMISO}
 
 Al marcar la casilla de aceptación, usted confirma que ha leído y acepta
 este documento en su totalidad, y que dicha aceptación, junto con la fecha,

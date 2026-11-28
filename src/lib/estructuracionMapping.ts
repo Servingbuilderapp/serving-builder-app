@@ -54,40 +54,41 @@ const DESGLOSE_TECNICO_COMUN = {
 export const ESTRUCTURACION_ESTRATEGICA: PlanEstructuracionMapeado = {
   id: 'esencial',
   nombre: 'Estructuración Estratégica',
-  subtitulo: 'Formulación completa de tu proyecto y tres meses buscando convocatorias',
-  rangoCapitalText: 'Tres meses de búsqueda y acompañamiento',
+  subtitulo: 'Formulación completa de tu proyecto y dos meses buscando convocatorias',
+  rangoCapitalText: 'Dos meses de búsqueda y acompañamiento',
   honorariosBase: 12000000,
   honorariosEstructuracion: '$12.000.000 COP + IVA',
-  honorariosEstructuracionDetalle: 'Honorarios de Estructuración — modalidad de tres meses',
+  honorariosEstructuracionDetalle: 'Honorarios de Estructuración — modalidad de dos meses',
   duracionEntrega: 'Entrega en 5 días hábiles desde que completas el formulario',
-  garantiaAcompanamiento: 'Garantía 3+3: si en 3 meses no consigues la financiación, te damos 3 meses más sin costo',
+  garantiaAcompanamiento: 'Prórroga o mes de cortesía: solo si en los 2 meses no se consiguen convocatorias acordes a tu proyecto',
   desgloseTecnico: DESGLOSE_TECNICO_COMUN,
   incluye: [
     'Diagnóstico incluido',
     'Formulación completa del proyecto',
-    '3 meses de búsqueda de convocatorias',
+    '2 meses de búsqueda de convocatorias',
     'Encaje con los términos de referencia',
-    '3 meses adicionales de cortesía si no se gana nada'
+    'Ayuda para postular a la primera convocatoria',
+    'Prórroga o mes de cortesía si no se consiguen convocatorias acordes'
   ]
 }
 
 export const ESTRUCTURACION_ELITE: PlanEstructuracionMapeado = {
   id: 'completo',
   nombre: 'Estructuración Élite',
-  subtitulo: 'El acompañamiento más completo: seis meses de búsqueda y encaje prioritario',
-  rangoCapitalText: 'Seis meses de búsqueda y atención prioritaria',
+  subtitulo: 'El acompañamiento más completo: tres meses de búsqueda y encaje prioritario',
+  rangoCapitalText: 'Tres meses de búsqueda y atención prioritaria',
   honorariosBase: 17000000,
   honorariosEstructuracion: '$17.000.000 COP + IVA',
   honorariosEstructuracionDetalle:
-    'Honorarios de Estructuración — modalidad de seis meses con atención prioritaria',
+    'Honorarios de Estructuración — modalidad de tres meses con atención prioritaria',
   duracionEntrega: 'Entrega en 5 días hábiles desde que completas el formulario',
-  garantiaAcompanamiento: 'Garantía 6+6: si en 6 meses no consigues la financiación, te damos 6 meses más sin costo',
+  garantiaAcompanamiento: 'Prórroga o mes de cortesía: solo si en los 3 meses no se consiguen convocatorias acordes a tu proyecto',
   desgloseTecnico: DESGLOSE_TECNICO_COMUN,
   incluye: [
     'Todo lo de la Estructuración Estratégica',
-    '6 meses de búsqueda de convocatorias',
+    '3 meses de búsqueda de convocatorias',
     'Encaje prioritario con los términos de referencia',
-    '6 meses adicionales de cortesía si no se gana nada',
+    'Prórroga o mes de cortesía si no se consiguen convocatorias acordes',
     'Atención prioritaria'
   ]
 }

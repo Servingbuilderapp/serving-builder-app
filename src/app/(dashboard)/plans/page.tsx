@@ -33,46 +33,48 @@ export default async function PlansPage() {
       slug: 'esencial',
       name_en: 'Strategic Structuring',
       name_es: 'Estructuración Estratégica',
-      description_en: 'Full project structuring with 3 months of grant search.',
-      description_es: 'Estructuración completa de tu proyecto con 3 meses de búsqueda de convocatorias.',
+      description_en: 'Full project structuring with 2 months of grant search.',
+      description_es: 'Estructuración completa de tu proyecto con 2 meses de búsqueda de convocatorias.',
       price_monthly: 12000000,
       items_en: [
         'Free Diagnosis Included',
         'Full Formulation Process',
-        '3 Months of Grant & Funding Search',
+        '2 Months of Grant & Funding Search',
         'Terms of Reference Matching',
-        '+3 Extra Months if Nothing is Won'
+        'Help applying to the first call',
+        'Extension or courtesy month only if no suitable calls are found'
       ],
       items_es: [
         'Diagnóstico Gratuito Incluido',
         'Formulación Completa',
-        '3 Meses de Búsqueda de Convocatorias',
+        '2 Meses de Búsqueda de Convocatorias',
         'Encaje con Términos de Referencia',
-        '+3 Meses de Cortesía si no se Gana Nada'
+        'Ayuda para postular a la primera convocatoria',
+        'Prórroga o mes de cortesía solo si no se consiguen convocatorias acordes'
       ]
     },
     {
       slug: 'completo',
       name_en: 'Elite Structuring',
       name_es: 'Estructuración Élite',
-      description_en: 'Our most complete plan: 6 months of grant search and priority matching.',
-      description_es: 'Nuestra modalidad más completa: 6 meses de búsqueda de convocatorias y encaje prioritario.',
+      description_en: 'Our most complete plan: 3 months of grant search and priority matching.',
+      description_es: 'Nuestra modalidad más completa: 3 meses de búsqueda de convocatorias y encaje prioritario.',
       price_monthly: 17000000,
       featured: true,
       items_en: [
         'Free Diagnosis Included',
         'Full Formulation Process',
-        '6 Months of Grant & Funding Search',
+        '3 Months of Grant & Funding Search',
         'Terms of Reference Matching',
-        '+6 Extra Months if Nothing is Won',
+        'Extension or courtesy month only if no suitable calls are found',
         'Priority Support'
       ],
       items_es: [
         'Diagnóstico Gratuito Incluido',
         'Formulación Completa',
-        '6 Meses de Búsqueda de Convocatorias',
+        '3 Meses de Búsqueda de Convocatorias',
         'Encaje con Términos de Referencia',
-        '+6 Meses de Cortesía si no se Gana Nada',
+        'Prórroga o mes de cortesía solo si no se consiguen convocatorias acordes',
         'Soporte Prioritario'
       ]
     }

@@ -102,9 +102,9 @@ export function ContratoDigitalModal({ plan, onContratoFirmado, onBack }: Contra
             El valor acordado para el plan seleccionado (<strong>{plan.nombre}</strong>) es de <strong>{plan.precioTotalDisplay}</strong>. El pago se realiza en dos contados iguales de <strong>{plan.pagoInicial}</strong> (IVA incluido): el primero al firmar este contrato, con el cual inicia la estructuración; y el segundo el día de la entrega del proyecto estructurado, con el cual inicia el período de búsqueda de convocatorias, postulación y radicación. Todos los valores están expresados en pesos colombianos e incluyen el IVA a la tarifa vigente, que EL PRESTADOR factura y declara conforme a la ley.
           </p>
 
-          <h5 className="font-bold text-color-base-content uppercase pt-2">CLÁUSULA TERCERA - GARANTÍA DE ACOMPAÑAMIENTO EXTENDIDO:</h5>
+          <h5 className="font-bold text-color-base-content uppercase pt-2">CLÁUSULA TERCERA - MESES CONTRATADOS, PRÓRROGA Y CORTESÍA:</h5>
           <p>
-            {plan.garantia} En caso de no resultar beneficiario de fondos durante el periodo inicial contratado, EL PRESTADOR extenderá el tiempo de búsqueda y postulación de forma 100% gratuita según los términos garantizados en el plan.
+            Los meses contratados son un derecho de EL CLIENTE, no una obligación; puede parar cuando quiera. EL PRESTADOR se compromete a conseguirle convocatorias acordes y a ayudarle a postular a la primera; ahí termina el servicio. Solo habrá prórroga o mes de cortesía si no se consiguieron convocatorias acordes. Si se le presentaron convocatorias acordes y EL CLIENTE no quiso postular, no hay prórroga ni cortesía, sin excepciones.
           </p>
 
           <h5 className="font-bold text-color-base-content uppercase pt-2">CLÁUSULA CUARTA - POLÍTICA DE HABEAS DATA Y PRIVACIDAD (LEY 1581 DE 2012):</h5>
@@ -148,7 +148,7 @@ export function ContratoDigitalModal({ plan, onContratoFirmado, onBack }: Contra
             EL PRESTADOR <strong>no garantiza</strong>, y nada en este contrato podrá interpretarse como promesa de, la aprobación del proyecto, su selección, su adjudicación ni el desembolso de recursos. Esas decisiones corresponden de manera exclusiva a las entidades financiadoras, que aplican sus propios criterios, cupos, calendarios y disponibilidad presupuestal, ajenos por completo al control de las partes.
           </p>
           <p>
-            Ninguna manifestación verbal, publicitaria, comercial o de cualquier otra naturaleza, anterior o posterior a la firma, podrá entenderse como una promesa de obtención de financiación. La <strong>garantía de acompañamiento extendido</strong> de la Cláusula Tercera es una ampliación del tiempo de servicio y no una promesa de resultado ni un derecho a devolución.
+            Ninguna manifestación verbal, publicitaria, comercial o de cualquier otra naturaleza, anterior o posterior a la firma, podrá entenderse como una promesa de obtención de financiación. La <strong>prórroga o mes de cortesía</strong> de la Cláusula Tercera es una ampliación del tiempo de servicio y no una promesa de resultado ni un derecho a devolución.
           </p>
           <p>
             En consecuencia, el hecho de que el proyecto no resulte financiado <strong>no da lugar a devolución de los honorarios</strong> pagados, por corresponder estos al trabajo efectivamente ejecutado. Los plazos y obligaciones de EL PRESTADOR se suspenderán mientras EL CLIENTE no entregue la información, los documentos o las firmas que le sean requeridos, o mientras incumpla los pagos pactados.
