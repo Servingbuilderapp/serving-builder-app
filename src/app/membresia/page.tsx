@@ -93,7 +93,7 @@ function MembresiaContent() {
                     {formatoCOP(precioColombia(n.precioMensualUsd, tasa).total)}<span className="text-xs font-bold text-color-base-content/50 ml-1">/mes · IVA incluido</span>
                   </div>
                   <p className="text-xs font-bold text-color-base-content/60 mt-0.5">
-                    o {formatoCOP(precioColombia(precioAnualUsd(n), tasa).total)}/año · 2 meses gratis · Desde el exterior: {formatoUSD(n.precioMensualUsd)}/mes
+                    o {formatoCOP(precioColombia(precioAnualUsd(n), tasa).total)}/año · Desde el exterior: {formatoUSD(n.precioMensualUsd)}/mes
                   </p>
                 </div>
                 <ul className="space-y-2 flex-1">

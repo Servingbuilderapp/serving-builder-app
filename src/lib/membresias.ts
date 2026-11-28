@@ -10,8 +10,8 @@
  * `/contratar` (ver TASA_COP_POR_USD más abajo) — hay que actualizarla cada
  * cierto tiempo a mano, igual que allá.
  *
- * El precio anual es 10 veces el mensual: pagando el año completo, el cliente
- * recibe 2 meses gratis. Para cambiarlo, se cambia solo el campo
+ * El precio anual es 12 veces el mensual: sin descuento ni meses gratis
+ * (decisión del dueño, 28 nov 2026). Para cambiarlo, se cambia solo el campo
  * `factorAnual` de cada nivel.
  */
 
@@ -32,7 +32,7 @@ export const NIVELES_MEMBRESIA: NivelMembresia[] = [
     slug: 'explorador',
     nombre: 'Explorador',
     precioMensualUsd: 47,
-    factorAnual: 10,
+    factorAnual: 12,
     resumen: 'Trae 1 proyecto listo o arma el tuyo por tu cuenta, y postula tú mismo hasta en 3 convocatorias durante 45 días.',
     incluye: [
       'Trae 1 proyecto listo, o arma el tuyo por ti mismo',
@@ -45,7 +45,7 @@ export const NIVELES_MEMBRESIA: NivelMembresia[] = [
     slug: 'constructor',
     nombre: 'Constructor',
     precioMensualUsd: 67,
-    factorAnual: 10,
+    factorAnual: 12,
     resumen: 'Trae o arma 2 proyectos diferentes y postula cada uno tú mismo, hasta en 3 convocatorias durante 45 días.',
     incluye: [
       'Trae o arma 2 proyectos diferentes',
@@ -58,7 +58,7 @@ export const NIVELES_MEMBRESIA: NivelMembresia[] = [
     slug: 'arquitecto',
     nombre: 'Arquitecto',
     precioMensualUsd: 97,
-    factorAnual: 10,
+    factorAnual: 12,
     resumen: 'Trae o arma 3 proyectos diferentes y postula cada uno tú mismo, hasta en 3 convocatorias durante 45 días.',
     incluye: [
       'Trae o arma 3 proyectos diferentes',
