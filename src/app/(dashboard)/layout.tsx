@@ -6,6 +6,7 @@ import { esEquipoServing } from '@/lib/guardiaEquipo'
 import { calcularSiguientePaso } from '@/lib/siguientePaso'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { PuertaCortesia } from '@/components/panel/PuertaCortesia'
+import { PuertaConvocatorias, type ConvocatoriaPorResponder } from '@/components/panel/PuertaConvocatorias'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -137,6 +138,39 @@ export default async function LayoutPanel({ children }: { children: React.ReactN
     }
   }
 
+  // Notificación obligatoria (28 nov 2026): si la plataforma ya le encontró
+  // convocatorias al cliente y no ha respondido alguna, solo ve esa pantalla
+  // hasta responder «Quiero postular», «Esperar» o «Descartar» en cada una.
+  let porResponder: ConvocatoriaPorResponder[] = []
+  if (!puerta && !esAdmin && !esSocio && proyecto?.id) {
+    try {
+      const { data: pendientes } = await supabaseAdmin
+        .from('convocatorias_candidatas_proyecto')
+        .select('id, nombre, entidad, fecha_cierre, monto, biblioteca_id')
+        .eq('id_proyecto', proyecto.id)
+        .eq('seleccionada', true)
+        .is('eleccion_cliente', null)
+        .limit(50)
+      porResponder = ((pendientes || []) as {
+        id: string
+        nombre: string | null
+        entidad: string | null
+        fecha_cierre: string | null
+        monto: string | null
+        biblioteca_id: string | null
+      }[]).map((c) => ({
+        id: String(c.id),
+        bibliotecaId: c.biblioteca_id ? String(c.biblioteca_id) : null,
+        nombre: c.nombre || 'Convocatoria sin nombre',
+        entidad: c.entidad || null,
+        fechaCierre: c.fecha_cierre || null,
+        monto: c.monto || null,
+      }))
+    } catch {
+      porResponder = []
+    }
+  }
+
   return (
     <PanelShell
       proyecto={
@@ -155,7 +189,13 @@ export default async function LayoutPanel({ children }: { children: React.ReactN
       aviso={aviso}
       numeroAlertas={esAdmin ? alertasEquipo : aviso?.accion ? 1 : 0}
     >
-      {puerta ? <PuertaCortesia nombre={puerta.nombre} comisionPct={puerta.comision_pct} dias={puerta.dias} /> : children}
+      {puerta ? (
+        <PuertaCortesia nombre={puerta.nombre} comisionPct={puerta.comision_pct} dias={puerta.dias} />
+      ) : porResponder.length > 0 && proyecto?.id ? (
+        <PuertaConvocatorias proyectoId={String(proyecto.id)} nombre={nombreUsuario} convocatorias={porResponder} />
+      ) : (
+        children
+      )}
     </PanelShell>
   )
 }

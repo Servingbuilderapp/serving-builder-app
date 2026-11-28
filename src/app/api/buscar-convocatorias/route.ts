@@ -25,19 +25,14 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-// Cuántas convocatorias, COMO MÁXIMO, se le presentan al cliente por semana,
-// según la modalidad que contrató. Es un tope, no una promesa: si esa semana
-// no hay tantas oportunidades que encajen de verdad, se entregan menos (o
-// ninguna) — nunca se rellena el lote solo para completar el número.
-// Decisión del dueño (10 sep 2026): cada convocatoria que se selecciona le
-// cuesta a la plataforma una corrida de Gemini para el Motor 2 y otra para
-// el Motor 3 (encaje) — de ahí que Élite, que vale más, tenga más cupo
-// semanal que Estratégica.
-const CONVOCATORIAS_POR_SEMANA: Record<string, number> = {
-  esencial: 1, // Estructuración Estratégica ($12.000.000) — máximo por semana
-  completo: 3, // Estructuración Élite ($17.000.000) — máximo por semana
-};
-const TAMANO_LOTE_POR_DEFECTO = 1;
+// Decisión del dueño (28 nov 2026): al cliente le llegan TODAS las convocatorias
+// que de verdad encajen (encaje de 60 o más), sin tope de notificaciones. Lo que
+// sigue limitado por semana es cuántas postulaciones PREPARA la plataforma
+// (1 en Estratégica, 3 en Élite): eso se controla en
+// /api/postulacion/quiero-postular, no aquí. Este número es solo un seguro
+// contra una respuesta descontrolada del modelo, no un cupo comercial.
+// (Antes, 10 sep 2026, el lote era 1 / 3 por semana según la modalidad.)
+const TAMANO_LOTE_MAXIMO = 30;
 
 const PROMPT_MOTOR_2 = `
 Eres el MOTOR DE BÚSQUEDA del sistema de Arquitectura Digital de Proyectos.
@@ -176,14 +171,7 @@ async function ejecutarBusquedaConvocatorias(id_proyecto: string) {
     return { status: 500, body: { error: "Falta configurar GEMINI_API_KEY en el servidor" }, idsSeleccionadas: [] as string[] };
   }
 
-  const { data: proyectoParaPlan } = await supabase
-    .from("proyectos_clientes_serving")
-    .select("plan_pago")
-    .eq("id", id_proyecto)
-    .maybeSingle();
-
-  const tamanoLote =
-    CONVOCATORIAS_POR_SEMANA[proyectoParaPlan?.plan_pago || ""] ?? TAMANO_LOTE_POR_DEFECTO;
+  const tamanoLote = TAMANO_LOTE_MAXIMO;
 
   const { data: contenido, error: errorContenido } = await supabase
     .from("contenido_pasos_proyecto")
@@ -303,7 +291,7 @@ ${bibliotecaTexto}
 OPORTUNIDADES YA EVALUADAS ANTES PARA ESTE PROYECTO (no las repitas, ni seleccionadas ni descartadas):
 ${listaYaEvaluadas}
 
-TAMAÑO DEL LOTE: selecciona COMO MÁXIMO ${tamanoLote} oportunidad${tamanoLote === 1 ? "" : "es"} para el lote de esta vez — nunca más de esa cantidad. Es un tope, no una meta: si esta semana solo hay ${tamanoLote === 1 ? "una oportunidad que de verdad encaje" : "una o dos que de verdad encajen"}, selecciona solo esas, y si ninguna encaja de verdad, no selecciones ninguna. PROHIBIDO rellenar el lote con una oportunidad débil solo para completar el número. Registra también las demás candidatas que evaluaste y no quedaron en el lote, como descartadas con su motivo.
+TAMAÑO DEL LOTE: selecciona TODAS las oportunidades que de verdad encajen con el proyecto (encaje de 60 % o más), sin un número fijo; por seguridad nunca más de ${tamanoLote}. Si solo hay una, selecciona una; si ninguna encaja de verdad, no selecciones ninguna. PROHIBIDO rellenar el lote con una oportunidad débil solo para completar el número, y PROHIBIDO dejar por fuera una que sí encaje solo para entregar pocas. Registra también las demás candidatas que evaluaste y no quedaron en el lote, como descartadas con su motivo.
 
 Responde ÚNICAMENTE con un JSON válido, sin texto antes ni después, con este formato exacto:
 {
