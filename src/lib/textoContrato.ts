@@ -74,7 +74,9 @@ Los meses contratados son un derecho del cliente, no una obligación:
 puede parar cuando quiera. El compromiso de ARQUITECTURA DIGITAL es
 conseguirle convocatorias acordes con su proyecto y ayudarle a postular a
 la primera; ahí termina el servicio. Solo habrá prórroga o mes de cortesía
-si no se consiguieron convocatorias acordes. Si se le presentaron
+si no se consiguieron convocatorias acordes, y consiste en un (1) mes
+adicional de búsqueda: la Estructuración Estratégica pasa de 2 a 3 meses y
+la Estructuración Élite pasa de 3 a 4 meses. Si se le presentaron
 convocatorias acordes y el cliente no quiso postular, no hay prórroga ni
 mes de cortesía, sin excepciones.
 

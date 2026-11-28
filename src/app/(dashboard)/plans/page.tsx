@@ -42,7 +42,7 @@ export default async function PlansPage() {
         '2 Months of Grant & Funding Search',
         'Terms of Reference Matching',
         'Help applying to the first call',
-        'Extension or courtesy month only if no suitable calls are found'
+        '1 courtesy month (2 to 3 months) only if no suitable calls are found'
       ],
       items_es: [
         'Diagnóstico Gratuito Incluido',
@@ -50,7 +50,7 @@ export default async function PlansPage() {
         '2 Meses de Búsqueda de Convocatorias',
         'Encaje con Términos de Referencia',
         'Ayuda para postular a la primera convocatoria',
-        'Prórroga o mes de cortesía solo si no se consiguen convocatorias acordes'
+        '1 mes de cortesía (de 2 a 3 meses) solo si no se consiguen convocatorias acordes'
       ]
     },
     {
@@ -66,7 +66,7 @@ export default async function PlansPage() {
         'Full Formulation Process',
         '3 Months of Grant & Funding Search',
         'Terms of Reference Matching',
-        'Extension or courtesy month only if no suitable calls are found',
+        '1 courtesy month (3 to 4 months) only if no suitable calls are found',
         'Priority Support'
       ],
       items_es: [
@@ -74,7 +74,7 @@ export default async function PlansPage() {
         'Formulación Completa',
         '3 Meses de Búsqueda de Convocatorias',
         'Encaje con Términos de Referencia',
-        'Prórroga o mes de cortesía solo si no se consiguen convocatorias acordes',
+        '1 mes de cortesía (de 3 a 4 meses) solo si no se consiguen convocatorias acordes',
         'Soporte Prioritario'
       ]
     }

@@ -60,7 +60,7 @@ export const ESTRUCTURACION_ESTRATEGICA: PlanEstructuracionMapeado = {
   honorariosEstructuracion: '$12.000.000 COP + IVA',
   honorariosEstructuracionDetalle: 'Honorarios de Estructuración — modalidad de dos meses',
   duracionEntrega: 'Entrega en 5 días hábiles desde que completas el formulario',
-  garantiaAcompanamiento: 'Prórroga o mes de cortesía: solo si en los 2 meses no se consiguen convocatorias acordes a tu proyecto',
+  garantiaAcompanamiento: 'Mes de cortesía: si en los 2 meses no se consiguen convocatorias acordes, se suma 1 mes más (3 en total)',
   desgloseTecnico: DESGLOSE_TECNICO_COMUN,
   incluye: [
     'Diagnóstico incluido',
@@ -68,7 +68,7 @@ export const ESTRUCTURACION_ESTRATEGICA: PlanEstructuracionMapeado = {
     '2 meses de búsqueda de convocatorias',
     'Encaje con los términos de referencia',
     'Ayuda para postular a la primera convocatoria',
-    'Prórroga o mes de cortesía si no se consiguen convocatorias acordes'
+    '1 mes de cortesía (de 2 a 3 meses) si no se consiguen convocatorias acordes'
   ]
 }
 
@@ -82,13 +82,13 @@ export const ESTRUCTURACION_ELITE: PlanEstructuracionMapeado = {
   honorariosEstructuracionDetalle:
     'Honorarios de Estructuración — modalidad de tres meses con atención prioritaria',
   duracionEntrega: 'Entrega en 5 días hábiles desde que completas el formulario',
-  garantiaAcompanamiento: 'Prórroga o mes de cortesía: solo si en los 3 meses no se consiguen convocatorias acordes a tu proyecto',
+  garantiaAcompanamiento: 'Mes de cortesía: si en los 3 meses no se consiguen convocatorias acordes, se suma 1 mes más (4 en total)',
   desgloseTecnico: DESGLOSE_TECNICO_COMUN,
   incluye: [
     'Todo lo de la Estructuración Estratégica',
     '3 meses de búsqueda de convocatorias',
     'Encaje prioritario con los términos de referencia',
-    'Prórroga o mes de cortesía si no se consiguen convocatorias acordes',
+    '1 mes de cortesía (de 3 a 4 meses) si no se consiguen convocatorias acordes',
     'Atención prioritaria'
   ]
 }

@@ -104,7 +104,7 @@ export function ContratoDigitalModal({ plan, onContratoFirmado, onBack }: Contra
 
           <h5 className="font-bold text-color-base-content uppercase pt-2">CLÁUSULA TERCERA - MESES CONTRATADOS, PRÓRROGA Y CORTESÍA:</h5>
           <p>
-            Los meses contratados son un derecho de EL CLIENTE, no una obligación; puede parar cuando quiera. EL PRESTADOR se compromete a conseguirle convocatorias acordes y a ayudarle a postular a la primera; ahí termina el servicio. Solo habrá prórroga o mes de cortesía si no se consiguieron convocatorias acordes. Si se le presentaron convocatorias acordes y EL CLIENTE no quiso postular, no hay prórroga ni cortesía, sin excepciones.
+            Los meses contratados son un derecho de EL CLIENTE, no una obligación; puede parar cuando quiera. EL PRESTADOR se compromete a conseguirle convocatorias acordes y a ayudarle a postular a la primera; ahí termina el servicio. Solo habrá prórroga o mes de cortesía si no se consiguieron convocatorias acordes, y consiste en un (1) mes adicional de búsqueda (de 2 a 3 meses en la Estructuración Estratégica y de 3 a 4 meses en la Élite). Si se le presentaron convocatorias acordes y EL CLIENTE no quiso postular, no hay prórroga ni cortesía, sin excepciones.
           </p>
 
           <h5 className="font-bold text-color-base-content uppercase pt-2">CLÁUSULA CUARTA - POLÍTICA DE HABEAS DATA Y PRIVACIDAD (LEY 1581 DE 2012):</h5>

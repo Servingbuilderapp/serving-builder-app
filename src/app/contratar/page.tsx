@@ -46,7 +46,7 @@ const PLANES: Record<
       '2 meses de búsqueda de convocatorias',
       'Encaje con los términos de referencia',
       'Ayuda para postular a la primera convocatoria',
-      'Prórroga o mes de cortesía si no se consiguen convocatorias acordes',
+      '1 mes de cortesía (de 2 a 3 meses) si no se consiguen convocatorias acordes',
     ],
   },
   completo: {
@@ -57,7 +57,7 @@ const PLANES: Record<
       'Todo lo de la Estructuración Estratégica',
       '3 meses de búsqueda de convocatorias',
       'Encaje prioritario con los términos de referencia',
-      'Prórroga o mes de cortesía si no se consiguen convocatorias acordes',
+      '1 mes de cortesía (de 3 a 4 meses) si no se consiguen convocatorias acordes',
       'Atención prioritaria',
     ],
   },
